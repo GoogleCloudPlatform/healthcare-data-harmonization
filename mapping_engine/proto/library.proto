@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package cloud.healthcare.cdw.etl.mapping.proto;
+
+import "proto/harmonization.proto";
+import "proto/http.proto";
+import "proto/mapping.proto";
+
+option go_package = "github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/proto";
+option java_multiple_files = true;
+option java_package = "com.google.cloud.healthcare.etl.proto.mapping.library";
+
+// The LibraryConfig message defines a set of standalone projectors and Google
+// cloud functions that can be loaded along-side and shared between mappings.
+message LibraryConfig {
+  // Basic projectors that can be shared across various mappings.
+  repeated ProjectorDefinition projector = 1;
+
+  // The remote servers that the configuration can call.
+  repeated ServerDefinition servers = 2;
+
+  // The CloudFunction message defines a cloud function that can be called
+  // as a projector.
+  repeated CloudFunction cloud_function = 3;
+
+  // HttpQuery defines a list of fetch queries, which are essentially projectors
+  // with external lookup. All fetch query configs are expected to contain a
+  // name field to be used as the projector name.
+  repeated HttpFetchQuery http_query = 4;
+
+  // DEPRECATED: Builtin projector libraries.
+  repeated string deprecate_imported_libraries = 5 [deprecated = true];
+
+  // User-defined projector libraries that will be included in the mappings.
+  repeated UserLibrary user_libraries = 6;
+}
+
+// Specifies a user-defined projector library.
+message UserLibrary {
+  // The type of mapping.
+  MappingType type = 1;
+
+  // The path defining the custom mapping library file.
+  Location path = 2;
+}

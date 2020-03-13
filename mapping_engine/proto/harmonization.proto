@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package cloud.healthcare.cdw.etl.mapping.proto;
+
+import "proto/http.proto";
+import "proto/mapping.proto";
+
+option go_package = "github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/proto";
+option java_package = "com.google.cloud.healthcare.etl.proto";
+option java_outer_classname = "Harmonization";
+option java_multiple_files = true;
+
+// Specifies the structure mapping for harmonization.
+message StructureMappingConfig {
+  oneof mapping {
+    // The configuration defining the structure mapping.
+    MappingConfig mapping_config = 1;
+
+    // The mapping config described in the mapping language.
+    string mapping_language_string = 2;
+
+    // The location of the mapping config.
+    MappingPathConfig mapping_path_config = 3;
+  }
+}
+
+enum MappingType {
+  INVALID = 0;
+  RAW_PROTO = 1;
+  MAPPING_LANGUAGE = 2;
+}
+
+message MappingPathConfig {
+  // The type of mapping.
+  MappingType mapping_type = 1;
+
+  // The path defining the structure mapping configuration file.
+  Location mapping_config_path = 2;
+}
+
+// Specifies how do the code harmonization.
+message CodeHarmonizationConfig {
+  // If harmonization is done using FHIR Store translate operation, the location
+  // should be the URL of the FHIR Store containing the concept map resources.
+  // E.g.
+  // https://healthcare.googleapis.com/v1alpha2/projects/*/locations/*/datasets/*/fhirStores/*.
+  repeated Location code_lookup = 1;
+
+  // Specifies the amount of time in seconds that a code will be kept in cache.
+  // Only applies to harmonization with a remote server. If not provided or
+  // provided a negative value, codes will not be cached.
+  int32 cache_ttl_seconds = 2;
+
+  // Specifies the amount of time in seconds that all expired codes will be
+  // cleared from the cache. Only applies to harmonization with a remote server.
+  // If not provided or provided a negative value, no cleanup will run.
+  int32 cleanup_interval_seconds = 3;
+}
+
+// Specifies how units should be normalized and harmonized.
+message UnitHarmonizationConfig {
+  Location unit_conversion = 2;
+}
+// BEGIN GOOGLE-INTERNAL
+
+// Specifies how notes should be normalized and harmonized.
+message NoteHarmonizationConfig {
+  repeated Location servers = 1;
+}
+// END GOOGLE-INTERNAL

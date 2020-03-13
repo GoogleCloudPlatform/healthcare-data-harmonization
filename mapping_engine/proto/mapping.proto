@@ -1,0 +1,163 @@
+syntax = "proto3";
+
+package cloud.healthcare.cdw.etl.mapping.proto;
+
+option go_package = "github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/proto";
+option java_package = "com.google.cloud.healthcare.etl.proto";
+option java_outer_classname = "ETLMapping";
+
+// The mapping phase defines a conversion from some source to some destination
+// model schema. The input to this phase is the output of the ingestion phase,
+// and the output of this phase is an object like
+// {
+//     models: [{...}, {...}]
+// }
+// where {...} are generated from the root_mappings below.
+message MappingConfig {
+  // Mapping of the root model elements.
+  repeated FieldMapping root_mapping = 1;
+
+  // All projectors to use.
+  repeated ProjectorDefinition projector = 2;
+
+  // Post processing projectors that will run uniformly over all the converted
+  // data.
+  oneof post_process {
+    // The name of a preexisting projector to use to post-process the
+    // resources.
+    string post_process_projector_name = 3;
+
+    // The inline projector definition to use to post-process the
+    // resources.
+    ProjectorDefinition post_process_projector_definition = 4;
+  }
+}
+
+// Represents a value to be set in the output.
+message ValueSource {
+  message InputSource {
+    // The number (1-based) of the projector argument to reference. If omitted
+    // or set to 0, will search for the given field in context values. A context
+    // value references a sibling (or as close as possible) to one of this
+    // projector's arguments, that has an absolute path as specified in field
+    // (omitting array indices). For example, if a projector gets an argument
+    // with full path foo[3].bar[0].baz.bonk, and arg is set to 0, and field is
+    // set to foo.bar.quip, then this InputSource resolves to the value at
+    // foo[3].bar[0].quip.
+    int32 arg = 1;
+
+    // Optionally, the JSON field/path on the argument to extract, e.g.
+    // "foo.bar". Can be suffixed with [] to enumerate an array, invoking the
+    // projector passed to on every element individually.
+    string field = 2;
+  }
+  oneof source {
+    // A field that comes from the source/input data. This refers to the
+    // arguments of the projector or context.
+    // If given multiple arguments, then:
+    //
+    //  - "1" refers to the first argument
+    //  - "2" refers to the second, and so on.
+    //
+    // If given only one argument, then:
+    //
+    //  - "." refers to the argument
+    //  - "1" or "xyz" refers to its first sub-element/child with that key
+    //  - "2" or "abc" refers to the second sub-element/child with that key
+    //    etc.
+    // If that sole argument is an array, then:
+    //
+    //  - "0" or "[0]" refers to its first element
+    //  - "1" or "[1]" refers to the second
+    //  - "." refers to the whole array
+    //  - "[]" means that the following projector is applied to each element
+    //
+    // DEPRECATED: Use from_input instead.
+    string from_source = 1 [deprecated = true];
+
+    // Data coming from a local variable. This must have been set by the current
+    // or parent projector.
+    // If the variable is an array, appending "[]" means that the following
+    // projector is applied to each element.
+    string from_local_var = 2;
+
+    // A field that is set at some point during the conversion in the mapping
+    // destination JSON.
+    string from_destination = 3;
+
+    // A value preprocessed with a projector.
+    ValueSource projected_value = 4;
+
+    // A hard-coded string value.
+    string const_string = 5;
+
+    // A hard-coded integer value.
+    int32 const_int = 6;
+
+    // A hard-coded floating point value.
+    float const_float = 7;
+
+    // A hard-coded boolean value.
+    bool const_bool = 8;
+
+    // Refer to a specific argument. This is a simpler version of from_source.
+    // 1 refers to the 1st argument, 2 to the second, etc. 0 refers to the whole
+    // arguments array.
+    //
+    // DEPRECATED: Use from_input instead.
+    int32 from_arg = 11 [deprecated = true];
+
+    InputSource from_input = 12;
+  }
+
+  // Additional arguments for the projector used to preprocess this argument. If
+  // set, projector must be specified.
+  repeated ValueSource additional_arg = 9;
+
+  // Projector to use to preprocess this argument. Defaults to identity
+  // function. Projectors prefixed with _ are built-ins.
+  string projector = 10;
+}
+
+message FieldMapping {
+  // The source sub-element selector. Each one is a consequent argument
+  // to the projector (unless one is an array, in which case it is expanded
+  // and each element passed to the projector in individual invocations).
+  ValueSource value_source = 1;
+
+  // The target element to set to the output of the source. Should be in JSON
+  // dot notation. This can be a complex JSON object, or a JSON value field,
+  // or an array (arrays must be suffixed with []).
+  oneof target {
+    // Target a leaf or non-leaf field in the output. Be aware that any data
+    // written to an output field cannot be overwritten. Use target_local_var
+    // for outputting data that needs to be changed before ending up in a field.
+    string target_field = 2;
+
+    // Target a variable that will not be output (all projectors called by this
+    // one or its descendants can access this variable). This may overwrite
+    // existing variable values/fields.
+    string target_local_var = 3;
+
+    // DEPRECATED(b/148284692): Use target_root_field instead.
+    string target_object = 4 [deprecated = true];
+
+    // Target a field from the root mappings.
+    string target_root_field = 6;
+  }
+
+  // A value that determines whether to apply this field mapping.
+  // It is only applied if this value is true. An error occurs if the
+  // result is not a boolean primitive.
+  ValueSource condition = 5;
+}
+
+// A projector is a function that converts one or more input elements into
+// one output element.
+message ProjectorDefinition {
+  // The name of the projector, as referred to by the ValueSource.
+  string name = 1;
+
+  // A list of mappings for this projector.
+  repeated FieldMapping mapping = 2;
+}

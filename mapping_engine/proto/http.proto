@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package cloud.healthcare.cdw.etl.mapping.proto;
+
+import "proto/mapping.proto";
+
+option go_package = "github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/proto";
+option java_package = "com.google.cloud.healthcare.etl.proto";
+option java_multiple_files = true;
+
+message ServerDefinition {
+  string name = 1;
+
+  // Config that provides the information for authenticating with the server.
+  oneof authentication_config {
+    CustomGCPConfig custom_gcp = 2;
+    // TODO : Support additional server types.
+  }
+}
+
+// TODO: Remove since its not needed anymore.
+message CustomGCPConfig {
+  // Location of client secret JSON
+  Location client_secret_file = 1;
+
+  // Scopes
+  repeated string scopes = 2;
+}
+
+message Location {
+  string name = 1;
+
+  oneof location {
+    // Location in Cloud Storage.
+    string gcs_location = 2;
+
+    // Local path.
+    string local_path = 3;
+
+    // URL path.
+    string url_path = 4;
+  }
+}
+
+// This defines a projector that will obtain its return value from an HTTP
+// endpoint.
+message HttpFetchQuery {
+  // The name of the fetch query, to be referenced in a projector field.
+  string name = 1;
+
+  // Should evaluate to an HTTP Method. Parameters passed along from caller.
+  ValueSource request_method = 2;
+
+  // Should evaluate to a REST URL. Parameters passed along from caller.
+  ValueSource request_url = 3;
+
+  // Specifies which server type we will be making requests to.  The server type
+  // should be defined in Servers.
+  // If left blank, the pipeline will attempt to use its application default
+  // credentials to authenticate.
+  string server = 4;
+}
+
+// The CloudFunction message defines a cloud function that can be called as a
+// projector.
+message CloudFunction {
+  // TODO: Evaluate the @ convention.
+  // The name of the cloud function, and it should start with '@' to indicate
+  // it is a cloud function as a projector.
+  string name = 1;
+
+  // The request url to call the cloud function.
+  string request_url = 2;
+}

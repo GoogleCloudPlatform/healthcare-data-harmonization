@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package cloud.healthcare.cdw.etl.mapping.proto;
+
+option java_multiple_files = true;
+option java_package = "com.google.cloud.healthcare.etl.proto.mapping.unitconfig";
+option go_package = "github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/proto";
+
+message UnitConversion {
+  // The source units we are converting from.
+  // This field is repeated so we can map multiple source strings such as 'mG'
+  // and 'mg'.
+  repeated string source_unit = 1;
+
+  // The destination unit we are converting to.
+  string dest_unit = 2;
+
+  // (Optional): use if the unit conversion factor depends on the
+  // observation code. For example, 'calcium' conversion from mmol_l to meq/l
+  // is dependent on valence of calcium.
+  string code = 3;
+
+  // Codesystem associated with the code for unit conversions.
+  string codesystem = 4;
+
+  // Unit calculation is: constant + scalar * source_unit_value.
+  // Constant factor associated with the conversion.
+  double constant = 5;
+
+  // Scalar multiplier associated with the conversion.
+  double scalar = 6;
+
+  // Whether to in the conversion use the constant term first
+  // i.e. (degF + const ) * scalar
+  bool constant_first = 8;
+}
+
+message UnitConfiguration {
+  repeated UnitConversion conversion = 1;
+
+  // Version of the unit configs we are using.
+  string version = 2;
+
+  // Target system of the destination unit configs.
+  string system = 3;
+
+  // Number of decimal places to keep in the harmonized unit quantity. Leaving
+  // this field unset or setting to zero means all decimals will be preserved.
+  int32 decimals = 4;
+}

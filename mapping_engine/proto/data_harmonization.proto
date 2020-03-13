@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package cloud.healthcare.cdw.etl.mapping.proto;
+
+import "proto/harmonization.proto";
+import "proto/library.proto";
+import "proto/mapping.proto";
+
+option go_package = "github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/proto";
+
+// Specification of how data should be harmonized including
+// 1) Structure Mapping
+// 2) Code harmonization and normalization
+// 3) Unit harmonization and normalization
+message DataHarmonizationConfig {
+  // The shared library configurations for structure mapping.
+  repeated LibraryConfig library_config = 1;
+
+  // DEPRECATED: Use structure_mapping_config instead.
+  MappingConfig deprecate_structure_mapping_config = 2 [deprecated = true];
+
+  // The configuration defining the code harmonization.
+  CodeHarmonizationConfig harmonization_config = 3;
+
+  // The configuration defining the unit harmonization.
+  UnitHarmonizationConfig unit_harmonization_config = 4;
+
+  // BEGIN GOOGLE-INTERNAL
+  // The configuration defining the note harmonization.
+  NoteHarmonizationConfig note_harmonization_config = 5;
+  // END GOOGLE-INTERNAL
+  // The configuration defining the structure mapping.
+  StructureMappingConfig structure_mapping_config = 6;
+}
