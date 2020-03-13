@@ -62,6 +62,7 @@ func UnmarshalJSON(in json.RawMessage) (JSONToken, error) {
 		if err != nil {
 			return nil, err
 		}
+
 		return JSONNum(num), nil
 	}
 }
