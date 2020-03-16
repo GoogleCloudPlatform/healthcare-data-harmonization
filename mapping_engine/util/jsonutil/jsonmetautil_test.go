@@ -483,17 +483,17 @@ func TestGetNodeField(t *testing.T) {
 		{
 			name:  "single [*] expansions on jagged array",
 			field: "expansion[*].purple",
-			want:  mustParseJSON(t, json.RawMessage(`[[{ "sometimesmissing": "leaf1", "explicitnull": null }, { "explicitnull": "leaf2" }]]`)),
+			want:  mustParseJSON(t, json.RawMessage(`[null, [{ "sometimesmissing": "leaf1", "explicitnull": null }, { "explicitnull": "leaf2" }]]`)),
 		},
 		{
 			name:  "multiple [*] expansions on jagged array",
 			field: "expansion[*].purple[*].sometimesmissing",
-			want:  mustParseJSON(t, json.RawMessage(`["leaf1"]`)),
+			want:  mustParseJSON(t, json.RawMessage(`[null, "leaf1", null]`)),
 		},
 		{
 			name:  "multiple [*] expansions on jagged array with explicit nulls",
 			field: "expansion[*].purple[*].explicitnull",
-			want:  mustParseJSON(t, json.RawMessage(`["leaf2"]`)),
+			want:  mustParseJSON(t, json.RawMessage(`[null, null, "leaf2"]`)),
 		},
 		{
 			name:  "non existent field",

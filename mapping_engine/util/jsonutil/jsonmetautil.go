@@ -266,7 +266,7 @@ func getNodeFieldSegmented(node JSONMetaNode, segments []string) (JSONMetaNode, 
 						return nil, false, fmt.Errorf("bug: getNodeFieldSegmented returned true for expansion but value was not an array (was %T)", f)
 					}
 					retNode.Items = append(retNode.Items, fArr.Items...)
-				} else if f != nil {
+				} else {
 					retNode.Items = append(retNode.Items, f)
 				}
 			}

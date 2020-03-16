@@ -187,17 +187,15 @@ func GetFieldSegmented(src JSONToken, segments []string) (JSONToken, error) {
 					return nil, fmt.Errorf("error expanding [*] on item index %d: %v", i, err)
 				}
 
-				if f != nil {
-					// If an array expansion occurs down the line, we need to unnest the resulting array here.
-					if hasArrayStar(segments[1:]) {
-						fArr, ok := f.(JSONArr)
-						if !ok {
-							return nil, fmt.Errorf("bug: found nested [*] but value was not an array (was %T)", f)
-						}
-						flatten = append(flatten, fArr...)
-					} else {
-						flatten = append(flatten, f)
+				// If an array expansion occurs down the line, we need to unnest the resulting array here.
+				if f != nil && hasArrayStar(segments[1:]) {
+					fArr, ok := f.(JSONArr)
+					if !ok {
+						return nil, fmt.Errorf("bug: found nested [*] but value was not an array (was %T)", f)
 					}
+					flatten = append(flatten, fArr...)
+				} else {
+					flatten = append(flatten, f)
 				}
 			}
 
