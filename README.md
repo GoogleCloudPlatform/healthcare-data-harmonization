@@ -27,7 +27,7 @@ This project consists of two components, the mapping engine and the mapping
 language, both of which can be built and tested independently with `go build`
 and `go test`. Please refer to their individual READMEs for more information.
 
-### Langauge Reference
+### Language Reference
 
 TODO: Add language reference.
 
