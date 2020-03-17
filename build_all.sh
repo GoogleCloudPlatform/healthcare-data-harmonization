@@ -21,6 +21,9 @@ cd mapping_engine
 cd ../mapping_language
 ./go_mod_edits.sh
 
+# Exit with the failing error code if one of the builds fails. Useful for CI.
+set -o errexit
+
 cd ../mapping_engine
 ./build.sh
 cd ../mapping_language

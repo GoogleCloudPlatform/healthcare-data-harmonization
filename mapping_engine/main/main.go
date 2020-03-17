@@ -37,6 +37,8 @@ import (
 
 )
 
+const fileWritePerm = 0666
+
 type stringSlice []string
 
 // String joins the slice into a semicolon-separated string.
@@ -197,7 +199,7 @@ func main() {
 		if *outputDir == "" {
 			log.Printf("File %q\n\n%s\n", op, string(bres))
 		} else {
-			if err := ioutil.WriteFile(op, bres, os.WritePermission); err != nil {
+			if err := ioutil.WriteFile(op, bres, fileWritePerm); err != nil {
 				log.Fatalf("Could not write output file %q: %v", op, err)
 			}
 		}
