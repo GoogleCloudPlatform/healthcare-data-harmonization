@@ -18,11 +18,11 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/harmonization/harmonizecode" /* copybara-comment: harmonizecode */
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/harmonization/harmonizecode" /* copybara-comment: harmonizecode */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
 	"github.com/google/go-cmp/cmp" /* copybara-comment: cmp */
 
-	ucpb "github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/proto" /* copybara-comment: unit_config_go_proto */
+	ucpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: unit_config_go_proto */
 )
 
 func TestHarmonizeUnits(t *testing.T) {

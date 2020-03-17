@@ -19,10 +19,10 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/types" /* copybara-comment: types */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types" /* copybara-comment: types */
 
-	httppb "github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/proto" /* copybara-comment: http_go_proto */
-	mappb "github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/proto" /* copybara-comment: mapping_go_proto */
+	httppb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: http_go_proto */
+	mappb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: mapping_go_proto */
 )
 
 func TestRegisterFetchProjector(t *testing.T) {

@@ -17,7 +17,7 @@ package harmonizecode
 import (
 	"testing"
 
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
 	"github.com/google/go-cmp/cmp" /* copybara-comment: cmp */
 )
 

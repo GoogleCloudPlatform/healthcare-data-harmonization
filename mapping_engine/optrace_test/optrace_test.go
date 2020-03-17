@@ -28,18 +28,18 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts" /* copybara-comment: cmpopts */
 	"google.golang.org/protobuf/testing/protocmp" /* copybara-comment: protocmp */
 
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/builtins" /* copybara-comment: builtins */
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/cloudfunction" /* copybara-comment: cloudfunction */
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/fetch" /* copybara-comment: fetch */
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/mapping" /* copybara-comment: mapping */
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/optrace" /* copybara-comment: optrace */
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/postprocess" /* copybara-comment: postprocess */
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/projector" /* copybara-comment: projector */
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/types" /* copybara-comment: types */
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/builtins" /* copybara-comment: builtins */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/cloudfunction" /* copybara-comment: cloudfunction */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/fetch" /* copybara-comment: fetch */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/mapping" /* copybara-comment: mapping */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/optrace" /* copybara-comment: optrace */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/postprocess" /* copybara-comment: postprocess */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/projector" /* copybara-comment: projector */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types" /* copybara-comment: types */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
 
-	httppb "github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/proto" /* copybara-comment: http_go_proto */
-	mappb "github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/proto" /* copybara-comment: mapping_go_proto */
+	httppb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: http_go_proto */
+	mappb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: mapping_go_proto */
 
 )
 

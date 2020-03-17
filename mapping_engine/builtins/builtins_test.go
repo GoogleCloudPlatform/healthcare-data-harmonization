@@ -25,8 +25,8 @@ import (
 	"github.com/google/go-cmp/cmp" /* copybara-comment: cmp */
 	"github.com/google/go-cmp/cmp/cmpopts" /* copybara-comment: cmpopts */
 
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/types" /* copybara-comment: types */
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types" /* copybara-comment: types */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
 )
 
 func mustParseContainer(json json.RawMessage, t *testing.T) jsonutil.JSONContainer {

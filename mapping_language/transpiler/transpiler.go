@@ -17,11 +17,11 @@ package transpiler
 import (
 	"fmt"
 
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_language/errors" /* copybara-comment: errors */
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_language/parser" /* copybara-comment: parser */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language/errors" /* copybara-comment: errors */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language/parser" /* copybara-comment: parser */
 	"github.com/antlr/antlr4/runtime/Go/antlr" /* copybara-comment: antlr */
 
-	mpb "github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/proto" /* copybara-comment: mapping_go_proto */
+	mpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: mapping_go_proto */
 )
 
 type transpiler struct {

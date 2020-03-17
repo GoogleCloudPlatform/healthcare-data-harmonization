@@ -23,13 +23,13 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/errors" /* copybara-comment: errors */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/errors" /* copybara-comment: errors */
 	"google.golang.org/grpc/credentials/oauth" /* copybara-comment: oauth */
 	"google.golang.org/grpc" /* copybara-comment: grpc */
 	"golang.org/x/oauth2/google" /* copybara-comment: google */
 	"golang.org/x/oauth2" /* copybara-comment: oauth2 */
 
-	httppb "github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/proto" /* copybara-comment: http_go_proto */
+	httppb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: http_go_proto */
 )
 
 const (

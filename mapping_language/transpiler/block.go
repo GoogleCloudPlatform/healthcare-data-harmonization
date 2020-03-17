@@ -15,7 +15,7 @@
 package transpiler
 
 import (
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_language/parser" /* copybara-comment: parser */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language/parser" /* copybara-comment: parser */
 	"github.com/antlr/antlr4/runtime/Go/antlr" /* copybara-comment: antlr */
 )
 

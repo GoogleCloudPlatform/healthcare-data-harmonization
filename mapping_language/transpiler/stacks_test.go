@@ -20,7 +20,7 @@ import (
 	"github.com/google/go-cmp/cmp" /* copybara-comment: cmp */
 	"google.golang.org/protobuf/testing/protocmp" /* copybara-comment: protocmp */
 
-	mpb "github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/proto" /* copybara-comment: mapping_go_proto */
+	mpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: mapping_go_proto */
 )
 
 func TestStack(t *testing.T) {

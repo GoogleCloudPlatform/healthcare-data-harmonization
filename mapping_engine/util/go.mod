@@ -1,4 +1,4 @@
-module github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/util
+module github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util
 
 go 1.14
 

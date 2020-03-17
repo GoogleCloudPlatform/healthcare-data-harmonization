@@ -23,7 +23,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/auth" /* copybara-comment: auth */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/auth" /* copybara-comment: auth */
 )
 
 // RemoteCodeHarmonizer will harmonize codes using a remote lookup service.

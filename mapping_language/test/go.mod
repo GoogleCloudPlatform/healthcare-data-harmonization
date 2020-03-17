@@ -1,4 +1,4 @@
-module github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_language/test
+module github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language/test
 
 go 1.14
 

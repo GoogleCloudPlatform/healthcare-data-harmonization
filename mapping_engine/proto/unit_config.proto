@@ -4,7 +4,7 @@ package cloud.healthcare.cdw.etl.mapping.proto;
 
 option java_multiple_files = true;
 option java_package = "com.google.cloud.healthcare.etl.proto.mapping.unitconfig";
-option go_package = "github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/proto";
+option go_package = "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto";
 
 message UnitConversion {
   // The source units we are converting from.

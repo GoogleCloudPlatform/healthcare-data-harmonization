@@ -17,7 +17,7 @@ package transpiler
 import (
 	"fmt"
 
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_language/parser" /* copybara-comment: parser */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language/parser" /* copybara-comment: parser */
 )
 
 type pathSpec struct {

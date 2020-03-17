@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/GoogleCloudPlatform/healthcare_data_harmonization/mapping_engine/util/storageclient" /* copybara-comment: storageclient */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/storageclient" /* copybara-comment: storageclient */
 )
 
 const (
