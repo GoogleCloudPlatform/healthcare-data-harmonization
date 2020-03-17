@@ -41,6 +41,11 @@ func TestTranspileErrors(t *testing.T) {
 			whistle:         `root hello: "world"`,
 			wantErrKeywords: []string{"redundant", "root"},
 		},
+		{
+			name:            "function without brackets",
+			whistle:         `root hello: FooFunc "world"`,
+			wantErrKeywords: []string{"parser error"},
+		},
 		// TODO: Add more tests.
 	}
 	for _, test := range tests {

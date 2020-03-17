@@ -274,21 +274,19 @@ filter
 expression
     : // Operator precedence is determined by order of alternatives.
     source                              # ExprSource
-    | ARROW TOKEN                       # ExprNoArg
+    | TOKEN '(' ')'                            # ExprNoArg
+    | TOKEN ARRAYMOD? '(' sourceContainer (',' sourceContainer)* ')' # ExprProjection
     | expression postunoperator         # ExprPostOp
     | preunoperator expression          # ExprPreOp
     | expression bioperator1 expression # ExprBiOp
     | expression bioperator2 expression # ExprBiOp
     | expression bioperator3 expression # ExprBiOp
     | expression bioperator4 expression # ExprBiOp
-    | expression ARROW TOKEN ARRAYMOD?  # ExprProjection
-    // This is a workaround for x ,y => a => b always being parsed as x, (y => a) => b, no matter
-    // what order these rules are in.
-    | sourceContainer (',' sourceContainer)* ARROW TOKEN ARRAYMOD? # ExprProjection
 ;
 
 sourceContainer
-    : source
+    : expression
+    | source
 ;
 
 source

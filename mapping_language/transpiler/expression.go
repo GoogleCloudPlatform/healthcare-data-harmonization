@@ -114,35 +114,21 @@ func (t *transpiler) VisitExprProjection(ctx *parser.ExprProjectionContext) inte
 		Projector: ctx.TOKEN().GetText() + arrMod,
 	}
 
-	// This rule has two alternatives - one with multiple args in source containers and on with just
-	// one source.
-	if len(ctx.AllSourceContainer()) > 0 {
-		for i := range ctx.AllSourceContainer() {
-			source := ctx.SourceContainer(i).Accept(t).(*mpb.ValueSource)
+	for i := range ctx.AllSourceContainer() {
+		source := ctx.SourceContainer(i).Accept(t).(*mpb.ValueSource)
 
-			if i == 0 {
-				if source.Projector == "" {
-					vs.Source = source.Source
-				} else {
-					vs.Source = &mpb.ValueSource_ProjectedValue{
-						ProjectedValue: source,
-					}
+		if i == 0 {
+			if source.Projector == "" {
+				vs.Source = source.Source
+			} else {
+				vs.Source = &mpb.ValueSource_ProjectedValue{
+					ProjectedValue: source,
 				}
-				continue
 			}
-
-			vs.AdditionalArg = append(vs.AdditionalArg, source)
+			continue
 		}
-	} else {
-		source := ctx.Expression().Accept(t).(*mpb.ValueSource)
 
-		if source.Projector == "" {
-			vs.Source = source.Source
-		} else {
-			vs.Source = &mpb.ValueSource_ProjectedValue{
-				ProjectedValue: source,
-			}
-		}
+		vs.AdditionalArg = append(vs.AdditionalArg, source)
 	}
 
 	return vs
@@ -154,12 +140,15 @@ func (t *transpiler) VisitExprSource(ctx *parser.ExprSourceContext) interface{} 
 }
 
 func (t *transpiler) VisitSourceContainer(ctx *parser.SourceContainerContext) interface{} {
-	// No-op here, just visit the Source child (see grammar for why this exists).
-	return ctx.Source().Accept(t)
+	// No-op here, just visit the appropriate child.
+	if ctx.Source() != nil {
+		return ctx.Source().Accept(t)
+	}
+	return ctx.Expression().Accept(t)
 }
 
 func (t *transpiler) VisitExprNoArg(ctx *parser.ExprNoArgContext) interface{} {
-	// Simple projector call with no args, e.x. ( => _UUID).
+	// Simple projector call with no args, e.x. $UUID()
 	return &mpb.ValueSource{
 		Projector: ctx.TOKEN().GetText(),
 	}

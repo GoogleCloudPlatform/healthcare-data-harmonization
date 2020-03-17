@@ -16,6 +16,7 @@ package transpiler
 
 import (
 	"fmt"
+	"runtime/debug"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language/errors" /* copybara-comment: errors */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language/parser" /* copybara-comment: parser */
@@ -42,7 +43,7 @@ func (t *transpiler) popEnv() {
 func Transpile(whistle string) (mp *mpb.MappingConfig, err error) {
 	defer func() {
 		if rec := recover(); rec != nil {
-			err = fmt.Errorf("%v", rec)
+			err = fmt.Errorf("%v\n\n%s", rec, debug.Stack())
 		}
 	}()
 

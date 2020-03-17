@@ -75,12 +75,12 @@ func TestTranspile(t *testing.T) {
 			},
 		},
 		{
-			name: "no args projector definition",
+			name: "no args function definition",
 			whistle: `def MyProjector() {
 									a: "test"
 							  }`,
 			wantValue: valueTest{
-				rootMappings: "out myOut: => MyProjector",
+				rootMappings: "out myOut: MyProjector()",
 				wantJSON: `{
 											   "myOut": [
 											     {
@@ -91,12 +91,12 @@ func TestTranspile(t *testing.T) {
 			},
 		},
 		{
-			name: "one arg projector definition",
+			name: "one arg function definition",
 			whistle: `def MyProjector(thisIsAnArg) {
 									a: thisIsAnArg.foo;
 							  }`,
 			wantValue: valueTest{
-				rootMappings: `out myOut: "hello world" => MakeFoo => MyProjector
+				rootMappings: `out myOut: MyProjector(MakeFoo("hello world"))
 											 def MakeFoo(value) { foo: value; }`,
 				wantJSON: `{
 									   "myOut": [
@@ -108,13 +108,13 @@ func TestTranspile(t *testing.T) {
 			},
 		},
 		{
-			name: "multiple arg projector definition",
+			name: "multiple arg function definition",
 			whistle: `def MyProjector(thisIsAnArg, thisIsAlsoAnArg) {
 									a: thisIsAnArg // this is a comment
 									b: thisIsAlsoAnArg
 							  }`,
 			wantValue: valueTest{
-				rootMappings: `out myOut: "one", "two" => MyProjector`,
+				rootMappings: `out myOut: MyProjector("one", "two")`,
 				wantJSON: `{
 											   "myOut": [
 											     {
@@ -127,7 +127,7 @@ func TestTranspile(t *testing.T) {
 		},
 		{
 			name: "constant sources",
-			whistle: `def projector() {
+			whistle: `def function() {
 									str: "str";
 									int: 9238;
 									float: 9.927840232849121;
@@ -136,7 +136,7 @@ func TestTranspile(t *testing.T) {
 									alsoBool: true;
 							 }`,
 			wantValue: valueTest{
-				rootMappings: `out myOut: => projector`,
+				rootMappings: `out myOut: function()`,
 				wantJSON: `{
 											   "myOut": [
 											     {
@@ -153,11 +153,11 @@ func TestTranspile(t *testing.T) {
 		},
 		{
 			name: "single projection",
-			whistle: `def projector() {
-									str: "str" => $StrCat;
+			whistle: `def function() {
+									str: $StrCat("str");
 							 }`,
 			wantValue: valueTest{
-				rootMappings: `out myOut: => projector`,
+				rootMappings: `out myOut: function()`,
 				wantJSON: `{
 											   "myOut": [
 											     {
@@ -169,11 +169,11 @@ func TestTranspile(t *testing.T) {
 		},
 		{
 			name: "single projection with multiple args",
-			whistle: `def projector() {
-									str: "str", "foo" => $StrCat;
+			whistle: `def function() {
+									str: $StrCat("str", "foo");
 							 }`,
 			wantValue: valueTest{
-				rootMappings: `out myOut: => projector`,
+				rootMappings: `out myOut: function()`,
 				wantJSON: `{
 											   "myOut": [
 											     {
@@ -185,11 +185,27 @@ func TestTranspile(t *testing.T) {
 		},
 		{
 			name: "chained projection with multiple args",
-			whistle: `def projector() {
-									str: "str", "foo" => $ListOf => $ListLen;
+			whistle: `def function() {
+									str: $ListLen($ListOf("str", "foo"));
 							 }`,
 			wantValue: valueTest{
-				rootMappings: `out myOut: => projector`,
+				rootMappings: `out myOut: function()`,
+				wantJSON: `{
+											   "myOut": [
+											     {
+											       "str": 2
+											     }
+											   ]
+											 }`,
+			},
+		},
+		{
+			name: "chained projection with multiple args with brackets",
+			whistle: `def function() {
+									str: $ListLen($ListOf("str", "foo"));
+							 }`,
+			wantValue: valueTest{
+				rootMappings: `out myOut: function()`,
 				wantJSON: `{
 											   "myOut": [
 											     {
@@ -201,11 +217,11 @@ func TestTranspile(t *testing.T) {
 		},
 		{
 			name: "chained projection with multiple args later",
-			whistle: `def projector() {
-									str: 1337, ("str", "foo" => $ListOf => $ListLen) => $Sum;
+			whistle: `def function() {
+									str: $Sum(1337, $ListLen($ListOf("str", "foo")));
 							 }`,
 			wantValue: valueTest{
-				rootMappings: `out myOut: => projector`,
+				rootMappings: `out myOut: function()`,
 				wantJSON: `{
 											   "myOut": [
 											     {
@@ -217,15 +233,15 @@ func TestTranspile(t *testing.T) {
 		},
 		{
 			name: "modifiers",
-			whistle: `def projector(a) {
+			whistle: `def function(a) {
 									array[]: a[];
-									array[]: a[0].b[] => $DebugString;
+									array[]: $DebugString(a[0].b[]);
 									value: "foo";
 									value!: a[1].b;
 									partial.arr[].key: "bar"
 							 }`,
 			wantValue: valueTest{
-				rootMappings: `out myOut: $root.a => projector`,
+				rootMappings: `out myOut: function($root.a)`,
 				wantJSON: `{
 									   "myOut": [
 									     {
@@ -285,12 +301,12 @@ func TestTranspile(t *testing.T) {
 		},
 		{
 			name: "inline condition",
-			whistle: `def projector(a) {
-									value (if a => $IsNotNil): a.foo;
-									value (iff a => $IsNil): "nothing";
+			whistle: `def function(a) {
+									value (if $IsNotNil(a)): a.foo;
+									value (iff $IsNil(a)): "nothing";
 							 }`,
 			wantValue: valueTest{
-				rootMappings: `out myOut: $root.nothing => projector; out myOut: $root.something => projector;`,
+				rootMappings: `out myOut: function($root.nothing); out myOut: function($root.something);`,
 				wantJSON: `{
 											   "myOut": [
 											     {
@@ -310,11 +326,11 @@ func TestTranspile(t *testing.T) {
 		},
 		{
 			name: "prefix operators",
-			whistle: `def projector(a) {
+			whistle: `def function(a) {
 									value (if ~a): a;
 							 }`,
 			wantValue: valueTest{
-				rootMappings: `out myOut: $root.nothing => projector; out myOut: $root.something => projector;`,
+				rootMappings: `out myOut: function($root.nothing); out myOut: function($root.something);`,
 				wantJSON: `{
 											   "myOut": [
 											     {
@@ -330,12 +346,12 @@ func TestTranspile(t *testing.T) {
 		},
 		{
 			name: "postfix operators",
-			whistle: `def projector(a) {
+			whistle: `def function(a) {
 									value (if a?): a.foo;
 									value (iff ~a?): "nothing";
 							 }`,
 			wantValue: valueTest{
-				rootMappings: `out myOut: $root.nothing => projector; out myOut: $root.something => projector;`,
+				rootMappings: `out myOut: function($root.nothing); out myOut: function($root.something);`,
 				wantJSON: `{
 											   "myOut": [
 											     {
@@ -355,7 +371,7 @@ func TestTranspile(t *testing.T) {
 		},
 		{
 			name: "binary operators",
-			whistle: `def projector(a, b, c) {
+			whistle: `def function(a, b, c) {
 									value[]: a + 2;
 									value[]: a / 2;
 									value[]: a - 2;
@@ -382,7 +398,7 @@ func TestTranspile(t *testing.T) {
 									value[]: -3 >= 3;
 							 }`,
 			wantValue: valueTest{
-				rootMappings: `out myOut: 100, true, false => projector`,
+				rootMappings: `out myOut: function(100, true, false)`,
 				wantJSON: `{
 											   "myOut": [
 											     {
@@ -419,7 +435,7 @@ func TestTranspile(t *testing.T) {
 		},
 		{
 			name: "operator ordering",
-			whistle: `def projector() {
+			whistle: `def function() {
 									arithmetic[]: 1 + 2 * 5;
 									arithmetic[]: 2 * 2 + 5;
 									arithmetic[]: 2 * (2 + 5);
@@ -432,7 +448,7 @@ func TestTranspile(t *testing.T) {
 								  logic[]: 1 - 3 <= -1 and 5 >= 6 - 1;
 							 }`,
 			wantValue: valueTest{
-				rootMappings: "out result: => projector",
+				rootMappings: "out result: function()",
 				wantJSON: `{
 						"result": [{
 							"arithmetic": [11, 9, 14, 1],
@@ -443,13 +459,13 @@ func TestTranspile(t *testing.T) {
 		},
 		{
 			name: "block condition",
-			whistle: `def projector(a) {
+			whistle: `def function(a) {
 									if a + 5 = 7 {
 										aPlusFive: "seven"
 									}
 							 }`,
 			wantValue: valueTest{
-				rootMappings: "out result: 2 => projector; out result: 100 => projector",
+				rootMappings: "out result: function(2); out result: function(100)",
 				wantJSON: `{
 									   "result": [
 									     {
@@ -461,7 +477,7 @@ func TestTranspile(t *testing.T) {
 		},
 		{
 			name: "block condition with else",
-			whistle: `def projector(a) {
+			whistle: `def function(a) {
 									if a + 5 = 7 {
 										aPlusFive: "seven"
 									} else {
@@ -469,7 +485,7 @@ func TestTranspile(t *testing.T) {
 									}
 							 }`,
 			wantValue: valueTest{
-				rootMappings: "out result: 99 => projector; out result: 2 => projector;",
+				rootMappings: "out result: function(99); out result: function(2);",
 				wantJSON: `{
 									   "result": [
 									     {
@@ -484,7 +500,7 @@ func TestTranspile(t *testing.T) {
 		},
 		{
 			name: "nested block condition with else",
-			whistle: `def projector(a) {
+			whistle: `def function(a) {
 									if a > 10 {
 										if a > 20 {
 											a: "more than 20"
@@ -500,7 +516,7 @@ func TestTranspile(t *testing.T) {
 									}
 							 }`,
 			wantValue: valueTest{
-				rootMappings: "var input: 21, 11, 10, 9 => $ListOf; out result: input[] => projector",
+				rootMappings: "var input: $ListOf(21, 11, 10, 9); out result: function(input[])",
 				wantJSON: `{
 									   "result": [
 									     {
@@ -521,18 +537,18 @@ func TestTranspile(t *testing.T) {
 		},
 		{
 			name: "nested block conditions share fields",
-			whistle: `def projector(a) {
+			whistle: `def function(a) {
 									foo: "outter"
 									if a > 10 {
 										if a > 20 {
-											foo!: foo, " inner" => $StrCat;
-											foo2: foo, " inner2" => $StrCat;
+											foo!: $StrCat(foo, " inner");
+											foo2: $StrCat(foo, " inner2");
 										}
 									}
 									bar: foo;
 							 }`,
 			wantValue: valueTest{
-				rootMappings: "out result: 999 => projector",
+				rootMappings: "out result: function(999)",
 				wantJSON: `{
 									   "result": [
 									     {
@@ -546,18 +562,18 @@ func TestTranspile(t *testing.T) {
 		},
 		{
 			name: "nested block conditions share variables",
-			whistle: `def projector(a) {
+			whistle: `def function(a) {
 									var foo: "outter"
 									if a > 10 {
 										if a > 20 {
-											var foo!: foo, " inner" => $StrCat;
+											var foo!: $StrCat(foo, " inner");
 										}
 									}
 									bar: foo;
 									foo: foo;
 							 }`,
 			wantValue: valueTest{
-				rootMappings: "out result: 999 => projector",
+				rootMappings: "out result: function(999)",
 				wantJSON: `{
 									   "result": [
 									     {
@@ -571,9 +587,9 @@ func TestTranspile(t *testing.T) {
 		{
 			name: "comments",
 			whistle: `// Comment here
-							 def projector(a) {
+							 def function(a) {
 									// comment there
-									value: a.foo.bar;
+									value: a.foo.bar; // Even here
 
 									// comment anywhere! With slashes: // that's fine
 									value!: a.foo.bar;
@@ -581,10 +597,10 @@ func TestTranspile(t *testing.T) {
 		},
 		{
 			name:    "newlines optional",
-			whistle: `def test(a, b) { if b? { var myvar (if a = "foo"): "asd" => $IsNotNil; if ~(b?) { var bvar (if b = "boo"): "bbb"?; } } else { out asd: 1.2 + 7 => $Str; some: a.field; } }`,
+			whistle: `def test(a, b) { if b? { var myvar (if a = "foo"): $IsNotNil("asd"); if ~(b?) { var bvar (if b = "boo"): "bbb"?; } } else { out asd: $Str(1.2 + 7); some: a.field; } }`,
 		},
 		{
-			name: "post process projector name",
+			name: "post process function name",
 			whistle: `
 			def makeFoo(num) {
 				num: num;
@@ -599,8 +615,8 @@ func TestTranspile(t *testing.T) {
 			post => addFoo
 			`,
 			wantValue: valueTest{
-				rootMappings: `var nums: 1, 2, 3, 4 => $ListOf
-											 out test: nums[] => makeFoo;`,
+				rootMappings: `var nums: $ListOf(1, 2, 3, 4)
+											 out test: makeFoo(nums[]);`,
 				wantJSON: `{
 								     "results": [
 								       {
@@ -625,7 +641,7 @@ func TestTranspile(t *testing.T) {
 			},
 		},
 		{
-			name: "post process inline projector",
+			name: "post process inline function",
 			whistle: `
 			def makeFoo(num) {
 				num: num;
@@ -638,8 +654,8 @@ func TestTranspile(t *testing.T) {
 			}
 			`,
 			wantValue: valueTest{
-				rootMappings: `var nums: 1, 2, 3, 4 => $ListOf
-											 out test: nums[] => makeFoo;`,
+				rootMappings: `var nums: $ListOf(1, 2, 3, 4)
+											 out test: makeFoo(nums[]);`,
 				wantJSON: `{
 									   "results": [
 									     {
@@ -672,7 +688,7 @@ func TestTranspile(t *testing.T) {
 			}
 			`,
 			wantValue: valueTest{
-				rootMappings: `out test: $root => ProcessHL7v2;`,
+				rootMappings: `out test: ProcessHL7v2($root);`,
 				inputJSON:    `{"4": {"5": {"6": {"7": {"A": "hello"}}}}}`,
 				wantJSON: `{"test": [{
 																	"MSH": {"1": {"2": {"3": "hello"}}},
@@ -686,7 +702,7 @@ func TestTranspile(t *testing.T) {
 									res: a + b
 							 }`,
 			wantValue: valueTest{
-				rootMappings: "out result: $root.nums[], 1 => add",
+				rootMappings: "out result: add($root.nums[], 1)",
 				inputJSON:    `{"nums": [0, 1, 2] }`,
 				wantJSON: `{
 									   "result": [
@@ -709,7 +725,7 @@ func TestTranspile(t *testing.T) {
 									res: a + b + c
 							 }`,
 			wantValue: valueTest{
-				rootMappings: "out result: $root.nums[], $root.more_nums[], $root.even_more_nums[] => add",
+				rootMappings: "out result: add($root.nums[], $root.more_nums[], $root.even_more_nums[])",
 				inputJSON:    `{"nums": [0, 1, 2], "more_nums": [100, -100, 47], "even_more_nums": [13, 17, 21] }`,
 				wantJSON: `{
 									   "result": [
@@ -732,7 +748,7 @@ func TestTranspile(t *testing.T) {
 									res: a + b + c
 							 }`,
 			wantValue: valueTest{
-				rootMappings: "out result: $root.nums[*].a[], $root.more_nums[], $root.even_more_nums[] => add",
+				rootMappings: "out result: add($root.nums[*].a[], $root.more_nums[], $root.even_more_nums[])",
 				inputJSON:    `{"nums": [{"a": 0}, {"a":1}, {"a":2}], "more_nums": [100, -100, 47], "even_more_nums": [13, 17, 21] }`,
 				wantJSON: `{
 									   "result": [
@@ -750,7 +766,7 @@ func TestTranspile(t *testing.T) {
 			},
 		},
 		{
-			name: "arg zipping not applied if there is a projector",
+			name: "arg zipping not applied if there is a function",
 			whistle: `def add(a, b, c) {
 									res: a + b[0] + c
 							 }
@@ -758,7 +774,7 @@ func TestTranspile(t *testing.T) {
 									$this: x
 							 }`,
 			wantValue: valueTest{
-				rootMappings: "out result: $root.nums[], ($root.more_nums[] => id), $root.even_more_nums[] => add",
+				rootMappings: "out result: add($root.nums[], id($root.more_nums[]), $root.even_more_nums[])",
 				inputJSON:    `{"nums": [0, 1, 2], "more_nums": [100, -100, 47], "even_more_nums": [13, 17, 21] }`,
 				wantJSON: `{
 									   "result": [
@@ -781,7 +797,7 @@ func TestTranspile(t *testing.T) {
 							nums: list[where $ > 100]
 						}`,
 			wantValue: valueTest{
-				rootMappings: "out result: 1, 2, 101, 3, 102, 104 => $ListOf => onlyBigNums",
+				rootMappings: "out result: onlyBigNums($ListOf(1, 2, 101, 3, 102, 104))",
 				wantJSON: `{
 									   "result": [
 									     {
@@ -798,7 +814,7 @@ func TestTranspile(t *testing.T) {
 							nums: list[where $ > limit]
 						}`,
 			wantValue: valueTest{
-				rootMappings: "out result: 1, 2, 101, 3, 102, 104 => $ListOf => onlyBigNums",
+				rootMappings: "out result: onlyBigNums($ListOf(1, 2, 101, 3, 102, 104))",
 				wantJSON: `{
 									   "result": [
 									     {
@@ -809,13 +825,12 @@ func TestTranspile(t *testing.T) {
 			},
 		},
 		{
-			name: "projector result enumeration",
+			name: "function result enumeration",
 			whistle: `def num_A(num) {
 						a: num
 						}`,
 			wantValue: valueTest{
-				rootMappings: "out one: 1, 2, 3 => $ListOf[] => num_A; out two: (1, 2, 3 => $ListOf)[] => num_A; out three: (1, 2, 3 => $ListOf[]) => num_A;",
-				inputJSON:    `{"nums": [{"a": 0}, {"a":101}, {"a":201}], "more_nums": [100, -100, 47], "even_more_nums": [13, 17] }`,
+				rootMappings: "out one: num_A($ListOf[](1, 2, 3)); out two: num_A($ListOf[](1, 2, 3)); out three: num_A($ListOf[](1, 2, 3));",
 				wantJSON: `{
 										 "one":[
 												{
@@ -862,7 +877,7 @@ func TestTranspile(t *testing.T) {
 									res: a + b + c
 							 }`,
 			wantValue: valueTest{
-				rootMappings: "out result: ($root.nums[where $.a > 100][] => GetA[]), $root.more_nums[where $ > 0][], $root.even_more_nums[] => add",
+				rootMappings: "out result: add(GetA[]($root.nums[where $.a > 100][]), $root.more_nums[where $ > 0][], $root.even_more_nums[])",
 				inputJSON:    `{"nums": [{"a": 0}, {"a":101}, {"a":201}], "more_nums": [100, -100, 47], "even_more_nums": [13, 17] }`,
 				wantJSON: `{
 									   "result": [
@@ -880,7 +895,7 @@ func TestTranspile(t *testing.T) {
 			name:    "nested filters",
 			whistle: ``,
 			wantValue: valueTest{
-				rootMappings: "out result: $root.nums[where $.a[where $ > 100] => $ListLen > 1]",
+				rootMappings: "out result: $root.nums[where $ListLen($.a[where $ > 100]) > 1]",
 				inputJSON:    `{"nums": [{"a": [1, 101, 102]}, {"a": [1, 2, 300]}]}`,
 				wantJSON: `{
 									   "result": [{"a": [1, 101, 102]}]
@@ -890,13 +905,13 @@ func TestTranspile(t *testing.T) {
 		{
 			name: "forced var/dest",
 			whistle: `def bad_names(arg) {
-									var bad: arg, "var" => $StrCat;
+									var bad: $StrCat(arg, "var");
 									bad: "dest";
 									read_var: var bad;
 									read_dest: dest bad;
 								}`,
 			wantValue: valueTest{
-				rootMappings: "out result: \"bad\" => bad_names",
+				rootMappings: `out result: bad_names("bad")`,
 				wantJSON: `{
 									   "result": [{"bad": "dest", "read_var": "badvar", "read_dest": "dest"}]
 									 }`,
@@ -909,7 +924,7 @@ func TestTranspile(t *testing.T) {
 									<this>: arg
 								}`,
 			wantValue: valueTest{
-				rootMappings: "out result: root => this",
+				rootMappings: "out result: this(root)",
 				wantJSON: `{
 									   "result": [{"red": "blue"}]
 									 }`,
@@ -926,8 +941,8 @@ func TestTranspile(t *testing.T) {
 			wantValue: valueTest{
 				rootMappings: `red: "red"
 											blue: "blue"
-											one: "one" => $ListOf
-											one[]: "two" => root_fields`,
+											one: $ListOf("one")
+											one[]: root_fields("two")`,
 				wantJSON: `{
 									   "red": "red",
 										 "blue": "blue",
@@ -950,7 +965,7 @@ func TestTranspile(t *testing.T) {
 									root two: "three"
 								}`,
 			wantValue: valueTest{
-				rootMappings: `var _: ("shouldNotBeInOutput" => root_fields)`,
+				rootMappings: `var _: root_fields("shouldNotBeInOutput")`,
 				wantJSON: `{
 									   "one": ["boo!"],
 										 "two": "three"
@@ -965,7 +980,7 @@ func TestTranspile(t *testing.T) {
 										[5]: three
 									}`,
 			wantValue: valueTest{
-				rootMappings: "result: 1, 2, 3 => array",
+				rootMappings: "result: array(1, 2, 3)",
 				wantJSON: `{
 										 "result": [1, 2, null, null, null, 3]
 									 }`,
