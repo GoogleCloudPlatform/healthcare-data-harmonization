@@ -154,26 +154,29 @@ func TestJSONFuture(t *testing.T) {
 			var lock sync.Mutex
 			received := make([]JSONToken, 0)
 
-			var wg sync.WaitGroup
-			wg.Add(test.numReceiver)
-
 			// Receivers
+			var wgr sync.WaitGroup
+			wgr.Add(test.numReceiver)
 			for i := 0; i < test.numReceiver; i++ {
 				go func() {
 					j := f.Value()
 					lock.Lock()
 					received = append(received, j)
 					lock.Unlock()
-					wg.Done()
+					wgr.Done()
 				}()
 			}
 			time.Sleep(100 * time.Millisecond)
 			// Sender
 			if test.sender {
+				var wgs sync.WaitGroup
+				wgs.Add(1)
 				go func() {
 					f.Set(test.value)
+					wgs.Done()
 				}()
-				wg.Wait()
+				wgr.Wait()
+				wgs.Wait()
 			}
 
 			if len(received) != test.want {
@@ -188,15 +191,15 @@ func TestJSONFuture(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		t.Run("receivers and sender interleaved"+test.name, func(t *testing.T) {
+		t.Run("receivers and sender interleaved "+test.name, func(t *testing.T) {
 			f := NewJSONFuture()
 			var lock sync.Mutex
 			received := make([]JSONToken, 0)
 
-			var wg sync.WaitGroup
-			wg.Add(test.numReceiver)
-
 			// Receivers
+			var wgr, wgrs sync.WaitGroup
+			wgrs.Add(1)
+			wgr.Add(test.numReceiver)
 			go func() {
 				for i := 0; i < test.numReceiver; i++ {
 					go func() {
@@ -204,20 +207,27 @@ func TestJSONFuture(t *testing.T) {
 						lock.Lock()
 						received = append(received, j)
 						lock.Unlock()
-						wg.Done()
+						wgr.Done()
 					}()
 				}
+				wgrs.Done()
 			}()
 			// Sender
+			var wgs sync.WaitGroup
+			wgs.Add(1)
+
 			go func() {
 				if test.sender {
 					f.Set(test.value)
 				}
+				wgs.Done()
 			}()
 
 			if test.sender {
-				wg.Wait()
+				wgr.Wait()
 			}
+			wgrs.Wait()
+			wgs.Wait()
 
 			if len(received) != test.want {
 				t.Errorf("number of receiver got %d want %d", len(received), test.want)

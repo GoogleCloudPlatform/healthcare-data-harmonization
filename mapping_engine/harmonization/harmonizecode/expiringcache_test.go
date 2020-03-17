@@ -72,24 +72,48 @@ func TestExpiringCache(t *testing.T) {
 }
 
 func TestConcurrentGoroutines(t *testing.T) {
+	items := []struct {
+		delay int
+		keys  CodeLookupKey
+		want  int
+	}{
+		{
+			delay: 0,
+			keys:  CodeLookupKey{"a", "b", "c"},
+			want:  1,
+		},
+		{
+			delay: 2,
+			keys:  CodeLookupKey{"aa", "bb", "cc"},
+			want:  2,
+		},
+		{
+			delay: 4,
+			keys:  CodeLookupKey{"aaa", "bbb", "ccc"},
+			want:  2,
+		},
+		{
+			delay: 6,
+			keys:  CodeLookupKey{"aaaa", "bbbb", "cccc"},
+			want:  2,
+		},
+	}
 	m := NewCache(3, 1)
 	var wg sync.WaitGroup
-	addCache := func(delay int, k CodeLookupKey, expectedCount int) {
-		wg.Add(1)
-		defer wg.Done()
-		time.Sleep(time.Duration(delay) * time.Second)
-		m.Put(k, []HarmonizedCode{})
+	wg.Add(len(items))
 
-		l := m.Len()
-		if l != expectedCount {
-			t.Errorf("unexpected number of entries in expiring cache, got %v, want %v", l, expectedCount)
-		}
+	for _, item := range items {
+		go func(delay int, k CodeLookupKey, expectedCount int) {
+			defer wg.Done()
+			time.Sleep(time.Duration(delay) * time.Second)
+			m.Put(k, []HarmonizedCode{})
+
+			l := m.Len()
+			if l != expectedCount {
+				t.Errorf("unexpected number of entries in expiring cache, got %v, want %v", l, expectedCount)
+			}
+		}(item.delay, item.keys, item.want)
 	}
-
-	go addCache(0, CodeLookupKey{"a", "b", "c"}, 1)
-	go addCache(2, CodeLookupKey{"aa", "bb", "cc"}, 2)
-	go addCache(4, CodeLookupKey{"aaa", "bbb", "ccc"}, 2)
-	go addCache(6, CodeLookupKey{"aaaa", "bbbb", "cccc"}, 2)
 
 	wg.Wait()
 }
