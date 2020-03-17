@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2020 Google LLC.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -282,7 +282,7 @@ func TestFromDefinition_ManagesContext(t *testing.T) {
 	// This projector will shadow myFoo, we want to make sure it retains
 	// the original value once the projector is done. This ensures that
 	// the projector pushes and pops the context.
-	def := mpb.ProjectorDefinition{
+	def := &mpb.ProjectorDefinition{
 		Name: "Test",
 		Mapping: []*mappb.FieldMapping{
 			{
@@ -327,7 +327,7 @@ func TestFromDefinition_ManagesContext(t *testing.T) {
 func TestFromDefinition_OutputsAnArrayWhenMapping(t *testing.T) {
 	reg := types.NewRegistry()
 
-	def := mpb.ProjectorDefinition{
+	def := &mpb.ProjectorDefinition{
 		Name: "Test",
 		Mapping: []*mappb.FieldMapping{
 			{
@@ -363,13 +363,13 @@ func TestFromDefinition_OutputsAnArrayWhenMapping(t *testing.T) {
 func TestProjectorsCannotExceedMaxStackDepth(t *testing.T) {
 	tests := []struct {
 		name       string
-		projectors []mpb.ProjectorDefinition
+		projectors []*mpb.ProjectorDefinition
 		wants      []string
 	}{
 		{
 			name: "single-projector cycle",
-			projectors: []mpb.ProjectorDefinition{
-				{
+			projectors: []*mpb.ProjectorDefinition{
+				&mpb.ProjectorDefinition{
 					Name: "Root",
 					Mapping: []*mappb.FieldMapping{
 						{
@@ -384,8 +384,8 @@ func TestProjectorsCannotExceedMaxStackDepth(t *testing.T) {
 		},
 		{
 			name: "multi-projector cycle",
-			projectors: []mpb.ProjectorDefinition{
-				{
+			projectors: []*mpb.ProjectorDefinition{
+				&mpb.ProjectorDefinition{
 					Name: "Root",
 					Mapping: []*mappb.FieldMapping{
 						{
@@ -393,7 +393,7 @@ func TestProjectorsCannotExceedMaxStackDepth(t *testing.T) {
 						},
 					},
 				},
-				{
+				&mpb.ProjectorDefinition{
 					Name: "A",
 					Mapping: []*mappb.FieldMapping{
 						{
@@ -401,7 +401,7 @@ func TestProjectorsCannotExceedMaxStackDepth(t *testing.T) {
 						},
 					},
 				},
-				{
+				&mpb.ProjectorDefinition{
 					Name: "B",
 					Mapping: []*mappb.FieldMapping{
 						{
@@ -453,12 +453,12 @@ func TestProjectorsCannotExceedMaxStackDepth(t *testing.T) {
 func TestProjectorsCanNestUpToMaxStackDepth(t *testing.T) {
 	tests := []struct {
 		name       string
-		projectors []mpb.ProjectorDefinition
+		projectors []*mpb.ProjectorDefinition
 	}{
 		{
 			name: "single-projector cycle",
-			projectors: []mpb.ProjectorDefinition{
-				{
+			projectors: []*mpb.ProjectorDefinition{
+				&mpb.ProjectorDefinition{
 					Name: "Root",
 					Mapping: []*mappb.FieldMapping{
 						{
@@ -466,7 +466,7 @@ func TestProjectorsCanNestUpToMaxStackDepth(t *testing.T) {
 						},
 					},
 				},
-				{
+				&mpb.ProjectorDefinition{
 					Name: "Loop",
 					Mapping: []*mappb.FieldMapping{
 						{
@@ -506,8 +506,8 @@ func TestProjectorsCanNestUpToMaxStackDepth(t *testing.T) {
 		},
 		{
 			name: "multi-projector cycle",
-			projectors: []mpb.ProjectorDefinition{
-				{
+			projectors: []*mpb.ProjectorDefinition{
+				&mpb.ProjectorDefinition{
 					Name: "Root",
 					Mapping: []*mappb.FieldMapping{
 						{
@@ -515,7 +515,7 @@ func TestProjectorsCanNestUpToMaxStackDepth(t *testing.T) {
 						},
 					},
 				},
-				{
+				&mpb.ProjectorDefinition{
 					Name: "A",
 					Mapping: []*mappb.FieldMapping{
 						{
@@ -551,7 +551,7 @@ func TestProjectorsCanNestUpToMaxStackDepth(t *testing.T) {
 						},
 					},
 				},
-				{
+				&mpb.ProjectorDefinition{
 					Name: "B",
 					Mapping: []*mappb.FieldMapping{
 						{

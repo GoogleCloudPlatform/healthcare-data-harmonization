@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2020 Google LLC.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -142,7 +142,7 @@ func LoadLibraryProjectors(t *testing.T) *types.Registry {
 	}
 
 	for _, pd := range lc.Projector {
-		p := projector.FromDef(*pd, false /* parallel */)
+		p := projector.FromDef(pd, false /* parallel */)
 
 		if err := reg.RegisterProjector(pd.Name, p); err != nil {
 			t.Fatalf("failed to load library projector %q: %v", pd.Name, err)

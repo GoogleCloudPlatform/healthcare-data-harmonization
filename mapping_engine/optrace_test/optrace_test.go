@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2020 Google LLC.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -73,7 +73,7 @@ func TestTracesAdded(t *testing.T) {
 
 				ctxStart := pctx.String()
 
-				proj := projector.FromDef(mappb.ProjectorDefinition{Name: "test"}, parallel)
+				proj := projector.FromDef(&mappb.ProjectorDefinition{Name: "test"}, parallel)
 				res, err := proj(args, pctx)
 
 				if err != nil {

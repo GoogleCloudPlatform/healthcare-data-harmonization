@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2020 Google LLC.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import (
 )
 
 // FromDef creates a projector from a proto definition. This will not register it.
-func FromDef(definition mappb.ProjectorDefinition, parallel bool) types.Projector {
+func FromDef(definition *mappb.ProjectorDefinition, parallel bool) types.Projector {
 	return func(arguments []jsonutil.JSONMetaNode, pctx *types.Context) (jsonutil.JSONToken, error) {
 		pctx.Variables.Push()
 		pctx.Trace.StartProjectorCall(definition.Name, arguments, pctx.String())

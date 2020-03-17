@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2020 Google LLC.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -264,7 +264,7 @@ func (t *Transformer) LoadMappingConfig(config *dhpb.DataHarmonizationConfig) (*
 // LoadProjectors registers all given projectors.
 func (t *Transformer) LoadProjectors(projectors []*mappb.ProjectorDefinition) error {
 	for _, pd := range projectors {
-		p := projector.FromDef(*pd, t.parallel)
+		p := projector.FromDef(pd, t.parallel)
 
 		if err := t.Registry.RegisterProjector(pd.Name, p); err != nil {
 			return fmt.Errorf("error registering projector %s: %v", pd.Name, err)

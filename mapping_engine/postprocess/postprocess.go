@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2020 Google LLC.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ func Process(pctx *types.Context, config *mappb.MappingConfig, skipBundling bool
 	var p types.Projector
 	switch proj := config.PostProcess.(type) {
 	case *mappb.MappingConfig_PostProcessProjectorDefinition:
-		p = projector.FromDef(*proj.PostProcessProjectorDefinition, parallel)
+		p = projector.FromDef(proj.PostProcessProjectorDefinition, parallel)
 	case *mappb.MappingConfig_PostProcessProjectorName:
 		fp, err := pctx.Registry.FindProjector(proj.PostProcessProjectorName)
 		if err != nil {
