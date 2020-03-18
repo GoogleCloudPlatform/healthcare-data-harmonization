@@ -140,10 +140,10 @@ Input1_Input2_InputN_Output**, though this is not formally enforced by tooling.
 Let's add some structure to our planets.
 
 ```
-Planet[0]: "Earth" => PlanetName_PlanetInfo
-Planet[1]: "Mars" => PlanetName_PlanetInfo
-Planet[2]: "Jupiter" => PlanetName_PlanetInfo
-Moon[0]: "Luna" => MoonName_MoonInfo
+Planet[0]: PlanetName_PlanetInfo("Earth")
+Planet[1]: PlanetName_PlanetInfo("Mars")
+Planet[2]: PlanetName_PlanetInfo("Jupiter")
+Moon[0]: MoonName_MoonInfo("Luna")
 
 def PlanetName_PlanetInfo(planetName) {
   name: planetName
@@ -190,17 +190,17 @@ Running this mapping yields:
 Breaking down the syntax, a simple function call looks like:
 
 ```
-a, b, c => FunctionName
+FunctionName(a, b, c)
 ```
 
-This is read as "take inputs `a`, `b`, and `c` and pipe them to function
+This is read as "take inputs `a`, `b`, and `c` and pass them to function
 `FunctionName`.
 
-We can chain function calls by piping the result of one function to the next
+We can chain function calls by passing the result of one function to the next
 one:
 
 ```
-a, b, c => FunctionName => AnotherFunctionName
+AnotherFunctionName(FunctionName(a, b, c))
 ```
 
 <section class="zippy">
@@ -217,7 +217,7 @@ This assumes `AnotherFunctionName` takes only a single input. We can add inputs
 if `AnotherFunctionName` takes multiple inputs.
 
 ```
-(a, b, c => FunctionName), d => AnotherFunctionName
+AnotherFunctionName(FunctionName(a, b, c), d)
 ```
 
 <section class="zippy">
@@ -236,14 +236,14 @@ Without the brackets in this case, the code will not compile.
 Let's generalize our functions by making the celstial body's `type` an input. We
 will also make use of a builtin function: `$ToUpper`:
 
-``` {highlight="content:..\s\$ToUpper content:,\sbodyType"}
-Planet[0]: "Earth", "Planet" => BodyName_BodyType_BodyInfo
-Planet[1]: "Mars", "Planet" => BodyName_BodyType_BodyInfo
-Planet[2]: "Jupiter", "Planet" => BodyName_BodyType_BodyInfo
-Moon[0]: "Luna", "Moon" => BodyName_BodyType_BodyInfo
+``` {highlight="content:\$ToUpper content:,\sbodyType"}
+Planet[0]: BodyName_BodyType_BodyInfo("Earth", "Planet")
+Planet[1]: BodyName_BodyType_BodyInfo("Mars", "Planet")
+Planet[2]: BodyName_BodyType_BodyInfo("Jupiter", "Planet")
+Moon[0]: BodyName_BodyType_BodyInfo("Luna", "Moon")
 
 def BodyName_BodyType_BodyInfo(bodyName, bodyType) {
-  name: bodyName => $ToUpper
+  name: $ToUpper(bodyName)
   type: bodyType
 }
 
@@ -308,9 +308,9 @@ array of the planets `"Mercury", "Venus", "Earth"`.
 <section class="zippy">
 Hint
 
-Remember that you can call a function with multiple inputs like `x, y =>
-Function`. To build a list of planets as one of the parameters, you will have
-something like `?, (???? => $ListOf) => Function`
+Remember that you can call a function with multiple inputs like `Function(x,
+y)`. To build a list of planets as one of the parameters, you will have
+something like `Function(?, $ListOf(????))`
 
 </section>
 <section class="zippy">
@@ -318,8 +318,7 @@ Another Hint
 
 Your Output mapping might look like
 
-`Star: "Sol", ("Mercury", "Venus", "Earth" => $ListOf) =>
-SunName_Planets_SunInfo`
+`Star: SunName_Planets_SunInfo("Sol", $ListOf("Mercury", "Venus", "Earth"))`
 
 Given this, write the function `SunName_Planets_SunInfo`.
 </section>
@@ -327,10 +326,10 @@ Given this, write the function `SunName_Planets_SunInfo`.
 Solution
 
 <pre>
-<code>Star: "Sol", ("Mercury", "Venus", "Earth" => $ListOf) => SunName_Planets_SunInfo
+<code>Star: SunName_Planets_SunInfo("Sol", $ListOf("Mercury", "Venus", "Earth"))
 
 def SunName_Planets_SunInfo(sunName, planets) {
-  name: sunName => $ToUpper
+  name: $ToUpper(sunName)
   planets: planets
 }
 </code>
@@ -346,18 +345,18 @@ What if we want a function to return a number? We can do this by mapping to
 `$this`:
 
 ```
-Primitive: 10 => Num_DoubleNum
-Merged: "red", "blue" => Colour_Colour_MergedColours
+Primitive: Num_DoubleNum(10)
+Merged: Colour_Colour_MergedColours("red", "blue")
 
 def Num_DoubleNum(num) {
-  $this: 2, num => $Mul
+  $this: $Mul(2, num)
 }
 
 def Colour_Colour_MergedColours(col1, col2) {
-  $this: col1 => Colour_Col1
+  $this: Colour_Col1(col1)
 
   // Merge the result of Colour_Col2 with $this.
-  $this: col2 => Colour_Col2
+  $this: Colour_Col2(col2)
 }
 
 def Colour_Col1(col) {
@@ -413,7 +412,7 @@ target fields in common (`tireProperties[0]`, `tireProperties[1]` and
   tireProperties[0].value: sedan.tireType
   tireProperties[1].key: "Size"
   tireProperties[1].value: sedan.tireSize
-  digitalSpeedometer: sedan.speedometer.type, "Digital" => $Eq
+  digitalSpeedometer: $Eq(sedan.speedometer.type, "Digital")
   type: "Sedan"
 }
 
@@ -462,12 +461,12 @@ Solution
 }
 
 def Sedan_Vehicle(sedan) {
-  $this: sedan, "Sedan" => Any_VehicleCommon
-  digitalSpeedometer: sedan.speedometer.type, "Digital" => $Eq
+  $this: Any_VehicleCommon(sedan, "Sedan")
+  digitalSpeedometer: $Eq(sedan.speedometer.type, "Digital")
 }
 
 def Lorry_Vehicle(lorry) {
-  $this: lorry, "Lorry" => Any_VehicleCommon
+  $this: Any_VehicleCommon(lorry, "Lorry")
   tireProperties[2].key: "Number"
   tireProperties[2].value: lorry.tireNum
   towCapacity: lorry.towing.capacity
@@ -516,13 +515,13 @@ of messy, non-modular mappings.
 </section>
 
 ``` {highlight="content:root\."}
-Planet[0]: $root.Planets[0], "Planet" => BodyName_BodyType_BodyInfo
-Planet[1]: $root.Planets[1], "Planet" => BodyName_BodyType_BodyInfo
-Planet[2]: $root.Planets[2], "Planet" => BodyName_BodyType_BodyInfo
-Moon[0]: $root.Moons[0], "Moon" => BodyName_BodyType_BodyInfo
+Planet[0]: BodyName_BodyType_BodyInfo($root.Planets[0], "Planet")
+Planet[1]: BodyName_BodyType_BodyInfo($root.Planets[1], "Planet")
+Planet[2]: BodyName_BodyType_BodyInfo($root.Planets[2], "Planet")
+Moon[0]: BodyName_BodyType_BodyInfo($root.Moons[0], "Moon")
 
 def BodyName_BodyType_BodyInfo(body, bodyType) {
-  name: body.name => $ToUpper
+  name: $ToUpper(body.name)
   type: bodyType
 }
 ```
@@ -541,11 +540,11 @@ there are not exactly 3 planets and 1 moon. Let's adjust our mapping to iterate
 over the `Planets` and `Moons` arrays:
 
 ``` {highlight="content:\[\]"}
-Planet: $root.Planets[], "Planet" => BodyName_BodyType_BodyInfo
-Moon: $root.Moons[], "Moon" => BodyName_BodyType_BodyInfo
+Planet: BodyName_BodyType_BodyInfo($root.Planets[], "Planet")
+Moon: BodyName_BodyType_BodyInfo($root.Moons[], "Moon")
 
 def BodyName_BodyType_BodyInfo(body, bodyType) {
-  name: body.name => $ToUpper
+  name: $ToUpper(body.name)
   type: bodyType
 }
 ```
@@ -555,24 +554,24 @@ input arrays in `codelab.json` and they will get mapped.
 
 The syntax for iterating an array is suffixing it with `[]`. More abstractly,
 
-`a[] => Function` means "pipe each element of `a` (one at a time) to
-`Function`". In our above mapping, we also pipe the constant "Planet";
+`Function(a[])` means "pass each element of `a` (one at a time) to `Function`".
+In our above mapping, we also pass the constant "Planet";
 
-`a[], b => Function` means "pipe each element of `a` (one at a time), along with
+`Function(a[], b)` means "pass each element of `a` (one at a time), along with
 `b` to `Function`". If `b` is an array of the same length as `a` we can iterate
 them together:
 
-`a[], b[] => Function` means "pipe each element of `a` (one at a time), along
-with each element of `b` (at the same index) to `Function`"
+`Function(a[], b[])` means "pass each element of `a` (one at a time), along with
+each element of `b` (at the same index) to `Function`"
 
 > NOTE: The result of an iterating mapping is itself an array. In our planets
-> example, The result of `root.Planets[], "Planet" =>
-> BodyName_BodyType_BodyInfo` is an array of BodyInfos. We then write this array
-> to `Planets`. If we want to iterate over this array, and pipe it along one
-> item at a time to something else, we can do
+> example, The result of `BodyName_BodyType_BodyInfo(root.Planets[], "Planet")`
+> is an array of BodyInfos. We then write this array to `Planets`. If we want to
+> iterate over this array, and pass it along one item at a time to something
+> else, we can do
 >
-> `root.Planets[], "Planet" => BodyName_BodyType_BodyInfo[] =>
-> BodyInfo_SomethingElse`.
+> `BodyInfo_SomethingElse(BodyName_BodyType_BodyInfo[](root.Planets[],
+> "Planet"))`.
 
 <section class="zippy">
 **Exercise**
@@ -617,8 +616,8 @@ make the output look like:
 
 > NOTE: `Moon` is unchanged.
 
-Make use of the `$StrCat` builtin, where `"one", " ", "two", " ", "three" =>
-$StrCat` makes `"one two three"`.
+Make use of the `$StrCat` builtin, where `$StrCat("one", " ", "two", " ",
+"three")` makes `"one two three"`.
 
 <section class="zippy">
 Hint
@@ -636,17 +635,17 @@ We'll also need to use <code>$this</code> in our new function to merge the curre
 Solution
 
 <pre>
-<code>Planet: $root.Planets[], "Planet" => BodyName_BodyType_BodyInfo[] => BodyInfo_ExtendedBodyInfo
-Moon: $root.Moons[], "Moon" => BodyName_BodyType_BodyInfo
+<code>Planet: BodyInfo_ExtendedBodyInfo(BodyName_BodyType_BodyInfo[]($root.Planets[], "Planet"))
+Moon: BodyName_BodyType_BodyInfo($root.Moons[], "Moon")
 
 def BodyName_BodyType_BodyInfo(body, bodyType) {
-  name: body.name => $ToUpper
+  name: $ToUpper(body.name)
   type: bodyType
 }
 
 def BodyInfo_ExtendedBodyInfo(info) {
   $this: info
-  extraInfo.fullName: info.type, " ", info.name => $StrCat
+  extraInfo.fullName: $StrCat(info.type, " ", info.name)
 }
 </code>
 </pre>
@@ -691,11 +690,11 @@ Let's make a new Output Key that just contains our planet names:
 ``` {highlight="content:\[\*\] context:1,PlanetNames"}
 PlanetNames: $root.Planets[*].name;
 
-Planet: $root.Planets[], "Planet" => BodyName_BodyType_BodyInfo
-Moon: $root.Moons[], "Moon" => BodyName_BodyType_BodyInfo
+Planet: BodyName_BodyType_BodyInfo($root.Planets[], "Planet")
+Moon: BodyName_BodyType_BodyInfo($root.Moons[], "Moon")
 
 def BodyName_BodyType_BodyInfo(body, bodyType) {
-  name: body.name => $ToUpper
+  name: $ToUpper(body.name)
   type: bodyType
 }
 ```
@@ -750,13 +749,13 @@ Let's capitalize the names in `PlanetNames` using what we learned about
 iterating arrays:
 
 ``` {highlight="content:\[\]\s..\s_ToUpper"}
-PlanetNames: $root.Planets[*].name[] => $ToUpper;
+PlanetNames: $ToUpper($root.Planets[*].name[]);
 
-Planet: $root.Planets[], "Planet" => BodyName_BodyType_BodyInfo
-Moon: $root.Moons[], "Moon" => BodyName_BodyType_BodyInfo
+Planet: BodyName_BodyType_BodyInfo($root.Planets[], "Planet")
+Moon: BodyName_BodyType_BodyInfo($root.Moons[], "Moon")
 
 def BodyName_BodyType_BodyInfo(body, bodyType) {
-  name: body.name => $ToUpper
+  name: $ToUpper(body.name)
   type: bodyType
 }
 ```
@@ -801,13 +800,13 @@ Running the mapping now gives us
 What if we want to write to an array field? Let's make `type` an array:
 
 ``` {highlight="content:types"}
-PlanetNames: $root.Planets[*].name[] => $ToUpper;
+PlanetNames: $ToUpper($root.Planets[*].name[]);
 
-Planet: $root.Planets[], "Planet" => BodyName_BodyType_BodyInfo
-Moon: $root.Moons[], "Moon" => BodyName_BodyType_BodyInfo
+Planet: BodyName_BodyType_BodyInfo($root.Planets[], "Planet")
+Moon: BodyName_BodyType_BodyInfo($root.Moons[], "Moon")
 
 def BodyName_BodyType_BodyInfo(body, bodyType) {
-  name: body.name => $ToUpper
+  name: $ToUpper(body.name)
   types[]: bodyType
   types[]: "Body"
 }
@@ -978,13 +977,13 @@ Hint
 Solution
 
 <pre>
-<code>PlanetNames: $root.Planets[*].name[] => $ToUpper;
+<code>PlanetNames: $ToUpper($root.Planets[*].name[]);
 
-Planet: $root.Planets[], "Planet" => BodyName_BodyType_BodyInfo
-Moon: $root.Moons[], "Moon" => BodyName_BodyType_BodyInfo
+Planet: BodyName_BodyType_BodyInfo($root.Planets[], "Planet")
+Moon: BodyName_BodyType_BodyInfo($root.Moons[], "Moon")
 
 def BodyName_BodyType_BodyInfo(body, bodyType) {
-  name: body.name => $ToUpper
+  name: $ToUpper(body.name)
   types[].array[]: bodyType
   types[].array[]: "Body"
 }
@@ -1001,13 +1000,13 @@ example, if we want to reuse some mapped data without executing the mapping
 again:
 
 ``` {highlight="content:\bvar\b content:\bbigName\b"}
-PlanetNames: $root.Planets[*].name[] => $ToUpper;
+PlanetNames: $ToUpper($root.Planets[*].name[]);
 
-Planet: $root.Planets[], "Planet" => BodyName_BodyType_BodyInfo
-Moon: $root.Moons[], "Moon" => BodyName_BodyType_BodyInfo
+Planet: BodyName_BodyType_BodyInfo($root.Planets[], "Planet")
+Moon: BodyName_BodyType_BodyInfo($root.Moons[], "Moon")
 
 def BodyName_BodyType_BodyInfo(body, bodyType) {
-  var bigName: body.name => $ToUpper
+  var bigName: $ToUpper(body.name)
   name: bigName
   types[]: bodyType
   types[]: "Body"
@@ -1067,18 +1066,18 @@ Let's update our mapping to output the data in AU, or
 AU):
 
 ``` {highlight="context:semiMajorAxisAU,1"}
-PlanetNames: $root.Planets[*].name[] => $ToUpper;
+PlanetNames: $ToUpper($root.Planets[*].name[]);
 
-Planet: $root.Planets[], "Planet" => BodyName_BodyType_BodyInfo
-Moon: $root.Moons[], "Moon" => BodyName_BodyType_BodyInfo
+Planet: BodyName_BodyType_BodyInfo($root.Planets[], "Planet")
+Moon: BodyName_BodyType_BodyInfo($root.Moons[], "Moon")
 
 def BodyName_BodyType_BodyInfo(body, bodyType) {
-  var bigName: body.name => $ToUpper
+  var bigName: $ToUpper(body.name)
   name: bigName
   types[]: bodyType
   types[]: "Body"
 
-  semiMajorAxisAU: body.semiMajorAxis, 149.598 => $Div
+  semiMajorAxisAU: $Div(body.semiMajorAxis, 149.598)
 }
 ```
 
@@ -1092,18 +1091,18 @@ add a condition so that we only output the `semiMajorAxisAU` field on planets,
 and not moons:
 
 ``` {highlight="content:\(if[^)]+\)"}
-PlanetNames: $root.Planets[*].name[] => $ToUpper;
+PlanetNames: $ToUpper($root.Planets[*].name[]);
 
-Planet: $root.Planets[], "Planet" => BodyName_BodyType_BodyInfo
-Moon: $root.Moons[], "Moon" => BodyName_BodyType_BodyInfo
+Planet: BodyName_BodyType_BodyInfo($root.Planets[], "Planet")
+Moon: BodyName_BodyType_BodyInfo($root.Moons[], "Moon")
 
 def BodyName_BodyType_BodyInfo(body, bodyType) {
-  var bigName: body.name => $ToUpper
+  var bigName: $ToUpper(body.name)
   name: bigName
   types[]: bodyType
   types[]: "Body"
 
-  semiMajorAxisAU (if bodyType, "Planet" => $Eq): body.semiMajorAxis, 149.598 => $Div
+  semiMajorAxisAU (if $Eq(bodyType, "Planet")): $Div(body.semiMajorAxis, 149.598)
 }
 ```
 
@@ -1172,21 +1171,21 @@ we can make our mapping more robust and easier to maintain/update by using
 `if/else` and not repeating the condition multiple times:
 
 ``` {highlight="context:if,1 content:.\selse\s."}
-PlanetNames: $root.Planets[*].name[] => $ToUpper;
+PlanetNames: $ToUpper($root.Planets[*].name[]);
 
-Planet: $root.Planets[], "Planet" => BodyName_BodyType_BodyInfo
-Moon: $root.Moons[], "Moon" => BodyName_BodyType_BodyInfo
+Planet: BodyName_BodyType_BodyInfo($root.Planets[], "Planet")
+Moon: BodyName_BodyType_BodyInfo($root.Moons[], "Moon")
 
 def BodyName_BodyType_BodyInfo(body, bodyType) {
-  var bigName: body.name => $ToUpper
+  var bigName: $ToUpper(body.name)
   name: bigName
   types[]: bodyType
   types[]: "Body"
-  if bodyType, "Planet" => $Eq {
-    semiMajorAxis.value: body.semiMajorAxis, 149.598 => $Div
+  if $Eq(bodyType, "Planet") {
+    semiMajorAxis.value: $Div(body.semiMajorAxis, 149.598)
     semiMajorAxis.unit: "AU"
   } else {
-    semiMajorAxis.value: body.semiMajorAxis, 1000000 => $Mul
+    semiMajorAxis.value: $Mul(body.semiMajorAxis, 1000000)
     semiMajorAxis.unit: "KM"
   }
 }
@@ -1257,7 +1256,7 @@ Running this mapping yields:
 
 ### Operators
 
-Writing `x, y => $Mul`, `$Div`, and `$Eq` is clunky. The DHML contains operators
+Writing `$Mul(x, y)`, `$Div`, and `$Eq` is clunky. The DHML contains operators
 for basic logical and arithmetic operations. Let's simplify our conditions to
 
 ``` {highlight="context:*"}
@@ -1359,7 +1358,7 @@ Your full input file should now look like this:
 </pre>
 </section>
 
-Add `Star: $root.Stars[], "Star" => BodyName_BodyType_BodyInfo` to your
+Add `Star: BodyName_BodyType_BodyInfo($root.Stars[], "Star")` to your
 mapping just below `Moon: ...`.
 
 Now, update BodyName_BodyType_BodyInfo to output semiMajorAxis according to the
@@ -1457,14 +1456,14 @@ Another Hint
 Solution
 
 <pre>
-<code>PlanetNames: $root.Planets[*].name[] => $ToUpper;
+<code>PlanetNames: $ToUpper($root.Planets[*].name[]);
 
-Planet: $root.Planets[], "Planet" => BodyName_BodyType_BodyInfo
-Moon: $root.Moons[], "Moon" => BodyName_BodyType_BodyInfo
-Star: $root.Stars[], "Star" => BodyName_BodyType_BodyInfo
+Planet: BodyName_BodyType_BodyInfo($root.Planets[], "Planet")
+Moon: BodyName_BodyType_BodyInfo($root.Moons[], "Moon")
+Star: BodyName_BodyType_BodyInfo($root.Stars[], "Star")
 
 def BodyName_BodyType_BodyInfo(body, bodyType) {
-  var bigName: body.name => $ToUpper
+  var bigName: $ToUpper(body.name)
   name: bigName
   types[]: bodyType
   types[]: "Body"
@@ -1493,10 +1492,10 @@ use a filter to only include planets with a semi-major axis greater than 200
 million km:
 
 ``` {highlight="content:\[where.+?\]"}
-PlanetNames: $root.Planets[*].name[] => $ToUpper;
+PlanetNames: $ToUpper($root.Planets[*].name[]);
 
-Planet: $root.Planets[where $.semiMajorAxis > 200][], "Planet" => BodyName_BodyType_BodyInfo
-Moon: $root.Moons[], "Moon" => BodyName_BodyType_BodyInfo
+Planet: BodyName_BodyType_BodyInfo($root.Planets[where $.semiMajorAxis > 200][], "Planet")
+Moon: BodyName_BodyType_BodyInfo($root.Moons[], "Moon")
 ```
 
 The `where` keyword indicates a filter, similar to `if` indicating a condition.
@@ -1623,25 +1622,25 @@ Hint
 
 Try writing a function that maps the Earth object to a constant that converts
 millions of kilometers to AU. How would you then *find* the earth object in the
-input to pipe to this mapping?
+input to pass to this mapping?
 
 </section>
 <section class="zippy">
 Solution
 
 <pre>
-<code>PlanetNames: $root.Planets[*].name[] => $ToUpper;
+<code>PlanetNames: $ToUpper($root.Planets[*].name[]);
 
-var kmToAU: $root.Planets[where $.name = "Earth"] => Earths_MKmToAUConst
-Planet: $root.Planets[where $.semiMajorAxis > 200][], "Planet", kmToAU => BodyName_BodyType_BodyInfo
-Moon: $root.Moons[], "Moon", kmToAU => BodyName_BodyType_BodyInfo
+var kmToAU: Earths_MKmToAUConst($root.Planets[where $.name = "Earth"])
+Planet: BodyName_BodyType_BodyInfo($root.Planets[where $.semiMajorAxis > 200][], "Planet", kmToAU)
+Moon: BodyName_BodyType_BodyInfo($root.Moons[], "Moon", kmToAU)
 
 def Earths_MKmToAUConst(earths) {
   $this: 1 / earths[0].semiMajorAxis
 }
 
 def BodyName_BodyType_BodyInfo(body, bodyType, kmToAU) {
-  var bigName: body.name => $ToUpper
+  var bigName: $ToUpper(body.name)
   name: bigName
   types[]: bodyType
   types[]: "Body"
@@ -1680,13 +1679,13 @@ mapping, and its result will become the new output.
 Let's reformat our output by defining a post process function:
 
 ``` {highlight="content:post"}
-PlanetNames: $root.Planets[*].name[] => $ToUpper;
+PlanetNames: $ToUpper($root.Planets[*].name[]);
 
-Planet: $root.Planets[], "Planet" => BodyName_BodyType_BodyInfo
-Moon: $root.Moons[], "Moon" => BodyName_BodyType_BodyInfo
+Planet: BodyName_BodyType_BodyInfo($root.Planets[], "Planet")
+Moon: BodyName_BodyType_BodyInfo($root.Moons[], "Moon")
 
 def BodyName_BodyType_BodyInfo(body, bodyType, kmToAU) {
-  var bigName: body.name => $ToUpper
+  var bigName: $ToUpper(body.name)
   name: bigName
   types[]: bodyType
   types[]: "Body"
@@ -1708,7 +1707,7 @@ post def RestructureExample(output) {
     solarSystem.planets[]: earths[0]
   }
 
-  planetNames: output.PlanetNames[] => $ToLower
+  planetNames: $ToLower(output.PlanetNames[])
 }
 ```
 
@@ -1792,7 +1791,7 @@ values/fields for you:
 
 2) If a non-existent field is accessed, it will return `null`
 
-However, a null value will still be piped to a function. Thus functions writing
+However, a null value will still be passed to a function. Thus functions writing
 fields with constants will still operate on null values.
 
 The following example demonstrates some of these properties:
@@ -1810,7 +1809,7 @@ Input:
 Mapping:
 
 ```
-Example: $root => Root_Example
+Example: Root_Example($root)
 
 def Root_Example(rt) {
   // This field does not appear in the output
@@ -1822,8 +1821,8 @@ def Root_Example(rt) {
   included[]: rt.Red.Blue
 
   // nested_1 will appear with just the constant, nested_2 will not appear
-  nested_1: rt.Abcdefghijklmnop, "Constant" => Nested_Example
-  nested_2: rt.Abcdefghijklmnop, rt.Abcdefghijklmnop => Nested_Example
+  nested_1: Nested_Example(rt.Abcdefghijklmnop, "Constant")
+  nested_2: Nested_Example(rt.Abcdefghijklmnop, rt.Abcdefghijklmnop)
 }
 
 def Nested_Example(one, two) {
@@ -1855,7 +1854,7 @@ root of the output. For example:
 
 ```
 Red[]: "Blue"
-Complex: "Hi", "Planet" => Hello_World_HelloWorldObject
+Complex: Hello_World_HelloWorldObject("Hi", "Planet")
 
 def Hello_World_HelloWorldObject(hello, world) {
     hello: hello
@@ -1894,7 +1893,7 @@ primitive (string, numeric, or boolean) field to only be written once. For
 example, the following mapping will fail:
 
 ```
-X: "Yep!" => String_X
+X: String_X("Yep!")
 
 def String_X(str) {
   x: str
@@ -1908,7 +1907,7 @@ source`.
 In order for it to succeed, the field can be suffixed with the `!` operator:
 
 ```
-X: "Yep!" => String_X
+X: String_X("Yep!")
 
 def String_X(str) {
   x: str
@@ -2022,33 +2021,34 @@ participant[0].individual.reference | extract the id from the FHIR Reference    
 Solution:
 
 <pre><code>
-VisitOccurrence(if $root.resourceType = "Encounter"): $root => Encounter_VisitOccurrence
+VisitOccurrence(if $root.resourceType = "Encounter"): Encounter_VisitOccurrence($root)
 
 def ExtractReferenceID(str) {
-    var temp: str, "/" => $StrSplit;
+    var temp: $StrSplit(str, "/");
     $this: temp[1];
 }
 
 def ExtractDate(str) {
-    $this: "2006-01-02T15:04:05Z07:00", str, "2006-01-02" => $ReformatTime;
+    $this:  $ReformatTime("2006-01-02T15:04:05Z07:00", str, "2006-01-02");
 }
 
 def ExtractTime(str) {
-    $this: "2006-01-02T15:04:05Z07:00", str, "15:04:05Z07:00" => $ReformatTime;
+    $this: $ReformatTime("2006-01-02T15:04:05Z07:00", str, "15:04:05Z07:00");
 }
 
 def Encounter_VisitOccurrence(encounter) {
     visit_occurrence_id: encounter.id
-    person_id: encounter.subject.reference => ExtractReferenceID
+    person_id: ExtractReferenceID(encounter.subject.reference)
     visit_concept_id: encounter.class.code
-    visit_start_date: encounter.period.start => ExtractDate
-    visit_start_time: encounter.period.start => ExtractTime
-    visit_end_date: encounter.period.end => ExtractDate
-    visit_end_time: encounter.period.end => ExtractTime
+    visit_start_date: ExtractDate(encounter.period.start)
+    visit_start_time: ExtractTime(encounter.period.start)
+    visit_end_date: ExtractDate(encounter.period.end)
+    visit_end_time: ExtractTime(encounter.period.end)
     // This constant comes from the suggested mapping: 44818518 (Visit derived from EHR)
     visit_type_concept_id: "44818518"
-    care_site_id: encounter.serviceProvider.reference => ExtractReferenceID
-    provider_id: encounter.participant[0].individual.reference => ExtractReferenceID
+    care_site_id: ExtractReferenceID(encounter.serviceProvider.reference)
+    provider_id: ExtractReferenceID(encounter.participant[0].individual.reference)
 }
 </code></pre>
+
 </section>
