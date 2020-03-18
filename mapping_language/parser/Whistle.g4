@@ -64,10 +64,6 @@ NEWLINE
     | EOF
 ;
 
-ARROW
-    : '=>'
-;
-
 WILDCARD
     : '[*]'
 ;
@@ -76,12 +72,15 @@ WILDCARD
 MUL
     : '*'
 ;
+
 DIV
     : '/'
 ;
+
 SUB
     : '-'
 ;
+
 ADD
     : '+'
 ;
@@ -327,6 +326,6 @@ pathSegment
 ;
 
 postProcess
-    : 'post' ARROW TOKEN  # postProcessName
-    | 'post' projectorDef # postProcessInline
+    : 'post' projectorDef # postProcessInline
+    | 'post' TOKEN  # postProcessName
 ;

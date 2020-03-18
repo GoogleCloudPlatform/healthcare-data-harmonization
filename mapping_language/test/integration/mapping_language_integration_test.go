@@ -612,7 +612,7 @@ func TestTranspile(t *testing.T) {
 				extra: "extra key"
 			}
 
-			post => addFoo
+			post addFoo
 			`,
 			wantValue: valueTest{
 				rootMappings: `var nums: $ListOf(1, 2, 3, 4)
