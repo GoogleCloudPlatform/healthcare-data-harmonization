@@ -1927,3 +1927,128 @@ Which results in
 ```
 
 > NOTE: Overwriting restrictions do not apply to variables.
+
+## [FHIR](https://hl7.org/fhir/) -> [OMOP](https://www.ohdsi.org/data-standardization/the-common-data-model/) example
+
+This exercise will map a [FHIR](https://hl7.org/fhir/)
+resource to its corresponding
+[OMOP](https://www.ohdsi.org/data-standardization/the-common-data-model/) table
+row, specifically the [FHIR Encounter](https://www.hl7.org/fhir/STU3/encounter.html) to an
+[OMOP VisitOccurrence](https://github.com/OHDSI/CommonDataModel/wiki/VISIT_OCCURRENCE).
+
+Using what you have learnt above, create a DHML file to map the following input and iterate on it until it produces the expected output.
+
+Input:
+
+```json
+{
+  "resourceType": "Encounter",
+  "id": "9eb1ee4b-12f0-4a31-8168-acd7af54023e",
+  "status": "finished",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "AMB"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "185349003",
+          "display": "Encounter for check up (procedure)"
+        }
+      ],
+      "text": "Encounter for check up (procedure)"
+    }
+  ],
+  "subject": {
+    "reference": "Patient/e6274e20-da06-4dd7-b9be-634cc3e31927"
+  },
+  "participant": [
+    {
+      "individual": {
+        "reference": "Practitioner/d9894296-41ab-4c50-a17a-8ec502b05ae7"
+      }
+    }
+  ],
+  "period": {
+    "start": "2009-07-04T17:20:00-04:00",
+    "end": "2009-07-04T17:50:00-04:00"
+  },
+  "serviceProvider": {
+    "reference": "Organization/b0e04623-b02c-3f8b-92ea-943fc4db60da"
+  }
+}
+```
+
+Expected output:
+
+```json
+{
+  "VisitOccurrence":{
+    "visit_occurrence_id": "9eb1ee4b-12f0-4a31-8168-acd7af54023e",
+    "person_id": "e6274e20-da06-4dd7-b9be-634cc3e31927",
+    "visit_concept_id": "AMB",
+    "visit_start_date": "2009-07-04",
+    "visit_start_time": "17:20:00-04:00",
+    "visit_end_date": "2009-07-04",
+    "visit_end_time": "17:50:00-04:00",
+    "visit_type_concept_id": "44818518",
+    "care_site_id": "b0e04623-b02c-3f8b-92ea-943fc4db60da",
+    "provider_id": "d9894296-41ab-4c50-a17a-8ec502b05ae7"
+  }
+}
+```
+
+### Mappings
+
+> NOTE: The mappings below are based off the
+> [OMOP on FHIR Project](http://omoponfhir.org/)
+
+Input field                         | Mapping operations                                                        | Output field
+----------------------------------- | ------------------------------------------------------------------------- | ------------
+id                                  | assign as is to output field                                              | visit_occurrence_id
+subject.reference                   | extract the id from the FHIR Reference                                    | person_id
+class.code                          | assign as is to output field                                              | visit_concept_id
+period.start                        | reformat time from "2006-01-02T15:04:05Z07:00" format to "2006-01-02"     | visit_start_date
+period.start                        | reformat time from "2006-01-02T15:04:05Z07:00" format to "15:04:05Z07:00" | visit_start_time
+period.end                          | reformat time from "2006-01-02T15:04:05Z07:00" format to "2006-01-02"     | visit_end_date
+period.end                          | reformat time from "2006-01-02T15:04:05Z07:00" format to "15:04:05Z07:00" | visit_end_time
+"44818518"                          | constant string                                                           | visit_type_concept_id
+serviceProvider.reference           | extract the id from the FHIR Reference                                    | care_site_id
+participant[0].individual.reference | extract the id from the FHIR Reference                                    | provider_id
+
+<section class="zippy">
+Solution:
+
+<pre><code>
+VisitOccurrence(if $root.resourceType = "Encounter"): $root => Encounter_VisitOccurrence
+
+def ExtractReferenceID(str) {
+    var temp: str, "/" => $StrSplit;
+    $this: temp[1];
+}
+
+def ExtractDate(str) {
+    $this: "2006-01-02T15:04:05Z07:00", str, "2006-01-02" => $ReformatTime;
+}
+
+def ExtractTime(str) {
+    $this: "2006-01-02T15:04:05Z07:00", str, "15:04:05Z07:00" => $ReformatTime;
+}
+
+def Encounter_VisitOccurrence(encounter) {
+    visit_occurrence_id: encounter.id
+    person_id: encounter.subject.reference => ExtractReferenceID
+    visit_concept_id: encounter.class.code
+    visit_start_date: encounter.period.start => ExtractDate
+    visit_start_time: encounter.period.start => ExtractTime
+    visit_end_date: encounter.period.end => ExtractDate
+    visit_end_time: encounter.period.end => ExtractTime
+    // This constant comes from the suggested mapping: 44818518 (Visit derived from EHR)
+    visit_type_concept_id: "44818518"
+    care_site_id: encounter.serviceProvider.reference => ExtractReferenceID
+    provider_id: encounter.participant[0].individual.reference => ExtractReferenceID
+}
+</code></pre>
+</section>
