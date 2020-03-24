@@ -44,8 +44,8 @@ import (
 
 var transformer *whistler.Transformer
 
-//export Java_com_google_cloud_healthcare_plugins_transform_TransformWrapper_transform
-func Java_com_google_cloud_healthcare_plugins_transform_TransformWrapper_transform(env *C.JNIEnv, cls C.jclass, cInput C.jstring) C.jstring {
+//export Java_com_google_cloud_healthcare_etl_util_library_TransformWrapper_transform
+func Java_com_google_cloud_healthcare_etl_util_library_TransformWrapper_transform(env *C.JNIEnv, cls C.jclass, cInput C.jstring) C.jstring {
 	input := jStringGoString(env, cInput)
 	i := []byte(input)
 	ji := &jsonutil.JSONContainer{}
@@ -71,8 +71,8 @@ func Java_com_google_cloud_healthcare_plugins_transform_TransformWrapper_transfo
 	return goStringJString(env, string(bres))
 }
 
-//export Java_com_google_cloud_healthcare_plugins_transform_TransformWrapper_initializeWhistler
-func Java_com_google_cloud_healthcare_plugins_transform_TransformWrapper_initializeWhistler(env *C.JNIEnv, cls C.jclass, cConfig C.jstring) {
+//export Java_com_google_cloud_healthcare_etl_util_library_TransformWrapper_initializeWhistler
+func Java_com_google_cloud_healthcare_etl_util_library_TransformWrapper_initializeWhistler(env *C.JNIEnv, cls C.jclass, cConfig C.jstring) {
 	config := jStringGoString(env, cConfig)
 	dhc := &dhpb.DataHarmonizationConfig{}
 	if err := proto.UnmarshalText(config, dhc); err != nil {
@@ -85,8 +85,8 @@ func Java_com_google_cloud_healthcare_plugins_transform_TransformWrapper_initial
 	}
 }
 
-//export Java_com_google_cloud_healthcare_plugins_transform_TransformWrapper_initializeWhistle
-func Java_com_google_cloud_healthcare_plugins_transform_TransformWrapper_initializeWhistle(env *C.JNIEnv, cls C.jclass, cConfig C.jstring) {
+//export Java_com_google_cloud_healthcare_etl_util_library_TransformWrapper_initializeWhistle
+func Java_com_google_cloud_healthcare_etl_util_library_TransformWrapper_initializeWhistle(env *C.JNIEnv, cls C.jclass, cConfig C.jstring) {
 	config := jStringGoString(env, cConfig)
 	mc, err := transpiler.Transpile(config)
 	if err != nil {
