@@ -38,6 +38,16 @@ function replace_modules() {
   go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util=$(realpath ../)/util
   go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine=$(realpath ../)
   cd ../
+
+  # BEGIN SCRUB-BEFORE-PUSH
+  cd _wrapping
+  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language=$(realpath ../../)/mapping_language
+  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto=$(realpath ../)/proto
+  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util=$(realpath ../)/util
+  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/transform=$(realpath ../)/transform
+  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine=$(realpath ../)
+  cd ../
+  # END SCRUB-BEFORE-PUSH
 }
 
 replace_modules
