@@ -1,57 +1,57 @@
 # Data Harmonization Mapping Language (DHML)
 
-This guide will walk you through the basics of writing a mapping in the DHML.
-Basic understanding with reading and writing languages like python or javascript
-is needed.
+This guide walks you through the basics of writing a mapping in the DHML. Basic
+understanding with reading and writing languages like python or javascript is
+needed.
 
-## Background
+This tutorial demonstrates the basics of writing data mapping in the Data
+Harmonization Mapping Language (DHML) to transform data from one schema to
+another schema. The following codelab walks you through different DHML features
+in a toy sample of data mapping. There are also a few exercises to help you get
+some hands-on practice with the configuration language.
 
-The DHML expresses data mappings from one schema to another. It lets users
-transform complex, nested data formats into other complex and nested data
-formats. This codelab will walk you through its features by building upon a toy
-example of data mapping.
+## Objectives
 
-## Setup {setup}
+*   Get familiar with the Data Harmonization Mapping Language (DHML) syntax
+*   Practice writing mapping configurations
+*   Run the mapping engine and look at the produced output
+*   Understand how this can be used to transform from one healthcare standard to
+    another
 
-If you wish to execute the code in this guide:
+## Before you begin {setup}
 
--   Make a new directory, for example `$HOME/dhml_codelab`.
+*   Make a new directory, for example `$HOME/dhml_codelab`
+*   Place the mapping configurations from the exercises in a file called
+    `codelab.dhml`
+*   Place the input in a file called `codelab.json` (for now the contents ofthe
+    file should just be `{}`, we'll fill it later)
 
--   Place the *code* in a file called `codelab.dhml`,
-
--   Place the *input* in a file called `codelab.json` (for now the contents of
-    the file should just be `{}`, we'll fill it later)
-
--   View the *output* in `$HOME/dhml_codelab/codelab.output.json`
-
--   Run your mapping using the mapping_engine binary, in mapping_engine/main.
-    An example command might look like (run from mapping_engine/main):
-    `go run . -- -input_file_spec=$HOME/dhml_codelab/codelab.json
+*   View the *output* in `$HOME/dhml_codelab/codelab.output.json`
+*   Run your mapping using the mapping_engine binary, in mapping_engine/main. An
+    example command might look like (run from mapping_engine/main): `go run . --
+    -input_file_spec=$HOME/dhml_codelab/codelab.json
     -output_dir=$HOME/dhml_codelab/
     -mapping_file_spec=$HOME/dhml_codelab/codelab.dhml`
 
-## Hello Mapping World
+## Hello mapping world
 
-Let's start with a simple mapping example (put this in `codelab.dhml` from the
-[Setup](#setup)).
+Start with a simple mapping example (put the config below in `codelab.dhml` from
+the [Before you begin](#setup)).
 
 ```
 Planet: "Earth"
 ```
 
-Let's break it down.
-
--   `Planet` is the path of the output field. Note it is a path, not just a name
-    so `Planet.someSubfield.someArray.someOtherSubfield` is also valid. Try it
-    to see what happens.
--   `:` is the mapping/assignment operator, which separates the target
+*   `Planet` is the path of the output field. Note it is a path, not just a name
+    so `Planet.someSubfield.someArray.someOtherSubfield` is also valid
+*   `:` is the mapping/assignment operator, which separates the target
     (`Planet`) and the data source (`"Earth"`)
--   `"Earth"` is a constant string data source
+*   `"Earth"` is a constant string data source
 
-(see [Setup](#setup) for how to run this mapping)
+Run the above mapping (see [Before you begin](#setup) for instructions)
 
 <section class="zippy">
-Running this mapping yields:
+Output:
 
 <pre>
 <code>{
@@ -62,7 +62,9 @@ Running this mapping yields:
 
 </section>
 
-**Let's add some more outputs**
+### Add array outputs
+
+Output data to an array instead of an object.
 
 ```
 Planet[0]: "Earth"
@@ -71,18 +73,8 @@ Planet[2]: "Jupiter"
 Moon[0]: "Luna"
 ```
 
-We've now introduced a new part of the path, `[i]`, where i is an index. This is
-standard JSON notation for indexing an array. The mapping engine will
-automatically create elements that do not yet exist. If you are curious, try to
-set one of the indices to 15, and see what happens.
-
-> WARNING: Mapping to specific array indices is rarely useful, since if you
-> remove or insert a mapping, you have to cascade your changes on to the
-> mappings after. We will later see how how to omit the indices in favour of
-> letting the engine keep track of them for us.
-
 <section class="zippy">
-Running this mapping yields:
+Output:
 
 <pre>
 <code>{
@@ -129,15 +121,14 @@ Moon[1]: "Luna"
 </section>
 </section>
 
-## Functions
+## Define and call functions
 
-A function is a set of mappings that produce a JSON object. It maps a set of
-inputs to a set of fields in its result object.
+### Defining functions
 
-**The usual naming convention for functions in DHML is
-Input1_Input2_InputN_Output**, though this is not formally enforced by tooling.
+*   A function is a set of mappings that produce a JSON object
+*   It maps a set of inputs to a set of fields in its result object
 
-Let's add some structure to our planets.
+Add some structure to planets.
 
 ```
 Planet[0]: PlanetName_PlanetInfo("Earth")
@@ -156,8 +147,10 @@ def MoonName_MoonInfo(moonName) {
 }
 ```
 
+Run the above mapping (see [Before you begin](#setup) for instructions)
+
 <section class="zippy">
-Running this mapping yields:
+Output:
 
 <pre>
 <code>{
@@ -187,54 +180,17 @@ Running this mapping yields:
 
 </section>
 
-Breaking down the syntax, a simple function call looks like:
+### Calling functions
 
-```
-FunctionName(a, b, c)
-```
+*   Calling functions is similar to C/Python
+*   A simple function call looks like `FunctionName(a, b, c)`
+*   Function calls are chained by passing the result of one function to the next
+    one like `SingleParameterFunctionName(FunctionName(a, b, c))`
+*   Similarly, multiple parameter function chaining is done like
+    `MultipleParamFunctionName(FunctionName(a, b, c), d)`
 
-This is read as "take inputs `a`, `b`, and `c` and pass them to function
-`FunctionName`.
-
-We can chain function calls by passing the result of one function to the next
-one:
-
-```
-AnotherFunctionName(FunctionName(a, b, c))
-```
-
-<section class="zippy">
-The equivalent in a C/Python style language would be
-
-<pre>
-<code>AnotherFunctionName(FunctionName(a, b, c))
-</code>
-</pre>
-
-</section>
-
-This assumes `AnotherFunctionName` takes only a single input. We can add inputs
-if `AnotherFunctionName` takes multiple inputs.
-
-```
-AnotherFunctionName(FunctionName(a, b, c), d)
-```
-
-<section class="zippy">
-The equivalent in a C/Python style language would be
-
-<pre>
-<code>AnotherFunctionName(FunctionName(a, b, c), d)
-</code>
-</pre>
-
-</section>
-
-We must now add brackets to make it clear which inputs go to which function.
-Without the brackets in this case, the code will not compile.
-
-Let's generalize our functions by making the celstial body's `type` an input. We
-will also make use of a builtin function: `$ToUpper`:
+Generalize our functions by making the celstial body's `type` an input. We will
+also make use of a builtin function: `$ToUpper`:
 
 ``` {highlight="content:\$ToUpper content:,\sbodyType"}
 Planet[0]: BodyName_BodyType_BodyInfo("Earth", "Planet")
@@ -306,15 +262,15 @@ Use the `$ListOf` builtin, which puts all given inputs into an array, to make an
 array of the planets `"Mercury", "Venus", "Earth"`.
 
 <section class="zippy">
-Hint
+Hint 1
 
-Remember that you can call a function with multiple inputs like `Function(x,
-y)`. To build a list of planets as one of the parameters, you will have
-something like `Function(?, $ListOf(????))`
+Call a function with multiple inputs like `Function(x, y)`. To build a list of
+planets as one of the parameters, you will have something like `Function(?,
+$ListOf(????))`
 
 </section>
 <section class="zippy">
-Another Hint
+Hint 2
 
 Your Output mapping might look like
 
@@ -340,62 +296,39 @@ def SunName_Planets_SunInfo(sunName, planets) {
 
 ### Mapping using $this
 
-All of the above functions map to fields in the return value of the function.
-What if we want a function to return a number? We can do this by mapping to
-`$this`:
+*   Functions by default map to fields in the return value of the function
+*   The `$this` keyword allows functions to return a value instead
+
+Set the `Primitive` field to the number `20` using a function.
 
 ```
 Primitive: Num_DoubleNum(10)
-Merged: Colour_Colour_MergedColours("red", "blue")
 
 def Num_DoubleNum(num) {
   $this: $Mul(2, num)
 }
-
-def Colour_Colour_MergedColours(col1, col2) {
-  $this: Colour_Col1(col1)
-
-  // Merge the result of Colour_Col2 with $this.
-  $this: Colour_Col2(col2)
-}
-
-def Colour_Col1(col) {
-  colour.first: col
-  colours[0]: col
-}
-
-def Colour_Col2(col) {
-  colour.second: col
-  colours[0]: col
-}
 ```
 
+Run the above mapping (see [Before you begin](#setup) for instructions)
+
 <section class="zippy">
-Running this mapping yields
+Output:
 
 <pre><code>{
-  "Merged": {
-      "colour": {
-        "first": "red",
-        "second": "blue"
-      },
-      "colours": [
-        "red",
-        "blue"
-      ]
-  },
   "Primitive": 20
 }
 </code></pre>
 
 </section>
 
-> NOTE: Pay attention to the merge semantics: The fields were preserved as is
-> but the array was concatenated; Even though both functions mapped to
-> `colours[0]`, `"blue"` ended up in `colours[1]`. If two fields have the same
-> name, both fields must be arrays or both fields must be objects. Otherwise,
-> then a merge conflict will arise and the mapping will fail. An overwrite can
-> be forced (see [Overwriting](#overwriting-fields))
+### Merge semantics
+
+*   Arrays are concatenated
+    *   Even though both functions mapped to `colours[0]`, `"blue"` ended up in
+        `colours[1]`
+*   New fields are added
+*   Similar fields produce a merge conflict. An overwrite can be forced (see
+    [Overwriting](#overwriting-fields))
 
 <section class="zippy">
 **Exercise**
@@ -443,9 +376,6 @@ type
 </code>
 </pre>
 
-Our solution will have those fields in a function the result of which will be
-merged using $this. It also seems `type` differs but is hardcoded, so it
-it will likely be an input to our extracted function.
 </section>
 <section class="zippy">
 Solution
@@ -479,9 +409,8 @@ def Lorry_Vehicle(lorry) {
 
 ## Mapping from data
 
-So far, all our input data has been hardcoded into our mappings. Now let's use
-an input file and move our planets and moon over there. In the [Setup](#setup)
-we made a file called `codelab.json`. Let's set its contents to:
+Start by moving our planets and moons over to the input file `codelab.json`. See
+[Setup](#setup) for more details. Set its contents to:
 
 ```json
 {
@@ -504,15 +433,12 @@ we made a file called `codelab.json`. Let's set its contents to:
 }
 ```
 
-This data will now be loaded into an input called `$root`. Data loading into an
-input to the mapping engine will always be in this `$root` input.
-
-<section class="zippy">
-$root should only be used outside of functions.
-
-You should avoid accessing `$root` inside a function because it is a strong sign
-of messy, non-modular mappings.
-</section>
+*   This data will now be loaded into an input called `$root`
+*   Data loading into an input to the mapping engine will always be in this
+    `$root` input
+*   $root can be used inside functions as well
+    *   You should avoid accessing `$root` inside a function because it is a strong sign of messy, non-modular mappings.
+        </section>
 
 ``` {highlight="content:root\."}
 Planet[0]: BodyName_BodyType_BodyInfo($root.Planets[0], "Planet")
@@ -526,18 +452,58 @@ def BodyName_BodyType_BodyInfo(body, bodyType) {
 }
 ```
 
+Run the above mapping (see [Before you begin](#setup) for instructions)
+
+<section class="zippy">
+Output:
+
+<pre><code>{
+    "Planet": [
+        {
+            "name": "EARTH",
+            "type": "Planet"
+        },
+        {
+            "name": "MARS",
+            "type": "Planet"
+        },
+        {
+            "name": "JUPITER",
+            "type": "Planet"
+        }
+    ],
+    "Moon": [
+        {
+            "name": "LUNA",
+            "type": "Moon"
+        }
+    ]
+}
+</code></pre>
+
+</section>
+
 > NOTE: Since each element in the input `Planets` and `Moons` arrays is an
-> object, we added '.name' inside our function to get its 'name' field. We could
-> have alternatively kept the function the same and added `.name` to the
-> function's input: `root.Planets[0].name`.
+> object, we add '.name' inside our function to get its 'name' field.
+> Alternatively, keep the function the same and add `.name` to the function's
+> input: `root.Planets[0].name`.
 
 ## Arrays
 
 ### Iteration
 
-Our mappings currently have some hardcoded array indices - this will break if
-there are not exactly 3 planets and 1 moon. Let's adjust our mapping to iterate
-over the `Planets` and `Moons` arrays:
+The syntax for iterating an array is suffixing it with `[]`. More abstractly:
+
+*   `Function(a[])` means "pass each element of `a` (one at a time) to
+    `Function`"
+*   `Function(a[], b)` means "pass each element of `a` (one at a time), along
+    with `b` to `Function`". If `b` is an array of the same length as `a` we can
+    iterate them together
+*   `Function(a[], b[])` means "pass each element of `a` (one at a time), along
+    with each element of `b` (at the same index) to `Function`"
+*   The result of an iterating mapping is also an array
+
+Adjust the mapping to iterate over the `Planets` and `Moons` arrays:
 
 ``` {highlight="content:\[\]"}
 Planet: BodyName_BodyType_BodyInfo($root.Planets[], "Planet")
@@ -549,29 +515,36 @@ def BodyName_BodyType_BodyInfo(body, bodyType) {
 }
 ```
 
-This yields the same output as before, but now we can add more elements to our
-input arrays in `codelab.json` and they will get mapped.
+Run the above mapping (see [Before you begin](#setup) for instructions)
 
-The syntax for iterating an array is suffixing it with `[]`. More abstractly,
+<section class="zippy">
+Output:
 
-`Function(a[])` means "pass each element of `a` (one at a time) to `Function`".
-In our above mapping, we also pass the constant "Planet";
+<pre><code>{
+    "Planet": [
+        {
+            "name": "EARTH",
+            "type": "Planet"
+        },
+        {
+            "name": "MARS",
+            "type": "Planet"
+        },
+        {
+            "name": "JUPITER",
+            "type": "Planet"
+        }
+    ],
+    "Moons": [
+        {
+            "name": "LUNA",
+            "type": "Moon"
+        }
+    ]
+}
+</code></pre>
 
-`Function(a[], b)` means "pass each element of `a` (one at a time), along with
-`b` to `Function`". If `b` is an array of the same length as `a` we can iterate
-them together:
-
-`Function(a[], b[])` means "pass each element of `a` (one at a time), along with
-each element of `b` (at the same index) to `Function`"
-
-> NOTE: The result of an iterating mapping is itself an array. In our planets
-> example, The result of `BodyName_BodyType_BodyInfo(root.Planets[], "Planet")`
-> is an array of BodyInfos. We then write this array to `Planets`. If we want to
-> iterate over this array, and pass it along one item at a time to something
-> else, we can do
->
-> `BodyInfo_SomethingElse(BodyName_BodyType_BodyInfo[](root.Planets[],
-> "Planet"))`.
+</section>
 
 <section class="zippy">
 **Exercise**
@@ -653,12 +626,16 @@ def BodyInfo_ExtendedBodyInfo(info) {
 </section>
 </section>
 
-### Appending
+### Appending {appending}
 
-At the beginning of the codelab, we mentioned that you would rarely map to a
-specific array index, as this is generally fragile. The mapping engine allows
-you to omit the index in a target path (instead of writing `[0]` or `[3]` just
-write `[]`), indicating that a new element should be appended. For example,
+*   The mapping engine allows you to append to an array using `[]`
+*   `[]` in the middle of the path (e.g. types[].typeName: ...) is valid as well
+    and creates `types: [{"typeName": ... }]`
+*   Hardcoded indexes can also be used (e.g.`types[0]: ...` and `types[1]: ...`)
+*   "Out of bounds" indexes (e.g. `types[153]: ...` generates all the missing
+    elements as `null`
+
+With index numbers:
 
 ```
 Planet[0]: "Earth"
@@ -667,7 +644,7 @@ Planet[2]: "Jupiter"
 Moon[0]: "Luna"
 ```
 
-May be equivalently, but more robustly expressed as
+With appending:
 
 ```
 Planet[]: "Earth"
@@ -676,16 +653,25 @@ Planet[]: "Jupiter"
 Moon[]: "Luna"
 ```
 
-Now, if we remove the mapping for "Earth", we won't have to update the other
-indices to fill the gap.
+Noteably:
 
-> NOTE: The empty index is a valid part of the JSON path in the target field.
-> That is, `SomeField.someArray[].someOtherField.someOtherArray[].finalField` is
-> valid, and will append a new element to both `someArray` and `someOtherArray`.
+*   The mapping engine allows you to omit the index in an array
+*   Instead of writing `[0]` or `[3]`, write `[]`
+*   If we remove the mapping for "Earth", we won't have to update the other
+    indices to fill the gap
+*   The empty index is a valid part of the JSON path in the target field.
+    *   E.g: `SomeField.someArray[].someOtherField.someOtherArray[].finalField`
+        is valid, and will append a new element to both `someArray` and
+        `someOtherArray`
 
 ### Wildcards
 
-Let's make a new Output Key that just contains our planet names:
+*   The `[*]` syntax works like specifying an index, except that it returns an
+    array of values
+*   Multiple arrays mapped through with `[*]`, for example `a[*].b.c[*].d`, in
+    one long, non-nested array of the values of `d` with the same item order
+
+Make a new Output Key that just contains our planet names:
 
 ``` {highlight="content:\[\*\] context:1,PlanetNames"}
 PlanetNames: $root.Planets[*].name;
@@ -699,11 +685,10 @@ def BodyName_BodyType_BodyInfo(body, bodyType) {
 }
 ```
 
-The `[*]` syntax works like specifying an index, except that it returns an array
-of values, in this case `["Earth", "Mars", "Jupiter"]`.
+Run the above mapping (see [Before you begin](#setup) for instructions)
 
 <section class="zippy">
-Thus running this mapping yields:
+Output:
 
 ```json
 {
@@ -737,16 +722,8 @@ Thus running this mapping yields:
 
 </section>
 
-> WARNING: `null` values and missing fields are filtered out. Try adding a
-> planet with no `name` field to `codelab.json`. See that it is omitted from
-> `PlanetNames` but an entry with no name appears in `Planet`.
-
-> NOTE: If there are multiple arrays mapped through with `[*]`, for example
-> `a[*].b.c[*].d`, the result will be one long, non-nested array of the values
-> of `d`. Item order will be maintained.
-
-Let's capitalize the names in `PlanetNames` using what we learned about
-iterating arrays:
+Capitalize the names in `PlanetNames` using what we learned about iterating
+arrays:
 
 ``` {highlight="content:\[\]\s..\s_ToUpper"}
 PlanetNames: $ToUpper($root.Planets[*].name[]);
@@ -760,8 +737,9 @@ def BodyName_BodyType_BodyInfo(body, bodyType) {
 }
 ```
 
+Run the above mapping (see [Before you begin](#setup) for instructions)
 <section class="zippy">
-Running the mapping now gives us
+Output:
 
 ```json
 {
@@ -795,9 +773,9 @@ Running the mapping now gives us
 
 </section>
 
-### Writing to array fields
+### Writing to array fields {writing_to_array}
 
-What if we want to write to an array field? Let's make `type` an array:
+Refactor the `type` field to an array by using the [append](#appending) syntax.
 
 ``` {highlight="content:types"}
 PlanetNames: $ToUpper($root.Planets[*].name[]);
@@ -812,11 +790,10 @@ def BodyName_BodyType_BodyInfo(body, bodyType) {
 }
 ```
 
-Aside from renaming the field to `types` to signify that it's a collection,
-we've added the `[]` syntax, which means "append an item".
+Run the above mapping (see [Before you begin](#setup) for instructions)
 
 <section class="zippy">
-Running this mapping outputs:
+Output:
 
 ```json
 {
@@ -861,14 +838,6 @@ Running this mapping outputs:
 ```
 
 </section>
-
-> NOTE: We can also hardcode the index: `types[0]: ...` and `types[1]: ...`
-> gives us the same result. If an index is written to that is "out of bounds",
-> e.x. `types[153]: ...`, this will create all the missing elements as `null`.
-
-> NOTE: The `[]` may appear in the middle of the path as well:
-> `types[].typeName: ...` is a valid target that will create `types: [{
-> "typeName": ... }]`
 
 <section class="zippy">
 **Exercise**
@@ -995,9 +964,14 @@ def BodyName_BodyType_BodyInfo(body, bodyType) {
 
 ## Variables
 
-Some mapping scenarios require some temporary storage for information. For
-example, if we want to reuse some mapped data without executing the mapping
-again:
+*   Variables allow reusing mapped data without re-excuting it
+*   The `var` keyword indicates the target field is a variable
+*   Variables have identical semantics to fields
+*   You can write to or iterate over them the same as any input, however
+    variables don't show up in the mapping output
+*   Variables cannot have the same name as any of the inputs in its function
+
+The mapping below is equivalent to the [exercise above](#writing_to_array).
 
 ``` {highlight="content:\bvar\b content:\bbigName\b"}
 PlanetNames: $ToUpper($root.Planets[*].name[]);
@@ -1013,27 +987,14 @@ def BodyName_BodyType_BodyInfo(body, bodyType) {
 }
 ```
 
-The output of this mapping is the same as before. The `var` keyword indicates
-the target field is a variable.
-
-**Variables have identical semantics to fields.**
-
-You can write to `var a[]: ...` or `var a.b: ...` or iterate over them the same
-as any input. The only difference is that they don't show up in the mapping
-output.
-
-> NOTE: Variables cannot have the same name as any of the inputs in its
-> function.
-
 ## Conditions
 
 ### Preparation
 
-Before we get into conditions, let's update our data and mappings with some new
-fields. Let's add the semi-major orbital axis, in millions of km, for our
-planets and moon, based on
-[these NASA factsheets](https://nssdc.gsfc.nasa.gov/planetary/factsheet/).
-Update our input `codelab.json` file with:
+*   Update our data and mappings with some new fields and add the semi-major
+    orbital axis, in millions of km, for our planets and moon, based on
+    [these NASA factsheets](https://nssdc.gsfc.nasa.gov/planetary/factsheet/)
+*   Update our input `codelab.json` file with:
 
 ```json
 {
@@ -1060,10 +1021,10 @@ Update our input `codelab.json` file with:
 }
 ```
 
-Let's update our mapping to output the data in AU, or
-[Astronomical Units](https://en.wikipedia.org/wiki/Astronomical_unit)
-(converting from our input which is in millions of KM, assuming 149.598M KM = 1
-AU):
+*   Update our mapping to output the data in AU, or
+    [Astronomical Units](https://en.wikipedia.org/wiki/Astronomical_unit)
+    (converting from our input which is in millions of KM, assuming 149.598M
+    KM = 1 AU):
 
 ``` {highlight="context:semiMajorAxisAU,1"}
 PlanetNames: $ToUpper($root.Planets[*].name[]);
@@ -1081,14 +1042,21 @@ def BodyName_BodyType_BodyInfo(body, bodyType) {
 }
 ```
 
-The `$Div` builtin divides our Million KM distance by our conversion constant to
-get us the distance in AU.
+*   The `$Div` builtin divides our Million KM distance by our conversion
+    constant to get us the distance in AU
 
 ### Conditional Mappings
 
-Mappings can be made to execute only if a condition on the data is met. Let's
-add a condition so that we only output the `semiMajorAxisAU` field on planets,
+*   Conditional mappings are mappings that only evaluated if a condition is met.
+
+Add a condition so that we only output the `semiMajorAxisAU` field on planets,
 and not moons:
+
+*   Use the `$Eq` (equal) builtin for comparison
+*   Use the `(if ...)` statement for conditionally executing the mapping
+    *   The expression in the `if` statement is evaluated and the mapping is
+        executed _if and only if_ it holds true. Otherwise the entire mapping is
+        ignored
 
 ``` {highlight="content:\(if[^)]+\)"}
 PlanetNames: $ToUpper($root.Planets[*].name[]);
@@ -1106,14 +1074,10 @@ def BodyName_BodyType_BodyInfo(body, bodyType) {
 }
 ```
 
-Aside from the new `$Eq` (equal) builtin, the new thing we see in this mapping
-is the `(if ...)` statement. This is inserted before the colon, after the target
-field. The expression in the `if` statement is evaluated and the mapping is
-executed _if and only if_ it holds true. Otherwise the entire mapping is
-ignored.
+Run the above mapping (see [Before you begin](#setup) for instructions)
 
 <section class="zippy">
-Running the mapping yields:
+Output:
 
 ```json
 {
@@ -1164,11 +1128,10 @@ Running the mapping yields:
 
 ### Condition Blocks
 
-For the moon, we will leave the orbit in KM. We will also move the unit to its
-own field to avoid confusion. Although we can express the condition by checking
-if `bodyType` is equal to `"Moon"` on the unit and value mappings individually,
-we can make our mapping more robust and easier to maintain/update by using
-`if/else` and not repeating the condition multiple times:
+*   Similar to conditional mappings, conditional blocks allow wrapping a set of
+    mappings within a condition
+
+Set the `semiMajorAxis.unit` to `AU` if the `bodyType` is a `Planet`.`
 
 ``` {highlight="context:if,1 content:.\selse\s."}
 PlanetNames: $ToUpper($root.Planets[*].name[]);
@@ -1191,8 +1154,10 @@ def BodyName_BodyType_BodyInfo(body, bodyType) {
 }
 ```
 
+Run the above mapping (see [Before you begin](#setup) for instructions)
+
 <section class="zippy">
-Running this mapping yields:
+Output:
 
 ```json
 {
@@ -1256,20 +1221,8 @@ Running this mapping yields:
 
 ### Operators
 
-Writing `$Mul(x, y)`, `$Div`, and `$Eq` is clunky. The DHML contains operators
-for basic logical and arithmetic operations. Let's simplify our conditions to
-
-``` {highlight="context:*"}
-if bodyType = "Planet" {
-  semiMajorAxis.value: body.semiMajorAxis / 149.598
-  semiMajorAxis.unit: "AU"
-} else {
-  semiMajorAxis.value: body.semiMajorAxis * 1000000
-  semiMajorAxis.unit: "KM"
-}
-```
-
-Running the mapping yields the same result.
+*   Similar to Python/C, there are operators available for common arithmetic and
+    logical operations
 
 <section class="zippy">
 All available operators:
@@ -1305,9 +1258,23 @@ any?           // Value Exists**
 
 </section>
 
-> WARNING: `x = y = z` is a valid expression but will not do what you expect. It
-> Will be executed as `(x = y) = z`. So if `x = y` is true this will then check
-> `true = z`.
+Replace $Mul(x,y), $Div(x,y), and $Eq(x,y) with basic logical and arithmetic
+operations.
+
+``` {highlight="context:*"}
+if bodyType = "Planet" {
+  semiMajorAxis.value: body.semiMajorAxis / 149.598
+  semiMajorAxis.unit: "AU"
+} else {
+  semiMajorAxis.value: body.semiMajorAxis * 1000000
+  semiMajorAxis.unit: "KM"
+}
+```
+
+Running the mapping yields the same result.
+
+> WARNING: `x = y = z` is a valid expression and is equivalent to `(x = y) = z`.
+> If `x = y` is true this will then check `true = z`.
 
 <section class="zippy">
 **Exercise**
@@ -1358,15 +1325,13 @@ Your full input file should now look like this:
 </pre>
 </section>
 
-Add `Star: BodyName_BodyType_BodyInfo($root.Stars[], "Star")` to your
-mapping just below `Moon: ...`.
-
-Now, update BodyName_BodyType_BodyInfo to output semiMajorAxis according to the
+* Add `Star: BodyName_BodyType_BodyInfo($root.Stars[], "Star")` to your
+mapping just below `Moon: ...`
+* Update BodyName_BodyType_BodyInfo to output semiMajorAxis according to the
 following specifications:
-
-1) Bodies with a semiMajorAxis greater than 1M KM should output a value converted to AU
-1) Bodies with a semiMajorAxis less than or equal to 1M KM should output a value converted to KM
-1) Bodies with no semiMajorAxis defined should have the field `orbitalRoot: true`
+  * Bodies with a semiMajorAxis greater than 1M KM should output a value converted to AU
+  * Bodies with a semiMajorAxis less than or equal to 1M KM should output a value converted to KM
+  * Bodies with no semiMajorAxis defined should have the field `orbitalRoot: true`
 
 Your output should be:
 
@@ -1487,8 +1452,17 @@ def BodyName_BodyType_BodyInfo(body, bodyType) {
 
 ## Filters
 
-Filters allow narrowing an array down to just items that pass a condition. Let's
-use a filter to only include planets with a semi-major axis greater than 200
+*   Filters allow narrowing an array to items that match a condition
+*   The `where` keyword indicates a filter, similar to `if` indicating a
+    condition
+*   Each item from the array will be loaded into an input named `$` in the
+    filter
+*   The filter produces a new array. To iterate over the results, use the `[]`
+    operator
+*   Filters can only be the last element in a path, i.e. `a.b[where $.color =
+    "red"].c` is invalid
+
+Use a filter to only include planets with a semi-major axis greater than 200
 million km:
 
 ``` {highlight="content:\[where.+?\]"}
@@ -1498,17 +1472,10 @@ Planet: BodyName_BodyType_BodyInfo($root.Planets[where $.semiMajorAxis > 200][],
 Moon: BodyName_BodyType_BodyInfo($root.Moons[], "Moon")
 ```
 
-The `where` keyword indicates a filter, similar to `if` indicating a condition.
-Each item from the array will be loaded into an input named `$` in the filter.
-
-> WARNING: The filter produces a new array, so we retain the iteration operator
-> `[]` afterwards, as we had before.
-
-> NOTE: Filters can only be the last element in a path, i.e. `a.b[where
-> $.color = "red"].c` is invalid.
+Run the above mapping (see [Before you begin](#setup) for instructions)
 
 <section class="zippy">
-Running the mapping yields:
+Output:
 
 ```json
 {
@@ -1660,23 +1627,13 @@ def BodyName_BodyType_BodyInfo(body, bodyType, kmToAU) {
 
 ## Post Processing
 
-Currently, the output of our mappings is limited to the form:
+*   Post processing allows running a function after the mapping is complete
+*   The input to the post processing function is the output from the mapping and
+    the result will become the new output
+*   A `post` function must be the last thing in the file
 
-```json
-{
-  "Key1": [...],
-  "Key2": [...],
-  ...
-}
-```
-
-What if we want to output a different form without all the fields being arrays?
-To this effect, we can define a *post process* function. This function is like
-any function we've seen so far - it maps input to output. However, it will be
-executed at the very end of the mapping; Its input will be the output of the
-mapping, and its result will become the new output.
-
-Let's reformat our output by defining a post process function:
+Reformat the output and moving the top level "Moons" array into the "Earth"
+planet by defining a post process function:
 
 ``` {highlight="content:post"}
 PlanetNames: $ToUpper($root.Planets[*].name[]);
@@ -1711,10 +1668,10 @@ post def RestructureExample(output) {
 }
 ```
 
-> NOTE: A `post` function must be the last thing in the file.
+Run the above mapping (see [Before you begin](#setup) for instructions)
 
 <section class="zippy">
-Running this mapping yields:
+Output:
 
 <pre>
 <code>{
@@ -1783,18 +1740,13 @@ Running this mapping yields:
 
 ### Nulls and null propagation
 
-The mapping engine will attempt to handle and ignore null and missing
-values/fields for you:
-
-1) If a field is written with a null or empty value, it will be ignored (thus
-`null`, `{}`, and `[]` can never show up in the mapping output).
-
-2) If a non-existent field is accessed, it will return `null`
-
-However, a null value will still be passed to a function. Thus functions writing
-fields with constants will still operate on null values.
-
-The following example demonstrates some of these properties:
+*   The mapping engine handles and ignore null and missing values/fields by
+    default, by following these rules:
+    *   If a field is written with a null or empty value, it will be ignored
+        (thus `null`, `{}`, and `[]` can never show up in the mapping output)
+    *   If a non-existent field is accessed, it will return `null`
+*   However, a null value is passed to a function and the function is still
+    executed
 
 Input:
 
@@ -1864,8 +1816,10 @@ def Hello_World_HelloWorldObject(hello, world) {
 }
 ```
 
+Run the above mapping (see [Before you begin](#setup) for instructions)
+
 <section class="zippy">
-Running this mapping yields:
+Output:
 
 <pre>
 <code>{
@@ -1888,9 +1842,13 @@ Running this mapping yields:
 
 ### Overwriting fields {overwriting}
 
-In order to prevent data loss and reduce mapping errors, the DHML allows a
-primitive (string, numeric, or boolean) field to only be written once. For
-example, the following mapping will fail:
+*   In order to prevent data loss and reduce mapping errors, the DHML allows a
+    primitive (string, numeric, or boolean) field to only be written once
+*   Use the `!` operator to overwrite
+*   Overwriting restrictions do not apply to variables
+
+For example, the following mapping will fail with the error `attempt to
+overwrite primitive destination with primitive source`.
 
 ```
 X: String_X("Yep!")
@@ -1901,10 +1859,7 @@ def String_X(str) {
 }
 ```
 
-The error will say `attempt to overwrite primitive destination with primitive
-source`.
-
-In order for it to succeed, the field can be suffixed with the `!` operator:
+Now suffix the field with the `!` operator:
 
 ```
 X: String_X("Yep!")
@@ -1915,7 +1870,7 @@ def String_X(str) {
 }
 ```
 
-Which results in
+Output:
 
 ```json
 {
@@ -1924,8 +1879,6 @@ Which results in
     }
 }
 ```
-
-> NOTE: Overwriting restrictions do not apply to variables.
 
 ## [FHIR](https://hl7.org/fhir/) -> [OMOP](https://www.ohdsi.org/data-standardization/the-common-data-model/) example
 
