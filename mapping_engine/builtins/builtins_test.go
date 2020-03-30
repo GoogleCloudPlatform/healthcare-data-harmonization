@@ -496,7 +496,7 @@ func TestCurrentTime(t *testing.T) {
 			name:      "date and timezone",
 			inFormat:  "2007-01-02 MST",
 			timeZone:  "Europe/Berlin",
-			wantRegex: "[0-9]{4}-[0-9]{2}-[0-9]{2} CET",
+			wantRegex: "[0-9]{4}-[0-9]{2}-[0-9]{2} CE[S]T",
 		},
 		{
 			name:      "date, time and timezone",
@@ -617,7 +617,6 @@ func TestListCat(t *testing.T) {
 }
 
 func TestUnionBy(t *testing.T) {
-
 	tests := []struct {
 		name  string
 		items jsonutil.JSONArr
@@ -699,6 +698,74 @@ func TestUnionBy(t *testing.T) {
 
 			if !cmp.Equal(got, test.want, cmpopts.SortSlices(sliceLessFn), cmpopts.SortMaps(mapLessFn)) {
 				t.Errorf("UnionBy(%v, %v) = %v, want %v", test.items, test.keys, got, test.want)
+			}
+		})
+	}
+}
+
+func TestUnique(t *testing.T) {
+	tests := []struct {
+		name  string
+		items jsonutil.JSONArr
+		want  jsonutil.JSONArr
+	}{
+		{
+			name:  "nil",
+			items: nil,
+			want:  mustParseArray(json.RawMessage(`[]`), t),
+		},
+		{
+			name:  "no items",
+			items: mustParseArray(json.RawMessage(`[]`), t),
+			want:  mustParseArray(json.RawMessage(`[]`), t),
+		},
+		{
+			name:  "one item",
+			items: mustParseArray(json.RawMessage(`[{"id": 1}]`), t),
+			want:  mustParseArray(json.RawMessage(`[{"id": 1}]`), t),
+		},
+		{
+			name:  "multiple items all unique",
+			items: mustParseArray(json.RawMessage(`[{"id": 1}, {"id": 2}]`), t),
+			want:  mustParseArray(json.RawMessage(`[{"id": 1}, {"id": 2}]`), t),
+		},
+		{
+			name:  "multiple items some unique - same key order",
+			items: mustParseArray(json.RawMessage(`[{"id": 1}, {"id": 1}]`), t),
+			want:  mustParseArray(json.RawMessage(`[{"id": 1}]`), t),
+		},
+		{
+			name:  "multiple items some unique - different key order",
+			items: mustParseArray(json.RawMessage(`[{"key": "val", "id": 1}, {"id": 1, "key": "val"}]`), t),
+			want:  mustParseArray(json.RawMessage(`[{"id": 1, "key": "val"}]`), t),
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := Unique(test.items)
+			if err != nil {
+				t.Fatalf("Unique(%v) returned unexpected error %v", test.items, err)
+			}
+
+			sliceLessFn := func(a, b jsonutil.JSONToken) bool {
+				t.Helper()
+				ah, err := jsonutil.Hash(a, false)
+				if err != nil {
+					t.Fatalf("error hashing %v: %v", a, err)
+				}
+				bh, err := jsonutil.Hash(b, false)
+				if err != nil {
+					t.Fatalf("error hashing %v: %v", b, err)
+				}
+				return hex.EncodeToString(ah) < hex.EncodeToString(bh)
+			}
+
+			mapLessFn := func(a, b string) bool {
+				return a < b
+			}
+
+			if !cmp.Equal(got, test.want, cmpopts.SortSlices(sliceLessFn), cmpopts.SortMaps(mapLessFn)) {
+				t.Errorf("Unique(%v) = %v, want %v", test.items, got, test.want)
 			}
 		})
 	}

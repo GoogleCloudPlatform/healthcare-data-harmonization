@@ -49,6 +49,7 @@ var builtinFunctions = map[string]interface{}{
 	"$ListOf":         ListOf,
 	"$SortAndTakeTop": SortAndTakeTop,
 	"$UnionBy":        UnionBy,
+	"$Unique":         Unique,
 	"$UnnestArrays":   UnnestArrays,
 
 	// Date/Time
@@ -70,15 +71,15 @@ var builtinFunctions = map[string]interface{}{
 	"$Void":        Void,
 
 	// Logic
-	"$And": And,
-	"$Eq":  Eq,
-	"$Gt":  Gt,
+	"$And":  And,
+	"$Eq":   Eq,
+	"$Gt":   Gt,
 	"$GtEq": GtEq,
-	"$Lt":  Lt,
+	"$Lt":   Lt,
 	"$LtEq": LtEq,
-	"$NEq": NEq,
-	"$Not": Not,
-	"$Or":  Or,
+	"$NEq":  NEq,
+	"$Not":  Not,
+	"$Or":   Or,
 
 	// Strings
 	"$ParseFloat": ParseFloat,
@@ -156,6 +157,25 @@ func Sum(operands ...jsonutil.JSONNum) (jsonutil.JSONNum, error) {
 		res += n
 	}
 	return res, nil
+}
+
+// Unique returns the unique elements in the array by comparing their hashes.
+func Unique(array jsonutil.JSONArr) (jsonutil.JSONArr, error) {
+	arr := make(jsonutil.JSONArr, 0)
+	set := make(map[jsonutil.JSONStr]bool)
+
+	for _, i := range array {
+		hash, err := Hash(i)
+		if err != nil {
+			return nil, err
+		}
+		if !set[hash] {
+			arr = append(arr, i)
+			set[hash] = true
+		}
+	}
+
+	return arr, nil
 }
 
 // Flatten turns a nested array of arrays (of any depth) into a single array.
