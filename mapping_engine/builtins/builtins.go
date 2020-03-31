@@ -119,13 +119,13 @@ func RegisterAll(r *types.Registry) error {
 // will be checked/enforced at runtime.
 
 // Div divides the first argument by the second.
-func Div(l jsonutil.JSONNum, r jsonutil.JSONNum) (jsonutil.JSONNum, error) {
-	return l / r, nil
+func Div(left jsonutil.JSONNum, right jsonutil.JSONNum) (jsonutil.JSONNum, error) {
+	return left / right, nil
 }
 
 // Mod returns the remainder of dividing the first argument by the second.
-func Mod(l jsonutil.JSONNum, r jsonutil.JSONNum) (jsonutil.JSONNum, error) {
-	res := math.Mod(float64(l), float64(r))
+func Mod(left jsonutil.JSONNum, right jsonutil.JSONNum) (jsonutil.JSONNum, error) {
+	res := math.Mod(float64(left), float64(right))
 	if math.IsNaN(res) {
 		return -1, errors.New("modulo operation returned NaN")
 	}
@@ -146,8 +146,8 @@ func Mul(operands ...jsonutil.JSONNum) (jsonutil.JSONNum, error) {
 }
 
 // Sub subtracts the second argument from the first.
-func Sub(l jsonutil.JSONNum, r jsonutil.JSONNum) (jsonutil.JSONNum, error) {
-	return l - r, nil
+func Sub(left jsonutil.JSONNum, right jsonutil.JSONNum) (jsonutil.JSONNum, error) {
+	return left - right, nil
 }
 
 // Sum adds up all given values.
@@ -257,9 +257,14 @@ func SortAndTakeTop(arr jsonutil.JSONArr, key jsonutil.JSONStr, desc jsonutil.JS
 }
 
 // UnionBy unions the items in the given array by the given keys, such that each item
-// in the resulting array has a unique combination of those keys. The items in the resulting
-// array are ordered deterministically (given Union(x, y, z) and Union(z, x, x, y), resulting
-// arrays will be the same).
+// in the resulting array has a unique combination of those keys. The first unique element
+// is picked when deduplicating. The items in the resulting array are ordered
+// deterministically (i.e unioning of array [x, y, z] and array [z, x, x, y], both return
+// [x, y, z]).
+//
+// E.g:
+// Arguments: items: `[{"id": 1}, {"id": 2}, {"id": 1, "foo": "hello"}]`, keys: "id"
+// Return: [{"id": 1}, {"id": 2}]
 func UnionBy(items jsonutil.JSONArr, keys ...jsonutil.JSONStr) (jsonutil.JSONArr, error) {
 	set := make(map[jsonutil.JSONStr]jsonutil.JSONToken)
 	var orderedKeys []jsonutil.JSONStr
@@ -300,10 +305,16 @@ func UnionBy(items jsonutil.JSONArr, keys ...jsonutil.JSONStr) (jsonutil.JSONArr
 	return arr, nil
 }
 
-// UnnestArrays takes a json object in the form {"key1": [{}...], "key2": {}}
-// and returns an unnested array in the form [{"k": "key1", "v": {}} ...].
+// UnnestArrays takes a json object with nested arrays (e.g.: {"key1": [{}...], "key2": {}})
+// and returns an unnested array that contains the top level key in the "k" field and each
+// array element, unnested, in the "v" field (e.g.: [{"k": "key1", "v": {}} ...]).
 // If the value of a key is an object, it simply returns that object. The
 // output is sorted by the keys, and the array ordering is preserved.
+// If the nested array is empty, the key is ignored.
+//
+// E.g:
+// c: `{"key1":[{"a": "z"}, {"b": "y"}], "key2": {"c": "x"}, "key3": []}
+// return: [{"k": "key1", "v":{"a": "z"}}`, {"k": "key1", "v":{"b": "y"}}, {"k": "key2", "v":{"c": "x"}}]
 func UnnestArrays(c jsonutil.JSONContainer) (jsonutil.JSONArr, error) {
 	var out jsonutil.JSONArr
 
@@ -344,7 +355,7 @@ func UnnestArrays(c jsonutil.JSONContainer) (jsonutil.JSONArr, error) {
 // string (https://www.iana.org/time-zones). A string representing the current
 // time is returned. A default layout of '2006-01-02 03:04:05'and a default
 // time zone of 'UTC' will be used if not provided.
-func CurrentTime(format, tz jsonutil.JSONStr) (jsonutil.JSONStr, error) {
+func CurrentTime(format jsonutil.JSONStr, tz jsonutil.JSONStr) (jsonutil.JSONStr, error) {
 	if len(format) == 0 {
 		format = defaultTimeFormat
 	}
@@ -359,11 +370,11 @@ func CurrentTime(format, tz jsonutil.JSONStr) (jsonutil.JSONStr, error) {
 
 // ParseTime uses a Go time-format to convert date into an ISO-formatted (JavaScript) date time.
 // TODO: Untie from Go format.
-func ParseTime(format, date jsonutil.JSONStr) (jsonutil.JSONStr, error) {
+func ParseTime(format jsonutil.JSONStr, date jsonutil.JSONStr) (jsonutil.JSONStr, error) {
 	return ReformatTime(format, date, time.RFC3339Nano)
 }
 
-func parseTime(format, date jsonutil.JSONStr) (time.Time, error) {
+func parseTime(format jsonutil.JSONStr, date jsonutil.JSONStr) (time.Time, error) {
 	if len(date) == 0 {
 		return time.Time{}, nil
 	}
@@ -376,7 +387,7 @@ func parseTime(format, date jsonutil.JSONStr) (time.Time, error) {
 }
 
 // ParseUnixTime parses a unit and a unix timestamp into an ISO-formatted (JavaScript) date time.
-func ParseUnixTime(unit jsonutil.JSONStr, ts jsonutil.JSONNum, format, tz jsonutil.JSONStr) (jsonutil.JSONStr, error) {
+func ParseUnixTime(unit jsonutil.JSONStr, ts jsonutil.JSONNum, format jsonutil.JSONStr, tz jsonutil.JSONStr) (jsonutil.JSONStr, error) {
 	sec := int64(ts)
 	ns := int64(0)
 	switch strings.ToLower(string(unit)) {
@@ -405,7 +416,7 @@ func ParseUnixTime(unit jsonutil.JSONStr, ts jsonutil.JSONNum, format, tz jsonut
 
 // ReformatTime uses a Go time-format to convert date into another Go time-formatted date time.
 // TODO: Untie from Go format.
-func ReformatTime(inFormat, date, outFormat jsonutil.JSONStr) (jsonutil.JSONStr, error) {
+func ReformatTime(inFormat jsonutil.JSONStr, date jsonutil.JSONStr, outFormat jsonutil.JSONStr) (jsonutil.JSONStr, error) {
 	isoDate, err := parseTime(inFormat, date)
 	if err != nil {
 		return jsonutil.JSONStr(""), err
@@ -420,7 +431,7 @@ func ReformatTime(inFormat, date, outFormat jsonutil.JSONStr) (jsonutil.JSONStr,
 // (https://golang.org/pkg/time/#Time.Format) provided.
 // An array with all components (year, month, day, hour, minute, second and
 // nanosecond) will be returned.
-func SplitTime(format, date jsonutil.JSONStr) (jsonutil.JSONArr, error) {
+func SplitTime(format jsonutil.JSONStr, date jsonutil.JSONStr) (jsonutil.JSONArr, error) {
 	d, err := parseTime(format, date)
 	if err != nil {
 		return jsonutil.JSONArr([]jsonutil.JSONToken{}), err
@@ -487,18 +498,19 @@ func MergeJSON(arr jsonutil.JSONArr, overwriteArrays jsonutil.JSONBool) (jsonuti
 	return out, nil
 }
 
-// UUID generates a UUID.
+// UUID generates a RFC4122 (https://tools.ietf.org/html/rfc4122) UUID.
 func UUID() (jsonutil.JSONStr, error) {
 	return jsonutil.JSONStr(uuid.New().String()), nil
 }
 
-// DebugString converts the JSON element to a string representation using Go's "%v" format.
+// DebugString converts the JSON element to a string representation by
+// recursively converting objects to strings.
 func DebugString(t jsonutil.JSONToken) (jsonutil.JSONStr, error) {
 	return jsonutil.JSONStr(fmt.Sprintf("%v", t)), nil
 }
 
 // Void returns nil given any inputs. You non-nil into the Void, the Void nils back.
-func Void(_ ...jsonutil.JSONToken) (jsonutil.JSONToken, error) {
+func Void(unused ...jsonutil.JSONToken) (jsonutil.JSONToken, error) {
 	return nil, nil
 }
 
@@ -533,23 +545,23 @@ func Eq(args ...jsonutil.JSONToken) (jsonutil.JSONBool, error) {
 }
 
 // Gt returns true iff the first argument is greater than the second.
-func Gt(l jsonutil.JSONNum, r jsonutil.JSONNum) (jsonutil.JSONBool, error) {
-	return l > r, nil
+func Gt(left jsonutil.JSONNum, right jsonutil.JSONNum) (jsonutil.JSONBool, error) {
+	return left > right, nil
 }
 
 // GtEq returns true iff the first argument is greater than or equal to the second.
-func GtEq(l jsonutil.JSONNum, r jsonutil.JSONNum) (jsonutil.JSONBool, error) {
-	return l >= r, nil
+func GtEq(left jsonutil.JSONNum, right jsonutil.JSONNum) (jsonutil.JSONBool, error) {
+	return left >= right, nil
 }
 
 // Lt returns true iff the first argument is less than the second.
-func Lt(l jsonutil.JSONNum, r jsonutil.JSONNum) (jsonutil.JSONBool, error) {
-	return l < r, nil
+func Lt(left jsonutil.JSONNum, right jsonutil.JSONNum) (jsonutil.JSONBool, error) {
+	return left < right, nil
 }
 
 // LtEq returns true iff the first argument is less than or equal to the second.
-func LtEq(l jsonutil.JSONNum, r jsonutil.JSONNum) (jsonutil.JSONBool, error) {
-	return l <= r, nil
+func LtEq(left jsonutil.JSONNum, right jsonutil.JSONNum) (jsonutil.JSONBool, error) {
+	return left <= right, nil
 }
 
 // NEq returns true iff all given arguments are different.
@@ -574,8 +586,8 @@ func NEq(args ...jsonutil.JSONToken) (jsonutil.JSONBool, error) {
 }
 
 // Not returns true iff the given value is false.
-func Not(v jsonutil.JSONBool) (jsonutil.JSONBool, error) {
-	return !v, nil
+func Not(value jsonutil.JSONBool) (jsonutil.JSONBool, error) {
+	return !value, nil
 }
 
 // Or is a logical OR of all given arguments.
@@ -612,7 +624,7 @@ func StrCat(args ...jsonutil.JSONToken) (jsonutil.JSONStr, error) {
 	return StrJoin(jsonutil.JSONStr(""), args...)
 }
 
-// StrFmt formats the given item using the given Go format specifier.
+// StrFmt formats the given item using the given Go format specifier (https://golang.org/pkg/fmt/).
 func StrFmt(format jsonutil.JSONStr, item jsonutil.JSONToken) (jsonutil.JSONStr, error) {
 	// This cast avoids formatting issues with numbers (since JSONNum is not detected as a number by the formatter)
 	if numItem, ok := item.(jsonutil.JSONNum); ok {
@@ -650,14 +662,12 @@ func StrSplit(str jsonutil.JSONStr, sep jsonutil.JSONStr) (jsonutil.JSONArr, err
 	return res, nil
 }
 
-// ToLower uses Go's builtin strings.ToLower to convert the given string with all unicode
-// characters mapped to their lowercase.
+// ToLower converts the given string with all unicode characters mapped to their lowercase.
 func ToLower(str jsonutil.JSONStr) (jsonutil.JSONStr, error) {
 	return jsonutil.JSONStr(strings.ToLower(string(str))), nil
 }
 
-// ToUpper uses Go's builtin strings.ToUpper to convert the given string with all unicode
-// characters mapped to their uppercase.
+// ToUpper converts the given string with all unicode characters mapped to their uppercase.
 func ToUpper(str jsonutil.JSONStr) (jsonutil.JSONStr, error) {
 	return jsonutil.JSONStr(strings.ToUpper(string(str))), nil
 }
