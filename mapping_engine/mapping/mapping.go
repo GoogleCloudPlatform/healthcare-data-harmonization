@@ -199,7 +199,8 @@ func EvaluateValueSource(vs *mappb.ValueSource, args []jsonutil.JSONMetaNode, ou
 	}
 
 	nextArgs := make([]jsonutil.JSONMetaNode, 0, 1)
-	var enumerateArg []bool
+	var iterableIndicies []bool
+	var anyArgsToIterate bool
 
 	if vs.GetSource() != nil {
 		arg, err := evaluateValueSourceSource(vs, args, output, pctx)
@@ -208,6 +209,8 @@ func EvaluateValueSource(vs *mappb.ValueSource, args []jsonutil.JSONMetaNode, ou
 		}
 
 		nextArgs = append(nextArgs, arg)
+		iterableIndicies = append(iterableIndicies, isArray(vs))
+		anyArgsToIterate = isArray(vs)
 
 		for _, s := range vs.AdditionalArg {
 			arg, err := EvaluateValueSource(s, args, output, pctx)
@@ -223,7 +226,9 @@ func EvaluateValueSource(vs *mappb.ValueSource, args []jsonutil.JSONMetaNode, ou
 			nextArgs = append(nextArgs, marg)
 
 			// Check if we need to enumerate each additional arg (based on whether it/it's projector is enumerated)
-			enumerateArg = append(enumerateArg, (isArray(s) && s.GetProjector() == "") || isSelectorArray(s.GetProjector()))
+			shouldIterate := (isArray(s) && s.GetProjector() == "") || isSelectorArray(s.GetProjector())
+			iterableIndicies = append(iterableIndicies, shouldIterate)
+			anyArgsToIterate = anyArgsToIterate || shouldIterate
 		}
 	}
 	proj, err := pctx.Registry.FindProjector(strings.TrimSuffix(vs.Projector, "[]"))
@@ -231,28 +236,21 @@ func EvaluateValueSource(vs *mappb.ValueSource, args []jsonutil.JSONMetaNode, ou
 		return nil, fmt.Errorf("error finding projector: %v", err)
 	}
 
-	if isArray(vs) {
-		var arr jsonutil.JSONMetaArrayNode
-		var ok bool
+	if anyArgsToIterate {
 		if len(nextArgs) == 0 {
 			return nil, errors.New("source was enumerated (ended with []) but source itself did not exist (?)")
 		}
 		if nextArgs[0] == nil {
 			return nil, nil
 		}
-		if arr, ok = nextArgs[0].(jsonutil.JSONMetaArrayNode); !ok {
-			// TODO: Make it an array of one item?
-			// TODO: If container, return array of values?
-			return nil, fmt.Errorf("source was enumerated (ended with []) but value was not an array (it was %T)", nextArgs[0])
-		}
 
 		// Zip the arguments together - enumerate any additional args that need it.
-		zippedArgs, err := zip(arr, nextArgs[1:], enumerateArg)
+		zippedArgs, err := zip(nextArgs, iterableIndicies)
 		if err != nil {
 			return nil, fmt.Errorf("error zipping args: %v", err)
 		}
 
-		projVals := make([]jsonutil.JSONToken, 0, len(arr.Items))
+		projVals := make([]jsonutil.JSONToken, 0)
 		for _, args := range zippedArgs {
 			pv, err := proj(args, pctx)
 			if err != nil {
@@ -296,54 +294,66 @@ func isSelectorArray(selector string) bool {
 	return strings.HasSuffix(selector, "[]")
 }
 
-// zip combines the given base array with the additionals to return a new array where each item
-// is an array of the base item + all additionals. For example,
-// zip([a, b, c], ["foo", "bar", "baz", [1, 2, 3, 4]], nil) returns
+// zip allows synchronized iteration of some arrays along with non-arrays.
+// Given some values, and an equal number of iterable flags; For any index where an iterable flag
+// is true and the value is an array - the array is expanded. For example
+// zip(["foo", "bar", "baz", [1, 2, 3, 4]], nil or [false, false, false, false]) returns
 // [
-// 		[a, "foo", "bar", "baz", [1, 2, 3, 4]],
-// 		[b, "foo", "bar", "baz", [1, 2, 3, 4]],
-// 		[c, "foo", "bar", "baz", [1, 2, 3, 4]],
+// 		["foo", "bar", "baz", [1, 2, 3, 4]],
 // ]
-// Also, zip can expand and enumerate the additionals if they are arrays, and
-// the enumerateAdditional flag at that index is set to true. For example,
-// zip([a, b, c], ["foo", "bar", "baz", [1, 2, 3]], [false, false, false,
-//     true]) returns
+// zip(["foo", "bar", "baz", [1, 2, 3]], [false, false, false, true]) returns
 // [
-// 		[a, "foo", "bar", "baz", 1],
-// 		[b, "foo", "bar", "baz", 2],
-// 		[c, "foo", "bar", "baz", 3],
+// 		["foo", "bar", "baz", 1],
+// 		["foo", "bar", "baz", 2],
+// 		["foo", "bar", "baz", 3],
 // ]
-func zip(base jsonutil.JSONMetaArrayNode, additionals []jsonutil.JSONMetaNode, enumerateAdditional []bool) ([][]jsonutil.JSONMetaNode, error) {
-	var res [][]jsonutil.JSONMetaNode
-
-	if len(additionals) != len(enumerateAdditional) {
-		return nil, fmt.Errorf("bug: number of arguments (%d) did not match number of enumeration flags (%d)", len(additionals), len(enumerateAdditional))
+// zip([["one", "two", "three"], [a, b], [1, 2, 3]], [true, false, true]) returns
+// [
+// 		["one",   [a, b], 1],
+// 		["two",   [a, b], 2],
+// 		["three", [a, b], 3],
+// ]
+func zip(values []jsonutil.JSONMetaNode, iterables []bool) ([][]jsonutil.JSONMetaNode, error) {
+	if len(values) != len(iterables) {
+		return nil, fmt.Errorf("bug: number of values (%d) did not match number of iterable flags (%d)", len(values), len(iterables))
 	}
 
-	// Validate.
-	if enumerateAdditional != nil {
-		for i, a := range additionals {
-			if !enumerateAdditional[i] {
+	// Validate that things flagged to be iterated are actually iterated.
+	baseLen := -1
+	basePath := ""
+	if iterables != nil {
+		for i, a := range values {
+			if !iterables[i] {
 				continue
 			}
 
 			arr, ok := a.(jsonutil.JSONMetaArrayNode)
 			if !ok {
-				return nil, fmt.Errorf("can't enumerate non-array (argument index %d)", i+1)
+				return nil, fmt.Errorf("can't iterate non-array (argument index %d) %q", i+1, a.Path())
 			}
 
-			if len(arr.Items) != len(base.Items) {
-				return nil, fmt.Errorf("can't zip/enumerate arrays of different sizes together (first array had %d items, arg index %d had %d)", len(base.Items), i+1, len(arr.Items))
+			if baseLen < 0 {
+				baseLen = len(arr.Items)
+				basePath = arr.Path()
+			}
+
+			if len(arr.Items) != baseLen {
+				return nil, fmt.Errorf("can't zip/iterate arrays of different sizes together (%q had %d items, but %q had %d)", basePath, baseLen, arr.Path(), len(arr.Items))
 			}
 		}
 	}
 
-	// Zip.
-	for i, v := range base.Items {
-		z := []jsonutil.JSONMetaNode{v}
-		for j, a := range additionals {
-			if enumerateAdditional != nil && enumerateAdditional[j] {
-				arr := additionals[j].(jsonutil.JSONMetaArrayNode)
+	if baseLen < 0 {
+		return [][]jsonutil.JSONMetaNode{values}, nil
+	}
+
+	// Zip together iterables and non-iterables.
+	var res [][]jsonutil.JSONMetaNode
+	for i := 0; i < baseLen; i++ {
+		z := []jsonutil.JSONMetaNode{}
+		for j, a := range values {
+			if iterables != nil && iterables[j] {
+				arr := values[j].(jsonutil.JSONMetaArrayNode)
 				z = append(z, arr.Items[i])
 			} else {
 				z = append(z, a)

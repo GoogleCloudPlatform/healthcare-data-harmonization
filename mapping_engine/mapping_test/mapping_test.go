@@ -570,6 +570,27 @@ func TestEvaluateValueSource(t *testing.T) {
 			want: mustParseArray(json.RawMessage(`[{"foo":{"meep": 1}, "bar":"bar"}, {"foo":{"meep": 2}, "bar":"bar"}, {"foo":{"meep": 3}, "bar":"bar"}]`), t),
 		},
 		{
+			name: "enumerated non-first value with zipped args",
+			argVs: mappb.ValueSource{
+				Source: &mappb.ValueSource_ConstString{
+					ConstString: "bar",
+				},
+				AdditionalArg: []*mappb.ValueSource{
+					{
+						Source: &mappb.ValueSource_FromInput{
+							FromInput: &mappb.ValueSource_InputSource{
+								Arg:   1,
+								Field: "foo[]",
+							},
+						},
+					},
+				},
+				Projector: "UDFMakeFooBar",
+			},
+			args: []jsonutil.JSONToken{mustParseContainer(json.RawMessage(`{"foo": [{"meep": 1}, {"meep": 2}, {"meep": 3}]}`), t)},
+			want: mustParseArray(json.RawMessage(`[{"bar":{"meep": 1}, "foo":"bar"}, {"bar":{"meep": 2}, "foo":"bar"}, {"bar":{"meep": 3}, "foo":"bar"}]`), t),
+		},
+		{
 			name: "enumerated multiple arrays as zipped args",
 			argVs: mappb.ValueSource{
 				Source: &mappb.ValueSource_FromInput{
