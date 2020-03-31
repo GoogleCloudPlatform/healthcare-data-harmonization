@@ -368,8 +368,7 @@ func CurrentTime(format jsonutil.JSONStr, tz jsonutil.JSONStr) (jsonutil.JSONStr
 	return jsonutil.JSONStr(outputTime), nil
 }
 
-// ParseTime uses a Go time-format to convert date into an ISO-formatted (JavaScript) date time.
-// TODO: Untie from Go format.
+// ParseTime uses a Go time-format to convert date into the RFC3339 (https://www.ietf.org/rfc/rfc3339.txt) format.
 func ParseTime(format jsonutil.JSONStr, date jsonutil.JSONStr) (jsonutil.JSONStr, error) {
 	return ReformatTime(format, date, time.RFC3339Nano)
 }
@@ -386,7 +385,8 @@ func parseTime(format jsonutil.JSONStr, date jsonutil.JSONStr) (time.Time, error
 	return isoDate, nil
 }
 
-// ParseUnixTime parses a unit and a unix timestamp into an ISO-formatted (JavaScript) date time.
+// ParseUnixTime parses a unit and a unix timestamp into the speficied format.
+// The function accepts a go time format layout (https://golang.org/pkg/time/#Time.Format)
 func ParseUnixTime(unit jsonutil.JSONStr, ts jsonutil.JSONNum, format jsonutil.JSONStr, tz jsonutil.JSONStr) (jsonutil.JSONStr, error) {
 	sec := int64(ts)
 	ns := int64(0)
@@ -414,7 +414,7 @@ func ParseUnixTime(unit jsonutil.JSONStr, ts jsonutil.JSONNum, format jsonutil.J
 	return jsonutil.JSONStr(tm.Format(string(format))), nil
 }
 
-// ReformatTime uses a Go time-format to convert date into another Go time-formatted date time.
+// ReformatTime uses a Go time-format (https://golang.org/pkg/time/#Time.Format) to convert date into another Go time-formatted date time (https://golang.org/pkg/time/#Time.Format).
 // TODO: Untie from Go format.
 func ReformatTime(inFormat jsonutil.JSONStr, date jsonutil.JSONStr, outFormat jsonutil.JSONStr) (jsonutil.JSONStr, error) {
 	isoDate, err := parseTime(inFormat, date)
@@ -480,8 +480,8 @@ func IsNotNil(object jsonutil.JSONToken) (jsonutil.JSONBool, error) {
 	return !isNil, err
 }
 
-// MergeJSON merges the JSONTokens into one JSON object by repeatedly calling the merge
-// function. This overwrites single fields and concatenates array fields (unless
+// MergeJSON merges the elements in the JSONArr into one JSON object by repeatedly calling the merge
+// function. The merge function overwrites single fields and concatenates array fields (unless
 // overwriteArrays is true, in which case arrays are overwritten).
 func MergeJSON(arr jsonutil.JSONArr, overwriteArrays jsonutil.JSONBool) (jsonutil.JSONToken, error) {
 	var out jsonutil.JSONToken
@@ -637,7 +637,8 @@ func StrFmt(format jsonutil.JSONStr, item jsonutil.JSONToken) (jsonutil.JSONStr,
 	return jsonutil.JSONStr(fmt.Sprintf(string(format), item)), nil
 }
 
-// StrJoin concatenates the input strings.
+// StrJoin joins the inputs together and adds the separator between them. Non-string arguments
+// are converted to strings before joining.
 func StrJoin(sep jsonutil.JSONStr, args ...jsonutil.JSONToken) (jsonutil.JSONStr, error) {
 	var o []string
 	for _, token := range args {
