@@ -38,7 +38,8 @@ import (
 
 const (
 	maxDecimalPlaces = 30
-	projectorName    = "_HarmonizeUnit"
+	projectorName    = "$HarmonizeUnit"
+
 )
 
 // UnitHarmonizer is the interface for harmonizing units.
@@ -163,7 +164,11 @@ func LoadUnitHarmonizationProjectors(r *types.Registry, unitHarmonizationConfig 
 		return err
 	}
 
-	return r.RegisterProjector(projectorName, proj)
+	if err := r.RegisterProjector(projectorName, proj); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // ParseUnitConfigFiles parses the unit config files.
