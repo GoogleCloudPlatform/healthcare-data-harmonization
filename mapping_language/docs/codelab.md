@@ -31,7 +31,22 @@ some hands-on practice with the configuration language.
     example command might look like (run from mapping_engine/main): `go run . --
     -input_file_spec=$HOME/dhml_codelab/codelab.json
     -output_dir=$HOME/dhml_codelab/
+    -harmonize_code_spec=$HOME/dhml_codelab/codelab-codes.textproto
+    -harmonize_unit_spec=$HOME/dhml_codelab/codelab-units.textproto
     -mapping_file_spec=$HOME/dhml_codelab/codelab.dhml`
+
+### All available flags
+
+*   input_file_spec: Input data file or directory (JSON)
+*   output_dir: Path to the directory where the output will be written to. Leave
+    empty to print to stdout
+*   mapping_file_spec: Mapping file (DHML file)
+*   lib_dir_spec: Path to the directory where the library DHML files are
+
+*   harmonize_code_spec: Code harmonization config
+    ([textproto](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto/harmonization.proto))
+*   harmonize_unit_spec: Unit harmonization config
+    ([textproto](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto/harmonization.proto))
 
 ## Hello mapping world
 
@@ -1885,6 +1900,210 @@ Output:
     }
 }
 ```
+
+## Code harmonization
+
+*   Code Harmonization is the mechanism for mapping a code in one terminology to
+    another
+*   The mapping engine uses
+    [FHIR ConceptMaps](https://www.hl7.org/fhir/conceptmap.html) to store lookup
+    tables, and uses a subset of
+    [FHIR Translate](https://www.hl7.org/fhir/conceptmap-operation-translate.html)
+    mechanics to do code lookups
+    *   Lookups return an array of
+        [FHIR Codings](https://www.hl7.org/fhir/datatypes.html#Coding)
+    *   Remote lookup is also possible
+    *   Multiple concept maps and multiple remote lookup servers are supported
+*   Lookup syntax
+    *   $HarmonizeCode(LookupSourceName, SourceCode, SourceSystem, ConceptMapID)
+    *   $HarmonizeCodeBySearch(LookupSourceName, SourceCode, SourceSystem)
+
+### Preparation
+
+#### ConceptMap
+
+Start by creating a ConceptMap `codelab.harmonization.json`. Set its contents
+to:
+
+```json
+{
+  "group":[
+    {
+      "element":[
+        {
+          "code": "red",
+          "target":[
+            {
+              "code": "target-red",
+              "equivalence": "EQUIVALENT"
+            }
+          ]
+        },
+        {
+          "code": "blue",
+          "target":[
+            {
+              "code": "target-blue",
+              "equivalence": "EQUIVALENT"
+            }
+          ]
+        }
+      ],
+      "source": "codelab-source",
+      "target": "codelab-target"
+    }
+  ],
+  "id": "codelab-conceptmap-id",
+  "version": "v1",
+  "resourceType":"ConceptMap"
+}
+```
+
+#### Code harmonization config
+
+Start by creating a text
+[protobuf](https://developers.google.com/protocol-buffers)
+`codelab-codes.textproto`. Set its contents to:
+
+```textproto
+code_lookup: {
+  local_path: "$HOME/dhml_codelab/codelab.harmonization.json"
+}
+```
+
+### Example
+
+Translate the code `red` to the value specified by the ConceptMap above.
+
+```
+Codes: TranslateCode("red")
+
+def TranslateCode(code) {
+  original_code: code
+  translated_code: $HarmonizeCode("$Local", code, "codelab-source", "codelab-conceptmap-id")
+}
+```
+
+Run the above mapping (see [Before you begin](#setup) for instructions)
+
+<section class="zippy">
+Output:
+
+<pre>
+<code>{
+  "Codes": {
+    "original_code": "red",
+    "translated_code": [
+      {
+        "code": "target-red",
+        "display": "A display for code red",
+        "system": "codelab-target",
+        "version": "v1"
+      }
+    ]
+  }
+}
+</code>
+</pre>
+
+</section>
+
+## Unit harmonization
+
+*   Unit harmonization is the mechanism for coverting values in one unit to
+    another
+*   The mapping engine uses conversion tables defined in the
+    [UnitConfiguration](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine/proto/unit_config.proto)
+    syntax
+*   Conversions return a object that contains:
+    *   `originalQuantity`: the original quantity
+    *   `originalUnit`: the original unit
+    *   `quantity`: the converted quantity
+    *   `unit`: the converted unit
+    *   `system`: the unit config system
+    *   `version`: the unit config version
+*   Lookup syntax
+    *   $HarmonizeUnit(sourceValue, sourceUnit, sourceCodingSystemArray)
+
+### Preparation
+
+#### Units conversion config
+
+Start by creating a text
+[protobuf](https://developers.google.com/protocol-buffers)
+`codelab-units-config.textproto`. Set its contents to:
+
+```textproto
+version: "v1"
+system: "http://unitsofmeasure.org"
+conversion {
+  source_unit: "LB"
+  dest_unit: "KG"
+  code: "weight"
+  codesystem: "metric"
+  constant: 0.0
+  scalar: 0.453592
+}
+conversion {
+  source_unit: "G"
+  dest_unit: "KG"
+  code: "weight"
+  codesystem: "metric"
+  constant: 0.0
+  scalar: 0.001
+}
+```
+
+#### Unit harmonization config
+
+Start by creating a text
+[protobuf](https://developers.google.com/protocol-buffers)
+`codelab-units.textproto`. Set its contents to:
+
+```textproto
+unit_conversion: {
+  local_path: "$HOME/dhml_codelab/codelab-units-config.textproto"
+}
+```
+
+### Example
+
+Translate the quantity `50 LB` to the `KG` using the conversion factor in the
+config above.
+
+```
+Units: ConvertUnit(50, "LB")
+
+def ConvertUnit(value, unit) {
+  var codesystem.system: "metric"
+  var codesystem.code: "weight"
+  var codesystems: $ListOf(codesystem)
+  converted_unit: $HarmonizeUnit(value, unit, codesystems)
+}
+```
+
+Run the above mapping (see [Before you begin](#setup) for instructions)
+
+<section class="zippy">
+Output:
+
+<pre>
+<code>{
+  "Units": {
+    "converted_unit": {
+      "originalQuantity": 50,
+      "originalUnit": "LB",
+      "quantity": 22.6796,
+      "system": "http://unitsofmeasure.org",
+      "unit": "KG",
+      "version": "v1"
+    }
+  }
+}
+</code>
+</pre>
+
+</section>
 
 ## [FHIR](https://hl7.org/fhir/) -> [OMOP](https://www.ohdsi.org/data-standardization/the-common-data-model/) example
 
