@@ -129,15 +129,13 @@ func NewTransformer(ctx context.Context, config *dhpb.DataHarmonizationConfig, s
 
 	if hc := config.GetHarmonizationConfig(); hc != nil {
 		if err := harmonizecode.LoadCodeHarmonizationProjectors(t.Registry, hc); err != nil {
-			// TODO: return nil, err
-			log.Printf("failed to load code harmonization projectors: %v", err)
+			return nil, err
 		}
 	}
 
 	if uc := config.GetUnitHarmonizationConfig(); uc != nil {
 		if err := harmonizeunit.LoadUnitHarmonizationProjectors(t.Registry, uc); err != nil {
-			// TODO: return nil, err
-			log.Printf("failed to load unit harmonization projectors: %v", err)
+			return nil, err
 		}
 	}
 
