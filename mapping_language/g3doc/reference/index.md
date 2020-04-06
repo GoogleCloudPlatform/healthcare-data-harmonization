@@ -369,6 +369,262 @@ operator can be used to overwrite primitive fields.
 
 > NOTE: Overwriting restrictions do not apply to variables.
 
+## Code Harmonization
+
+Code Harmonization is the mechanism for mapping a code in one terminology to
+another. The mapping engine uses
+[FHIR ConceptMaps](https://www.hl7.org/fhir/conceptmap.html) to store lookup
+tables, and uses a subset of
+[FHIR Translate](https://www.hl7.org/fhir/conceptmap-operation-translate.html)
+mechanics to do code lookups. Unlike FHIR translate, lookups return an array of
+[FHIR Codings](https://www.hl7.org/fhir/datatypes.html#Coding) on successful
+responses.
+
+The lookups can be configured to read from remote servers as well as local
+files. Local files are read at startup, and cached for the duration of the
+mapping engine instance. When reading from remote servers, the returned codes
+are cached. The Time To Live (TTL) and cache clean up interval for this cache is
+configurable.
+
+For unsuccessful responses, an error message is returned instead of an an array
+of FHIR Codings. In the case of remote servers, the http code and error message
+is returned.
+
+### Configuration
+
+See the
+[CodeHarmonization protobuf](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine/proto/harmonization.proto)
+for more information on how to configure Code Harmonization.
+
+#### Local code harmonization example
+
+<section class="zippy">
+ConceptMap:
+
+<pre>
+<code>
+{
+  "group":[
+    {
+      "element":[
+        {
+          "code": "red",
+          "target":[
+            {
+              "code": "target-red",
+              "equivalence": "EQUIVALENT"
+            }
+          ]
+        },
+        {
+          "code": "blue",
+          "target":[
+            {
+              "code": "target-blue",
+              "equivalence": "EQUIVALENT"
+            }
+          ]
+        }
+      ],
+      "source": "codelab-source",
+      "target": "codelab-target"
+    }
+  ],
+  "id": "codelab-conceptmap-id",
+  "version": "v1",
+  "resourceType":"ConceptMap"
+}
+</code>
+</pre>
+
+</section>
+
+<section class="zippy">
+Local file configuration:
+
+<pre>
+<code>
+code_lookup: {
+  local_path: PATH_TO_CONCEPT_MAP
+}
+</code>
+</pre>
+
+</section>
+
+<section class="zippy">
+Google Cloud Storage (GCS) file configuration:
+
+<pre>
+<code>
+code_lookup: {
+  gcs_path: gs://PATH_TO_CONCEPT_MAP
+}
+</code>
+</pre>
+
+</section>
+
+> NOTE:
+> [Applicaton default credentials](https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login)
+> are used when accessing GCS files.
+
+#### Remote code harmonization example
+
+> NOTE: Only [Google Cloud FHIR Stores]() are supported currently.
+
+<section class="zippy">
+Configuration:
+
+<pre>
+<code>
+code_lookup: {
+  name: "fhir-store",
+  url_path: https://healthcare.googleapis.com/PATH_TO_FHIR_STORE
+},
+cache_ttl_seconds: 100,
+cleanup_interval_seconds: 500
+</code>
+</pre>
+
+</section>
+
+### Lookup syntax
+
+#### $HarmonizeCode
+
+```go
+$HarmonizeCode(lookupSourceName string, sourceCode string, sourceSystem string, conceptMapID string) array
+```
+
+Harmonize the provided code to the value specified by the ConceptMap.
+
+Arguments:
+
+*   lookupSourceName: The name of the code lookup block in the CodeHarmonzation
+    configuration if remote, or `$Local` for local concept maps.
+*   sourceCode: The code to lookup.
+*   sourceSystem: The system that the source code is in.
+*   conceptMapID: The ID of the ConceptMap to lookup against.
+
+Return: An array of
+[FHIR Codings](https://www.hl7.org/fhir/datatypes.html#Coding) that match.
+
+#### $HarmonizeCodeBySearch
+
+```go
+$HarmonizeCodeBySearch(lookupSourceName string, sourceCode string, sourceSystem string) array
+```
+
+Harmonize the provided code to the value specified by any ConceptMap. This is
+slower than `$HarmonizeCode` as it needs to look at all the provided
+ConceptMaps.
+
+Arguments:
+
+*   lookupSourceName: The name of the code lookup block in the CodeHarmonzation
+    configuration if remote, or `$Local` for local concept maps.
+*   sourceCode: The code to lookup.
+*   sourceSystem: The system that the source code is in.
+
+Return: An array of
+[FHIR Codings](https://www.hl7.org/fhir/datatypes.html#Coding) that match.
+
+## Unit Harmonization
+
+Unit harmonization is the mechanism for converting a value in one unit to
+another. The mapping engine uses conversion tables defined in the
+[UnitConfiguration](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine/proto/unit_config.proto)
+syntax. Conversions return a object that contains:
+
+*   `originalQuantity`: the original quantity
+*   `originalUnit`: the original unit
+*   `quantity`: the converted quantity
+*   `unit`: the converted unit
+*   `system`: the unit config system
+*   `version`: the unit config version
+
+### Sample configurations
+
+<section class="zippy">
+Conversion configuration:
+
+<pre>
+<code>
+version: "v1"
+system: "http://unitsofmeasure.org"
+conversion {
+  source_unit: "LB"
+  dest_unit: "KG"
+  code: "weight"
+  codesystem: "metric"
+  constant: 0.0
+  scalar: 0.453592
+}
+conversion {
+  source_unit: "G"
+  dest_unit: "KG"
+  code: "weight"
+  codesystem: "metric"
+  constant: 0.0
+  scalar: 0.001
+}
+</code>
+</pre>
+
+</section>
+
+<section class="zippy">
+Code harmonization configuration:
+
+<pre>
+<code>
+unit_conversion: {
+  local_path: "PATH_TO_CONVERSION_CONFIG"
+}
+</code>
+</pre>
+
+</section>
+
+### Lookup syntax
+
+#### $HarmonizeUnit
+
+```go
+$HarmonizeUnit(sourceValue string, sourceUnit string, sourceCodingSystemArray array) object
+```
+
+Harmonize the provided quantity and unit to the specified coding system.
+
+Arguments:
+
+*   sourceValue: The value of the unit to convert.
+*   sourceUnit: The unit to convert.
+*   sourceCodingSystemArray: The coding system to convert to.
+
+Return: An object with the original quantity and converted quantity as specfied
+above.
+
+E.g: `$HarmonizeUnit("50", "KG", [{"system":"metric", "code":"weight"}])`
+
+Output:
+
+```json
+{
+  "Units": {
+    "converted_unit": {
+      "originalQuantity": 50,
+      "originalUnit": "LB",
+      "quantity": 22.6796,
+      "system": "http://unitsofmeasure.org",
+      "unit": "KG",
+      "version": "v1"
+    }
+  }
+}
+```
+
 ## Comments
 
 Similar to C/Java, lines prefixed with `//` are comments and not part of the
