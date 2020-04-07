@@ -29,7 +29,7 @@ and `go test`. Please refer to their individual READMEs for more information.
 
 ### Language Reference
 
-TODO: Add language reference.
+A language reference is available: [Data Harmonization Mapping Language Reference](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_language/docs/reference.md)
 
 ### Codelab
 

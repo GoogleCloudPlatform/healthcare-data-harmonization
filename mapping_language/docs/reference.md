@@ -138,7 +138,7 @@ patient: PatientName(input_json)
 There are a number of builtin functions provided out of the box. Builtin
 functions are prefixed with a `$`. The full documentation of the builtin
 functions is available
-[here](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_language/g3doc/reference/builtins.md).
+[here](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_language/docs/builtins.md).
 
 ### Null propogation
 
