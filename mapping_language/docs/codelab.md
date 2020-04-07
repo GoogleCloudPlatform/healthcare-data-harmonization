@@ -44,9 +44,9 @@ some hands-on practice with the configuration language.
 *   lib_dir_spec: Path to the directory where the library DHML files are
 
 *   harmonize_code_spec: Code harmonization config
-    ([textproto](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto/harmonization.proto))
+    ([textproto](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_engine/proto/harmonization.proto))
 *   harmonize_unit_spec: Unit harmonization config
-    ([textproto](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto/harmonization.proto))
+    ([textproto](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_engine/proto/harmonization.proto))
 
 ## Hello mapping world
 

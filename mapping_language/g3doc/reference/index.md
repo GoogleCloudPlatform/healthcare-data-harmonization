@@ -26,9 +26,9 @@ available in DHML.
 *   lib_dir_spec: Path to the directory where the library DHML files are
 
 *   harmonize_code_spec: Code harmonization config
-    ([textproto](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto/harmonization.proto))
+    ([textproto](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_engine/proto/harmonization.proto))
 *   harmonize_unit_spec: Unit harmonization config
-    ([textproto](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto/harmonization.proto))
+    ([textproto](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_engine/proto/harmonization.proto))
 
 ## Mapping
 
@@ -138,7 +138,7 @@ patient: PatientName(input_json)
 There are a number of builtin functions provided out of the box. Builtin
 functions are prefixed with a `$`. The full documentation of the builtin
 functions is available
-[here](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language/mapping_language/g3doc/reference/builtins.md).
+[here](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_language/g3doc/reference/builtins.md).
 
 ### Null propogation
 

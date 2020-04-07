@@ -8,7 +8,8 @@ configuration file which describes how.
 The configuration file can be written in any
 [protobuf](https://developers.google.com/protocol-buffers/docs/overview) format.
 This can be rather verbose, so we recommend using the
-[Data Harmonization Mapping Language](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language) which is transpiled to protobuf configs for you.
+[Data Harmonization Mapping Language](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_language)
+which is transpiled to protobuf configs for you.
 
 The engine accepts data in JSON format and outputs it in JSON format.
 For information on the mapping configuration, look at the protobuf files in the
