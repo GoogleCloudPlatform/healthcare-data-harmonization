@@ -6,7 +6,7 @@ This is an syntax that designed to express mappings of data of one structure to
 another.
 
 This syntax is transpiled into a configuration file for the
-[Data Harmonization Mapping Engine](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine)
+[Data Harmonization Mapping Engine](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_engine)
 which can then execute the mappings.
 
 The engine accepts data in JSON format and outputs it in JSON format.
