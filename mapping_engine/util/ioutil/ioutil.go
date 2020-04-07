@@ -51,6 +51,16 @@ func MustReadDir(path, name string) []string {
 	return o
 }
 
+// MustReadGlob gets the file/directory names that match the path.
+// The name parameter is used strictly for formatting the errors.
+func MustReadGlob(pattern, name string) []string {
+	fis, err := filepath.Glob(pattern)
+	if err != nil {
+		log.Fatalf("Could not read %s glob %q: %v", name, pattern, err)
+	}
+	return fis
+}
+
 // Exists checks if a file or folder exists.
 func Exists(name string) bool {
 	_, err := os.Stat(name)

@@ -56,7 +56,7 @@ func (s *stringSlice) Set(v string) error {
 }
 
 var (
-	inputFile           = flag.String("input_file_spec", "", "Input data file or directory (JSON).")
+	inputFile           = flag.String("input_file_spec", "", "Input data file or glob pattern (JSON).")
 	outputDir           = flag.String("output_dir", "", "Path to the directory where the output will be written to. Leave empty to print to stdout.")
 	mappingFile         = flag.String("mapping_file_spec", "", "Mapping file (DHML file).")
 	harmonizeCodeConfig = flag.String("harmonize_code_spec", "", "Code harmonization config (text proto)")
@@ -120,20 +120,21 @@ func readLibConfigs(path string) []*libpb.LibraryConfig {
 	return libs
 }
 
-func readInputs(path string) []string {
-	fi, err := os.Stat(*inputFile)
-	if err != nil {
-		log.Fatalf("Failed to read input spec: %v", err)
-	}
+func readInputs(pattern string) []string {
+	fs := fileutil.MustReadGlob(pattern, "input_dir")
 
-	var fs []string
-	switch fm := fi.Mode(); {
-	case fm.IsDir():
-		fs = append(fs, fileutil.MustReadDir(*inputFile, "input dir")...)
-	case fm.IsRegular():
-		fs = append(fs, *inputFile)
+	var ret []string
+	for _, f := range fs {
+		fi, err := os.Stat(f)
+		if err != nil {
+			log.Fatalf("Failed to read input spec: %v", err)
+		}
+		if fi.IsDir() {
+			continue
+		}
+		ret = append(ret, f)
 	}
-	return fs
+	return ret
 }
 
 func main() {
