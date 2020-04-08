@@ -19,6 +19,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 
 	"github.com/golang/protobuf/proto" /* copybara-comment: proto */
@@ -329,33 +330,40 @@ func (t *Transformer) HasPostProcessProjector() bool {
 
 // loadMappingConfig loads a mapping config from GCS.
 func loadMappingConfig(loc *httppb.Location, typ hapb.MappingType) (*mappb.MappingConfig, error) {
-	mpc := &mappb.MappingConfig{}
+	var data []byte
 	switch l := loc.Location.(type) {
 	case *httppb.Location_GcsLocation:
-		data, err := gcsutil.ReadFromGcs(context.Background(), l.GcsLocation)
+		d, err := gcsutil.ReadFromGcs(context.Background(), l.GcsLocation)
 		if err != nil {
-			return nil, fmt.Errorf("failed to read MappingConfig from GCS, %v", err)
+			return nil, fmt.Errorf("failed to read mapping config from GCS, %v", err)
 		}
-		switch typ {
-		case hapb.MappingType_RAW_PROTO:
-			if err := proto.UnmarshalText(string(data), mpc); err != nil {
-				return nil, err
-			}
-		case hapb.MappingType_MAPPING_LANGUAGE:
-			lmpc, err := transpiler.Transpile(string(data))
-			if err != nil {
-				return nil, err
-			}
-			mpc = lmpc
-		default:
-			return nil, fmt.Errorf("invalid mapping config type %v", typ)
-		}
-		return mpc, nil
-	case *httppb.Location_UrlPath:
-		return nil, fmt.Errorf("loading from remote path %s is unsupported", l.UrlPath)
+		data = d
 	case *httppb.Location_LocalPath:
-		return nil, fmt.Errorf("loading from local path %s is unsupported", l.LocalPath)
+		d, err := ioutil.ReadFile(l.LocalPath)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read library file with error %v", err)
+		}
+		data = d
+	case *httppb.Location_UrlPath:
+		return nil, fmt.Errorf("loading mappings from remote path %s is unsupported", l.UrlPath)
 	default:
-		return nil, fmt.Errorf("location type %s is unsupported", l)
+		return nil, fmt.Errorf("location type %T is unsupported", l)
 	}
+
+	mpc := &mappb.MappingConfig{}
+	switch typ {
+	case hapb.MappingType_RAW_PROTO:
+		if err := proto.UnmarshalText(string(data), mpc); err != nil {
+			return nil, err
+		}
+	case hapb.MappingType_MAPPING_LANGUAGE:
+		lmpc, err := transpiler.Transpile(string(data))
+		if err != nil {
+			return nil, err
+		}
+		mpc = lmpc
+	default:
+		return nil, fmt.Errorf("invalid mapping config type %v", typ)
+	}
+	return mpc, nil
 }

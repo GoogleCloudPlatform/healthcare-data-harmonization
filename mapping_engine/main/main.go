@@ -27,11 +27,11 @@ import (
 
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/transform" /* copybara-comment: transform */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
-	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language/transpiler" /* copybara-comment: transpiler */
 	"github.com/golang/protobuf/proto" /* copybara-comment: proto */
 
 	dhpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: data_harmonization_go_proto */
 	hpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: harmonization_go_proto */
+	httppb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: http_go_proto */
 	libpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: library_go_proto */
 	fileutil "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/ioutil" /* copybara-comment: ioutil */
 
@@ -56,12 +56,13 @@ func (s *stringSlice) Set(v string) error {
 }
 
 var (
-	inputFile           = flag.String("input_file_spec", "", "Input data file or glob pattern (JSON).")
-	outputDir           = flag.String("output_dir", "", "Path to the directory where the output will be written to. Leave empty to print to stdout.")
-	mappingFile         = flag.String("mapping_file_spec", "", "Mapping file (DHML file).")
-	harmonizeCodeConfig = flag.String("harmonize_code_spec", "", "Code harmonization config (text proto)")
-	harmonizeUnitConfig = flag.String("harmonize_unit_spec", "", "Unit harmonization config (text proto)")
-	libConfigDir        = flag.String("lib_dir_spec", "", "Path to the directory where the libraries are.")
+	inputFile         = flag.String("input_file_spec", "", "Input data file or glob pattern (JSON).")
+	outputDir         = flag.String("output_dir", "", "Path to the directory where the output will be written to. Leave empty to print to stdout.")
+	mappingFile       = flag.String("mapping_file_spec", "", "Mapping file (DHML file).")
+	harmonizeCodeDir  = flag.String("harmonize_code_dir_spec", "", "Path to the directory where the FHIR ConceptMaps that should be used for harmozing codes are.")
+	harmonizeUnitFile = flag.String("harmonize_unit_spec", "", "Unit harmonization file (textproto)")
+	libDir            = flag.String("lib_dir_spec", "", "Path to the directory where the libraries are.")
+	dhConfigFile      = flag.String("data_harmonization_config_file_spec", "", "Data Harmonization config (textproto). If this flag is specified, other configs cannot be specified.")
 
 	verbose = flag.Bool("verbose", false, "Enables outputting full trace of operations at the end.")
 
@@ -82,9 +83,9 @@ func outputFileName(outputPath, inputFilePath string) string {
 	return filepath.Join(outputPath, f+outputExtension)
 }
 
-func readLibConfigs(path string) []*libpb.LibraryConfig {
+func libConfigs(path string) []*libpb.LibraryConfig {
 	if path == "" {
-		return []*libpb.LibraryConfig{}
+		return nil
 	}
 	fs := fileutil.MustReadDir(path, "library dir")
 
@@ -92,32 +93,38 @@ func readLibConfigs(path string) []*libpb.LibraryConfig {
 	for _, f := range fs {
 
 		var lbc *libpb.LibraryConfig
-		if strings.HasSuffix(f, dhmlExtension) {
-
-			b := fileutil.MustRead(f, "library file")
-
-			c, err := transpiler.Transpile(string(b))
-			if err != nil {
-				log.Fatalf("Failed to transpile library file %v: %v", f, err)
-			}
-			lbc = &libpb.LibraryConfig{Projector: c.GetProjector()}
-		}
-
-		if strings.HasSuffix(f, textProtoExtension) {
-			ls := fileutil.MustRead(f, "library file")
-			lbc = &libpb.LibraryConfig{}
-			if err := proto.UnmarshalText(string(ls), lbc); err != nil {
-				log.Fatalf("Failed to parse library %q: %v", ls, err)
-			}
-		}
-
-		if lbc == nil {
-			log.Printf("Unsupported library file: %v. library files must be either .dhml or .textproto files", f)
-		}
+		lbc = &libpb.LibraryConfig{UserLibraries: []*libpb.UserLibrary{
+			&libpb.UserLibrary{
+				Type: hpb.MappingType_MAPPING_LANGUAGE,
+				Path: &httppb.Location{Location: &httppb.Location_LocalPath{LocalPath: f}},
+			}}}
 
 		libs = append(libs, lbc)
 	}
 	return libs
+}
+
+func codeHarmonizationConfig(path string) *hpb.CodeHarmonizationConfig {
+	if path == "" {
+		return nil
+	}
+	fs := fileutil.MustReadDir(path, "code harmonization dir")
+
+	var locs []*httppb.Location
+	for _, f := range fs {
+		locs = append(locs, &httppb.Location{Location: &httppb.Location_LocalPath{LocalPath: f}})
+	}
+	return &hpb.CodeHarmonizationConfig{CodeLookup: locs}
+}
+
+func unitHarmonizationConfig(path string) *hpb.UnitHarmonizationConfig {
+	if path == "" {
+		return nil
+	}
+	return &hpb.UnitHarmonizationConfig{
+		UnitConversion: &httppb.Location{
+			Location: &httppb.Location_LocalPath{LocalPath: path},
+		}}
 }
 
 func readInputs(pattern string) []string {
@@ -140,31 +147,28 @@ func readInputs(pattern string) []string {
 func main() {
 	flag.Parse()
 
-	ch := &hpb.CodeHarmonizationConfig{}
-	if *harmonizeCodeConfig != "" {
-		c := fileutil.MustRead(*harmonizeCodeConfig, "code harmonization config")
-		if err := proto.UnmarshalText(string(c), ch); err != nil {
-			log.Fatalf("Failed to parse code harmonization config: %v", err)
-		}
-	}
+	var dhConfig *dhpb.DataHarmonizationConfig
 
-	uh := &hpb.UnitHarmonizationConfig{}
-	if *harmonizeUnitConfig != "" {
-		u := fileutil.MustRead(*harmonizeUnitConfig, "unit harmonization config")
-		if err := proto.UnmarshalText(string(u), uh); err != nil {
-			log.Fatalf("Failed to read unit harmonization config: %v", err)
+	if *dhConfigFile != "" {
+		if *mappingFile != "" || *harmonizeCodeDir != "" || *harmonizeUnitFile != "" || *libDir != "" {
+			log.Fatal("data_harmonization_config_file_spec flag should not be set along with other configuration flags " +
+				"(mapping_file_spec, harmonize_code_dir_spec, harmonize_unit_spec, lib_dir_spec).")
 		}
-	}
-
-	dhConfig := &dhpb.DataHarmonizationConfig{
-		StructureMappingConfig: &hpb.StructureMappingConfig{
-			Mapping: &hpb.StructureMappingConfig_MappingLanguageString{
-				MappingLanguageString: string(fileutil.MustRead(*mappingFile, "mapping")),
+		n := fileutil.MustRead(*dhConfigFile, "data harmonization config")
+		if err := proto.UnmarshalText(string(n), dhConfig); err != nil {
+			log.Fatalf("Failed to parse data harmonization config")
+		}
+	} else {
+		dhConfig = &dhpb.DataHarmonizationConfig{
+			StructureMappingConfig: &hpb.StructureMappingConfig{
+				Mapping: &hpb.StructureMappingConfig_MappingLanguageString{
+					MappingLanguageString: string(fileutil.MustRead(*mappingFile, "mapping")),
+				},
 			},
-		},
-		HarmonizationConfig:     ch,
-		UnitHarmonizationConfig: uh,
-		LibraryConfig:           readLibConfigs(*libConfigDir),
+			HarmonizationConfig:     codeHarmonizationConfig(*harmonizeCodeDir),
+			UnitHarmonizationConfig: unitHarmonizationConfig(*harmonizeUnitFile),
+			LibraryConfig:           libConfigs(*libDir),
+		}
 	}
 
 	var tr *transform.Transformer

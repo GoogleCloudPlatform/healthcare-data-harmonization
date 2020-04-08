@@ -55,12 +55,12 @@ func (h *LocalCodeHarmonizer) HarmonizeBySearch(sourceCode, sourceSystem, source
 func (h *LocalCodeHarmonizer) Harmonize(sourceCode, sourceSystem, sourceName string) ([]HarmonizedCode, error) {
 	conceptMap, ok := h.cachedMaps[sourceName]
 	if !ok {
-		return nil, fmt.Errorf("source %s does not exist", sourceName)
+		return nil, fmt.Errorf("the harmonization source %q does not exist", sourceName)
 	}
 	mapGroups := conceptMap.groups
 
 	if len(mapGroups) == 0 {
-		return nil, fmt.Errorf("concept map %s must have at least one group", sourceName)
+		return nil, fmt.Errorf("concept map %q must have at least one group", sourceName)
 	}
 
 	var output []HarmonizedCode
@@ -144,7 +144,7 @@ func buildCachedMap(cm *ConceptMap) (cachedMap, string, error) {
 		if unmapped := group.Unmapped; unmapped != nil &&
 			unmapped.Mode != unmappedModeFixed &&
 			unmapped.Mode != unmappedModeProvided {
-			return cachedMap{}, "", fmt.Errorf("only fixed and provided modes are supported in concept map %s", cm.ID)
+			return cachedMap{}, "", fmt.Errorf("only fixed and provided modes are supported in concept map %q", cm.ID)
 		}
 		cachedGroup := cachedGroup{
 			lookups:      lookup,
