@@ -23,7 +23,7 @@ some hands-on practice with the configuration language.
 *   Make a new directory, for example `$HOME/dhml_codelab`
 *   Place the mapping configurations from the exercises in a file called
     `codelab.dhml`
-*   Place the input in a file called `codelab.json` (for now the contents ofthe
+*   Place the input in a file called `codelab.json` (for now the contents of the
     file should just be `{}`, we'll fill it later)
 
 *   View the *output* in `$HOME/dhml_codelab/codelab.output.json`
@@ -31,22 +31,10 @@ some hands-on practice with the configuration language.
     example command might look like (run from mapping_engine/main): `go run . --
     -input_file_spec=$HOME/dhml_codelab/codelab.json
     -output_dir=$HOME/dhml_codelab/
-    -harmonize_code_spec=$HOME/dhml_codelab/codelab-codes.textproto
+    -harmonize_code_dir_spec=$HOME/dhml_codelab/code_harmonization
     -harmonize_unit_spec=$HOME/dhml_codelab/codelab-units.textproto
     -mapping_file_spec=$HOME/dhml_codelab/codelab.dhml`
-
-### All available flags
-
-*   input_file_spec: Input data file or directory (JSON)
-*   output_dir: Path to the directory where the output will be written to. Leave
-    empty to print to stdout
-*   mapping_file_spec: Mapping file (DHML file)
-*   lib_dir_spec: Path to the directory where the library DHML files are
-
-*   harmonize_code_spec: Code harmonization config
-    ([textproto](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_engine/proto/harmonization.proto))
-*   harmonize_unit_spec: Unit harmonization config
-    ([textproto](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_engine/proto/harmonization.proto))
+*   See [running mappings](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/docs/reference.md#running-your-mappings) for all available options
 
 ## Hello mapping world
 
@@ -1922,7 +1910,7 @@ Output:
 
 #### ConceptMap
 
-Start by creating a ConceptMap `codelab.harmonization.json`. Set its contents
+Start by creating a folder `code_harmonization` and adding a ConceptMap `codelab.harmonization.json` in it. Set its contents
 to:
 
 ```json
@@ -1956,18 +1944,6 @@ to:
   "id": "codelab-conceptmap-id",
   "version": "v1",
   "resourceType":"ConceptMap"
-}
-```
-
-#### Code harmonization config
-
-Start by creating a text
-[protobuf](https://developers.google.com/protocol-buffers)
-`codelab-codes.textproto`. Set its contents to:
-
-```textproto
-code_lookup: {
-  local_path: "$HOME/dhml_codelab/codelab.harmonization.json"
 }
 ```
 
@@ -2027,11 +2003,9 @@ Output:
 
 ### Preparation
 
-#### Units conversion config
-
 Start by creating a text
 [protobuf](https://developers.google.com/protocol-buffers)
-`codelab-units-config.textproto`. Set its contents to:
+`codelab-units.textproto`. Set its contents to:
 
 ```textproto
 version: "v1"
@@ -2051,18 +2025,6 @@ conversion {
   codesystem: "metric"
   constant: 0.0
   scalar: 0.001
-}
-```
-
-#### Unit harmonization config
-
-Start by creating a text
-[protobuf](https://developers.google.com/protocol-buffers)
-`codelab-units.textproto`. Set its contents to:
-
-```textproto
-unit_conversion: {
-  local_path: "$HOME/dhml_codelab/codelab-units-config.textproto"
 }
 ```
 

@@ -24,9 +24,9 @@ available in DHML.
     Leave empty to print to stdout
 *   mapping_file_spec: Mapping file (DHML file)
 *   lib_dir_spec: Path to the directory where the library DHML files are
+*   harmonize_code_dir_spec: [FHIR ConceptMaps](https://www.hl7.org/fhir/conceptmap.html) used for code harmonization
 
-*   harmonize_code_spec: Code harmonization config
-    ([textproto](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_engine/proto/harmonization.proto))
+*   data_harmonization_config_file_spec: Data harmonization config ([textproto](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_engine/proto/data_harmonization.proto)).
 *   harmonize_unit_spec: Unit harmonization config
     ([textproto](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_engine/proto/harmonization.proto))
 
