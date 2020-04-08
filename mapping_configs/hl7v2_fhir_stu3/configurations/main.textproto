@@ -1,0 +1,60 @@
+# BEGIN GOOGLE-INTERNAL
+# proto-file: third_party/cloud_healthcare_data_harmonization/mapping_engine/proto/data_harmonization.proto
+# proto-message: cloud.healthcare.cdw.etl.mapping.proto.DataHarmonizationConfig
+# END GOOGLE-INTERNAL
+
+library_config: {
+  user_libraries: {
+    type: MAPPING_LANGUAGE
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/datatypes.dhml" }
+  }
+  user_libraries: {
+    type: MAPPING_LANGUAGE
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/hl7v2_fhir.dhml" }
+  }
+  user_libraries: {
+    type: MAPPING_LANGUAGE
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/messages.dhml" }
+  }
+  user_libraries: {
+    type: MAPPING_LANGUAGE
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/postprocess.dhml" }
+  }
+  user_libraries: {
+    type: MAPPING_LANGUAGE
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/segments.dhml" }
+  }
+}
+
+harmonization_config: {
+  code_lookup: {
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/code_harmonization/Allergy_Category.harmonization.json"
+  }
+  code_lookup: {
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/code_harmonization/Allergy_Severity.harmonization.json"
+  }
+  code_lookup: {
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/code_harmonization/Allergy_Type.harmonization.json"
+  }
+  code_lookup: {
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/code_harmonization/Gender.harmonization.json"
+  }
+  code_lookup: {
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/code_harmonization/Name_Type.harmonization.json"
+  }
+  code_lookup: {
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/code_harmonization/Observation_Status.harmonization.json"
+  }
+  code_lookup: {
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/code_harmonization/Report_Status.harmonization.json"
+  }
+}
+
+structure_mapping_config: {
+  mapping_path_config: {
+    mapping_type: MAPPING_LANGUAGE
+    mapping_config_path: {
+      local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/configurations/main.dhml"
+    }
+  }
+}

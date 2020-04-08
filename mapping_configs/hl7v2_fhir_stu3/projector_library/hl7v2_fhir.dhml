@@ -1,0 +1,12 @@
+// Description: Converts a HL7v2 Message to a set of FHIR resources.
+//
+// Argument(s):
+//   message HL7v2 Message Type (version 2.9)
+//
+// Output(s):
+//   FHIR STU3 Resources : http://www.hl7.org/fhir/stu3/resourcelist.html
+//
+def HL7v2_FHIR(message) {
+  $this (if message.ADT_A01?) : ADT_A01(message.ADT_A01);
+  $this (if message.ORU_R01?) : ORU_R01(message.ORU_R01);
+}

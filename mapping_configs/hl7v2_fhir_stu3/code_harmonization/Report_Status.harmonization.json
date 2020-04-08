@@ -1,0 +1,175 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "O",
+          "display": "Order received; specimen not yet received",
+          "target": [
+            {
+              "code": "registered",
+              "display": "Registered",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "C",
+          "display": "Correction to results",
+          "target": [
+            {
+              "code": "corrected",
+              "display": "Corrected",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "R",
+          "display": "Results stored; not yet verified",
+          "target": [
+            {
+              "code": "partial",
+              "display": "Partial",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "F",
+          "display": "Final results; results stored and verified.Can only be changed with a corrected result.",
+          "target": [
+            {
+              "code": "final",
+              "display": "Final",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "X",
+          "display": "No results available; Order canceled.",
+          "target": [
+            {
+              "code": "cancelled",
+              "display": "Cancelled",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70123",
+      "target": "http://hl7.org/fhir/diagnostic-report-status"
+    },
+    {
+      "element": [
+        {
+          "code": "I",
+          "display": "\"No results available; specimen received",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": " procedure incomplete\"",
+      "target": "Registered"
+    },
+    {
+      "element": [
+        {
+          "code": "S",
+          "display": "\"No results available; procedure scheduled",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "but not done\"",
+      "target": "Registered"
+    },
+    {
+      "element": [
+        {
+          "code": "A",
+          "display": "\"Some",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "partial",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": " but not all",
+      "target": "http://hl7.org/fhir/diagnostic-report-status"
+    },
+    {
+      "element": [
+        {
+          "code": "P",
+          "display": "\"Preliminary: A verified early result is available",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": " final results not yet obtained\"",
+      "target": "Preliminary"
+    },
+    {
+      "element": [
+        {
+          "code": "Y",
+          "display": "No order on record for this test.(Used only on queries)",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70124",
+      "target": "http://hl7.org/fhir/diagnostic-report-status"
+    },
+    {
+      "element": [
+        {
+          "code": "Z",
+          "display": "No record of this patient. (Used only on queries)",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70125",
+      "target": "http://hl7.org/fhir/diagnostic-report-status",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "unknown",
+        "display": "Unknown"
+      }
+    }
+  ],
+  "id": "Report_Status",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}
