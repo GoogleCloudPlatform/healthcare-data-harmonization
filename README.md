@@ -8,7 +8,7 @@ configuration file which describes how.
 The configuration file can be written in either the native
 [protobuf](https://developers.google.com/protocol-buffers/docs/overview) format
 or a condensed
-[Data Harmonization Mapping Language](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_language)
+[Data Harmonization Mapping Language](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language)
 which is transpiled to protobuf configs for you.
 
 The engine accepts data in JSON format and outputs it in JSON format. For
@@ -29,12 +29,12 @@ and `go test`. Please refer to their individual READMEs for more information.
 
 ### Language Reference
 
-A language reference is available: [Data Harmonization Mapping Language Reference](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_language/docs/reference.md)
+A language reference is available: [Data Harmonization Mapping Language Reference](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/docs/reference/index.md)
 
 ### Codelab
 
 Please refer to the
-[Data Harmonization Mapping Language Codelab](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_language/docs/codelab.md)
+[Data Harmonization Mapping Language Codelab](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/docs/codelab/index.md)
 for instructions on how to run the mapping engine and for getting familiar with
 the mapping language.
 

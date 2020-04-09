@@ -34,7 +34,7 @@ some hands-on practice with the configuration language.
     -harmonize_code_dir_spec=$HOME/dhml_codelab/code_harmonization
     -harmonize_unit_spec=$HOME/dhml_codelab/codelab-units.textproto
     -mapping_file_spec=$HOME/dhml_codelab/codelab.dhml`
-*   See [running mappings](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/docs/reference.md#running-your-mappings) for all available options
+*   See [running mappings](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/docs/reference/index.md#running-your-mappings) for all available options
 
 ## Hello mapping world
 
@@ -1989,7 +1989,7 @@ Output:
 *   Unit harmonization is the mechanism for coverting values in one unit to
     another
 *   The mapping engine uses conversion tables defined in the
-    [UnitConfiguration](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine/proto/unit_config.proto)
+    [UnitConfiguration](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine/proto/unit_config.proto)
     syntax
 *   Conversions return a object that contains:
     *   `originalQuantity`: the original quantity

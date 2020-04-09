@@ -14,15 +14,15 @@ Every sample directory is composed of different files and directories, namely:
 *   code_harmonization:
     [FHIR ConceptMaps](https://www.hl7.org/fhir/conceptmap.html) in JSON format
     that are used for
-    [Code Harmonization](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/docs/reference.md#code-harmonization)
+    [Code Harmonization](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/docs/reference/index.md#code-harmonization)
 *   configurations
     *   main.dhml: the mapping configuration
     *   main.textproto: the
-        [Data Harmonization configuration](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine/proto/data_harmonization.proto).
+        [Data Harmonization configuration](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine/proto/data_harmonization.proto).
         This configuration is composed of the mapping config,
         library configs and the different types of harmonization configs.
     *   units.textproto:
-        [Unit Harmonization](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine/proto/unit_config.proto)
+        [Unit Harmonization](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine/proto/unit_config.proto)
         configuration
 *   test cases in the form:
     *   TEST_NAME.input.json: the input file used in the test
@@ -42,7 +42,7 @@ config, or by specifying the individual configuration separately. In both cases,
 the output from the mapping engine is written to the terminal.
 
 See the
-[language reference](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/docs/reference.md#running-your-mappings)
+[language reference](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/docs/reference/index.md#running-your-mappings)
 for more details and other flags that are supported.
 
 ### Using individual configs

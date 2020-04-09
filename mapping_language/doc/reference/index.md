@@ -25,10 +25,9 @@ available in DHML.
 *   mapping_file_spec: Mapping file (DHML file)
 *   lib_dir_spec: Path to the directory where the library DHML files are
 *   harmonize_code_dir_spec: [FHIR ConceptMaps](https://www.hl7.org/fhir/conceptmap.html) used for code harmonization
-
-*   data_harmonization_config_file_spec: Data harmonization config ([textproto](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_engine/proto/data_harmonization.proto)).
 *   harmonize_unit_spec: Unit harmonization config
-    ([textproto](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_engine/proto/harmonization.proto))
+    ([textproto](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine/proto/harmonization.proto))
+*   data_harmonization_config_file_spec: Data harmonization config ([textproto](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine/proto/data_harmonization.proto)).
 
 ## Mapping
 
@@ -137,8 +136,7 @@ patient: PatientName(input_json)
 
 There are a number of builtin functions provided out of the box. Builtin
 functions are prefixed with a `$`. The full documentation of the builtin
-functions is available
-[here](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/tree/master/mapping_language/docs/builtins.md).
+functions is available [here](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/docs/reference/builtins.md).
 
 ### Null propogation
 
@@ -393,7 +391,7 @@ is returned.
 ### Configuration
 
 See the
-[CodeHarmonization protobuf](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine/proto/harmonization.proto)
+[CodeHarmonization protobuf](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine/proto/harmonization.proto)
 for more information on how to configure Code Harmonization.
 
 #### Local code harmonization example
@@ -534,7 +532,7 @@ Return: An array of
 
 Unit harmonization is the mechanism for converting a value in one unit to
 another. The mapping engine uses conversion tables defined in the
-[UnitConfiguration](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine/proto/unit_config.proto)
+[UnitConfiguration](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine/proto/unit_config.proto)
 syntax. Conversions return a object that contains:
 
 *   `originalQuantity`: the original quantity
