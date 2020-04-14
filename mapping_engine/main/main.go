@@ -147,7 +147,7 @@ func readInputs(pattern string) []string {
 func main() {
 	flag.Parse()
 
-	var dhConfig *dhpb.DataHarmonizationConfig
+	dhConfig := &dhpb.DataHarmonizationConfig{}
 
 	if *dhConfigFile != "" {
 		if *mappingFile != "" || *harmonizeCodeDir != "" || *harmonizeUnitFile != "" || *libDir != "" {
