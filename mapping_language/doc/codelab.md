@@ -18,7 +18,7 @@ some hands-on practice with the configuration language.
 *   Understand how this can be used to transform from one healthcare standard to
     another
 
-## Before you begin {setup}
+## Before you begin
 
 *   Make a new directory, for example `$HOME/dhml_codelab`
 *   Place the mapping configurations from the exercises in a file called
@@ -39,7 +39,7 @@ some hands-on practice with the configuration language.
 ## Hello mapping world
 
 Start with a simple mapping example (put the config below in `codelab.dhml` from
-the [Before you begin](#setup)).
+the [Before you begin](#before-you-begin)).
 
 ```
 Planet: "Earth"
@@ -51,7 +51,7 @@ Planet: "Earth"
     (`Planet`) and the data source (`"Earth"`)
 *   `"Earth"` is a constant string data source
 
-Run the above mapping (see [Before you begin](#setup) for instructions)
+Run the above mapping (see [Before you begin](#before-you-begin) for instructions)
 
 <section class="zippy">
 Output:
@@ -150,7 +150,7 @@ def MoonName_MoonInfo(moonName) {
 }
 ```
 
-Run the above mapping (see [Before you begin](#setup) for instructions)
+Run the above mapping (see [Before you begin](#before-you-begin) for instructions)
 
 <section class="zippy">
 Output:
@@ -312,7 +312,7 @@ def Num_DoubleNum(num) {
 }
 ```
 
-Run the above mapping (see [Before you begin](#setup) for instructions)
+Run the above mapping (see [Before you begin](#before-you-begin) for instructions)
 
 <section class="zippy">
 Output:
@@ -413,7 +413,7 @@ def Lorry_Vehicle(lorry) {
 ## Mapping from data
 
 Start by moving our planets and moons over to the input file `codelab.json`. See
-[Setup](#setup) for more details. Set its contents to:
+[Setup](#before-you-begin) for more details. Set its contents to:
 
 ```json
 {
@@ -455,7 +455,7 @@ def BodyName_BodyType_BodyInfo(body, bodyType) {
 }
 ```
 
-Run the above mapping (see [Before you begin](#setup) for instructions)
+Run the above mapping (see [Before you begin](#before-you-begin) for instructions)
 
 <section class="zippy">
 Output:
@@ -521,7 +521,7 @@ def BodyName_BodyType_BodyInfo(body, bodyType) {
 }
 ```
 
-Run the above mapping (see [Before you begin](#setup) for instructions)
+Run the above mapping (see [Before you begin](#before-you-begin) for instructions)
 
 <section class="zippy">
 Output:
@@ -632,7 +632,7 @@ def BodyInfo_ExtendedBodyInfo(info) {
 </section>
 </section>
 
-### Appending {appending}
+### Appending
 
 *   The mapping engine allows you to append to an array using `[]`
 *   `[]` in the middle of the path (e.g. types[].typeName: ...) is valid as well
@@ -694,7 +694,7 @@ def BodyName_BodyType_BodyInfo(body, bodyType) {
 }
 ```
 
-Run the above mapping (see [Before you begin](#setup) for instructions)
+Run the above mapping (see [Before you begin](#before-you-begin) for instructions)
 
 <section class="zippy">
 Output:
@@ -746,7 +746,7 @@ def BodyName_BodyType_BodyInfo(body, bodyType) {
 }
 ```
 
-Run the above mapping (see [Before you begin](#setup) for instructions)
+Run the above mapping (see [Before you begin](#before-you-begin) for instructions)
 <section class="zippy">
 Output:
 
@@ -782,7 +782,7 @@ Output:
 
 </section>
 
-### Writing to array fields {writing_to_array}
+### Writing to array fields
 
 Refactor the `type` field to an array by using the [append](#appending) syntax.
 
@@ -799,7 +799,7 @@ def BodyName_BodyType_BodyInfo(body, bodyType) {
 }
 ```
 
-Run the above mapping (see [Before you begin](#setup) for instructions)
+Run the above mapping (see [Before you begin](#before-you-begin) for instructions)
 
 <section class="zippy">
 Output:
@@ -980,7 +980,7 @@ def BodyName_BodyType_BodyInfo(body, bodyType) {
     variables don't show up in the mapping output
 *   Variables cannot have the same name as any of the inputs in its function
 
-The mapping below is equivalent to the [exercise above](#writing_to_array).
+The mapping below is equivalent to the [exercise above](#writing-to-array-fields).
 
 ``` {highlight="content:\bvar\b content:\bbigName\b"}
 PlanetNames: $ToUpper($root.Planets[*].name[]);
@@ -1083,7 +1083,7 @@ def BodyName_BodyType_BodyInfo(body, bodyType) {
 }
 ```
 
-Run the above mapping (see [Before you begin](#setup) for instructions)
+Run the above mapping (see [Before you begin](#before-you-begin) for instructions)
 
 <section class="zippy">
 Output:
@@ -1163,7 +1163,7 @@ def BodyName_BodyType_BodyInfo(body, bodyType) {
 }
 ```
 
-Run the above mapping (see [Before you begin](#setup) for instructions)
+Run the above mapping (see [Before you begin](#before-you-begin) for instructions)
 
 <section class="zippy">
 Output:
@@ -1481,7 +1481,7 @@ Planet: BodyName_BodyType_BodyInfo($root.Planets[where $.semiMajorAxis > 200][],
 Moon: BodyName_BodyType_BodyInfo($root.Moons[], "Moon")
 ```
 
-Run the above mapping (see [Before you begin](#setup) for instructions)
+Run the above mapping (see [Before you begin](#before-you-begin) for instructions)
 
 <section class="zippy">
 Output:
@@ -1677,7 +1677,7 @@ post def RestructureExample(output) {
 }
 ```
 
-Run the above mapping (see [Before you begin](#setup) for instructions)
+Run the above mapping (see [Before you begin](#before-you-begin) for instructions)
 
 <section class="zippy">
 Output:
@@ -1825,7 +1825,7 @@ def Hello_World_HelloWorldObject(hello, world) {
 }
 ```
 
-Run the above mapping (see [Before you begin](#setup) for instructions)
+Run the above mapping (see [Before you begin](#before-you-begin) for instructions)
 
 <section class="zippy">
 Output:
@@ -1849,7 +1849,7 @@ Output:
 
 </section>
 
-### Overwriting fields {overwriting}
+### Overwriting fields
 
 *   In order to prevent data loss and reduce mapping errors, the DHML allows a
     primitive (string, numeric, or boolean) field to only be written once
@@ -1960,7 +1960,7 @@ def TranslateCode(code) {
 }
 ```
 
-Run the above mapping (see [Before you begin](#setup) for instructions)
+Run the above mapping (see [Before you begin](#before-you-begin) for instructions)
 
 <section class="zippy">
 Output:
@@ -2044,7 +2044,7 @@ def ConvertUnit(value, unit) {
 }
 ```
 
-Run the above mapping (see [Before you begin](#setup) for instructions)
+Run the above mapping (see [Before you begin](#before-you-begin) for instructions)
 
 <section class="zippy">
 Output:

@@ -1,7 +1,5 @@
 # Data Harmonization Mapping Language (DHML) language reference
 
-[TOC]
-
 ## Background
 
 The Data Harmonization Mapping Language (DHML) expresses data mappings from one
@@ -149,7 +147,7 @@ following rules:
 
 > NOTE: Functions are still executed even if its arguments are null.
 
-### Merge semantics {merge_semantics}
+### Merge semantics
 
 Assigning a value to the same field results in a merge rather than an overwrite,
 i.e:
@@ -159,7 +157,7 @@ i.e:
         `colours[1]`
 *   New fields are added
 *   Similar fields produce a merge conflict. An overwrite can be forced (see
-    [overwrite operator `!`](#overwrite))
+    [overwrite operator `!`](#overwrite-))
 
 ## Conditions
 
@@ -193,7 +191,7 @@ def PatientName(input) {
 
 Arrays
 
-### Iteration (`[]`) {iteration}
+### Iteration (`[]`)
 
 To iterate an array, suffix the array with `[]`. For example:
 
@@ -224,7 +222,7 @@ used to write to a specific index.
 
 ### Wildcards (`[*]`)
 
-In contrast to [iteration](#iteration), the `[*]` syntax works like specifying
+In contrast to [iteration](#iteration-), the `[*]` syntax works like specifying
 an index, except that it returns an array of values. Multiple arrays mapped
 through with `[*]`, for example `a[*].b.c[*].d`, in one long, non-nested array
 of the values of `d` with the same item order.
@@ -298,7 +296,7 @@ non-modular mappings.
 
 `root` can be used inside a function in order to send data to the root of the
 output. If there exists an object with the same name, they are
-[merged](#merge_semantics).
+[merged](#merge-semantics).
 
 ```
 root name: input.patient.name
@@ -359,7 +357,7 @@ There are built in arithmetic, logical and existential operators.
 *   any? : Value exists or array/string is not empty
 *   ~any? : Value does not exist or array/string is empty
 
-### Overwrite (`!`) {overwrite}
+### Overwrite (`!`)
 
 In order to prevent data loss and reduce mapping errors, the DHML allows a
 primitive (string, numeric, or boolean) field to only be written once. The `!`

@@ -1,7 +1,5 @@
 # Data Harmonization Mapping Language (DHML) builtin functions
 
-[TOC]
-
 There are various built-in functions available. The parameters to these
 functions are JSON types namely:
 
