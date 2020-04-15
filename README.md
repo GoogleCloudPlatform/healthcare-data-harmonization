@@ -29,12 +29,12 @@ and `go test`. Please refer to their individual READMEs for more information.
 
 ### Language Reference
 
-A language reference is available: [Data Harmonization Mapping Language Reference](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/docs/reference/index.md)
+A language reference is available: [Data Harmonization Mapping Language Reference](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md)
 
 ### Codelab
 
 Please refer to the
-[Data Harmonization Mapping Language Codelab](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/docs/codelab/index.md)
+[Data Harmonization Mapping Language Codelab](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/codelab.md)
 for instructions on how to run the mapping engine and for getting familiar with
 the mapping language.
 

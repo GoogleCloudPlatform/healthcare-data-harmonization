@@ -14,7 +14,7 @@ Every sample directory is composed of different files and directories, namely:
 *   code_harmonization:
     [FHIR ConceptMaps](https://www.hl7.org/fhir/conceptmap.html) in JSON format
     that are used for
-    [Code Harmonization](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/docs/reference/index.md#code-harmonization)
+    [Code Harmonization](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md#code-harmonization)
 *   configurations
     *   main.dhml: the mapping configuration
     *   main.textproto: the
@@ -42,7 +42,7 @@ config, or by specifying the individual configuration separately. In both cases,
 the output from the mapping engine is written to the terminal.
 
 See the
-[language reference](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/docs/reference/index.md#running-your-mappings)
+[language reference](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md#running-your-mappings)
 for more details and other flags that are supported.
 
 ### Using individual configs

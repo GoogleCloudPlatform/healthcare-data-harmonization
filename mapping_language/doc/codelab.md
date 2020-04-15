@@ -34,7 +34,7 @@ some hands-on practice with the configuration language.
     -harmonize_code_dir_spec=$HOME/dhml_codelab/code_harmonization
     -harmonize_unit_spec=$HOME/dhml_codelab/codelab-units.textproto
     -mapping_file_spec=$HOME/dhml_codelab/codelab.dhml`
-*   See [running mappings](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/docs/reference/index.md#running-your-mappings) for all available options
+*   See [running mappings](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md#running-your-mappings) for all available options
 
 ## Hello mapping world
 

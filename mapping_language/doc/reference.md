@@ -126,7 +126,7 @@ def PatientName(input) {
 #### Calling a function
 
 Calling a function is similar to how you call functions in other programming
-langauges (e.g. C, Java, Python).
+languages (e.g. C, Java, Python).
 
 ```
 patient: PatientName(input_json)
@@ -136,9 +136,9 @@ patient: PatientName(input_json)
 
 There are a number of builtin functions provided out of the box. Builtin
 functions are prefixed with a `$`. The full documentation of the builtin
-functions is available [here](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/docs/reference/builtins.md).
+functions is available [here](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/builtins.md).
 
-### Null propogation
+### Null propagation
 
 By default, null and missing values/fields are ignored in accordance with the
 following rules:
