@@ -1,4 +1,4 @@
-# Data Harmonization Mapping Language (DHML) builtin functions
+# Whistle Data Transformation Language builtin functions
 
 There are various built-in functions available. The parameters to these
 functions are JSON types namely:

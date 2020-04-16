@@ -1,18 +1,18 @@
-# Data Harmonization Mapping Language (DHML)
+# Whistle Data Transformation Language
 
-This guide walks you through the basics of writing a mapping in the DHML. Basic
-understanding with reading and writing languages like python or javascript is
-needed.
+This guide walks you through the basics of writing a mapping in the Whistle Data
+Transformation Language. Basic understanding with reading and writing languages
+like python or javascript is needed.
 
-This tutorial demonstrates the basics of writing data mapping in the Data
-Harmonization Mapping Language (DHML) to transform data from one schema to
-another schema. The following codelab walks you through different DHML features
-in a toy sample of data mapping. There are also a few exercises to help you get
-some hands-on practice with the configuration language.
+This tutorial demonstrates the basics of writing data mapping in Whistle to
+transform data from one schema to another schema. The following codelab walks
+you through different Whistle features in a toy
+sample of data mapping. There are also a few exercises to help you get some
+hands-on practice with the configuration language.
 
 ## Objectives
 
-*   Get familiar with the Data Harmonization Mapping Language (DHML) syntax
+*   Get familiar with the Whistle Data Transformation Language syntax
 *   Practice writing mapping configurations
 *   Run the mapping engine and look at the produced output
 *   Understand how this can be used to transform from one healthcare standard to
@@ -20,25 +20,28 @@ some hands-on practice with the configuration language.
 
 ## Before you begin
 
-*   Make a new directory, for example `$HOME/dhml_codelab`
+*   Make a new directory, for example `$HOME/wstl_codelab`
 *   Place the mapping configurations from the exercises in a file called
-    `codelab.dhml`
+    `codelab.wstl`
 *   Place the input in a file called `codelab.json` (for now the contents of the
     file should just be `{}`, we'll fill it later)
 
-*   View the *output* in `$HOME/dhml_codelab/codelab.output.json`
+*   View the *output* in `$HOME/wstl_codelab/codelab.output.json`
 *   Run your mapping using the mapping_engine binary, in mapping_engine/main. An
     example command might look like (run from mapping_engine/main): `go run . --
-    -input_file_spec=$HOME/dhml_codelab/codelab.json
-    -output_dir=$HOME/dhml_codelab/
-    -harmonize_code_dir_spec=$HOME/dhml_codelab/code_harmonization
-    -harmonize_unit_spec=$HOME/dhml_codelab/codelab-units.textproto
-    -mapping_file_spec=$HOME/dhml_codelab/codelab.dhml`
-*   See [running mappings](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md#running-your-mappings) for all available options
+    -input_file_spec=$HOME/wstl_codelab/codelab.json
+    -output_dir=$HOME/wstl_codelab/
+    -harmonize_code_dir_spec=$HOME/wstl_codelab/code_harmonization
+    -harmonize_unit_spec=$HOME/wstl_codelab/codelab-units.textproto
+    -mapping_file_spec=$HOME/wstl_codelab/codelab.wstl`
+
+*   See
+    [running mappings](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md#running-your-mappings)
+    for all available options
 
 ## Hello mapping world
 
-Start with a simple mapping example (put the config below in `codelab.dhml` from
+Start with a simple mapping example (put the config below in `codelab.wstl` from
 the [Before you begin](#before-you-begin)).
 
 ```
@@ -1851,7 +1854,7 @@ Output:
 
 ### Overwriting fields
 
-*   In order to prevent data loss and reduce mapping errors, the DHML allows a
+*   In order to prevent data loss and reduce mapping errors, Whistle allows a
     primitive (string, numeric, or boolean) field to only be written once
 *   Use the `!` operator to overwrite
 *   Overwriting restrictions do not apply to variables
@@ -2075,7 +2078,8 @@ resource to its corresponding
 row, specifically the [FHIR Encounter](https://www.hl7.org/fhir/STU3/encounter.html) to an
 [OMOP VisitOccurrence](https://github.com/OHDSI/CommonDataModel/wiki/VISIT_OCCURRENCE).
 
-Using what you have learnt above, create a DHML file to map the following input and iterate on it until it produces the expected output.
+Using what you have learnt above, create a Whistle file to map the following
+input and iterate on it until it produces the expected output.
 
 Input:
 

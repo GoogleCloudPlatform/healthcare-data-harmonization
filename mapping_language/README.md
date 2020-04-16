@@ -1,4 +1,4 @@
-# Google HCLS Data Harmonization Mapping Language
+# Google HCLS Whistle Data Transformation Language
 
 ## Summary
 

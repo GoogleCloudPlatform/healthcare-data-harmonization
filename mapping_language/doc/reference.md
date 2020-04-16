@@ -1,11 +1,11 @@
-# Data Harmonization Mapping Language (DHML) language reference
+# Whistle Data Transformation Language language reference
 
 ## Background
 
-The Data Harmonization Mapping Language (DHML) expresses data mappings from one
-schema to another. It lets users transform complex, nested data formats into
-other complex and nested data formats. This document lists out the features
-available in DHML.
+The Whistle Data Transformation Language expresses data mappings from one schema
+to another. It lets users transform complex, nested data formats into other
+complex and nested data formats. This document lists out the features available
+in Whistle.
 
 ## Running your mappings
 
@@ -18,14 +18,17 @@ available in DHML.
 ### All available flags
 
 *   input_file_spec: Input data file or directory (JSON)
-*   output_dir: Path to the directory where the output will be written to.
-    Leave empty to print to stdout
-*   mapping_file_spec: Mapping file (DHML file)
-*   lib_dir_spec: Path to the directory where the library DHML files are
-*   harmonize_code_dir_spec: [FHIR ConceptMaps](https://www.hl7.org/fhir/conceptmap.html) used for code harmonization
+*   output_dir: Path to the directory where the output will be written to. Leave
+    empty to print to stdout
+*   mapping_file_spec: Mapping file
+*   lib_dir_spec: Path to the directory where the library mapping files are
+*   harmonize_code_dir_spec:
+    [FHIR ConceptMaps](https://www.hl7.org/fhir/conceptmap.html) used for code
+    harmonization
 *   harmonize_unit_spec: Unit harmonization config
     ([textproto](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine/proto/harmonization.proto))
-*   data_harmonization_config_file_spec: Data harmonization config ([textproto](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine/proto/data_harmonization.proto)).
+*   data_harmonization_config_file_spec: Data harmonization config
+    ([textproto](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine/proto/data_harmonization.proto)).
 
 ## Mapping
 
@@ -284,7 +287,8 @@ post UpperCase
 
 ## Other Keywords
 
-DHML has various constructs to allow mapping from one JSON structure to another.
+Whistle has various constructs to allow mapping from one JSON structure to
+another.
 
 ### $root
 
@@ -359,7 +363,7 @@ There are built in arithmetic, logical and existential operators.
 
 ### Overwrite (`!`)
 
-In order to prevent data loss and reduce mapping errors, the DHML allows a
+In order to prevent data loss and reduce mapping errors, Whistle allows a
 primitive (string, numeric, or boolean) field to only be written once. The `!`
 operator can be used to overwrite primitive fields.
 
