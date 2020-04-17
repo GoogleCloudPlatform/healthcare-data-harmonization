@@ -69,7 +69,7 @@ var (
 )
 
 const (
-	dhmlExtension      = ".dhml"
+	dhmlExtension      = ".wstl"
 	textProtoExtension = ".textproto"
 	jsonExtension      = ".json"
 	inputExtension     = ".input"

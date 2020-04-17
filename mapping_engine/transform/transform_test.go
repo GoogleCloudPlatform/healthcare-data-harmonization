@@ -265,7 +265,7 @@ func TestTransform_NewTransformer(t *testing.T) {
 							MappingType: hpb.MappingType_RAW_PROTO,
 							MappingConfigPath: &httppb.Location{
 								Location: &httppb.Location_GcsLocation{
-									GcsLocation: "gs://dummy/config.dhml",
+									GcsLocation: "gs://dummy/config.wstl",
 								},
 							},
 						},
@@ -429,12 +429,12 @@ func TestTransform_NewTransformer_UserLibraries(t *testing.T) {
 					Type: hpb.MappingType_MAPPING_LANGUAGE,
 					Path: &httppb.Location{
 						Location: &httppb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/config.dhml",
+							GcsLocation: "gs://dummy/config.wstl",
 						},
 					},
 				},
 			},
-			gcsFiles:               map[string]string{"gs://dummy/config.dhml": whistleProjector},
+			gcsFiles:               map[string]string{"gs://dummy/config.wstl": whistleProjector},
 			expectedUserProjectors: []string{"Patient_PatientWhistler"},
 		},
 		{
@@ -467,14 +467,14 @@ func TestTransform_NewTransformer_UserLibraries(t *testing.T) {
 					Type: hpb.MappingType_MAPPING_LANGUAGE,
 					Path: &httppb.Location{
 						Location: &httppb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/whistler.dhml",
+							GcsLocation: "gs://dummy/whistler.wstl",
 						},
 					},
 				},
 			},
 			gcsFiles: map[string]string{
 				"gs://dummy/proto.textproto": proto.MarshalTextString(protoProjector),
-				"gs://dummy/whistler.dhml":   whistleProjector,
+				"gs://dummy/whistler.wstl":   whistleProjector,
 			},
 			expectedUserProjectors: []string{"Patient_PatientWhistler", "Patient_PatientProto"},
 		},
@@ -493,14 +493,14 @@ func TestTransform_NewTransformer_UserLibraries(t *testing.T) {
 					Type: hpb.MappingType_MAPPING_LANGUAGE,
 					Path: &httppb.Location{
 						Location: &httppb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/whistler.dhml",
+							GcsLocation: "gs://dummy/whistler.wstl",
 						},
 					},
 				},
 			},
 			gcsFiles: map[string]string{
 				"gs://dummy/proto.textproto": proto.MarshalTextString(protoProjector),
-				"gs://dummy/whistler.dhml":   duplicateWhistleProjector,
+				"gs://dummy/whistler.wstl":   duplicateWhistleProjector,
 			},
 			wantErrors: true,
 		},
@@ -526,12 +526,12 @@ func TestTransform_NewTransformer_UserLibraries(t *testing.T) {
 					Type: hpb.MappingType_RAW_PROTO,
 					Path: &httppb.Location{
 						Location: &httppb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/config.dhml",
+							GcsLocation: "gs://dummy/config.wstl",
 						},
 					},
 				},
 			},
-			gcsFiles:   map[string]string{"gs://dummy/config.dhml": whistleProjector},
+			gcsFiles:   map[string]string{"gs://dummy/config.wstl": whistleProjector},
 			wantErrors: true,
 		},
 		{
@@ -541,12 +541,12 @@ func TestTransform_NewTransformer_UserLibraries(t *testing.T) {
 					Type: hpb.MappingType_MAPPING_LANGUAGE,
 					Path: &httppb.Location{
 						Location: &httppb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/config.dhml",
+							GcsLocation: "gs://dummy/config.wstl",
 						},
 					},
 				},
 			},
-			gcsFiles:   map[string]string{"gs://dummy/config.dhml": duplicateWhistleProjector},
+			gcsFiles:   map[string]string{"gs://dummy/config.wstl": duplicateWhistleProjector},
 			wantErrors: true,
 		},
 		{
@@ -571,12 +571,12 @@ func TestTransform_NewTransformer_UserLibraries(t *testing.T) {
 					Type: hpb.MappingType_MAPPING_LANGUAGE,
 					Path: &httppb.Location{
 						Location: &httppb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/config.dhml",
+							GcsLocation: "gs://dummy/config.wstl",
 						},
 					},
 				},
 			},
-			gcsFiles: map[string]string{"gs://dummy/config.dhml": whistleConfig},
+			gcsFiles: map[string]string{"gs://dummy/config.wstl": whistleConfig},
 		},
 		{
 			name: "invalid type",
@@ -585,7 +585,7 @@ func TestTransform_NewTransformer_UserLibraries(t *testing.T) {
 					Type: hpb.MappingType_INVALID,
 					Path: &httppb.Location{
 						Location: &httppb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/config.dhml",
+							GcsLocation: "gs://dummy/config.wstl",
 						},
 					},
 				},
