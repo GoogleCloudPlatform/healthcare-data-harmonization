@@ -15,7 +15,6 @@
 
 # This script will run code generation and compile and test all go modules.
 
-shopt -s globstar
 set -o errexit
 
 PREREQUISITES=( java go )
@@ -37,11 +36,19 @@ function check_tools {
   done
 }
 
+function absfilepath() {
+  pushd $(dirname $1) > /dev/null
+  base=$(pwd)
+  popd > /dev/null
+  echo $base/$(basename $1)
+}
+
 function go_mod_command {
   START=$(pwd)
-  for f in **/go.mod; do
-    echo Entering $(dirname $(realpath "$f"))
-    cd $(dirname $(realpath "$f"))
+  find . -name "go.mod" -print0 | while read -d $'\0' f
+  do
+    echo Entering $(dirname $(absfilepath "$f"))
+    cd $(dirname $(absfilepath "$f"))
     go $1 ./...
     cd $START
   done

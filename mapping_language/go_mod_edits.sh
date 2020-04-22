@@ -18,17 +18,24 @@
 # same directory and their directory names are mapping_engine and
 # mapping_language.
 
+function abspath() {
+  pushd $1 > /dev/null
+  base=$(pwd)
+  popd > /dev/null
+  echo $base
+}
+
 function replace_modules() {
-  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine=$(realpath ../)/mapping_engine
-  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto=$(realpath ../)/mapping_engine/proto
-  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util=$(realpath ../)/mapping_engine/util
+  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine=$(abspath ../)/mapping_engine
+  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto=$(abspath ../)/mapping_engine/proto
+  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util=$(abspath ../)/mapping_engine/util
 
   cd test
-  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language=$(realpath ../)
-  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine=$(realpath ../../)/mapping_engine
-  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto=$(realpath ../../)/mapping_engine/proto
-  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util=$(realpath ../../)/mapping_engine/util
-  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/transform=$(realpath ../../)/mapping_engine/transform
+  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language=$(abspath ../)
+  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine=$(abspath ../../)/mapping_engine
+  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto=$(abspath ../../)/mapping_engine/proto
+  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util=$(abspath ../../)/mapping_engine/util
+  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/transform=$(abspath ../../)/mapping_engine/transform
   cd ../
 }
 
