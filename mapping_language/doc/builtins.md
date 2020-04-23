@@ -162,7 +162,7 @@ is returned. A default layout of '2006-01-02 03:04:05'and a default time zone of
 $ParseTime(format string, date string) string
 ```
 
-ParseTime uses a Go time-format to convert date into the RFC3339
+ParseTime uses a [Go time-format](https://golang.org/pkg/time/#Time.Format) or [Python time-format](#Python_tokens) to convert date into the RFC3339
 (https://www.ietf.org/rfc/rfc3339.txt) format.
 
 ### $ParseUnixTime
@@ -175,15 +175,64 @@ ParseUnixTime parses a unit and a unix timestamp into the speficied format. The
 function accepts a go time format layout
 (https://golang.org/pkg/time/#Time.Format)
 
-### $ReformatTime
+### $ReformatTime {#Python_tokens}
 
 ```go
 $ReformatTime(inFormat string, date string, outFormat string) string
 ```
 
-ReformatTime uses a Go time-format (https://golang.org/pkg/time/#Time.Format) to
-convert date into another Go time-formatted date time
-(https://golang.org/pkg/time/#Time.Format).
+ReformatTime uses a Go time-format or a Python time-format to convert date into
+another Go time-formatted date time or Python time-format. The Go time-formats
+are defined in https://golang.org/pkg/time/#Time.Format and the Python
+time-formats are based
+https://docs.python.org/3/library/time.html#time.strftime. The details of
+supported Python date-time formatting tokens are listed in the following table.
+Some additional tokens (the ones marked ADDED or Google Cloud SQL) are added to
+accomodate the unpadded alternative for those fields.
+
+| Token | Meaning                               | Corresponding GO time-format |
+| :---: | ------------------------------------- | ---------------------------- |
+| %A    | Python: Locale’s full weekday name    | Monday                       |
+| %a    | Python: Locale’s abbreviated weekday  | Mon                          |
+:       : name                                  :                              :
+| %B    | Python: Locale’s full month name      | January                      |
+| %b    | Python: Locale’s abbreviated month    | Jan                          |
+:       : name                                  :                              :
+| %c    | Python: Locale’s appropriate date and | Mon Jan 2 15:04:05 2006      |
+:       : time representation                   :                              :
+| %d    | Python: Day of the month as a decimal | 02                           |
+:       : number [01,31]                        :                              :
+| %e    | Google Cloud SQL: The day of month as | 2                            |
+:       : a decimal number (1-31)               :                              :
+| %H    | Python: Hour (24-hour clock) as a     | 15                           |
+:       : decimal number [00,23]                :                              :
+| %I    | Python: Hour (12-hour clock) as a     | 03                           |
+:       : decimal number [01,12]                :                              :
+| %i    | ADDED: 12H hour representation        | 3                            |
+:       : without padding                       :                              :
+| %M    | Python: Minute as a decimal number    | 04                           |
+:       : [00,59]                               :                              :
+| %m    | Python: Month as a decimal number     | 01                           |
+:       : [01,12]                               :                              :
+| %p    | Python: Locale’s equivalent of either | PM                           |
+:       : AM or PM                              :                              :
+| %S    | Python: Second as a decimal number    | 05                           |
+:       : [00,60]                               :                              :
+| %s    | ADDED: second as a decimal number     | 5                            |
+:       : without padding [0,60]                :                              :
+| %X    | Python: Locale’s appropriate time     | 15:04:05                     |
+:       : representation                        :                              :
+| %x    | Python: Locale’s appropriate date     | 01/02/06                     |
+:       : representation                        :                              :
+| %Y    | Python: Year with century as a        | 2006                         |
+:       : decimal number                        :                              :
+| %y    | Python: Year without century as a     | 06                           |
+:       : decimal number [00,99]                :                              :
+| %Z    | Python: Time zone name (no characters | MST                          |
+:       : if no time zone exists)               :                              :
+| %z    | Python: Time zone offset indicating a | -07:00                       |
+:       : positive or negative time difference  :                              :
+:       : from UTC/GMT                          :                              :
 
 ### $SplitTime
 
@@ -191,10 +240,10 @@ convert date into another Go time-formatted date time
 $SplitTime(format string, date string) array
 ```
 
-SplitTime splits a time string into components based on the Go time-format
-(https://golang.org/pkg/time/#Time.Format) provided. An array with all
-components (year, month, day, hour, minute, second and nanosecond) will be
-returned.
+SplitTime splits a time string into components based on the
+[Go time-format](https://golang.org/pkg/time/#Time.Format) and
+[Python time-format](#Python_tokens) provided. An array with all components
+(year, month, day, hour, minute, second and nanosecond) will be returned.
 
 ## Data operations
 

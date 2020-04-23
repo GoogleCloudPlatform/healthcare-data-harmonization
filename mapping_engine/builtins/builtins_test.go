@@ -42,6 +42,146 @@ func mustParseContainer(json json.RawMessage, t *testing.T) jsonutil.JSONContain
 	return c
 }
 
+func TestConvertTimeFormatGoToPython(t *testing.T) {
+	tests := []struct {
+		name, inFormat, want string
+		wantErr              bool
+	}{
+		{
+			name:     "regular date time",
+			inFormat: "2006_01_02 15:04:05",
+			want:     "%Y_%m_%d %X",
+		},
+		{
+			name:     "irregular date time",
+			inFormat: "06/01!2 3:04:5",
+			want:     "%y/%m!%e %i:%M:%s",
+		},
+		{
+			name:     "date time without padding (can only be used in formatting)",
+			inFormat: "20060123045Z",
+			want:     "%Y%m%e%i%M%sZ",
+		},
+		{
+			name:     "UnixDate",
+			inFormat: "Mon Jan _2 15:04:05 MST 2006",
+			want:     "%a %b _%e %X %Z %Y",
+		},
+		{
+			name:     "RFC3339",
+			inFormat: "2006-01-02T15:04:05Z",
+			want:     "%Y-%m-%dT%XZ",
+		},
+		{
+			name:     "ISO8601",
+			inFormat: "2006-01-02T15:04-07:00",
+			want:     "%Y-%m-%dT%H:%M%z",
+		},
+		{
+			name:     "ISO8601-UTC",
+			inFormat: "2006-01-02T15:04Z",
+			want:     "%Y-%m-%dT%H:%MZ",
+		},
+		{
+			name:     "FHIR v4.0.1-dateTime",
+			inFormat: "2006-01-02T15:04:05-07:00",
+			want:     "%Y-%m-%dT%X%z",
+		},
+		{
+			name:     "FHIR v4.0.1-date",
+			inFormat: "2006-01-02",
+			want:     "%Y-%m-%d",
+		},
+		{
+			name:     "FHIR v4.0.1-time",
+			inFormat: "15:04:05",
+			want:     "%X",
+		},
+		{
+			name:     "empty string",
+			inFormat: "",
+			wantErr:  true,
+		},
+		{
+			name:     "invalid Go format",
+			inFormat: "YYYY-MM-DD",
+			wantErr:  true,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := convertTimeFormatGoToPython(jsonutil.JSONStr(test.inFormat))
+			if gotErr := (err != nil); gotErr != test.wantErr {
+				t.Errorf("TestConvertTimeFormatGoToPython(%s) = %v with error %s, want %v with error %v", test.inFormat, got, err, test.want, test.wantErr)
+			} else if string(got) != test.want {
+				t.Errorf("TestConvertTimeFormatGoToPython(%s) = %v , want %s", test.inFormat, got, test.want)
+			}
+		})
+	}
+}
+
+func TestConvertTimeFormatToGo(t *testing.T) {
+	tests := []struct {
+		name, inFormat, want string
+		wantErr              bool
+	}{
+
+		{
+			name:     "irregular date time",
+			inFormat: "%e/%m/%y:%H-%M-%S",
+			want:     "2/01/06:15-04-05",
+		},
+		{
+			name:     "irregular date time without separator",
+			inFormat: "%Y%m%e%i%M%s%z",
+			want:     "20060123045-07:00",
+		},
+		{
+			name:     "UnixDate",
+			inFormat: "%a %b _%e %X %Z %Y",
+			want:     "Mon Jan _2 15:04:05 MST 2006",
+		},
+		{
+			name:     "RFC3339",
+			inFormat: "%Y-%m-%dT%X%z",
+			want:     "2006-01-02T15:04:05-07:00",
+		},
+		{
+			name:     "ISO8601",
+			inFormat: "%Y-%m-%dT%H:%M:%S%z",
+			want:     "2006-01-02T15:04:05-07:00",
+		},
+		{
+			name:     "ISO8601-UTC",
+			inFormat: "%Y-%m-%dT%H:%M:%SZ",
+			want:     "2006-01-02T15:04:05Z",
+		},
+		{
+			name:     "FHIR v4.0.1",
+			inFormat: "%Y-%m-%dT%X%z",
+			want:     "2006-01-02T15:04:05-07:00",
+		},
+		{
+			name:     "FHIR v4.0.1-date",
+			want:     "2006-01-02",
+			inFormat: "%Y-%m-%d",
+		},
+		{
+			name:     "FHIR v4.0.1-time",
+			inFormat: "%H:%M:%S",
+			want:     "15:04:05",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got := convertTimeFormatToGo(jsonutil.JSONStr(test.inFormat))
+			if string(got) != test.want {
+				t.Errorf("TestConvertTimeFormatToGo(%s) = %s, want %s", test.inFormat, got, test.want)
+			}
+		})
+	}
+}
+
 func mustParseArray(json json.RawMessage, t *testing.T) jsonutil.JSONArr {
 	t.Helper()
 	c := make(jsonutil.JSONArr, 0)
@@ -455,6 +595,33 @@ func TestReformatTime(t *testing.T) {
 			date:      "2019 04 10",
 			outFormat: "2006_01_02",
 			wantErr:   true,
+		},
+		{
+			name:      "python format to python format",
+			inFormat:  "%Y-%m-%dT%H:%M:%S%z",
+			date:      "2019-04-05T05:06:07+10:00",
+			outFormat: "%e/%m/%y:%H-%M-%S",
+			want:      "5/04/19:05-06-07",
+		},
+		{
+			name:      "python format to go format",
+			inFormat:  "%Y-%m-%dT%H:%M:%S%z",
+			date:      "2019-04-05T05:06:07+10:00",
+			outFormat: "2/01/06:15-04-05",
+			want:      "5/04/19:05-06-07",
+		},
+		{
+			name:      "go format to python format",
+			inFormat:  "2006_01_02 15:04:05.000",
+			date:      "2019_04_10 10:20:49.123",
+			outFormat: "%e/%m/%y:%H-%M-%S",
+			want:      "10/04/19:10-20-49",
+		},
+		{
+			name:     "implicitly illegal python format",
+			inFormat: "%bu%H-%M-%s",
+			date:     "Febu16:17:28",
+			wantErr:  true,
 		},
 	}
 	for _, test := range tests {

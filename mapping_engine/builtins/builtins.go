@@ -20,6 +20,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -93,8 +94,44 @@ var builtinFunctions = map[string]interface{}{
 }
 
 const (
-	defaultTimeFormat = "2006-01-02 03:04:05"
+	defaultTimeFormat   = "2006-01-02 03:04:05"
+	pythonStyleDateTime = 0
+	goStyleDateTime     = 1
 )
+
+// need to put more complicated formatting first and the substrings it contains after otherwise the longer string only gets partially translated
+var (
+	timeTokenMap = [...][2]string{
+		{"%c", "Mon Jan 2 15:04:05 2006"}, // Python: Locale’s appropriate date and time representation.
+		{"%x", "01/02/06"},                // Python: Locale’s appropriate date representation.
+		{"%X", "15:04:05"},                // Python: Locale’s appropriate time representation.
+		{"%A", "Monday"},                  // Python: Locale’s full weekday name.
+		{"%a", "Mon"},                     // Python: Locale’s abbreviated weekday name.
+		{"%B", "January"},                 // Python: Locale’s full month name.
+		{"%b", "Jan"},                     // Python: Locale’s abbreviated month name.
+		{"%Y", "2006"},                    // Python: Year with century as a decimal number.
+		{"%d", "02"},                      // Python: Day of the month as a decimal number [01,31].
+		{"%e", "2"},                       // Google Cloud SQL: The day of month as a decimal number (1-31).
+		{"%H", "15"},                      // Python: Hour (24-hour clock) as a decimal number [00,23].
+		{"%I", "03"},                      // Python: Hour (12-hour clock) as a decimal number [01,12].
+		{"%i", "3"},                       // ADDED: 12H hour representation without padding
+		{"%m", "01"},                      // Python: Month as a decimal number [01,12].
+		{"%M", "04"},                      // Python: Minute as a decimal number [00,59].
+		{"%p", "PM"},                      // Python: Locale’s equivalent of either AM or PM.
+		{"%S", "05"},                      // Python: Second as a decimal number [00,60].
+		{"%s", "5"},                       // ADDED: second as a decimal number without padding [0,60]
+		{"%y", "06"},                      // Python: Year without century as a decimal number [00,99].
+		{"%Z", "MST"},                     // Python: Time zone name (no characters if no time zone exists).
+		{"%z", "-07:00"},                  // Python: Time zone offset indicating a positive or negative time difference from UTC/GMT
+		{"%z", "-0700"},
+		{"%z", "-07"},
+	}
+	pythonFormatRegex *regexp.Regexp
+)
+
+func init() {
+	precompilePythonTimeFormat()
+}
 
 // RegisterAll registers all built-ins declared in the built-ins maps. This will wrap the functions
 // into types.Projectors using projector.FromFunction.
@@ -111,6 +148,15 @@ func RegisterAll(r *types.Registry) error {
 	}
 
 	return nil
+}
+
+// precompilePythonTimeFormat precompile the regex for python formatting string
+func precompilePythonTimeFormat() {
+	var tokens [len(timeTokenMap)]string
+	for i := 0; i < len(timeTokenMap); i++ {
+		tokens[i] = timeTokenMap[i][0][1:]
+	}
+	pythonFormatRegex, _ = regexp.Compile(fmt.Sprintf("^(.{0}|(.*%%[%s].*))+$", strings.Join(tokens[:], "")))
 }
 
 // Although arguments and types can vary, all projectors, including built-ins must return
@@ -373,11 +419,11 @@ func ParseTime(format jsonutil.JSONStr, date jsonutil.JSONStr) (jsonutil.JSONStr
 	return ReformatTime(format, date, time.RFC3339Nano)
 }
 
-func parseTime(format jsonutil.JSONStr, date jsonutil.JSONStr) (time.Time, error) {
+func parseTime(format, date jsonutil.JSONStr) (time.Time, error) {
 	if len(date) == 0 {
 		return time.Time{}, nil
 	}
-
+	format = convertTimeFormatToGo(format)
 	isoDate, err := time.Parse(string(format), string(date))
 	if err != nil {
 		return time.Time{}, err
@@ -385,8 +431,47 @@ func parseTime(format jsonutil.JSONStr, date jsonutil.JSONStr) (time.Time, error
 	return isoDate, nil
 }
 
+// isPythonTimeFormat returns true iff the format string contains python formatting string.
+func isPythonTimeFormat(format jsonutil.JSONStr) bool {
+	return pythonFormatRegex.MatchString(string(format))
+}
+
+// convertTimeFormatToGo converts input DateTime formatting string to GO DateTime formatting string if it's in Python format.
+func convertTimeFormatToGo(inFormat jsonutil.JSONStr) jsonutil.JSONStr {
+	if isPythonTimeFormat(inFormat) {
+		return convertTimeFormat(inFormat, pythonStyleDateTime, goStyleDateTime)
+	}
+	return inFormat
+}
+
+// convertTimeFormatGoToPython translates GO DateTime formatting string to Python DateTime formatting string.
+func convertTimeFormatGoToPython(goFormat jsonutil.JSONStr) (jsonutil.JSONStr, error) {
+	if len(string(goFormat)) == 0 {
+		return jsonutil.JSONStr(""), fmt.Errorf("the input goFormat cannot be empty")
+	}
+	pyFormat := convertTimeFormat(goFormat, goStyleDateTime, pythonStyleDateTime)
+	isValid := isPythonTimeFormat(pyFormat)
+	if !isValid {
+		return jsonutil.JSONStr(""), fmt.Errorf("fail to convert the GO formatting string to valid python formatting string")
+	}
+
+	return pyFormat, nil
+}
+
+// ConvertTimeFormat converts a fomatting string in inStyle to that in outStyle, where inStyle and outStyle are defined in const
+func convertTimeFormat(inFormat jsonutil.JSONStr, inStyle, outStyle int) jsonutil.JSONStr {
+	result := []byte(string(inFormat))
+	for _, tokenPair := range timeTokenMap {
+		inToken := tokenPair[inStyle]
+		outToken := tokenPair[outStyle]
+		re := regexp.MustCompile(inToken)
+		result = re.ReplaceAll(result, []byte(outToken))
+	}
+	return jsonutil.JSONStr(string(result))
+}
+
 // ParseUnixTime parses a unit and a unix timestamp into the speficied format.
-// The function accepts a go time format layout (https://golang.org/pkg/time/#Time.Format)
+// The function accepts a go time format layout (https://golang.org/pkg/time/#Time.Format) and Python time format layout (defined in timeTokenMap)
 func ParseUnixTime(unit jsonutil.JSONStr, ts jsonutil.JSONNum, format jsonutil.JSONStr, tz jsonutil.JSONStr) (jsonutil.JSONStr, error) {
 	sec := int64(ts)
 	ns := int64(0)
@@ -411,12 +496,23 @@ func ParseUnixTime(unit jsonutil.JSONStr, ts jsonutil.JSONNum, format jsonutil.J
 		return jsonutil.JSONStr(""), fmt.Errorf("unsupported timezone %v", tz)
 	}
 	tm = tm.In(loc)
+	format = convertTimeFormatToGo(format)
 	return jsonutil.JSONStr(tm.Format(string(format))), nil
 }
 
-// ReformatTime uses a Go time-format (https://golang.org/pkg/time/#Time.Format) to convert date into another Go time-formatted date time (https://golang.org/pkg/time/#Time.Format).
-// TODO: Untie from Go format.
-func ReformatTime(inFormat jsonutil.JSONStr, date jsonutil.JSONStr, outFormat jsonutil.JSONStr) (jsonutil.JSONStr, error) {
+// ReformatTime uses a Go or Python time-format to convert date into another Go or Python time-formatted date time.
+func ReformatTime(inFormat, date, outFormat jsonutil.JSONStr) (jsonutil.JSONStr, error) {
+	if len(string(inFormat)) == 0 {
+		return jsonutil.JSONStr(""), fmt.Errorf("inFormat string cannot be empty")
+	}
+	if len(string(outFormat)) == 0 {
+		return jsonutil.JSONStr(""), fmt.Errorf("outFormat string cannot be empty")
+	}
+
+	inFormat = convertTimeFormatToGo(inFormat)
+
+	outFormat = convertTimeFormatToGo(outFormat)
+
 	isoDate, err := parseTime(inFormat, date)
 	if err != nil {
 		return jsonutil.JSONStr(""), err
@@ -427,8 +523,8 @@ func ReformatTime(inFormat jsonutil.JSONStr, date jsonutil.JSONStr, outFormat js
 	return jsonutil.JSONStr(isoDate.Format(string(outFormat))), nil
 }
 
-// SplitTime splits a time string into components based on the Go time-format
-// (https://golang.org/pkg/time/#Time.Format) provided.
+// SplitTime splits a time string into components based on the Go
+// (https://golang.org/pkg/time/#Time.Format) and Python time-format provided.
 // An array with all components (year, month, day, hour, minute, second and
 // nanosecond) will be returned.
 func SplitTime(format jsonutil.JSONStr, date jsonutil.JSONStr) (jsonutil.JSONArr, error) {
