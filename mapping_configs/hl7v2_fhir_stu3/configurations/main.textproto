@@ -6,23 +6,23 @@
 library_config: {
   user_libraries: {
     type: MAPPING_LANGUAGE
-    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/datatypes.dhml" }
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/datatypes.wstl" }
   }
   user_libraries: {
     type: MAPPING_LANGUAGE
-    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/hl7v2_fhir.dhml" }
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/hl7v2_fhir.wstl" }
   }
   user_libraries: {
     type: MAPPING_LANGUAGE
-    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/messages.dhml" }
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/messages.wstl" }
   }
   user_libraries: {
     type: MAPPING_LANGUAGE
-    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/postprocess.dhml" }
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/postprocess.wstl" }
   }
   user_libraries: {
     type: MAPPING_LANGUAGE
-    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/segments.dhml" }
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/segments.wstl" }
   }
 }
 
@@ -54,7 +54,7 @@ structure_mapping_config: {
   mapping_path_config: {
     mapping_type: MAPPING_LANGUAGE
     mapping_config_path: {
-      local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/configurations/main.dhml"
+      local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/configurations/main.wstl"
     }
   }
 }
