@@ -938,6 +938,39 @@ func TestUnique(t *testing.T) {
 	}
 }
 
+func TestMatchesRegex(t *testing.T) {
+	tests := []struct {
+		name  string
+		str   jsonutil.JSONStr
+		regex jsonutil.JSONStr
+		want  jsonutil.JSONBool
+	}{
+		{
+			name:  "matches",
+			str:   jsonutil.JSONStr("123"),
+			regex: jsonutil.JSONStr("\\d+"),
+			want:  jsonutil.JSONBool(true),
+		},
+		{
+			name:  "not matches",
+			str:   jsonutil.JSONStr("abc"),
+			regex: jsonutil.JSONStr("\\d+"),
+			want:  jsonutil.JSONBool(false),
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := MatchesRegex(test.str, test.regex)
+			if err != nil {
+				t.Fatalf("MatchesRegex(%v, %v) returned unexpected error %v", test.str, test.regex, err)
+			}
+			if !cmp.Equal(got, test.want) {
+				t.Errorf("MatchesRegex(%v, %v) = %v, want %v", test.str, test.regex, got, test.want)
+			}
+		})
+	}
+}
+
 func TestParseInt(t *testing.T) {
 	tests := []struct {
 		name string
@@ -1952,6 +1985,46 @@ func TestFlatten(t *testing.T) {
 			}
 			if diff := cmp.Diff(test.want, got); diff != "" {
 				t.Errorf("Flatten(%v) -want/+got:\n%s", test.input, diff)
+			}
+		})
+	}
+}
+
+func TestIntHash(t *testing.T) {
+	tests := []struct {
+		name  string
+		input jsonutil.JSONToken
+		want  jsonutil.JSONNum
+	}{
+		{
+			name:  "string",
+			input: jsonutil.JSONStr("test"),
+			want:  jsonutil.JSONNum(1.776318759e+09),
+		},
+		{
+			name:  "num",
+			input: jsonutil.JSONNum(123),
+			want:  jsonutil.JSONNum(6.12871997e+08),
+		},
+		{
+			name:  "array",
+			input: mustParseArray(json.RawMessage(`[1, 2, 3]`), t),
+			want:  jsonutil.JSONNum(2.706119551e+09),
+		},
+		{
+			name:  "object",
+			input: mustParseContainer(json.RawMessage(`{"a":"b"}`), t),
+			want:  jsonutil.JSONNum(4.026688896e+09),
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := IntHash(test.input)
+			if err != nil {
+				t.Fatalf("IntHash(%v) = error %v", test.input, err)
+			}
+			if got != test.want {
+				t.Errorf("IntHash(%v) = %v want %v", test.input, got, test.want)
 			}
 		})
 	}

@@ -257,6 +257,16 @@ Hash converts the given item into a hash. Key order is not considered (array
 item order is). This is not cryptographically secure, and is not to be used for
 secure hashing.
 
+### $IntHash
+
+```go
+$IntHash(object any) number
+```
+
+IntHash converts the given item into an integer hash. Key order is not considered (array
+item order is). This is not cryptographically secure, and is not to be used for
+secure hashing.
+
 ### $IsNil
 
 ```go
@@ -387,6 +397,14 @@ $Or(args ...boolean) boolean
 Or is a logical OR of all given arguments.
 
 ## Strings
+
+### $ParseFloat
+
+```go
+$MatchesRegex(str string, regex string) boolean
+```
+
+MatchesRegex returns true iff the string matches the regex pattern.
 
 ### $ParseFloat
 

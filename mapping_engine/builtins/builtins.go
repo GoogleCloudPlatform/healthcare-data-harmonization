@@ -19,6 +19,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"hash/fnv"
 	"math"
 	"regexp"
 	"sort"
@@ -62,6 +63,7 @@ var builtinFunctions = map[string]interface{}{
 
 	// Data operations
 	"$Hash":      Hash,
+	"$IntHash":   IntHash,
 	"$IsNil":     IsNil,
 	"$IsNotNil":  IsNotNil,
 	"$MergeJSON": MergeJSON,
@@ -83,14 +85,15 @@ var builtinFunctions = map[string]interface{}{
 	"$Or":   Or,
 
 	// Strings
-	"$ParseFloat": ParseFloat,
-	"$ParseInt":   ParseInt,
-	"$StrCat":     StrCat,
-	"$StrFmt":     StrFmt,
-	"$StrJoin":    StrJoin,
-	"$StrSplit":   StrSplit,
-	"$ToLower":    ToLower,
-	"$ToUpper":    ToUpper,
+	"$MatchesRegex": MatchesRegex,
+	"$ParseFloat":   ParseFloat,
+	"$ParseInt":     ParseInt,
+	"$StrCat":       StrCat,
+	"$StrFmt":       StrFmt,
+	"$StrJoin":      StrJoin,
+	"$StrSplit":     StrSplit,
+	"$ToLower":      ToLower,
+	"$ToUpper":      ToUpper,
 }
 
 const (
@@ -554,6 +557,20 @@ func Hash(obj jsonutil.JSONToken) (jsonutil.JSONStr, error) {
 	return jsonutil.JSONStr(hex.EncodeToString(h)), nil
 }
 
+// IntHash converts the given item into a integer hash. Key order is not considered (array item order is).
+// This is not cryptographically secure, and is not to be used for secure hashing.
+func IntHash(obj jsonutil.JSONToken) (jsonutil.JSONNum, error) {
+	h, err := jsonutil.Hash(obj, false)
+	if err != nil {
+		return -1, err
+	}
+	h32 := fnv.New32a()
+	if _, err := h32.Write(h); err != nil {
+		return -1, err
+	}
+	return jsonutil.JSONNum(h32.Sum32()), nil
+}
+
 // IsNil returns true iff the given object is nil or empty.
 func IsNil(object jsonutil.JSONToken) (jsonutil.JSONBool, error) {
 	switch t := object.(type) {
@@ -695,6 +712,13 @@ func Or(args ...jsonutil.JSONBool) (jsonutil.JSONBool, error) {
 	}
 
 	return false, nil
+}
+
+// MatchesRegex returns true iff the string matches the regex pattern.
+func MatchesRegex(str jsonutil.JSONStr, regex jsonutil.JSONStr) (jsonutil.JSONBool, error) {
+	// TODO: Consider compiling and caching these regexes.
+	m, err := regexp.MatchString(string(regex), string(str))
+	return jsonutil.JSONBool(m), err
 }
 
 // ParseFloat parses a string into a float.
