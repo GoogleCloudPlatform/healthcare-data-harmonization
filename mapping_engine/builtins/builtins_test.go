@@ -511,6 +511,53 @@ func TestParseTime(t *testing.T) {
 	}
 }
 
+func TestMultiFormatParseTime(t *testing.T) {
+	tests := []struct {
+		name, date, want string
+		format           []string
+		wantErr          bool
+	}{
+		{
+			name:   "first match",
+			format: []string{"2006_01_02 15:04:05.000", "1/2/06", "2006_01_02"},
+			date:   "2019_04_10 10:20:49.123",
+			want:   "2019-04-10T10:20:49.123Z",
+		},
+		{
+			name:   "second match",
+			format: []string{"2006_01_02 15:04:05.000", "1/2/06", "2006_01_02"},
+			date:   "1/8/17",
+			want:   "2017-01-08T00:00:00Z",
+		},
+		{
+			name:    "date format mismatch",
+			format:  []string{"2006_01_02 15:04:05.000", "1/2/06", "2006_01_02"},
+			date:    "2019 04 10",
+			wantErr: true,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			var arr jsonutil.JSONArr
+			for _, s := range test.format {
+				arr = append(arr, jsonutil.JSONStr(s))
+			}
+			got, err := MultiFormatParseTime(arr, jsonutil.JSONStr(test.date))
+			if err != nil != test.wantErr {
+				var wantErrStr string
+				if !test.wantErr {
+					wantErrStr = "no "
+				}
+				t.Errorf("MultiFormatParseTime(%s, %s) expected %serror, got %v %v", test.format, test.date, wantErrStr, got, err)
+			}
+
+			if string(got) != test.want {
+				t.Errorf("MultiFormatParseTime(%s, %s) = %s, want %s", test.format, test.date, got, test.want)
+			}
+		})
+	}
+}
+
 func TestSplitTime(t *testing.T) {
 	tests := []struct {
 		name, format, date string

@@ -156,14 +156,28 @@ string (https://www.iana.org/time-zones). A string representing the current time
 is returned. A default layout of '2006-01-02 03:04:05'and a default time zone of
 'UTC' will be used if not provided.
 
+### $MultiFormatParseTime
+
+```go
+$MultiFormatParseTime(format array, date string) string
+```
+
+MultiFormatParseTime converts the time in the specified formats to
+[RFC3339](https://www.ietf.org/rfc/rfc3339.txt) format. It tries the formats in
+order and returns an error if none of the formats match. The function accepts a
+[Go time-format](https://golang.org/pkg/time/#Time.Format) or
+[Python time-format](#Python_tokens).
+
 ### $ParseTime
 
 ```go
 $ParseTime(format string, date string) string
 ```
 
-ParseTime uses a [Go time-format](https://golang.org/pkg/time/#Time.Format) or [Python time-format](#Python_tokens) to convert date into the RFC3339
-(https://www.ietf.org/rfc/rfc3339.txt) format.
+ParseTime converts the time in the specified format to
+[RFC3339](https://www.ietf.org/rfc/rfc3339.txt) format. The function accepts a
+[Go time format](https://golang.org/pkg/time/#Time.Format) or
+[Python time format](#Python_tokens)
 
 ### $ParseUnixTime
 
@@ -172,8 +186,7 @@ $ParseUnixTime(unit string, ts number, format string, tz string) string
 ```
 
 ParseUnixTime parses a unit and a unix timestamp into the speficied format. The
-function accepts a go time format layout
-(https://golang.org/pkg/time/#Time.Format)
+function accepts a [Go time-format](https://golang.org/pkg/time/#Time.Format)
 
 ### $ReformatTime {#Python_tokens}
 
@@ -398,7 +411,7 @@ Or is a logical OR of all given arguments.
 
 ## Strings
 
-### $ParseFloat
+### $MatchesRegex`
 
 ```go
 $MatchesRegex(str string, regex string) boolean

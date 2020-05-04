@@ -55,11 +55,12 @@ var builtinFunctions = map[string]interface{}{
 	"$UnnestArrays":   UnnestArrays,
 
 	// Date/Time
-	"$CurrentTime":   CurrentTime,
-	"$ParseTime":     ParseTime,
-	"$ParseUnixTime": ParseUnixTime,
-	"$ReformatTime":  ReformatTime,
-	"$SplitTime":     SplitTime,
+	"$CurrentTime":          CurrentTime,
+	"$MultiFormatParseTime": MultiFormatParseTime,
+	"$ParseTime":            ParseTime,
+	"$ParseUnixTime":        ParseUnixTime,
+	"$ReformatTime":         ReformatTime,
+	"$SplitTime":            SplitTime,
 
 	// Data operations
 	"$Hash":      Hash,
@@ -417,7 +418,24 @@ func CurrentTime(format jsonutil.JSONStr, tz jsonutil.JSONStr) (jsonutil.JSONStr
 	return jsonutil.JSONStr(outputTime), nil
 }
 
-// ParseTime uses a Go time-format to convert date into the RFC3339 (https://www.ietf.org/rfc/rfc3339.txt) format.
+// MultiFormatParseTime converts the time in the specified formats to RFC3339 (https://www.ietf.org/rfc/rfc3339.txt) format. It tries the formats in order and returns an error if none of the formats match.
+// The function accepts a go time format layout (https://golang.org/pkg/time/#Time.Format) or Python time format layout (defined in timeTokenMap)
+func MultiFormatParseTime(format jsonutil.JSONArr, date jsonutil.JSONStr) (jsonutil.JSONStr, error) {
+	for _, f := range format {
+		s, ok := f.(jsonutil.JSONStr)
+		if !ok {
+			return jsonutil.JSONStr(""), fmt.Errorf("expected array of strings instead of %v", format)
+		}
+		t, err := ParseTime(s, date)
+		if err == nil {
+			return t, nil
+		}
+	}
+	return jsonutil.JSONStr(""), fmt.Errorf("no date formats(%v) matched %v", format, date)
+}
+
+// ParseTime converts the time in the specified format to RFC3339 (https://www.ietf.org/rfc/rfc3339.txt) format.
+// The function accepts a go time format layout (https://golang.org/pkg/time/#Time.Format) or Python time format layout (defined in timeTokenMap)
 func ParseTime(format jsonutil.JSONStr, date jsonutil.JSONStr) (jsonutil.JSONStr, error) {
 	return ReformatTime(format, date, time.RFC3339Nano)
 }
