@@ -35,12 +35,12 @@ func (c *ThirdPartyClient) ReadBytes(ctx context.Context, bucket string, filenam
 	defer client.Close()
 	reader, err := client.Bucket(bucket).Object(filename).NewReader(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("unable to read the file %s/%s from GCS", bucket, filename)
+		return nil, fmt.Errorf("unable to read the file %s/%s from GCS: %v", bucket, filename, err)
 	}
 	defer reader.Close()
 	raw, err := ioutil.ReadAll(reader)
 	if err != nil {
-		return nil, fmt.Errorf("unable to download the file %s/%s from GCS", bucket, filename)
+		return nil, fmt.Errorf("unable to download the file %s/%s from GCS: %v", bucket, filename, err)
 	}
 	return raw, nil
 }
