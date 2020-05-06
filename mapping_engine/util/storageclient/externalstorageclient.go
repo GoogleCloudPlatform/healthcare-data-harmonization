@@ -21,6 +21,9 @@ import (
 	"io/ioutil"
 
 	"cloud.google.com/go/storage" /* copybara-comment: storage */
+	"google.golang.org/api/option" /* copybara-comment: option */
+
+	goauth2 "golang.org/x/oauth2/google" /* copybara-comment: google */
 )
 
 // ThirdPartyClient is a client to communicate with GCS from outside of google3.
@@ -28,7 +31,11 @@ type ThirdPartyClient struct {
 }
 
 func (c *ThirdPartyClient) ReadBytes(ctx context.Context, bucket string, filename string) ([]byte, error) {
-	client, err := storage.NewClient(ctx)
+	ts, err := goauth2.DefaultTokenSource(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("unable to create token source: %v", err)
+	}
+	client, err := storage.NewClient(ctx, option.WithTokenSource(ts))
 	if err != nil {
 		return nil, fmt.Errorf("unable to create GCS storage client: %v", err)
 	}
