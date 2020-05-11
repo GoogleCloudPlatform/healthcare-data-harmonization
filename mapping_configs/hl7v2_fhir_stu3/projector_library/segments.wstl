@@ -59,8 +59,7 @@ def PID_PD1_Patient(PID, PD1) {
   identifier[] : CX_Identifier(PID.4[]);
   name[] : XPN_HumanName(PID.5[]);
   birthDate : Extract_Date(PID.7);
-  var gender_code: $HarmonizeCode("$Local", CWE_Code(PID.8), "http://hl7.org/fhir/administrative-gender", "Gender");
-  gender : gender_code[0].code;
+  gender : Convert_TerminologyCode(CWE_Code(PID.8), "Gender");
   name[] : XPN_HumanName(PID.9[]);
   address[] : XAD_Address(PID.11[]);
   telecom[] : XTN_ContactPoint(PID.13[], "home");
@@ -194,15 +193,12 @@ def PV1_DG1_Encounter(PV1, DG1, Patient, Condition) {
 //   AllergyIntolerance: https://www.hl7.org/fhir/stu3/allergyintolerance.html
 //
 def AL1_AllergyIntolerance (AL1, Patient) {
-  var category_code: $HarmonizeCode("$Local", CWE_Code(AL1.2), "http://hl7.org/fhir/allergy-intolerance-category", "Allergy_Category");
-  category[] : category_code[0].code;
-  var type_code: $HarmonizeCode("$Local", CWE_Code(AL1.2), "http://hl7.org/fhir/allergy-intolerance-type", "Allergy_Type");
-  type : type_code[0].code;
+  category[] : Convert_TerminologyCode(CWE_Code(AL1.2), "Allergy_Category");
+  type : Convert_TerminologyCode(CWE_Code(AL1.2), "Allergy_Type");
   code : CWE_CodeableConcept(AL1.3);
   verificationStatus : "confirmed";   // Hard-coded for STU3 validation
   if (AL1.4 ~= "U") {
-    var severity_code: $HarmonizeCode("$Local", CWE_Code(AL1.4), "https://www.hl7.org/fhir/codesystem-reaction-event-severity.html", "Allergy_Severity");
-    reaction[0].severity : severity_code[0].code;
+    reaction[0].severity : Convert_TerminologyCode(CWE_Code(AL1.4), "Allergy_Severity");
   }
 // TODO: Uncomment below
   //criticality : AL1.4 => CWE_Code;     Need Terminology Mapping: No mappings found in community sheet
@@ -237,8 +233,7 @@ def OBX_Observation (OBX, Patient) {
   }
   referenceRange[0].text : OBX.7;
   if (OBX.11?) {
-    var status_code: $HarmonizeCode("$Local", OBX.11, "http://hl7.org/fhir/observation-status", "Observation_Status");
-    status : status_code[0].code;
+    status : Convert_TerminologyCode(OBX.11, "Observation_Status");
   } else {
     status : "registered";
   }
@@ -300,8 +295,7 @@ def OBR_ORC_DiagnosticReport(OBR, ORC, Patient, Encounter) {
   issued : Convert_Instant(OBR.22);
   category.coding[0].code : OBR.24
   if (OBR.25?) {
-    var status_code: $HarmonizeCode("$Local", OBR.25, "http://hl7.org/fhir/diagnostic-report-status", "Report_Status");
-    status : status_code[0].code;
+    status : Convert_TerminologyCode(OBR.25, "Report_Status");
   } else {
     status : "registered";    // place-holder for 1-1 cardinality
   }

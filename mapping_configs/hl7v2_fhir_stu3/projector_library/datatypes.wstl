@@ -1,3 +1,17 @@
+// Description: Converts HL7 v2 terminology into FHIR terminology
+//
+// Argument(s):
+//   HL7 v2 Code:  https://hl7-definition.caristix.com/v2/HL7v2.7/Tables
+//   ConceptMapID: https://www.hl7.org/fhir/conceptmap.html
+//
+// Output(s):
+//   FHIR Code datatype: https://www.hl7.org/fhir/stu3/datatypes.html#code
+//
+def Convert_TerminologyCode(Code, ConceptMapID){
+  var mapping : $HarmonizeCode("$Local", Code, "", ConceptMapID);
+  $this : mapping[0].code;
+}
+
 // Description: Extracts a date in FHIR format from a HL7v2 DateTime datatype
 //
 // Argument(s):
@@ -406,8 +420,7 @@ def XPN_HumanName(XPN) {
   suffix[] : XPN.4;
   prefix[] : XPN.5;
   suffix[] : XPN.6;
-  var use_code: $HarmonizeCode("$Local", XPN.7, "http://hl7.org/fhir/name-use", "Name_Type");
-  use : use_code[0].code;
+  use : Convert_TerminologyCode(XPN.7, "Name_Type");
   if (~XPN.12? and ~XPN.13?) {
     period : DR_Period(XPN.10);
   }
@@ -449,8 +462,7 @@ def XCN_Practitioner(XCN) {
   name[0].suffix[] : XCN.5;
   name[0].prefix[] : XCN.6;
   name[0].suffix[] : XCN.7;
-  var use_code: $HarmonizeCode("$Local", XCN.10, "http://hl7.org/fhir/name-use", "Name_Type");
-  name[0].use : use_code[0].code;
+  name[0].use : Convert_TerminologyCode(XCN.10, "Name_Type");
   identifier[0].type.coding[].code : XCN.13;
   if (XCN.19? and ~XCN.20?) {
     name[0].period : DR_Period(XCN.17);
