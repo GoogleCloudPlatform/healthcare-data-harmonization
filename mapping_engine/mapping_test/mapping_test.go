@@ -21,9 +21,9 @@ import (
 	"github.com/google/go-cmp/cmp" /* copybara-comment: cmp */
 	"github.com/google/go-cmp/cmp/cmpopts" /* copybara-comment: cmpopts */
 
-	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/builtins" /* copybara-comment: builtins */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/mapping" /* copybara-comment: mapping */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/projector" /* copybara-comment: projector */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types/register_all" /* copybara-comment: registerall */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types" /* copybara-comment: types */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
 
@@ -869,6 +869,11 @@ func TestProcessMappingSequential(t *testing.T) {
 	if err := reg.RegisterProjector("MakeFooBar", proj); err != nil {
 		t.Fatalf("failed to register test projector: %v", err)
 	}
+	registerall.RegisterAll(reg)
+	if err := reg.RegisterProjector("MakeObject", proj); err != nil {
+		t.Fatalf("failed to register test projector: %v", err)
+	}
+	st := jsonutil.JSONToken(jsonutil.JSONStr("bar"))
 
 	tests := []struct {
 		name          string
@@ -920,6 +925,147 @@ func TestProcessMappingSequential(t *testing.T) {
 				},
 			},
 			wantOk: false,
+		},
+		{
+			name: "non-bool condition: non-empty string",
+			mapping: &mappb.FieldMapping{
+				Condition: &mappb.ValueSource{
+					Source: &mappb.ValueSource_ConstString{
+						ConstString: "foo",
+					},
+				},
+				ValueSource: &mappb.ValueSource{
+					Source: &mappb.ValueSource_ConstString{
+						ConstString: "foo",
+					},
+				},
+				Target: &mappb.FieldMapping_TargetField{
+					TargetField: "",
+				},
+			},
+			want:   jsonutil.JSONStr("foo"),
+			wantOk: true,
+		},
+		{
+			name: "non-bool condition: empty string",
+			mapping: &mappb.FieldMapping{
+				Condition: &mappb.ValueSource{
+					Source: &mappb.ValueSource_ConstString{
+						ConstString: "",
+					},
+				},
+				ValueSource: &mappb.ValueSource{
+					Source: &mappb.ValueSource_ConstString{
+						ConstString: "foo",
+					},
+				},
+				Target: &mappb.FieldMapping_TargetField{
+					TargetField: "",
+				},
+			},
+			wantOk: false,
+		},
+		{
+			name: "non-bool condition: int",
+			mapping: &mappb.FieldMapping{
+				Condition: &mappb.ValueSource{
+					Source: &mappb.ValueSource_ConstInt{
+						ConstInt: 0,
+					},
+				},
+				ValueSource: &mappb.ValueSource{
+					Source: &mappb.ValueSource_ConstString{
+						ConstString: "foo",
+					},
+				},
+				Target: &mappb.FieldMapping_TargetField{
+					TargetField: "",
+				},
+			},
+			want:   jsonutil.JSONStr("foo"),
+			wantOk: true,
+		},
+		{
+			name: "non-bool condition: nonempty array",
+			mapping: &mappb.FieldMapping{
+				Condition: &mappb.ValueSource{
+					Source: &mappb.ValueSource_ConstString{
+						ConstString: "item1",
+					},
+					Projector: "$ListOf",
+				},
+				ValueSource: &mappb.ValueSource{
+					Source: &mappb.ValueSource_ConstString{
+						ConstString: "foo",
+					},
+				},
+				Target: &mappb.FieldMapping_TargetField{
+					TargetField: "",
+				},
+			},
+			want:   jsonutil.JSONStr("foo"),
+			wantOk: true,
+		},
+		{
+			name: "non-bool condition: empty array",
+			mapping: &mappb.FieldMapping{
+				Condition: &mappb.ValueSource{
+					Projector: "$ListOf",
+				},
+				ValueSource: &mappb.ValueSource{
+					Source: &mappb.ValueSource_ConstString{
+						ConstString: "foo",
+					},
+				},
+				Target: &mappb.FieldMapping_TargetField{
+					TargetField: "",
+				},
+			},
+			wantOk: false,
+		},
+		{
+			name: "nonboolean condition: nil object",
+			mapping: &mappb.FieldMapping{
+				Condition: &mappb.ValueSource{
+					Source: &mappb.ValueSource_FromSource{
+						FromSource: "foo",
+					},
+				},
+				ValueSource: &mappb.ValueSource{
+					Source: &mappb.ValueSource_ConstString{
+						ConstString: "irrelevant",
+					},
+				},
+				Target: &mappb.FieldMapping_TargetField{
+					TargetField: "",
+				},
+			},
+			wantOk: false,
+		},
+		{
+			name: "nonboolean condition: nonnil object",
+			args: jsonutil.JSONArr{jsonutil.JSONContainer(map[string]*jsonutil.JSONToken{
+				"foo": &st,
+			})},
+			mapping: &mappb.FieldMapping{
+				Condition: &mappb.ValueSource{
+					Source: &mappb.ValueSource_FromInput{
+						FromInput: &mappb.ValueSource_InputSource{
+							Field: "foo",
+						},
+					},
+				},
+				ValueSource: &mappb.ValueSource{
+					Source: &mappb.ValueSource_ConstString{
+						ConstString: "irrelevant",
+					},
+				},
+				Target: &mappb.FieldMapping_TargetField{
+					TargetField: "",
+				},
+			},
+			want:   jsonutil.JSONStr("irrelevant"),
+			wantOk: true,
 		},
 		{
 			name: "field target",
@@ -1390,7 +1536,7 @@ func TestProcessMappingSequentialErrors(t *testing.T) {
 	}
 
 	reg := types.NewRegistry()
-	builtins.RegisterAll(reg)
+	registerall.RegisterAll(reg)
 	if err := reg.RegisterProjector("MakeObject", proj); err != nil {
 		t.Fatalf("failed to register test projector: %v", err)
 	}
@@ -1401,43 +1547,7 @@ func TestProcessMappingSequentialErrors(t *testing.T) {
 		argOutput     jsonutil.JSONToken
 		argPctxOutput jsonutil.JSONToken
 	}{
-		{
-			name: "non-bool condition",
-			mapping: &mappb.FieldMapping{
-				Condition: &mappb.ValueSource{
-					Source: &mappb.ValueSource_ConstString{
-						ConstString: "foo",
-					},
-				},
-				ValueSource: &mappb.ValueSource{
-					Source: &mappb.ValueSource_ConstString{
-						ConstString: "foo",
-					},
-				},
-				Target: &mappb.FieldMapping_TargetField{
-					TargetField: "bar",
-				},
-			},
-		},
-		{
-			name: "nil condition",
-			mapping: &mappb.FieldMapping{
-				Condition: &mappb.ValueSource{
-					Source: &mappb.ValueSource_FromSource{
-						FromSource: "foo",
-					},
-				},
-				ValueSource: &mappb.ValueSource{
-					Source: &mappb.ValueSource_ConstString{
-						ConstString: "irrelevant",
-					},
-				},
-				Target: &mappb.FieldMapping_TargetField{
-					TargetField: "irrelevant",
-				},
-			},
-			args: []jsonutil.JSONToken{mustParseContainer(json.RawMessage(`{"foo": null}`), t)},
-		},
+
 		{
 			name: "field overwrite",
 			mapping: &mappb.FieldMapping{

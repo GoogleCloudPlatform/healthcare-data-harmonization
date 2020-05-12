@@ -147,8 +147,7 @@ message FieldMapping {
   }
 
   // A value that determines whether to apply this field mapping.
-  // It is only applied if this value is true. An error occurs if the
-  // result is not a boolean primitive.
+  // It is only applied if this value is true.
   ValueSource condition = 5;
 }
 

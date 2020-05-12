@@ -35,6 +35,7 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/optrace" /* copybara-comment: optrace */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/postprocess" /* copybara-comment: postprocess */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/projector" /* copybara-comment: projector */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types/register_all" /* copybara-comment: registerall */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types" /* copybara-comment: types */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
 
@@ -55,7 +56,7 @@ func emptyOutput() *jsonutil.JSONToken {
 
 func TestTracesAdded(t *testing.T) {
 	reg := types.NewRegistry()
-	if err := builtins.RegisterAll(reg); err != nil {
+	if err := registerall.RegisterAll(reg); err != nil {
 		t.Fatalf("failed to register builtins: %v", err)
 	}
 

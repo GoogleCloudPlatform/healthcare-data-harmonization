@@ -21,8 +21,8 @@ import (
 	"github.com/google/go-cmp/cmp" /* copybara-comment: cmp */
 	"github.com/golang/protobuf/proto" /* copybara-comment: proto */
 
-	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/builtins" /* copybara-comment: builtins */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/projector" /* copybara-comment: projector */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types/register_all" /* copybara-comment: registerall */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types" /* copybara-comment: types */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
 
@@ -133,7 +133,7 @@ const postProcessProjectors = `
 func LoadLibraryProjectors(t *testing.T) *types.Registry {
 	reg := types.NewRegistry()
 
-	if err := builtins.RegisterAll(reg); err != nil {
+	if err := registerall.RegisterAll(reg); err != nil {
 		t.Fatalf("failed to load builtins %v", err)
 	}
 	lc := &libpb.LibraryConfig{}

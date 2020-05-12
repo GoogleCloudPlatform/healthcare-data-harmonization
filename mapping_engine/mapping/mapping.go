@@ -21,6 +21,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/builtins" /* copybara-comment: builtins */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types" /* copybara-comment: types */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
 
@@ -61,7 +62,7 @@ func ProcessMappingSequential(m *mappb.FieldMapping, args []jsonutil.JSONMetaNod
 
 		cb, ok := cond.(jsonutil.JSONBool)
 		if !ok {
-			return fmt.Errorf("condition returned unexpected type %T (expected JSONBool)", cond)
+			cb, _ = builtins.IsNotNil(cond)
 		}
 
 		pctx.Trace.EndConditionCheck(bool(cb))
@@ -140,18 +141,8 @@ func ProcessMappingSequential(m *mappb.FieldMapping, args []jsonutil.JSONMetaNod
 }
 
 func isNil(src jsonutil.JSONToken) bool {
-	switch t := src.(type) {
-	case jsonutil.JSONStr:
-		return len(t) == 0
-	case jsonutil.JSONArr:
-		return len(t) == 0
-	case jsonutil.JSONContainer:
-		return len(t) == 0
-	case nil:
-		return true
-	}
-
-	return false
+	result, _ := builtins.IsNil(src)
+	return bool(result)
 }
 
 func postProcessValue(value jsonutil.JSONToken) jsonutil.JSONToken {

@@ -347,8 +347,8 @@ func TestTranspile(t *testing.T) {
 		{
 			name: "postfix operators",
 			whistle: `def function(a) {
-									value (if a?): a.foo;
-									value (iff ~a?): "nothing";
+									value (if a): a.foo;
+									value (iff ~a): "nothing";
 							 }`,
 			wantValue: valueTest{
 				rootMappings: `out myOut: function($root.nothing); out myOut: function($root.something);`,
@@ -371,13 +371,19 @@ func TestTranspile(t *testing.T) {
 		},
 		{
 			name: "binary operators",
-			whistle: `def function(a, b, c) {
+			whistle: `def function(a, b, c, d) {
 									value[]: a + 2;
 									value[]: a / 2;
 									value[]: a - 2;
 									value[]: a * 2;
 									value[]: a > 2;
 									value[]: a < 2;
+									value[]: ~a;
+									value[]: a and c;
+									value[]: a or c;
+									value[]: ~d;
+									value[]: d or b;
+									value[]: d and b;
 									value[]: b and c;
 									value[]: b or c;
 									value[]: 3 ~= 4;
@@ -398,7 +404,12 @@ func TestTranspile(t *testing.T) {
 									value[]: -3 >= 3;
 							 }`,
 			wantValue: valueTest{
-				rootMappings: `out myOut: function(100, true, false)`,
+				rootMappings: `out myOut: function(100, true, false, $root.nothing)`,
+				inputJSON: `{
+											   "something": {
+											     "foo": "something"
+											   }
+											 }`,
 				wantJSON: `{
 											   "myOut": [
 											     {
@@ -409,6 +420,12 @@ func TestTranspile(t *testing.T) {
 											         200,
 											         true,
 											         false,
+															 false,
+															 false,
+															 true,
+															 true,
+															 true,
+															 false,
 											         false,
 											         true,
 											         true,
@@ -597,7 +614,7 @@ func TestTranspile(t *testing.T) {
 		},
 		{
 			name:    "newlines optional",
-			whistle: `def test(a, b) { if b? { var myvar (if a = "foo"): $IsNotNil("asd"); if ~(b?) { var bvar (if b = "boo"): "bbb"?; } } else { out asd: $Str(1.2 + 7); some: a.field; } }`,
+			whistle: `def test(a, b) { if b { var myvar (if a = "foo"): $IsNotNil("asd"); if ~(b) { var bvar (if b = "boo"): "bbb"; } } else { out asd: $Str(1.2 + 7); some: a.field; } }`,
 		},
 		{
 			name: "post process function name",

@@ -27,8 +27,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/projector" /* copybara-comment: projector */
-	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types" /* copybara-comment: types */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
 	"github.com/google/go-cmp/cmp" /* copybara-comment: cmp */
 	"bitbucket.org/creachadair/stringset" /* copybara-comment: stringset */
@@ -36,7 +34,7 @@ import (
 )
 
 // When adding a built-in, remember to add it to the map below with its name as the key.
-var builtinFunctions = map[string]interface{}{
+var BuiltinFunctions = map[string]interface{}{
 	// Arithmetic
 	"$Div": Div,
 	"$Mod": Mod,
@@ -135,23 +133,6 @@ var (
 
 func init() {
 	precompilePythonTimeFormat()
-}
-
-// RegisterAll registers all built-ins declared in the built-ins maps. This will wrap the functions
-// into types.Projectors using projector.FromFunction.
-func RegisterAll(r *types.Registry) error {
-	for name, fn := range builtinFunctions {
-		proj, err := projector.FromFunction(fn, name)
-		if err != nil {
-			return fmt.Errorf("failed to create projector from built-in %s: %v", name, err)
-		}
-
-		if err = r.RegisterProjector(name, proj); err != nil {
-			return fmt.Errorf("failed to register built-in %s: %v", name, err)
-		}
-	}
-
-	return nil
 }
 
 // precompilePythonTimeFormat precompile the regex for python formatting string
@@ -646,13 +627,14 @@ func Void(unused ...jsonutil.JSONToken) (jsonutil.JSONToken, error) {
 }
 
 // And is a logical AND of all given arguments.
-func And(args ...jsonutil.JSONBool) (jsonutil.JSONBool, error) {
+func And(args ...jsonutil.JSONToken) (jsonutil.JSONBool, error) {
 	if len(args) == 0 {
 		return false, nil
 	}
 
 	for _, a := range args {
-		if !a {
+		notA, _ := Not(a)
+		if notA {
 			return false, nil
 		}
 	}
@@ -717,14 +699,22 @@ func NEq(args ...jsonutil.JSONToken) (jsonutil.JSONBool, error) {
 }
 
 // Not returns true iff the given value is false.
-func Not(value jsonutil.JSONBool) (jsonutil.JSONBool, error) {
-	return !value, nil
+func Not(object jsonutil.JSONToken) (jsonutil.JSONBool, error) {
+	result, ok := object.(jsonutil.JSONBool)
+	if !ok {
+		return IsNil(object)
+	}
+	return !result, nil
 }
 
 // Or is a logical OR of all given arguments.
-func Or(args ...jsonutil.JSONBool) (jsonutil.JSONBool, error) {
+func Or(args ...jsonutil.JSONToken) (jsonutil.JSONBool, error) {
 	for _, a := range args {
-		if a {
+		boolVal, ok := a.(jsonutil.JSONBool)
+		if !ok {
+			boolVal, _ = IsNotNil(a)
+		}
+		if boolVal {
 			return true, nil
 		}
 	}

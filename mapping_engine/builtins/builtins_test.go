@@ -25,7 +25,6 @@ import (
 	"github.com/google/go-cmp/cmp" /* copybara-comment: cmp */
 	"github.com/google/go-cmp/cmp/cmpopts" /* copybara-comment: cmpopts */
 
-	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types" /* copybara-comment: types */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
 )
 
@@ -193,20 +192,6 @@ func mustParseArray(json json.RawMessage, t *testing.T) jsonutil.JSONArr {
 	}
 
 	return c
-}
-
-func TestRegisterAll(t *testing.T) {
-	// This test also serves to assert that all builtins are actually valid projectors.
-	reg := types.NewRegistry()
-	err := RegisterAll(reg)
-	if err != nil {
-		t.Errorf("a builtin is invalid or failed to register: %v", err)
-	}
-
-	// +1 for identity function
-	if r, b := reg.Count(), len(builtinFunctions); r != b+1 {
-		t.Errorf("registry had a different number of functions (%d) than builtins map (%d)", r, b)
-	}
 }
 
 func TestMod(t *testing.T) {
@@ -1503,32 +1488,62 @@ func TestParseUnixTime(t *testing.T) {
 func TestAnd(t *testing.T) {
 	tests := []struct {
 		name string
-		args []jsonutil.JSONBool
+		args []jsonutil.JSONToken
 		want jsonutil.JSONBool
 	}{
 		{
 			name: "no args",
-			args: []jsonutil.JSONBool{},
+			args: []jsonutil.JSONToken{},
 			want: jsonutil.JSONBool(false),
 		},
 		{
 			name: "one true arg",
-			args: []jsonutil.JSONBool{true},
+			args: []jsonutil.JSONToken{jsonutil.JSONBool(true)},
 			want: jsonutil.JSONBool(true),
 		},
 		{
 			name: "one false arg",
-			args: []jsonutil.JSONBool{false},
+			args: []jsonutil.JSONToken{jsonutil.JSONBool(false)},
 			want: jsonutil.JSONBool(false),
 		},
 		{
 			name: "multiple true args",
-			args: []jsonutil.JSONBool{true, true, true},
+			args: []jsonutil.JSONToken{jsonutil.JSONBool(true), jsonutil.JSONBool(true), jsonutil.JSONBool(true)},
 			want: jsonutil.JSONBool(true),
 		},
 		{
 			name: "multiple partly true args",
-			args: []jsonutil.JSONBool{true, false, true},
+			args: []jsonutil.JSONToken{jsonutil.JSONBool(true), jsonutil.JSONBool(false), jsonutil.JSONBool(true)},
+			want: jsonutil.JSONBool(false),
+		},
+		{
+			name: "one nil",
+			args: []jsonutil.JSONToken{nil},
+			want: jsonutil.JSONBool(false),
+		},
+		{
+			name: "one non-null non-boolean",
+			args: []jsonutil.JSONToken{jsonutil.JSONStr("a random string")},
+			want: jsonutil.JSONBool(true),
+		},
+		{
+			name: "multiple non-boolean",
+			args: []jsonutil.JSONToken{nil, jsonutil.JSONStr("a random string")},
+			want: jsonutil.JSONBool(false),
+		},
+		{
+			name: "one true with null",
+			args: []jsonutil.JSONToken{jsonutil.JSONBool(true), nil},
+			want: jsonutil.JSONBool(false),
+		},
+		{
+			name: "non-boolean and true",
+			args: []jsonutil.JSONToken{jsonutil.JSONNum(1), jsonutil.JSONBool(true)},
+			want: jsonutil.JSONBool(true),
+		},
+		{
+			name: "multiple partly true values with null",
+			args: []jsonutil.JSONToken{jsonutil.JSONBool(true), jsonutil.JSONBool(true), jsonutil.JSONBool(true), nil},
 			want: jsonutil.JSONBool(false),
 		},
 	}
@@ -1548,37 +1563,67 @@ func TestAnd(t *testing.T) {
 func TestOr(t *testing.T) {
 	tests := []struct {
 		name string
-		args []jsonutil.JSONBool
+		args []jsonutil.JSONToken
 		want jsonutil.JSONBool
 	}{
 		{
 			name: "no args",
-			args: []jsonutil.JSONBool{},
+			args: []jsonutil.JSONToken{},
 			want: jsonutil.JSONBool(false),
 		},
 		{
 			name: "one true arg",
-			args: []jsonutil.JSONBool{true},
+			args: []jsonutil.JSONToken{jsonutil.JSONBool(true)},
 			want: jsonutil.JSONBool(true),
 		},
 		{
 			name: "one false arg",
-			args: []jsonutil.JSONBool{false},
+			args: []jsonutil.JSONToken{jsonutil.JSONBool(false)},
 			want: jsonutil.JSONBool(false),
 		},
 		{
 			name: "multiple true args",
-			args: []jsonutil.JSONBool{true, true, true},
+			args: []jsonutil.JSONToken{jsonutil.JSONBool(true), jsonutil.JSONBool(true), jsonutil.JSONBool(true)},
 			want: jsonutil.JSONBool(true),
 		},
 		{
 			name: "multiple false args",
-			args: []jsonutil.JSONBool{false, false, false},
+			args: []jsonutil.JSONToken{jsonutil.JSONBool(false), jsonutil.JSONBool(false), jsonutil.JSONBool(false)},
 			want: jsonutil.JSONBool(false),
 		},
 		{
 			name: "multiple partly true args",
-			args: []jsonutil.JSONBool{false, false, true},
+			args: []jsonutil.JSONToken{jsonutil.JSONBool(false), jsonutil.JSONBool(false), jsonutil.JSONBool(true)},
+			want: jsonutil.JSONBool(true),
+		},
+		{
+			name: "one nil",
+			args: []jsonutil.JSONToken{nil},
+			want: jsonutil.JSONBool(false),
+		},
+		{
+			name: "one non-null non-boolean",
+			args: []jsonutil.JSONToken{jsonutil.JSONStr("a random string")},
+			want: jsonutil.JSONBool(true),
+		},
+		{
+			name: "multiple non-boolean",
+			args: []jsonutil.JSONToken{nil, jsonutil.JSONStr("a random string")},
+			want: jsonutil.JSONBool(true),
+		},
+		{
+			name: "one true with null",
+			args: []jsonutil.JSONToken{nil, jsonutil.JSONBool(true)},
+			want: jsonutil.JSONBool(true),
+		},
+		{
+			name: "one false with null",
+			args: []jsonutil.JSONToken{nil, jsonutil.JSONBool(false)},
+			want: jsonutil.JSONBool(false),
+		},
+		{
+			name: "multiple partly true values with null",
+			args: []jsonutil.JSONToken{nil, jsonutil.JSONBool(false), jsonutil.JSONBool(false), jsonutil.JSONBool(true), jsonutil.JSONBool(false)},
 			want: jsonutil.JSONBool(true),
 		},
 	}
@@ -1963,6 +2008,48 @@ func TestNot(t *testing.T) {
 	}
 }
 
+func TestNotNonBoolean(t *testing.T) {
+	var v jsonutil.JSONToken = jsonutil.JSONNum(0)
+	tests := []struct {
+		name string
+		arg  jsonutil.JSONToken
+		want jsonutil.JSONBool
+	}{
+		{
+			name: "nil",
+			arg:  jsonutil.JSONToken(nil),
+			want: true,
+		},
+		{
+			name: "not nil",
+			arg:  jsonutil.JSONToken(jsonutil.JSONArr{jsonutil.JSONNum(1)}),
+			want: false,
+		},
+		{
+			name: "non-empty container",
+			arg: jsonutil.JSONContainer{
+				"foo": &v,
+			},
+			want: false,
+		},
+		{
+			name: "number",
+			arg:  jsonutil.JSONNum(0),
+			want: false,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := Not(test.arg)
+			if err != nil {
+				t.Fatalf("Not(%v) = error %v", test.arg, err)
+			}
+			if got != test.want {
+				t.Errorf("Not(%v) = %v want %v", test.arg, got, test.want)
+			}
+		})
+	}
+}
 func TestVoid(t *testing.T) {
 	tests := []struct {
 		name     string
