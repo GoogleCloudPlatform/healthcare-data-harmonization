@@ -83,7 +83,7 @@ def PID_PD1_Patient(PID, PD1) {
   generalPractitioner[] : Build_Reference(Output_Resource[](XON_Organization[](PD1.3[])));
   generalPractitioner[] : Build_Reference(Output_Resource[](XCN_Practitioner[](PD1.4[])));
   active : true;
-  id : $UUID();
+  id : PatientID(PID);
   resourceType : "Patient";
 }
 
