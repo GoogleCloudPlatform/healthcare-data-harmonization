@@ -12,6 +12,46 @@ def Convert_TerminologyCode(Code, ConceptMapID){
   $this : mapping[0].code;
 }
 
+// Description: Creates a list of Time Formats to be used by MultiFormatParseTime()
+// The function has a default list of formats that can be modified to meet specific
+// requirements. Time formats should adhere to Golang time format layout
+// (https://golang.org/pkg/time/#Time.Format)
+//
+// Argument(s):
+//
+// Output(s):
+//    Array of DateTime Formats that will be used for parsing incoming DateTime fields.
+//
+def GetTimeFormats() {
+  $this: $ListOf("20060102150405-0600", "20060102150405.999999", "20060102150405", "200601021504", "20060102")
+}
+
+// Description: Returns a Time format for RFC3339 with second precision
+// Time Format should adhere to Golang time format layout
+// (https://golang.org/pkg/time/#Time.Format)
+//
+// Argument(s):
+//
+// Output(s):
+//    Time format for RFC3339 to second
+//
+def GetRFC3339() {
+  $this: "2006-01-02T15:04:05Z";
+}
+
+// Description: Returns a Time format for RFC3339 with millisecond precision
+// Time Format should adhere to Golang time format layout
+// (https://golang.org/pkg/time/#Time.Format)
+//
+// Argument(s):
+//
+// Output(s):
+//    Time format for RFC3339 to millisecond
+//
+def GetRFC3339Millis() {
+  $this: "2006-01-02T15:04:05.99Z";
+}
+
 // Description: Extracts a date in FHIR format from a HL7v2 DateTime datatype
 //
 // Argument(s):
@@ -21,7 +61,7 @@ def Convert_TerminologyCode(Code, ConceptMapID){
 //   FHIR Date datatype: https://www.hl7.org/fhir/stu3/datatypes.html#date
 //
 def Extract_Date(str) {
-  $this: $ReformatTime("20060102150405", str, "2006-01-02");
+  $this: $ReformatTime(GetRFC3339(), str, "2006-01-02");
 }
 
 // Description: Converts a HL7v2 DateTime datatype to a FHIR Instant datatype
@@ -33,8 +73,9 @@ def Extract_Date(str) {
 //   FHIR Instant datatype: https://www.hl7.org/fhir/stu3/datatypes.html#instant
 //
 def Convert_Instant(str) {
-  $this: $ReformatTime("20060102150405", str, "2006-01-02T15:04:05.2112Z");
+  $this: $ReformatTime(GetRFC3339Millis(), str, "2006-01-02T15:04:05.2112Z");
 }
+
 
 // Description: Converts HL7v2 DateTime to FHIR DateTime format
 //
@@ -45,8 +86,9 @@ def Convert_Instant(str) {
 //   FHIR DateTime datatype: https://www.hl7.org/fhir/stu3/datatypes.html#dateTime
 //
 def Convert_DateTime(str) {
-  $this: $ReformatTime("20060102150405", str, "2006-01-02T15:04:05+01:00");
+  $this: $ReformatTime(GetRFC3339(), str, "2006-01-02T15:04:05+01:00");
 }
+
 
 // Description: Constructs a Provenance Resource, and the Device Resource being referenced
 //
@@ -204,8 +246,8 @@ def XON_Organization(XON) {
 def CX_Identifier(CX) {
   value : CX.1;
   type.coding[].code : CX.5;
-  period.start : Convert_DateTime(CX.7);
-  period.end : Convert_DateTime(CX.8);
+  period.start : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), CX.7));
+  period.end : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), CX.8));
 }
 
 // Description: Constructs Family datatype
@@ -313,8 +355,8 @@ def XAD_Address(XAD) {
   }
   district : CWE_String(XAD.9);
   period : DR_Period(XAD.12);
-  period.start : Convert_DateTime(XAD.13);
-  period.end : Convert_DateTime(XAD.14);
+  period.start : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), XAD.13));
+  period.end : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), XAD.14));
   line[] : XAD.19;
 }
 
@@ -370,8 +412,8 @@ def CWE_String(CWE) {
 //   Period datatype : https://www.hl7.org/fhir/stu3/datatypes.html#Period
 //
 def DR_Period(DR) {
-  start : Convert_DateTime(DR.1);
-  end : Convert_DateTime(DR.2);
+  start : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), DR.1));
+  end : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), DR.2));
 }
 
 // Description: Constructs ContactPoint datatype
@@ -387,8 +429,8 @@ def Build_ContactPoint(varValue, varSystem, varUse, varRank, varStart, varEnd) {
   system : varSystem;
   use : varUse;
   rank : varRank;
-  period.start : Convert_DateTime(varStart);
-  period.end : Convert_DateTime(varEnd);
+  period.start : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), varStart));
+  period.end : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), varEnd));
 }
 
 // Description: Constructs ContactPoint datatype
@@ -424,8 +466,8 @@ def XPN_HumanName(XPN) {
   if (~XPN.12? and ~XPN.13?) {
     period : DR_Period(XPN.10);
   }
-  period.start : Convert_DateTime(XPN.12);
-  period.end : Convert_DateTime(XPN.13);
+  period.start : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), XPN.12));
+  period.end : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), XPN.13));
   suffix[] : XPN.14;
 }
 
@@ -467,8 +509,8 @@ def XCN_Practitioner(XCN) {
   if (XCN.19? and ~XCN.20?) {
     name[0].period : DR_Period(XCN.17);
   }
-  name[0].period.start : Convert_DateTime(XCN.19);
-  name[0].period.end : Convert_DateTime(XCN.20);
+  name[0].period.start : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), XCN.19));
+  name[0].period.end : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), XCN.20));
   name[0].suffix[] : XCN.21;
   id : $UUID();
   resourceType : "Practitioner";
@@ -905,7 +947,7 @@ def CM_Specimen (CM) {
 //
 def OBR_Specimen (OBR, Patient) {
   collection.collector : Build_Reference(Output_Resource(XCN_Practitioner(OBR.10)));
-  receivedTime : Convert_DateTime(OBR.14);
+  receivedTime : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), OBR.14));
   $this : CM_Specimen(OBR.15);
   subject : Build_Reference(Patient);
   id : $UUID();
