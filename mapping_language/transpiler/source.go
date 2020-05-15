@@ -101,10 +101,15 @@ func (t *transpiler) VisitSourceInput(ctx *parser.SourceInputContext) interface{
 }
 
 func (t *transpiler) VisitSourceConstStr(ctx *parser.SourceConstStrContext) interface{} {
+	// Strip quotes from string.
+	text := ctx.STRING().GetText()[1 : len(ctx.STRING().GetText())-1]
+	// Replace escaped quotes.
+	text = strings.ReplaceAll(text, `\"`, `"`)
+	// Replace escaped backslashes
+	text = strings.ReplaceAll(text, `\\`, `\`)
 	return &mpb.ValueSource{
 		Source: &mpb.ValueSource_ConstString{
-			// Strip quotes from string.
-			ConstString: ctx.STRING().GetText()[1 : len(ctx.STRING().GetText())-1],
+			ConstString: text,
 		},
 	}
 }

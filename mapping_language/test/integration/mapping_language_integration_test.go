@@ -128,7 +128,7 @@ func TestTranspile(t *testing.T) {
 		{
 			name: "constant sources",
 			whistle: `def function() {
-									str: "str";
+									str: "str\\back\"slash\\\\";
 									int: 9238;
 									float: 9.927840232849121;
 									negfloat: -9.927840232849121;
@@ -140,7 +140,7 @@ func TestTranspile(t *testing.T) {
 				wantJSON: `{
 											   "myOut": [
 											     {
-											       "str": "str",
+											       "str": "str\\back\"slash\\\\",
 											       "int": 9238,
 											       "float": 9.927840232849121,
 											       "negfloat": -9.927840232849121,
