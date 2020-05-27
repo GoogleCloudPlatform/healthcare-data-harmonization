@@ -2,4 +2,4 @@ module github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engi
 
 go 1.14
 
-require github.com/golang/protobuf v1.3.4
+require github.com/golang/protobuf v1.4.2
