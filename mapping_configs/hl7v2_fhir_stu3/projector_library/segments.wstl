@@ -15,7 +15,7 @@ def MSH_MessageHeader (MSH) {
     source.endpoint : "unknown"   // place-holder for 1-* cardinality
   }
   if (MSH.7?) {
-    timestamp : Convert_Instant($MultiFormatParseTime(GetTimeFormats(), MSH.7));
+    timestamp : Convert_Instant(MSH.7);
   } else {
     timestamp : $CurrentTime("2006-01-02T15:04:05+01:00", "UTC");
   }
@@ -58,7 +58,7 @@ def PID_PD1_Patient(PID, PD1) {
   identifier[] : CX_Identifier(PID.3[]);
   identifier[] : CX_Identifier(PID.4[]);
   name[] : XPN_HumanName(PID.5[]);
-  birthDate : Extract_Date($MultiFormatParseTime(GetTimeFormats(), PID.7));
+  birthDate : Extract_Date(PID.7);
   gender : Convert_TerminologyCode(CWE_Code(PID.8), "Gender");
   name[] : XPN_HumanName(PID.9[]);
   address[] : XAD_Address(PID.11[]);
@@ -74,11 +74,11 @@ def PID_PD1_Patient(PID, PD1) {
     multipleBirthBoolean : PID.24;
   }
   multipleBirthInteger : PID.25;
-  deceasedDateTime : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), PID.29));
+  deceasedDateTime : Convert_DateTime(PID.29);
   if (~PID.29?) {
-    deceasedBoolean : PID.30;
+    deceasedBoolean (if PID.30?): PID.30="Y";
   }
-  meta.lastUpdated : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), PID.33));
+  meta.lastUpdated : Convert_DateTime(PID.33);
   telecom[] : XTN_ContactPoint(PID.40[], "home");
   generalPractitioner[] : Build_Reference(Output_Resource[](XON_Organization[](PD1.3[])));
   generalPractitioner[] : Build_Reference(Output_Resource[](XCN_Practitioner[](PD1.4[])));
@@ -116,7 +116,7 @@ def PID_Account(PID_18, Patient) {
 def DG1_Condition (DG1, Patient) {
   code : CWE_CodeableConcept(DG1.3);
   code.text : DG1.4;
-  onsetDateTime : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), DG1.5));
+  onsetDateTime : Convert_DateTime(DG1.5);
   asserter : Build_Reference(Output_Resource(XCN_Practitioner(DG1.16[0])));
   identifier[] : EI_Identifier(DG1.20);
   subject : Build_Reference(Patient);
@@ -140,7 +140,11 @@ def DG1_Condition (DG1, Patient) {
 //   EpisodeOfCare: https://www.hl7.org/fhir/stu3/episodeofcare.html
 //
 def PV1_DG1_Encounter(PV1, DG1, Patient, Condition) {
-  class : CWE_Coding(PV1.2);
+  if (PV1.2?) {
+    class : CWE_Coding(PV1.2);   // Needs ConceptMap
+  } else {
+    class.code : "AMB";
+  }
   if (PV1.2.1 ~= "P") {
     $this : PL_Location(PV1.3, "active");
   }
@@ -165,8 +169,8 @@ def PV1_DG1_Encounter(PV1, DG1, Patient, Condition) {
   hospitalization.dischargeDisposition : CWE_CodeableConcept(PV1.36);
   hospitalization.destination : Build_Reference(Output_Resource(DLD_Location(PV1.37)));
   hospitalization.dietPreference[] : CWE_CodeableConcept(PV1.38);
-  period.start : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), PV1.44));
-  period.end : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), PV1.45));
+  period.start : Convert_DateTime(PV1.44);
+  period.end : Convert_DateTime(PV1.45);
   if (~PV1.45?) {
       status : "unknown";     //--------- Hard-coded for a place holder
   } else {
@@ -205,7 +209,7 @@ def AL1_AllergyIntolerance (AL1, Patient) {
 //  reaction[0].manifestation[].text : AL1.5[];
   // TODO: Generating invalid FHIR JSON
 reaction[0].manifestation[].text : "Place Holder";
-  onsetDateTime : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), AL1.6));
+  onsetDateTime : Convert_DateTime(AL1.6);
   patient : Build_Reference(Patient);
   id : $UUID();
   resourceType : "AllergyIntolerance";
@@ -228,7 +232,11 @@ def OBX_Observation (OBX, Patient) {
   if ($ListLen(OBX.5) > 1) {
     component[] : Build_ObservationComponent(OBX.5[], OBX.2, OBX.3, OBX.6);
   } else {
-    code : CWE_CodeableConcept(OBX.3);
+    if (OBX.3?) {
+      code : CWE_CodeableConcept(OBX.3);
+    } else {
+      code.coding[0].code : "10001-6";   // place-holder for 1-1 cardinality
+    }
     $this : Build_ObservationValue(OBX.5[0], OBX.2, OBX.6);
   }
   referenceRange[0].text : OBX.7;
@@ -237,7 +245,7 @@ def OBX_Observation (OBX, Patient) {
   } else {
     status : "registered";
   }
-  effectiveDateTime: Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), OBX.14));
+  effectiveDateTime: Convert_DateTime(OBX.14);
   performer[] : Build_Reference(Output_Resource(XCN_Practitioner(OBX.16[])));
   method : CWE_CodeableConcept(OBX.17);
   device : Build_Reference(Output_Resource(EI_Device(OBX.18[])));
@@ -266,33 +274,47 @@ def OBX_Observation (OBX, Patient) {
 //   Specimen : https://hl7.org/fhir/stu3/specimen.html
 //
 def OBR_ORC_DiagnosticReport(OBR, ORC, Patient, Encounter) {
-  identifier[0].value : OBR.2.1;
-  identifier[0].type.coding[0].code : "PLAC";
-  identifier[0].type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0203";
-  identifier[1].value : OBR.3.1;
-  identifier[1].type.coding[0].code : "FILL";
-  identifier[1].type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0203";
-  identifier[2].value : ORC.2.1;
-  identifier[2].type.coding[0].code : "PLAC";
-  identifier[2].type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0203";
-  identifier[3].value : ORC.3.1;
-  identifier[3].type.coding[0].code : "FILL";
-  identifier[3].type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0203";
-  identifier[4].value : ORC.4.1;
-  identifier[4].type.coding[0].code : "PGN";
-  identifier[4].type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0203";
-  code : CWE_CodeableConcept(OBR.4);
+  if (OBR.2.1?) {
+    identifier[0].value : OBR.2.1;
+    identifier[0].type.coding[0].code : "PLAC";
+    identifier[0].type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0203";
+  }
+  if (OBR.3.1?) {
+    identifier[1].value : OBR.3.1;
+    identifier[1].type.coding[0].code : "FILL";
+    identifier[1].type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0203";
+  }
+  if (ORC.2.1?) {
+    identifier[2].value : ORC.2.1;
+    identifier[2].type.coding[0].code : "PLAC";
+    identifier[2].type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0203";
+  }
+  if (ORC.3.1?) {
+    identifier[3].value : ORC.3.1;
+    identifier[3].type.coding[0].code : "FILL";
+    identifier[3].type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0203";
+  }
+  if (ORC.4.1?) {
+    identifier[4].value : ORC.4.1;
+    identifier[4].type.coding[0].code : "PGN";
+    identifier[4].type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0203";
+  }
+  if (OBR.4?){
+    code : CWE_CodeableConcept(OBR.4);  //Need ConceptMap
+  } else {
+    code.coding[0].code : "1003-3";
+  }
   if (~OBR.7?) {
-    effectiveDateTime : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), ORC.9));
+    effectiveDateTime : Convert_DateTime(ORC.9);
   } else {
     if (~OBR.8?) {
-      effectiveDateTime : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), OBR.7));
+      effectiveDateTime : Convert_DateTime(OBR.7);
     } else {
-      effectivePeriod.start : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), OBR.7));
-      effectivePeriod.end : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), OBR.8));
+      effectivePeriod.start : Convert_DateTime(OBR.7);
+      effectivePeriod.end : Convert_DateTime(OBR.8);
     }
   }
-  issued : Convert_Instant($MultiFormatParseTime(GetTimeFormats(), OBR.22));
+  issued : Convert_Instant(OBR.22);
   category.coding[0].code : OBR.24
   if (OBR.25?) {
     status : Convert_TerminologyCode(OBR.25, "Report_Status");
@@ -308,10 +330,34 @@ def OBR_ORC_DiagnosticReport(OBR, ORC, Patient, Encounter) {
   resourceType : "DiagnosticReport";
 }
 
+// Description: Parse ORDER_OBSERVATION group, and constructs FHIR STU3 Resources based on OBX, OBR, ORC sub-segments
+//
+// Argument(s):
+//   ORDER_OBSERVATION Group
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/stu3/patient.html
+//   Encounter Resource already constructed through PV1_DG1_Encounter Projector: https://www.hl7.org/fhir/stu3/encounter.html
+//
+// Output(s):
+//   DiagnosticReport: https://hl7.org/fhir/stu3/diagnosticreport.html
+//   Location: https://www.hl7.org/fhir/stu3/location.html
+//   Observation: https://www.hl7.org/fhir/stu3/observation.html
+//   Organization: https://www.hl7.org/fhir/stu3/organization.html
+//   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
+//   Specimen : https://hl7.org/fhir/stu3/specimen.html
+//
+def PARSE_ORDER_OBSERVATION (ORDER_OBSERVATION, Patient, Encounter) {
+
+  var Observation : OBX_Observation(ORDER_OBSERVATION.OBSERVATION[*].OBX[], Patient);
+  out Resources : Observation;
+
+  var DiagnosticReport : OBR_ORC_DiagnosticReport(ORDER_OBSERVATION.OBR, ORDER_OBSERVATION.COMMON_ORDER.ORC, Patient, Encounter)
+  out Resources : DiagnosticReport;
+}
+
 // Description: Parse PATIENT_RESULT group, and constructs FHIR STU3 Resources based on PID, PD1, PV1, OBX, OBR, ORC sub-segments
 //
 // Argument(s):
-//   PATIENT_RESULT Segment
+//   PATIENT_RESULT Group
 //
 // Output(s):
 //   Account: https://www.hl7.org/fhir/stu3/account.html
@@ -338,9 +384,5 @@ def Parse_PATIENT_RESULT (PATIENT_RESULT) {
     out Resources : OBX_Observation(PATIENT_RESULT.PATIENT.PATIENT_OBSERVATION.OBX, Patient);
   }
 
-  var Observation : OBX_Observation(PATIENT_RESULT.ORDER_OBSERVATION[*].OBSERVATION[*].OBX[], Patient);
-  out Resources : Observation;
-
-  var DiagnosticReport : OBR_ORC_DiagnosticReport(PATIENT_RESULT.ORDER_OBSERVATION[*].OBR[], PATIENT_RESULT.ORDER_OBSERVATION[*].COMMON_ORDER.ORC[], Patient, Encounter);
-  out Resources : DiagnosticReport;
+  $this : PARSE_ORDER_OBSERVATION (PATIENT_RESULT.ORDER_OBSERVATION[], Patient, Encounter);
 }

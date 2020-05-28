@@ -12,12 +12,24 @@ def Convert_TerminologyCode(Code, ConceptMapID){
   $this : mapping[0].code;
 }
 
+// Description: Tests whether the given string is a Number or not
+//
+// Argument(s):
+//   str:  input string
+//
+// Output(s):
+//   Boolean: return true when str is a Number; otherwise false
+//
+def IsNumber(str) {
+  $this: $MatchesRegex(str, "^\\d*\\.?\\d+$");
+}
+
 // Description: Creates a list of Time Formats to be used by MultiFormatParseTime()
 // The function has a default list of formats that can be modified to meet specific
 // requirements. Time formats should adhere to Golang time format layout
 // (https://golang.org/pkg/time/#Time.Format)
 //
-// Argument(s):
+// Argument(s):5
 //
 // Output(s):
 //    Array of DateTime Formats that will be used for parsing incoming DateTime fields.
@@ -26,30 +38,18 @@ def GetTimeFormats() {
   $this: $ListOf("20060102150405-0600", "20060102150405.999999", "20060102150405", "200601021504", "20060102")
 }
 
-// Description: Returns a Time format for RFC3339 with second precision
+// Description: Returns a Time format for RFC3339 with second or millisecond precision
 // Time Format should adhere to Golang time format layout
 // (https://golang.org/pkg/time/#Time.Format)
 //
 // Argument(s):
-//
+//    precision: s or second and ms or millisecond
 // Output(s):
-//    Time format for RFC3339 to second
+//    Time format for RFC3339 to second or millisecond
 //
-def GetRFC3339() {
-  $this: "2006-01-02T15:04:05Z";
-}
-
-// Description: Returns a Time format for RFC3339 with millisecond precision
-// Time Format should adhere to Golang time format layout
-// (https://golang.org/pkg/time/#Time.Format)
-//
-// Argument(s):
-//
-// Output(s):
-//    Time format for RFC3339 to millisecond
-//
-def GetRFC3339Millis() {
-  $this: "2006-01-02T15:04:05.99Z";
+def GetRFC3339(precision) {
+  $this (if precision = "s"): "2006-01-02T15:04:05Z";
+  $this (if precision = "ms"): "2006-01-02T15:04:05.99Z";
 }
 
 // Description: Extracts a date in FHIR format from a HL7v2 DateTime datatype
@@ -61,7 +61,8 @@ def GetRFC3339Millis() {
 //   FHIR Date datatype: https://www.hl7.org/fhir/stu3/datatypes.html#date
 //
 def Extract_Date(str) {
-  $this: $ReformatTime(GetRFC3339(), str, "2006-01-02");
+  var input : $MultiFormatParseTime(GetTimeFormats(), str);
+  $this: $ReformatTime(GetRFC3339("s"), input, "2006-01-02");
 }
 
 // Description: Converts a HL7v2 DateTime datatype to a FHIR Instant datatype
@@ -73,9 +74,9 @@ def Extract_Date(str) {
 //   FHIR Instant datatype: https://www.hl7.org/fhir/stu3/datatypes.html#instant
 //
 def Convert_Instant(str) {
-  $this: $ReformatTime(GetRFC3339Millis(), str, "2006-01-02T15:04:05.2112Z");
+  var input : $MultiFormatParseTime(GetTimeFormats(), str);
+  $this: $ReformatTime(GetRFC3339("ms"), input, "2006-01-02T15:04:05.2112Z");
 }
-
 
 // Description: Converts HL7v2 DateTime to FHIR DateTime format
 //
@@ -86,9 +87,9 @@ def Convert_Instant(str) {
 //   FHIR DateTime datatype: https://www.hl7.org/fhir/stu3/datatypes.html#dateTime
 //
 def Convert_DateTime(str) {
-  $this: $ReformatTime(GetRFC3339(), str, "2006-01-02T15:04:05+01:00");
+  var input : $MultiFormatParseTime(GetTimeFormats(), str);
+  $this: $ReformatTime(GetRFC3339("s"), input, "2006-01-02T15:04:05+01:00");
 }
-
 
 // Description: Constructs a Provenance Resource, and the Device Resource being referenced
 //
@@ -246,8 +247,8 @@ def XON_Organization(XON) {
 def CX_Identifier(CX) {
   value : CX.1;
   type.coding[].code : CX.5;
-  period.start : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), CX.7));
-  period.end : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), CX.8));
+  period.start : Convert_DateTime(CX.7);
+  period.end : Convert_DateTime(CX.8);
 }
 
 // Description: Constructs Family datatype
@@ -328,7 +329,7 @@ def CWE_CodeableConcept(CWE) {
 def DLN_Identifier(DLN, varCode) {
   value : DLN.1;
   type.coding[].code: varCode;
-  system : DLN.2;
+  system : DLN.2.1;
   period.end : DLN.3;
 }
 
@@ -355,8 +356,8 @@ def XAD_Address(XAD) {
   }
   district : CWE_String(XAD.9);
   period : DR_Period(XAD.12);
-  period.start : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), XAD.13));
-  period.end : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), XAD.14));
+  period.start : Convert_DateTime(XAD.13);
+  period.end : Convert_DateTime(XAD.14);
   line[] : XAD.19;
 }
 
@@ -412,8 +413,8 @@ def CWE_String(CWE) {
 //   Period datatype : https://www.hl7.org/fhir/stu3/datatypes.html#Period
 //
 def DR_Period(DR) {
-  start : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), DR.1));
-  end : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), DR.2));
+  start : Convert_DateTime(DR.1);
+  end : Convert_DateTime(DR.2);
 }
 
 // Description: Constructs ContactPoint datatype
@@ -429,8 +430,8 @@ def Build_ContactPoint(varValue, varSystem, varUse, varRank, varStart, varEnd) {
   system : varSystem;
   use : varUse;
   rank : varRank;
-  period.start : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), varStart));
-  period.end : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), varEnd));
+  period.start : Convert_DateTime(varStart);
+  period.end : Convert_DateTime(varEnd);
 }
 
 // Description: Constructs ContactPoint datatype
@@ -466,8 +467,8 @@ def XPN_HumanName(XPN) {
   if (~XPN.12? and ~XPN.13?) {
     period : DR_Period(XPN.10);
   }
-  period.start : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), XPN.12));
-  period.end : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), XPN.13));
+  period.start : Convert_DateTime(XPN.12);
+  period.end : Convert_DateTime(XPN.13);
   suffix[] : XPN.14;
 }
 
@@ -509,8 +510,8 @@ def XCN_Practitioner(XCN) {
   if (XCN.19? and ~XCN.20?) {
     name[0].period : DR_Period(XCN.17);
   }
-  name[0].period.start : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), XCN.19));
-  name[0].period.end : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), XCN.20));
+  name[0].period.start : Convert_DateTime(XCN.19);
+  name[0].period.end : Convert_DateTime(XCN.20);
   name[0].suffix[] : XCN.21;
   id : $UUID();
   resourceType : "Practitioner";
@@ -758,7 +759,7 @@ def CWE_Qauntity(CWE) {
 //
 def SN_Quantity (SN) {
   comparator : SN.1;
-  value : SN.2;
+  value : $ParseFloat(SN.2);
 }
 
 // Description: Constructs a Ratio datatype from SN datatype
@@ -770,8 +771,8 @@ def SN_Quantity (SN) {
 //   Ratio Datatype : https://www.hl7.org/fhir/stu3/datatypes.html#Ratio
 //
 def SN_Ratio (SN) {
-  numerator.value : SN.2;
-  denominator.value : SN.4;
+  numerator.value : $ParseFloat(SN.2);
+  denominator.value : $ParseFloat(SN.4);
 }
 
 // Description: Constructs a Range datatype from SN datatype
@@ -783,8 +784,8 @@ def SN_Ratio (SN) {
 //   Range Datatype : https://www.hl7.org/fhir/stu3/datatypes.html#Range
 //
 def SN_Range(SN) {
-  low.value : SN.2;
-  high.value : SN.4;
+  low.value : $ParseFloat(SN.2);
+  high.value : $ParseFloat(SN.4);
 }
 
 // Description: Constructs a Range datatype from NR datatype
@@ -796,8 +797,84 @@ def SN_Range(SN) {
 //   Range Datatype : https://www.hl7.org/fhir/stu3/datatypes.html#Range
 //
 def NR_Range(NR) {
-  low.value : NR.1;
-  high.value : NR.2;
+  low.value : $ParseFloat(NR.1);
+  high.value : $ParseFloat(NR.2);
+}
+
+// Description: Constructs CodeableConcept datatype based on HL7 v2 OBX-5 VARIES datatype
+//
+// Argument(s):
+//   VR: OBX-5 VARIES datatype
+//
+// Output(s):
+//   CodeableConcept datatype : https://www.hl7.org/fhir/stu3/datatypes.html#CodeableConcept
+//
+def VARIES_CodeableConcept(VR) {
+  coding[0].code : VR.1.1;
+  coding[0].display : VR.2.1;
+  coding[0].system : VR.3.1;
+  coding[1].code : VR.4.1;
+  coding[1].display : VR.5.1;
+  coding[1].system : VR.6.1;
+  coding[0].version : VR.7.1;
+  coding[1].version : VR.8.1;
+  text : VR.9.1;
+  coding[2].code : VR.10.1;
+  coding[2].display : VR.11.1;
+  coding[2].system : VR.12.1;
+  coding[2].version : VR.13.1;
+}
+
+// Description: Constructs Period datatype based on HL7 v2 OBX-5 VARIES datatype
+//
+// Argument(s):
+//   VR: OBX-5 VARIES datatype
+//
+// Output(s):
+//   Period datatype : https://www.hl7.org/fhir/stu3/datatypes.html#Period
+//
+def VARIES_Period(VR) {
+  start : Convert_DateTime(VR.1.1);
+  end : Convert_DateTime(VR.2.1);
+}
+
+// Description: Constructs a Range datatype from NR datatype based on HL7 v2 OBX-5 VARIES datatype
+//
+// Argument(s):
+//   VR: OBX-5 VARIES datatype
+//
+// Output(s):
+//   Range Datatype : https://www.hl7.org/fhir/stu3/datatypes.html#Range
+//
+def VARIES_Range(VR) {
+  low.value : $ParseFloat(VR.1.1);
+  high.value : $ParseFloat(VR.2.1);
+}
+
+// Description: Constructs a Ratio datatype from SN datatype based on HL7 v2 OBX-5 VARIES datatype
+//
+// Argument(s):
+//   VR: OBX-5 VARIES datatype
+//
+// Output(s):
+//   Ratio Datatype : https://www.hl7.org/fhir/stu3/datatypes.html#Ratio
+//
+def VARIES_Ratio (VR) {
+  numerator.value : $ParseFloat(VR.2.1);
+  denominator.value : $ParseFloat(VR.4.1);
+}
+
+// Description: Constructs a Quantity datatype from CWE datatype based on HL7 v2 OBX-5 VARIES datatype
+//
+// Argument(s):
+//   VR: OBX-5 VARIES datatype
+//
+// Output(s):
+//   Quantity Datatype : https://www.hl7.org/fhir/stu3/datatypes.html#Quantity
+//
+def VARIES_Quantity (VR) {
+  comparator : VR.1.1;
+  value : $ParseFloat(VR.2.1);
 }
 
 // Description: Constructs an Observation.value datatype, where based on OBX2 datatype Observation values are mapped.
@@ -813,59 +890,59 @@ def NR_Range(NR) {
 //
 def Build_ObservationValue(OBX5, OBX2, OBX6) {
   if (OBX2 = "NM") {
-    if (OBX5.1.1 = "<1") {
-      valueString : OBX5.1.1;
-    } else {
+    if (IsNumber(OBX5.1.1)) {
       valueQuantity.value : $ParseFloat(OBX5.1.1);
+    } else {
+      valueString : OBX5.1.1
     }
   }
   if (OBX2 = "ST" or OBX2 = "FT" or OBX2 =  "TX") {
     valueString : OBX5.1.1;
   }
   if (OBX2 = "CF" or OBX2 = "CNE" or OBX2 =  "CWE" or OBX2 =  "CE" or OBX2 = "IS") {
-    valueCodeableConcept : CWE_CodeableConcept(OBX5);
+    valueCodeableConcept : VARIES_CodeableConcept(OBX5);
   }
   if (OBX2 = "IS") {
-    valueCodeableConcept.coding[].code : OBX5;
+    valueCodeableConcept.coding[].code : OBX5.1.1;
   }
   if (OBX2 = "DR") {
-    valuePeriod : DR_Period(OBX5);
+    valuePeriod : VARIES_Period(OBX5);
   }
   if (OBX2 = "DTM" or OBX2 = "DT") {
-    valueDateTime : OBX5;
+    valueDateTime : OBX5.1.1;
   }
   if (OBX2 = "NR") {
-    valueRange : NR_Range(OBX5);
+    valueRange : VARIES_Range(OBX5);
   }
   if (OBX2 = "VR") {
-    valueString: $StrCat(OBX5.1, "-" , OBX5.2);
+    valueString: $StrCat(OBX5.1.1, "-" , OBX5.2.1);
   }
   if (OBX2 = "TM") {
-    valueTime: OBX5;
+    valueTime: OBX5.1.1;
   }
-  if (OBX2 = "SN" and (OBX5.3 = ":" or OBX5.3 = "/")) {
-    valueRatio: SN_Ratio(OBX5);
+  if (OBX2 = "SN" and (OBX5.3.1 = ":" or OBX5.3.1 = "/")) {
+    valueRatio: VARIES_Ratio(OBX5);
   }
-  if (OBX2 = "SN" and OBX5.3 = "-") {
-    valueRange: SN_Range(OBX5);
+  if (OBX2 = "SN" and OBX5.3.1 = "-") {
+    valueRange: VARIES_Range(OBX5);
   }
-  if (OBX2 = "SN" and OBX5.3 = "+") {
-    valueString: $StrCat(OBX5.1, " " , OBX5.2, " " , OBX5.3);
+  if (OBX2 = "SN" and OBX5.3.1 = "+") {
+    valueString: $StrCat(OBX5.1.1, " " , OBX5.2.1, " " , OBX5.3.1);
   }
-  if (OBX2 = "SN" and OBX5.3 ~= ":" and OBX5.3 ~= "/" and OBX5.3 ~= "+" and OBX5.3 ~= "-") {
-    valueQuantity: SN_Quantity(OBX5);
+  if (OBX2 = "SN" and OBX5.3.1 ~= ":" and OBX5.3.1 ~= "/" and OBX5.3.1 ~= "+" and OBX5.3.1 ~= "-") {
+    valueQuantity: VARIES_Quantity(OBX5);
   }
-  if (OBX2 = "SN" and OBX5.3 ~= ":" and OBX5.3 ~= "/" and OBX5.3 ~= "+" and OBX5.3 ~= "-") {
+  if (OBX2 = "SN" and OBX5.3.1 ~= ":" and OBX5.3.1 ~= "/" and OBX5.3.1 ~= "+" and OBX5.3.1 ~= "-") {
     valueQuantity: CWE_Qauntity(OBX6);
  }
  if (OBX2 = "NA" or OBX2 = "NM") {
     valueQuantity: CWE_Qauntity(OBX6);
   }
-  if (OBX2 = "SN" or OBX5.3 = "-") {
+  if (OBX2 = "SN" or OBX5.3.1 = "-") {
     valueRange.low: CWE_Qauntity(OBX6);
     valueRange.high : CWE_Qauntity(OBX6);
   }
-  if (OBX2 = "SN" or OBX5.3 = ":" or OBX5.3 = "/") {
+  if (OBX2 = "SN" or OBX5.3.1 = ":" or OBX5.3.1 = "/") {
     valueRatio.numerator : CWE_Qauntity(OBX6);
     valueRatio.denominator : CWE_Qauntity(OBX6);
   }
@@ -947,7 +1024,7 @@ def CM_Specimen (CM) {
 //
 def OBR_Specimen (OBR, Patient) {
   collection.collector : Build_Reference(Output_Resource(XCN_Practitioner(OBR.10)));
-  receivedTime : Convert_DateTime($MultiFormatParseTime(GetTimeFormats(), OBR.14));
+  receivedTime : Convert_DateTime(OBR.14);
   $this : CM_Specimen(OBR.15);
   subject : Build_Reference(Patient);
   id : $UUID();

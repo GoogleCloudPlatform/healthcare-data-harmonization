@@ -1,31 +1,30 @@
 {
-   "resourceType":"Bundle",
    "type":"transaction",
    "entry":[
       {
          "resource":{
             "identifier":[
                {
-                  "value":"RAL",
                   "type":{
                      "coding":[
                         {
                            "system":"http://terminology.hl7.org/CodeSystem/v2-0301"
                         }
                      ]
-                  }
+                  },
+                  "value":"RAL"
                },
                {
+                  "value":"4.2-two",
                   "type":{
                      "coding":[
                         {
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0301",
-                           "code":"UUID"
+                           "code":"UUID",
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0301"
                         }
                      ]
                   },
-                  "system":"urn:ietf:rfc:3986",
-                  "value":"4.2-two"
+                  "system":"urn:ietf:rfc:3986"
                }
             ],
             "id":"01010101-0101-4101-8101-010101010101",
@@ -43,7 +42,6 @@
       },
       {
          "resource":{
-            "resourceType":"Organization",
             "name":"Reciever - YIEWSLEY FAMILY PRACTICE",
             "identifier":[
                {
@@ -51,14 +49,15 @@
                   "type":{
                      "coding":[
                         {
-                           "code":"DCode",
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
+                           "code":"DCode"
                         }
                      ]
                   }
                }
             ],
-            "id":"02020202-0202-4202-8202-020202020202"
+            "id":"02020202-0202-4202-8202-020202020202",
+            "resourceType":"Organization"
          },
          "request":{
             "method":"PUT",
@@ -67,9 +66,10 @@
       },
       {
          "resource":{
+            "resourceType":"Organization",
+            "name":"Resposible - YIEWSLEY FAMILY PRACTICE",
             "identifier":[
                {
-                  "value":"6010",
                   "type":{
                      "coding":[
                         {
@@ -77,12 +77,11 @@
                            "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
                         }
                      ]
-                  }
+                  },
+                  "value":"6010"
                }
             ],
-            "id":"03030303-0303-4303-8303-030303030303",
-            "resourceType":"Organization",
-            "name":"Resposible - YIEWSLEY FAMILY PRACTICE"
+            "id":"03030303-0303-4303-8303-030303030303"
          },
          "request":{
             "method":"PUT",
@@ -91,30 +90,38 @@
       },
       {
          "resource":{
-            "language":"ENG",
             "id":"04040404-0404-4404-8404-040404040404",
+            "destination":[
+               {
+                  "name":"STREAMS",
+                  "endpoint":"RAL"
+               }
+            ],
+            "event":{
+               "system":"http://terminology.hl7.org/CodeSystem/v2-0003",
+               "code":"A01"
+            },
             "receiver":{
                "reference":"Organization/02020202-0202-4202-8202-020202020202"
             },
             "source":{
-               "endpoint":"3.2-two",
-               "name":"CERNER"
+               "name":"CERNER",
+               "endpoint":"3.2-two"
             },
             "responsible":{
                "reference":"Organization/03030303-0303-4303-8303-030303030303"
             },
-            "timestamp":"2019-03-09T13:01:56.9339Z",
-            "destination":[
-               {
-                  "endpoint":"RAL",
-                  "name":"STREAMS"
-               }
-            ],
-            "resourceType":"MessageHeader",
             "sender":{
                "reference":"Organization/01010101-0101-4101-8101-010101010101"
             },
+            "resourceType":"MessageHeader",
+            "language":"ENG",
             "meta":{
+               "security":[
+                  {
+                     "code":"8-Security"
+                  }
+               ],
                "tag":[
                   {
                      "code":"T",
@@ -124,17 +131,9 @@
                      "system":"http://terminology.hl7.org/CodeSystem/v2-0207",
                      "code":"11.2-processing"
                   }
-               ],
-               "security":[
-                  {
-                     "code":"8-Security"
-                  }
                ]
             },
-            "event":{
-               "code":"A01",
-               "system":"http://terminology.hl7.org/CodeSystem/v2-0003"
-            }
+            "timestamp":"2019-03-09T13:01:56.9339Z"
          },
          "request":{
             "method":"PUT",
@@ -142,25 +141,25 @@
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"Device/05050505-0505-4505-8505-050505050505"
+         },
          "resource":{
-            "id":"05050505-0505-4505-8505-050505050505",
             "resourceType":"Device",
             "identifier":[
                {
+                  "value":"CERNER",
                   "type":{
                      "coding":[
                         {
                            "system":"http://terminology.hl7.org/CodeSystem/v2-0301"
                         }
                      ]
-                  },
-                  "value":"CERNER"
+                  }
                }
-            ]
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Device/05050505-0505-4505-8505-050505050505"
+            ],
+            "id":"05050505-0505-4505-8505-050505050505"
          }
       },
       {
@@ -185,20 +184,10 @@
             "method":"PUT",
             "url":"Provenance/06060606-0606-4606-8606-060606060606"
          }
-      },
-      {
-         "resource":{
-            "id":"07070707-0707-4707-8707-070707070707",
-            "resourceType":"Bundle",
-            "identifier":{
-               "value":"7"
-            },
-            "type":"message"
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Bundle/07070707-0707-4707-8707-070707070707"
-         }
       }
-   ]
+   ],
+   "identifier":{
+      "value":"7"
+   },
+   "resourceType":"Bundle"
 }

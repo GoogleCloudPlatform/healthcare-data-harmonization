@@ -18,7 +18,7 @@ def Process_ADT_A01(ADT_A01) {
   var MH : MSH_MessageHeader(ADT_A01.MSH);
   out Resources : MH;
   out Resources : HD_Provenance(ADT_A01.MSH.3, MH);
-  out Resources : MSH_Bundle(ADT_A01.MSH.10);
+  root Bundle : MSH_Bundle(ADT_A01.MSH.10);
 }
 
 post Output_Transaction

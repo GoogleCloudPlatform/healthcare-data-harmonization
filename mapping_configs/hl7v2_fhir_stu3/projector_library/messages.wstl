@@ -2,7 +2,7 @@
 //
 // Argument(s):
 //   ADT_A01 HL7v2 Message Type (version 2.9)
-//   ADT_A01 Segments covered in this mapping configuration are: MSH, PID, PD1, DG1, PV1, AL1
+//   ADT_A01 Segments covered in this mapping configuration are: MSH, PID, PD1, DG1, PV1, AL1, OBX
 //
 // Output(s):
 //   FHIR STU3 Resources : http://www.hl7.org/fhir/stu3/resourcelist.html
@@ -26,7 +26,7 @@ def ADT_A01(ADT_A01) {
   var MessageHeader : MSH_MessageHeader(ADT_A01.MSH);
   out Resources : MessageHeader;
   out Resources : HD_Provenance(ADT_A01.MSH.3, MessageHeader);
-  out Resources : MSH_Bundle(ADT_A01.MSH.10);
+  root Bundle : MSH_Bundle(ADT_A01.MSH.10);
 
   var Patient : PID_PD1_Patient(ADT_A01.PID, ADT_A01.PD1);
   out Resources : Patient;
@@ -69,7 +69,7 @@ def ORU_R01(ORU_R01) {
   var MessageHeader : MSH_MessageHeader(ORU_R01.MSH);
   out Resources : MessageHeader;
   out Resources : HD_Provenance(ORU_R01.MSH.3, MessageHeader);
-  out Resources : MSH_Bundle(ORU_R01.MSH.10);
+  root Bundle : MSH_Bundle(ORU_R01.MSH.10);
 
   $this : Parse_PATIENT_RESULT(ORU_R01.PATIENT_RESULT[]);
 }
