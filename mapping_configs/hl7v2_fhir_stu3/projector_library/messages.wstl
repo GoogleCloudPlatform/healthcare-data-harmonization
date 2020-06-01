@@ -35,11 +35,12 @@ def ADT_A01(ADT_A01) {
   var Condition : DG1_Condition(ADT_A01.DG1[], Patient);
   out Resources : Condition;
 
-  out Resources : PV1_DG1_Encounter(ADT_A01.PV1, ADT_A01.DG1, Patient, Condition);
+  var Encounter : PV1_DG1_Encounter(ADT_A01.PV1, ADT_A01.DG1, Patient, Condition);
+  out Resources : Encounter;
 
   out Resources : AL1_AllergyIntolerance(ADT_A01.AL1[], Patient);
 
-  out Resources : OBX_Observation(ADT_A01.OBX[], Patient);
+  out Resources : OBX_Observation(ADT_A01.OBX[], Patient, Encounter);
 }
 
 // Description: Define ORU_R01 HL7v2 (version 2.9) to FHIR STU3 transformation

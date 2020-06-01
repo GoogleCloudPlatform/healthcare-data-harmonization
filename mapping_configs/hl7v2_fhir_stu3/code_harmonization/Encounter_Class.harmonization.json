@@ -1,0 +1,112 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "E",
+          "display": "Emergency",
+          "target": [
+            {
+              "code": "EMER",
+              "display": "emergency",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "I",
+          "display": "Inpatient",
+          "target": [
+            {
+              "code": "IMP",
+              "display": "inpatient encounter",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "O",
+          "display": "Outpatient",
+          "target": [
+            {
+              "code": "AMB",
+              "display": "ambulatory",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "P",
+          "display": "Preadmit",
+          "target": [
+            {
+              "code": "PRENC",
+              "display": "pre-admission",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "R",
+          "display": "Recurring patient",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "B",
+          "display": "Obstetrics",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "C",
+          "display": "Commercial Account",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "N",
+          "display": "Not Applicable",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "U",
+          "display": "Unknown",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70004",
+      "target": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    }
+  ],
+  "id": "Encounter_Class",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

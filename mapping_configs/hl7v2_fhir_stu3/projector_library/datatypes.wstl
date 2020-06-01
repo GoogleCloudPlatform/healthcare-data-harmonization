@@ -2,7 +2,7 @@
 //
 // Argument(s):
 //   HL7 v2 Code:  https://hl7-definition.caristix.com/v2/HL7v2.7/Tables
-//   ConceptMapID: https://www.hl7.org/fhir/conceptmap.html
+//   ConceptMapID: https://www.hl7.org/fhir/stu3/conceptmap.html
 //
 // Output(s):
 //   FHIR Code datatype: https://www.hl7.org/fhir/stu3/datatypes.html#code
@@ -10,6 +10,20 @@
 def Convert_TerminologyCode(Code, ConceptMapID){
   var mapping : $HarmonizeCode("$Local", Code, "", ConceptMapID);
   $this : mapping[0].code;
+}
+
+// Description: Converts HL7 v2 terminology into FHIR terminology
+//
+// Argument(s):
+//   HL7 v2 Code:  https://hl7-definition.caristix.com/v2/HL7v2.7/Tables
+//   ConceptMapID: https://www.hl7.org/fhir/stu3/conceptmap.html
+//
+// Output(s):
+//   FHIR Coding datatype: https://www.hl7.org/fhir/stu3/datatypes.html#Coding
+//
+def Convert_TerminologyCoding(Code, ConceptMapID){
+  var mapping : $HarmonizeCode("$Local", Code, "", ConceptMapID);
+  $this : mapping[0];
 }
 
 // Description: Tests whether the given string is a Number or not

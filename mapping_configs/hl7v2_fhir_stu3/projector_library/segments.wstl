@@ -141,7 +141,8 @@ def DG1_Condition (DG1, Patient) {
 //
 def PV1_DG1_Encounter(PV1, DG1, Patient, Condition) {
   if (PV1.2?) {
-    class : CWE_Coding(PV1.2);   // Needs ConceptMap
+    var classCoding : CWE_Coding(PV1.2);
+    class : Convert_TerminologyCoding(classCoding.code, "Encounter_Class");
   } else {
     class.code : "AMB";
   }
@@ -171,8 +172,8 @@ def PV1_DG1_Encounter(PV1, DG1, Patient, Condition) {
   hospitalization.dietPreference[] : CWE_CodeableConcept(PV1.38);
   period.start : Convert_DateTime(PV1.44);
   period.end : Convert_DateTime(PV1.45);
-  if (~PV1.45?) {
-      status : "unknown";     //--------- Hard-coded for a place holder
+  if (~PV1.45? and PV1.2?) {
+      status : Convert_TerminologyCode(CWE_Code(PV1.2), "Encounter_Status");
   } else {
     status : "finished";
   }
@@ -220,6 +221,7 @@ reaction[0].manifestation[].text : "Place Holder";
 // Argument(s):
 //   OBX V2 Segment
 //   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/stu3/patient.html
+//   Encounter Resource already constructed through PV1_DG1_Encounter Projector: https://www.hl7.org/fhir/stu3/encounter.html
 //
 // Output(s):
 //   Observation: https://www.hl7.org/fhir/stu3/observation.html
@@ -228,7 +230,7 @@ reaction[0].manifestation[].text : "Place Holder";
 //   Organization: https://www.hl7.org/fhir/stu3/organization.html
 //   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
 //
-def OBX_Observation (OBX, Patient) {
+def OBX_Observation (OBX, Patient, Encounter) {
   if ($ListLen(OBX.5) > 1) {
     component[] : Build_ObservationComponent(OBX.5[], OBX.2, OBX.3, OBX.6);
   } else {
@@ -255,6 +257,7 @@ def OBX_Observation (OBX, Patient) {
   performer[] : Build_Reference(Output_Resource(XON_XAD_Organization(OBX.23, OBX.24)));
   performer[] : Build_Reference(Output_Resource(XCN_Practitioner(OBX.25)));
   subject : Build_Reference(Patient);
+  context (if Encounter?): Build_Reference(Encounter);
   id : $UUID();
   resourceType : "Observation";
 }
@@ -347,7 +350,7 @@ def OBR_ORC_DiagnosticReport(OBR, ORC, Patient, Encounter) {
 //
 def PARSE_ORDER_OBSERVATION (ORDER_OBSERVATION, Patient, Encounter) {
 
-  var Observation : OBX_Observation(ORDER_OBSERVATION.OBSERVATION[*].OBX[], Patient);
+  var Observation : OBX_Observation(ORDER_OBSERVATION.OBSERVATION[*].OBX[], Patient, Encounter);
   out Resources : Observation;
 
   var DiagnosticReport : OBR_ORC_DiagnosticReport(ORDER_OBSERVATION.OBR, ORDER_OBSERVATION.COMMON_ORDER.ORC, Patient, Encounter)
@@ -381,7 +384,7 @@ def Parse_PATIENT_RESULT (PATIENT_RESULT) {
   out Resources : Encounter;
 
   if (PATIENT_RESULT.PATIENT.PATIENT_OBSERVATION.OBX?) {
-    out Resources : OBX_Observation(PATIENT_RESULT.PATIENT.PATIENT_OBSERVATION.OBX, Patient);
+    out Resources : OBX_Observation(PATIENT_RESULT.PATIENT.PATIENT_OBSERVATION.OBX, Patient, Encounter);
   }
 
   $this : PARSE_ORDER_OBSERVATION (PATIENT_RESULT.ORDER_OBSERVATION[], Patient, Encounter);
