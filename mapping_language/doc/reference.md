@@ -322,7 +322,7 @@ def FirstName(name) {
 ### out
 
 `out` is used to append output an object to the main output object instead of
-only as the return value of a mapping. This is different from `$root` which sets
+only as the return value of a mapping. This is different from `root` which sets
 data at the root of the output instead of appending. `out` can also be used
 inside a function.
 
