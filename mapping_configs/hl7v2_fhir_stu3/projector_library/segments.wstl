@@ -209,7 +209,7 @@ def AL1_AllergyIntolerance (AL1, Patient) {
   //criticality : AL1.4 => CWE_Code;     Need Terminology Mapping: No mappings found in community sheet
 //  reaction[0].manifestation[].text : AL1.5[];
   // TODO: Generating invalid FHIR JSON
-reaction[0].manifestation[].text : "Place Holder";
+  reaction[0].manifestation[].text : "Place Holder";
   onsetDateTime : Convert_DateTime(AL1.6);
   patient : Build_Reference(Patient);
   id : $UUID();

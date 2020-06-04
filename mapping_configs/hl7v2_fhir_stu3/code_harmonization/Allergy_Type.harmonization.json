@@ -36,17 +36,6 @@
           ]
         },
         {
-          "code": "MC",
-          "display": "Miscellaneous contraindication",
-          "target": [
-            {
-              "code": "unknown",
-              "display": "",
-              "equivalence": "equivalent"
-            }
-          ]
-        },
-        {
           "code": "EA",
           "display": "Environmental allergy",
           "target": [
