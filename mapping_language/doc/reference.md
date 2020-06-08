@@ -103,6 +103,42 @@ patient_name: input_name;
 
 > NOTE: Variables take precedence over input fields if they have the same name.
 
+### Nested mappings
+
+Nested fields can also be described with blocks:
+
+```
+patient: {
+  name: input_json.name
+}
+```
+
+Variables inside blocks are scoped to that block for writes. E.g.,
+
+```
+var one: "one"
+nested: {
+  read: one
+  var one: "two"
+  // The above assignment declares a new variable called "one" for this block.
+  inner: one
+}
+// The below "one" refers to the variable declared on the first line.
+outter: one
+```
+
+outputs:
+
+```json
+{
+  "nested": {
+    "read": "one",
+    "inner": "two"
+  },
+  "outter": "one"
+}
+```
+
 ### Functions
 
 Mappings can be grouped together into a function, and this function can be
@@ -132,6 +168,21 @@ languages (e.g. C, Java, Python).
 ```
 patient: PatientName(input_json)
 ```
+
+Values passed to functions can also be objects, as described above, E.g.
+
+```
+patient: PatientName({
+  first: "Jane"
+  var initial: "J. "
+  last:  $ToUpper($StrCat(initial, "Doe"))
+})
+
+// Or, equivalently
+patient: PatientName({first: "Jane"; last:  "Doe";})
+```
+
+Note that variables are not passed along to `PatientName`.
 
 #### Builtin functions
 

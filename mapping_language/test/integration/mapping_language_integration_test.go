@@ -1179,6 +1179,25 @@ func TestTranspile(t *testing.T) {
 									 }`,
 			},
 		},
+		{
+			name: "block expression var semantics",
+			wantValue: valueTest{
+				rootMappings: `var one: "one"
+					nested: {
+						read: one
+						var one: "two"
+						inner: one
+					}
+					outter: one`,
+				wantJSON: `{
+									   "nested": {
+										 		"read": "one",
+												"inner": "two"
+										 },
+										 "outter": "one"
+									 }`,
+			},
+		},
 		// TODO: Add more tests.
 	}
 	for _, test := range tests {
