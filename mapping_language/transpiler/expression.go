@@ -23,6 +23,10 @@ import (
 	mpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: mapping_go_proto */
 )
 
+const (
+	anonymousBlockNameFormat = "$anonblock_%d_%d"
+)
+
 // Consts for builtins.
 var (
 	preOpMapping = map[string]string{
@@ -137,6 +141,28 @@ func (t *transpiler) VisitExprProjection(ctx *parser.ExprProjectionContext) inte
 func (t *transpiler) VisitExprSource(ctx *parser.ExprSourceContext) interface{} {
 	// No-op here, just visit the Source child.
 	return ctx.Source().Accept(t)
+}
+
+// VisitExprAnonBlock handles anonymous block expressions by creating a new projector and calling it
+// with no arguments.
+func (t *transpiler) VisitExprAnonBlock(ctx *parser.ExprAnonBlockContext) interface{} {
+	// Create a new environment/projector for the block with no args.
+	anonBlockEnv := t.environment.newChild(fmt.Sprintf(anonymousBlockNameFormat, ctx.GetStart().GetLine(), ctx.GetStart().GetColumn()), []string{}, []string{})
+
+	// Transpile the mappings for the block.
+	t.pushEnv(anonBlockEnv)
+	ctx.Block().Accept(t)
+
+	// Add the projector to the mapping program.
+	t.projectors = append(t.projectors, t.environment.generateProjector())
+	t.popEnv()
+
+	// Create a no-args call site for it.
+	cs, err := anonBlockEnv.generateCallsite()
+	if err != nil {
+		t.fail(ctx, fmt.Errorf("unable to generate anonymous block callsite: %v", err))
+	}
+	return cs
 }
 
 func (t *transpiler) VisitSourceContainer(ctx *parser.SourceContainerContext) interface{} {

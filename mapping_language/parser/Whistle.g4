@@ -277,6 +277,7 @@ filter
 expression
     : // Operator precedence is determined by order of alternatives.
     source                              # ExprSource
+    | block                             # ExprAnonBlock
     | TOKEN '(' ')'                            # ExprNoArg
     | TOKEN ARRAYMOD? '(' sourceContainer (',' sourceContainer)* ')' # ExprProjection
     | expression postunoperator         # ExprPostOp

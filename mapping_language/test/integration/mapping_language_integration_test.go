@@ -1126,7 +1126,59 @@ func TestTranspile(t *testing.T) {
 									 }`,
 			},
 		},
-
+		{
+			name: "block expression",
+			wantValue: valueTest{
+				rootMappings: `result: {
+					one: "two"
+					two: 2
+				}`,
+				wantJSON: `{
+										 "result": {"one": "two", "two": 2}
+									 }`,
+			},
+		},
+		{
+			name: "block expression pulls from parent env",
+			whistle: `def projector(arg) {
+			            var v: arg + 1
+									block: {
+										key: arg
+										key2: v
+									}
+									other_key: arg
+								}`,
+			wantValue: valueTest{
+				rootMappings: `$this: projector(1)`,
+				wantJSON: `{
+									   "block": {
+										 	"key": 1,
+											"key2": 2
+										 },
+										 "other_key": 1
+									 }`,
+			},
+		},
+		{
+			name: "block expression as an argument",
+			whistle: `def projector(arg, other) {
+			            key: arg
+									other_key: other
+								}`,
+			wantValue: valueTest{
+				rootMappings: `$this: projector({
+					blocks: "are fun!"
+				}, {thisone: "is inline";})`,
+				wantJSON: `{
+									   "key": {
+										 		"blocks": "are fun!"
+										 },
+										 "other_key": {
+										 		"thisone": "is inline"
+										 }
+									 }`,
+			},
+		},
 		// TODO: Add more tests.
 	}
 	for _, test := range tests {
