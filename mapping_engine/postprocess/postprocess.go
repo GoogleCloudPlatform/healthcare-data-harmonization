@@ -18,6 +18,7 @@ package postprocess
 import (
 	"fmt"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/errors" /* copybara-comment: errors */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/projector" /* copybara-comment: projector */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types" /* copybara-comment: types */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
@@ -34,6 +35,8 @@ const (
 func Process(pctx *types.Context, config *mappb.MappingConfig, skipBundling bool, parallel bool) (jsonutil.JSONToken, error) {
 	var result jsonutil.JSONToken
 
+	errLocation := errors.FnLocationf("Post Processing")
+
 	var p types.Projector
 	switch proj := config.PostProcess.(type) {
 	case *mappb.MappingConfig_PostProcessProjectorDefinition:
@@ -41,7 +44,7 @@ func Process(pctx *types.Context, config *mappb.MappingConfig, skipBundling bool
 	case *mappb.MappingConfig_PostProcessProjectorName:
 		fp, err := pctx.Registry.FindProjector(proj.PostProcessProjectorName)
 		if err != nil {
-			return nil, fmt.Errorf("post_process projector %v not found", proj.PostProcessProjectorName)
+			return nil, errors.Wrap(errLocation, fmt.Errorf("post_process projector %v not found", proj.PostProcessProjectorName))
 		}
 		p = fp
 	}
@@ -49,22 +52,20 @@ func Process(pctx *types.Context, config *mappb.MappingConfig, skipBundling bool
 	result = pctx.Output
 	if len(pctx.TopLevelObjects) > 0 {
 		if err := jsonutil.Merge(convertTopLevelObjectsToContainer(pctx), &result, true, false); err != nil {
-			return nil, fmt.Errorf("attempt to merge root mappings with target_object (Output Key) mappings failed: %v. target_object is deprecated, consider using target_root_field", err)
+			return nil, errors.Wrap(errLocation, fmt.Errorf("attempt to merge root mappings with target_object (Output Key) mappings failed: %v. target_object is deprecated, consider using target_root_field", err))
 		}
 	}
 
 	if p != nil && !skipBundling {
-		pctx.Trace.StartBundler(result)
 		jmn, err := jsonutil.TokenToNode(result)
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(errLocation, err)
 		}
 		res, err := p([]jsonutil.JSONMetaNode{jmn}, pctx)
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(errLocation, err)
 		}
 		result = res
-		pctx.Trace.EndBundler(result)
 	}
 
 	return result, nil

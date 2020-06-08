@@ -25,6 +25,7 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types" /* copybara-comment: types */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
 
+	errs "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/errors" /* copybara-comment: errors */
 	mappb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: mapping_go_proto */
 )
 
@@ -36,12 +37,42 @@ func ProcessMappings(maps []*mappb.FieldMapping, projName string, args []jsonuti
 		// TODO: Add parallelized ProcessMapping.
 		return fmt.Errorf("parallelization is not implemented yet")
 	}
+
+	mapType := "field"
+	if projName == "" {
+		mapType = "root"
+	}
+
 	for i, m := range maps {
 		if err := ProcessMappingSequential(m, args, output, pctx); err != nil {
-			return fmt.Errorf("error processing field mapping %d in projector %s: %v", i, projName, err)
+			return errs.Wrap(errs.NewProtoLocationf(m, "%s %s_mapping", errs.SuffixNumber(i+1), mapType), err)
 		}
 	}
+
 	return nil
+}
+
+func checkCondition(conditionVs *mappb.ValueSource, args []jsonutil.JSONMetaNode, output *jsonutil.JSONToken, pctx *types.Context) (bool, error) {
+	cond, err := EvaluateValueSource(conditionVs, args, *output, pctx)
+	if err != nil {
+		return false, err
+	}
+
+	cp, ok := cond.(jsonutil.JSONMetaPrimitiveNode)
+	if ok {
+		cb, ok := cp.Value.(jsonutil.JSONBool)
+		if ok {
+			return bool(cb), nil
+		}
+	}
+
+	t, err := jsonutil.NodeToToken(cond)
+	if err != nil {
+		return false, err
+	}
+
+	notNil, err := builtins.IsNotNil(t)
+	return bool(notNil), err
 }
 
 // ProcessMappingSequential evaluates and assigns a single field mapping sequentially. This method
@@ -50,40 +81,33 @@ func ProcessMappings(maps []*mappb.FieldMapping, projName string, args []jsonuti
 // The JSONToken returned is the resulting value of this mapping (including a top level object if
 // that was the target).
 func ProcessMappingSequential(m *mappb.FieldMapping, args []jsonutil.JSONMetaNode, output *jsonutil.JSONToken, pctx *types.Context) error {
-	pctx.Trace.StartMapping(m)
-
 	if m.Condition != nil {
-		pctx.Trace.StartConditionCheck()
-
-		cond, err := EvaluateValueSource(m.Condition, args, *output, pctx)
-		if err != nil {
-			return fmt.Errorf("error evaluating condition: %v", err)
+		var cb bool
+		var err error
+		if cb, err = checkCondition(m.Condition, args, output, pctx); err != nil {
+			return errs.Wrap(errs.NewProtoLocation(m.Condition, m), err)
 		}
-
-		cb, ok := cond.(jsonutil.JSONBool)
-		if !ok {
-			cb, _ = builtins.IsNotNil(cond)
-		}
-
-		pctx.Trace.EndConditionCheck(bool(cb))
-
 		if !cb {
-			pctx.Trace.EndMapping(m, nil)
 			return nil
 		}
 	}
 
-	src, err := EvaluateValueSource(m.ValueSource, args, *output, pctx)
-	if err != nil {
-		return fmt.Errorf("error evaluating value source: %v", err)
+	var src jsonutil.JSONMetaNode
+	var err error
+	if src, err = EvaluateValueSource(m.ValueSource, args, *output, pctx); err != nil {
+		return errs.Wrap(errs.NewProtoLocation(m.ValueSource, m), err)
 	}
 
-	src = postProcessValue(src)
+	srcToken, err := jsonutil.NodeToToken(src)
+	if err != nil {
+		return err
+	}
+	srcToken = postProcessValue(srcToken)
+
 	// Skip nil-check if target is var, since we still want to define the var even assign nil to it.
 	// Once the var is used, and written to something else that isn't a var, that's when nil-check
 	// will happen on this value.
-	if _, isVar := m.Target.(*mappb.FieldMapping_TargetLocalVar); !isVar && isNil(src) {
-		pctx.Trace.EndMapping(m, nil)
+	if _, isVar := m.Target.(*mappb.FieldMapping_TargetLocalVar); !isVar && isNil(srcToken) {
 		return nil
 	}
 
@@ -94,10 +118,9 @@ func ProcessMappingSequential(m *mappb.FieldMapping, args []jsonutil.JSONMetaNod
 
 	switch t := m.Target.(type) {
 	case *mappb.FieldMapping_TargetField:
-		if err := writeField(src, t.TargetField, output, false); err != nil {
+		if err := writeField(srcToken, t.TargetField, output, false); err != nil {
 			return fmt.Errorf("could not write field %q: %v", t.TargetField, err)
 		}
-		pctx.Trace.EndMapping(m, src)
 		return nil
 	case *mappb.FieldMapping_TargetLocalVar:
 		cval, name, err := getVar(t.TargetLocalVar, *pctx)
@@ -114,7 +137,7 @@ func ProcessMappingSequential(m *mappb.FieldMapping, args []jsonutil.JSONMetaNod
 		// For variables, we allow to overwrite them without "!" except for array appending.
 		forceOverwrite := !isSelectorArray(field)
 
-		if err := writeField(src, field, &cval, forceOverwrite); err != nil {
+		if err := writeField(srcToken, field, &cval, forceOverwrite); err != nil {
 			return err
 		}
 
@@ -123,17 +146,14 @@ func ProcessMappingSequential(m *mappb.FieldMapping, args []jsonutil.JSONMetaNod
 			return fmt.Errorf("error setting var %q: %v", t.TargetLocalVar, err)
 		}
 
-		pctx.Trace.EndMapping(m, cval)
 		return nil
 	case *mappb.FieldMapping_TargetObject:
-		addObject(src, t.TargetObject, pctx)
-		pctx.Trace.EndMapping(m, src)
+		addObject(srcToken, t.TargetObject, pctx)
 		return nil
 	case *mappb.FieldMapping_TargetRootField:
-		if err := writeField(src, t.TargetRootField, &pctx.Output, false); err != nil {
+		if err := writeField(srcToken, t.TargetRootField, &pctx.Output, false); err != nil {
 			return fmt.Errorf("could not write root field %q: %v", t.TargetRootField, err)
 		}
-		pctx.Trace.EndMapping(m, src)
 		return nil
 	default:
 		return fmt.Errorf("unknown target %T", m.Target)
@@ -184,7 +204,7 @@ func addObject(src jsonutil.JSONToken, targetObject string, pctx *types.Context)
 
 // EvaluateValueSource "interprets" a single value source. The source is converted into a JSONToken
 // representation of its value (or an error).
-func EvaluateValueSource(vs *mappb.ValueSource, args []jsonutil.JSONMetaNode, output jsonutil.JSONToken, pctx *types.Context) (jsonutil.JSONToken, error) {
+func EvaluateValueSource(vs *mappb.ValueSource, args []jsonutil.JSONMetaNode, output jsonutil.JSONToken, pctx *types.Context) (jsonutil.JSONMetaNode, error) {
 	if vs == nil {
 		return nil, errors.New("nil value source pointer")
 	}
@@ -196,7 +216,7 @@ func EvaluateValueSource(vs *mappb.ValueSource, args []jsonutil.JSONMetaNode, ou
 	if vs.GetSource() != nil {
 		arg, err := evaluateValueSourceSource(vs, args, output, pctx)
 		if err != nil {
-			return nil, fmt.Errorf("error evaluating value_source argument: %v", err)
+			return nil, err
 		}
 
 		nextArgs = append(nextArgs, arg)
@@ -206,15 +226,10 @@ func EvaluateValueSource(vs *mappb.ValueSource, args []jsonutil.JSONMetaNode, ou
 		for _, s := range vs.AdditionalArg {
 			arg, err := EvaluateValueSource(s, args, output, pctx)
 			if err != nil {
-				return nil, fmt.Errorf("error evaluating value_source argument: %v", err)
+				return nil, errs.Wrap(errs.NewProtoLocation(s, vs), err)
 			}
 
-			marg, err := jsonutil.TokenToNode(arg)
-			if err != nil {
-				return nil, fmt.Errorf("error wrapping value_source argument: %v", err)
-			}
-
-			nextArgs = append(nextArgs, marg)
+			nextArgs = append(nextArgs, arg)
 
 			// Check if we need to enumerate each additional arg (based on whether it/it's projector is enumerated)
 			shouldIterate := (isArray(s) && s.GetProjector() == "") || isSelectorArray(s.GetProjector())
@@ -222,7 +237,9 @@ func EvaluateValueSource(vs *mappb.ValueSource, args []jsonutil.JSONMetaNode, ou
 			anyArgsToIterate = anyArgsToIterate || shouldIterate
 		}
 	}
-	proj, err := pctx.Registry.FindProjector(strings.TrimSuffix(vs.Projector, "[]"))
+
+	projName := strings.TrimSuffix(vs.Projector, "[]")
+	proj, err := pctx.Registry.FindProjector(projName)
 	if err != nil {
 		return nil, fmt.Errorf("error finding projector: %v", err)
 	}
@@ -241,24 +258,60 @@ func EvaluateValueSource(vs *mappb.ValueSource, args []jsonutil.JSONMetaNode, ou
 			return nil, fmt.Errorf("error zipping args: %v", err)
 		}
 
-		projVals := make([]jsonutil.JSONToken, 0)
+		projVals := make([]jsonutil.JSONMetaNode, 0)
 		for _, args := range zippedArgs {
+			sources := []string{}
+			for _, s := range args {
+				if s != nil {
+					sources = append(sources, s.ProvenanceString())
+				} else {
+					sources = append(sources, "null")
+				}
+			}
+
 			pv, err := proj(args, pctx)
 			if err != nil {
-				return nil, fmt.Errorf("error projecting array item: %v", err)
+				return nil, errs.Wrap(errs.Locationf("Iterated arguments %q", strings.Join(sources, ", ")), err)
 			}
 
 			pv = postProcessValue(pv)
 			if isNil(pv) {
 				continue
 			}
-			projVals = append(projVals, pv)
+
+			pvm, err := jsonutil.TokenToNodeWithProvenance(pv, "", jsonutil.Provenance{
+				Sources:  args,
+				Function: projName,
+			})
+			if err != nil {
+				return nil, err
+			}
+
+			projVals = append(projVals, pvm)
 		}
 
-		return jsonutil.JSONArr(projVals), nil
+		return jsonutil.JSONMetaArrayNode{
+			Items: projVals,
+			JSONMeta: jsonutil.NewJSONMeta("", jsonutil.Provenance{
+				Sources:  nextArgs,
+				Function: projName,
+			}),
+		}, nil
 	}
 
-	return proj(nextArgs, pctx)
+	pv, err := proj(nextArgs, pctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if projName == "" && len(nextArgs) == 1 && nextArgs[0] != nil {
+		return jsonutil.TokenToNodeWithProvenance(pv, nextArgs[0].Key(), nextArgs[0].Provenance())
+	}
+
+	return jsonutil.TokenToNodeWithProvenance(pv, "", jsonutil.Provenance{
+		Sources:  nextArgs,
+		Function: projName,
+	})
 }
 
 func isArray(vs *mappb.ValueSource) bool {
@@ -320,16 +373,16 @@ func zip(values []jsonutil.JSONMetaNode, iterables []bool) ([][]jsonutil.JSONMet
 
 			arr, ok := a.(jsonutil.JSONMetaArrayNode)
 			if !ok {
-				return nil, fmt.Errorf("can't iterate non-array (argument index %d) %q", i+1, a.Path())
+				return nil, fmt.Errorf("can't iterate non-array %q (it was the %s argument in the function call)", a.ProvenanceString(), errs.SuffixNumber(i+1))
 			}
 
 			if baseLen < 0 {
 				baseLen = len(arr.Items)
-				basePath = arr.Path()
+				basePath = arr.ProvenanceString()
 			}
 
 			if len(arr.Items) != baseLen {
-				return nil, fmt.Errorf("can't zip/iterate arrays of different sizes together (%q had %d items, but %q had %d)", basePath, baseLen, arr.Path(), len(arr.Items))
+				return nil, fmt.Errorf("can't zip/iterate arrays of different sizes together (%q had %d items, but %q had %d)", basePath, baseLen, arr.ProvenanceString(), len(arr.Items))
 			}
 		}
 	}
@@ -361,48 +414,55 @@ func zip(values []jsonutil.JSONMetaNode, iterables []bool) ([][]jsonutil.JSONMet
 // output field).
 func evaluateValueSourceSource(vs *mappb.ValueSource, args []jsonutil.JSONMetaNode, output jsonutil.JSONToken, pctx *types.Context) (jsonutil.JSONMetaNode, error) {
 
-	var token jsonutil.JSONToken
 	var metaNode jsonutil.JSONMetaNode
 	var err error
-	var source string
+	var location string
 	switch s := vs.Source.(type) {
 
 	// Constants:
 	case *mappb.ValueSource_ConstString:
-		metaNode, source = jsonutil.JSONMetaPrimitiveNode{Value: jsonutil.JSONStr(s.ConstString)}, "const string"
+		location = "const string"
+		metaNode, err = jsonutil.TokenToNodeWithProvenance(jsonutil.JSONStr(s.ConstString), fmt.Sprintf("%q", s.ConstString), jsonutil.Provenance{})
 	case *mappb.ValueSource_ConstInt:
-		metaNode, source = jsonutil.JSONMetaPrimitiveNode{Value: jsonutil.JSONNum(s.ConstInt)}, "const int"
+		location = "const int"
+		metaNode, err = jsonutil.TokenToNodeWithProvenance(jsonutil.JSONNum(s.ConstInt), fmt.Sprintf("%d", s.ConstInt), jsonutil.Provenance{})
 	case *mappb.ValueSource_ConstFloat:
-		metaNode, source = jsonutil.JSONMetaPrimitiveNode{Value: jsonutil.JSONNum(s.ConstFloat)}, "const float"
+		location = "const float"
+		metaNode, err = jsonutil.TokenToNodeWithProvenance(jsonutil.JSONNum(s.ConstFloat), fmt.Sprintf("%f", s.ConstFloat), jsonutil.Provenance{})
 	case *mappb.ValueSource_ConstBool:
-		metaNode, source = jsonutil.JSONMetaPrimitiveNode{Value: jsonutil.JSONBool(s.ConstBool)}, "const bool"
+		location = "const bool"
+		metaNode, err = jsonutil.TokenToNodeWithProvenance(jsonutil.JSONBool(s.ConstBool), fmt.Sprintf("%v", s.ConstBool), jsonutil.Provenance{})
 
 	// More complicated things:
 	case *mappb.ValueSource_FromSource:
-		source = fmt.Sprintf("source %q", s.FromSource)
+		location = fmt.Sprintf("From Source %q", s.FromSource)
 		as, asErr := fromSourceToArgSource(s, args)
 		if asErr != nil {
 			return nil, asErr
 		}
 		metaNode, err = EvaluateArgSource(as, args, pctx)
 	case *mappb.ValueSource_FromDestination:
-		source = fmt.Sprintf("destination %q", s.FromDestination)
-		if token, err = EvaluateFromDestination(s, output); err != nil {
-			return nil, err
+		location = fmt.Sprintf("From Destination %q", s.FromDestination)
+		token, lerr := EvaluateFromDestination(s, output)
+		if lerr != nil {
+			return nil, lerr
 		}
-		metaNode, err = jsonutil.TokenToNode(token)
+		metaNode, err = jsonutil.TokenToNodeWithProvenance(token, fmt.Sprintf("%s's output field %s", pctx.Projector(), s.FromDestination), jsonutil.Provenance{})
 	case *mappb.ValueSource_FromLocalVar:
-		source = fmt.Sprintf("var %q", s.FromLocalVar)
-		if token, err = EvaluateFromVar(s, *pctx); err != nil {
-			return nil, err
+		location = fmt.Sprintf("From Var %q", s.FromLocalVar)
+		// TODO: Provenance support for vars.
+		token, lerr := EvaluateFromVar(s, *pctx)
+		if lerr != nil {
+			return nil, lerr
 		}
-		metaNode, err = jsonutil.TokenToNode(token)
+		metaNode, err = jsonutil.TokenToNodeWithProvenance(token, fmt.Sprintf("%s's var %s", pctx.Projector(), s.FromLocalVar), jsonutil.Provenance{})
 	case *mappb.ValueSource_ProjectedValue:
-		source = "projected value"
-		if token, err = EvaluateValueSource(s.ProjectedValue, args, output, pctx); err != nil {
-			return nil, err
+		if s.ProjectedValue.Projector != "" {
+			location = "Argument for " + s.ProjectedValue.Projector
+		} else {
+			location = "Nested expression"
 		}
-		metaNode, err = jsonutil.TokenToNode(token)
+		metaNode, err = EvaluateValueSource(s.ProjectedValue, args, output, pctx)
 	// TODO: token Key = GUID(); Parent = common ancestor of all args
 	// No need to mutate parent though.
 	case *mappb.ValueSource_FromArg:
@@ -410,25 +470,23 @@ func evaluateValueSourceSource(vs *mappb.ValueSource, args []jsonutil.JSONMetaNo
 			return nil, fmt.Errorf("from_arg is out of range. Requested arg %d but projector only got %d", s.FromArg, len(args))
 		}
 
-		source = fmt.Sprintf("from arg %d", s.FromArg)
+		location = fmt.Sprintf("from arg %d", s.FromArg)
 		if s.FromArg == 0 {
-			source += " (all args)"
+			location += " (all args)"
 			metaNode = jsonutil.JSONMetaArrayNode{Items: args}
 		} else {
 			metaNode = args[s.FromArg-1]
 		}
 	case *mappb.ValueSource_FromInput:
 		metaNode, err = EvaluateArgSource(s.FromInput, args, pctx)
-		source = fmt.Sprintf("input arg %d field %q", s.FromInput.Arg, s.FromInput.Field)
+		location = fmt.Sprintf("input arg %d field %q", s.FromInput.Arg, s.FromInput.Field)
 	default:
 		return nil, fmt.Errorf("unknown value source %T", vs.Source)
 	}
 
 	if err != nil {
-		return nil, err
+		return nil, errs.Wrap(errs.Locationf(location), err)
 	}
-
-	pctx.Trace.ValueResolved(metaNode, source)
 
 	return metaNode, nil
 }
@@ -504,7 +562,7 @@ func EvaluateArgSource(vs *mappb.ValueSource_InputSource, args []jsonutil.JSONMe
 	} else {
 		targetObj, err = jsonutil.GetNodeFieldSegmented(args[vs.Arg-1], segs)
 		if err != nil {
-			return nil, fmt.Errorf("error getting value %q from argument %d (%v): %v", vs.Field, vs.Arg, args[vs.Arg-1], err)
+			return nil, fmt.Errorf("error getting field %q from %q: %v", vs.Field, args[vs.Arg-1].ProvenanceString(), err)
 		}
 	}
 
@@ -519,8 +577,6 @@ func getValueFromContext(args []jsonutil.JSONMetaNode, segs []string, pctx *type
 	if node, remSegs, err = ParentInfoFromArgs(args, segs); err != nil {
 		return nil, err
 	}
-
-	pctx.Trace.ContextScan(node, segs, remSegs)
 
 	return jsonutil.GetNodeFieldSegmented(node, remSegs)
 }
@@ -552,7 +608,7 @@ func ParentInfoFromArgs(args []jsonutil.JSONMetaNode, segs []string) (jsonutil.J
 		p := arg.Path()
 		argSegs, err := jsonutil.SegmentPath(p)
 		if err != nil {
-			return nil, segs, fmt.Errorf("argument %v does not have a valid path %s: %v", arg, p, err)
+			return nil, segs, fmt.Errorf("argument %q does not have a valid path %s: %v", arg.ProvenanceString(), p, err)
 		}
 
 		commonAnc, rem, err := getCommonAncestor(root, argSegs, segs)

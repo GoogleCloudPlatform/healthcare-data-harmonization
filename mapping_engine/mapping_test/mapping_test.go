@@ -447,6 +447,16 @@ func buildProjector(t *testing.T, fn interface{}) types.Projector {
 	return p
 }
 
+func mustTokenToNode(t *testing.T, token jsonutil.JSONToken) jsonutil.JSONMetaNode {
+	t.Helper()
+	n, err := jsonutil.TokenToNode(token)
+	if err != nil {
+		t.Fatalf("failed to convert token %v to node: %v", token, err)
+	}
+
+	return n
+}
+
 func TestEvaluateValueSource(t *testing.T) {
 	reg := types.NewRegistry()
 	if err := reg.RegisterProjector("UDFGetBar", buildProjector(t, udfGetBar)); err != nil {
@@ -462,7 +472,7 @@ func TestEvaluateValueSource(t *testing.T) {
 		args      []jsonutil.JSONToken
 		argVars   types.StackMapInterface
 		argOutput jsonutil.JSONToken
-		want      jsonutil.JSONToken
+		want      jsonutil.JSONMetaNode
 	}{
 		{
 			name: "const source",
@@ -472,7 +482,7 @@ func TestEvaluateValueSource(t *testing.T) {
 				},
 			},
 			args: []jsonutil.JSONToken{},
-			want: jsonutil.JSONStr("foo"),
+			want: mustTokenToNode(t, jsonutil.JSONStr("foo")),
 		},
 		{
 			name: "single source",
@@ -482,7 +492,7 @@ func TestEvaluateValueSource(t *testing.T) {
 				},
 			},
 			args: []jsonutil.JSONToken{mustParseContainer(json.RawMessage(`{"foo":"bar"}`), t)},
-			want: jsonutil.JSONStr("bar"),
+			want: mustTokenToNode(t, jsonutil.JSONStr("bar")),
 		},
 		{
 			name: "single source with projector",
@@ -493,7 +503,7 @@ func TestEvaluateValueSource(t *testing.T) {
 				Projector: "UDFGetBar",
 			},
 			args: []jsonutil.JSONToken{mustParseContainer(json.RawMessage(`{"baz": {"bar":"foo"}}`), t)},
-			want: jsonutil.JSONStr("foo"),
+			want: mustTokenToNode(t, jsonutil.JSONStr("foo")),
 		},
 		{
 			name: "additional arg with projector",
@@ -511,7 +521,7 @@ func TestEvaluateValueSource(t *testing.T) {
 				Projector: "UDFMakeFooBar",
 			},
 			args: []jsonutil.JSONToken{mustParseContainer(json.RawMessage(`{"baz": {"bar":"foo"}}`), t)},
-			want: mustParseContainer(json.RawMessage(`{"foo": {"bar":"foo"}, "bar": "foo"}`), t),
+			want: mustTokenToNode(t, mustParseContainer(json.RawMessage(`{"foo": {"bar":"foo"}, "bar": "foo"}`), t)),
 		},
 		{
 			name: "additional arg with projector in arg",
@@ -537,7 +547,7 @@ func TestEvaluateValueSource(t *testing.T) {
 				Projector: "UDFMakeFooBar",
 			},
 			args: []jsonutil.JSONToken{mustParseContainer(json.RawMessage(`{"baz": {"bar":"foo"}}`), t)},
-			want: mustParseContainer(json.RawMessage(`{"foo": {"bar":"foo"}, "bar": {"foo": "red", "bar": "blue"}}`), t),
+			want: mustTokenToNode(t, mustParseContainer(json.RawMessage(`{"foo": {"bar":"foo"}, "bar": {"foo": "red", "bar": "blue"}}`), t)),
 		},
 		{
 			name: "enumerated value",
@@ -549,7 +559,7 @@ func TestEvaluateValueSource(t *testing.T) {
 				Projector: "UDFGetBar",
 			},
 			args: []jsonutil.JSONToken{mustParseContainer(json.RawMessage(`{"foo": [{"bar": 1}, {"bar": 2}, {"bar": 3}]}`), t)},
-			want: jsonutil.JSONArr{jsonutil.JSONNum(1), jsonutil.JSONNum(2), jsonutil.JSONNum(3)},
+			want: mustTokenToNode(t, jsonutil.JSONArr{jsonutil.JSONNum(1), jsonutil.JSONNum(2), jsonutil.JSONNum(3)}),
 		},
 		{
 			name: "enumerated value with zipped args",
@@ -567,7 +577,7 @@ func TestEvaluateValueSource(t *testing.T) {
 				Projector: "UDFMakeFooBar",
 			},
 			args: []jsonutil.JSONToken{mustParseContainer(json.RawMessage(`{"foo": [{"meep": 1}, {"meep": 2}, {"meep": 3}]}`), t)},
-			want: mustParseArray(json.RawMessage(`[{"foo":{"meep": 1}, "bar":"bar"}, {"foo":{"meep": 2}, "bar":"bar"}, {"foo":{"meep": 3}, "bar":"bar"}]`), t),
+			want: mustTokenToNode(t, mustParseArray(json.RawMessage(`[{"foo":{"meep": 1}, "bar":"bar"}, {"foo":{"meep": 2}, "bar":"bar"}, {"foo":{"meep": 3}, "bar":"bar"}]`), t)),
 		},
 		{
 			name: "enumerated non-first value with zipped args",
@@ -588,7 +598,7 @@ func TestEvaluateValueSource(t *testing.T) {
 				Projector: "UDFMakeFooBar",
 			},
 			args: []jsonutil.JSONToken{mustParseContainer(json.RawMessage(`{"foo": [{"meep": 1}, {"meep": 2}, {"meep": 3}]}`), t)},
-			want: mustParseArray(json.RawMessage(`[{"bar":{"meep": 1}, "foo":"bar"}, {"bar":{"meep": 2}, "foo":"bar"}, {"bar":{"meep": 3}, "foo":"bar"}]`), t),
+			want: mustTokenToNode(t, mustParseArray(json.RawMessage(`[{"bar":{"meep": 1}, "foo":"bar"}, {"bar":{"meep": 2}, "foo":"bar"}, {"bar":{"meep": 3}, "foo":"bar"}]`), t)),
 		},
 		{
 			name: "enumerated multiple arrays as zipped args",
@@ -612,7 +622,7 @@ func TestEvaluateValueSource(t *testing.T) {
 				Projector: "UDFMakeFooBar",
 			},
 			args: []jsonutil.JSONToken{mustParseContainer(json.RawMessage(`{"foo": [{"meep": 1}, {"meep": 2}, {"meep": 3}]}`), t), mustParseArray(json.RawMessage(`["red", "green", "blue"]`), t)},
-			want: mustParseArray(json.RawMessage(`[{"foo":{"meep": 1}, "bar":"red"}, {"foo":{"meep": 2}, "bar":"green"}, {"foo":{"meep": 3}, "bar":"blue"}]`), t),
+			want: mustTokenToNode(t, mustParseArray(json.RawMessage(`[{"foo":{"meep": 1}, "bar":"red"}, {"foo":{"meep": 2}, "bar":"green"}, {"foo":{"meep": 3}, "bar":"blue"}]`), t)),
 		},
 		{
 			name: "projected enumerated value",
@@ -634,7 +644,7 @@ func TestEvaluateValueSource(t *testing.T) {
 				Projector: "UDFMakeFooBar",
 			},
 			args: []jsonutil.JSONToken{mustParseContainer(json.RawMessage(`{"foo": [{"bar": 1}, {"bar": 2}, {"bar": 3}]}`), t)},
-			want: mustParseContainer(json.RawMessage(`{"foo": [1,2,3], "bar": "hello"}`), t),
+			want: mustTokenToNode(t, mustParseContainer(json.RawMessage(`{"foo": [1,2,3], "bar": "hello"}`), t)),
 		},
 		{
 			name: "projected value with explicit nil arg",
@@ -650,7 +660,7 @@ func TestEvaluateValueSource(t *testing.T) {
 				Projector: "UDFMakeFooBar",
 			},
 			args: []jsonutil.JSONToken{mustParseContainer(json.RawMessage(`{"nullkey": null}`), t)},
-			want: mustParseContainer(json.RawMessage(`{"foo": null, "bar": "hello"}`), t),
+			want: mustTokenToNode(t, mustParseContainer(json.RawMessage(`{"foo": null, "bar": "hello"}`), t)),
 		},
 		{
 			name: "projected value with implicit nil arg",
@@ -666,7 +676,7 @@ func TestEvaluateValueSource(t *testing.T) {
 				Projector: "UDFMakeFooBar",
 			},
 			args: []jsonutil.JSONToken{mustParseContainer(json.RawMessage(`{"foo": {}}`), t)},
-			want: mustParseContainer(json.RawMessage(`{"foo": null, "bar": "hello"}`), t),
+			want: mustTokenToNode(t, mustParseContainer(json.RawMessage(`{"foo": null, "bar": "hello"}`), t)),
 		},
 		{
 			name: "non-existent key",
@@ -697,7 +707,7 @@ func TestEvaluateValueSource(t *testing.T) {
 			},
 			args:      []jsonutil.JSONToken{},
 			argOutput: mustParseContainer(json.RawMessage(`{"foo": {"bar": "baz"}}`), t),
-			want:      jsonutil.JSONStr("baz"),
+			want:      mustTokenToNode(t, jsonutil.JSONStr("baz")),
 		},
 		{
 			name: "from variable",
@@ -708,7 +718,7 @@ func TestEvaluateValueSource(t *testing.T) {
 			},
 			args:    []jsonutil.JSONToken{},
 			argVars: buildStackMap(map[string]jsonutil.JSONToken{"foo": jsonutil.JSONStr("baz")}),
-			want:    jsonutil.JSONStr("baz"),
+			want:    mustTokenToNode(t, jsonutil.JSONStr("baz")),
 		},
 		{
 			name: "enumerated from destination",
@@ -720,7 +730,7 @@ func TestEvaluateValueSource(t *testing.T) {
 			},
 			args:      []jsonutil.JSONToken{},
 			argOutput: mustParseContainer(json.RawMessage(`{"foo": [{"bar": 1}, {"bar": 2}, {"bar": 3}]}`), t),
-			want:      jsonutil.JSONArr{jsonutil.JSONNum(1), jsonutil.JSONNum(2), jsonutil.JSONNum(3)},
+			want:      mustTokenToNode(t, jsonutil.JSONArr{jsonutil.JSONNum(1), jsonutil.JSONNum(2), jsonutil.JSONNum(3)}),
 		},
 		{
 			name: "enumerated from variable",
@@ -734,7 +744,7 @@ func TestEvaluateValueSource(t *testing.T) {
 			argVars: buildStackMap(map[string]jsonutil.JSONToken{
 				"foo": mustParseArray(json.RawMessage(`[{"bar": 1}, {"bar": 2}, {"bar": 3}]`), t),
 			}),
-			want: jsonutil.JSONArr{jsonutil.JSONNum(1), jsonutil.JSONNum(2), jsonutil.JSONNum(3)},
+			want: mustTokenToNode(t, jsonutil.JSONArr{jsonutil.JSONNum(1), jsonutil.JSONNum(2), jsonutil.JSONNum(3)}),
 		},
 		{
 			name: "from arg - 0 returns all args",
@@ -744,7 +754,7 @@ func TestEvaluateValueSource(t *testing.T) {
 				},
 			},
 			args: []jsonutil.JSONToken{jsonutil.JSONNum(99), jsonutil.JSONNum(98), jsonutil.JSONNum(97)},
-			want: jsonutil.JSONArr{jsonutil.JSONNum(99), jsonutil.JSONNum(98), jsonutil.JSONNum(97)},
+			want: mustTokenToNode(t, jsonutil.JSONArr{jsonutil.JSONNum(99), jsonutil.JSONNum(98), jsonutil.JSONNum(97)}),
 		},
 		{
 			name: "from arg - 1 returns first arg",
@@ -754,7 +764,7 @@ func TestEvaluateValueSource(t *testing.T) {
 				},
 			},
 			args: []jsonutil.JSONToken{jsonutil.JSONNum(99), jsonutil.JSONNum(98), jsonutil.JSONNum(97)},
-			want: jsonutil.JSONNum(99),
+			want: mustTokenToNode(t, jsonutil.JSONNum(99)),
 		},
 		{
 			name: "from arg - len(arg) returns last arg",
@@ -764,7 +774,7 @@ func TestEvaluateValueSource(t *testing.T) {
 				},
 			},
 			args: []jsonutil.JSONToken{jsonutil.JSONNum(99), jsonutil.JSONNum(98), jsonutil.JSONNum(97)},
-			want: jsonutil.JSONNum(97),
+			want: mustTokenToNode(t, jsonutil.JSONNum(97)),
 		},
 	}
 	for _, test := range tests {
@@ -778,7 +788,7 @@ func TestEvaluateValueSource(t *testing.T) {
 
 			if err != nil {
 				t.Errorf("evaluateFromSource(%v, %v, %v) unexpected error %v", test.argVs, test.args, pctx, err)
-			} else if diff := cmp.Diff(got, test.want); diff != "" {
+			} else if diff := cmp.Diff(test.want, got, cmpopts.IgnoreUnexported(jsonutil.JSONMeta{})); diff != "" {
 				t.Errorf("evaluateFromSource(%v, %v, %v) => %v want %v diff %s", test.argVs, test.args, pctx, got, test.want, diff)
 			}
 		})

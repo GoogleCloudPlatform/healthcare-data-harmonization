@@ -20,7 +20,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 
 	"github.com/golang/protobuf/proto" /* copybara-comment: proto */
 
@@ -223,7 +222,7 @@ func (e invalidFetchProjectorError) Error() string {
 func (t *Transformer) Project(projector string, args ...jsonutil.JSONMetaNode) (res jsonutil.JSONToken, err error) {
 	pctx := types.NewContext(t.Registry)
 
-	defer errors.RecoverWithTrace(pctx.Trace, "Project", func(e error) {
+	defer errors.Recover("Project", func(e error) {
 		err = e
 	})
 
@@ -275,7 +274,7 @@ func (t *Transformer) LoadProjectors(projectors []*mappb.ProjectorDefinition) er
 // Transform converts the json tree using the specified config.
 func (t *Transformer) Transform(in *jsonutil.JSONContainer, tconfig TransformationConfigs) (res jsonutil.JSONToken, err error) {
 	pctx := types.NewContext(t.Registry)
-	defer errors.RecoverWithTrace(pctx.Trace, "Transform", func(e error) {
+	defer errors.Recover("Transform", func(e error) {
 		err = e
 	})
 
@@ -287,17 +286,13 @@ func (t *Transformer) Transform(in *jsonutil.JSONContainer, tconfig Transformati
 	}
 	args := []jsonutil.JSONMetaNode{inn}
 
-	if err := mapping.ProcessMappings(t.mappingConfig.RootMapping, "root", args, &pctx.Output, pctx, t.parallel); err != nil {
-		return nil, pctx.Trace.AsError(err)
+	if err := mapping.ProcessMappings(t.mappingConfig.RootMapping, "", args, &pctx.Output, pctx, t.parallel); err != nil {
+		return nil, err
 	}
 
 	result, err := postprocess.Process(pctx, t.mappingConfig, tconfig.SkipBundling, t.parallel)
 	if err != nil {
-		return nil, pctx.Trace.AsError(err)
-	}
-
-	if tconfig.LogTrace {
-		log.Printf(pctx.Trace.String())
+		return nil, err
 	}
 
 	return result, nil

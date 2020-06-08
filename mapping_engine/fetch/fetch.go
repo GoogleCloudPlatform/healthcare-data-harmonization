@@ -23,6 +23,7 @@ import (
 	"strings"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/auth" /* copybara-comment: auth */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/errors" /* copybara-comment: errors */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/mapping" /* copybara-comment: mapping */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types" /* copybara-comment: types */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
@@ -49,46 +50,59 @@ func LoadFetchProjectors(ctx context.Context, r *types.Registry, httpProjectors 
 
 func buildFetchProjector(ctx context.Context, httpQuery *httppb.HttpFetchQuery) (types.Projector, error) {
 	return func(arguments []jsonutil.JSONMetaNode, pctx *types.Context) (jsonutil.JSONToken, error) {
-		requestMethod, err := mapping.EvaluateValueSource(httpQuery.GetRequestMethod(), arguments, nil, pctx)
+		errLocation := errors.FnLocationf("Fetch Function Preamble %q", httpQuery.GetName())
+
+		requestMethodNode, err := mapping.EvaluateValueSource(httpQuery.GetRequestMethod(), arguments, nil, pctx)
 		if err != nil {
-			return nil, fmt.Errorf("error occurred in getting request method %s", err)
+			return nil, errors.Wrap(errLocation, fmt.Errorf("error occurred in getting request method %s", err))
 		}
-		requestURL, err := mapping.EvaluateValueSource(httpQuery.GetRequestUrl(), arguments, nil, pctx)
+		requestURLNode, err := mapping.EvaluateValueSource(httpQuery.GetRequestUrl(), arguments, nil, pctx)
 		if err != nil {
-			return nil, fmt.Errorf("error occurred in getting request url %s", err)
+			return nil, errors.Wrap(errLocation, fmt.Errorf("error occurred in getting request url %s", err))
+		}
+
+		requestURL, err := jsonutil.NodeToToken(requestURLNode)
+		if err != nil {
+			return nil, errors.Wrap(errLocation, err)
 		}
 
 		url, ok := requestURL.(jsonutil.JSONStr)
 		if !ok {
-			return nil, fmt.Errorf("request url should be a string")
+			return nil, errors.Wrap(errLocation, fmt.Errorf("request url should be a string"))
 		}
+
+		requestMethod, err := jsonutil.NodeToToken(requestMethodNode)
+		if err != nil {
+			return nil, errors.Wrap(errLocation, err)
+		}
+
 		method, ok := requestMethod.(jsonutil.JSONStr)
 		if !ok {
-			return nil, fmt.Errorf("request method should be a string")
+			return nil, errors.Wrap(errLocation, fmt.Errorf("request method should be a string"))
 		}
 
 		if strings.ToUpper(string(method)) != http.MethodGet {
-			return nil, fmt.Errorf("only GET method is supported")
+			return nil, errors.Wrap(errLocation, fmt.Errorf("only GET method is supported"))
 		}
+
+		errLocation = errors.FnLocationf("Fetch Function %q", httpQuery.GetName())
 
 		client := auth.NewClient(ctx)
 		req, err := http.NewRequest(http.MethodGet, string(url), nil)
 		if err != nil {
-			return nil, fmt.Errorf("error building new request %v", err)
+			return nil, errors.Wrap(errLocation, fmt.Errorf("error building new request %v", err))
 		}
 		q := req.URL.Query()
 		req.URL.RawQuery = q.Encode()
-		pctx.Trace.StartFetchCall(string(url), string(method))
 		resource, err := client.ExecuteRequest(ctx, req, "search resources", false)
-		pctx.Trace.EndFetchCall(resource, err)
 
 		if err != nil {
-			return nil, fmt.Errorf("error searching for resources %v", err)
+			return nil, errors.Wrap(errLocation, fmt.Errorf("error searching for resources %v", err))
 		}
 
 		jc := &jsonutil.JSONContainer{}
 		if err := jc.UnmarshalJSON(*resource); err != nil {
-			return nil, fmt.Errorf("error parsing retrieved resources %s", err)
+			return nil, errors.Wrap(errLocation, fmt.Errorf("error parsing retrieved resources %s", err))
 		}
 
 		return *jc, nil

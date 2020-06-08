@@ -20,7 +20,6 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/optrace" /* copybara-comment: optrace */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
 )
 
@@ -48,7 +47,6 @@ type Context struct {
 
 	Output          jsonutil.JSONToken
 	TopLevelObjects map[string][]jsonutil.JSONToken
-	Trace           *optrace.Trace
 	Registry        *Registry
 
 	// The depth of the projector stack
@@ -56,6 +54,8 @@ type Context struct {
 
 	// The number of times a projector is present in the current stack (useful for debugging).
 	stackProjectorCounts map[string]int
+
+	projectorStack []string
 }
 
 func (c *Context) String() string {
@@ -81,6 +81,8 @@ func (c *Context) PushProjectorToStack(name string) error {
 		return c.generateStackOverflowError()
 	}
 
+	c.projectorStack = append(c.projectorStack, name)
+
 	return nil
 }
 
@@ -88,6 +90,15 @@ func (c *Context) PushProjectorToStack(name string) error {
 func (c *Context) PopProjectorFromStack(name string) {
 	c.stackDepth--
 	c.stackProjectorCounts[name]--
+	c.projectorStack = c.projectorStack[:len(c.projectorStack)-1]
+}
+
+// Projector returns the latest projector in the stack.
+func (c *Context) Projector() string {
+	if len(c.projectorStack) == 0 {
+		return ""
+	}
+	return c.projectorStack[len(c.projectorStack)-1]
 }
 
 func (c *Context) generateStackOverflowError() error {
@@ -120,7 +131,6 @@ func NewContext(registry *Registry) *Context {
 	return &Context{
 		TopLevelObjects:      map[string][]jsonutil.JSONToken{},
 		Variables:            NewStackMap(),
-		Trace:                &optrace.Trace{},
 		Registry:             registry,
 		stackProjectorCounts: map[string]int{},
 	}

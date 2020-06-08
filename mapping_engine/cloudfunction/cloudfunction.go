@@ -19,7 +19,6 @@ package cloudfunction
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -28,6 +27,8 @@ import (
 
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types" /* copybara-comment: types */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
+
+	errs "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/errors" /* copybara-comment: errors */
 
 	httppb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: http_go_proto */
 )
@@ -59,13 +60,13 @@ func FromCloudFunction(cf *httppb.CloudFunction) (types.Projector, error) {
 		return nil, fmt.Errorf("invalid Google cloud function definition: %v", err)
 	}
 	return func(metaArgs []jsonutil.JSONMetaNode, pctx *types.Context) (jsonutil.JSONToken, error) {
-		pctx.Trace.StartProjectorCall(cf.Name, metaArgs, pctx.String())
+		errLocation := errs.FnLocationf("Cloud Function Preamble %q", cf.Name)
 
 		args := make([]jsonutil.JSONToken, len(metaArgs))
 		for i, metaArg := range metaArgs {
 			node, err := jsonutil.NodeToToken(metaArg)
 			if err != nil {
-				return nil, fmt.Errorf("error converting args: %v", err)
+				return nil, errs.Wrap(errLocation, fmt.Errorf("error converting args: %v", err))
 			}
 			args[i] = node
 		}
@@ -80,39 +81,36 @@ func FromCloudFunction(cf *httppb.CloudFunction) (types.Projector, error) {
 		}
 
 		if err != nil {
-			return nil, fmt.Errorf("error marshaling arguments into a JSON object: %v", err)
+			return nil, errs.Wrap(errLocation, fmt.Errorf("error marshaling arguments into a JSON object: %v", err))
 		}
 
-		pctx.Trace.StartCloudFunctionCall(cf.RequestUrl, metaArgs, pctx.String())
+		errLocation = errs.FnLocationf("Cloud Function %q", cf.Name)
 
 		resp, err := http.Post(cf.RequestUrl, "application/json", bytes.NewBuffer(body))
 		if err != nil {
-			return nil, fmt.Errorf("cloud function request failed due to: %v", err)
+			return nil, errs.Wrap(errLocation, fmt.Errorf("cloud function request failed due to: %v", err))
 		}
-
-		pctx.Trace.EndCloudFunctionCall(cf.RequestUrl, "<same as start>", resp.Status)
 
 		if resp.StatusCode != http.StatusOK {
 			message, _ := ioutil.ReadAll(resp.Body)
-			return nil, fmt.Errorf("error http response status code: %v, error message: %s", resp.Status, message)
+			return nil, errs.Wrap(errLocation, fmt.Errorf("error http response status code: %v, error message: %s", resp.Status, message))
 		}
 
 		defer resp.Body.Close()
 		bytes, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			return nil, fmt.Errorf("error reading http response body: %v", err)
+			return nil, errs.Wrap(errLocation, fmt.Errorf("error reading http response body: %v", err))
 		}
 
 		if len(bytes) == 0 {
-			return nil, errors.New("error empty http response body")
+			return nil, errs.Wrap(errLocation, fmt.Errorf("error empty http response body"))
 		}
 
 		val, err := jsonutil.UnmarshalJSON(json.RawMessage(bytes))
 		if err != nil {
-			return nil, fmt.Errorf("error unmarshal http response body into JSONToken: %v", err)
+			return nil, errs.Wrap(errLocation, fmt.Errorf("error unmarshal http response body into JSONToken: %v", err))
 		}
 
-		pctx.Trace.EndProjectorCall(cf.Name, "<same as start>", val)
 		return val, nil
 	}, nil
 }

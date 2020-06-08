@@ -20,6 +20,7 @@ import (
 	"math"
 	"reflect"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/errors" /* copybara-comment: errors */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/mapping" /* copybara-comment: mapping */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types" /* copybara-comment: types */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
@@ -31,24 +32,25 @@ import (
 func FromDef(definition *mappb.ProjectorDefinition, parallel bool) types.Projector {
 	return func(arguments []jsonutil.JSONMetaNode, pctx *types.Context) (jsonutil.JSONToken, error) {
 		pctx.Variables.Push()
-		pctx.Trace.StartProjectorCall(definition.Name, arguments, pctx.String())
+
+		errLocation := errors.NewProtoLocation(definition, nil)
 		if err := pctx.PushProjectorToStack(definition.Name); err != nil {
-			return nil, err
+			return nil, errors.Wrap(errLocation, err)
 		}
 
 		var merged jsonutil.JSONToken
 
 		// TODO: Sort in dependency order
 		if err := mapping.ProcessMappings(definition.Mapping, definition.Name, arguments, &merged, pctx, parallel); err != nil {
-			return nil, err
+			return nil, errors.Wrap(errLocation, err)
 		}
 
-		pctx.Trace.EndProjectorCall(definition.Name, pctx.String(), merged)
 		pctx.PopProjectorFromStack(definition.Name)
 
 		if _, err := pctx.Variables.Pop(); err != nil {
-			return nil, err
+			return nil, errors.Wrap(errLocation, err)
 		}
+
 		return merged, nil
 	}
 }
@@ -84,9 +86,10 @@ func FromFunction(fn interface{}, name string) (types.Projector, error) {
 
 	// Build wrapper closure.
 	return func(metaArgs []jsonutil.JSONMetaNode, pctx *types.Context) (jsonutil.JSONToken, error) {
-		pctx.Trace.StartProjectorCall(name, metaArgs, pctx.String())
+		errLocation := errors.FnLocationf("Native Function Preamble %q", name)
+
 		if err := pctx.PushProjectorToStack(name); err != nil {
-			return nil, err
+			return nil, errors.Wrap(errLocation, err)
 		}
 
 		// Lose the meta.
@@ -94,23 +97,23 @@ func FromFunction(fn interface{}, name string) (types.Projector, error) {
 		for i, metaArg := range metaArgs {
 			node, err := jsonutil.NodeToToken(metaArg)
 			if err != nil {
-				return nil, fmt.Errorf("error converting args: %v", err)
+				return nil, errors.Wrap(errLocation, fmt.Errorf("error converting args: %v", err))
 			}
 			args[i] = node
 		}
 
 		if ft.IsVariadic() && len(args) < ft.NumIn()-1 {
-			return nil, fmt.Errorf("expected at least %d parameters (could be more, function is variadic), got %d", ft.NumIn()-1, len(args))
+			return nil, errors.Wrap(errLocation, fmt.Errorf("expected at least %d parameters (could be more, function is variadic), got %d", ft.NumIn()-1, len(args)))
 		}
 		if !ft.IsVariadic() && len(args) != ft.NumIn() {
-			return nil, fmt.Errorf("expected %d parameters, got %d", ft.NumIn(), len(args))
+			return nil, errors.Wrap(errLocation, fmt.Errorf("expected %d parameters, got %d", ft.NumIn(), len(args)))
 		}
 		argvs := make([]reflect.Value, 0, len(args))
 		for i, arg := range args {
 			if ft.IsVariadic() && i == ft.NumIn()-1 {
 				a, err := extractVariadic(ft.In(i).Elem(), args[i:])
 				if err != nil {
-					return nil, fmt.Errorf("error extracting variadic argument %d: %v", i, err)
+					return nil, errors.Wrap(errLocation, fmt.Errorf("error extracting variadic argument %d: %v", i, err))
 				}
 
 				argvs = append(argvs, a...)
@@ -119,7 +122,7 @@ func FromFunction(fn interface{}, name string) (types.Projector, error) {
 			if ft.In(i).Kind() == reflect.Slice {
 				a, err := extractSlice(ft.In(i).Elem(), arg)
 				if err != nil {
-					return nil, fmt.Errorf("error extracting slice argument %d: %v", i, err)
+					return nil, errors.Wrap(errLocation, fmt.Errorf("error extracting slice argument %d: %v", i, err))
 				}
 				argvs = append(argvs, a)
 				continue
@@ -127,7 +130,7 @@ func FromFunction(fn interface{}, name string) (types.Projector, error) {
 
 			a, err := extractSimple(ft.In(i), arg)
 			if err != nil {
-				return nil, fmt.Errorf("error extracting argument %d: %v", i, err)
+				return nil, errors.Wrap(errLocation, fmt.Errorf("error extracting argument %d: %v", i, err))
 			}
 			argvs = append(argvs, a)
 		}
@@ -144,10 +147,13 @@ func FromFunction(fn interface{}, name string) (types.Projector, error) {
 			err = ri.(error)
 		}
 
-		pctx.Trace.EndProjectorCall(name, "<same as start>", r)
 		pctx.PopProjectorFromStack(name)
 
-		return r, err
+		if err != nil {
+			return nil, errors.Wrap(errors.FnLocationf("Native Function %q", name), err)
+		}
+
+		return r, nil
 	}, nil
 }
 

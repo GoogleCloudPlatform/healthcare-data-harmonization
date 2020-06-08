@@ -43,6 +43,14 @@ func (j JSONMetaTestNode) ContentString(level int) string {
 	return fmt.Sprintf("level %d", level)
 }
 
+func (j JSONMetaTestNode) ProvenanceString() string {
+	return "test node"
+}
+
+func (j JSONMetaTestNode) Provenance() Provenance {
+	return Provenance{}
+}
+
 type JSONTestToken struct{}
 
 func (j JSONTestToken) String() string { return `"test"` }
@@ -68,6 +76,14 @@ var (
 	}))
 )
 
+func simpleCP(n JSONMetaNode) Provenance {
+	return Provenance{
+		Sources: []JSONMetaNode{
+			n,
+		},
+	}
+}
+
 func TestPath(t *testing.T) {
 	tests := []struct {
 		name string
@@ -84,9 +100,9 @@ func TestPath(t *testing.T) {
 			node: JSONMetaPrimitiveNode{
 				JSONMeta: JSONMeta{
 					key: "foo",
-					parent: JSONMetaContainerNode{
+					provenance: simpleCP(JSONMetaContainerNode{
 						JSONMeta: JSONMeta{},
-					},
+					}),
 				},
 			},
 			want: "foo",
@@ -96,14 +112,14 @@ func TestPath(t *testing.T) {
 			node: JSONMetaPrimitiveNode{
 				JSONMeta: JSONMeta{
 					key: "bar",
-					parent: JSONMetaContainerNode{
+					provenance: simpleCP(JSONMetaContainerNode{
 						JSONMeta: JSONMeta{
 							key: "foo",
-							parent: JSONMetaContainerNode{
+							provenance: simpleCP(JSONMetaContainerNode{
 								JSONMeta: JSONMeta{},
-							},
+							}),
 						},
-					},
+					}),
 				},
 			},
 			want: "foo.bar",
@@ -113,14 +129,14 @@ func TestPath(t *testing.T) {
 			node: JSONMetaPrimitiveNode{
 				JSONMeta: JSONMeta{
 					key: "[1]",
-					parent: JSONMetaArrayNode{
+					provenance: simpleCP(JSONMetaArrayNode{
 						JSONMeta: JSONMeta{
 							key: "foo",
-							parent: JSONMetaContainerNode{
+							provenance: simpleCP(JSONMetaContainerNode{
 								JSONMeta: JSONMeta{},
-							},
+							}),
 						},
-					},
+					}),
 				},
 			},
 			want: "foo[1]",
@@ -144,11 +160,11 @@ func TestNodeToToken(t *testing.T) {
 		{
 			name: "container",
 			node: JSONMetaContainerNode{
-				JSONMeta: JSONMeta{key: "k", parent: nil},
+				JSONMeta: JSONMeta{key: "k", provenance: Provenance{}},
 				Children: map[string]JSONMetaNode{
-					"key1": JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "key1", parent: nil}, Value: st.(JSONPrimitive)},
-					"key2": JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "key2", parent: nil}, Value: nm.(JSONPrimitive)},
-					"key3": JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "key3", parent: nil}, Value: bl.(JSONPrimitive)},
+					"key1": JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "key1", provenance: Provenance{}}, Value: st.(JSONPrimitive)},
+					"key2": JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "key2", provenance: Provenance{}}, Value: nm.(JSONPrimitive)},
+					"key3": JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "key3", provenance: Provenance{}}, Value: bl.(JSONPrimitive)},
 				},
 			},
 			want: JSONContainer(map[string]*JSONToken{
@@ -160,28 +176,28 @@ func TestNodeToToken(t *testing.T) {
 		{
 			name: "array",
 			node: JSONMetaArrayNode{
-				JSONMeta: JSONMeta{key: "k", parent: nil},
+				JSONMeta: JSONMeta{key: "k", provenance: Provenance{}},
 				Items: []JSONMetaNode{
-					JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[0]", parent: nil}, Value: st.(JSONPrimitive)},
-					JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[1]", parent: nil}, Value: nm.(JSONPrimitive)},
-					JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[2]", parent: nil}, Value: bl.(JSONPrimitive)},
+					JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[0]", provenance: Provenance{}}, Value: st.(JSONPrimitive)},
+					JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[1]", provenance: Provenance{}}, Value: nm.(JSONPrimitive)},
+					JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[2]", provenance: Provenance{}}, Value: bl.(JSONPrimitive)},
 				},
 			},
 			want: JSONArr([]JSONToken{st, nm, bl}),
 		},
 		{
 			name: "str",
-			node: JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[0]", parent: nil}, Value: st.(JSONPrimitive)},
+			node: JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[0]", provenance: Provenance{}}, Value: st.(JSONPrimitive)},
 			want: st,
 		},
 		{
 			name: "num",
-			node: JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[1]", parent: nil}, Value: nm.(JSONPrimitive)},
+			node: JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[1]", provenance: Provenance{}}, Value: nm.(JSONPrimitive)},
 			want: nm,
 		},
 		{
 			name: "bool",
-			node: JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[2]", parent: nil}, Value: bl.(JSONPrimitive)},
+			node: JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[2]", provenance: Provenance{}}, Value: bl.(JSONPrimitive)},
 			want: bl,
 		},
 	}
@@ -229,17 +245,17 @@ func TestNodeToToken_Errors(t *testing.T) {
 }
 
 func TestTokenToNode(t *testing.T) {
-	arr := JSONMetaArrayNode{JSONMeta: JSONMeta{key: "", parent: nil}}
+	arr := JSONMetaArrayNode{JSONMeta: JSONMeta{key: "", provenance: Provenance{}}}
 	arr.Items = []JSONMetaNode{
-		JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[0]", parent: &arr}, Value: st.(JSONPrimitive)},
-		JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[1]", parent: &arr}, Value: nm.(JSONPrimitive)},
-		JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[2]", parent: &arr}, Value: bl.(JSONPrimitive)},
+		JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[0]", provenance: simpleCP(&arr)}, Value: st.(JSONPrimitive)},
+		JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[1]", provenance: simpleCP(&arr)}, Value: nm.(JSONPrimitive)},
+		JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[2]", provenance: simpleCP(&arr)}, Value: bl.(JSONPrimitive)},
 	}
-	obj := JSONMetaContainerNode{JSONMeta: JSONMeta{key: "", parent: nil}}
+	obj := JSONMetaContainerNode{JSONMeta: JSONMeta{key: "", provenance: Provenance{}}}
 	obj.Children = map[string]JSONMetaNode{
-		"key1": JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "key1", parent: &obj}, Value: st.(JSONPrimitive)},
-		"key2": JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "key2", parent: &obj}, Value: nm.(JSONPrimitive)},
-		"key3": JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "key3", parent: &obj}, Value: bl.(JSONPrimitive)},
+		"key1": JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "key1", provenance: simpleCP(&obj)}, Value: st.(JSONPrimitive)},
+		"key2": JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "key2", provenance: simpleCP(&obj)}, Value: nm.(JSONPrimitive)},
+		"key3": JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "key3", provenance: simpleCP(&obj)}, Value: bl.(JSONPrimitive)},
 	}
 
 	tests := []struct {
@@ -263,17 +279,17 @@ func TestTokenToNode(t *testing.T) {
 		},
 		{
 			name:  "str",
-			want:  JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "", parent: nil}, Value: st.(JSONPrimitive)},
+			want:  JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "", provenance: Provenance{}}, Value: st.(JSONPrimitive)},
 			token: st,
 		},
 		{
 			name:  "num",
-			want:  JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "", parent: nil}, Value: nm.(JSONPrimitive)},
+			want:  JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "", provenance: Provenance{}}, Value: nm.(JSONPrimitive)},
 			token: nm,
 		},
 		{
 			name:  "bool",
-			want:  JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "", parent: nil}, Value: bl.(JSONPrimitive)},
+			want:  JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "", provenance: Provenance{}}, Value: bl.(JSONPrimitive)},
 			token: bl,
 		},
 	}
@@ -670,17 +686,17 @@ func TestGetNodeField_Errors(t *testing.T) {
 
 func complexNode() JSONMetaNode {
 	node := JSONMetaContainerNode{JSONMeta: JSONMeta{}}
-	arr := JSONMetaArrayNode{JSONMeta: JSONMeta{key: "key1", parent: &node}}
+	arr := JSONMetaArrayNode{JSONMeta: JSONMeta{key: "key1", provenance: simpleCP(&node)}}
 	arr.Items = []JSONMetaNode{
-		JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[0]", parent: &arr}, Value: st.(JSONPrimitive)},
-		JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[1]", parent: &arr}, Value: nm.(JSONPrimitive)},
-		JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[2]", parent: &arr}, Value: bl.(JSONPrimitive)},
+		JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[0]", provenance: simpleCP(&arr)}, Value: st.(JSONPrimitive)},
+		JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[1]", provenance: simpleCP(&arr)}, Value: nm.(JSONPrimitive)},
+		JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "[2]", provenance: simpleCP(&arr)}, Value: bl.(JSONPrimitive)},
 	}
-	obj := JSONMetaContainerNode{JSONMeta: JSONMeta{key: "key2", parent: &node}}
+	obj := JSONMetaContainerNode{JSONMeta: JSONMeta{key: "key2", provenance: simpleCP(&node)}}
 	obj.Children = map[string]JSONMetaNode{
-		"key1": JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "key1", parent: &obj}, Value: st.(JSONPrimitive)},
-		"key2": JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "key2", parent: &obj}, Value: nm.(JSONPrimitive)},
-		"key3": JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "key3", parent: &obj}, Value: bl.(JSONPrimitive)},
+		"key1": JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "key1", provenance: simpleCP(&obj)}, Value: st.(JSONPrimitive)},
+		"key2": JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "key2", provenance: simpleCP(&obj)}, Value: nm.(JSONPrimitive)},
+		"key3": JSONMetaPrimitiveNode{JSONMeta: JSONMeta{key: "key3", provenance: simpleCP(&obj)}, Value: bl.(JSONPrimitive)},
 	}
 	node.Children = map[string]JSONMetaNode{"key1": arr, "key2": obj}
 	return node

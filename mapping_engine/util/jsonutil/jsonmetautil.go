@@ -27,12 +27,52 @@ type JSONMetaNode interface {
 	Key() string
 	Path() string
 	ContentString(level int) string
+	Provenance() Provenance
+	ProvenanceString() string
+}
+
+// Provenance contains information on the source provenance of this node if it was created
+// by the computation of some other nodes going through a function.
+type Provenance struct {
+	Sources  []JSONMetaNode
+	Function string
+}
+
+// ShallowString returns the paths of the arguments and the function used to get this node. It does
+// not recursively check for provenance of the parent nodes.
+func (c Provenance) ShallowString() string {
+	parents := []string{}
+	for _, s := range c.Sources {
+		str := "..."
+		if s.Path() != s.Key() && s.Key() != "" {
+			str = s.Path()
+		} else if s.Key() != "" {
+			str = "..." + s.Key()
+		} else if s.Provenance().Function != "" {
+			str = fmt.Sprintf("%s(...)", s.Provenance().Function)
+		}
+
+		parents = append(parents, str)
+	}
+
+	if c.Function != "" {
+		return fmt.Sprintf("%s( %s )", c.Function, strings.Join(parents, ", "))
+	}
+	return strings.Join(parents, ", ")
 }
 
 // JSONMeta is a container for the common JSONMeta data.
 type JSONMeta struct {
-	parent JSONMetaNode
-	key    string
+	key        string
+	provenance Provenance
+}
+
+// NewJSONMeta creates a new JSONMeta with the given key and Provenance information.
+func NewJSONMeta(key string, cp Provenance) JSONMeta {
+	return JSONMeta{
+		key:        key,
+		provenance: cp,
+	}
 }
 
 // Key returns this Meta's key (boxed array index like [1] for array elements,
@@ -41,14 +81,22 @@ func (jm JSONMeta) Key() string {
 	return jm.key
 }
 
-// Parent returns this Meta's parent node.
+// Parent returns this Meta's parent node, if this node was not computationally derived.
 func (jm JSONMeta) Parent() JSONMetaNode {
-	return jm.parent
+	if len(jm.provenance.Sources) != 1 || jm.provenance.Function != "" {
+		return nil
+	}
+	return jm.provenance.Sources[0]
+}
+
+// Provenance returns the provenance information of this node.
+func (jm JSONMeta) Provenance() Provenance {
+	return jm.provenance
 }
 
 // ContentString prints the meta content as a string.
 func (jm JSONMeta) ContentString(_ int) string {
-	return fmt.Sprintf("%s => %v", jm.Path(), jm.parent)
+	return fmt.Sprintf("%s => %v", jm.Path(), jm.Parent())
 }
 
 // Path returns the full JSON path in dot/bracket notation to this Meta by following its parents.
@@ -65,6 +113,21 @@ func (jm JSONMeta) Path() string {
 	}
 
 	return strings.TrimLeft(strings.Join(sb, ""), ".")
+}
+
+// ProvenanceString produces a string representing the approximate provenance of this JSONMeta. This
+// uses Provenance.ShallowString and thus may contain incomplete information. It shall not
+// include any content of the data.
+func (jm JSONMeta) ProvenanceString() string {
+	if jm.Key() == "" {
+		return jm.provenance.ShallowString()
+	}
+	cp := jm.Provenance().ShallowString()
+	if cp == "" {
+		return jm.Key()
+	}
+
+	return fmt.Sprintf("%s.%s", cp, jm.Key())
 }
 
 // JSONMetaContainerNode is a JSONMetaNode with an additional Children value.
@@ -145,16 +208,22 @@ func (j JSONMetaPrimitiveNode) ContentString(_ int) string {
 
 // TokenToNode converts a JSONToken to a JSONMetaNode, filling the meta data.
 func TokenToNode(token JSONToken) (JSONMetaNode, error) {
-	return tokenToNode(nil, "", token)
+	return tokenToNode(Provenance{}, "", token)
 }
 
-func tokenToNode(parent JSONMetaNode, key string, token JSONToken) (JSONMetaNode, error) {
-	m := JSONMeta{key: key, parent: parent}
+// TokenToNodeWithProvenance converts a JSONToken to a JSONMetaNode, filling the meta data with the
+// given provenance.
+func TokenToNodeWithProvenance(token JSONToken, key string, cp Provenance) (JSONMetaNode, error) {
+	return tokenToNode(cp, key, token)
+}
+
+func tokenToNode(cp Provenance, key string, token JSONToken) (JSONMetaNode, error) {
+	m := JSONMeta{key: key, provenance: cp}
 	switch t := token.(type) {
 	case JSONContainer:
 		cn := JSONMetaContainerNode{JSONMeta: m, Children: make(map[string]JSONMetaNode)}
 		for k, v := range t {
-			vn, err := tokenToNode(cn, k, *v)
+			vn, err := tokenToNode(Provenance{Sources: []JSONMetaNode{cn}}, k, *v)
 			if err != nil {
 				return nil, err
 			}
@@ -165,7 +234,7 @@ func tokenToNode(parent JSONMetaNode, key string, token JSONToken) (JSONMetaNode
 		an := JSONMetaArrayNode{JSONMeta: m, Items: make([]JSONMetaNode, 0, len(t))}
 		for i, v := range t {
 			// "[i]" is the key.
-			vn, err := tokenToNode(an, "["+strconv.Itoa(i)+"]", v)
+			vn, err := tokenToNode(Provenance{Sources: []JSONMetaNode{an}}, "["+strconv.Itoa(i)+"]", v)
 			if err != nil {
 				return nil, err
 			}
