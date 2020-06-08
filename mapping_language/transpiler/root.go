@@ -36,7 +36,7 @@ func (t *transpiler) VisitRoot(ctx *parser.RootContext) interface{} {
 		program = ctx.PostProcess().Accept(t).(*mpb.MappingConfig)
 	}
 
-	t.environment = newEnv("", rootEnvInputName)
+	t.environment = newEnv("", []string{rootEnvInputName}, []string{})
 
 	// TODO: Remove this env and the callsite after sunset.
 	t.environment.args[legacyRootEnvInputName] = t.environment.args[rootEnvInputName]

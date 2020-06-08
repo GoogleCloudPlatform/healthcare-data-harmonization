@@ -34,11 +34,14 @@ type env struct {
 	args             map[string]int
 	inputsFromParent map[string]int
 
+	// requiredArgs stores the names of arguments that are required for the projector. It is a subset of the projector arguments.
+	requiredArgs []string
+
 	mapping []*mpb.FieldMapping
 }
 
 // newEnv creates a new environment with the given name and registers/binds the given arguments.
-func newEnv(name string, args ...string) *env {
+func newEnv(name string, args []string, requiredArgs []string) *env {
 	am := make(map[string]int)
 	for i, a := range args {
 		am[a] = i
@@ -48,6 +51,7 @@ func newEnv(name string, args ...string) *env {
 		name:             name,
 		args:             am,
 		inputsFromParent: make(map[string]int),
+		requiredArgs:     requiredArgs,
 	}
 }
 
@@ -135,10 +139,25 @@ func (n *env) readInput(input, field string) *mpb.ValueSource {
 
 // generateProjector creates a ProjectorDefinition from the current environment.
 func (n *env) generateProjector() *mpb.ProjectorDefinition {
-	return &mpb.ProjectorDefinition{
+	result := &mpb.ProjectorDefinition{
 		Name:    n.name,
 		Mapping: n.mapping,
 	}
+
+	requiredArgStack := &valueStack{}
+	for _, k := range n.requiredArgs {
+		requiredArgStack.push(n.readInput(k, ""))
+	}
+
+	for i := range result.Mapping {
+		if result.Mapping[i].Condition == nil {
+			result.Mapping[i].Condition = requiredArgStack.and()
+		} else {
+			result.Mapping[i].Condition = requiredArgStack.and(result.Mapping[i].Condition)
+		}
+	}
+
+	return result
 }
 
 // addMapping adds the given mapping to the environment and subsequently the projector definition
@@ -147,18 +166,9 @@ func (n *env) addMapping(mapping *mpb.FieldMapping) {
 	n.mapping = append(n.mapping, mapping)
 }
 
-func (n *env) newChild(name string, args []string) *env {
-	child := &env{
-		name:             name,
-		parent:           n,
-		args:             make(map[string]int),
-		inputsFromParent: make(map[string]int),
-	}
-
-	for i, a := range args {
-		child.args[a] = i
-	}
-
+func (n *env) newChild(name string, args []string, requiredArgs []string) *env {
+	child := newEnv(name, args, requiredArgs)
+	child.parent = n
 	return child
 }
 

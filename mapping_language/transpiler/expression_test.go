@@ -111,7 +111,7 @@ func TestVisitExprProjection(t *testing.T) {
 	}
 
 	tp := &transpiler{}
-	tp.pushEnv(newEnv("", "arg1"))
+	tp.pushEnv(newEnv("", []string{"arg1"}, []string{}))
 	testRule(t, tests, tp, func(p *parser.WhistleParser) (antlr.ParseTree, string) {
 		return p.Expression(), "Expression"
 	})

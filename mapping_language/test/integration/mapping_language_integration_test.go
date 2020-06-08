@@ -108,6 +108,129 @@ func TestTranspile(t *testing.T) {
 			},
 		},
 		{
+			name: "one arg function definition with required - Nil",
+			whistle: `def MyProjector(required thisIsAnArg) {
+									a: thisIsAnArg.foo;
+							  }`,
+			wantValue: valueTest{
+				rootMappings: `out myOut: MyProjector($root.nothing)
+											 `,
+				wantJSON: ``,
+				inputJSON: `{
+											   "something": {
+											     "foo": "something"
+											   }
+											 }`,
+			},
+		},
+		{
+			name: "one arg function definition with required - notNil",
+			whistle: `def MyProjector(required thisIsAnArg) {
+									a: thisIsAnArg.foo;
+							  }`,
+			wantValue: valueTest{
+				rootMappings: `out myOut: MyProjector($root.something)
+											 `,
+				wantJSON: `{
+									   "myOut": [
+									     {
+											 		"a": "something"
+											 }
+									   ]
+									 }`,
+				inputJSON: `{
+											   "something": {
+											     "foo": "something"
+											   }
+											 }`,
+			},
+		},
+		{
+			name: "required keyword multiple argument function nil with nested",
+			whistle: `def MyProjector(rt) {
+									nested_1: both_required(rt.Abcdefghijklmnop, "Constant")
+        					nested_2: both_required(rt.Abcdefghijklmnop, rt.Abcdefghijklmnop)
+        					nested_3: both_required(rt.Red.Blue, rt.Red)
+									nested_4: none_required(rt.kalfdjlakdf, "Constant")
+									nested_5: first_required(rt.Red, rt.dlajfldklkjlakdf)
+									nested_6: second_required(rt.kalfdjlakdf, "Constant")
+									nested_7: first_required(rt.kadjfk, "Constant")
+									nested_8: second_required(rt.Red, rt.akdfjafkl)
+									nested_9: required_condition_compose(rt.akldfjkaldf, rt.Red.Blue)
+									if 1 > 0 {
+										nested_10: first_required("true & required satisfied", rt.ajdfakdfd)
+									}
+									if 1 < 0 {
+										nested_11: first_required("false & required satisfied", rt.lkdjaklfj)
+									}
+								}
+
+								def none_required(one, two) {
+									one: one
+									two: two
+								}
+								def both_required(required one,required two) {
+									one: one
+									two: two
+								}
+								def first_required(required one, two) {
+									one: one
+									two: two
+								}
+								def second_required(one, required two) {
+									one: one
+									two: two
+								}
+								def required_condition_compose(one, required two) {
+									if two > 0 {
+										one: one
+										two: two
+										conclusion: "bigger than 0"
+									} else {
+										two: "smaller than 0"
+									}
+								}`,
+			wantValue: valueTest{
+				rootMappings: `out myOut: MyProjector($root)
+											 `,
+				wantJSON: `{"myOut": [{
+											"nested_3":{
+													"one":1,
+													"two": {"Blue":1}
+													},
+											"nested_4": { "two":"Constant"},
+											"nested_5": {"one":{"Blue":1}},
+											"nested_6": { "two":"Constant"},
+											"nested_9": { "two":1, "conclusion":"bigger than 0"},
+											"nested_10": {"one":"true & required satisfied"}
+									}
+								]
+							}`,
+				inputJSON: `{
+										"Red": {
+											"Blue": 1
+										}
+									}`,
+			},
+		},
+		{
+			name: "one arg function definition with required - notNIL",
+			whistle: `def MyProjector(required thisIsAnArg) {
+									a: thisIsAnArg.foo;
+							  }`,
+			wantValue: valueTest{
+				rootMappings: `out myOut: MyProjector(MakeFoo("hello world"))
+											 def MakeFoo(value) { foo: value; }`,
+				wantJSON: `{
+									   "myOut": [
+									     {
+									       "a": "hello world"
+									     }
+									   ]
+									 }`,
+			},
+		},
+		{
 			name: "multiple arg function definition",
 			whistle: `def MyProjector(thisIsAnArg, thisIsAlsoAnArg) {
 									a: thisIsAnArg // this is a comment

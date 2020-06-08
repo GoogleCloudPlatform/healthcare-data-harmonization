@@ -125,6 +125,10 @@ DEF
     : 'def'
 ;
 
+REQUIRED
+    : 'required'
+;
+
 INDEX
     : '[' INTEGER ']'
 ;
@@ -218,11 +222,11 @@ root
   ;
 
 projectorDef
-    : DEF TOKEN '(' ((argAlias (',' argAlias)*) | argAlias?) ')' NEWLINE? block NEWLINE?
+    : DEF TOKEN '(' (argAlias (',' argAlias)*)? ')' NEWLINE? block NEWLINE?
 ;
 
 argAlias
-    : TOKEN
+    : REQUIRED? TOKEN
 ;
 
 conditionBlock

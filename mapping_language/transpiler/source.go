@@ -74,7 +74,7 @@ func (t *transpiler) VisitSourceInput(ctx *parser.SourceInputContext) interface{
 	}
 
 	if ctx.InlineFilter() != nil {
-		lambdaEnv := t.environment.newChild(fmt.Sprintf("$filter_%d_%d", ctx.GetStart().GetLine(), ctx.GetStart().GetColumn()), []string{foreachElementInputName})
+		lambdaEnv := t.environment.newChild(fmt.Sprintf("$filter_%d_%d", ctx.GetStart().GetLine(), ctx.GetStart().GetColumn()), []string{foreachElementInputName}, []string{})
 		t.pushEnv(lambdaEnv)
 		t.environment.addMapping(&mpb.FieldMapping{
 			Condition: ctx.InlineFilter().Accept(t).(*mpb.ValueSource),
