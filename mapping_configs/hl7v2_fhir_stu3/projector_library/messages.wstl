@@ -1,4 +1,4 @@
-// Description: Define ADT_A01/ADT_A03 HL7v2 Message Type (version 2.9) to FHIR STU3 transformation
+// Description: Define ADT_A01/ADT_A03/ADT_A04/ADT_A08 HL7v2 Message Type (version 2.9) to FHIR STU3 transformation
 //
 // Argument(s):
 //   ADT_A01 Segments covered in this mapping configuration are: MSH, PID, PD1, DG1, PV1, AL1, OBX
@@ -94,6 +94,60 @@ def ADT_A01(ADT_A01) {
 //
 def ADT_A03(ADT_A03) {
     $this : Transform_ADT(ADT_A03);
+}
+
+// Description: Define ADT_A04 HL7v2 Message Type (version 2.9) to FHIR STU3 transformation
+//
+// Argument(s):
+//   ADT_A04 Segments covered in this mapping configuration are: MSH, PID, PD1, DG1, PV1, AL1, OBX
+//
+// Output(s):
+//   FHIR R4 Resources : http://www.hl7.org/fhir/stu3/resourcelist.html
+// List of Generated FHIR Resources:
+//   Account: https://www.hl7.org/fhir/stu3/account.html
+//   AllergyIntolerance: https://www.hl7.org/fhir/stu3/allergyintolerance.html
+//   Bundle: https://www.hl7.org/fhir/stu3/bundle.html
+//   Condition: https://www.hl7.org/fhir/stu3/condition.html
+//   Device : https://www.hl7.org/fhir/stu3/device.html
+//   Encounter: https://www.hl7.org/fhir/stu3/encounter.html
+//   EpisodeOfCare: https://www.hl7.org/fhir/stu3/episodeofcare.html
+//   Location: https://www.hl7.org/fhir/stu3/location.html
+//   MessageHeader: https://www.hl7.org/fhir/stu3/messageheader.html
+//   Observation: https://www.hl7.org/fhir/stu3/observation.html
+//   Organization: https://www.hl7.org/fhir/stu3/organization.html
+//   Patient: https://www.hl7.org/fhir/stu3/patient.html
+//   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
+//   Provenance: https://www.hl7.org/fhir/stu3/provenance.html
+//
+def ADT_A04(ADT_A04) {
+    $this : Transform_ADT(ADT_A04);
+}
+
+// Description: Define ADT_A08 HL7v2 Message Type (version 2.9) to FHIR STU3 transformation
+//
+// Argument(s):
+//   ADT_A08 Segments covered in this mapping configuration are: MSH, PID, PD1, DG1, PV1, AL1, OBX
+//
+// Output(s):
+//   FHIR R4 Resources : http://www.hl7.org/fhir/stu3/resourcelist.html
+// List of Generated FHIR Resources:
+//   Account: https://www.hl7.org/fhir/stu3/account.html
+//   AllergyIntolerance: https://www.hl7.org/fhir/stu3/allergyintolerance.html
+//   Bundle: https://www.hl7.org/fhir/stu3/bundle.html
+//   Condition: https://www.hl7.org/fhir/stu3/condition.html
+//   Device : https://www.hl7.org/fhir/stu3/device.html
+//   Encounter: https://www.hl7.org/fhir/stu3/encounter.html
+//   EpisodeOfCare: https://www.hl7.org/fhir/stu3/episodeofcare.html
+//   Location: https://www.hl7.org/fhir/stu3/location.html
+//   MessageHeader: https://www.hl7.org/fhir/stu3/messageheader.html
+//   Observation: https://www.hl7.org/fhir/stu3/observation.html
+//   Organization: https://www.hl7.org/fhir/stu3/organization.html
+//   Patient: https://www.hl7.org/fhir/stu3/patient.html
+//   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
+//   Provenance: https://www.hl7.org/fhir/stu3/provenance.html
+//
+def ADT_A08(ADT_A08) {
+    $this : Transform_ADT(ADT_A08);
 }
 
 // Description: Define ORU_R01 HL7v2 Message Type (version 2.9) to FHIR STU3 transformation
