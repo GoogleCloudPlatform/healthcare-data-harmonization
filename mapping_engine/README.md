@@ -19,7 +19,8 @@ proto directory.
 
 ### TL;DR
 
-Run `build.sh`
+Make sure [Golang](https://golang.org/dl/) (>= 1.13) is installed, then run
+`build.sh`
 
 ### Details
 
