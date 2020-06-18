@@ -59,6 +59,22 @@ patient.name: input_json.name;
 > NOTE: By default, all fields are present in the output. For fields that should
 > not be present in the output, use variables.
 
+A field can contain spaces or dots by escaping them with a `\`:
+
+```
+patient\.data.first\ name: input_json.first\ name
+```
+
+outputs:
+
+```json
+{
+  "patient.data": {
+    "first name": "..."
+  }
+}
+```
+
 ### Constant
 
 You can map various different types of constants to the output fields.

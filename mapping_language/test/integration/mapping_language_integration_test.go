@@ -1198,6 +1198,24 @@ func TestTranspile(t *testing.T) {
 									 }`,
 			},
 		},
+		{
+			name: "field names with spaces",
+			whistle: `Hello\ World: "hello"
+			          var some\ var: $root.input\ with[0].some\ spaces
+			          Test\.field: Test\ Projector(some\ var)
+								def Test\ Projector(test\ arg){
+									more\ spaces\ \ \ \ everywhere: test\ arg
+								}`,
+			wantValue: valueTest{
+				inputJSON: `{"input with": [{"some spaces" : "hi"}]}`,
+				wantJSON: `{
+									   "Hello World": "hello",
+										 "Test.field": {
+										 		"more spaces    everywhere": "hi"
+										 }
+									 }`,
+			},
+		},
 		// TODO: Add more tests.
 	}
 	for _, test := range tests {

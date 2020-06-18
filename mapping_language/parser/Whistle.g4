@@ -138,7 +138,12 @@ DELIM
 ;
 
 TOKEN
-    : [$A-Za-z_][$A-Za-z_0-9/-]*
+    : [$A-Za-z_] TOKENCHAR*
+;
+
+fragment TOKENCHAR
+    : [$A-Za-z_0-9/-]
+    | '\\' [ .]
 ;
 
 OWMOD

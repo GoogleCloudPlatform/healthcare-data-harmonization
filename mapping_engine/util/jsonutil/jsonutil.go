@@ -86,7 +86,7 @@ func SegmentPath(path string) ([]string, error) {
 		delim := c == '.' && !escaped
 
 		// Validation
-		if !unicode.IsLetter(c) && !unicode.IsDigit(c) && !strings.Contains(`-*[]._\`, string(c)) {
+		if !unicode.IsLetter(c) && !unicode.IsDigit(c) && !strings.Contains(`-*[]._\' `, string(c)) {
 			return nil, fmt.Errorf("invalid character %q", string(c))
 		}
 		if i > 0 && c == '.' && path[i-1] == '.' && !prevEscaped {
