@@ -176,6 +176,26 @@ def PatientName(input) {
 
 ```
 
+Arguments can have optional `required` keywords. Mappings in a function will
+only be executed if **all** arguments with `required` keyword are not nil. For
+example:
+
+```
+def PatientName(required requiredArg1, required requiredArg2, arg3) {
+    ...mappings...
+}
+```
+
+is equivalent to
+
+```
+def PatientName(requiredArg1, requiredArg2, arg3) {
+    if $IsNotNil(requiredArg1) and $IsNotNil(requiredArg2) {
+        ...mappings...
+    }
+}
+```
+
 #### Calling a function
 
 Calling a function is similar to how you call functions in other programming
