@@ -1105,7 +1105,7 @@ func TestStrFmt(t *testing.T) {
 			name: "array",
 			in:   jsonutil.JSONArr{jsonutil.JSONStr("a"), jsonutil.JSONStr("b")},
 			fmt:  jsonutil.JSONStr("%v"),
-			want: jsonutil.JSONStr(`["a", "b"]`),
+			want: jsonutil.JSONStr(`["a","b"]`),
 		},
 	}
 	for _, test := range tests {
@@ -1210,7 +1210,7 @@ func TestDebugString(t *testing.T) {
 		{
 			name: "array",
 			in:   jsonutil.JSONArr{jsonutil.JSONStr("a"), jsonutil.JSONStr("b")},
-			want: jsonutil.JSONStr(`["a", "b"]`),
+			want: jsonutil.JSONStr(`["a","b"]`),
 		},
 	}
 	for _, test := range tests {

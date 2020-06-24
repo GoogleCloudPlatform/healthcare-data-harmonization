@@ -31,6 +31,26 @@ import (
 	"github.com/google/go-cmp/cmp" /* copybara-comment: cmp */
 )
 
+// MarshalJSON serializes the given token into JSON string.
+func MarshalJSON(tkn JSONToken) string {
+	switch t := tkn.(type) {
+	case JSONNum:
+		// Format is based on RFC 7159.
+		return strconv.FormatFloat(float64(t), 'G', -1, 64)
+	case JSONStr:
+		return fmt.Sprintf("%q", t)
+	case JSONBool:
+		return fmt.Sprintf("%t", t)
+	case nil:
+		return "null"
+	case JSONContainer:
+		return t.String()
+	case JSONArr:
+		return t.String()
+	}
+	return fmt.Sprintf("%v", tkn)
+}
+
 // UnmarshalJSON determines the type of the RawMessage and unmarshals it into a JSONToken.
 func UnmarshalJSON(in json.RawMessage) (JSONToken, error) {
 	ins := strings.TrimSpace(string(in))
@@ -54,7 +74,7 @@ func UnmarshalJSON(in json.RawMessage) (JSONToken, error) {
 		return JSONBool(true), nil
 	case ins == "false":
 		return JSONBool(false), nil
-	case ins == "nil":
+	case ins == "null":
 		return JSONToken(nil), nil
 	default:
 		// The only valid choice left is a number.
@@ -533,29 +553,19 @@ func (b JSONBool) Value() JSONToken {
 }
 
 func (c JSONContainer) String() string {
-	var o []string
+	o := make([]string, 0, len(c))
 	for k, v := range c {
-		switch vt := (*v).(type) {
-		case JSONStr:
-			o = append(o, fmt.Sprintf("%q:%q", k, string(vt)))
-		default:
-			o = append(o, fmt.Sprintf("%q:%v", k, *v))
-		}
+		o = append(o, fmt.Sprintf("%q:%s", k, MarshalJSON(*v)))
 	}
-	return fmt.Sprintf("{%s}", strings.Join(o, ", "))
+	return fmt.Sprintf("{%s}", strings.Join(o, ","))
 }
 
 func (a JSONArr) String() string {
-	var o []string
+	o := make([]string, 0, len(a))
 	for _, v := range a {
-		switch vt := v.(type) {
-		case JSONStr:
-			o = append(o, fmt.Sprintf("%q", string(vt)))
-		default:
-			o = append(o, fmt.Sprintf("%v", v))
-		}
+		o = append(o, MarshalJSON(v))
 	}
-	return fmt.Sprintf("[%s]", strings.Join(o, ", "))
+	return fmt.Sprintf("[%s]", strings.Join(o, ","))
 }
 
 // JSONPrimitive represents one of the JSON primitive types (Str, Bool, Num). This is useful for
