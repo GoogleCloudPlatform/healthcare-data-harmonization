@@ -21,7 +21,7 @@
 //   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
 //   Provenance: https://www.hl7.org/fhir/stu3/provenance.html
 //
-def Transform_ADT(ADT) {
+def Transform_ADT(required ADT) {
   var MessageHeader : MSH_MessageHeader(ADT.MSH);
   out Resources : MessageHeader;
   out Resources : HD_Provenance(ADT.MSH.3, MessageHeader);

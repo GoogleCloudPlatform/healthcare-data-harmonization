@@ -7,7 +7,7 @@
 // Output(s):
 //   FHIR Code datatype: https://www.hl7.org/fhir/stu3/datatypes.html#code
 //
-def Convert_TerminologyCode(Code, ConceptMapID){
+def Convert_TerminologyCode(required Code, ConceptMapID){
   var mapping : $HarmonizeCode("$Local", Code, "", ConceptMapID);
   $this : mapping[0].code;
 }
@@ -21,7 +21,7 @@ def Convert_TerminologyCode(Code, ConceptMapID){
 // Output(s):
 //   FHIR Coding datatype: https://www.hl7.org/fhir/stu3/datatypes.html#Coding
 //
-def Convert_TerminologyCoding(Code, ConceptMapID){
+def Convert_TerminologyCoding(required Code, ConceptMapID){
   var mapping : $HarmonizeCode("$Local", Code, "", ConceptMapID);
   $this : mapping[0];
 }
@@ -34,7 +34,7 @@ def Convert_TerminologyCoding(Code, ConceptMapID){
 // Output(s):
 //   Boolean: return true when str is a Number; otherwise false
 //
-def IsNumber(str) {
+def IsNumber(required str) {
   $this: $MatchesRegex(str, "^\\d*\\.?\\d+$");
 }
 
@@ -74,7 +74,7 @@ def GetRFC3339(precision) {
 // Output(s):
 //   FHIR Date datatype: https://www.hl7.org/fhir/stu3/datatypes.html#date
 //
-def Extract_Date(str) {
+def Extract_Date(required str) {
   var input : $MultiFormatParseTime(GetTimeFormats(), str);
   $this: $ReformatTime(GetRFC3339("s"), input, "2006-01-02");
 }
@@ -87,7 +87,7 @@ def Extract_Date(str) {
 // Output(s):
 //   FHIR Instant datatype: https://www.hl7.org/fhir/stu3/datatypes.html#instant
 //
-def Convert_Instant(str) {
+def Convert_Instant(required str) {
   var input : $MultiFormatParseTime(GetTimeFormats(), str);
   $this: $ReformatTime(GetRFC3339("ms"), input, "2006-01-02T15:04:05.2112Z");
 }
@@ -100,7 +100,7 @@ def Convert_Instant(str) {
 // Output(s):
 //   FHIR DateTime datatype: https://www.hl7.org/fhir/stu3/datatypes.html#dateTime
 //
-def Convert_DateTime(str) {
+def Convert_DateTime(required str) {
   var input : $MultiFormatParseTime(GetTimeFormats(), str);
   $this: $ReformatTime(GetRFC3339("s"), input, "2006-01-02T15:04:05+01:00");
 }
@@ -115,7 +115,7 @@ def Convert_DateTime(str) {
 //   Provenance: https://www.hl7.org/fhir/stu3/provenance.html
 //   Device: https://www.hl7.org/fhir/stu3/device.html
 //
-def HD_Provenance (HD, MessageHeader) {
+def HD_Provenance (required HD, MessageHeader) {
   agent[0].whoReference : Build_Reference(Output_Resource(HD_Device(HD)));
   recorded : MessageHeader.timestamp;
     target[0]: Build_Reference(MessageHeader);
@@ -131,7 +131,7 @@ def HD_Provenance (HD, MessageHeader) {
 // Output(s):
 //   Bundle: https://www.hl7.org/fhir/stu3/bundle.html
 //
-def MSH_Bundle (MSH_10) {
+def MSH_Bundle (required MSH_10) {
   identifier.value : MSH_10;
   type : "message";
   id : $UUID();
@@ -146,7 +146,7 @@ def MSH_Bundle (MSH_10) {
 // Output(s):
 //   MessageDefinition resource : https://www.hl7.org/fhir/stu3/messagedefinition.html
 //
-def MSG_MessageDefinition (MSG) {
+def MSG_MessageDefinition (required MSG) {
    identifier[].value : MSG.3;
    id : $UUID();
    resourceType : "MessageDefinition";
@@ -160,7 +160,7 @@ def MSG_MessageDefinition (MSG) {
 // Output(s):
 //   Device Resource : https://www.hl7.org/fhir/stu3/device.html
 //
-def HD_Device (HD) {
+def HD_Device (required HD) {
   if (HD.1?) {
     identifier[] : Build_Identifier(HD.1, "", "");
   }
@@ -179,7 +179,7 @@ def HD_Device (HD) {
 // Output(s):
 //   Organization Resource : https://www.hl7.org/fhir/stu3/organization.html
 //
-def HD_Organization (HD) {
+def HD_Organization (required HD) {
   identifier[] : Build_Identifier(HD.1, "", "");
   identifier[] : Build_Identifier(HD.2, HD.3, HD.3);
   id : $UUID();
@@ -211,7 +211,7 @@ def Build_Identifier (varValue, varType, varID) {
 // Output(s):
 //   Organization Resource : https://www.hl7.org/fhir/stu3/organization.html
 //
-def HD_CC_Organization (HD,CC) {
+def HD_CC_Organization (required HD,CC) {
  $this: HD_Organization(HD);
   address[].country : CC;
 }
@@ -224,7 +224,7 @@ def HD_CC_Organization (HD,CC) {
 // Output(s):
 //   CodeableConcept datatype : https://www.hl7.org/fhir/stu3/datatypes.html#CodeableConcept
 //
-def ID_CodeableConcept (ID) {
+def ID_CodeableConcept (required ID) {
   coding[0].code : ID;
   coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0301";
 }
@@ -237,7 +237,7 @@ def ID_CodeableConcept (ID) {
 // Output(s):
 //   Organization Resource : https://www.hl7.org/fhir/stu3/organization.html
 //
-def XON_Organization(XON) {
+def XON_Organization(required XON) {
   name : XON.1;
   if (XON.3?) {
     identifier[0].value : XON.3;
@@ -496,7 +496,7 @@ def XPN_HumanName(XPN) {
 //   Encouter.participant datatype : https://www.hl7.org/fhir/stu3/encounter-definitions.html#Encounter.participant
 //   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
 //
-def Build_Participant (XCN, varCode, varSystem, varDisplay) {
+def Build_Participant (required XCN, varCode, varSystem, varDisplay) {
   individual : Build_Reference(Output_Resource(XCN_Practitioner(XCN)));
   type[0].coding[0].code : varCode;
   type[0].coding[0].system : varSystem;
@@ -511,7 +511,7 @@ def Build_Participant (XCN, varCode, varSystem, varDisplay) {
 // Output(s):
 //   Practitioner Resource : https://www.hl7.org/fhir/stu3/practitioner.html
 //
-def XCN_Practitioner(XCN) {
+def XCN_Practitioner(required XCN) {
   identifier[0].value : XCN.1;
   name[0].family : FN_Family(XCN.2);
   name[0].given[] : XCN.3;
@@ -578,7 +578,7 @@ def HD_Location(HD, segN) {
 // Output(s):
 //   Location Resource : https://www.hl7.org/fhir/stu3/location.html
 //
-def PL_Location (PL,Status) {
+def PL_Location (required PL,Status) {
   var facility : HD_Location(PL.4, "PL.4");
   var building : HD_Location(PL.7, "PL.7");
   var floor : HD_Location(PL.8, "PL.8");
@@ -609,7 +609,7 @@ def PL_Location (PL,Status) {
 // Output(s):
 //   Location Resource reference & its status
 //
-def Build_LocationStatus (Location, Status) {
+def Build_LocationStatus (required Location, Status) {
   location : Build_Reference(Output_Resource(Location));
   status : Status;
 }
@@ -622,7 +622,7 @@ def Build_LocationStatus (Location, Status) {
 // Output(s):
 //   Location Resource : https://www.hl7.org/fhir/stu3/location.html
 //
-def DLD_Location(DLD) {
+def DLD_Location(required DLD) {
   $this : CWE_Location(DLD.1);
 }
 
@@ -634,7 +634,7 @@ def DLD_Location(DLD) {
 // Output(s):
 //   EpisodeOfCare Resource : https://www.hl7.org/fhir/stu3/episodeofcare.html
 //
-def CX_EpisodeOfCare(CX) {
+def CX_EpisodeOfCare(required CX) {
   identifier[] : CX_Identifier(CX);
   id : $UUID();
   resourceType : "EpisodeOfCare";
@@ -648,7 +648,7 @@ def CX_EpisodeOfCare(CX) {
 // Output(s):
 //   Location Resource : https://www.hl7.org/fhir/stu3/location.html
 //
-def CWE_Location(CWE) {
+def CWE_Location(required CWE) {
   identifier[0].value : CWE.1;
   name : CWE.2;
   identifier[0].system : CWE.3;
@@ -681,7 +681,7 @@ def DG1_Encounter (DG1, Condition) {
 // Output(s):
 //   EpisodeOfCare Resource : https://www.hl7.org/fhir/stu3/episodeofcare.html
 //
-def CX_DG1_EpisodeOfCare(CX, DG1, Condition, Patient) {
+def CX_DG1_EpisodeOfCare(CX, required DG1, Condition, Patient) {
   identifier[] : CX_Identifier(CX);
   status : "finished";
   diagnosis[] : DG1_EpisodeOfCare(DG1[], Condition[]);
@@ -711,7 +711,7 @@ def DG1_EpisodeOfCare (DG1, Condition) {
 // Output(s):
 //   Condition Resource : https://www.hl7.org/fhir/stu3/condition.html
 //
-def EI_Condition (EI) {
+def EI_Condition (required EI) {
   identifier[] : EI_Identifier(EI);
   id : $UUID();
   resourceType : "Condition";
@@ -737,7 +737,7 @@ def EI_Identifier(EI) {
 // Output(s):
 //   Device Resource : https://www.hl7.org/fhir/stu3/device.html
 //
-def EI_Device (EI) {
+def EI_Device (required EI) {
   $this : EI_Identifier(EI);
   id : _UUID();
   resourceType : "Device";
@@ -986,7 +986,7 @@ def Build_ObservationComponent(OBX5, OBX2, OBX3, OBX6) {
 // Output(s):
 //   Organization Resource : https://www.hl7.org/fhir/stu3/organization.html
 //
-def XON_XAD_Organization (XON, XAD) {
+def XON_XAD_Organization (required XON, XAD) {
   $this: XON_Organization(XON);
   address[] : XAD_Address(XAD);
 }
@@ -999,7 +999,7 @@ def XON_XAD_Organization (XON, XAD) {
 // Output(s):
 //   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
 //
-def CNN_Practitioner (CNN) {
+def CNN_Practitioner (required CNN) {
   identifier[].value : CNN.1;
   name.family : CNN.2;
   name.given[] : CNN.3;
@@ -1036,7 +1036,7 @@ def CM_Specimen (CM) {
 //   Specimen : https://hl7.org/fhir/stu3/specimen.html
 //   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
 //
-def OBR_Specimen (OBR, Patient) {
+def OBR_Specimen (required OBR, Patient) {
   collection.collector : Build_Reference(Output_Resource(XCN_Practitioner(OBR.10)));
   receivedTime : Convert_DateTime(OBR.14);
   $this : CM_Specimen(OBR.15);

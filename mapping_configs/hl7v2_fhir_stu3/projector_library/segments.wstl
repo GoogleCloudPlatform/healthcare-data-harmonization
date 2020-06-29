@@ -7,7 +7,7 @@
 //   MessageHeader: https://www.hl7.org/fhir/stu3/messageheader.html
 //   Organization: https://www.hl7.org/fhir/stu3/organization.html
 //
-def MSH_MessageHeader (MSH) {
+def MSH_MessageHeader(required MSH) {
   source.name : MSH.3.1;
   if (MSH.3.3 = "URI" and ~MSH.24?) {
     source.endpoint : MSH.3.2;
@@ -53,7 +53,7 @@ def MSH_MessageHeader (MSH) {
 //   Organization: https://www.hl7.org/fhir/stu3/organization.html
 //   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
 //
-def PID_PD1_Patient(PID, PD1) {
+def PID_PD1_Patient(required PID, PD1) {
   identifier[] : CX_Identifier(PID.2);
   identifier[] : CX_Identifier(PID.3[]);
   identifier[] : CX_Identifier(PID.4[]);
@@ -96,7 +96,7 @@ def PID_PD1_Patient(PID, PD1) {
 // Output(s):
 //   Account: https://www.hl7.org/fhir/stu3/account.html
 //
-def PID_Account(PID_18, Patient) {
+def PID_Account(required PID_18, Patient) {
   identifier[] : CX_Identifier(PID_18);
   subject : Build_Reference(Patient);
   id : $UUID();
@@ -113,7 +113,7 @@ def PID_Account(PID_18, Patient) {
 //   Condition: https://www.hl7.org/fhir/stu3/condition.html
 //   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
 //
-def DG1_Condition (DG1, Patient) {
+def DG1_Condition (required DG1, Patient) {
   code : CWE_CodeableConcept(DG1.3);
   code.text : DG1.4;
   onsetDateTime : Convert_DateTime(DG1.5);
@@ -139,7 +139,7 @@ def DG1_Condition (DG1, Patient) {
 //   Location: https://www.hl7.org/fhir/stu3/location.html
 //   EpisodeOfCare: https://www.hl7.org/fhir/stu3/episodeofcare.html
 //
-def PV1_DG1_Encounter(PV1, DG1, Patient, Condition) {
+def PV1_DG1_Encounter(required PV1, DG1, Patient, Condition) {
   if (PV1.2?) {
     var classCoding : CWE_Coding(PV1.2);
     class : Convert_TerminologyCoding(classCoding.code, "Encounter_Class");
@@ -197,7 +197,7 @@ def PV1_DG1_Encounter(PV1, DG1, Patient, Condition) {
 // Output(s):
 //   AllergyIntolerance: https://www.hl7.org/fhir/stu3/allergyintolerance.html
 //
-def AL1_AllergyIntolerance (AL1, Patient) {
+def AL1_AllergyIntolerance (required AL1, Patient) {
   category[] : Convert_TerminologyCode(CWE_Code(AL1.2), "Allergy_Category");
   type : Convert_TerminologyCode(CWE_Code(AL1.2), "Allergy_Type");
   code : CWE_CodeableConcept(AL1.3);
@@ -230,7 +230,7 @@ def AL1_AllergyIntolerance (AL1, Patient) {
 //   Organization: https://www.hl7.org/fhir/stu3/organization.html
 //   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
 //
-def OBX_Observation (OBX, Patient, Encounter) {
+def OBX_Observation (required OBX, Patient, Encounter) {
   if ($ListLen(OBX.5) > 1) {
     component[] : Build_ObservationComponent(OBX.5[], OBX.2, OBX.3, OBX.6);
   } else {
@@ -276,7 +276,7 @@ def OBX_Observation (OBX, Patient, Encounter) {
 //   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
 //   Specimen : https://hl7.org/fhir/stu3/specimen.html
 //
-def OBR_ORC_DiagnosticReport(OBR, ORC, Patient, Encounter) {
+def OBR_ORC_DiagnosticReport(required OBR, ORC, Patient, Encounter) {
   if (OBR.2.1?) {
     identifier[0].value : OBR.2.1;
     identifier[0].type.coding[0].code : "PLAC";
@@ -348,7 +348,7 @@ def OBR_ORC_DiagnosticReport(OBR, ORC, Patient, Encounter) {
 //   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
 //   Specimen : https://hl7.org/fhir/stu3/specimen.html
 //
-def PARSE_ORDER_OBSERVATION (ORDER_OBSERVATION, Patient, Encounter) {
+def PARSE_ORDER_OBSERVATION (required ORDER_OBSERVATION, Patient, Encounter) {
 
   var Observation : OBX_Observation(ORDER_OBSERVATION.OBSERVATION[*].OBX[], Patient, Encounter);
   out Resources : Observation;
@@ -375,7 +375,7 @@ def PARSE_ORDER_OBSERVATION (ORDER_OBSERVATION, Patient, Encounter) {
 //   Provenance: https://www.hl7.org/fhir/stu3/provenance.html
 //   Specimen : https://hl7.org/fhir/stu3/specimen.html
 //
-def Parse_PATIENT_RESULT (PATIENT_RESULT) {
+def Parse_PATIENT_RESULT (required PATIENT_RESULT) {
   var Patient : PID_PD1_Patient(PATIENT_RESULT.PATIENT.PID, PATIENT_RESULT.PATIENT.PD1);
   out Resources : PID_Account(PATIENT_RESULT.PATIENT.PID.18, Patient);
   out Resources : Patient;
@@ -383,9 +383,7 @@ def Parse_PATIENT_RESULT (PATIENT_RESULT) {
   var Encounter : PV1_DG1_Encounter(PATIENT_RESULT.PATIENT.PV1, "", Patient, "");
   out Resources : Encounter;
 
-  if (PATIENT_RESULT.PATIENT.PATIENT_OBSERVATION.OBX?) {
-    out Resources : OBX_Observation(PATIENT_RESULT.PATIENT.PATIENT_OBSERVATION.OBX, Patient, Encounter);
-  }
+  out Resources : OBX_Observation(PATIENT_RESULT.PATIENT.PATIENT_OBSERVATION.OBX, Patient, Encounter);
 
   $this : PARSE_ORDER_OBSERVATION (PATIENT_RESULT.ORDER_OBSERVATION[], Patient, Encounter);
 }
