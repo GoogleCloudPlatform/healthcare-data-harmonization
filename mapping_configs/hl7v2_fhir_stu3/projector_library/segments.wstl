@@ -9,24 +9,24 @@
 //
 def MSH_MessageHeader(required MSH) {
   source.name : MSH.3.1;
-  if (MSH.3.3 = "URI" and ~MSH.24?) {
+  if (MSH.3.3 = "URI" and ~MSH.24) {
     source.endpoint : MSH.3.2;
   } else {
     source.endpoint : "unknown"   // place-holder for 1-* cardinality
   }
-  if (MSH.7?) {
+  if (MSH.7) {
     timestamp : Convert_Instant(MSH.7);
   } else {
     timestamp : $CurrentTime("2006-01-02T15:04:05+01:00", "UTC");
   }
   sender : Build_Reference(Output_Resource(HD_CC_Organization(MSH.4, MSH.17)));
   destination[0].name : MSH.5.1;
-  if (~MSH.23?) {
+  if (~MSH.23) {
      receiver : Build_Reference(Output_Resource(HD_Organization(MSH.6)));
   } else {
       receiver : Build_Reference(Output_Resource(XON_Organization(MSH.23)));
   }
-  if (~MSH.25?) {
+  if (~MSH.25) {
     destination[0].endpoint : MSH.6.1;
   }
   meta.security[0].code: MSH.8;
@@ -70,13 +70,13 @@ def PID_PD1_Patient(required PID, PD1) {
   maritalStatus : CWE_CodeableConcept(PID.16);
   identifier[] : ST_Identifier(PID.19);
   identifier[] : DLN_Identifier(PID.20, "DL");
-  if (~PID.25?) {
+  if (~PID.25) {
     multipleBirthBoolean : PID.24;
   }
   multipleBirthInteger : PID.25;
   deceasedDateTime : Convert_DateTime(PID.29);
-  if (~PID.29?) {
-    deceasedBoolean (if PID.30?): PID.30="Y";
+  if (~PID.29) {
+    deceasedBoolean (if PID.30): PID.30="Y";
   }
   meta.lastUpdated : Convert_DateTime(PID.33);
   telecom[] : XTN_ContactPoint(PID.40[], "home");
@@ -103,6 +103,39 @@ def PID_Account(required PID_18, Patient) {
   resourceType : "Account";
 }
 
+// Description: Constructs a FHIR STU3 RelatedPerson Resource and its related resources based on V2 NK1 Segment
+//
+// Argument(s):
+//   NK1 V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/stu3/patient.html
+//
+// Output(s):
+//   RelatedPerson: https://www.hl7.org/fhir/stu3/relatedperson.html
+//
+def NK1_RelatedPerson(required NK1, Patient) {
+  name[] : XPN_HumanName(NK1.2[]);
+  var relationshipCC : CWE_CodeableConcept(NK1.3);
+  relationship (if relationshipCC) : Convert_Terminology(relationshipCC.coding[0].code, "Relationship");
+  address[] : XAD_Address(NK1.4[]);
+  telecom[] :  XTN_ContactPoint(NK1.5[], "home");
+  telecom[] : XTN_ContactPoint(NK1.6[], "work");
+  period.start : Convert_DateTime(NK1.8);
+  period.end : Convert_DateTime(NK1.9);
+  identifier[] : CX_Identifier(NK1.12);
+  gender : Convert_TerminologyCode(CWE_Code(NK1.15), "Gender");
+  birthDate : Extract_Date(NK1.16);
+  name[] : XPN_HumanName(NK1.30[]);
+  telecom[] :  XTN_ContactPoint(NK1.31[], "work");
+  address[] : XAD_Address(NK1.32[]);
+  identifier[] : CX_Identifier(NK1.33[]);
+  identifier[] : ST_Identifier(NK1.37);
+  telecom[] : XTN_ContactPoint(NK1.40, "home");
+  telecom[] : XTN_ContactPoint(NK1.41, "work");
+  patient : Build_Reference(Patient);
+  id : $UUID();
+  resourceType : "RelatedPerson";
+}
+
 // Description: Constructs a FHIR STU3 Condition Resource and its related resources based on V2 DG1 Segment and Patient resource
 //
 // Argument(s):
@@ -118,7 +151,7 @@ def DG1_Condition (required DG1, Patient) {
   code.text : DG1.4;
   onsetDateTime : Convert_DateTime(DG1.5);
   asserter : Build_Reference(Output_Resource(XCN_Practitioner(DG1.16[0])));
-  identifier[] : EI_Identifier(DG1.20);
+  identifier[] : EI_Identifier(DG1.20, "", "");
   subject : Build_Reference(Patient);
   id : $UUID();
   resourceType : "Condition";
@@ -140,7 +173,7 @@ def DG1_Condition (required DG1, Patient) {
 //   EpisodeOfCare: https://www.hl7.org/fhir/stu3/episodeofcare.html
 //
 def PV1_DG1_Encounter(required PV1, DG1, Patient, Condition) {
-  if (PV1.2?) {
+  if (PV1.2) {
     var classCoding : CWE_Coding(PV1.2);
     class : Convert_TerminologyCoding(classCoding.code, "Encounter_Class");
   } else {
@@ -162,7 +195,7 @@ def PV1_DG1_Encounter(required PV1, DG1, Patient, Condition) {
   hospitalization.admitSource : CWE_CodeableConcept(PV1.14);
   participant[] : Build_Participant(PV1.17[], "ADM", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType", "admitter");
   identifier[0] : CX_Identifier(PV1.19);
-  if (~PV1.19.5?) {
+  if (~PV1.19.5) {
     identifier[0].type.coding[0].code : "VN";
   }
   identifier[0].type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0203";
@@ -172,7 +205,7 @@ def PV1_DG1_Encounter(required PV1, DG1, Patient, Condition) {
   hospitalization.dietPreference[] : CWE_CodeableConcept(PV1.38);
   period.start : Convert_DateTime(PV1.44);
   period.end : Convert_DateTime(PV1.45);
-  if (~PV1.45? and PV1.2?) {
+  if (~PV1.45 and PV1.2) {
       status : Convert_TerminologyCode(CWE_Code(PV1.2), "Encounter_Status");
   } else {
     status : "finished";
@@ -234,7 +267,7 @@ def OBX_Observation (required OBX, Patient, Encounter) {
   if ($ListLen(OBX.5) > 1) {
     component[] : Build_ObservationComponent(OBX.5[], OBX.2, OBX.3, OBX.6);
   } else {
-    if (OBX.3?) {
+    if (OBX.3) {
       code : CWE_CodeableConcept(OBX.3);
     } else {
       code.coding[0].code : "10001-6";   // place-holder for 1-1 cardinality
@@ -242,7 +275,7 @@ def OBX_Observation (required OBX, Patient, Encounter) {
     $this : Build_ObservationValue(OBX.5[0], OBX.2, OBX.6);
   }
   referenceRange[0].text : OBX.7;
-  if (OBX.11?) {
+  if (OBX.11) {
     status : Convert_TerminologyCode(OBX.11, "Observation_Status");
   } else {
     status : "registered";
@@ -252,12 +285,11 @@ def OBX_Observation (required OBX, Patient, Encounter) {
   method : CWE_CodeableConcept(OBX.17);
   device : Build_Reference(Output_Resource(EI_Device(OBX.18[])));
   bodySite : CWE_CodeableConcept(OBX.20[]);
-  identifier[0] : EI_Identifier(OBX.21);
-  identifier[0].type.coding[0].code : "FILL";
+  identifier[0] : EI_Identifier(OBX.21, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203");
   performer[] : Build_Reference(Output_Resource(XON_XAD_Organization(OBX.23, OBX.24)));
   performer[] : Build_Reference(Output_Resource(XCN_Practitioner(OBX.25)));
   subject : Build_Reference(Patient);
-  context (if Encounter?): Build_Reference(Encounter);
+  context (if Encounter): Build_Reference(Encounter);
   id : $UUID();
   resourceType : "Observation";
 }
@@ -277,40 +309,30 @@ def OBX_Observation (required OBX, Patient, Encounter) {
 //   Specimen : https://hl7.org/fhir/stu3/specimen.html
 //
 def OBR_ORC_DiagnosticReport(required OBR, ORC, Patient, Encounter) {
-  if (OBR.2.1?) {
-    identifier[0].value : OBR.2.1;
-    identifier[0].type.coding[0].code : "PLAC";
-    identifier[0].type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0203";
+  if (OBR.2) {
+    identifier[] : EI_Identifier(OBR.2, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203");
   }
-  if (OBR.3.1?) {
-    identifier[1].value : OBR.3.1;
-    identifier[1].type.coding[0].code : "FILL";
-    identifier[1].type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0203";
+  if (OBR.3) {
+    identifier[] : EI_Identifier(OBR.3, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203");
   }
-  if (ORC.2.1?) {
-    identifier[2].value : ORC.2.1;
-    identifier[2].type.coding[0].code : "PLAC";
-    identifier[2].type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0203";
+  if (ORC.2) {
+    identifier[] : EI_Identifier(ORC.2, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203");
   }
-  if (ORC.3.1?) {
-    identifier[3].value : ORC.3.1;
-    identifier[3].type.coding[0].code : "FILL";
-    identifier[3].type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0203";
+  if (ORC.3) {
+    identifier[] : EI_Identifier(ORC.3, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203");
   }
-  if (ORC.4.1?) {
-    identifier[4].value : ORC.4.1;
-    identifier[4].type.coding[0].code : "PGN";
-    identifier[4].type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0203";
+  if (ORC.4) {
+    identifier[] : EI_Identifier(ORC.4, "PGN", "http://terminology.hl7.org/CodeSystem/v2-0203");
   }
-  if (OBR.4?){
+  if (OBR.4){
     code : CWE_CodeableConcept(OBR.4);  //Need ConceptMap
   } else {
     code.coding[0].code : "1003-3";
   }
-  if (~OBR.7?) {
+  if (~OBR.7) {
     effectiveDateTime : Convert_DateTime(ORC.9);
   } else {
-    if (~OBR.8?) {
+    if (~OBR.8) {
       effectiveDateTime : Convert_DateTime(OBR.7);
     } else {
       effectivePeriod.start : Convert_DateTime(OBR.7);
@@ -319,7 +341,7 @@ def OBR_ORC_DiagnosticReport(required OBR, ORC, Patient, Encounter) {
   }
   issued : Convert_Instant(OBR.22);
   category.coding[0].code : OBR.24
-  if (OBR.25?) {
+  if (OBR.25) {
     status : Convert_TerminologyCode(OBR.25, "Report_Status");
   } else {
     status : "registered";    // place-holder for 1-1 cardinality
@@ -377,8 +399,12 @@ def PARSE_ORDER_OBSERVATION (required ORDER_OBSERVATION, Patient, Encounter) {
 //
 def Parse_PATIENT_RESULT (required PATIENT_RESULT) {
   var Patient : PID_PD1_Patient(PATIENT_RESULT.PATIENT.PID, PATIENT_RESULT.PATIENT.PD1);
-  out Resources : PID_Account(PATIENT_RESULT.PATIENT.PID.18, Patient);
+  var Patient.contact[] (if PATIENT_RESULT.PATIENT.NK1) : NK1_Contact(PATIENT_RESULT.PATIENT.NK1[]);
   out Resources : Patient;
+
+  out Resources : PID_Account(PATIENT_RESULT.PATIENT.PID.18, Patient);
+
+  out Resources : NK1_RelatedPerson(PATIENT_RESULT.PATIENT.NK1[], Patient);
 
   var Encounter : PV1_DG1_Encounter(PATIENT_RESULT.PATIENT.PV1, "", Patient, "");
   out Resources : Encounter;

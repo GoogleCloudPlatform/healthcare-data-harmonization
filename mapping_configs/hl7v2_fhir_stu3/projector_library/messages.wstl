@@ -20,6 +20,7 @@
 //   Patient: https://www.hl7.org/fhir/stu3/patient.html
 //   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
 //   Provenance: https://www.hl7.org/fhir/stu3/provenance.html
+//   RelatedPerson: https://www.hl7.org/fhir/stu3/relatedperson.html
 //
 def Transform_ADT(required ADT) {
   var MessageHeader : MSH_MessageHeader(ADT.MSH);
@@ -28,8 +29,12 @@ def Transform_ADT(required ADT) {
   root Bundle : MSH_Bundle(ADT.MSH.10);
 
   var Patient : PID_PD1_Patient(ADT.PID, ADT.PD1);
+  var Patient.contact[] (if ADT.NK1) : NK1_Contact(ADT.NK1[]);
   out Resources : Patient;
+
   out Resources : PID_Account(ADT.PID.18, Patient);
+
+  out Resources : NK1_RelatedPerson(ADT.NK1[], Patient);
 
   var Condition : DG1_Condition(ADT.DG1[], Patient);
   out Resources : Condition;
@@ -64,6 +69,7 @@ def Transform_ADT(required ADT) {
 //   Patient: https://www.hl7.org/fhir/stu3/patient.html
 //   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
 //   Provenance: https://www.hl7.org/fhir/stu3/provenance.html
+//   RelatedPerson: https://www.hl7.org/fhir/stu3/relatedperson.html
 //
 def ADT_A01(ADT_A01) {
   $this : Transform_ADT(ADT_A01);
@@ -91,6 +97,7 @@ def ADT_A01(ADT_A01) {
 //   Patient: https://www.hl7.org/fhir/stu3/patient.html
 //   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
 //   Provenance: https://www.hl7.org/fhir/stu3/provenance.html
+//   RelatedPerson: https://www.hl7.org/fhir/stu3/relatedperson.html
 //
 def ADT_A03(ADT_A03) {
     $this : Transform_ADT(ADT_A03);
@@ -118,6 +125,7 @@ def ADT_A03(ADT_A03) {
 //   Patient: https://www.hl7.org/fhir/stu3/patient.html
 //   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
 //   Provenance: https://www.hl7.org/fhir/stu3/provenance.html
+//   RelatedPerson: https://www.hl7.org/fhir/stu3/relatedperson.html
 //
 def ADT_A04(ADT_A04) {
     $this : Transform_ADT(ADT_A04);
@@ -145,6 +153,7 @@ def ADT_A04(ADT_A04) {
 //   Patient: https://www.hl7.org/fhir/stu3/patient.html
 //   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
 //   Provenance: https://www.hl7.org/fhir/stu3/provenance.html
+//   RelatedPerson: https://www.hl7.org/fhir/stu3/relatedperson.html
 //
 def ADT_A05(ADT_A05) {
     $this : Transform_ADT(ADT_A05);
@@ -172,6 +181,7 @@ def ADT_A05(ADT_A05) {
 //   Patient: https://www.hl7.org/fhir/stu3/patient.html
 //   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
 //   Provenance: https://www.hl7.org/fhir/stu3/provenance.html
+//   RelatedPerson: https://www.hl7.org/fhir/stu3/relatedperson.html
 //
 def ADT_A08(ADT_A08) {
     $this : Transform_ADT(ADT_A08);
@@ -199,6 +209,7 @@ def ADT_A08(ADT_A08) {
 //   Patient: https://www.hl7.org/fhir/stu3/patient.html
 //   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
 //   Provenance: https://www.hl7.org/fhir/stu3/provenance.html
+//   RelatedPerson: https://www.hl7.org/fhir/stu3/relatedperson.html
 //
 def ADT_A31(ADT_A31) {
     $this : Transform_ADT(ADT_A31);
@@ -225,6 +236,7 @@ def ADT_A31(ADT_A31) {
 //   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
 //   Provenance: https://www.hl7.org/fhir/stu3/provenance.html
 //   Specimen : https://hl7.org/fhir/stu3/specimen.html
+//   RelatedPerson: https://www.hl7.org/fhir/stu3/relatedperson.html
 //
 def ORU_R01(ORU_R01) {
   var MessageHeader : MSH_MessageHeader(ORU_R01.MSH);

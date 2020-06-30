@@ -1,0 +1,465 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "SEL",
+          "display": "Self",
+          "target": [
+            {
+              "code": "ONESELF",
+              "display": "self",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "SPO",
+          "display": "Spouse",
+          "target": [
+            {
+              "code": "SPS",
+              "display": "spouse",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "DOM",
+          "display": "Life partner",
+          "target": [
+            {
+              "code": "SIGOTHR",
+              "display": "significant other",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "CHD",
+          "display": "Child",
+          "target": [
+            {
+              "code": "CHILD",
+              "display": "child",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "GCH",
+          "display": "Grandchild",
+          "target": [
+            {
+              "code": "GRNDCHILD",
+              "display": "grandchild",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "NCH",
+          "display": "Natural child",
+          "target": [
+            {
+              "code": "NCHILD",
+              "display": "natural child",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "SCH",
+          "display": "Stepchild",
+          "target": [
+            {
+              "code": "STPCHLD",
+              "display": "step child",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "FCH",
+          "display": "Foster child",
+          "target": [
+            {
+              "code": "CHLDFOST",
+              "display": "foster child",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "PAR",
+          "display": "Parent",
+          "target": [
+            {
+              "code": "PRN",
+              "display": "parent",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "MTH",
+          "display": "Mother",
+          "target": [
+            {
+              "code": "MTH",
+              "display": "mother",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "FTH",
+          "display": "Father",
+          "target": [
+            {
+              "code": "FTH",
+              "display": "father",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "GRP",
+          "display": "Grandparent",
+          "target": [
+            {
+              "code": "GRPRN",
+              "display": "grandparent",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "EXF",
+          "display": "Extended family",
+          "target": [
+            {
+              "code": "EXT",
+              "display": "extended family member",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "SIB",
+          "display": "Sibling",
+          "target": [
+            {
+              "code": "SIB",
+              "display": "sibling",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "BRO",
+          "display": "Brother",
+          "target": [
+            {
+              "code": "BRO",
+              "display": "brother",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "SIS",
+          "display": "Sister",
+          "target": [
+            {
+              "code": "SIS",
+              "display": "sister",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "FND",
+          "display": "Friend",
+          "target": [
+            {
+              "code": "FRND",
+              "display": "unrelated friend",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70063",
+      "target": "http://terminology.hl7.org/CodeSystem/v3-RoleCode"
+    },
+    {
+      "element": [
+        {
+          "code": "DEP",
+          "display": "Handicapped dependent",
+          "target": [
+            {
+              "code": "U",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "WRD",
+          "display": "Ward of court",
+          "target": [
+            {
+              "code": "U",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "CGV",
+          "display": "Care giver",
+          "target": [
+            {
+              "code": "U",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "GRD",
+          "display": "Guardian",
+          "target": [
+            {
+              "code": "U",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "OAD",
+          "display": "Other adult",
+          "target": [
+            {
+              "code": "U",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "EME",
+          "display": "Employee",
+          "target": [
+            {
+              "code": "U",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "EMR",
+          "display": "Employer",
+          "target": [
+            {
+              "code": "E",
+              "display": "Employer",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ASC",
+          "display": "Associate",
+          "target": [
+            {
+              "code": "U",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "EMC",
+          "display": "Emergency contact",
+          "target": [
+            {
+              "code": "C",
+              "display": "Emergency Contact",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "OWN",
+          "display": "Owner",
+          "target": [
+            {
+              "code": "U",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "TRA",
+          "display": "Trainer",
+          "target": [
+            {
+              "code": "U",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "MGR",
+          "display": "Manager",
+          "target": [
+            {
+              "code": "U",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "NON",
+          "display": "None",
+          "target": [
+            {
+              "code": "U",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "UNK",
+          "display": "Unknown",
+          "target": [
+            {
+              "code": "U",
+              "display": "Unknown",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "OTH",
+          "display": "Other",
+          "target": [
+            {
+              "code": "O",
+              "display": "Other",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70063",
+      "target": "http://terminology.hl7.org/CodeSystem/v2-0131"
+    },
+    {
+      "element": [
+        {
+          "code": "E",
+          "display": "Employer",
+          "target": [
+            {
+              "code": "E",
+              "display": "Employer",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "C",
+          "display": "Emergency Contact",
+          "target": [
+            {
+              "code": "C",
+              "display": "Emergency Contact",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "F",
+          "display": "Federal Agency",
+          "target": [
+            {
+              "code": "F",
+              "display": "Federal Agency",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "I",
+          "display": "Insurance Company",
+          "target": [
+            {
+              "code": "I",
+              "display": "Insurance Company",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "N",
+          "display": "Next-of-Kin",
+          "target": [
+            {
+              "code": "N",
+              "display": "Next-of-Kin",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "S",
+          "display": "State Agency",
+          "target": [
+            {
+              "code": "S",
+              "display": "State Agency",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "O",
+          "display": "Other",
+          "target": [
+            {
+              "code": "O",
+              "display": "Other",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "U",
+          "display": "Unknown",
+          "target": [
+            {
+              "code": "U",
+              "display": "Unknown",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70131",
+      "target": "http://terminology.hl7.org/CodeSystem/v2-0131"
+    }
+  ],
+  "id": "Relationship",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

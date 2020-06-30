@@ -1,17 +1,17 @@
-def Output_Resource(item) {
+def Output_Resource(required item) {
   out Resources : item;
   $this : item;
 }
 
-def Build_Reference(Resource) {
-  if (Resource.resourceType?){
+def Build_Reference(required Resource) {
+  if (Resource.resourceType){
     reference : $StrCat(Resource.resourceType, "/", Resource.id);
   }
 }
 
 def Build_BundleEntry(Resource,Verb) {
   resource : Resource;
-  if (~Resource.id?){
+  if (~Resource.id){
     resource.id : $Hash(Resource);
   }
   request.method : Verb;

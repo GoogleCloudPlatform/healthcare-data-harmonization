@@ -26,6 +26,19 @@ def Convert_TerminologyCoding(required Code, ConceptMapID){
   $this : mapping[0];
 }
 
+// Description: Converts HL7 v2 terminology into FHIR terminology
+//
+// Argument(s):
+//   HL7 v2 Code:  https://hl7-definition.caristix.com/v2/HL7v2.7/Tables
+//   ConceptMapID: https://www.hl7.org/fhir/stu3/conceptmap.html
+//
+// Output(s):
+//   FHIR CodeableConcept datatype: https://www.hl7.org/fhir/stu3/datatypes.html#CodeableConcept
+//
+def Convert_Terminology(Code, ConceptMapID){
+  coding : $HarmonizeCode("$Local", Code, "", ConceptMapID);
+}
+
 // Description: Tests whether the given string is a Number or not
 //
 // Argument(s):
@@ -161,7 +174,7 @@ def MSG_MessageDefinition (required MSG) {
 //   Device Resource : https://www.hl7.org/fhir/stu3/device.html
 //
 def HD_Device (required HD) {
-  if (HD.1?) {
+  if (HD.1) {
     identifier[] : Build_Identifier(HD.1, "", "");
   }
   if (HD.3 = "ISO" or HD.3 = "UUID") {
@@ -239,7 +252,7 @@ def ID_CodeableConcept (required ID) {
 //
 def XON_Organization(required XON) {
   name : XON.1;
-  if (XON.3?) {
+  if (XON.3) {
     identifier[0].value : XON.3;
   } else {
     identifier[0].value : XON.10;
@@ -286,7 +299,7 @@ def FN_Family(FN) {
 //   Code datatype : https://www.hl7.org/fhir/stu3/datatypes.html#code
 //
 def CWE_Code(CWE) {
-  if (~CWE.1?) {
+  if (~CWE.1) {
     $this : CWE.4;
   } else {
     $this : CWE.1;
@@ -366,7 +379,7 @@ def XAD_Address(XAD) {
     type : XAD.7;
   }
   if (XAD.7 = "BA" or XAD.7 = "BI" or XAD.7 = "C" or XAD.7 = "B" or XAD.7 = "H" or XAD.7 = "O") {
-    use : XAD.7;
+    use : Convert_TerminologyCode(XAD.7, "Address_Use");
   }
   district : CWE_String(XAD.9);
   period : DR_Period(XAD.12);
@@ -411,7 +424,7 @@ def SAD_AddressLine(SAD) {
 //   String datatype, in the context of XAD.9
 //
 def CWE_String(CWE) {
-  if (~CWE.9?) {
+  if (~CWE.9) {
     $this : CWE.2;
   } else {
     $this : CWE.9;
@@ -457,7 +470,7 @@ def Build_ContactPoint(varValue, varSystem, varUse, varRank, varStart, varEnd) {
 //   ContactPoint datatype : https://www.hl7.org/fhir/stu3/datatypes.html#ContactPoint
 //
 def XTN_ContactPoint(XTN, cUse) {
-  if (XTN.1?) {
+  if (XTN.1) {
     $this: Build_ContactPoint(XTN.1, "", cUse, XTN.18, XTN.13, XTN.14);
   }
 }
@@ -478,12 +491,52 @@ def XPN_HumanName(XPN) {
   prefix[] : XPN.5;
   suffix[] : XPN.6;
   use : Convert_TerminologyCode(XPN.7, "Name_Type");
-  if (~XPN.12? and ~XPN.13?) {
+  if (~XPN.12 and ~XPN.13) {
     period : DR_Period(XPN.10);
   }
   period.start : Convert_DateTime(XPN.12);
   period.end : Convert_DateTime(XPN.13);
   suffix[] : XPN.14;
+}
+
+// Description: Constructs a FHIR STU3 Patient.contact and its related resources based on NK1 Segment
+//
+// Argument(s):
+//   NK1 V2 Segment
+//
+// Output(s):
+//   Patient.contact: https://www.hl7.org/fhir/stu3/patient-definitions.html#Patient.contact
+//
+def NK1_Contact(required NK1) {
+  name : XPN_HumanName(NK1.2[0]);
+  address : XAD_Address(NK1.4[0]);
+  telecom[] : XTN_ContactPoint(NK1.5[], "home");
+  telecom[] : XTN_ContactPoint(NK1.6[], "work");
+  var relationshipCC : CWE_CodeableConcept(NK1.7);
+  relationship[] (if relationshipCC) : Convert_Terminology(relationshipCC.coding[0].code, "Relationship");
+  period.start : Convert_DateTime(NK1.8);
+  period.end : Convert_DateTime(NK1.9);
+  var Organization : XON_Organization(NK1.13[0]);
+  var Organization.contact[] (if Organization): XPN_XTN_XAD_OrganizationContact(NK1.30, NK1.31, NK1.32);
+  organization :  Build_Reference(Output_Resource(Organization));
+  gender : Convert_TerminologyCode(CWE_Code(NK1.14), "Gender");
+  telecom[] : XTN_ContactPoint(NK1.40, "home");
+  telecom[] : XTN_ContactPoint(NK1.41, "work");
+}
+
+// Description: Constructs an Organization resource
+//
+// Argument(s):
+//   XPN datatype
+//   XTN datatype
+//   XAD datatype
+// Output(s):
+//   Organization Resource : https://www.hl7.org/fhir/stu3/organization.html
+//
+def XPN_XTN_XAD_OrganizationContact(XPN, XTN, XAD) {
+  name : XPN_HumanName(XPN[0]);
+  telecom[] : XTN_ContactPoint(XTN[], "work");
+  address : XAD_Address(XAD[0]);
 }
 
 // Description: Constructs an Encouter.participant datatype, where a Practitioner resource is created and referrenced.
@@ -521,7 +574,7 @@ def XCN_Practitioner(required XCN) {
   name[0].suffix[] : XCN.7;
   name[0].use : Convert_TerminologyCode(XCN.10, "Name_Type");
   identifier[0].type.coding[].code : XCN.13;
-  if (XCN.19? and ~XCN.20?) {
+  if (XCN.19 and ~XCN.20) {
     name[0].period : DR_Period(XCN.17);
   }
   name[0].period.start : Convert_DateTime(XCN.19);
@@ -543,7 +596,7 @@ def XCN_Practitioner(required XCN) {
 def HD_Location(HD, segN) {
   name : HD.1;
   if (HD.3 = "ISO" or HD.3 = "UUID") {
-    identifier.value : HD.2;
+    identifier[].value : HD.2;
   }
   mode : "instance";
   if (segN = "PL.1" or segN = "") {
@@ -712,7 +765,7 @@ def DG1_EpisodeOfCare (DG1, Condition) {
 //   Condition Resource : https://www.hl7.org/fhir/stu3/condition.html
 //
 def EI_Condition (required EI) {
-  identifier[] : EI_Identifier(EI);
+  identifier[] : EI_Identifier(EI, "", "");
   id : $UUID();
   resourceType : "Condition";
 }
@@ -721,12 +774,16 @@ def EI_Condition (required EI) {
 //
 // Argument(s):
 //   EI datatype
+//   typeCode: a code string to be mapped with Identifier.type code
+//   typeSystem : a system string to be mapped with Identifier.type system
 //
 // Output(s):
-//   Identifier datatype : https://www.hl7.org/fhir/stu3/datatypes.html#Identifier
+//   Identifier datatype : https://www.hl7.org/fhir/datatypes.html#Identifier
 //
-def EI_Identifier(EI) {
+def EI_Identifier(EI, typeCode, typeSystem) {
   value : EI.1;
+  type.coding[0].code (if typeCode ~= ""): typeCode;
+  type.coding[0].system (if typeSystem ~= ""): typeSystem;
 }
 
 // Description: Constructs a Device resource from HD datatype
@@ -738,7 +795,7 @@ def EI_Identifier(EI) {
 //   Device Resource : https://www.hl7.org/fhir/stu3/device.html
 //
 def EI_Device (required EI) {
-  $this : EI_Identifier(EI);
+  $this : EI_Identifier(EI, "", "");
   id : _UUID();
   resourceType : "Device";
 }
@@ -752,11 +809,11 @@ def EI_Device (required EI) {
 //   Quantity Datatype : https://www.hl7.org/fhir/stu3/datatypes.html#Quantity
 //
 def CWE_Qauntity(CWE) {
-  if (CWE.1? and CWE.3?) {
+  if (CWE.1 and CWE.3) {
     code : CWE.1;
     system : CWE.3;
   }
-  if (~CWE.2?) {
+  if (~CWE.2) {
     unit : CWE.1;
   } else {
     unit : CWE.2;
