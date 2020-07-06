@@ -508,7 +508,7 @@ The syntax for iterating an array is suffixing it with `[]`. More abstractly:
 *   `Function(a[], b[])` means "pass each element of `a` (one at a time), along
     with each element of `b` (at the same index) to `Function`"
 *   `[]` is also allowed after function calls
-    *   `Function2(Function(a)[])` means "pass each element from the result of
+    *   `Function2(Function[](a))` means "pass each element from the result of
         `Function(a)` (one at a time) to `Function2`
 *   The result of an iterating function call is also an array
 
@@ -544,7 +544,7 @@ Output:
             "type": "Planet"
         }
     ],
-    "Moons": [
+    "Moon": [
         {
             "name": "LUNA",
             "type": "Moon"
@@ -680,7 +680,7 @@ Noteably:
 *   Multiple arrays mapped through with `[*]`, for example `a[*].b.c[*].d`, in
     one long, non-nested array of the values of `d` with the same item order
 *   Null values are included, through jagged traversal. E.g.: `a[*].b.c[*].d`,
-    if some instance of a does not have `b.c`, then a single null value is
+    if some instance of `a` does not have `b.c`, then a single null value is
     returned for that instance
 
 Make a new Output Key that just contains our planet names:
