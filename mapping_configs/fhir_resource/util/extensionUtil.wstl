@@ -1,4 +1,4 @@
-def addBase64Binary(url, data, placeholder){
+def addBase64Binary(url, data){
   url: url
   valueBase64Binary: data
 }
@@ -12,9 +12,9 @@ def fetchBase64BinaryArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueBase64Binary
 }
+    
 
-
-def addBoolean(url, data, placeholder){
+def addBoolean(url, data){
   url: url
   valueBoolean: data
 }
@@ -28,9 +28,9 @@ def fetchBooleanArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueBoolean
 }
+    
 
-
-def addCanonical(url, data, placeholder){
+def addCanonical(url, data){
   url: url
   valueCanonical: data
 }
@@ -44,9 +44,9 @@ def fetchCanonicalArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueCanonical
 }
+    
 
-
-def addCode(url, data, placeholder){
+def addCode(url, data){
   url: url
   valueCode: data
 }
@@ -60,9 +60,9 @@ def fetchCodeArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueCode
 }
+    
 
-
-def addDate(url, data, placeholder){
+def addDate(url, data){
   url: url
   valueDate: data
 }
@@ -76,9 +76,9 @@ def fetchDateArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueDate
 }
+    
 
-
-def addDateTime(url, data, placeholder){
+def addDateTime(url, data){
   url: url
   valueDateTime: data
 }
@@ -92,9 +92,9 @@ def fetchDateTimeArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueDateTime
 }
+    
 
-
-def addDecimal(url, data, placeholder){
+def addDecimal(url, data){
   url: url
   valueDecimal: data
 }
@@ -108,9 +108,9 @@ def fetchDecimalArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueDecimal
 }
+    
 
-
-def addId(url, data, placeholder){
+def addId(url, data){
   url: url
   valueId: data
 }
@@ -124,9 +124,9 @@ def fetchIdArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueId
 }
+    
 
-
-def addInstant(url, data, placeholder){
+def addInstant(url, data){
   url: url
   valueInstant: data
 }
@@ -140,9 +140,9 @@ def fetchInstantArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueInstant
 }
+    
 
-
-def addInteger(url, data, placeholder){
+def addInteger(url, data){
   url: url
   valueInteger: data
 }
@@ -156,9 +156,9 @@ def fetchIntegerArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueInteger
 }
+    
 
-
-def addMarkdown(url, data, placeholder){
+def addMarkdown(url, data){
   url: url
   valueMarkdown: data
 }
@@ -172,9 +172,9 @@ def fetchMarkdownArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueMarkdown
 }
+    
 
-
-def addOid(url, data, placeholder){
+def addOid(url, data){
   url: url
   valueOid: data
 }
@@ -188,9 +188,9 @@ def fetchOidArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueOid
 }
+    
 
-
-def addPositiveInt(url, data, placeholder){
+def addPositiveInt(url, data){
   url: url
   valuePositiveInt: data
 }
@@ -204,9 +204,9 @@ def fetchPositiveIntArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valuePositiveInt
 }
+    
 
-
-def addString(url, data, placeholder){
+def addString(url, data){
   url: url
   valueString: data
 }
@@ -220,9 +220,9 @@ def fetchStringArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueString
 }
+    
 
-
-def addTime(url, data, placeholder){
+def addTime(url, data){
   url: url
   valueTime: data
 }
@@ -236,9 +236,9 @@ def fetchTimeArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueTime
 }
+    
 
-
-def addUnsignedInt(url, data, placeholder){
+def addUnsignedInt(url, data){
   url: url
   valueUnsignedInt: data
 }
@@ -252,9 +252,9 @@ def fetchUnsignedIntArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueUnsignedInt
 }
+    
 
-
-def addUri(url, data, placeholder){
+def addUri(url, data){
   url: url
   valueUri: data
 }
@@ -268,9 +268,9 @@ def fetchUriArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueUri
 }
+    
 
-
-def addUrl(url, data, placeholder){
+def addUrl(url, data){
   url: url
   valueUrl: data
 }
@@ -284,9 +284,9 @@ def fetchUrlArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueUrl
 }
+    
 
-
-def addUuid(url, data, placeholder){
+def addUuid(url, data){
   url: url
   valueUuid: data
 }
@@ -300,9 +300,9 @@ def fetchUuidArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueUuid
 }
+    
 
-
-def addAddress(url, data, placeholder){
+def addAddress(url, data){
   url: url
   valueAddress: data
 }
@@ -316,9 +316,9 @@ def fetchAddressArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueAddress
 }
+    
 
-
-def addAge(url, data, placeholder){
+def addAge(url, data){
   url: url
   valueAge: data
 }
@@ -332,9 +332,9 @@ def fetchAgeArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueAge
 }
+    
 
-
-def addAnnotation(url, data, placeholder){
+def addAnnotation(url, data){
   url: url
   valueAnnotation: data
 }
@@ -348,9 +348,9 @@ def fetchAnnotationArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueAnnotation
 }
+    
 
-
-def addAttachment(url, data, placeholder){
+def addAttachment(url, data){
   url: url
   valueAttachment: data
 }
@@ -364,9 +364,9 @@ def fetchAttachmentArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueAttachment
 }
+    
 
-
-def addCodeableConcept(url, data, placeholder){
+def addCodeableConcept(url, data){
   url: url
   valueCodeableConcept: data
 }
@@ -380,9 +380,9 @@ def fetchCodeableConceptArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueCodeableConcept
 }
+    
 
-
-def addCoding(url, data, placeholder){
+def addCoding(url, data){
   url: url
   valueCoding: data
 }
@@ -396,9 +396,9 @@ def fetchCodingArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueCoding
 }
+    
 
-
-def addContactPoint(url, data, placeholder){
+def addContactPoint(url, data){
   url: url
   valueContactPoint: data
 }
@@ -412,9 +412,9 @@ def fetchContactPointArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueContactPoint
 }
+    
 
-
-def addCount(url, data, placeholder){
+def addCount(url, data){
   url: url
   valueCount: data
 }
@@ -428,9 +428,9 @@ def fetchCountArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueCount
 }
+    
 
-
-def addDistance(url, data, placeholder){
+def addDistance(url, data){
   url: url
   valueDistance: data
 }
@@ -444,9 +444,9 @@ def fetchDistanceArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueDistance
 }
+    
 
-
-def addDuration(url, data, placeholder){
+def addDuration(url, data){
   url: url
   valueDuration: data
 }
@@ -460,9 +460,9 @@ def fetchDurationArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueDuration
 }
+    
 
-
-def addHumanName(url, data, placeholder){
+def addHumanName(url, data){
   url: url
   valueHumanName: data
 }
@@ -476,9 +476,9 @@ def fetchHumanNameArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueHumanName
 }
+    
 
-
-def addIdentifier(url, data, placeholder){
+def addIdentifier(url, data){
   url: url
   valueIdentifier: data
 }
@@ -492,9 +492,9 @@ def fetchIdentifierArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueIdentifier
 }
+    
 
-
-def addMoney(url, data, placeholder){
+def addMoney(url, data){
   url: url
   valueMoney: data
 }
@@ -508,9 +508,9 @@ def fetchMoneyArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueMoney
 }
+    
 
-
-def addPeriod(url, data, placeholder){
+def addPeriod(url, data){
   url: url
   valuePeriod: data
 }
@@ -524,9 +524,9 @@ def fetchPeriodArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valuePeriod
 }
+    
 
-
-def addQuantity(url, data, placeholder){
+def addQuantity(url, data){
   url: url
   valueQuantity: data
 }
@@ -540,9 +540,9 @@ def fetchQuantityArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueQuantity
 }
+    
 
-
-def addRange(url, data, placeholder){
+def addRange(url, data){
   url: url
   valueRange: data
 }
@@ -556,9 +556,9 @@ def fetchRangeArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueRange
 }
+    
 
-
-def addRatio(url, data, placeholder){
+def addRatio(url, data){
   url: url
   valueRatio: data
 }
@@ -572,9 +572,9 @@ def fetchRatioArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueRatio
 }
+    
 
-
-def addReference(url, data, placeholder){
+def addReference(url, data){
   url: url
   valueReference: data
 }
@@ -588,9 +588,9 @@ def fetchReferenceArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueReference
 }
+    
 
-
-def addSampledData(url, data, placeholder){
+def addSampledData(url, data){
   url: url
   valueSampledData: data
 }
@@ -604,9 +604,9 @@ def fetchSampledDataArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueSampledData
 }
+    
 
-
-def addSignature(url, data, placeholder){
+def addSignature(url, data){
   url: url
   valueSignature: data
 }
@@ -620,9 +620,9 @@ def fetchSignatureArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueSignature
 }
+    
 
-
-def addTiming(url, data, placeholder){
+def addTiming(url, data){
   url: url
   valueTiming: data
 }
@@ -636,9 +636,9 @@ def fetchTimingArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueTiming
 }
+    
 
-
-def addContactDetail(url, data, placeholder){
+def addContactDetail(url, data){
   url: url
   valueContactDetail: data
 }
@@ -652,9 +652,9 @@ def fetchContactDetailArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueContactDetail
 }
+    
 
-
-def addContributor(url, data, placeholder){
+def addContributor(url, data){
   url: url
   valueContributor: data
 }
@@ -668,9 +668,9 @@ def fetchContributorArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueContributor
 }
+    
 
-
-def addDataRequirement(url, data, placeholder){
+def addDataRequirement(url, data){
   url: url
   valueDataRequirement: data
 }
@@ -684,9 +684,9 @@ def fetchDataRequirementArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueDataRequirement
 }
+    
 
-
-def addExpression(url, data, placeholder){
+def addExpression(url, data){
   url: url
   valueExpression: data
 }
@@ -700,9 +700,9 @@ def fetchExpressionArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueExpression
 }
+    
 
-
-def addParameterDefinition(url, data, placeholder){
+def addParameterDefinition(url, data){
   url: url
   valueParameterDefinition: data
 }
@@ -716,9 +716,9 @@ def fetchParameterDefinitionArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueParameterDefinition
 }
+    
 
-
-def addRelatedArtifact(url, data, placeholder){
+def addRelatedArtifact(url, data){
   url: url
   valueRelatedArtifact: data
 }
@@ -732,9 +732,9 @@ def fetchRelatedArtifactArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueRelatedArtifact
 }
+    
 
-
-def addTriggerDefinition(url, data, placeholder){
+def addTriggerDefinition(url, data){
   url: url
   valueTriggerDefinition: data
 }
@@ -748,9 +748,9 @@ def fetchTriggerDefinitionArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueTriggerDefinition
 }
+    
 
-
-def addUsageContext(url, data, placeholder){
+def addUsageContext(url, data){
   url: url
   valueUsageContext: data
 }
@@ -764,9 +764,9 @@ def fetchUsageContextArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueUsageContext
 }
+    
 
-
-def addDosage(url, data, placeholder){
+def addDosage(url, data){
   url: url
   valueDosage: data
 }
@@ -780,9 +780,9 @@ def fetchDosageArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueDosage
 }
+    
 
-
-def addMeta(url, data, placeholder){
+def addMeta(url, data){
   url: url
   valueMeta: data
 }
@@ -796,4 +796,4 @@ def fetchMetaArray(url, extension) {
   var result: extension[where $.url = url]
   $this: result[*].valueMeta
 }
-
+ 
