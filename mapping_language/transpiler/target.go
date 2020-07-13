@@ -49,7 +49,7 @@ func (t *transpiler) VisitTargetVar(ctx *parser.TargetVarContext) interface{} {
 func (t *transpiler) VisitTargetObj(ctx *parser.TargetObjContext) interface{} {
 	return &mpb.FieldMapping{
 		Target: &mpb.FieldMapping_TargetObject{
-			TargetObject: ctx.TOKEN().GetText(),
+			TargetObject: getTokenText(ctx.TOKEN()),
 		},
 	}
 }

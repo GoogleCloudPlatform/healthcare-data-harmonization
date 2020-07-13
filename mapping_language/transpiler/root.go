@@ -59,7 +59,7 @@ func (t *transpiler) VisitRoot(ctx *parser.RootContext) interface{} {
 func (t *transpiler) VisitPostProcessName(ctx *parser.PostProcessNameContext) interface{} {
 	return &mpb.MappingConfig{
 		PostProcess: &mpb.MappingConfig_PostProcessProjectorName{
-			PostProcessProjectorName: ctx.TOKEN().GetText(),
+			PostProcessProjectorName: getTokenText(ctx.TOKEN()),
 		},
 	}
 }

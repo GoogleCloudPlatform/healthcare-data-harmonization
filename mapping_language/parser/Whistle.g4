@@ -138,12 +138,17 @@ DELIM
 ;
 
 TOKEN
-    : [$A-Za-z_] TOKENCHAR*
+    : TOKENINITCHAR TOKENCHAR*
+    | '\'' ('\\\'' | ~['])+ '\''
 ;
 
 fragment TOKENCHAR
     : [$A-Za-z_0-9/-]
-    | '\\' [ .]
+    | '\\' .
+;
+fragment TOKENINITCHAR
+    : [$A-Za-z_]
+    | '\\' .
 ;
 
 OWMOD

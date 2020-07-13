@@ -24,12 +24,12 @@ func (t *transpiler) VisitProjectorDef(ctx *parser.ProjectorDefContext) interfac
 	for i := range ctx.AllArgAlias() {
 		aliases = append(aliases, ctx.ArgAlias(i).(*parser.ArgAliasContext).TOKEN().GetText())
 		if ctx.ArgAlias(i).(*parser.ArgAliasContext).REQUIRED() != nil {
-			requiredArgs = append(requiredArgs, ctx.ArgAlias(i).(*parser.ArgAliasContext).TOKEN().GetText())
+			requiredArgs = append(requiredArgs, getTokenText(ctx.ArgAlias(i).(*parser.ArgAliasContext).TOKEN()))
 		}
 	}
 
 	// Create a new environment for each projector.
-	t.pushEnv(t.environment.newChild(ctx.TOKEN().GetText(), aliases, requiredArgs))
+	t.pushEnv(t.environment.newChild(getTokenText(ctx.TOKEN()), aliases, requiredArgs))
 
 	ctx.Block().Accept(t)
 

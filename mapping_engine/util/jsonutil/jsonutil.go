@@ -106,7 +106,7 @@ func SegmentPath(path string) ([]string, error) {
 		delim := c == '.' && !escaped
 
 		// Validation
-		if !unicode.IsLetter(c) && !unicode.IsDigit(c) && !strings.Contains(`-*[]._\' `, string(c)) {
+		if !unicode.IsLetter(c) && !unicode.IsDigit(c) && !strings.Contains(`-*[]._\' `, string(c)) && !escaped {
 			return nil, fmt.Errorf("invalid character %q", string(c))
 		}
 		if i > 0 && c == '.' && path[i-1] == '.' && !prevEscaped {
@@ -117,12 +117,16 @@ func SegmentPath(path string) ([]string, error) {
 			sb.WriteRune(c)
 		}
 
-		if (delim || (i < len(path)-1 && path[i+1] == '[') || i == len(path)-1) && sb.Len() > 0 {
+		if (delim || (i < len(path)-1 && path[i+1] == '[')) && sb.Len() > 0 {
 			segs = append(segs, sb.String())
 			sb.Reset()
 		}
 
 		prevEscaped = escaped
+	}
+
+	if sb.Len() > 0 {
+		segs = append(segs, sb.String())
 	}
 
 	return segs, nil

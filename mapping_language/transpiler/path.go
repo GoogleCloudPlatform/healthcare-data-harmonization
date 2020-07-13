@@ -16,9 +16,16 @@ package transpiler
 
 import (
 	"fmt"
+	"regexp"
+	"strings"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language/parser" /* copybara-comment: parser */
+	"github.com/antlr/antlr4/runtime/Go/antlr" /* copybara-comment: antlr */
 )
+
+// identifierEscape is the quote escape character to use to indicate that an indentifier has special
+// characters in it.
+const identifierEscape = "'"
 
 type pathSpec struct {
 	arg, field, index string
@@ -52,7 +59,7 @@ func (t *transpiler) VisitPath(ctx *parser.PathContext) interface{} {
 func (t *transpiler) VisitPathHead(ctx *parser.PathHeadContext) interface{} {
 	if ctx.TOKEN() != nil && ctx.TOKEN().GetText() != "" {
 		return pathSpec{
-			arg: ctx.TOKEN().GetText(),
+			arg: getTokenText(ctx.TOKEN()),
 		}
 	}
 
@@ -89,5 +96,25 @@ func (t *transpiler) VisitPathHead(ctx *parser.PathHeadContext) interface{} {
 
 // VisitPathSegment returns a string of the PathSegmentContext contents.
 func (t *transpiler) VisitPathSegment(ctx *parser.PathSegmentContext) interface{} {
+	if ctx.TOKEN() != nil && ctx.TOKEN().GetText() != "" {
+		delim := ""
+		if ctx.DELIM() != nil {
+			delim = ctx.DELIM().GetText()
+		}
+		return delim + getTokenText(ctx.TOKEN())
+	}
 	return ctx.GetText()
+}
+
+var anyChar = regexp.MustCompile(".")
+
+func getTokenText(node antlr.TerminalNode) string {
+	nodeText := node.GetText()
+	if strings.HasPrefix(nodeText, identifierEscape) && strings.HasSuffix(nodeText, identifierEscape) {
+		return anyChar.ReplaceAllStringFunc(strings.Trim(nodeText, identifierEscape), func(s string) string {
+			return `\` + s
+		})
+	}
+
+	return nodeText
 }

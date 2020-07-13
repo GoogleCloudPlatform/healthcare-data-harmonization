@@ -59,10 +59,17 @@ patient.name: input_json.name;
 > NOTE: By default, all fields are present in the output. For fields that should
 > not be present in the output, use variables.
 
-A field can contain spaces or dots by escaping them with a `\`:
+A field can contain spaces, dots or any special characters by escaping them with
+a <code><span>&#92;</span></code> (or two backslashes for a literal backslash in
+the field).
+
+A field can be composed of any characters (e.x. unicode) if it is quoted in
+single quotes. Beware that all delimiters inside the quotes are preserved
+literally and are not treated as delimiters in the path.
 
 ```
-patient\.data.first\ name: input_json.first\ name
+patient\.data.first\\name: input_json.first\ name
+'patient.data'.'😊': true
 ```
 
 outputs:
@@ -70,10 +77,15 @@ outputs:
 ```json
 {
   "patient.data": {
-    "first name": "..."
+    "first\\name": "...",
+    "😊": true
   }
 }
 ```
+
+NOTE: In the above example, the double <code><span>&#92;&#92;</span></code> is
+the JSON escape for a single <code><span>&#92;</span></code>. This means the
+above first name field, when parsed out of JSON, is `first\name`.
 
 ### Constant
 

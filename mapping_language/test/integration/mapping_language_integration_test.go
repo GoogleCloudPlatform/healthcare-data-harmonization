@@ -1216,6 +1216,30 @@ func TestTranspile(t *testing.T) {
 									 }`,
 			},
 		},
+		{
+			name: "field names with fancy chars",
+			whistle: `\0123.\-000: "hello"
+								var 'моя переменная': $root.123[0].\123X
+								'=+2': '"proj\\ector\'"'('моя переменная')
+								def '"proj\\ector\'"'(\1ar\ g1){
+									\123\\_: \1ar\ g1
+									'поле': "field"
+									'😊'.status: "whoa"
+								}`,
+			wantValue: valueTest{
+				inputJSON: `{"123": [{"123X" : "hi"}]}`,
+				wantJSON: `{
+									   "0123": {"-000": "hello"},
+										 "=+2": {
+										 		"123\\_": "hi",
+												"поле": "field",
+												"😊": {
+													"status": "whoa"
+												}
+										 }
+									 }`,
+			},
+		},
 		// TODO: Add more tests.
 	}
 	for _, test := range tests {

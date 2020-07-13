@@ -115,7 +115,7 @@ func (t *transpiler) VisitExprProjection(ctx *parser.ExprProjectionContext) inte
 	}
 
 	vs := &mpb.ValueSource{
-		Projector: ctx.TOKEN().GetText() + arrMod,
+		Projector: getTokenText(ctx.TOKEN()) + arrMod,
 	}
 
 	for i := range ctx.AllSourceContainer() {
@@ -176,6 +176,6 @@ func (t *transpiler) VisitSourceContainer(ctx *parser.SourceContainerContext) in
 func (t *transpiler) VisitExprNoArg(ctx *parser.ExprNoArgContext) interface{} {
 	// Simple projector call with no args, e.x. $UUID()
 	return &mpb.ValueSource{
-		Projector: ctx.TOKEN().GetText(),
+		Projector: getTokenText(ctx.TOKEN()),
 	}
 }
