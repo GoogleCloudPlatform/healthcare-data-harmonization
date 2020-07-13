@@ -1,0 +1,33 @@
+def CodeToCodeableConcept(system, data) {
+  coding.system: system
+  coding.code: data
+}
+
+def CodeableConceptToCode(data) {
+  $this: data.coding[0].code
+}
+
+def StringToCodeableConcept(data) {
+  text: data
+}
+
+def CodeableConceptToString(data) {
+  $this: data.text
+}
+
+def IdentifierToReference(data) {
+  identifier: data
+}
+
+def ReferenceToIdentifier(data) {
+  $this: data.identifier
+}
+
+def ReferenceToCanonical(data) {
+  $this: data.identifier.uri
+}
+
+def CanonicalToReference(data) {
+  identifier.uri: data
+}
+

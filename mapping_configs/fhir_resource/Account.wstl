@@ -1,0 +1,50 @@
+def AccountBase(account) {
+  resourceType: account.resourceType
+  id: account.id
+  meta: account.meta
+  implicitRules: account.implicitRules
+  language: account.language
+  text: account.text
+  contained: account.contained
+  extension: account.extension
+  modifierExtension: account.modifierExtension
+  identifier: account.identifier
+  type: account.type
+  name: account.name
+  coverage: account.coverage
+  owner: account.owner
+  description: account.description
+  guarantor: account.guarantor
+}
+
+def R3AccountToR4(account) {
+  $this: AccountBase(account)
+  status: account.status
+  subject: R3Account_SubjectToR4("https://www.hl7.org/fhir/account-definitions.html#Account.subject", account.extension, account.subject)
+  servicePeriod: account.period
+  partOf: fetchReference("https://www.hl7.org/fhir/account-definitions.html#Account.partOf", account.extension)
+  extension[]: addPeriod("https://www.hl7.org/fhir/STU3/account-definitions.html#Account.active", account.active)
+  extension[]: addPeriod("https://www.hl7.org/fhir/STU3/account-definitions.html#Account.balance", account.balance)
+  extension[]: addReference("https://www.hl7.org/fhir/STU3/account-definitions.html#Account.subject", account.subject)
+}
+
+def R4AccountToR3(account) {
+  $this: AccountBase(account)
+  status: account.status
+  subject: account.subject[0]
+  period: account.servicePeriod
+  active: fetchPeriod("https://www.hl7.org/fhir/STU3/account-definitions.html#Account.active", account.extension)
+  balance: fetchPeriod("https://www.hl7.org/fhir/STU3/account-definitions.html#Account.balance", account.extension)
+  extension[]: addReference("https://www.hl7.org/fhir/account-definitions.html#Account.subject", account.subject[])
+  extension[]: addReference("https://www.hl7.org/fhir/account-definitions.html#Account.partOf", account.partOf)
+}
+
+def R3Account_SubjectToR4(url, extension, data) {
+  var subject: fetchReferenceArray(url, extension)
+  if subject? {
+    $this: subject
+  } else {
+    $this: $ListOf(data)
+  }
+}
+
