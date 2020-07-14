@@ -405,7 +405,7 @@ func writeFieldSegmented(src JSONToken, segments []string, dest *JSONToken, over
 	case JSONNum, JSONStr, JSONBool:
 		return fmt.Errorf("attempt to key into primitive with key %s", seg)
 	}
-	return fmt.Errorf("JSON contained unknown data strcture at %s", seg)
+	return fmt.Errorf("JSON contained unknown data structure %T at %s", *dest, seg)
 }
 
 // Merge merges two JSONTokens together. If failOnOverwrite is true, this method guarantees that no
