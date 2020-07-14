@@ -1,0 +1,451 @@
+{
+ "OML_O21": {
+  "MSH": {
+   "0": "MSH",
+   "1": "|",
+   "10": "NIST-LOI_5.0_1.1-GU",
+   "11": {
+    "1": "T"
+   },
+   "12": {
+    "1": "2.5.1"
+   },
+   "13": null,
+   "14": null,
+   "15": "AL",
+   "16": "AL",
+   "17": null,
+   "18": null,
+   "19": null,
+   "2": "^~\\&#",
+   "20": null,
+   "21": [
+    {
+     "1": "LOI_Common_Component",
+     "2": "LOI Base Profile",
+     "3": "2.16.840.1.113883.9.66",
+     "4": "ISO"
+    },
+    {
+     "1": "LOI_GU_Component",
+     "2": "LOI GU Profile",
+     "3": "2.16.840.1.113883.9.78",
+     "4": "ISO"
+    },
+    {
+     "1": "LAB_PRU_Component",
+     "2": "LOI PRU Profile",
+     "3": "2.16.840.1.113883.9.82",
+     "4": "ISO"
+    }
+   ],
+   "3": {
+    "1": "NIST EHR",
+    "2": "2.16.840.1.113883.3.72.5.22",
+    "3": "ISO"
+   },
+   "4": {
+    "1": "NIST EHR Facility",
+    "2": "2.16.840.1.113883.3.72.5.23",
+    "3": "ISO"
+   },
+   "5": {
+    "1": "NIST Test Lab APP",
+    "2": "2.16.840.1.113883.3.72.5.20",
+    "3": "ISO"
+   },
+   "6": {
+    "1": "NIST Lab Facility",
+    "2": "2.16.840.1.113883.3.72.5.21",
+    "3": "ISO"
+   },
+   "7": "20130211184101-0500",
+   "8": null,
+   "9": {
+    "1": "OML",
+    "2": "O21",
+    "3": "OML_O21"
+   }
+  },
+  "NTE": null,
+  "ORDER": [
+   {
+    "BLG": null,
+    "CTI": null,
+    "FT1": null,
+    "OBSERVATION_REQUEST": {
+     "CTD": null,
+     "DG1": [
+      {
+       "0": "DG1",
+       "1": "1",
+       "10": null,
+       "11": null,
+       "12": null,
+       "13": null,
+       "14": null,
+       "15": "1",
+       "2": null,
+       "3": {
+        "1": "F11.129",
+        "2": "Opioid abuse with intoxication,unspecified",
+        "3": "I10C"
+       },
+       "4": null,
+       "5": null,
+       "6": {
+        "1": "W"
+       },
+       "7": null,
+       "8": null,
+       "9": null
+      }
+     ],
+     "NTE": null,
+     "OBR": {
+      "0": "OBR",
+      "1": "1",
+      "10": null,
+      "11": null,
+      "12": null,
+      "13": null,
+      "14": null,
+      "15": null,
+      "16": [
+       {
+        "1": "5742200012",
+        "10": "L",
+        "11": null,
+        "12": null,
+        "13": "NPI",
+        "2": {
+         "1": "Radon"
+        },
+        "3": "Nicholas",
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": {
+         "1": "NPI",
+         "2": "2.16.840.1.113883.4.6",
+         "3": "ISO"
+        }
+       }
+      ],
+      "2": {
+       "1": "ORD448811",
+       "2": null,
+       "3": "2.16.840.1.113883.3.72.5.24",
+       "4": "ISO"
+      },
+      "3": null,
+      "4": {
+       "1": "1000",
+       "2": "Hepatitis A B  C Panel_WithReflex",
+       "3": "99USL"
+      },
+      "5": null,
+      "6": null,
+      "7": "20120628070100",
+      "8": null,
+      "9": null
+     },
+     "OBSERVATION": [
+      {
+       "NTE": null,
+       "OBX": {
+        "0": "OBX",
+        "1": "1",
+        "10": null,
+        "11": "O",
+        "12": null,
+        "13": null,
+        "14": "20120628",
+        "15": null,
+        "16": null,
+        "17": null,
+        "18": null,
+        "19": null,
+        "2": "CWE",
+        "20": null,
+        "21": null,
+        "22": null,
+        "23": null,
+        "24": null,
+        "25": null,
+        "26": null,
+        "27": null,
+        "28": null,
+        "29": [
+         "SCI"
+        ],
+        "3": {
+         "1": "67471-3",
+         "2": "Pregnancy",
+         "3": "LN"
+        },
+        "4": null,
+        "5": [
+         {
+          "1": {
+           "1": "UNK"
+          },
+          "2": {
+           "1": "Unknown"
+          },
+          "3": {
+           "1": "HL70353"
+          },
+          "4": {
+           "1": "3118003"
+          },
+          "5": {
+           "1": "Possible, unconfirmed"
+          },
+          "6": {
+           "1": "99USL"
+          },
+          "7": {
+           "1": ""
+          },
+          "8": {
+           "1": ""
+          },
+          "9": {
+           "1": "suspected, but unconfirmed - no test to date"
+          }
+         }
+        ],
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null
+       },
+       "PRT": null,
+       "TCD": null
+      }
+     ],
+     "PRIOR_RESULT": null,
+     "PRT": null,
+     "SGH": null,
+     "SGT": null,
+     "SPECIMEN": [
+      {
+       "CONTAINER": null,
+       "SPECIMEN_OBSERVATION": null,
+       "SPM": {
+        "0": "SPM",
+        "1": "1",
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null,
+        "15": null,
+        "16": null,
+        "17": {
+         "1": "20120628070100"
+        },
+        "2": {
+         "1": {
+          "1": "S-2012_448811",
+          "2": null,
+          "3": "2.16.840.1.113883.3.72.5.24",
+          "4": "ISO"
+         }
+        },
+        "3": null,
+        "4": {
+         "1": "119364003",
+         "2": "Serum specimen (specimen)",
+         "3": "SCT",
+         "4": "SER",
+         "5": "Serum",
+         "6": "L"
+        },
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null
+       }
+      }
+     ],
+     "TCD": null
+    },
+    "ORC": {
+     "0": "ORC",
+     "1": "NW",
+     "10": null,
+     "11": null,
+     "12": [
+      {
+       "1": "5742200012",
+       "10": "L",
+       "11": null,
+       "12": null,
+       "13": "NPI",
+       "2": {
+        "1": "Radon"
+       },
+       "3": "Nicholas",
+       "4": null,
+       "5": null,
+       "6": null,
+       "7": null,
+       "8": null,
+       "9": {
+        "1": "NPI",
+        "2": "2.16.840.1.113883.4.6",
+        "3": "ISO"
+       }
+      }
+     ],
+     "2": {
+      "1": "ORD448811",
+      "2": null,
+      "3": "2.16.840.1.113883.3.72.5.24",
+      "4": "ISO"
+     },
+     "3": null,
+     "4": null,
+     "5": null,
+     "6": null,
+     "7": null,
+     "8": null,
+     "9": "20120628070100"
+    },
+    "PRT": null,
+    "TIMING": null
+   }
+  ],
+  "PATIENT": {
+   "AL1": null,
+   "ARV": null,
+   "GT1": null,
+   "INSURANCE": null,
+   "NK1": [
+    {
+     "0": "NK1",
+     "1": "1",
+     "10": null,
+     "11": null,
+     "12": null,
+     "13": [
+      {
+       "1": "County Women's Correctional Facility",
+       "10": "OID724",
+       "2": null,
+       "3": null,
+       "4": null,
+       "5": null,
+       "6": {
+        "1": "CWCF",
+        "2": "2.16.840.1.114222.4.50.12.4",
+        "3": "ISO"
+       },
+       "7": "XX",
+       "8": null,
+       "9": null
+      }
+     ],
+     "2": null,
+     "3": {
+      "1": "OTH",
+      "2": "Other",
+      "3": "HL70063"
+     },
+     "4": null,
+     "5": null,
+     "6": null,
+     "7": null,
+     "8": null,
+     "9": null
+    }
+   ],
+   "NTE": null,
+   "PATIENT_VISIT": null,
+   "PD1": null,
+   "PID": {
+    "0": "PID",
+    "1": "1",
+    "10": [
+     {
+      "1": "2106-3",
+      "2": "White",
+      "3": "HL70005"
+     }
+    ],
+    "11": [
+     {
+      "1": {
+       "1": "450 Bauchet Street"
+      },
+      "2": null,
+      "3": "Los Angeles",
+      "4": "CA",
+      "5": "90012",
+      "6": null,
+      "7": "H"
+     }
+    ],
+    "12": null,
+    "13": null,
+    "14": null,
+    "15": null,
+    "16": null,
+    "17": null,
+    "18": null,
+    "19": null,
+    "2": null,
+    "20": null,
+    "21": null,
+    "22": [
+     {
+      "1": "N",
+      "2": "Not Hispanic or Latino",
+      "3": "HL70189"
+     }
+    ],
+    "3": [
+     {
+      "1": "PATID1239",
+      "2": null,
+      "3": null,
+      "4": {
+       "1": "NIST MPI",
+       "2": "2.16.840.1.113883.3.72.5.30.2",
+       "3": "ISO"
+      },
+      "5": "MR"
+     }
+    ],
+    "4": null,
+    "5": [
+     {
+      "1": {
+       "1": "Smirnoff"
+      },
+      "2": "Peggy",
+      "3": null,
+      "4": null,
+      "5": null,
+      "6": null,
+      "7": "M"
+     }
+    ],
+    "6": null,
+    "7": "19750401",
+    "8": {
+     "1": "F"
+    },
+    "9": null
+   },
+   "PRT": null
+  },
+  "SFT": null,
+  "UAC": null
+ }
+}

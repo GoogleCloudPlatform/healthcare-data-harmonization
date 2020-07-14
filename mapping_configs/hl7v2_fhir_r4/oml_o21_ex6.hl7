@@ -1,0 +1,6 @@
+MSH|^~\&#|NIST EHR|NIST EHR Facility|NIST Test Lab APP|NIST Lab Facility|20130211184101-0500||OML^O21^OML_O21|NIST-LOI_5.0_1.1-NG|T|2.5.1|||AL|AL|||||LOI_Common_Component^LOI Base Profile^2.16.840.1.113883.9.66^ISO~LOI_NG_Component^LOI NG Profile^2.16.840.1.113883.9.79^ISO~LAB_PRU_Component^LOI PRU Profile^2.16.840.1.113883.9.82^ISO
+PID|1||PATID1239^^^NIST MPI^MR||Smirnoff^Peggy^^^^^M||19750401|F||2106-3^White^HL70005|450 Bauchet Street^^LosAngeles^CA^90012^^H|||||||||||N^Not Hispanic or Latino^HL70189NK1|1||OTH^Other^HL70063||||||||||County Women's Correctional Facility^^^^^CWCF&2.16.840.1.114222.4.50.12.4&ISO^XX^^^OID724ORC|NW|ORD448811^NIST EHR|||||||20120628070100|||5742200012^Radon^Nicholas^^^^^^NPI^L^^^NPI
+OBR|1|ORD448811^NIST EHR||1000^Hepatitis A  B  C Panel_WithReflex^99USL|||20120628070100|||||||||5742200012^Radon^Nicholas^^^^^^NPI^L^^^NPI
+DG1|1||F11.129^Opioid abuse with intoxication,unspecified^I10C|||W|||||||||1
+OBX|1|CWE|67471-3^Pregnancy^LN||UNK^Unknown^HL70353^3118003^Possible, unconfirmed^99USL^^^suspected, but unconfirmed - no test to date||||||O|||20120628|||||||||||||||SCI
+SPM|1|S-2012_448811&NIST EHR||119364003^Serum specimen(specimen)^SCT^SER^Serum^L|||||||||||||20120628070100

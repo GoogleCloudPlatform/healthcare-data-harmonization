@@ -1,0 +1,308 @@
+{
+ "ADT_A01": {
+  "ACC": null,
+  "AL1": null,
+  "ARV_1": null,
+  "ARV_2": null,
+  "DB1": null,
+  "DG1": null,
+  "DRG": null,
+  "EVN": {
+   "0": "EVN",
+   "1": "A01",
+   "2": "20200508130643",
+   "3": null,
+   "4": null,
+   "5": [
+    {
+     "1": "C006",
+     "10": "PRSNL",
+     "11": null,
+     "12": null,
+     "13": "ORGDR",
+     "2": {
+      "1": "Wolf"
+     },
+     "3": "Kathy",
+     "4": null,
+     "5": null,
+     "6": "Dr",
+     "7": null,
+     "8": null,
+     "9": {
+      "1": "DRNBR"
+     }
+    }
+   ],
+   "6": null
+  },
+  "GT1": null,
+  "INSURANCE": null,
+  "MSH": {
+   "0": "MSH",
+   "1": "|",
+   "10": "5",
+   "11": {
+    "1": "T"
+   },
+   "12": {
+    "1": "2.3"
+   },
+   "13": null,
+   "14": null,
+   "15": "AL",
+   "16": null,
+   "17": "44",
+   "18": [
+    "ASCII"
+   ],
+   "2": "^~\\&",
+   "3": {
+    "1": "SIMHOSP"
+   },
+   "4": {
+    "1": "SFAC"
+   },
+   "5": {
+    "1": "RAPP"
+   },
+   "6": {
+    "1": "RFAC"
+   },
+   "7": "20200508130643",
+   "8": null,
+   "9": {
+    "1": "ADT",
+    "2": "A01"
+   }
+  },
+  "NK1": null,
+  "OBX": null,
+  "PD1": {
+   "0": "PD1",
+   "1": null,
+   "2": null,
+   "3": [
+    {
+     "1": "FAMILY PRACTICE",
+     "2": null,
+     "3": "12345"
+    }
+   ],
+   "4": null
+  },
+  "PDA": null,
+  "PID": {
+   "0": "PID",
+   "1": "1",
+   "10": null,
+   "11": [
+    {
+     "1": {
+      "1": "170 Juice Place"
+     },
+     "2": null,
+     "3": "London",
+     "4": null,
+     "5": "RW21 6KC",
+     "6": "GBR",
+     "7": "HOME"
+    }
+   ],
+   "12": null,
+   "13": [
+    {
+     "1": "020 5368 1665",
+     "2": "HOME"
+    }
+   ],
+   "14": null,
+   "15": null,
+   "16": null,
+   "17": null,
+   "18": null,
+   "19": null,
+   "2": {
+    "1": "2590157853",
+    "2": null,
+    "3": null,
+    "4": {
+     "1": "SIMULATOR MRN"
+    },
+    "5": "MRN"
+   },
+   "20": null,
+   "21": null,
+   "22": [
+    {
+     "1": "R",
+     "2": "Other - Chinese",
+     "3": null,
+     "4": null,
+     "5": null
+    }
+   ],
+   "23": null,
+   "24": null,
+   "25": null,
+   "26": null,
+   "27": null,
+   "28": null,
+   "29": null,
+   "3": [
+    {
+     "1": "2590157853",
+     "2": null,
+     "3": null,
+     "4": {
+      "1": "SIMULATOR MRN"
+     },
+     "5": "MRN"
+    },
+    {
+     "1": "2478684691",
+     "2": null,
+     "3": null,
+     "4": {
+      "1": "NHSNBR"
+     },
+     "5": "NHSNMBR"
+    }
+   ],
+   "30": null,
+   "4": null,
+   "5": [
+    {
+     "1": {
+      "1": "Esterkin"
+     },
+     "2": "AKI Scenario 6",
+     "3": null,
+     "4": null,
+     "5": "Miss",
+     "6": null,
+     "7": "CURRENT"
+    }
+   ],
+   "6": null,
+   "7": "19890118000000",
+   "8": {
+    "1": "F"
+   },
+   "9": null
+  },
+  "PROCEDURE": null,
+  "PV1": {
+   "0": "PV1",
+   "1": "1",
+   "10": {
+    "1": "MED"
+   },
+   "11": null,
+   "12": null,
+   "13": null,
+   "14": null,
+   "15": null,
+   "16": null,
+   "17": null,
+   "18": null,
+   "19": {
+    "1": "6145914547062969032",
+    "2": null,
+    "3": null,
+    "4": null,
+    "5": "visitid"
+   },
+   "2": {
+    "1": "I"
+   },
+   "20": null,
+   "21": null,
+   "22": null,
+   "23": null,
+   "24": null,
+   "25": null,
+   "26": null,
+   "27": null,
+   "28": null,
+   "29": null,
+   "3": {
+    "1": {
+     "1": "RenalWard"
+    },
+    "2": {
+     "1": "MainRoom"
+    },
+    "3": {
+     "1": "Bed 1"
+    },
+    "4": {
+     "1": "Simulated Hospital"
+    },
+    "5": null,
+    "6": "BED",
+    "7": {
+     "1": "Main Building"
+    },
+    "8": {
+     "1": "5"
+    }
+   },
+   "30": null,
+   "31": null,
+   "32": null,
+   "33": null,
+   "34": null,
+   "35": null,
+   "36": null,
+   "37": null,
+   "38": null,
+   "39": null,
+   "4": {
+    "1": "28b"
+   },
+   "40": null,
+   "41": {
+    "1": "ARRIVED"
+   },
+   "42": null,
+   "43": null,
+   "44": "20200508130643",
+   "45": null,
+   "46": null,
+   "5": null,
+   "6": null,
+   "7": [
+    {
+     "1": "C006",
+     "10": null,
+     "11": null,
+     "12": "ORGDR",
+     "2": {
+      "1": "Wolf"
+     },
+     "3": "Kathy",
+     "4": null,
+     "5": "Dr",
+     "6": null,
+     "7": null,
+     "8": {
+      "1": "DRNBR"
+     },
+     "9": {
+      "1": "PRSNL"
+     }
+    }
+   ],
+   "8": null,
+   "9": null
+  },
+  "PV2": null,
+  "ROL_1": null,
+  "ROL_2": null,
+  "SFT": null,
+  "UAC": null,
+  "UB1": null,
+  "UB2": null
+ }
+}

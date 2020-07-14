@@ -1,0 +1,13 @@
+MSH|^~\&|SIMHOSP|SFAC|RAPP|RFAC|20200508130644||ORU^R01|7|T|2.3|||AL||44|ASCII
+PID|1|1076943130^^^SIMULATOR MRN^MRN|1076943130^^^SIMULATOR MRN^MRN~2914785070^^^NHSNBR^NHSNMBR||Trivedi^Jacqueline^Pauline^^Mrs^^CURRENT||19371227000000|F|||44 Name House^Flanker Road^Westerham^^PK17 5OI^GBR^HOME||070 0130 6118^HOME|||||||||N^Black or Black British - African^^^||||||||
+PV1|1|I|OtherWard^MainRoom^Bed 1^Simulated Hospital^^BED^Main Building^4|28b|||C002^Smith^Elizabeth^^^Dr^^^DRNBR^PRSNL^^^ORGDR|||SUR|||||||||4637913778641671097^^^^visitid||||||||||||||||||||||ARRIVED|||20200508130644||
+ORC|RE|3529823179|2427424202||CM||||20200508130644
+OBR|1|3529823179|2427424202|us-0003^UREA AND ELECTROLYTES^WinPath^^||20200508130644|20200508130644|||||||20200508130644||||||||20200508130644|||F||1
+OBX|1|NM|tt-0003-02^Potassium^WinPath^^||5.10|MMOLL|3.5 - 5.3||||F|||20200508130644||
+OBX|2|NM|tt-0003-03^Sodium^WinPath^^||145.01|MMOLL|133 - 146||||F|||20200508130644||
+OBX|3|NM|tt-0003-04^Urea^WinPath^^||5.45|MMOLL|2.5 - 7.8||||F|||20200508130644||
+NTE|0||Music dinghy poet pyramid revenge human charles dictionary hydrofoil|
+OBX|4|NM|tt-0003-05^eGFR (MDRD)^WinPath^^||<15|MLMIN|[ ]||||F|||20200508130644||
+NTE|0||Objective chairlift pard mug mouse sweatshirt wildlife contract mode|
+OBX|5|NM|tt-0003-01^Creatinine^WinPath^^||86.25|UMOLL|49 - 92||||F|||20200508130644||
+NTE|0||Pyjama leash modem dressing pocket-watch resource essay|

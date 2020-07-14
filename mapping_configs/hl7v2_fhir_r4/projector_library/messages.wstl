@@ -1,0 +1,242 @@
+// Description: Define ADT_Axx HL7v2 Message Types (version 2.9) to FHIR R4 transformation
+//
+// Argument(s):
+//   ADT_A01 Segments covered in this mapping configuration are: MSH, PID, PD1, DG1, PV1, AL1, OBX
+//
+// Output(s):
+//   FHIR R4 Resources : http://www.hl7.org/fhir/resourcelist.html
+// List of Generated FHIR Resources:
+//   Account: https://www.hl7.org/fhir/account.html
+//   AllergyIntolerance: https://www.hl7.org/fhir/allergyintolerance.html
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//   Condition: https://www.hl7.org/fhir/condition.html
+//   Device : https://www.hl7.org/fhir/device.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   EpisodeOfCare: https://www.hl7.org/fhir/episodeofcare.html
+//   Location: https://www.hl7.org/fhir/location.html
+//   MessageHeader: https://www.hl7.org/fhir/messageheader.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   RelatedPerson: https://www.hl7.org/fhir/stu3/relatedperson.html
+//
+def Transform_ADT(required ADT) {
+  var MessageHeader : MSH_MessageHeader(ADT.MSH);
+  out Resources : MessageHeader;
+  out Resources : HD_Provenance(ADT.MSH.3, ADT.MSH.7, MessageHeader);
+  root Bundle : MSH_Bundle(ADT.MSH.7, ADT.MSH.10);
+
+  var Patient : PID_PD1_Patient(ADT.PID, ADT.PD1);
+  var Patient.contact[] (if ADT.NK1) : NK1_Contact(ADT.NK1[]);
+  out Resources : Patient;
+
+  out Resources : PID_Account(ADT.PID.18, Patient);
+
+  out Resources : NK1_RelatedPerson(ADT.NK1[], Patient);
+
+  var Condition : DG1_Condition(ADT.DG1[], Patient);
+  out Resources : Condition;
+
+  var Encounter : PV1_DG1_Encounter(ADT.PV1, ADT.DG1, Patient, Condition);
+  out Resources : Encounter;
+
+  out Resources : AL1_AllergyIntolerance(ADT.AL1[], Patient);
+
+  out Resources : OBX_Observation(ADT.OBX[], Patient, Encounter);
+}
+
+// Description: Define ADT_A01 HL7v2 Message Type (version 2.9) to FHIR R4 transformation
+//
+// Argument(s):
+//   ADT_A01 Segments covered in this mapping configuration are: MSH, PID, PD1, DG1, PV1, AL1, OBX
+//
+// Output(s):
+//   FHIR R4 Resources : http://www.hl7.org/fhir/resourcelist.html
+// List of Generated FHIR Resources:
+//   Account: https://www.hl7.org/fhir/account.html
+//   AllergyIntolerance: https://www.hl7.org/fhir/allergyintolerance.html
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//   Condition: https://www.hl7.org/fhir/condition.html
+//   Device : https://www.hl7.org/fhir/device.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   EpisodeOfCare: https://www.hl7.org/fhir/episodeofcare.html
+//   Location: https://www.hl7.org/fhir/location.html
+//   MessageHeader: https://www.hl7.org/fhir/messageheader.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   RelatedPerson: https://www.hl7.org/fhir/stu3/relatedperson.html
+//
+def ADT_A01(ADT_A01) {
+  $this : Transform_ADT(ADT_A01);
+}
+
+// Description: Define ADT_A03 HL7v2 Message Type (version 2.9) to FHIR R4 transformation
+//
+// Argument(s):
+//   ADT_A03 Segments covered in this mapping configuration are: MSH, PID, PD1, DG1, PV1, AL1, OBX
+//
+// Output(s):
+//   FHIR R4 Resources : http://www.hl7.org/fhir/resourcelist.html
+// List of Generated FHIR Resources:
+//   Account: https://www.hl7.org/fhir/account.html
+//   AllergyIntolerance: https://www.hl7.org/fhir/allergyintolerance.html
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//   Condition: https://www.hl7.org/fhir/condition.html
+//   Device : https://www.hl7.org/fhir/device.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   EpisodeOfCare: https://www.hl7.org/fhir/episodeofcare.html
+//   Location: https://www.hl7.org/fhir/location.html
+//   MessageHeader: https://www.hl7.org/fhir/messageheader.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   RelatedPerson: https://www.hl7.org/fhir/stu3/relatedperson.html
+//
+def ADT_A03(ADT_A03) {
+  $this : Transform_ADT(ADT_A03);
+}
+
+// Description: Define HL7v2 (version 2.9) to FHIR R4 transformation
+//
+// Argument(s):
+//   ADT_A04 HL7v2 Message Type (version 2.9)
+//   ADT_A04 Segments covered in this mapping configuration are: MSH, PID, PD1, DG1, PV1, AL1, OBX
+//
+// Output(s):
+//   FHIR R4 Resources : http://www.hl7.org/fhir/resourcelist.html
+// List of Generated FHIR Resources:
+//   Account: https://www.hl7.org/fhir/account.html
+//   AllergyIntolerance: https://www.hl7.org/fhir/allergyintolerance.html
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//   Condition: https://www.hl7.org/fhir/condition.html
+//   Device : https://www.hl7.org/fhir/device.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   EpisodeOfCare: https://www.hl7.org/fhir/episodeofcare.html
+//   Location: https://www.hl7.org/fhir/location.html
+//   MessageHeader: https://www.hl7.org/fhir/messageheader.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   RelatedPerson: https://www.hl7.org/fhir/stu3/relatedperson.html
+//
+def ADT_A04(ADT_A04) {
+  $this : Transform_ADT(ADT_A04);
+}
+
+// Description: Define HL7v2 (version 2.9) to FHIR R4 transformation
+//
+// Argument(s):
+//   ADT_A08 HL7v2 Message Type (version 2.9)
+//   ADT_A08 Segments covered in this mapping configuration are: MSH, PID, PD1, DG1, PV1, AL1, OBX
+//
+// Output(s):
+//   FHIR R4 Resources : http://www.hl7.org/fhir/resourcelist.html
+// List of Generated FHIR Resources:
+//   Account: https://www.hl7.org/fhir/account.html
+//   AllergyIntolerance: https://www.hl7.org/fhir/allergyintolerance.html
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//   Condition: https://www.hl7.org/fhir/condition.html
+//   Device : https://www.hl7.org/fhir/device.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   EpisodeOfCare: https://www.hl7.org/fhir/episodeofcare.html
+//   Location: https://www.hl7.org/fhir/location.html
+//   MessageHeader: https://www.hl7.org/fhir/messageheader.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   RelatedPerson: https://www.hl7.org/fhir/stu3/relatedperson.html
+//
+def ADT_A08(ADT_A08) {
+  $this : Transform_ADT(ADT_A08);
+}
+
+// Description: Define ORU_R01 HL7v2 (version 2.9) to FHIR R4 transformation
+//
+// Argument(s):
+//   ORU_R01 HL7v2 Message Type (version 2.9)
+//   ORU_R01 Segments covered in this mapping configuration are: MSH, PID, PD1, PV1, OBX, OBR, ORC
+//
+// Output(s):
+//   FHIR R4 Resources : http://www.hl7.org/fhir/resourcelist.html
+// List of Generated FHIR Resources:
+//   Account: https://www.hl7.org/fhir/account.html
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//   Device : https://www.hl7.org/fhir/device.html
+//   DiagnosticReport: https://hl7.org/fhir/diagnosticreport.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   Location: https://www.hl7.org/fhir/location.html
+//   MessageHeader: https://www.hl7.org/fhir/messageheader.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   RelatedPerson: https://www.hl7.org/fhir/stu3/relatedperson.html
+//   Specimen : https://hl7.org/fhir/specimen.html
+//
+def ORU_R01(ORU_R01) {
+  var MessageHeader : MSH_MessageHeader(ORU_R01.MSH);
+  out Resources : MessageHeader;
+  out Resources : HD_Provenance(ORU_R01.MSH.3, ORU_R01.MSH.7, MessageHeader);
+  root Bundle : MSH_Bundle(ORU_R01.MSH.7, ORU_R01.MSH.10);
+
+  $this : Parse_PATIENT_RESULT(ORU_R01.PATIENT_RESULT[]);
+}
+
+// Description: Define OML_O21 HL7v2 (version 2.9) to FHIR R4 transformation
+//
+// Argument(s):
+//   OML_O21 HL7v2 Message Type (version 2.9)
+//   OML_O21 Segments covered in this mapping configuration are: MSH, PID, PD1, PV1, OBX, OBR, ORC
+//
+// Output(s):
+//   FHIR R4 Resources : http://www.hl7.org/fhir/resourcelist.html
+// List of Generated FHIR Resources:
+//   Account: https://www.hl7.org/fhir/account.html
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//   Device : https://www.hl7.org/fhir/device.html
+//   DiagnosticReport: https://hl7.org/fhir/diagnosticreport.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   Location: https://www.hl7.org/fhir/location.html
+//   MessageHeader: https://www.hl7.org/fhir/messageheader.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   Specimen : https://hl7.org/fhir/specimen.html
+//
+def OML_O21(OML_O21) {
+  var MessageHeader : MSH_MessageHeader(OML_O21.MSH);
+  out Resources : MessageHeader;
+  out Resources : HD_Provenance(OML_O21.MSH.3, OML_O21.MSH.7, MessageHeader);
+  root Bundle : MSH_Bundle(OML_O21.MSH.7, OML_O21.MSH.10);
+
+  var Patient : PID_PD1_Patient(OML_O21.PATIENT.PID, OML_O21.PATIENT.PD1);
+  out Resources : Patient;
+  out Resources : PID_Account(OML_O21.PATIENT.PID.18, Patient);
+
+  var Condition : DG1_Condition(OML_O21.ORDER[*].DG1[], Patient);
+  out Resources : Condition;
+
+  var Encounter : PV1_DG1_Encounter(OML_O21.PATIENT.PATIENT_VISIT.PV1, OML_O21.ORDER[*].DG1[], Patient, Condition);
+  out Resources : Encounter;
+
+  out Resources : AL1_AllergyIntolerance(OML_O21.PATIENT.AL1, Patient);
+
+  out Resources : OBX_Observation(OML_O21.ORDER[*].OBSERVATION_REQUEST.OBSERVATION[*].OBX[], Patient, Encounter);
+
+  var DiagnosticReport : OBR_ORC_DiagnosticReport(OML_O21.ORDER[*].OBSERVATION_REQUEST.OBR[], OML_O21.ORDER[*].ORC[], Patient, Encounter)
+  out Resources : DiagnosticReport;
+}

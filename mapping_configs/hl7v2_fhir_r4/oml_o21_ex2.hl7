@@ -1,0 +1,9 @@
+MSH|^~\&#|NIST EHR^2.16.840.1.113883.3.72.5.22^ISO|NIST EHR Facility^2.16.840.1.113883.3.72.5.23^ISO|NIST Test Lab APP^2.16.840.1.113883.3.72.5.20^ISO|NIST Lab Facility^2.16.840.1.113883.3.72.5.21^ISO|20130211184101-0500||OML^O21^OML_O21|NIST-LOI_3.0_1.1-GU|T|2.5.1|||AL|AL|||||LOI_Common_Component^LOI Base Profile^2.16.840.1.113883.9.66^ISO~LOI_GU_Component^LOI GU Profile^2.16.840.1.113883.9.78^ISO~LAB_PRU_Component^LOI PRU Profile^2.16.840.1.113883.9.82^ISO
+PID|1||PATID1234^^^NIST MPI&2.16.840.1.113883.3.72.5.30.2&ISO^MR||Jones^William^A^JR^^^L||19610615|M||2106-3^White^HL70005|2100 Kennwood Ave^Apt 41^Los Angeles^CA^90067^^H
+ORC|NW|ORD777888^^2.16.840.1.113883.3.72.5.24^ISO||GORD874244^^2.16.840.1.113883.3.72.5.24^ISO|||||20120628070100|||5742200012^Radon^Nicholas^^^^^^NPI&2.16.840.1.113883.4.6&ISO^L^^^NPI||||||||2^Patient has been informed of responsibility, and agrees to   pay for service^HL70339
+OBR|1|ORD777888^^2.16.840.1.113883.3.72.5.24^ISO||400.1^Lipid Panel - direct LDL^99USL^57698-3^Lipid panel with direct LDL -  Serum or Plasma^LN^20130421^^Lipid Panel - direct LDL|||20110531123551-0800|||||||||5742200012^Radon^Nicholas^^^^^^NPI&2.16.840.1.113883.4.6&ISO^L^^^NPI||||||||||||10092000194^Hamlin^Pafford^^^^^^NPI&2.16.840.1.113883.4.6&ISO^L^^^NPI
+PRT|1^NIST EHR^2.16.840.1.113883.3.72.5.22^ISO|AD||RCT^Result Copies To^HL70912^^^^^^Send blind carbon copies to|10092000194^Hamlin^Pafford^^^^^^NPI&2.16.840.1.113883.4.6&ISO^L^^^NPI||||||||||^^FX^^^323^5555555
+DG1|1||Z82.49^Family history of   ischemic heart disease and other diseases of the circulatory system^I10C^^^^^^family history of  heart diease NOS|||W|||||||||2
+DG1|2||R00.2^Palpitations^I10C^^^^^^Palpitations|||W|||||||||1
+OBX|1|CWE|49541-6^Fasting status^LN^1902^Fasting Status^99USL||Y^Yes^HL70136||||||O|||20110531|||||||||||||||SCI
+SPM|1|S-666555&NIST EHR&2.16.840.1.113883.3.72.5.24&ISO||119297000^Blood Specimen^SCT^^^^^^Blood|||||||||||||20110531123551-0800

@@ -1,0 +1,84 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "DA",
+          "display": "Drug allergy",
+          "target": [
+            {
+              "code": "medication",
+              "display": "Medication",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "FA",
+          "display": "Food allergy",
+          "target": [
+            {
+              "code": "food",
+              "display": "Food",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "EA",
+          "display": "Environmental allergy",
+          "target": [
+            {
+              "code": "environment",
+              "display": "Environment",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "AA",
+          "display": "Animal allergy",
+          "target": [
+            {
+              "code": "environment",
+              "display": "Environment",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "PA",
+          "display": "Plant allergy",
+          "target": [
+            {
+              "code": "environment",
+              "display": "Environment",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "LA",
+          "display": "Pollen allergy",
+          "target": [
+            {
+              "code": "environment",
+              "display": "Environment",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://terminology.hl7.org/CodeSystem/v2-0127",
+      "target": "http://hl7.org/fhir/allergy-intolerance-category",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "food",
+        "display": "Food"
+      }
+    }
+  ],
+  "id": "Allergy_Category",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

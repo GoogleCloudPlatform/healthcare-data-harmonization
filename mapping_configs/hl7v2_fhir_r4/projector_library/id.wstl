@@ -1,0 +1,11 @@
+// Description: Generates a resource ID for a Patient given a V2 PID segment.
+//
+// Argument(s):
+//   PID V2 Segment
+//
+// Output(s):
+//  A string representing a patient resource id.
+//
+def PatientID (PID) {
+  $this: $UUID();
+}

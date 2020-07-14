@@ -1,0 +1,112 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "E",
+          "display": "Emergency",
+          "target": [
+            {
+              "code": "in-progress",
+              "display": "In Progress",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "I",
+          "display": "Inpatient",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "Unknown",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "O",
+          "display": "Outpatient",
+          "target": [
+            {
+              "code": "in-progress",
+              "display": "In Progress",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "P",
+          "display": "Preadmit",
+          "target": [
+            {
+              "code": "planned",
+              "display": "Planned",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "R",
+          "display": "Recurring patient",
+          "target": [
+            {
+              "code": "in-progress",
+              "display": "In Progress",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "B",
+          "display": "Obstetrics",
+          "target": [
+            {
+              "code": "in-progress",
+              "display": "In Progress",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "C",
+          "display": "Commercial Account",
+          "target": [
+            {
+              "code": "in-progress",
+              "display": "In Progress",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "N",
+          "display": "Not Applicable",
+          "target": [
+            {
+              "code": "in-progress",
+              "display": "In Progress",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "U",
+          "display": "Unknown",
+          "target": [
+            {
+              "code": "in-progress",
+              "display": "In Progress",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70004",
+      "target": "http://hl7.org/fhir/encounter-status"
+    }
+  ],
+  "id": "Encounter_Status",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

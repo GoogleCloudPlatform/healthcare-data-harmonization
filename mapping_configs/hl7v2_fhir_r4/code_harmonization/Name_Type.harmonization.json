@@ -1,0 +1,260 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "A",
+          "display": "Assigned",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "B",
+          "display": "Birth name",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "BAD",
+          "display": "Bad Name",
+          "target": [
+            {
+              "code": "old",
+              "display": "Old",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "C",
+          "display": "Adopted Name",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "D",
+          "display": "Customary Name",
+          "target": [
+            {
+              "code": "usual",
+              "display": "Usual",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "F",
+          "display": "Fathers Name",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "I",
+          "display": "Licensing Name",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "K",
+          "display": "Business name",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "L",
+          "display": "Official Registry Name",
+          "target": [
+            {
+              "code": "official",
+              "display": "Official",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "M",
+          "display": "Maiden Name",
+          "target": [
+            {
+              "code": "maiden",
+              "display": "Maiden",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "MSK",
+          "display": "Masked",
+          "target": [
+            {
+              "code": "anonymous",
+              "display": "Anonymous",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "N",
+          "display": "Nickname",
+          "target": [
+            {
+              "code": "nickname",
+              "display": "Nickname",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "NAV",
+          "display": "Temporarily Unavailable",
+          "target": [
+            {
+              "code": "temp",
+              "display": "temp",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "NB",
+          "display": "Newborn Name",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "NOUSE",
+          "display": "No Longer To Be Used",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "P",
+          "display": "Name of Partner/Spouse",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "R",
+          "display": "Registered Name",
+          "target": [
+            {
+              "code": "official",
+              "display": "Official",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "REL",
+          "display": "Religious",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "S",
+          "display": "Pseudonym",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "T",
+          "display": "Indigenous/Tribal",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "TEMP",
+          "display": "Temporary Name",
+          "target": [
+            {
+              "code": "temp",
+              "display": "Temp",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "U",
+          "display": "Unknown",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70200",
+      "target": "http://hl7.org/fhir/name-use",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "anonymous",
+        "display": "Anonymous"
+      }
+    }
+  ],
+  "id": "Name_Type",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

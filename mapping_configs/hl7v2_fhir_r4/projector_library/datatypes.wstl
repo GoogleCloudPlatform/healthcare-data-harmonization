@@ -1,0 +1,1101 @@
+// Description: Converts HL7 v2 terminology into FHIR terminology
+//
+// Argument(s):
+//   HL7 v2 Code:  https://hl7-definition.caristix.com/v2/HL7v2.7/Tables
+//   ConceptMapID: https://www.hl7.org/fhir/conceptmap.html
+//
+// Output(s):
+//   FHIR Code datatype: https://www.hl7.org/fhir/datatypes.html#code
+//
+def Convert_TerminologyCode(required Code, ConceptMapID){
+  var mapping : $HarmonizeCode("$Local", Code, "", ConceptMapID);
+  $this : mapping[0].code;
+}
+
+// Description: Converts HL7 v2 terminology into FHIR terminology
+//
+// Argument(s):
+//   HL7 v2 Code:  https://hl7-definition.caristix.com/v2/HL7v2.7/Tables
+//   ConceptMapID: https://www.hl7.org/fhir/conceptmap.html
+//
+// Output(s):
+//   FHIR Coding datatype: https://www.hl7.org/fhir/datatypes.html#Coding
+//
+def Convert_TerminologyCoding(required Code, ConceptMapID){
+  var mapping : $HarmonizeCode("$Local", Code, "", ConceptMapID);
+  $this : mapping[0];
+}
+
+// Description: Converts HL7 v2 terminology into FHIR terminology
+//
+// Argument(s):
+//   HL7 v2 Code:  https://hl7-definition.caristix.com/v2/HL7v2.7/Tables
+//   ConceptMapID: https://www.hl7.org/fhir/conceptmap.html
+//
+// Output(s):
+//   FHIR CodeableConcept datatype: https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def Convert_Terminology(required Code, ConceptMapID){
+  coding : $HarmonizeCode("$Local", Code, "", ConceptMapID);
+}
+
+// Description: Matches the given string is a Number or not
+//
+// Argument(s):
+//   str:  input string
+//
+// Output(s):
+//   Boolean: return true when str is a Number; otherwise false
+//
+def IsNumber(required str) {
+  $this: $MatchesRegex(str, "^\\d*\\.?\\d+$");
+}
+
+// Description: Creates a list of Time Formats to be used by MultiFormatParseTime()
+// The function has a default list of formats that can be modified to meet specific
+// requirements. Time formats should adhere to Golang time format layout
+// (https://golang.org/pkg/time/#Time.Format)
+//
+// Argument(s):
+//
+// Output(s):
+//    Array of DateTime Formats that will be used for parsing incoming DateTime fields.
+//
+def GetTimeFormats() {
+  $this: $ListOf("20060102150405-0600", "20060102150405.999999", "20060102150405", "200601021504", "20060102")
+}
+
+// Description: Returns a Time format for RFC3339 with second or millisecond precision
+// Time Format should adhere to Golang time format layout
+// (https://golang.org/pkg/time/#Time.Format)
+//
+// Argument(s):
+//    precision: s or second and ms or millisecond
+// Output(s):
+//    Time format for RFC3339 to second or millisecond
+//
+def GetRFC3339(precision) {
+  $this (if precision = "s"): "2006-01-02T15:04:05Z";
+  $this (if precision = "ms"): "2006-01-02T15:04:05.99Z";
+}
+
+// Description: Extracts a date in FHIR format from a HL7v2 DateTime datatype
+//
+// Argument(s):
+//   str:  HL7v2 DateTime datatype
+//
+// Output(s):
+//   FHIR Date datatype: https://www.hl7.org/fhir/datatypes.html#date
+//
+def Extract_Date(required str) {
+  var input : $MultiFormatParseTime(GetTimeFormats(), str);
+  $this: $ReformatTime(GetRFC3339("s"), input, "2006-01-02");
+}
+
+// Description: Converts a HL7v2 DateTime datatype to a FHIR Instant datatype
+//
+// Argument(s):
+//   str:  HL7v2 DateTime datatype
+//
+// Output(s):
+//   FHIR Instant datatype: https://www.hl7.org/fhir/datatypes.html#instant
+//
+def Convert_Instant(required str) {
+  var input : $MultiFormatParseTime(GetTimeFormats(), str);
+  $this: $ReformatTime(GetRFC3339("ms"), input, "2006-01-02T15:04:05.2112Z");
+}
+
+// Description: Converts HL7v2 DateTime to FHIR DateTime format
+//
+// Argument(s):
+//   str:  HL7v2 DateTime datatype
+//
+// Output(s):
+//   FHIR DateTime datatype: https://www.hl7.org/fhir/datatypes.html#dateTime
+//
+def Convert_DateTime(required str) {
+  var input : $MultiFormatParseTime(GetTimeFormats(), str);
+  $this: $ReformatTime(GetRFC3339("s"), input, "2006-01-02T15:04:05+01:00");
+}
+
+// Description: Constructs a Provenance Resource, and the Device Resource being referenced
+//
+// Argument(s):
+//   HD datatype
+//   MessageHeader: already constructed MessageHeader from MSH_MessageHeader projector
+//
+// Output(s):
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   Device: https://www.hl7.org/fhir/device.html
+//
+def HD_Provenance (required HD, MSH_7, MessageHeader) {
+  agent[0].who : Build_Reference(Output_Resource(HD_Device(HD)));
+  recorded : Convert_Instant(MSH_7);
+  target[0]: Build_Reference(MessageHeader);
+  id : $UUID();
+  resourceType : "Provenance";
+}
+
+// Description: Constructs a Bundle Resource
+//
+// Argument(s):
+//   MSH-10 datatype
+//
+// Output(s):
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//
+def MSH_Bundle (MSH_7, MSH_10) {
+  timestamp : Convert_Instant(MSH_7);
+  identifier.value : MSH_10;
+}
+
+// Description: Constructs a MessageDefinition resource
+//
+// Argument(s):
+//   MSH.MSG datatype
+//
+// Output(s):
+//   MessageDefinition resource : https://www.hl7.org/fhir/messagedefinition.html
+//
+def MSG_MessageDefinition (required MSG) {
+   identifier[].value : MSG.3;
+   id : $UUID();
+   resourceType : "MessageDefinition";
+}
+
+// Description: Constructs a Device resource from HD datatype
+//
+// Argument(s):
+//   HD datatype
+//
+// Output(s):
+//   Device Resource : https://www.hl7.org/fhir/device.html
+//
+def HD_Device (required HD) {
+  if (HD.1) {
+    identifier[] : Build_Identifier(HD.1, "", "");
+  }
+  if (HD.3 = "ISO" or HD.3 = "UUID") {
+    identifier[] : Build_Identifier(HD.2, HD.3, HD.3);
+  }
+  id : $UUID();
+  resourceType : "Device";
+}
+
+// Description: Constructs an Organization resource
+//
+// Argument(s):
+//   HD datatype
+//
+// Output(s):
+//   Organization Resource : https://www.hl7.org/fhir/organization.html
+//
+def HD_Organization (required HD) {
+  identifier[] : Build_Identifier(HD.1, "", "");
+  identifier[] : Build_Identifier(HD.2, HD.3, HD.3);
+  id : $UUID();
+  resourceType : "Organization";
+}
+
+// Description: Constructs Identifier datatype
+//
+// Argument(s):
+//   varValue: Identifier.value attribute
+//   varType: Identifier.type attribute
+//   varID: HD.3 identifier type
+// Output(s):
+//   Identifier datatype : https://www.hl7.org/fhir/datatypes.html#Identifier
+//
+def Build_Identifier (varValue, varType, varID) {
+  value : varValue;
+  type : ID_CodeableConcept(varType);
+  if (varID = "ISO" or varID = "UUID") {
+    system : "urn:ietf:rfc:3986";   // when the identifier is a URI: https://www.hl7.org/fhir/identifier-registry.html
+  }
+}
+
+// Description: Constructs an Organization resource
+//
+// Argument(s):
+//   HD datatype
+//   CC Country Code
+// Output(s):
+//   Organization Resource : https://www.hl7.org/fhir/organization.html
+//
+def HD_CC_Organization (required HD,CC) {
+ $this: HD_Organization(HD);
+  address[].country : CC;
+}
+
+// Description: Constructs CodeableConcept datatype
+//
+// Argument(s):
+//   ID datatype
+//
+// Output(s):
+//   CodeableConcept datatype : https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def ID_CodeableConcept (required ID) {
+  coding[0].code : ID;
+  coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0301";
+}
+
+// Description: Constructs a Organization resource
+//
+// Argument(s):
+//   XON datatype
+//
+// Output(s):
+//   Organization Resource : https://www.hl7.org/fhir/organization.html
+//
+def XON_Organization(required XON) {
+  name : XON.1;
+  if (XON.3) {
+    identifier[0].value : XON.3;
+  } else {
+    identifier[0].value : XON.10;
+  }
+  identifier[0].type.coding[0].code : XON.7;
+  identifier[0].type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0203";
+  id : $UUID();
+  resourceType : "Organization";
+}
+
+// Description: Constructs Identifier datatype
+//
+// Argument(s):
+//   CX datatype
+//
+// Output(s):
+//   Identifier datatype : https://www.hl7.org/fhir/datatypes.html#Identifier
+//
+def CX_Identifier(CX) {
+  value : CX.1;
+  type.coding[].code : CX.5;
+  period.start : Convert_DateTime(CX.7);
+  period.end : Convert_DateTime(CX.8);
+}
+
+// Description: Constructs Family datatype
+//
+// Argument(s):
+//   FN datatype
+//
+// Output(s):
+//   Family datatype : https://www.hl7.org/fhir/datatypes.html#HumanName
+//
+def FN_Family(FN) {
+  $this : FN.1;
+}
+
+// Description: Constructs Code datatype
+//
+// Argument(s):
+//   CWE datatype
+//
+// Output(s):
+//   Code datatype : https://www.hl7.org/fhir/datatypes.html#code
+//
+def CWE_Code(CWE) {
+  if (~CWE.1) {
+    $this : CWE.4;
+  } else {
+    $this : CWE.1;
+  }
+}
+
+// Description: Constructs Coding datatype
+//
+// Argument(s):
+//   CWE datatype
+//
+// Output(s):
+//   Coding datatype : https://www.hl7.org/fhir/datatypes.html#Coding
+//
+def CWE_Coding(CWE) {
+  code : CWE.1;
+  display : CWE.2;
+  system : CWE.3;
+  version : CWE.7;
+}
+
+// Description: Constructs CodeableConcept datatype
+//
+// Argument(s):
+//   CWE datatype
+//
+// Output(s):
+//   CodeableConcept datatype : https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def CWE_CodeableConcept(CWE) {
+  coding[0].code : CWE.1;
+  coding[0].display : CWE.2;
+  coding[0].system : CWE.3;
+  coding[1].code : CWE.4;
+  coding[1].display : CWE.5;
+  coding[1].system : CWE.6;
+  coding[0].version : CWE.7;
+  coding[1].version : CWE.8;
+  text : CWE.9;
+  coding[2].code : CWE.10;
+  coding[2].display : CWE.11;
+  coding[2].system : CWE.12;
+  coding[2].version : CWE.13;
+}
+
+// Description: Constructs Identifier datatype
+//
+// Argument(s):
+//   DLN datatype
+//   varCode: a code string to be mapped with Identifier.type code
+// Output(s):
+//   Identifier datatype : https://www.hl7.org/fhir/datatypes.html#Identifier
+//
+def DLN_Identifier(DLN, varCode) {
+  value : DLN.1;
+  type.coding[].code: varCode;
+  system : DLN.2.1;
+  period.end : DLN.3;
+}
+
+// Description: Constructs Address datatype
+//
+// Argument(s):
+//   XAD datatype
+//
+// Output(s):
+//   Address datatype : https://www.hl7.org/fhir/datatypes.html#Address
+//
+def XAD_Address(XAD) {
+  $this : SAD_AddressLine(XAD.1);
+  line[] : XAD.2;
+  city : XAD.3;
+  state : XAD.4;
+  postalCode : XAD.5;
+  country : XAD.6;
+  if (XAD.7 = "M" or XAD.7 = "SH") {
+    type : XAD.7;
+  }
+  if (XAD.7 = "BA" or XAD.7 = "BI" or XAD.7 = "C" or XAD.7 = "B" or XAD.7 = "H" or XAD.7 = "O") {
+    use : Convert_TerminologyCode(XAD.7, "Address_Use");
+  }
+  district : CWE_String(XAD.9);
+  period : DR_Period(XAD.12);
+  period.start : Convert_DateTime(XAD.13);
+  period.end : Convert_DateTime(XAD.14);
+  line[] : XAD.19;
+}
+
+// Description: Constructs Identifier datatype
+//
+// Argument(s):
+//   ST datatype, in the context PID.19 - SSN Number - Patient
+//
+// Output(s):
+//   Identifier datatype : https://www.hl7.org/fhir/datatypes.html#Identifier
+//
+def ST_Identifier(ST) {
+  value : ST;
+  type.coding[0].code : "SB";
+}
+
+// Description: Constructs Address datatype
+//
+// Argument(s):
+//   SAD datatype
+//
+// Output(s):
+//   Address datatype : https://www.hl7.org/fhir/datatypes.html#Address
+//
+def SAD_AddressLine(SAD) {
+  line[] : SAD.1;
+  line[] : SAD.2;
+  line[] : SAD.3;
+}
+
+// Description: Constructs String datatype
+//
+// Argument(s):
+//   CWE datatype
+//
+// Output(s):
+//   String datatype, in the context of XAD.9
+//
+def CWE_String(CWE) {
+  if (~CWE.9) {
+    $this : CWE.2;
+  } else {
+    $this : CWE.9;
+  }
+}
+
+// Description: Constructs Period datatype
+//
+// Argument(s):
+//   DR datatype
+//
+// Output(s):
+//   Period datatype : https://www.hl7.org/fhir/datatypes.html#Period
+//
+def DR_Period(DR) {
+  start : Convert_DateTime(DR.1);
+  end : Convert_DateTime(DR.2);
+}
+
+// Description: Constructs ContactPoint datatype
+//
+// Argument(s):
+//   varValue, varSystem, varUse, varRank, varStart, varEnd : respective values are passed to construct a ContactPoint datatype
+//
+// Output(s):
+//   ContactPoint datatype : https://www.hl7.org/fhir/datatypes.html#ContactPoint
+//
+def Build_ContactPoint(varValue, varSystem, varUse, varRank, varStart, varEnd) {
+  value : varValue;
+  system : varSystem;
+  use : varUse;
+  rank : varRank;
+  period.start : Convert_DateTime(varStart);
+  period.end : Convert_DateTime(varEnd);
+}
+
+// Description: Constructs ContactPoint datatype
+//
+// Argument(s):
+//   XTN datatype
+//
+// Output(s):
+//   ContactPoint datatype : https://www.hl7.org/fhir/datatypes.html#ContactPoint
+//
+def XTN_ContactPoint(XTN, cUse) {
+  if (XTN.1) {
+    $this: Build_ContactPoint(XTN.1, "", cUse, XTN.18, XTN.13, XTN.14);
+  }
+}
+
+// Description: Constructs HumanName datatype
+//
+// Argument(s):
+//   XPN datatype
+//
+// Output(s):
+//   HumanName datatype : https://www.hl7.org/fhir/datatypes.html#HumanName
+//
+def XPN_HumanName(XPN) {
+  family : FN_Family(XPN.1);
+  given[] : XPN.2;
+  given[] : XPN.3;
+  suffix[] : XPN.4;
+  prefix[] : XPN.5;
+  suffix[] : XPN.6;
+  use : Convert_TerminologyCode(XPN.7, "Name_Type");
+  if (~XPN.12 and ~XPN.13) {
+    period : DR_Period(XPN.10);
+  }
+  period.start : Convert_DateTime(XPN.12);
+  period.end : Convert_DateTime(XPN.13);
+  suffix[] : XPN.14;
+}
+
+// Description: Constructs a FHIR R4 Patient.contact and its related resources based on NK1 Segment
+//
+// Argument(s):
+//   NK1 V2 Segment
+//
+// Output(s):
+//   Patient.contact: https://www.hl7.org/fhir/patient-definitions.html#Patient.contact
+//
+def NK1_Contact(required NK1) {
+  name : XPN_HumanName(NK1.2[0]);
+  address : XAD_Address(NK1.4[0]);
+  telecom[] : XTN_ContactPoint(NK1.5[], "home");
+  telecom[] : XTN_ContactPoint(NK1.6[], "work");
+  var relationshipCC : CWE_CodeableConcept(NK1.7);
+  relationship[] (if relationshipCC) : Convert_Terminology(relationshipCC.coding[0].code, "Relationship");
+  period.start : Convert_DateTime(NK1.8);
+  period.end : Convert_DateTime(NK1.9);
+  var Organization : XON_Organization(NK1.13[0]);
+  var Organization.contact[] (if Organization): XPN_XTN_XAD_OrganizationContact(NK1.30, NK1.31, NK1.32);
+  organization :  Build_Reference(Output_Resource(Organization));
+  gender : Convert_TerminologyCode(CWE_Code(NK1.14), "Gender");
+  telecom[] : XTN_ContactPoint(NK1.40, "home");
+  telecom[] : XTN_ContactPoint(NK1.41, "work");
+}
+
+// Description: Constructs an Organization resource
+//
+// Argument(s):
+//   XPN datatype
+//   XTN datatype
+//   XAD datatype
+// Output(s):
+//   Organization Resource : https://www.hl7.org/fhir/organization.html
+//
+def XPN_XTN_XAD_OrganizationContact(XPN, XTN, XAD) {
+  name : XPN_HumanName(XPN[0]);
+  telecom[] : XTN_ContactPoint(XTN[], "work");
+  address : XAD_Address(XAD[0]);
+}
+
+// Description: Constructs an Encouter.participant datatype, where a Practitioner resource is created and referrenced.
+//
+// Argument(s):
+//   XCN Datatype
+//   varCode, varSystem, varDisplay: respective values are passed to construct a participant datatype
+//
+// Output(s):
+//   Encouter.participant datatype : https://www.hl7.org/fhir/encounter-definitions.html#Encounter.participant
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def Build_Participant (required XCN, varCode, varSystem, varDisplay) {
+  individual : Build_Reference(Output_Resource(XCN_Practitioner(XCN)));
+  type[0].coding[0].code : varCode;
+  type[0].coding[0].system : varSystem;
+  type[0].coding[0].display : varDisplay;
+}
+
+// Description: Constructs a Practitioner resource
+//
+// Argument(s):
+//   XCN datatype
+//
+// Output(s):
+//   Practitioner Resource : https://www.hl7.org/fhir/practitioner.html
+//
+def XCN_Practitioner(required XCN) {
+  identifier[0].value : XCN.1;
+  name[0].family : FN_Family(XCN.2);
+  name[0].given[] : XCN.3;
+  name[0].given[] : XCN.4;
+  name[0].suffix[] : XCN.5;
+  name[0].prefix[] : XCN.6;
+  name[0].suffix[] : XCN.7;
+  name[0].use : Convert_TerminologyCode(XCN.10, "Name_Type");
+  identifier[0].type.coding[].code : XCN.13;
+  if (XCN.19 and ~XCN.20) {
+    name[0].period : DR_Period(XCN.17);
+  }
+  name[0].period.start : Convert_DateTime(XCN.19);
+  name[0].period.end : Convert_DateTime(XCN.20);
+  name[0].suffix[] : XCN.21;
+  id : $UUID();
+  resourceType : "Practitioner";
+}
+
+// Description: Constructs a Location resource
+//
+// Argument(s):
+//   DH datatype
+//   segN represents each of PL subsegments to be mapped a location type in Location Resource
+//
+// Output(s):
+//   Location Resource : https://www.hl7.org/fhir/location.html
+//
+def HD_Location(HD, segN) {
+  name : HD.1;
+  if (HD.3 = "ISO" or HD.3 = "UUID") {
+    identifier[].value : HD.2;
+  }
+  mode : "instance";
+  if (segN = "PL.1" or segN = "") {
+    physicalType.coding[0].code : "si";
+  }
+  if (segN = "PL.2") {
+    physicalType.coding[0].code : "ro";
+  }
+  if (segN = "PL.3") {
+    physicalType.coding[0].code : "bd";
+  }
+  if (segN = "PL.4") {
+    physicalType.coding[0].code : "si";
+  }
+  if (segN = "PL.7") {
+    physicalType.coding[0].code : "bu";
+  }
+  if (segN = "PL.8") {
+    physicalType.coding[0].code : "lvl";
+  }
+  physicalType.coding[0].system : "http://terminology.hl7.org/CodeSystem/location-physical-type";    //Code System to define Location Physical Type: https://www.hl7.org/fhir/codesystem-location-physical-type.html
+  id : $UUID();
+  resourceType : "Location";
+}
+
+// Description: Constructs an array of Location resource based on PL subsegments
+//
+// Argument(s):
+//   PL datatype
+//   Status represents status each of PL subsegments to be mapped a location type in Location Resource
+//
+// Output(s):
+//   Location Resource : https://www.hl7.org/fhir/location.html
+//
+def PL_Location (required PL,Status) {
+  var facility : HD_Location(PL.4, "PL.4");
+  var building : HD_Location(PL.7, "PL.7");
+  var floor : HD_Location(PL.8, "PL.8");
+  var pointOfCare : HD_Location(PL.1, "PL.1");
+  var room : HD_Location(PL.2, "PL.2");
+  var bed : HD_Location(PL.3, "PL.3");
+
+  var pointOfCare.partOf : Build_Reference(building);
+  var room.partOf : Build_Reference(pointOfCare);
+  var bed.partOf : Build_Reference(room);
+  var building.partOf : Build_Reference(facility);
+  var floor.partOf : Build_Reference(building);
+
+  location[] : Build_LocationStatus(pointOfCare, Status);
+  location[] : Build_LocationStatus(room, Status);
+  location[] : Build_LocationStatus(bed, Status);
+  location[] : Build_LocationStatus(facility, Status);
+  location[] : Build_LocationStatus(building, Status);
+  location[] : Build_LocationStatus(floor, Status);
+}
+
+// Description: Constructs a Location resource and its corresponding status
+//
+// Argument(s):
+//   Location Resource : https://www.hl7.org/fhir/location.html
+//   Status represents status each of PL subsegments to be mapped a location type in Location Resource
+//
+// Output(s):
+//   Location Resource reference & its status
+//
+def Build_LocationStatus (required Location, Status) {
+  location : Build_Reference(Output_Resource(Location));
+  status : Status;
+}
+
+// Description: Constructs a Location resource
+//
+// Argument(s):
+//   DLD datatype
+//
+// Output(s):
+//   Location Resource : https://www.hl7.org/fhir/location.html
+//
+def DLD_Location(required DLD) {
+  $this : CWE_Location(DLD.1);
+}
+
+// Description: Constructs a EpisodeOfCare resource
+//
+// Argument(s):
+//   CX datatype
+//
+// Output(s):
+//   EpisodeOfCare Resource : https://www.hl7.org/fhir/episodeofcare.html
+//
+def CX_EpisodeOfCare(required CX) {
+  identifier[] : CX_Identifier(CX);
+  id : $UUID();
+  resourceType : "EpisodeOfCare";
+}
+
+// Description: Constructs a Location resource
+//
+// Argument(s):
+//   DLD datatype
+//
+// Output(s):
+//   Location Resource : https://www.hl7.org/fhir/location.html
+//
+def CWE_Location(required CWE) {
+  identifier[0].value : CWE.1;
+  name : CWE.2;
+  identifier[0].system : CWE.3;
+  id : $UUID();
+  resourceType : "Location";
+}
+
+// Description: Constructs an Encounter's condition datatype
+//
+// Argument(s):
+//   DG1 Segment datatype
+//   Condition already constructed from DG1 segment: https://www.hl7.org/fhir/condition.html
+// Output(s):
+//   an Encounter's condition datatype
+//
+def DG1_Encounter (required DG1, Condition) {
+  condition : Build_Reference(Condition);
+// TODO: Uncomment below
+//  use : DG1.6 => CWE_CodeableConcept;   //------ Needs Terminology Mappings: No mappings found in community sheet
+}
+
+// Description: Constructs a EpisodeOfCare resource based on Condition and Patient resources
+//
+// Argument(s):
+//   CX datatype
+//   DG1 Segment
+//   Condition Resource: https://www.hl7.org/fhir/condition.html
+//   Patient Resource: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   EpisodeOfCare Resource : https://www.hl7.org/fhir/episodeofcare.html
+//
+def CX_DG1_EpisodeOfCare(CX, DG1, Condition, Patient) {
+  identifier[] : CX_Identifier(CX);
+  status : "finished";
+  diagnosis[] : DG1_EpisodeOfCare(DG1[], Condition[]);
+  patient : Build_Reference(Patient);
+  id : $UUID();
+  resourceType : "EpisodeOfCare";
+}
+
+// Description: Constructs an EpisodeOfCare's condition datatype
+//
+// Argument(s):
+//   DG1 Segment datatype
+//   Condition already constructed from DG1 segment: https://www.hl7.org/fhir/condition.html
+// Output(s):
+//   an EpisodeOfCare's condition datatype
+//
+def DG1_EpisodeOfCare (DG1, Condition) {
+  condition : Build_Reference(Condition);
+  role : CWE_CodeableConcept(DG1.6);
+}
+
+// Description: Constructs a Condition resource
+//
+// Argument(s):
+//   EI datatype
+//
+// Output(s):
+//   Condition Resource : https://www.hl7.org/fhir/condition.html
+//
+def EI_Condition (required EI) {
+  identifier[] : EI_Identifier(EI, "", "");
+  id : $UUID();
+  resourceType : "Condition";
+}
+
+// Description: Constructs Identifier datatype
+//
+// Argument(s):
+//   EI datatype
+//   typeCode: a code string to be mapped with Identifier.type code
+//   typeSystem : a system string to be mapped with Identifier.type system
+//
+// Output(s):
+//   Identifier datatype : https://www.hl7.org/fhir/datatypes.html#Identifier
+//
+def EI_Identifier(required EI, typeCode, typeSystem) {
+  value : EI.1;
+  type.coding[0].code (if typeCode ~= ""): typeCode;
+  type.coding[0].system (if typeSystem ~= ""): typeSystem;
+}
+
+// Description: Constructs a Device resource from HD datatype
+//
+// Argument(s):
+//   EI datatype
+//
+// Output(s):
+//   Device Resource : https://www.hl7.org/fhir/device.html
+//
+def EI_Device (required EI) {
+  $this : EI_Identifier(EI, "", "");
+  id : _UUID();
+  resourceType : "Device";
+}
+
+// Description: Constructs a Quantity datatype from CWE datatype
+//
+// Argument(s):
+//   CWE datatype
+//
+// Output(s):
+//   Quantity Datatype : https://www.hl7.org/fhir/datatypes.html#Quantity
+//
+def CWE_Qauntity(CWE) {
+  if (CWE.1 and CWE.3) {
+    code : CWE.1;
+    system : CWE.3;
+  }
+  if (~CWE.2) {
+    unit : CWE.1;
+  } else {
+    unit : CWE.2;
+  }
+}
+
+// Description: Constructs a Quantity datatype from CWE datatype
+//
+// Argument(s):
+//   SN datatype
+//
+// Output(s):
+//   Quantity Datatype : https://www.hl7.org/fhir/datatypes.html#Quantity
+//
+def SN_Quantity (SN) {
+  comparator : SN.1;
+  value : $ParseFloat(SN.2);
+}
+
+// Description: Constructs a Ratio datatype from SN datatype
+//
+// Argument(s):
+//   SN datatype
+//
+// Output(s):
+//   Ratio Datatype : https://www.hl7.org/fhir/datatypes.html#Ratio
+//
+def SN_Ratio (SN) {
+  numerator.value : $ParseFloat(SN.2);
+  denominator.value : $ParseFloat(SN.4);
+}
+
+// Description: Constructs a Range datatype from SN datatype
+//
+// Argument(s):
+//   SN datatype
+//
+// Output(s):
+//   Range Datatype : https://www.hl7.org/fhir/datatypes.html#Range
+//
+def SN_Range(SN) {
+  low.value : $ParseFloat(SN.2);
+  high.value : $ParseFloat(SN.4);
+}
+
+// Description: Constructs a Range datatype from NR datatype
+//
+// Argument(s):
+//   NR datatype
+//
+// Output(s):
+//   Range Datatype : https://www.hl7.org/fhir/datatypes.html#Range
+//
+def NR_Range(NR) {
+  low.value : $ParseFloat(NR.1);
+  high.value : $ParseFloat(NR.2);
+}
+
+// Description: Constructs CodeableConcept datatype based on HL7 v2 OBX-5 VARIES datatype
+//
+// Argument(s):
+//   VR: OBX-5 VARIES datatype
+//
+// Output(s):
+//   CodeableConcept datatype : https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def VARIES_CodeableConcept(VR) {
+  coding[0].code : VR.1.1;
+  coding[0].display : VR.2.1;
+  coding[0].system : VR.3.1;
+  coding[1].code : VR.4.1;
+  coding[1].display : VR.5.1;
+  coding[1].system : VR.6.1;
+  coding[0].version : VR.7.1;
+  coding[1].version : VR.8.1;
+  text : VR.9.1;
+  coding[2].code : VR.10.1;
+  coding[2].display : VR.11.1;
+  coding[2].system : VR.12.1;
+  coding[2].version : VR.13.1;
+}
+
+// Description: Constructs Period datatype based on HL7 v2 OBX-5 VARIES datatype
+//
+// Argument(s):
+//   VR: OBX-5 VARIES datatype
+//
+// Output(s):
+//   Period datatype : https://www.hl7.org/fhir/datatypes.html#Period
+//
+def VARIES_Period(VR) {
+  start : Convert_DateTime(VR.1.1);
+  end : Convert_DateTime(VR.2.1);
+}
+
+// Description: Constructs a Range datatype from NR datatype based on HL7 v2 OBX-5 VARIES datatype
+//
+// Argument(s):
+//   VR: OBX-5 VARIES datatype
+//
+// Output(s):
+//   Range Datatype : https://www.hl7.org/fhir/datatypes.html#Range
+//
+def VARIES_Range(VR) {
+  low.value : $ParseFloat(VR.1.1);
+  high.value : $ParseFloat(VR.2.1);
+}
+
+// Description: Constructs a Ratio datatype from SN datatype based on HL7 v2 OBX-5 VARIES datatype
+//
+// Argument(s):
+//   VR: OBX-5 VARIES datatype
+//
+// Output(s):
+//   Ratio Datatype : https://www.hl7.org/fhir/datatypes.html#Ratio
+//
+def VARIES_Ratio (VR) {
+  numerator.value : $ParseFloat(VR.2.1);
+  denominator.value : $ParseFloat(VR.4.1);
+}
+
+// Description: Constructs a Quantity datatype from CWE datatype based on HL7 v2 OBX-5 VARIES datatype
+//
+// Argument(s):
+//   VR: OBX-5 VARIES datatype
+//
+// Output(s):
+//   Quantity Datatype : https://www.hl7.org/fhir/datatypes.html#Quantity
+//
+def VARIES_Quantity (VR) {
+  comparator : VR.1.1;
+  value : $ParseFloat(VR.2.1);
+}
+
+// Description: Constructs an Observation.value datatype, where based on OBX2 datatype Observation values are mapped.
+//
+// Argument(s):
+//   OBX5 Datatype
+//   OBX2 Datatype
+//   OBX3 Datatype
+//   OBX6 Datatype
+//
+// Output(s):
+//   Observation.value datatype : https://www.hl7.org/fhir/observation-definitions.html#Observation.value_x_
+//
+def Build_ObservationValue(OBX5, OBX2, OBX6) {
+  if (OBX2 = "NM") {
+    if (IsNumber(OBX5.1.1)) {
+      valueQuantity.value : $ParseFloat(OBX5.1.1);
+    } else {
+      valueString : OBX5.1.1
+    }
+  }
+  if (OBX2 = "ST" or OBX2 = "FT" or OBX2 =  "TX") {
+    valueString : OBX5.1.1;
+  }
+  if (OBX2 = "CF" or OBX2 = "CNE" or OBX2 =  "CWE" or OBX2 =  "CE" or OBX2 = "IS") {
+    valueCodeableConcept : VARIES_CodeableConcept(OBX5);
+  }
+  if (OBX2 = "IS") {
+    valueCodeableConcept.coding[].code : OBX5.1.1;
+  }
+  if (OBX2 = "DR") {
+    valuePeriod : VARIES_Period(OBX5);
+  }
+  if (OBX2 = "DTM" or OBX2 = "DT") {
+    valueDateTime : OBX5.1.1;
+  }
+  if (OBX2 = "NR") {
+    valueRange : VARIES_Range(OBX5);
+  }
+  if (OBX2 = "VR") {
+    valueString: $StrCat(OBX5.1.1, "-" , OBX5.2.1);
+  }
+  if (OBX2 = "TM") {
+    valueTime: OBX5.1.1;
+  }
+  if (OBX2 = "SN" and (OBX5.3.1 = ":" or OBX5.3.1 = "/")) {
+    valueRatio: VARIES_Ratio(OBX5);
+  }
+  if (OBX2 = "SN" and OBX5.3.1 = "-") {
+    valueRange: VARIES_Range(OBX5);
+  }
+  if (OBX2 = "SN" and OBX5.3.1 = "+") {
+    valueString: $StrCat(OBX5.1.1, " " , OBX5.2.1, " " , OBX5.3.1);
+  }
+  if (OBX2 = "SN" and OBX5.3.1 ~= ":" and OBX5.3.1 ~= "/" and OBX5.3.1 ~= "+" and OBX5.3.1 ~= "-") {
+    valueQuantity: VARIES_Quantity(OBX5);
+  }
+  if (OBX2 = "SN" and OBX5.3.1 ~= ":" and OBX5.3.1 ~= "/" and OBX5.3.1 ~= "+" and OBX5.3.1 ~= "-") {
+    valueQuantity: CWE_Qauntity(OBX6);
+ }
+ if (OBX2 = "NA" or OBX2 = "NM") {
+    valueQuantity: CWE_Qauntity(OBX6);
+  }
+  if (OBX2 = "SN" or OBX5.3.1 = "-") {
+    valueRange.low: CWE_Qauntity(OBX6);
+    valueRange.high : CWE_Qauntity(OBX6);
+  }
+  if (OBX2 = "SN" or OBX5.3.1 = ":" or OBX5.3.1 = "/") {
+    valueRatio.numerator : CWE_Qauntity(OBX6);
+    valueRatio.denominator : CWE_Qauntity(OBX6);
+  }
+}
+
+// Description: Constructs an Observation.component datatype, where based on OBX2 datatype Observation values are mapped.
+//
+// Argument(s):
+//   OBX5 Datatype
+//   OBX2 Datatype
+//   OBX3 Datatype
+//   OBX6 Datatype
+//
+// Output(s):
+//   Observation.component datatype : https://www.hl7.org/fhir/observation-definitions.html#Observation.component
+//
+def Build_ObservationComponent(OBX5, OBX2, OBX3, OBX6) {
+  code : CWE_CodeableConcept(OBX3);
+  $this : Build_ObservationValue(OBX5, OBX2, OBX6);
+}
+
+// Description: Constructs an Organization resource
+//
+// Argument(s):
+//   XON datatype
+//   XAD datatype
+// Output(s):
+//   Organization Resource : https://www.hl7.org/fhir/organization.html
+//
+def XON_XAD_Organization (required XON, XAD) {
+  $this: XON_Organization(XON);
+  address[] : XAD_Address(XAD);
+}
+
+// Description: Constructs a FHIR R4 Practitioner Resource based on CNN datatype
+//
+// Argument(s):
+//   CNN datatype
+//
+// Output(s):
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def CNN_Practitioner (required CNN) {
+  identifier[].value : CNN.1;
+  name.family : CNN.2;
+  name.given[] : CNN.3;
+  name.given[] : CNN.4;
+  name.suffix[] : CNN.5;
+  name.prefix[] : CNN.6;
+  name.suffix[] : CNN.7;
+  id : $UUID();
+  resourceType : "Practitioner";
+}
+
+// Description: Constructs a FHIR R4 Specimen Resource based on CM datatype
+//
+// Argument(s):
+//   CM datatype
+//
+// Output(s):
+//   Specimen : https://hl7.org/fhir/specimen.html
+//
+def CM_Specimen (CM) {
+  type : CWE_CodeableConcept(CM.1);
+  container[].additiveCodeableConcept.text : CM.2;
+  note[].text : CM.3
+  collection.bodySite : CWE_CodeableConcept(CM.4);
+}
+
+// Description: Constructs a FHIR R4 Specimen & Practitioner Resources based on OBR Segment
+//
+// Argument(s):
+//   OBR V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Specimen : https://hl7.org/fhir/specimen.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def OBR_Specimen (required OBR, Patient) {
+  collection.collector : Build_Reference(Output_Resource(XCN_Practitioner(OBR.10)));
+  receivedTime : Convert_DateTime(OBR.14);
+  $this : CM_Specimen(OBR.15);
+  subject : Build_Reference(Patient);
+  id : $UUID();
+  resourceType : "Specimen";
+}

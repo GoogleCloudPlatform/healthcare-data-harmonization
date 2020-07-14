@@ -1,0 +1,767 @@
+{
+ "entry": [
+  {
+   "request": {
+    "method": "PUT",
+    "url": "Organization/71299dba-a1a9-4fc2-b335-1e8199dec0c3"
+   },
+   "resource": {
+    "id": "71299dba-a1a9-4fc2-b335-1e8199dec0c3",
+    "identifier": [
+     {
+      "type": {
+       "coding": [
+        {
+         "code": "CLN",
+         "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+        }
+       ]
+      },
+      "value": "6020"
+     }
+    ],
+    "name": "YIEWSLEY FAMILY PRACTICE",
+    "resourceType": "Organization"
+   }
+  },
+  {
+   "request": {
+    "method": "PUT",
+    "url": "Location/e2d24f4e-3e50-4672-86a6-299a3029391c"
+   },
+   "resource": {
+    "id": "e2d24f4e-3e50-4672-86a6-299a3029391c",
+    "mode": "instance",
+    "name": "Orthopaedic",
+    "partOf": {
+     "reference": "Location/34624399-ec03-4d1f-aa73-11518af1a2ae"
+    },
+    "physicalType": {
+     "coding": [
+      {
+       "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+      }
+     ]
+    },
+    "resourceType": "Location"
+   }
+  },
+  {
+   "request": {
+    "method": "PUT",
+    "url": "Location/b18a6686-d58a-4ab6-991c-6be568781fcd"
+   },
+   "resource": {
+    "id": "b18a6686-d58a-4ab6-991c-6be568781fcd",
+    "mode": "instance",
+    "name": "Bay A",
+    "partOf": {
+     "reference": "Location/e2d24f4e-3e50-4672-86a6-299a3029391c"
+    },
+    "physicalType": {
+     "coding": [
+      {
+       "code": "ro",
+       "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+      }
+     ]
+    },
+    "resourceType": "Location"
+   }
+  },
+  {
+   "request": {
+    "method": "PUT",
+    "url": "Location/97c12053-f65a-4f1d-ae20-2b2f3cb73ecc"
+   },
+   "resource": {
+    "id": "97c12053-f65a-4f1d-ae20-2b2f3cb73ecc",
+    "mode": "instance",
+    "name": "Bed 1",
+    "partOf": {
+     "reference": "Location/b18a6686-d58a-4ab6-991c-6be568781fcd"
+    },
+    "physicalType": {
+     "coding": [
+      {
+       "code": "bd",
+       "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+      }
+     ]
+    },
+    "resourceType": "Location"
+   }
+  },
+  {
+   "request": {
+    "method": "PUT",
+    "url": "Location/9ba14b8e-0033-4319-b5e9-5d91d381f320"
+   },
+   "resource": {
+    "id": "9ba14b8e-0033-4319-b5e9-5d91d381f320",
+    "mode": "instance",
+    "name": "Simulated Hospital",
+    "physicalType": {
+     "coding": [
+      {
+       "code": "si",
+       "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+      }
+     ]
+    },
+    "resourceType": "Location"
+   }
+  },
+  {
+   "request": {
+    "method": "PUT",
+    "url": "Location/34624399-ec03-4d1f-aa73-11518af1a2ae"
+   },
+   "resource": {
+    "id": "34624399-ec03-4d1f-aa73-11518af1a2ae",
+    "mode": "instance",
+    "name": "Orthopaedic ward",
+    "partOf": {
+     "reference": "Location/9ba14b8e-0033-4319-b5e9-5d91d381f320"
+    },
+    "physicalType": {
+     "coding": [
+      {
+       "code": "bu",
+       "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+      }
+     ]
+    },
+    "resourceType": "Location"
+   }
+  },
+  {
+   "request": {
+    "method": "PUT",
+    "url": "Location/c02709c2-b50b-43cc-829c-0fc48b288b7e"
+   },
+   "resource": {
+    "id": "c02709c2-b50b-43cc-829c-0fc48b288b7e",
+    "mode": "instance",
+    "name": "1",
+    "partOf": {
+     "reference": "Location/34624399-ec03-4d1f-aa73-11518af1a2ae"
+    },
+    "physicalType": {
+     "coding": [
+      {
+       "code": "lvl",
+       "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+      }
+     ]
+    },
+    "resourceType": "Location"
+   }
+  },
+  {
+   "request": {
+    "method": "PUT",
+    "url": "Location/a19908a6-29c4-4aa3-90cf-b5180186af57"
+   },
+   "resource": {
+    "id": "a19908a6-29c4-4aa3-90cf-b5180186af57",
+    "mode": "instance",
+    "name": "PV1-6-Orthopaedic",
+    "partOf": {
+     "reference": "Location/511318fb-a815-4ab2-9a69-194146d2dd5e"
+    },
+    "physicalType": {
+     "coding": [
+      {
+       "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+      }
+     ]
+    },
+    "resourceType": "Location"
+   }
+  },
+  {
+   "request": {
+    "method": "PUT",
+    "url": "Location/7d909775-9bea-455f-a6ef-2fcb71d7f0c3"
+   },
+   "resource": {
+    "id": "7d909775-9bea-455f-a6ef-2fcb71d7f0c3",
+    "mode": "instance",
+    "name": "PV1-6-Bay A",
+    "partOf": {
+     "reference": "Location/a19908a6-29c4-4aa3-90cf-b5180186af57"
+    },
+    "physicalType": {
+     "coding": [
+      {
+       "code": "ro",
+       "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+      }
+     ]
+    },
+    "resourceType": "Location"
+   }
+  },
+  {
+   "request": {
+    "method": "PUT",
+    "url": "Location/d0bb5e0b-8cc5-4f0b-8093-00dd4474339f"
+   },
+   "resource": {
+    "id": "d0bb5e0b-8cc5-4f0b-8093-00dd4474339f",
+    "mode": "instance",
+    "name": "PV1-6-Bed 1",
+    "partOf": {
+     "reference": "Location/7d909775-9bea-455f-a6ef-2fcb71d7f0c3"
+    },
+    "physicalType": {
+     "coding": [
+      {
+       "code": "bd",
+       "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+      }
+     ]
+    },
+    "resourceType": "Location"
+   }
+  },
+  {
+   "request": {
+    "method": "PUT",
+    "url": "Location/8478096e-e06c-459a-abc2-613960b22cc4"
+   },
+   "resource": {
+    "id": "8478096e-e06c-459a-abc2-613960b22cc4",
+    "mode": "instance",
+    "name": "PV1-6-Simulated Hospital",
+    "physicalType": {
+     "coding": [
+      {
+       "code": "si",
+       "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+      }
+     ]
+    },
+    "resourceType": "Location"
+   }
+  },
+  {
+   "request": {
+    "method": "PUT",
+    "url": "Location/511318fb-a815-4ab2-9a69-194146d2dd5e"
+   },
+   "resource": {
+    "id": "511318fb-a815-4ab2-9a69-194146d2dd5e",
+    "mode": "instance",
+    "name": "PV1-6-Orthopaedic ward",
+    "partOf": {
+     "reference": "Location/8478096e-e06c-459a-abc2-613960b22cc4"
+    },
+    "physicalType": {
+     "coding": [
+      {
+       "code": "bu",
+       "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+      }
+     ]
+    },
+    "resourceType": "Location"
+   }
+  },
+  {
+   "request": {
+    "method": "PUT",
+    "url": "Location/3c02bd5d-4fa2-4ad1-822c-ec47d86eb756"
+   },
+   "resource": {
+    "id": "3c02bd5d-4fa2-4ad1-822c-ec47d86eb756",
+    "mode": "instance",
+    "name": "PV1-6-0",
+    "partOf": {
+     "reference": "Location/511318fb-a815-4ab2-9a69-194146d2dd5e"
+    },
+    "physicalType": {
+     "coding": [
+      {
+       "code": "lvl",
+       "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+      }
+     ]
+    },
+    "resourceType": "Location"
+   }
+  },
+  {
+   "request": {
+    "method": "PUT",
+    "url": "Practitioner/decac86f-d16d-475c-9f3c-7e5d71d61677"
+   },
+   "resource": {
+    "id": "decac86f-d16d-475c-9f3c-7e5d71d61677",
+    "identifier": [
+     {
+      "type": {
+       "coding": [
+        {
+         "code": "CC"
+        }
+       ]
+      },
+      "value": "C184726198"
+     }
+    ],
+    "name": [
+     {
+      "family": "Connell",
+      "given": [
+       "Alistair",
+       "Alex"
+      ],
+      "prefix": [
+       "Dr"
+      ],
+      "suffix": [
+       "Sr",
+       "MD",
+       "MSc."
+      ],
+      "use": "Current"
+     }
+    ],
+    "resourceType": "Practitioner"
+   }
+  },
+  {
+   "request": {
+    "method": "PUT",
+    "url": "Practitioner/7bb38084-5bf5-459b-aa20-ef452ddf59ed"
+   },
+   "resource": {
+    "id": "7bb38084-5bf5-459b-aa20-ef452ddf59ed",
+    "identifier": [
+     {
+      "type": {
+       "coding": [
+        {
+         "code": "CC"
+        }
+       ]
+      },
+      "value": "C184726198"
+     }
+    ],
+    "name": [
+     {
+      "family": "Connell",
+      "given": [
+       "Alistair",
+       "Alex"
+      ],
+      "prefix": [
+       "Dr"
+      ],
+      "suffix": [
+       "Sr",
+       "MD",
+       "MSc."
+      ],
+      "use": "Current"
+     }
+    ],
+    "resourceType": "Practitioner"
+   }
+  },
+  {
+   "request": {
+    "method": "PUT",
+    "url": "Practitioner/2b10e2e7-f7f6-4e62-8e76-ad9c0f7d59b7"
+   },
+   "resource": {
+    "id": "2b10e2e7-f7f6-4e62-8e76-ad9c0f7d59b7",
+    "identifier": [
+     {
+      "type": {
+       "coding": [
+        {
+         "code": "CC"
+        }
+       ]
+      },
+      "value": "C184726198"
+     }
+    ],
+    "name": [
+     {
+      "family": "Connell",
+      "given": [
+       "Alistair",
+       "Alex"
+      ],
+      "prefix": [
+       "Dr"
+      ],
+      "suffix": [
+       "Sr",
+       "MD",
+       "MSc."
+      ],
+      "use": "Current"
+     }
+    ],
+    "resourceType": "Practitioner"
+   }
+  },
+  {
+   "request": {
+    "method": "PUT",
+    "url": "EpisodeOfCare/3a61338b-b2ee-4e79-b20a-4263203f3175"
+   },
+   "resource": {
+    "id": "3a61338b-b2ee-4e79-b20a-4263203f3175",
+    "identifier": [
+     {
+      "period": {
+       "end": "2010-09-08",
+       "start": "2019-04-05"
+      },
+      "type": {
+       "coding": [
+        {
+         "code": "visitid"
+        }
+       ]
+      },
+      "value": "5609582645793883000"
+     }
+    ],
+    "patient": {
+     "reference": "Patient/711223a7-09c7-4042-9882-98f373033b68"
+    },
+    "resourceType": "EpisodeOfCare",
+    "status": "finished"
+   }
+  },
+  {
+   "request": {
+    "method": "PUT",
+    "url": "Encounter/fc0166fd-9b90-4fde-93fc-0d623f691171"
+   },
+   "resource": {
+    "class": {
+     "code": "INPATIENT"
+    },
+    "episodeOfCare": [
+     {
+      "reference": "EpisodeOfCare/3a61338b-b2ee-4e79-b20a-4263203f3175"
+     }
+    ],
+    "hospitalization": {
+     "preAdmissionIdentifier": {
+      "value": "PV1-5"
+     }
+    },
+    "id": "fc0166fd-9b90-4fde-93fc-0d623f691171",
+    "location": [
+     {
+      "location": {
+       "reference": "Location/e2d24f4e-3e50-4672-86a6-299a3029391c"
+      },
+      "status": "active"
+     },
+     {
+      "location": {
+       "reference": "Location/b18a6686-d58a-4ab6-991c-6be568781fcd"
+      },
+      "status": "active"
+     },
+     {
+      "location": {
+       "reference": "Location/97c12053-f65a-4f1d-ae20-2b2f3cb73ecc"
+      },
+      "status": "active"
+     },
+     {
+      "location": {
+       "reference": "Location/9ba14b8e-0033-4319-b5e9-5d91d381f320"
+      },
+      "status": "active"
+     },
+     {
+      "location": {
+       "reference": "Location/34624399-ec03-4d1f-aa73-11518af1a2ae"
+      },
+      "status": "active"
+     },
+     {
+      "location": {
+       "reference": "Location/c02709c2-b50b-43cc-829c-0fc48b288b7e"
+      },
+      "status": "active"
+     },
+     {
+      "location": {
+       "reference": "Location/a19908a6-29c4-4aa3-90cf-b5180186af57"
+      },
+      "status": "completed"
+     },
+     {
+      "location": {
+       "reference": "Location/7d909775-9bea-455f-a6ef-2fcb71d7f0c3"
+      },
+      "status": "completed"
+     },
+     {
+      "location": {
+       "reference": "Location/d0bb5e0b-8cc5-4f0b-8093-00dd4474339f"
+      },
+      "status": "completed"
+     },
+     {
+      "location": {
+       "reference": "Location/8478096e-e06c-459a-abc2-613960b22cc4"
+      },
+      "status": "completed"
+     },
+     {
+      "location": {
+       "reference": "Location/511318fb-a815-4ab2-9a69-194146d2dd5e"
+      },
+      "status": "completed"
+     },
+     {
+      "location": {
+       "reference": "Location/3c02bd5d-4fa2-4ad1-822c-ec47d86eb756"
+      },
+      "status": "completed"
+     }
+    ],
+    "participant": [
+     {
+      "individual": {
+       "reference": "Practitioner/decac86f-d16d-475c-9f3c-7e5d71d61677"
+      },
+      "type": [
+       {
+        "coding": [
+         {
+          "code": "ATND",
+          "display": "attender",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "individual": {
+       "reference": "Practitioner/7bb38084-5bf5-459b-aa20-ef452ddf59ed"
+      },
+      "type": [
+       {
+        "coding": [
+         {
+          "code": "REF",
+          "display": "referrer",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "individual": {
+       "reference": "Practitioner/2b10e2e7-f7f6-4e62-8e76-ad9c0f7d59b7"
+      },
+      "type": [
+       {
+        "coding": [
+         {
+          "code": "CON",
+          "display": "consultant",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "resourceType": "Encounter",
+    "status": "finished",
+    "subject": {
+     "reference": "Patient/711223a7-09c7-4042-9882-98f373033b68"
+    },
+    "type": [
+     {
+      "coding": [
+       {
+        "code": "28b"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "request": {
+    "method": "PUT",
+    "url": "Patient/711223a7-09c7-4042-9882-98f373033b68"
+   },
+   "resource": {
+    "active": true,
+    "address": [
+     {
+      "city": "Croydon",
+      "country": "GBR",
+      "line": [
+       "25 Dahlia House",
+       "Plough Avenue",
+       "Some Guy"
+      ],
+      "postalCode": "SV20 3BC",
+      "state": "N/A",
+      "use": "H"
+     }
+    ],
+    "communication": [
+     {
+      "language": {
+       "coding": [
+        {
+         "code": "ENG-UK"
+        }
+       ]
+      },
+      "preferred": true
+     }
+    ],
+    "gender": "2",
+    "generalPractitioner": [
+     {
+      "reference": "Organization/71299dba-a1a9-4fc2-b335-1e8199dec0c3"
+     }
+    ],
+    "id": "711223a7-09c7-4042-9882-98f373033b68",
+    "identifier": [
+     {
+      "type": {
+       "coding": [
+        {
+         "code": "MRN"
+        }
+       ]
+      },
+      "value": "1419055458"
+     },
+     {
+      "type": {
+       "coding": [
+        {
+         "code": "MRN"
+        }
+       ]
+      },
+      "value": "1419055458"
+     },
+     {
+      "type": {
+       "coding": [
+        {
+         "code": "NHSNMBR"
+        }
+       ]
+      },
+      "value": "3870146052"
+     },
+     {
+      "type": {
+       "coding": [
+        {
+         "code": "MRN4"
+        }
+       ]
+      },
+      "value": "1419055459"
+     },
+     {
+      "type": {
+       "coding": [
+        {
+         "code": "SB"
+        }
+       ]
+      },
+      "value": "SSN-48383"
+     },
+     {
+      "type": {
+       "coding": [
+        {
+         "code": "DL"
+        }
+       ]
+      },
+      "value": "43211234"
+     }
+    ],
+    "maritalStatus": {
+     "coding": [
+      {
+       "code": "MARRIED"
+      }
+     ]
+    },
+    "multipleBirthInteger": "2",
+    "name": [
+     {
+      "family": "Doe",
+      "given": [
+       "Jane",
+       "Janny"
+      ],
+      "prefix": [
+       "Miss"
+      ],
+      "suffix": [
+       "Jr",
+       "PhD",
+       "Eng."
+      ]
+     },
+     {
+      "family": "Al-Doe",
+      "given": [
+       "Al-Jane",
+       "Al-Janny"
+      ],
+      "prefix": [
+       "Al-Miss"
+      ],
+      "suffix": [
+       "Al-Jr",
+       "Al-PhD",
+       "Al-Eng."
+      ]
+     }
+    ],
+    "resourceType": "Patient",
+    "telecom": [
+     {
+      "use": "home",
+      "value": "020 0921 5742"
+     },
+     {
+      "use": "work",
+      "value": "020 0921 5748"
+     },
+     {
+      "use": "home",
+      "value": "020 0921 5700"
+     }
+    ]
+   }
+  }
+ ],
+ "resourceType": "Bundle",
+ "type": "transaction"
+}

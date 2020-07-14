@@ -1,0 +1,19 @@
+MSH|^~\&|HL7|CG3_SICU|CE_CENTRAL|GH_CSF|20251014154101||ORU^R01|20251014154101-639|P|2.3||||||UNICODE UTF-8
+PID|||100002^^^A^MR||RAPID^^|^^|||||^^^^^^^||||||||||||||||||
+PV1||E|G52008|||||||||||||||||||||||||||||||||||||||||
+OBR|1||||||20251014154101||||||||||||||||||||^^^^|||||||||
+OBX|1|ST|HR||73|/min|||||R
+OBX|2|ST|PVC||15|#/min|||||R
+OBX|3|ST|STI||-0.5|mm|||||R
+OBX|4|ST|STII||0.0|mm|||||R
+OBX|5|ST|STIII||0.5|mm|||||R
+OBX|6|ST|STV1||0.0|mm|||||R
+OBX|7|ST|STAVR||0.2|mm|||||R
+OBX|8|ST|STAVL||-0.5|mm|||||R
+OBX|9|ST|STAVF||0.2|mm|||||R
+OBX|10|ST|RR||15|breaths/min|||||R
+OBX|11|ST|CO2EX||32|mm(hg)|||||R
+OBX|12|ST|CO2IN||0|mm(hg)|||||R
+OBX|13|ST|CO2RR||14|breaths/min|||||R
+OBX|14|ST|SPO2R||73|/min|||||R
+OBX|15|ST|SPO2P||99|%|||||R

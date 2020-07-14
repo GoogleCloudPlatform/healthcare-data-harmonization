@@ -1,0 +1,16 @@
+// Description: Converts a HL7v2 Message to a set of FHIR resources.
+//
+// Argument(s):
+//   message HL7v2 Message Type (version 2.9)
+//
+// Output(s):
+//   FHIR R4 Resources : http://www.hl7.org/fhir/resourcelist.html
+//
+def HL7v2_FHIR(message) {
+  $this (if message.ADT_A01?) : ADT_A01(message.ADT_A01);
+  $this (if message.ADT_A03?) : ADT_A03(message.ADT_A03);
+  $this (if message.ADT_A04?) : ADT_A04(message.ADT_A04);
+  $this (if message.ADT_A08?) : ADT_A08(message.ADT_A08);
+  $this (if message.OML_O21?) : OML_O21(message.OML_O21);
+  $this (if message.ORU_R01?) : ORU_R01(message.ORU_R01);
+}

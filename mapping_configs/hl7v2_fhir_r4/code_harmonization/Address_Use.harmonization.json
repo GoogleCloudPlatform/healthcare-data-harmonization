@@ -1,0 +1,217 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "BA",
+          "display": "Bad address",
+          "target": [
+            {
+              "code": "old",
+              "display": "Old / Incorrect",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "BI",
+          "display": "Billing Address",
+          "target": [
+            {
+              "code": "billing",
+              "display": "Billing",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "BDL",
+          "display": "Birth delivery location (address where birth occurred)",
+          "target": [
+            {
+              "code": "billing",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "F",
+          "display": "Country Of Origin",
+          "target": [
+            {
+              "code": "billing",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "C",
+          "display": "Current Or Temporary",
+          "target": [
+            {
+              "code": "temp",
+              "display": "Temporary",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "B",
+          "display": "Firm/Business",
+          "target": [
+            {
+              "code": "work",
+              "display": "Work",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "H",
+          "display": "Home",
+          "target": [
+            {
+              "code": "home",
+              "display": "Home",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "L",
+          "display": "Legal Address",
+          "target": [
+            {
+              "code": "billing",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "M",
+          "display": "Mailing",
+          "target": [
+            {
+              "code": "billing",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "O",
+          "display": "Office/Business",
+          "target": [
+            {
+              "code": "work",
+              "display": "Work",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "P",
+          "display": "Permanent",
+          "target": [
+            {
+              "code": "billing",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "RH",
+          "display": "Registry home",
+          "target": [
+            {
+              "code": "billing",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "BR",
+          "display": "Residence at birth (home address at time of birth)",
+          "target": [
+            {
+              "code": "billing",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "S",
+          "display": "Service Location",
+          "target": [
+            {
+              "code": "billing",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "SH",
+          "display": "Shipping Address",
+          "target": [
+            {
+              "code": "billing",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "TM",
+          "display": "Tube Address",
+          "target": [
+            {
+              "code": "billing",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "V",
+          "display": "Vacation",
+          "target": [
+            {
+              "code": "billing",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70190",
+      "target": "http://hl7.org/fhir/address-use"
+    },
+    {
+      "element": [
+        {
+          "code": "N",
+          "display": "\"Birth (nee) (birth address",
+          "target": [
+            {
+              "code": "billing",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": " not otherwise specified)\"",
+      "target": "http://hl7.org/fhir/address-use"
+    }
+  ],
+  "id": "Address_Use",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

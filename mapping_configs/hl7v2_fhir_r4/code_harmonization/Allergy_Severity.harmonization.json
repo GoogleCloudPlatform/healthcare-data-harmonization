@@ -1,0 +1,57 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "SV",
+          "display": "Severe",
+          "target": [
+            {
+              "code": "severe",
+              "display": "Severe",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "MO",
+          "display": "Moderate",
+          "target": [
+            {
+              "code": "moderate",
+              "display": "Moderate",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "MI",
+          "display": "Mild",
+          "target": [
+            {
+              "code": "mild",
+              "display": "Mild",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "U",
+          "display": "Unknown",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://terminology.hl7.org/CodeSystem/v2-0128",
+      "target": "https://www.hl7.org/fhir/codesystem-reaction-event-severity.html"
+    }
+  ],
+  "id": "Allergy_Severity",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}
