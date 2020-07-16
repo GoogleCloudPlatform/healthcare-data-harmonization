@@ -47,7 +47,7 @@ func (t *transpiler) VisitSourceConstNum(ctx *parser.SourceConstNumContext) inte
 
 func (t *transpiler) VisitSourceInput(ctx *parser.SourceInputContext) interface{} {
 	// Parse the path.
-	p := ctx.Path().Accept(t).(pathSpec)
+	p := ctx.SourcePath().Accept(t).(pathSpec)
 
 	if p.arg == "" && t.environment.name == "" {
 		t.fail(ctx, fmt.Errorf("root mapping can't access source %q. It can only use vars or the input %q", p.index, rootEnvInputName))

@@ -31,8 +31,8 @@ type pathSpec struct {
 	arg, field, index string
 }
 
-// VisitPath returns a pathSpec for the given PathContext.
-func (t *transpiler) VisitPath(ctx *parser.PathContext) interface{} {
+// VisitTargetPath returns a pathSpec for the given TargetPathContext.
+func (t *transpiler) VisitTargetPath(ctx *parser.TargetPathContext) interface{} {
 	p := ctx.PathHead().Accept(t).(pathSpec)
 	for i := range ctx.AllPathSegment() {
 		p.field += ctx.PathSegment(i).Accept(t).(string)
@@ -48,13 +48,13 @@ func (t *transpiler) VisitPath(ctx *parser.PathContext) interface{} {
 
 	// Only one of p.arg and p.index can be filled.
 	if (p.arg == "") == (p.index == "") {
-		t.fail(ctx, fmt.Errorf("invalid path - expected arg xor index but got both or neither (arg %s and index %s)", p.arg, p.index))
+		t.fail(ctx, fmt.Errorf("invalid target path - expected arg xor index but got both or neither (arg %s and index %s)", p.arg, p.index))
 	}
 
 	return p
 }
 
-// VisitPath returns a partially filled pathSpec for the given PathHeadContext.
+// VisitPathHead returns a partially filled pathSpec for the given PathHeadContext.
 // Either the arg or index field will be filled, as appropriate.
 func (t *transpiler) VisitPathHead(ctx *parser.PathHeadContext) interface{} {
 	if ctx.TOKEN() != nil && ctx.TOKEN().GetText() != "" {
@@ -90,8 +90,31 @@ func (t *transpiler) VisitPathHead(ctx *parser.PathHeadContext) interface{} {
 		}
 	}
 
-	t.fail(ctx, fmt.Errorf("invalid path head - no token, index, or wildcard"))
+	t.fail(ctx, fmt.Errorf("invalid path head - no token, index, arraymod, or wildcard"))
 	return nil
+}
+
+// VisitSourcePath returns a pathSpec for the given SourcePathContext.
+func (t *transpiler) VisitSourcePath(ctx *parser.SourcePathContext) interface{} {
+	p := ctx.PathHead().Accept(t).(pathSpec)
+	for i := range ctx.AllPathSegment() {
+		p.field += ctx.PathSegment(i).Accept(t).(string)
+	}
+
+	if ctx.ARRAYMOD() != nil && ctx.ARRAYMOD().GetText() != "" {
+		p.field += ctx.ARRAYMOD().GetText()
+	}
+
+	if ctx.OWMOD() != nil && ctx.OWMOD().GetText() != "" {
+		p.field += ctx.OWMOD().GetText()
+	}
+
+	// Only one of p.arg and p.index can be filled.
+	if (p.arg == "") == (p.index == "") {
+		t.fail(ctx, fmt.Errorf("invalid source path - expected arg xor index but got both or neither (arg %s and index %s)", p.arg, p.index))
+	}
+
+	return p
 }
 
 // VisitPathSegment returns a string of the PathSegmentContext contents.

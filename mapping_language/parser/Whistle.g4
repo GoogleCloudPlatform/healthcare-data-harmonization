@@ -305,21 +305,25 @@ sourceContainer
 
 source
     : floatingPoint                  # SourceConstNum
-    | (VAR | DEST)? path (inlineFilter ARRAYMOD?)? # SourceInput
+    | (VAR | DEST)? sourcePath (inlineFilter ARRAYMOD?)? # SourceInput
     | STRING                         # SourceConstStr
     | BOOL                           # SourceConstBool
     | '(' expression ')' ARRAYMOD?   # SourceProjection
 ;
 
 target
-    : VAR path  # TargetVar
-    | ROOT path # TargetRootField
+    : VAR targetPath  # TargetVar
+    | ROOT targetPath # TargetRootField
     | OBJ TOKEN # TargetObj
     | THIS      # TargetThis
-    | path      # TargetField
+    | targetPath      # TargetField
 ;
 
-path
+targetPath
+    : pathHead pathSegment* ARRAYMOD? OWMOD?
+;
+
+sourcePath
     : pathHead pathSegment* ARRAYMOD? OWMOD?
 ;
 

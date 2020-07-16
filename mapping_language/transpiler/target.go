@@ -27,7 +27,7 @@ import (
 const jsonThis = "."
 
 func (t *transpiler) VisitTargetVar(ctx *parser.TargetVarContext) interface{} {
-	p := ctx.Path().Accept(t).(pathSpec)
+	p := ctx.TargetPath().Accept(t).(pathSpec)
 
 	if p.arg == "" {
 		t.fail(ctx, fmt.Errorf("expected a valid variable name (optionally followed by a path), but got %s", p.index+p.field))
@@ -55,7 +55,7 @@ func (t *transpiler) VisitTargetObj(ctx *parser.TargetObjContext) interface{} {
 }
 
 func (t *transpiler) VisitTargetRootField(ctx *parser.TargetRootFieldContext) interface{} {
-	p := ctx.Path().Accept(t).(pathSpec)
+	p := ctx.TargetPath().Accept(t).(pathSpec)
 
 	if t.environment.name == "" {
 		t.fail(ctx, errors.New("using the root keyword in a root mapping is redundant"))
@@ -79,7 +79,7 @@ func (t *transpiler) VisitTargetThis(ctx *parser.TargetThisContext) interface{} 
 }
 
 func (t *transpiler) VisitTargetField(ctx *parser.TargetFieldContext) interface{} {
-	p := ctx.Path().Accept(t).(pathSpec)
+	p := ctx.TargetPath().Accept(t).(pathSpec)
 
 	t.environment.declareTarget(p.arg + p.index)
 
