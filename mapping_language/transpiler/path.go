@@ -33,9 +33,9 @@ type pathSpec struct {
 
 // VisitTargetPath returns a pathSpec for the given TargetPathContext.
 func (t *transpiler) VisitTargetPath(ctx *parser.TargetPathContext) interface{} {
-	p := ctx.PathHead().Accept(t).(pathSpec)
-	for i := range ctx.AllPathSegment() {
-		p.field += ctx.PathSegment(i).Accept(t).(string)
+	p := ctx.TargetPathHead().Accept(t).(pathSpec)
+	for i := range ctx.AllTargetPathSegment() {
+		p.field += ctx.TargetPathSegment(i).Accept(t).(string)
 	}
 
 	if ctx.ARRAYMOD() != nil && ctx.ARRAYMOD().GetText() != "" {
@@ -54,9 +54,9 @@ func (t *transpiler) VisitTargetPath(ctx *parser.TargetPathContext) interface{} 
 	return p
 }
 
-// VisitPathHead returns a partially filled pathSpec for the given PathHeadContext.
+// VisitTargetPathHead returns a partially filled pathSpec for the given TargetPathHeadContext.
 // Either the arg or index field will be filled, as appropriate.
-func (t *transpiler) VisitPathHead(ctx *parser.PathHeadContext) interface{} {
+func (t *transpiler) VisitTargetPathHead(ctx *parser.TargetPathHeadContext) interface{} {
 	if ctx.TOKEN() != nil && ctx.TOKEN().GetText() != "" {
 		return pathSpec{
 			arg: getTokenText(ctx.TOKEN()),
@@ -90,15 +90,27 @@ func (t *transpiler) VisitPathHead(ctx *parser.PathHeadContext) interface{} {
 		}
 	}
 
-	t.fail(ctx, fmt.Errorf("invalid path head - no token, index, arraymod, or wildcard"))
+	t.fail(ctx, fmt.Errorf("invalid target path head - no token, index, arraymod, or wildcard"))
 	return nil
+}
+
+// VisitTargetPathSegment returns a string of the TargetPathSegmentContext contents.
+func (t *transpiler) VisitTargetPathSegment(ctx *parser.TargetPathSegmentContext) interface{} {
+	if ctx.TOKEN() != nil && ctx.TOKEN().GetText() != "" {
+		delim := ""
+		if ctx.DELIM() != nil {
+			delim = ctx.DELIM().GetText()
+		}
+		return delim + getTokenText(ctx.TOKEN())
+	}
+	return ctx.GetText()
 }
 
 // VisitSourcePath returns a pathSpec for the given SourcePathContext.
 func (t *transpiler) VisitSourcePath(ctx *parser.SourcePathContext) interface{} {
-	p := ctx.PathHead().Accept(t).(pathSpec)
-	for i := range ctx.AllPathSegment() {
-		p.field += ctx.PathSegment(i).Accept(t).(string)
+	p := ctx.SourcePathHead().Accept(t).(pathSpec)
+	for i := range ctx.AllSourcePathSegment() {
+		p.field += ctx.SourcePathSegment(i).Accept(t).(string)
 	}
 
 	if ctx.ARRAYMOD() != nil && ctx.ARRAYMOD().GetText() != "" {
@@ -117,8 +129,48 @@ func (t *transpiler) VisitSourcePath(ctx *parser.SourcePathContext) interface{} 
 	return p
 }
 
-// VisitPathSegment returns a string of the PathSegmentContext contents.
-func (t *transpiler) VisitPathSegment(ctx *parser.PathSegmentContext) interface{} {
+// VisitSourcePathHead returns a partially filled pathSpec for the given SourcePathHeadContext.
+// Either the arg or index field will be filled, as appropriate.
+func (t *transpiler) VisitSourcePathHead(ctx *parser.SourcePathHeadContext) interface{} {
+	if ctx.TOKEN() != nil && ctx.TOKEN().GetText() != "" {
+		return pathSpec{
+			arg: getTokenText(ctx.TOKEN()),
+		}
+	}
+
+	// ROOT_INPUT is a special case path segment since normally they cannot contain $.
+	if ctx.ROOT_INPUT() != nil && ctx.ROOT_INPUT().GetText() != "" {
+		return pathSpec{
+			arg: ctx.ROOT_INPUT().GetText(),
+		}
+	}
+
+	// ROOT is a special case path segment since it is a keyword and does not get tokenized as a TOKEN
+	// TODO: Remove after sunset.
+	if ctx.ROOT() != nil && ctx.ROOT().GetText() != "" {
+		return pathSpec{
+			arg: ctx.ROOT().GetText(),
+		}
+	}
+
+	if ctx.INDEX() != nil && ctx.INDEX().GetText() != "" {
+		return pathSpec{
+			index: ctx.INDEX().GetText(),
+		}
+	}
+
+	if ctx.WILDCARD() != nil && ctx.WILDCARD().GetText() != "" {
+		return pathSpec{
+			index: ctx.WILDCARD().GetText(),
+		}
+	}
+
+	t.fail(ctx, fmt.Errorf("invalid source path head - no token, index, arraymod, or wildcard"))
+	return nil
+}
+
+// VisitSourcePathSegment returns a string of the SourcePathSegmentContext contents.
+func (t *transpiler) VisitSourcePathSegment(ctx *parser.SourcePathSegmentContext) interface{} {
 	if ctx.TOKEN() != nil && ctx.TOKEN().GetText() != "" {
 		delim := ""
 		if ctx.DELIM() != nil {

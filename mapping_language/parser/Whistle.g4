@@ -320,14 +320,10 @@ target
 ;
 
 targetPath
-    : pathHead pathSegment* ARRAYMOD? OWMOD?
+    : targetPathHead targetPathSegment* ARRAYMOD? OWMOD?
 ;
 
-sourcePath
-    : pathHead pathSegment* ARRAYMOD? OWMOD?
-;
-
-pathHead
+targetPathHead
     : ROOT_INPUT
     | ROOT // Deprecated: b/148939976
     | TOKEN
@@ -336,7 +332,28 @@ pathHead
     | WILDCARD
 ;
 
-pathSegment
+targetPathSegment
+    : DELIM TOKEN
+    | DELIM INTEGER
+    | WILDCARD
+    | INDEX
+    | ARRAYMOD
+;
+
+sourcePath
+    : sourcePathHead sourcePathSegment* ARRAYMOD? OWMOD?
+;
+
+sourcePathHead
+    : ROOT_INPUT
+    | ROOT // Deprecated: b/148939976
+    | TOKEN
+    | INDEX
+    | ARRAYMOD
+    | WILDCARD
+;
+
+sourcePathSegment
     : DELIM TOKEN
     | DELIM INTEGER
     | WILDCARD
