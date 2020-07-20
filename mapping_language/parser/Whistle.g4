@@ -347,9 +347,6 @@ sourcePathHead
     : ROOT_INPUT
     | ROOT // Deprecated: b/148939976
     | TOKEN
-    | INDEX
-    | ARRAYMOD
-    | WILDCARD
 ;
 
 sourcePathSegment

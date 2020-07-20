@@ -153,19 +153,7 @@ func (t *transpiler) VisitSourcePathHead(ctx *parser.SourcePathHeadContext) inte
 		}
 	}
 
-	if ctx.INDEX() != nil && ctx.INDEX().GetText() != "" {
-		return pathSpec{
-			index: ctx.INDEX().GetText(),
-		}
-	}
-
-	if ctx.WILDCARD() != nil && ctx.WILDCARD().GetText() != "" {
-		return pathSpec{
-			index: ctx.WILDCARD().GetText(),
-		}
-	}
-
-	t.fail(ctx, fmt.Errorf("invalid source path head - no token, index, arraymod, or wildcard"))
+	t.fail(ctx, fmt.Errorf("invalid source path head - no token or %s", rootEnvInputName))
 	return nil
 }
 
