@@ -118,8 +118,8 @@ func (t *transpiler) VisitExprProjection(ctx *parser.ExprProjectionContext) inte
 		Projector: getTokenText(ctx.TOKEN()) + arrMod,
 	}
 
-	for i := range ctx.AllSourceContainer() {
-		source := ctx.SourceContainer(i).Accept(t).(*mpb.ValueSource)
+	for i := range ctx.AllExpression() {
+		source := ctx.Expression(i).Accept(t).(*mpb.ValueSource)
 
 		if i == 0 {
 			if source.Projector == "" {
@@ -163,14 +163,6 @@ func (t *transpiler) VisitExprAnonBlock(ctx *parser.ExprAnonBlockContext) interf
 		t.fail(ctx, fmt.Errorf("unable to generate anonymous block callsite: %v", err))
 	}
 	return cs
-}
-
-func (t *transpiler) VisitSourceContainer(ctx *parser.SourceContainerContext) interface{} {
-	// No-op here, just visit the appropriate child.
-	if ctx.Source() != nil {
-		return ctx.Source().Accept(t)
-	}
-	return ctx.Expression().Accept(t)
 }
 
 func (t *transpiler) VisitExprNoArg(ctx *parser.ExprNoArgContext) interface{} {

@@ -289,18 +289,13 @@ expression
     source                              # ExprSource
     | block                             # ExprAnonBlock
     | TOKEN '(' ')'                            # ExprNoArg
-    | TOKEN ARRAYMOD? '(' sourceContainer (',' sourceContainer)* ')' # ExprProjection
+    | TOKEN ARRAYMOD? '(' expression (',' expression)* ')' # ExprProjection
     | expression postunoperator         # ExprPostOp
     | preunoperator expression          # ExprPreOp
     | expression bioperator1 expression # ExprBiOp
     | expression bioperator2 expression # ExprBiOp
     | expression bioperator3 expression # ExprBiOp
     | expression bioperator4 expression # ExprBiOp
-;
-
-sourceContainer
-    : expression
-    | source
 ;
 
 source
