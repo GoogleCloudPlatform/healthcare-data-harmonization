@@ -335,7 +335,6 @@ targetPathHead
 targetPathSegment
     : DELIM TOKEN
     | DELIM INTEGER
-    | WILDCARD
     | INDEX
     | ARRAYMOD
 ;
