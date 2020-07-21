@@ -21,6 +21,7 @@ import (
 	"github.com/google/go-cmp/cmp" /* copybara-comment: cmp */
 	"github.com/golang/protobuf/proto" /* copybara-comment: proto */
 
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/mapping" /* copybara-comment: mapping */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/projector" /* copybara-comment: projector */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types/register_all" /* copybara-comment: registerall */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types" /* copybara-comment: types */
@@ -142,7 +143,7 @@ func LoadLibraryProjectors(t *testing.T) *types.Registry {
 	}
 
 	for _, pd := range lc.Projector {
-		p := projector.FromDef(pd, false /* parallel */)
+		p := projector.FromDef(pd, mapping.NewWhistler())
 
 		if err := reg.RegisterProjector(pd.Name, p); err != nil {
 			t.Fatalf("failed to load library projector %q: %v", pd.Name, err)
@@ -176,7 +177,7 @@ func TestPostProcess(t *testing.T) {
 		want         json.RawMessage
 		config       *mappb.MappingConfig
 		skipBundling bool
-		parallel     bool
+		engine       mapping.Engine
 	}{
 		{
 			desc: "generate FHIR STU3 bundle",
@@ -214,7 +215,7 @@ func TestPostProcess(t *testing.T) {
 				"type":"transaction"
 			}`),
 			skipBundling: false,
-			parallel:     false,
+			engine:       mapping.NewWhistler(),
 		},
 		{
 			desc: "skip bundling",
@@ -240,14 +241,14 @@ func TestPostProcess(t *testing.T) {
 				]
 			}`),
 			skipBundling: true,
-			parallel:     false,
+			engine:       mapping.NewWhistler(),
 		},
 	}
 	for _, test := range tests {
 		t.Run(test.desc, func(t *testing.T) {
 			pctx := types.NewContext(reg)
 			pctx.TopLevelObjects = test.input
-			got, err := Process(pctx, test.config, test.skipBundling, test.parallel)
+			got, err := Process(pctx, test.config, test.skipBundling, test.engine)
 			if err != nil {
 				t.Errorf("Process(%v, %v, %v) failed with error: %v",
 					pctx, test.config, test.skipBundling, err)

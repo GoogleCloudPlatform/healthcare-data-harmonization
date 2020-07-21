@@ -29,7 +29,7 @@ import (
 )
 
 // FromDef creates a projector from a proto definition. This will not register it.
-func FromDef(definition *mappb.ProjectorDefinition, parallel bool) types.Projector {
+func FromDef(definition *mappb.ProjectorDefinition, e mapping.Engine) types.Projector {
 	return func(arguments []jsonutil.JSONMetaNode, pctx *types.Context) (jsonutil.JSONToken, error) {
 		pctx.Variables.Push()
 
@@ -41,7 +41,7 @@ func FromDef(definition *mappb.ProjectorDefinition, parallel bool) types.Project
 		var merged jsonutil.JSONToken
 
 		// TODO: Sort in dependency order
-		if err := mapping.ProcessMappings(definition.Mapping, definition.Name, arguments, &merged, pctx, parallel); err != nil {
+		if err := e.ProcessMappings(definition.Mapping, definition.Name, arguments, &merged, pctx); err != nil {
 			return nil, errors.Wrap(errLocation, err)
 		}
 

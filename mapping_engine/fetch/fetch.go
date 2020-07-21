@@ -52,11 +52,11 @@ func buildFetchProjector(ctx context.Context, httpQuery *httppb.HttpFetchQuery) 
 	return func(arguments []jsonutil.JSONMetaNode, pctx *types.Context) (jsonutil.JSONToken, error) {
 		errLocation := errors.FnLocationf("Fetch Function Preamble %q", httpQuery.GetName())
 
-		requestMethodNode, err := mapping.EvaluateValueSource(httpQuery.GetRequestMethod(), arguments, nil, pctx)
+		requestMethodNode, err := mapping.EvaluateValueSource(httpQuery.GetRequestMethod(), arguments, nil, pctx, jsonutil.DefaultAccessor{})
 		if err != nil {
 			return nil, errors.Wrap(errLocation, fmt.Errorf("error occurred in getting request method %s", err))
 		}
-		requestURLNode, err := mapping.EvaluateValueSource(httpQuery.GetRequestUrl(), arguments, nil, pctx)
+		requestURLNode, err := mapping.EvaluateValueSource(httpQuery.GetRequestUrl(), arguments, nil, pctx, jsonutil.DefaultAccessor{})
 		if err != nil {
 			return nil, errors.Wrap(errLocation, fmt.Errorf("error occurred in getting request url %s", err))
 		}

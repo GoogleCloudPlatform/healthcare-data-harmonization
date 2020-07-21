@@ -45,7 +45,8 @@ type StackMapInterface interface {
 type Context struct {
 	Variables StackMapInterface
 
-	Output          jsonutil.JSONToken
+	Output *jsonutil.JSONToken
+
 	TopLevelObjects map[string][]jsonutil.JSONToken
 	Registry        *Registry
 
@@ -129,7 +130,8 @@ func (c *Context) generateStackOverflowError() error {
 // NewContext creates a new context with empty components initialized and ready to go.
 func NewContext(registry *Registry) *Context {
 	return &Context{
-		TopLevelObjects:      map[string][]jsonutil.JSONToken{},
+		TopLevelObjects: map[string][]jsonutil.JSONToken{},
+		Output:          new(jsonutil.JSONToken),
 		Variables:            NewStackMap(),
 		Registry:             registry,
 		stackProjectorCounts: map[string]int{},

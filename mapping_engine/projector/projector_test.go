@@ -20,16 +20,13 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/mapping" /* copybara-comment: mapping */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types" /* copybara-comment: types */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
 	"github.com/google/go-cmp/cmp" /* copybara-comment: cmp */
 
 	mappb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: mapping_go_proto */
 	mpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: mapping_go_proto */
-)
-
-const (
-	parallel = false
 )
 
 // toNodes converts the given array of tokens into nodes with meta data.
@@ -272,91 +269,107 @@ func TestFromFunctionInvocationErrors(t *testing.T) {
 	}
 }
 
+var testModes = []struct {
+	name   string
+	engine mapping.Engine
+}{
+	{"whistler", mapping.NewWhistler()},
+}
+
 func TestFromDefinition_ManagesContext(t *testing.T) {
-	reg := types.NewRegistry()
+	for _, mode := range testModes {
+		t.Run(mode.name, func(t *testing.T) {
+			reg := types.NewRegistry()
 
-	const name = "myFoo"
-	const origValue = "Hello World"
-	const shadowedValue = "I pity the foo"
+			const name = "myFoo"
+			const origValue = "Hello World"
+			const shadowedValue = "I pity the foo"
 
-	// This projector will shadow myFoo, we want to make sure it retains
-	// the original value once the projector is done. This ensures that
-	// the projector pushes and pops the context.
-	def := &mpb.ProjectorDefinition{
-		Name: "Test",
-		Mapping: []*mappb.FieldMapping{
-			{
-				ValueSource: &mappb.ValueSource{Source: &mappb.ValueSource_ConstString{ConstString: shadowedValue}},
-				Target:      &mappb.FieldMapping_TargetLocalVar{TargetLocalVar: name},
-			},
-			{
-				ValueSource: &mappb.ValueSource{Source: &mappb.ValueSource_FromLocalVar{FromLocalVar: name}},
-				Target:      &mappb.FieldMapping_TargetObject{TargetObject: "Foo"},
-			},
-		},
-	}
+			// This projector will shadow myFoo, we want to make sure it retains
+			// the original value once the projector is done. This ensures that
+			// the projector pushes and pops the context.
+			def := &mpb.ProjectorDefinition{
+				Name: "Test",
+				Mapping: []*mappb.FieldMapping{
+					{
+						ValueSource: &mappb.ValueSource{Source: &mappb.ValueSource_ConstString{ConstString: shadowedValue}},
+						Target:      &mappb.FieldMapping_TargetLocalVar{TargetLocalVar: name},
+					},
+					{
+						ValueSource: &mappb.ValueSource{Source: &mappb.ValueSource_FromLocalVar{FromLocalVar: name}},
+						Target:      &mappb.FieldMapping_TargetObject{TargetObject: "Foo"},
+					},
+				},
+			}
 
-	proj := FromDef(def, parallel)
-	ctx := types.NewContext(reg)
-	ctx.Variables.Push()
+			proj := FromDef(def, mode.engine)
+			ctx := types.NewContext(reg)
+			ctx.Variables.Push()
 
-	var origValueToken jsonutil.JSONToken = jsonutil.JSONStr(origValue)
+			var origValueToken jsonutil.JSONToken = jsonutil.JSONStr(origValue)
 
-	if err := ctx.Variables.Set(name, &origValueToken); err != nil {
-		t.Fatalf("Set(%q, %v) returned unexpected error: %v", name, origValueToken, err)
-	}
+			if err := ctx.Variables.Set(name, &origValueToken); err != nil {
+				t.Fatalf("Set(%q, %v) returned unexpected error: %v", name, origValueToken, err)
+			}
 
-	if _, err := proj([]jsonutil.JSONMetaNode{}, ctx); err != nil {
-		t.Fatalf("projector returned unexpected error: %v", err)
-	}
+			if _, err := proj([]jsonutil.JSONMetaNode{}, ctx); err != nil {
+				t.Fatalf("projector returned unexpected error: %v", err)
+			}
 
-	gotMyFoo, err := ctx.Variables.Get(name)
-	if err != nil {
-		t.Fatalf("Get(%q) returned unexpected error: %v", name, err)
-	}
+			gotMyFoo, err := ctx.Variables.Get(name)
+			if err != nil {
+				t.Fatalf("Get(%q) returned unexpected error: %v", name, err)
+			}
 
-	if !cmp.Equal(string((*gotMyFoo).(jsonutil.JSONStr)), origValue) {
-		t.Errorf("bad value for %s: got %v, want %v", name, *gotMyFoo, origValue)
-	}
+			if !cmp.Equal(string((*gotMyFoo).(jsonutil.JSONStr)), origValue) {
+				t.Errorf("bad value for %s: got %v, want %v", name, *gotMyFoo, origValue)
+			}
 
-	if got := ctx.TopLevelObjects["Foo"][0]; !cmp.Equal(string(got.(jsonutil.JSONStr)), shadowedValue) {
-		t.Errorf("bad value for top level object: got %v, want %v", got, shadowedValue)
+			if got := ctx.TopLevelObjects["Foo"][0]; !cmp.Equal(string(got.(jsonutil.JSONStr)), shadowedValue) {
+				t.Errorf("bad value for top level object: got %v, want %v", got, shadowedValue)
+			}
+		})
 	}
 }
 
 func TestFromDefinition_OutputsAnArrayWhenMapping(t *testing.T) {
-	reg := types.NewRegistry()
+	for _, mode := range testModes {
+		t.Run(mode.name, func(t *testing.T) {
 
-	def := &mpb.ProjectorDefinition{
-		Name: "Test",
-		Mapping: []*mappb.FieldMapping{
-			{
-				ValueSource: &mappb.ValueSource{Source: &mappb.ValueSource_ConstString{ConstString: "hello"}},
-				Target:      &mappb.FieldMapping_TargetLocalVar{TargetLocalVar: "myvar"},
-			},
-			{
-				ValueSource: &mappb.ValueSource{Source: &mappb.ValueSource_FromLocalVar{FromLocalVar: "myvar"}},
-				Target:      &mappb.FieldMapping_TargetField{TargetField: "[2].hi"},
-			},
-		},
-	}
+			reg := types.NewRegistry()
 
-	proj := FromDef(def, parallel)
-	ctx := types.NewContext(reg)
-	ctx.Variables.Push()
+			def := &mpb.ProjectorDefinition{
+				Name: "Test",
+				Mapping: []*mappb.FieldMapping{
+					{
+						ValueSource: &mappb.ValueSource{Source: &mappb.ValueSource_ConstString{ConstString: "hello"}},
+						Target:      &mappb.FieldMapping_TargetLocalVar{TargetLocalVar: "myvar"},
+					},
+					{
+						ValueSource: &mappb.ValueSource{Source: &mappb.ValueSource_FromLocalVar{FromLocalVar: "myvar"}},
+						Target:      &mappb.FieldMapping_TargetField{TargetField: "[2].hi"},
+					},
+				},
+			}
 
-	got, err := proj([]jsonutil.JSONMetaNode{}, ctx)
-	if err != nil {
-		t.Fatalf("projector returned unexpected error: %v", err)
-	}
+			proj := FromDef(def, mode.engine)
+			ctx := types.NewContext(reg)
+			ctx.Variables.Push()
 
-	want, err := jsonutil.UnmarshalJSON(json.RawMessage(`[null, null, {"hi": "hello"}]`))
-	if err != nil {
-		t.Fatalf("could not unmarshal want JSON: %v", err)
-	}
+			got, err := proj([]jsonutil.JSONMetaNode{}, ctx)
+			if err != nil {
+				t.Fatalf("projector returned unexpected error: %v", err)
+			}
 
-	if diff := cmp.Diff(want, got); diff != "" {
-		t.Errorf("projector result was incorrect: -want +got: %s", diff)
+			want, err := jsonutil.UnmarshalJSON(json.RawMessage(`[null, null, {"hi": "hello"}]`))
+			if err != nil {
+				t.Fatalf("could not unmarshal want JSON: %v", err)
+			}
+
+			if diff := cmp.Diff(want, got); diff != "" {
+				t.Errorf("projector result was incorrect: -want +got: %s", diff)
+			}
+		})
 	}
 }
 
@@ -417,36 +430,38 @@ func TestProjectorsCannotExceedMaxStackDepth(t *testing.T) {
 			},
 		},
 	}
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			reg := types.NewRegistry()
+	for _, mode := range testModes {
+		for _, test := range tests {
+			t.Run(test.name+" "+mode.name, func(t *testing.T) {
+				reg := types.NewRegistry()
 
-			for _, p := range test.projectors {
-				if err := reg.RegisterProjector(p.Name, FromDef(p, parallel)); err != nil {
-					t.Fatalf("failed to register test projector %s: %v", p.Name, err)
+				for _, p := range test.projectors {
+					if err := reg.RegisterProjector(p.Name, FromDef(p, mode.engine)); err != nil {
+						t.Fatalf("failed to register test projector %s: %v", p.Name, err)
+					}
 				}
-			}
 
-			ctx := types.NewContext(reg)
-			ctx.Variables.Push()
+				ctx := types.NewContext(reg)
+				ctx.Variables.Push()
 
-			root, err := reg.FindProjector("Root")
-			if err != nil {
-				t.Fatalf("registry could not find Root test projector: %v", err)
-			}
-
-			_, err = root([]jsonutil.JSONMetaNode{}, ctx)
-			if err == nil {
-				t.Fatalf("expected stack overflow error, got nil")
-			}
-			errStr := err.Error()
-
-			for _, w := range test.wants {
-				if !strings.Contains(errStr, w) {
-					t.Errorf("expected stack overflow error to contain %s, but it was %s", w, errStr)
+				root, err := reg.FindProjector("Root")
+				if err != nil {
+					t.Fatalf("registry could not find Root test projector: %v", err)
 				}
-			}
-		})
+
+				_, err = root([]jsonutil.JSONMetaNode{}, ctx)
+				if err == nil {
+					t.Fatalf("expected stack overflow error, got nil")
+				}
+				errStr := err.Error()
+
+				for _, w := range test.wants {
+					if !strings.Contains(errStr, w) {
+						t.Errorf("expected stack overflow error to contain %s, but it was %s", w, errStr)
+					}
+				}
+			})
+		}
 	}
 }
 
@@ -590,35 +605,37 @@ func TestProjectorsCanNestUpToMaxStackDepth(t *testing.T) {
 			},
 		},
 	}
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			reg := types.NewRegistry()
-			registerHelpers(t, reg)
+	for _, mode := range testModes {
+		for _, test := range tests {
+			t.Run(test.name+" "+mode.name, func(t *testing.T) {
+				reg := types.NewRegistry()
+				registerHelpers(t, reg)
 
-			for _, p := range test.projectors {
-				if err := reg.RegisterProjector(p.Name, FromDef(p, parallel)); err != nil {
-					t.Fatalf("failed to register test projector %s: %v", p.Name, err)
+				for _, p := range test.projectors {
+					if err := reg.RegisterProjector(p.Name, FromDef(p, mode.engine)); err != nil {
+						t.Fatalf("failed to register test projector %s: %v", p.Name, err)
+					}
 				}
-			}
 
-			ctx := types.NewContext(reg)
-			ctx.Variables.Push()
+				ctx := types.NewContext(reg)
+				ctx.Variables.Push()
 
-			root, err := reg.FindProjector("Root")
-			if err != nil {
-				t.Fatalf("registry could not find Root test projector: %v", err)
-			}
+				root, err := reg.FindProjector("Root")
+				if err != nil {
+					t.Fatalf("registry could not find Root test projector: %v", err)
+				}
 
-			depth, err := root([]jsonutil.JSONMetaNode{}, ctx)
-			if err != nil {
-				t.Fatalf("projector Root([], {}, _) got unexpected error %v", err)
-			}
+				depth, err := root([]jsonutil.JSONMetaNode{}, ctx)
+				if err != nil {
+					t.Fatalf("projector Root([], {}, _) got unexpected error %v", err)
+				}
 
-			depthNum, ok := depth.(jsonutil.JSONNum)
-			if !ok || depthNum != types.MaxStackDepth-1 {
-				t.Errorf("projector Root([], {}, _) got %v, want %v", depth, types.MaxStackDepth-1)
-			}
-		})
+				depthNum, ok := depth.(jsonutil.JSONNum)
+				if !ok || depthNum != types.MaxStackDepth-1 {
+					t.Errorf("projector Root([], {}, _) got %v, want %v", depth, types.MaxStackDepth-1)
+				}
+			})
+		}
 	}
 }
 

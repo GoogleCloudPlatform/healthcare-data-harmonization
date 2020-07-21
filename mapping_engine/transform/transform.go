@@ -52,7 +52,6 @@ type Transformer struct {
 	Registry                *types.Registry
 	dataHarmonizationConfig *dhpb.DataHarmonizationConfig
 	mappingConfig           *mappb.MappingConfig
-	parallel                bool
 }
 
 // TransformationConfigs contains metadata used during transformation.
@@ -122,8 +121,6 @@ func NewTransformer(ctx context.Context, config *dhpb.DataHarmonizationConfig, s
 	for _, setter := range setters {
 		setter(options)
 	}
-
-	t.parallel = options.Parallel
 
 	gcsutil.InitializeClient(options.GCSClient)
 
@@ -262,7 +259,7 @@ func (t *Transformer) LoadMappingConfig(config *dhpb.DataHarmonizationConfig) (*
 // LoadProjectors registers all given projectors.
 func (t *Transformer) LoadProjectors(projectors []*mappb.ProjectorDefinition) error {
 	for _, pd := range projectors {
-		p := projector.FromDef(pd, t.parallel)
+		p := projector.FromDef(pd, mapping.NewWhistler())
 
 		if err := t.Registry.RegisterProjector(pd.Name, p); err != nil {
 			return fmt.Errorf("error registering projector %s: %v", pd.Name, err)
@@ -286,11 +283,12 @@ func (t *Transformer) Transform(in *jsonutil.JSONContainer, tconfig Transformati
 	}
 	args := []jsonutil.JSONMetaNode{inn}
 
-	if err := mapping.ProcessMappings(t.mappingConfig.RootMapping, "", args, &pctx.Output, pctx, t.parallel); err != nil {
+	e := mapping.NewWhistler()
+	if err := e.ProcessMappings(t.mappingConfig.RootMapping, "root", args, pctx.Output, pctx); err != nil {
 		return nil, err
 	}
 
-	result, err := postprocess.Process(pctx, t.mappingConfig, tconfig.SkipBundling, t.parallel)
+	result, err := postprocess.Process(pctx, t.mappingConfig, tconfig.SkipBundling, e)
 	if err != nil {
 		return nil, err
 	}

@@ -159,6 +159,15 @@ func hasArrayStar(segments []string) bool {
 	return false
 }
 
+// JSONTokenAccessor defines an interface for accessing JSONToken with different engines.
+type JSONTokenAccessor interface {
+	GetField(src JSONToken, field string) (JSONToken, error)
+	SetField(src JSONToken, field string, dest *JSONToken, forceOverwrite bool) error
+}
+
+// DefaultAccessor is a default JSONTokenAccessor to read/write JSONToken and used by the engine Whistler.
+type DefaultAccessor struct{}
+
 // GetField gets the specified field value for the provided JSON object.
 // Nested fields can be accessed using the "." notation and repeated fields can be accessed using
 // the "[i]" notation. E.g. name[0].first
@@ -171,17 +180,30 @@ func hasArrayStar(segments []string) bool {
 // GetField({"foo": ["bar", 1]}, "foo") => ["bar", 1]
 // GetField({"foo": ["bar", 1]}, "foo[0]") => "bar"
 // GetField({"foo": [{"bar": 1}, {"bar": 2}], "foo[*].bar") => [1, 2]
+// GetField is a wrapper for DefaultAccessor.GetField().
 func GetField(src JSONToken, field string) (JSONToken, error) {
+	a := DefaultAccessor{}
+	return a.GetField(src, field)
+}
+
+// GetFieldSegmented is a wrapper for DefaultAccessor.GetFieldSegmented().
+func GetFieldSegmented(src JSONToken, segments []string) (JSONToken, error) {
+	a := DefaultAccessor{}
+	return a.getFieldSegmented(src, segments)
+}
+
+// GetField gets the specified field value for the provided JSON object.
+func (w DefaultAccessor) GetField(src JSONToken, field string) (JSONToken, error) {
 	segs, err := SegmentPath(field)
 	if err != nil {
 		return nil, fmt.Errorf("failed to segment path: %v", err)
 	}
-	return GetFieldSegmented(src, segs)
+	return w.getFieldSegmented(src, segs)
 }
 
-// GetFieldSegmented gets the specified field value for the provided JSON object.
+// getFieldSegmented gets the specified field value for the provided JSON object.
 // segments are path segments like ["foo", "bar", "array", "[2]", "value"].
-func GetFieldSegmented(src JSONToken, segments []string) (JSONToken, error) {
+func (w DefaultAccessor) getFieldSegmented(src JSONToken, segments []string) (JSONToken, error) {
 	if len(segments) == 0 {
 		return src, nil
 	}
@@ -206,7 +228,7 @@ func GetFieldSegmented(src JSONToken, segments []string) (JSONToken, error) {
 			flatten := JSONArr{}
 
 			for i := range o {
-				f, err := GetFieldSegmented(o[i], segments[1:])
+				f, err := w.getFieldSegmented(o[i], segments[1:])
 				if err != nil {
 					return nil, fmt.Errorf("error expanding [*] on item index %d: %v", i, err)
 				}
@@ -238,13 +260,13 @@ func GetFieldSegmented(src JSONToken, segments []string) (JSONToken, error) {
 			// fields that are actually set to null.
 			return nil, nil
 		}
-		return GetFieldSegmented(o[idx], segments[1:])
+		return w.getFieldSegmented(o[idx], segments[1:])
 	case JSONContainer:
 		if seg == "" || seg == "." {
-			return GetFieldSegmented(o, segments[1:])
+			return w.getFieldSegmented(o, segments[1:])
 		}
 		if item, ok := o[seg]; ok {
-			return GetFieldSegmented(*item, segments[1:])
+			return w.getFieldSegmented(*item, segments[1:])
 		}
 		// TODO: Consider returning a different value for fields that don't exist vs
 		// fields that are actually set to null.
@@ -331,14 +353,22 @@ func HasField(j JSONToken, path string) (bool, error) {
 // SetField({"foo": {"bar": 1}}, "foo.bar", 0, true) => {"foo": {"bar": 0}}
 // SetField({"foo": [0]}, "foo[]", 1, false) => {"foo": [0, 1]}
 func SetField(src JSONToken, field string, dest *JSONToken, overwrite bool) error {
+	w := DefaultAccessor{}
+	return w.SetField(src, field, dest, overwrite)
+}
+
+// SetField sets the specified field value for the provided JSON object.
+func (w DefaultAccessor) SetField(src JSONToken, field string, dest *JSONToken, overwrite bool) error {
 	segments, err := SegmentPath(field)
 	if err != nil {
 		return fmt.Errorf("failed to segment path: %v", err)
 	}
-	return writeFieldSegmented(src, segments, dest, overwrite)
+	return w.setFieldSegmented(src, segments, dest, overwrite)
 }
 
-func writeFieldSegmented(src JSONToken, segments []string, dest *JSONToken, overwrite bool) error {
+// setFieldSegmented sets the specified field value for the provided JSON object.
+// segments are path segments like ["foo", "bar", "array", "[2]", "value"].
+func (w DefaultAccessor) setFieldSegmented(src JSONToken, segments []string, dest *JSONToken, overwrite bool) error {
 	if len(segments) == 0 {
 		if overwrite {
 			*dest = src
@@ -389,11 +419,11 @@ func writeFieldSegmented(src JSONToken, segments []string, dest *JSONToken, over
 			o = append(o, make(JSONArr, idx-len(o)+1)...)
 			*dest = o
 		}
-		return writeFieldSegmented(src, segments[1:], &o[idx], overwrite)
+		return w.setFieldSegmented(src, segments[1:], &o[idx], overwrite)
 	case JSONContainer:
 		if seg == "" || seg == "." {
 			var obj JSONToken = o
-			return writeFieldSegmented(src, segments[1:], &obj, overwrite)
+			return w.setFieldSegmented(src, segments[1:], &obj, overwrite)
 		}
 		item, ok := o[seg]
 		if !ok {
@@ -401,7 +431,7 @@ func writeFieldSegmented(src JSONToken, segments []string, dest *JSONToken, over
 			item = &n
 			o[seg] = item
 		}
-		return writeFieldSegmented(src, segments[1:], item, overwrite)
+		return w.setFieldSegmented(src, segments[1:], item, overwrite)
 	case JSONNum, JSONStr, JSONBool:
 		return fmt.Errorf("attempt to key into primitive with key %s", seg)
 	}
@@ -499,6 +529,7 @@ func isPrim(object JSONToken) bool {
 type JSONToken interface {
 	jsonObject()
 	Value() JSONToken
+	Equal(JSONToken) bool
 }
 
 // GetValue gets actual JSON value in a JSONToken. If it is nil, return nil.
@@ -554,6 +585,64 @@ func (n JSONNum) Value() JSONToken {
 // Value gets a primitive JSON bool.
 func (b JSONBool) Value() JSONToken {
 	return b
+}
+
+// Equal reports whether j and itself are equal by recursively checking each element in the map.
+func (c JSONContainer) Equal(j JSONToken) bool {
+	jc, ok := j.(JSONContainer)
+	if !ok || len(c) != len(jc) {
+		return false
+	}
+	for k, x := range c {
+		y, ok := jc[k]
+		if !ok {
+			return false
+		}
+		if *x == nil {
+			if *y != nil {
+				return false
+			}
+		} else if !(*x).Equal(*y) {
+			return false
+		}
+	}
+	return true
+}
+
+// Equal reports whether j and itself are equal by recursively checking each element in the array.
+func (a JSONArr) Equal(j JSONToken) bool {
+	ja, ok := j.(JSONArr)
+	if !ok || len(a) != len(ja) {
+		return false
+	}
+	for i, x := range a {
+		if x == nil {
+			if ja[i] != nil {
+				return false
+			}
+		} else if !x.Equal(ja[i]) {
+			return false
+		}
+	}
+	return true
+}
+
+// Equal reports whether j and itself are equal.
+func (s JSONStr) Equal(j JSONToken) bool {
+	js, ok := j.(JSONStr)
+	return ok && s == js
+}
+
+// Equal reports whether j and itself are equal.
+func (n JSONNum) Equal(j JSONToken) bool {
+	jn, ok := j.(JSONNum)
+	return ok && n == jn
+}
+
+// Equal reports whether j and itself are equal.
+func (b JSONBool) Equal(j JSONToken) bool {
+	jb, ok := j.(JSONBool)
+	return ok && b == jb
 }
 
 func (c JSONContainer) String() string {

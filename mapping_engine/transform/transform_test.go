@@ -56,6 +56,13 @@ func (s *mockKeyValueGCSClient) ReadBytes(ctx context.Context, bucket string, fi
 	return []byte{}, nil
 }
 
+var testModes = []struct {
+	name           string
+	enableParallel bool
+}{
+	{"sequential", false},
+}
+
 func TestTransform_InitsContext(t *testing.T) {
 	// This config tests two things:
 	// 1) the context is initialized before any root mappings get called (so
@@ -82,28 +89,32 @@ func TestTransform_InitsContext(t *testing.T) {
 		},
 	}
 
-	var tr *Transformer
-	var err error
+	for _, mode := range testModes {
+		t.Run(mode.name, func(t *testing.T) {
+			var tr *Transformer
+			var err error
 
-	if tr, err = NewTransformer(context.Background(), dhConfig); err != nil {
-		t.Fatalf("could not initialize with config: %v", err)
-	}
+			if tr, err = NewTransformer(context.Background(), dhConfig, Parallel(mode.enableParallel)); err != nil {
+				t.Fatalf("could not initialize with config: %v", err)
+			}
 
-	tconfig := TransformationConfigs{
-		LogTrace:     false,
-		SkipBundling: false,
-	}
+			tconfig := TransformationConfigs{
+				LogTrace:     false,
+				SkipBundling: false,
+			}
 
-	got, err := tr.Transform(&jsonutil.JSONContainer{}, tconfig)
-	if err != nil {
-		t.Fatalf("Transform({}, %v, false, false, false) got unexpected error %v", config, err)
-	}
+			got, err := tr.Transform(&jsonutil.JSONContainer{}, tconfig)
+			if err != nil {
+				t.Fatalf("Transform({}, %v, false, false, false) got unexpected error %v", config, err)
+			}
 
-	var wantTok jsonutil.JSONToken = jsonutil.JSONArr{jsonutil.JSONStr("I pity the foo")}
-	want := jsonutil.JSONContainer{"Foo": &wantTok}
+			var wantTok jsonutil.JSONToken = jsonutil.JSONArr{jsonutil.JSONStr("I pity the foo")}
+			want := jsonutil.JSONContainer{"Foo": &wantTok}
 
-	if diff := cmp.Diff(got, want); diff != "" {
-		t.Errorf("Transform({}, %v, false, false, false) returned diff (-want +got):\n%s", config, diff)
+			if diff := cmp.Diff(got, want); diff != "" {
+				t.Errorf("Transform({}, %v, false, false, false) returned diff (-want +got):\n%s", config, diff)
+			}
+		})
 	}
 }
 
@@ -304,6 +315,20 @@ func TestTransform_NewTransformer(t *testing.T) {
 			want:       Options{},
 			wantCF:     "",
 			wantErrors: true,
+		},
+		{
+			name: "enable parallel",
+			config: &dhpb.DataHarmonizationConfig{
+				StructureMappingConfig: &hpb.StructureMappingConfig{
+					Mapping: &hpb.StructureMappingConfig_MappingConfig{
+						MappingConfig: config,
+					},
+				},
+			},
+			options:    []Option{Parallel(true)},
+			want:       Options{Parallel: true},
+			wantCF:     "",
+			wantErrors: false,
 		},
 	}
 
@@ -686,27 +711,31 @@ func TestTransform_JSONtoJSON(t *testing.T) {
 		},
 	}
 
-	var tr *Transformer
-	var err error
-	if tr, err = NewTransformer(context.Background(), dhconfig); err != nil {
-		t.Fatalf("could not initialize with config: %v", err)
-	}
+	for _, mode := range testModes {
+		t.Run(mode.name, func(t *testing.T) {
+			var tr *Transformer
+			var err error
+			if tr, err = NewTransformer(context.Background(), dhconfig, Parallel(mode.enableParallel)); err != nil {
+				t.Fatalf("could not initialize with config: %v", err)
+			}
 
-	tconfig := TransformationConfigs{
-		LogTrace:     false,
-		SkipBundling: false,
-	}
+			tconfig := TransformationConfigs{
+				LogTrace:     false,
+				SkipBundling: false,
+			}
 
-	in := `{"ID": "test"}`
-	got, err := tr.JSONtoJSON([]byte(in), tconfig)
-	if err != nil {
-		t.Fatalf("JSONtoJSON(%v) got expected error: %v", in, err)
-	}
+			in := `{"ID": "test"}`
+			got, err := tr.JSONtoJSON([]byte(in), tconfig)
+			if err != nil {
+				t.Fatalf("JSONtoJSON(%v) got expected error: %v", in, err)
+			}
 
-	want := `{"Patient":[{"id":"test","resourceType":"Patient"}]}`
+			want := `{"Patient":[{"id":"test","resourceType":"Patient"}]}`
 
-	if diff := cmp.Diff(string(got), want); diff != "" {
-		t.Errorf("JSONtoJSON(%v) returned diff (-want +got):\n%s", mconfig, diff)
+			if diff := cmp.Diff(string(got), want); diff != "" {
+				t.Errorf("JSONtoJSON(%v) returned diff (-want +got):\n%s", mconfig, diff)
+			}
+		})
 	}
 }
 

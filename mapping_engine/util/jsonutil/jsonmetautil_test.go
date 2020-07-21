@@ -61,6 +61,11 @@ func (j JSONTestToken) Value() JSONToken {
 	return j
 }
 
+func (j JSONTestToken) Equal(o JSONToken) bool {
+	_, ok := o.(JSONTestToken)
+	return ok
+}
+
 var (
 	benchmarkParallelism = flag.Int("benchmark_parallelism", 8, "Number of goroutines to use for conversion.")
 

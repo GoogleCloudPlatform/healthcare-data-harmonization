@@ -1858,3 +1858,141 @@ func TestMarshalJSON(t *testing.T) {
 		})
 	}
 }
+
+func TestJSONToken_Equal(t *testing.T) {
+	tests := []struct {
+		name string
+		a    JSONToken
+		b    JSONToken
+		want bool
+	}{
+		{
+			name: "equal string",
+			a:    JSONStr("foo"),
+			b:    JSONStr("foo"),
+			want: true,
+		},
+		{
+			name: "different strings",
+			a:    JSONStr("foo"),
+			b:    JSONStr("bar"),
+			want: false,
+		},
+		{
+			name: "equal number",
+			a:    JSONNum(0),
+			b:    JSONNum(0),
+			want: true,
+		},
+		{
+			name: "different numbers",
+			a:    JSONNum(0),
+			b:    JSONNum(1),
+			want: false,
+		},
+		{
+			name: "equal boolean",
+			a:    JSONBool(false),
+			b:    JSONBool(false),
+			want: true,
+		},
+		{
+			name: "different booleans",
+			a:    JSONBool(false),
+			b:    JSONBool(true),
+			want: false,
+		},
+		{
+			name: "equal array",
+			a:    mustParseJSON(t, json.RawMessage(`[1, 2, 3]`)),
+			b:    mustParseJSON(t, json.RawMessage(`[1, 2, 3]`)),
+			want: true,
+		},
+		{
+			name: "different arrays different length",
+			a:    mustParseJSON(t, json.RawMessage(`[1, 2, 3]`)),
+			b:    mustParseJSON(t, json.RawMessage(`[1, 2, 3, 4]`)),
+			want: false,
+		},
+		{
+			name: "different arrays different elements",
+			a:    mustParseJSON(t, json.RawMessage(`[1, 2, 3]`)),
+			b:    mustParseJSON(t, json.RawMessage(`[1, 2, "3"]`)),
+			want: false,
+		},
+		{
+			name: "arrays in defferent order",
+			a:    mustParseJSON(t, json.RawMessage(`[1, 2, 3]`)),
+			b:    mustParseJSON(t, json.RawMessage(`[2, 3, 1]`)),
+			want: false,
+		},
+		{
+			name: "equal object",
+			a:    mustParseJSON(t, json.RawMessage(`{"a": 1, "b": 2, "c": 3}`)),
+			b:    mustParseJSON(t, json.RawMessage(`{"b": 2, "c": 3, "a": 1}`)),
+			want: true,
+		},
+		{
+			name: "different objects",
+			a:    mustParseJSON(t, json.RawMessage(`{"a": 1, "b": 2, "c": 3}`)),
+			b:    mustParseJSON(t, json.RawMessage(`{"a": 1, "b": "2", "c": "3"}`)),
+			want: false,
+		},
+		{
+			name: "string and number",
+			a:    mustParseJSON(t, json.RawMessage(`"0"`)),
+			b:    mustParseJSON(t, json.RawMessage(`0`)),
+			want: false,
+		},
+		{
+			name: "number and bool",
+			a:    mustParseJSON(t, json.RawMessage(`1`)),
+			b:    mustParseJSON(t, json.RawMessage(`true`)),
+			want: false,
+		},
+		{
+			name: "string and object",
+			a:    mustParseJSON(t, json.RawMessage(`"{"a": 1, "b": 2, "c": 3}"`)),
+			b:    mustParseJSON(t, json.RawMessage(`{"a": 1, "b": 2, "c": 3}`)),
+			want: false,
+		},
+		{
+			name: "string and array",
+			a:    mustParseJSON(t, json.RawMessage(`"[1, 2, 3]"`)),
+			b:    mustParseJSON(t, json.RawMessage(`[1, 2, 3]`)),
+			want: false,
+		},
+		{
+			name: "array and object",
+			a:    mustParseJSON(t, json.RawMessage(`[1, 2, 3]`)),
+			b:    mustParseJSON(t, json.RawMessage(`{"1": 1, "2": 2, "3": 3}`)),
+			want: false,
+		},
+		{
+			name: "nested array",
+			a:    mustParseJSON(t, json.RawMessage(`[1, {"key": "a", "value": "b"}, true, [3, 4]]`)),
+			b:    mustParseJSON(t, json.RawMessage(`[1, {"key": "a", "value": "b"}, true, [4, 3]]`)),
+			want: false,
+		},
+		{
+			name: "nested object",
+			a:    mustParseJSON(t, json.RawMessage(`{"key": "a", "value": {"one": true, "two": 2}, "id": "unknown"}`)),
+			b:    mustParseJSON(t, json.RawMessage(`{"id": "unknown", "key": "a", "value": {"two": 2, "one": true}}`)),
+			want: true,
+		},
+		{
+			name: "different nested object",
+			a:    mustParseJSON(t, json.RawMessage(`{"key": "a", "value": {"one": true, "two": "2"}, "id": "unknown"}`)),
+			b:    mustParseJSON(t, json.RawMessage(`{"id": "unknown", "key": "a", "value": {"two": 2, "one": true}}`)),
+			want: false,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got := test.a.Equal(test.b)
+			if got != test.want {
+				t.Errorf("Equal(%v, %v) => %v want %v", test.a, test.b, got, test.want)
+			}
+		})
+	}
+}
