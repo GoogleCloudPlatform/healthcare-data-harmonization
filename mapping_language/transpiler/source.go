@@ -53,7 +53,7 @@ func (t *transpiler) VisitSourceInput(ctx *parser.SourceInputContext) interface{
 		t.fail(ctx, fmt.Errorf("root mapping can't access source %q. It can only use vars or the input %q", p.index, rootEnvInputName))
 	}
 
-	if ctx.InlineFilter() != nil {
+	if ctx.InlineFilter() != nil || ctx.ARRAYMOD() != nil {
 		// Force a foreach.
 		p.field = strings.TrimSuffix(p.field, "[]") + "[]"
 	}

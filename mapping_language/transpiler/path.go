@@ -113,14 +113,6 @@ func (t *transpiler) VisitSourcePath(ctx *parser.SourcePathContext) interface{} 
 		p.field += ctx.SourcePathSegment(i).Accept(t).(string)
 	}
 
-	if ctx.ARRAYMOD() != nil && ctx.ARRAYMOD().GetText() != "" {
-		p.field += ctx.ARRAYMOD().GetText()
-	}
-
-	if ctx.OWMOD() != nil && ctx.OWMOD().GetText() != "" {
-		p.field += ctx.OWMOD().GetText()
-	}
-
 	// Only one of p.arg and p.index can be filled.
 	if (p.arg == "") == (p.index == "") {
 		t.fail(ctx, fmt.Errorf("invalid source path - expected arg xor index but got both or neither (arg %s and index %s)", p.arg, p.index))

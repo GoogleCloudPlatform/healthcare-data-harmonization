@@ -286,31 +286,31 @@ filter
 
 expression
     : // Operator precedence is determined by order of alternatives.
-    source                              # ExprSource
-    | block                             # ExprAnonBlock
-    | TOKEN '(' ')'                            # ExprNoArg
+    source                                                 # ExprSource
+    | block                                                # ExprAnonBlock
+    | TOKEN '(' ')'                                        # ExprNoArg
     | TOKEN ARRAYMOD? '(' expression (',' expression)* ')' # ExprProjection
-    | expression postunoperator         # ExprPostOp
-    | preunoperator expression          # ExprPreOp
-    | expression bioperator1 expression # ExprBiOp
-    | expression bioperator2 expression # ExprBiOp
-    | expression bioperator3 expression # ExprBiOp
-    | expression bioperator4 expression # ExprBiOp
+    | expression postunoperator                            # ExprPostOp
+    | preunoperator expression                             # ExprPreOp
+    | expression bioperator1 expression                    # ExprBiOp
+    | expression bioperator2 expression                    # ExprBiOp
+    | expression bioperator3 expression                    # ExprBiOp
+    | expression bioperator4 expression                    # ExprBiOp
 ;
 
 source
-    : floatingPoint                  # SourceConstNum
-    | (VAR | DEST)? sourcePath (inlineFilter ARRAYMOD?)? # SourceInput
-    | STRING                         # SourceConstStr
-    | BOOL                           # SourceConstBool
-    | '(' expression ')' ARRAYMOD?   # SourceProjection
+    : floatingPoint                                    # SourceConstNum
+    | (VAR | DEST)? sourcePath inlineFilter? ARRAYMOD? # SourceInput
+    | STRING                                           # SourceConstStr
+    | BOOL                                             # SourceConstBool
+    | '(' expression ')' ARRAYMOD?                     # SourceProjection
 ;
 
 target
     : VAR targetPath  # TargetVar
     | ROOT targetPath # TargetRootField
-    | OBJ TOKEN # TargetObj
-    | THIS      # TargetThis
+    | OBJ TOKEN       # TargetObj
+    | THIS            # TargetThis
     | targetPath      # TargetField
 ;
 
@@ -335,7 +335,7 @@ targetPathSegment
 ;
 
 sourcePath
-    : sourcePathHead sourcePathSegment* ARRAYMOD? OWMOD?
+    : sourcePathHead sourcePathSegment*
 ;
 
 sourcePathHead
@@ -349,7 +349,6 @@ sourcePathSegment
     | DELIM INTEGER
     | WILDCARD
     | INDEX
-    | ARRAYMOD
 ;
 
 postProcess
