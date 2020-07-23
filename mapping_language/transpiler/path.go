@@ -38,8 +38,8 @@ func (t *transpiler) VisitTargetPath(ctx *parser.TargetPathContext) interface{} 
 		p.field += ctx.TargetPathSegment(i).Accept(t).(string)
 	}
 
-	if ctx.ARRAYMOD() != nil && ctx.ARRAYMOD().GetText() != "" {
-		p.field += ctx.ARRAYMOD().GetText()
+	if ctx.ArrayMod() != nil && ctx.ArrayMod().GetText() != "" {
+		p.field += ctx.ArrayMod().GetText()
 	}
 
 	if ctx.OWMOD() != nil && ctx.OWMOD().GetText() != "" {
@@ -78,9 +78,9 @@ func (t *transpiler) VisitTargetPathHead(ctx *parser.TargetPathHeadContext) inte
 		}
 	}
 
-	if ctx.INDEX() != nil && ctx.INDEX().GetText() != "" {
+	if ctx.Index() != nil && ctx.Index().GetText() != "" {
 		return pathSpec{
-			index: ctx.INDEX().GetText(),
+			index: ctx.Index().GetText(),
 		}
 	}
 

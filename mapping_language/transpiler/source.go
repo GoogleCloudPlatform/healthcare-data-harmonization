@@ -53,7 +53,7 @@ func (t *transpiler) VisitSourceInput(ctx *parser.SourceInputContext) interface{
 		t.fail(ctx, fmt.Errorf("root mapping can't access source %q. It can only use vars or the input %q", p.index, rootEnvInputName))
 	}
 
-	if ctx.InlineFilter() != nil || ctx.ARRAYMOD() != nil {
+	if ctx.InlineFilter() != nil || ctx.ArrayMod() != nil {
 		// Force a foreach.
 		p.field = strings.TrimSuffix(p.field, "[]") + "[]"
 	}
@@ -90,8 +90,8 @@ func (t *transpiler) VisitSourceInput(ctx *parser.SourceInputContext) interface{
 		if err != nil {
 			t.fail(ctx, fmt.Errorf("unable to generate filter callsite: %v", err))
 		}
-		if ctx.ARRAYMOD() != nil {
-			cs.Projector += ctx.ARRAYMOD().GetText()
+		if ctx.ArrayMod() != nil {
+			cs.Projector += ctx.ArrayMod().GetText()
 		}
 
 		return cs
@@ -129,8 +129,8 @@ func (t *transpiler) VisitSourceProjection(ctx *parser.SourceProjectionContext) 
 		},
 	}
 
-	if ctx.ARRAYMOD() != nil {
-		vs.Projector += ctx.ARRAYMOD().GetText()
+	if ctx.ArrayMod() != nil {
+		vs.Projector += ctx.ArrayMod().GetText()
 	}
 	return vs
 }

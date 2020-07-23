@@ -64,8 +64,16 @@ NEWLINE
     | EOF
 ;
 
+LISTOPEN
+    : '['
+;
+
+LISTCLOSE
+    : ']'
+;
+
 WILDCARD
-    : '[*]'
+    : LISTOPEN '*' LISTCLOSE
 ;
 
 // Arithmetic operators
@@ -129,10 +137,6 @@ REQUIRED
     : 'required'
 ;
 
-INDEX
-    : '[' INTEGER ']'
-;
-
 DELIM
     : '.'
 ;
@@ -153,10 +157,6 @@ fragment TOKENINITCHAR
 
 OWMOD
     : '!'
-;
-
-ARRAYMOD
-    : '[]'
 ;
 
 CTX
@@ -256,9 +256,16 @@ inlineCondition
 ;
 
 inlineFilter
-    : '[' filter ']'
+    : LISTOPEN filter LISTCLOSE
 ;
 
+index
+    : LISTOPEN INTEGER LISTCLOSE
+;
+
+arrayMod
+    : LISTOPEN LISTCLOSE
+;
 block
     : '{' NEWLINE? (mapping | comment | conditionBlock | NEWLINE)* '}'
 ;
@@ -289,7 +296,7 @@ expression
     source                                                 # ExprSource
     | block                                                # ExprAnonBlock
     | TOKEN '(' ')'                                        # ExprNoArg
-    | TOKEN ARRAYMOD? '(' expression (',' expression)* ')' # ExprProjection
+    | TOKEN arrayMod? '(' expression (',' expression)* ')' # ExprProjection
     | expression postunoperator                            # ExprPostOp
     | preunoperator expression                             # ExprPreOp
     | expression bioperator1 expression                    # ExprBiOp
@@ -300,10 +307,10 @@ expression
 
 source
     : floatingPoint                                    # SourceConstNum
-    | (VAR | DEST)? sourcePath inlineFilter? ARRAYMOD? # SourceInput
+    | (VAR | DEST)? sourcePath inlineFilter? arrayMod? # SourceInput
     | STRING                                           # SourceConstStr
     | BOOL                                             # SourceConstBool
-    | '(' expression ')' ARRAYMOD?                     # SourceProjection
+    | '(' expression ')' arrayMod?                     # SourceProjection
 ;
 
 target
@@ -315,23 +322,23 @@ target
 ;
 
 targetPath
-    : targetPathHead targetPathSegment* ARRAYMOD? OWMOD?
+    : targetPathHead targetPathSegment* arrayMod? OWMOD?
 ;
 
 targetPathHead
     : ROOT_INPUT
     | ROOT // Deprecated: b/148939976
     | TOKEN
-    | INDEX
-    | ARRAYMOD
+    | index
+    | arrayMod
     | WILDCARD
 ;
 
 targetPathSegment
     : DELIM TOKEN
     | DELIM INTEGER
-    | INDEX
-    | ARRAYMOD
+    | index
+    | arrayMod
 ;
 
 sourcePath
@@ -348,7 +355,7 @@ sourcePathSegment
     : DELIM TOKEN
     | DELIM INTEGER
     | WILDCARD
-    | INDEX
+    | index
 ;
 
 postProcess

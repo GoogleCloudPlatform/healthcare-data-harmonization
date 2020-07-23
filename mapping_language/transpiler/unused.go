@@ -75,3 +75,11 @@ func (t *transpiler) VisitPostunoperator(ctx *parser.PostunoperatorContext) inte
 func (t *transpiler) VisitPreunoperator(ctx *parser.PreunoperatorContext) interface{} {
 	panic("unused rule VisitPreunoperator entered by visitor - this should never happen")
 }
+
+func (t *transpiler) VisitIndex(ctx *parser.IndexContext) interface{} {
+	panic("unused rule VisitIndex entered by visitor - this should never happen")
+}
+
+func (t *transpiler) VisitArrayMod(ctx *parser.ArrayModContext) interface{} {
+	panic("unused rule VisitArrayMod entered by visitor - this should never happen")
+}

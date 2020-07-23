@@ -110,8 +110,8 @@ func (t *transpiler) VisitExprBiOp(ctx *parser.ExprBiOpContext) interface{} {
 
 func (t *transpiler) VisitExprProjection(ctx *parser.ExprProjectionContext) interface{} {
 	arrMod := ""
-	if ctx.ARRAYMOD() != nil {
-		arrMod = ctx.ARRAYMOD().GetText()
+	if ctx.ArrayMod() != nil {
+		arrMod = ctx.ArrayMod().GetText()
 	}
 
 	vs := &mpb.ValueSource{
