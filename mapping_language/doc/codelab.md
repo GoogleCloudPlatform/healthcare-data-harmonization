@@ -20,7 +20,9 @@ hands-on practice with the configuration language.
 
 ## Before you begin
 
-*   Make a new directory, for example `$HOME/wstl_codelab`
+*   Make a new directory, for example `$HOME/wstl_codelab`. You can use any
+    other directory you like; If you do, substitute it instead of
+    `$HOME/wstl_codelab` everywhere.
 *   Place the mapping configurations from the exercises in a file called
     `codelab.wstl`
 *   Place the input in a file called `codelab.json` (for now the contents of the
@@ -31,8 +33,6 @@ hands-on practice with the configuration language.
     example command might look like (run from mapping_engine/main): `go run . --
     -input_file_spec=$HOME/wstl_codelab/codelab.json
     -output_dir=$HOME/wstl_codelab/
-    -harmonize_code_dir_spec=$HOME/wstl_codelab/code_harmonization
-    -harmonize_unit_spec=$HOME/wstl_codelab/codelab-units.textproto
     -mapping_file_spec=$HOME/wstl_codelab/codelab.wstl`
 
 *   See
@@ -196,7 +196,8 @@ Output:
     `MultipleParamFunctionName(FunctionName(a, b, c), d)`
 
 Generalize our functions by making the celstial body's `type` an input. We will
-also make use of a builtin function: `$ToUpper`:
+also make use of a builtin function:
+[`$ToUpper`](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/builtins.md?cl=head#toupper):
 
 ``` {highlight="content:\$ToUpper content:,\sbodyType"}
 Planet[0]: BodyName_BodyType_BodyInfo("Earth", "Planet")
@@ -264,8 +265,10 @@ Your output should be:
 </code>
 </pre>
 
-Use the `$ListOf` builtin, which puts all given inputs into an array, to make an
-array of the planets `"Mercury", "Venus", "Earth"`.
+Use the
+[`$ListOf`](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/builtins.md?cl=head#listof)
+builtin, which puts all given inputs into an array, to make an array of the
+planets `"Mercury", "Venus", "Earth"`.
 
 <section class="zippy">
 Hint 1
@@ -329,12 +332,64 @@ Output:
 
 ### Merge semantics
 
-*   Arrays are concatenated
-    *   Even though both functions mapped to `colours[0]`, `"blue"` ended up in
-        `colours[1]`
-*   New fields are added
-*   Similar fields produce a merge conflict. An overwrite can be forced (see
-    [Overwriting](#overwriting-fields))
+Take special note of how fields are written to and merged in Whistle. Consider
+the mapping below.
+
+<pre><code>
+Primitive: Num_DoubleNum(10)
+Merged: Colour_Colour_MergedColours("red", "blue")
+
+def Num_DoubleNum(num) {
+  $this: $Mul(2, num)
+}
+
+def Colour_Colour_MergedColours(col1, col2) {
+  $this: Colour_Col1(col1)
+
+  // Merge the result of Colour_Col2 with $this.
+  $this: Colour_Col2(col2)
+}
+
+def Colour_Col1(col) {
+  colour.first: col
+  colours[0]: col
+}
+
+def Colour_Col2(col) {
+  colour.second: col
+  colours[0]: col
+}
+</code></pre>
+
+<section class="zippy">
+Running this mapping yields
+
+<pre><code>{
+  "Merged": {
+      "colour": {
+        "first": "red",
+        "second": "blue"
+      },
+      "colours": [
+        "red",
+        "blue"
+      ]
+  },
+  "Primitive": 20
+}
+</code></pre>
+
+</section>
+
+1.  Arrays are concatenated
+
+    Even though both functions mapped to `colours[0]`, `"blue"` ended up in
+    `colours[1]`
+
+1.  New fields are added
+
+1.  Fields with the same name and primitive values produce a merge conflict. An
+    overwrite can be forced (see [Overwriting](#overwriting-fields))
 
 <section class="zippy">
 **Exercise**
@@ -1950,6 +2005,18 @@ to:
 }
 ```
 
+#### New CLI parameters
+
+Add your `code_harmonization` folder you made above to the CLI parameters as
+`-harmonize_code_dir_spec`:
+
+*   From now on, run your mapping using the mapping_engine binary, in mapping_engine/main. An
+    example command might look like (run from mapping_engine/main): `go run . --
+    -input_file_spec=$HOME/wstl_codelab/codelab.json
+    -output_dir=$HOME/wstl_codelab/
+    -harmonize_code_dir_spec=$HOME/wstl_codelab/code_harmonization
+    -mapping_file_spec=$HOME/wstl_codelab/codelab.wstl`
+
 ### Example
 
 Translate the code `red` to the value specified by the ConceptMap above.
@@ -2030,6 +2097,18 @@ conversion {
   scalar: 0.001
 }
 ```
+
+#### New CLI parameters
+
+Add your `codelab-units.textproto` file you made above to the CLI parameters as
+`-harmonize_unit_spec`:
+
+*   From now on, run your mapping using the mapping_engine binary, in mapping_engine/main. An
+    example command might look like (run from mapping_engine/main): `go run . --
+    -input_file_spec=$HOME/wstl_codelab/codelab.json
+    -output_dir=$HOME/wstl_codelab/
+    -harmonize_unit_spec=$HOME/wstl_codelab/codelab-units.textproto
+    -mapping_file_spec=$HOME/wstl_codelab/codelab.wstl`
 
 ### Example
 
