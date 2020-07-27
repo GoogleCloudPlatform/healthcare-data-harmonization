@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/golang/protobuf/proto" /* copybara-comment: proto */
+	"google.golang.org/protobuf/encoding/prototext" /* copybara-comment: prototext */
 
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/auth" /* copybara-comment: auth */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/cloudfunction" /* copybara-comment: cloudfunction */
@@ -346,7 +346,7 @@ func loadMappingConfig(loc *httppb.Location, typ hapb.MappingType) (*mappb.Mappi
 	mpc := &mappb.MappingConfig{}
 	switch typ {
 	case hapb.MappingType_RAW_PROTO:
-		if err := proto.UnmarshalText(string(data), mpc); err != nil {
+		if err := prototext.Unmarshal(data, mpc); err != nil {
 			return nil, err
 		}
 	case hapb.MappingType_MAPPING_LANGUAGE:

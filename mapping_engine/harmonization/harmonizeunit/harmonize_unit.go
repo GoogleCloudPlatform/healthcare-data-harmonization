@@ -28,7 +28,7 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/types" /* copybara-comment: types */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/gcsutil" /* copybara-comment: gcsutil */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
-	"github.com/golang/protobuf/proto" /* copybara-comment: proto */
+	"google.golang.org/protobuf/encoding/prototext" /* copybara-comment: prototext */
 
 	hpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: harmonization_go_proto */
 	httppb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: http_go_proto */
@@ -193,7 +193,7 @@ func ParseUnitConfigFiles(unitConversion *httppb.Location) (*ucpb.UnitConfigurat
 	default:
 		return nil, fmt.Errorf("location type %T is not supported", t)
 	}
-	if err := proto.UnmarshalText(string(raw), uc); err != nil {
+	if err := prototext.Unmarshal(raw, uc); err != nil {
 		return nil, fmt.Errorf("could not unmarshal unit conversion file: %v", err)
 	}
 	return uc, nil

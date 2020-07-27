@@ -17,11 +17,10 @@ package errors
 import (
 	"fmt"
 
-	"github.com/golang/protobuf/proto" /* copybara-comment: proto */
+	"google.golang.org/protobuf/proto" /* copybara-comment: proto */
 	"google.golang.org/protobuf/reflect/protoreflect" /* copybara-comment: protoreflect */
 
 	mappb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: mapping_go_proto */
-	proto2 "google.golang.org/protobuf/proto" /* copybara-comment: proto */
 )
 
 // ProtoLocation is an implementation of error that generates locations from proto messages.
@@ -35,14 +34,12 @@ type ProtoLocation struct {
 // parent message is used to derive a name for the proto message value (i.e. based on which field in
 // the parent contains the given message value).
 func NewProtoLocation(msg, parent proto.Message) ProtoLocation {
-	msgv2 := proto.MessageV2(msg)
-	parentv2 := proto.MessageV2(parent)
-	fields := msgv2.ProtoReflect().Descriptor().Fields()
-	name := findNameFieldValue(msgv2, fields)
+	fields := msg.ProtoReflect().Descriptor().Fields()
+	name := findNameFieldValue(msg, fields)
 
 	// Try to build the name by finding the field in the parent that contains the message.
-	if name == "" && parentv2 != nil {
-		name = getNameFromParentField(msgv2, parentv2)
+	if name == "" && parent != nil {
+		name = getNameFromParentField(msg, parent)
 	}
 
 	return ProtoLocation{
@@ -52,7 +49,7 @@ func NewProtoLocation(msg, parent proto.Message) ProtoLocation {
 	}
 }
 
-func findNameFieldValue(msg proto2.Message, fields protoreflect.FieldDescriptors) string {
+func findNameFieldValue(msg proto.Message, fields protoreflect.FieldDescriptors) string {
 	if f := fields.ByName("name"); f != nil {
 		return msg.ProtoReflect().Get(f).String()
 	}
@@ -61,7 +58,7 @@ func findNameFieldValue(msg proto2.Message, fields protoreflect.FieldDescriptors
 
 // getNameFromParentField finds a field in the parent message that contains the given msg, and
 // returns its name.
-func getNameFromParentField(msg, parent proto2.Message) string {
+func getNameFromParentField(msg, parent proto.Message) string {
 	parentFields := parent.ProtoReflect().Descriptor().Fields()
 	for i := 0; i < parentFields.Len(); i++ {
 		f := parentFields.Get(i)
@@ -71,12 +68,12 @@ func getNameFromParentField(msg, parent proto2.Message) string {
 		case protoreflect.List:
 			for j := 0; j < pfit.Len(); j++ {
 				item := pfit.Get(j)
-				if itemMsg, ok := item.Interface().(protoreflect.Message); ok && proto2.Equal(itemMsg.Interface(), msg) {
+				if itemMsg, ok := item.Interface().(protoreflect.Message); ok && proto.Equal(itemMsg.Interface(), msg) {
 					return fmt.Sprintf("%s %s", SuffixNumber(j+1), f.Name())
 				}
 			}
 		case protoreflect.Message:
-			if proto2.Equal(pfit.Interface(), msg) {
+			if proto.Equal(pfit.Interface(), msg) {
 				return string(f.Name())
 			}
 		}
@@ -109,7 +106,7 @@ func (p ProtoLocation) Error() string {
 		return fmt.Sprintf("%sEvaluating arguments for %s%s", prefix, vs.Projector, suffix)
 	}
 
-	typ := string(proto.MessageV2(p.msg).ProtoReflect().Type().Descriptor().FullName().Name())
+	typ := string(p.msg.ProtoReflect().Type().Descriptor().FullName().Name())
 
 	if p.name == "" {
 		return prefix + typ + suffix
@@ -119,8 +116,6 @@ func (p ProtoLocation) Error() string {
 }
 
 func isProtoMessageFunction(msg proto.Message) bool {
-	msgv2 := proto.MessageV2(msg)
-
-	projDef := proto.MessageV2(&mappb.ProjectorDefinition{})
-	return msgv2.ProtoReflect().Type().Descriptor().FullName() == projDef.ProtoReflect().Type().Descriptor().FullName()
+	projDef := &mappb.ProjectorDefinition{}
+	return msg.ProtoReflect().Type().Descriptor().FullName() == projDef.ProtoReflect().Type().Descriptor().FullName()
 }

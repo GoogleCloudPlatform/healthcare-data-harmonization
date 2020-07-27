@@ -20,7 +20,8 @@ import (
 
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
 	"github.com/google/go-cmp/cmp" /* copybara-comment: cmp */
-	"github.com/golang/protobuf/proto" /* copybara-comment: proto */
+	"google.golang.org/protobuf/encoding/prototext" /* copybara-comment: prototext */
+	"google.golang.org/protobuf/proto" /* copybara-comment: proto */
 
 	dhpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: data_harmonization_go_proto */
 	hpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: harmonization_go_proto */
@@ -54,6 +55,17 @@ func (s *mockKeyValueGCSClient) ReadBytes(ctx context.Context, bucket string, fi
 		s.t.Fatalf("tried to read path that has no value: %s", path)
 	}
 	return []byte{}, nil
+}
+
+func mustMarshalConfig(t *testing.T, message proto.Message) string {
+	t.Helper()
+
+	b, err := prototext.Marshal(message)
+	if err != nil {
+		t.Fatalf("Marshal proto message error for %v: %v", message, err)
+	}
+
+	return string(b)
 }
 
 var testModes = []struct {
@@ -283,7 +295,7 @@ func TestTransform_NewTransformer(t *testing.T) {
 					},
 				},
 			},
-			options:    []Option{GCSClient(&mockStorageClient{b: proto.MarshalTextString(config)})},
+			options:    []Option{GCSClient(&mockStorageClient{b: mustMarshalConfig(t, config)})},
 			want:       Options{},
 			wantCF:     "",
 			wantErrors: false,
@@ -297,7 +309,7 @@ func TestTransform_NewTransformer(t *testing.T) {
 					},
 				},
 			},
-			options:    []Option{GCSClient(&mockStorageClient{b: proto.MarshalTextString(config)})},
+			options:    []Option{GCSClient(&mockStorageClient{b: mustMarshalConfig(t, config)})},
 			want:       Options{},
 			wantCF:     "",
 			wantErrors: false,
@@ -311,7 +323,7 @@ func TestTransform_NewTransformer(t *testing.T) {
 					},
 				},
 			},
-			options:    []Option{GCSClient(&mockStorageClient{b: proto.MarshalTextString(config)})},
+			options:    []Option{GCSClient(&mockStorageClient{b: mustMarshalConfig(t, config)})},
 			want:       Options{},
 			wantCF:     "",
 			wantErrors: true,
@@ -474,7 +486,7 @@ func TestTransform_NewTransformer_UserLibraries(t *testing.T) {
 					},
 				},
 			},
-			gcsFiles:               map[string]string{"gs://dummy/config.textproto": proto.MarshalTextString(protoProjector)},
+			gcsFiles:               map[string]string{"gs://dummy/config.textproto": mustMarshalConfig(t, protoProjector)},
 			expectedUserProjectors: []string{"Patient_PatientProto"},
 		},
 		{
@@ -498,7 +510,7 @@ func TestTransform_NewTransformer_UserLibraries(t *testing.T) {
 				},
 			},
 			gcsFiles: map[string]string{
-				"gs://dummy/proto.textproto": proto.MarshalTextString(protoProjector),
+				"gs://dummy/proto.textproto": mustMarshalConfig(t, protoProjector),
 				"gs://dummy/whistler.wstl":   whistleProjector,
 			},
 			expectedUserProjectors: []string{"Patient_PatientWhistler", "Patient_PatientProto"},
@@ -524,7 +536,7 @@ func TestTransform_NewTransformer_UserLibraries(t *testing.T) {
 				},
 			},
 			gcsFiles: map[string]string{
-				"gs://dummy/proto.textproto": proto.MarshalTextString(protoProjector),
+				"gs://dummy/proto.textproto": mustMarshalConfig(t, protoProjector),
 				"gs://dummy/whistler.wstl":   duplicateWhistleProjector,
 			},
 			wantErrors: true,
@@ -541,7 +553,7 @@ func TestTransform_NewTransformer_UserLibraries(t *testing.T) {
 					},
 				},
 			},
-			gcsFiles:   map[string]string{"gs://dummy/config.textproto": proto.MarshalTextString(protoProjector)},
+			gcsFiles:   map[string]string{"gs://dummy/config.textproto": mustMarshalConfig(t, protoProjector)},
 			wantErrors: true,
 		},
 		{
@@ -586,7 +598,7 @@ func TestTransform_NewTransformer_UserLibraries(t *testing.T) {
 					},
 				},
 			},
-			gcsFiles:   map[string]string{"gs://dummy/config.textproto": proto.MarshalTextString(duplicateProtoProjector)},
+			gcsFiles:   map[string]string{"gs://dummy/config.textproto": mustMarshalConfig(t, duplicateProtoProjector)},
 			wantErrors: true,
 		},
 		{

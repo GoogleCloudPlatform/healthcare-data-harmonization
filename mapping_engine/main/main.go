@@ -27,7 +27,7 @@ import (
 
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/transform" /* copybara-comment: transform */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
-	"github.com/golang/protobuf/proto" /* copybara-comment: proto */
+	"google.golang.org/protobuf/encoding/prototext" /* copybara-comment: prototext */
 
 	dhpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: data_harmonization_go_proto */
 	hpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: harmonization_go_proto */
@@ -155,7 +155,7 @@ func main() {
 				"(mapping_file_spec, harmonize_code_dir_spec, harmonize_unit_spec, lib_dir_spec).")
 		}
 		n := fileutil.MustRead(*dhConfigFile, "data harmonization config")
-		if err := proto.UnmarshalText(string(n), dhConfig); err != nil {
+		if err := prototext.Unmarshal(n, dhConfig); err != nil {
 			log.Fatalf("Failed to parse data harmonization config")
 		}
 	} else {

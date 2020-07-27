@@ -21,7 +21,7 @@ import (
 
 	"github.com/antlr/antlr4/runtime/Go/antlr" /* copybara-comment: antlr */
 	"github.com/google/go-cmp/cmp" /* copybara-comment: cmp */
-	"github.com/golang/protobuf/proto" /* copybara-comment: proto */
+	"google.golang.org/protobuf/proto" /* copybara-comment: proto */
 	"google.golang.org/protobuf/testing/protocmp" /* copybara-comment: protocmp */
 
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language/errors" /* copybara-comment: errors */

@@ -17,9 +17,9 @@
 
 function generate_protos() {
   export GOPATH=$(go env GOPATH)
-  export PATH=$PATH:$GOPATH/bin
+  export PATH=$GOPATH/bin:$PATH
 
-  go get -u github.com/golang/protobuf/protoc-gen-go@v1.4.2
+  go get -u google.golang.org/protobuf/cmd/protoc-gen-go@v1.25.0
 
   find ./proto -type f -name "*.proto" -exec protoc --go_out=paths=source_relative:. {} \;
 }

@@ -24,7 +24,7 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language/transpiler" /* copybara-comment: transpiler */
 	"github.com/google/go-cmp/cmp" /* copybara-comment: cmp */
-	"github.com/golang/protobuf/proto" /* copybara-comment: proto */
+	"google.golang.org/protobuf/encoding/prototext" /* copybara-comment: prototext */
 
 	dhpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: data_harmonization_go_proto */
 	hpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: harmonization_go_proto */
@@ -1334,7 +1334,8 @@ func TestTranspile(t *testing.T) {
 
 				got, err := exec(t, compiled, test.wantValue.inputJSON)
 				if err != nil {
-					t.Fatalf("executing whistle code yielded unexpected error\nwhistle code:\n%s\nerror: %v\nwhistler: %s", full, err, proto.MarshalTextString(compiled))
+					m, _ := prototext.Marshal(compiled)
+					t.Fatalf("executing whistle code yielded unexpected error\nwhistle code:\n%s\nerror: %v\nwhistler: %s", full, err, string(m))
 				}
 
 				want, err := jsonutil.UnmarshalJSON(json.RawMessage(test.wantValue.wantJSON))

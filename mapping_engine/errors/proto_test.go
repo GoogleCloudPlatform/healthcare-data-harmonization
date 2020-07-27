@@ -18,7 +18,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/golang/protobuf/proto" /* copybara-comment: proto */
+	"google.golang.org/protobuf/proto" /* copybara-comment: proto */
 
 	mappb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: mapping_go_proto */
 )

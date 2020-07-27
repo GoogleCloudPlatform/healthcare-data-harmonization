@@ -19,7 +19,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp" /* copybara-comment: cmp */
-	"github.com/golang/protobuf/proto" /* copybara-comment: proto */
+	"google.golang.org/protobuf/encoding/prototext" /* copybara-comment: prototext */
 
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/mapping" /* copybara-comment: mapping */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/projector" /* copybara-comment: projector */
@@ -138,7 +138,7 @@ func LoadLibraryProjectors(t *testing.T) *types.Registry {
 		t.Fatalf("failed to load builtins %v", err)
 	}
 	lc := &libpb.LibraryConfig{}
-	if err := proto.UnmarshalText(postProcessProjectors, lc); err != nil {
+	if err := prototext.Unmarshal([]byte(postProcessProjectors), lc); err != nil {
 		t.Fatalf("failed to unmarshal post process projectors: %v", err)
 	}
 
