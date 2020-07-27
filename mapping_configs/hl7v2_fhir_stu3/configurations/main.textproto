@@ -14,6 +14,10 @@ library_config: {
   }
   user_libraries: {
     type: MAPPING_LANGUAGE
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/id.wstl" }
+  }
+  user_libraries: {
+    type: MAPPING_LANGUAGE
     path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/messages.wstl" }
   }
   user_libraries: {
@@ -35,6 +39,12 @@ harmonization_config: {
   }
   code_lookup: {
     local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/code_harmonization/Allergy_Type.harmonization.json"
+  }
+  code_lookup: {
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/code_harmonization/Encounter_Class.harmonization.json"
+  }
+  code_lookup: {
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/code_harmonization/Encounter_Status.harmonization.json"
   }
   code_lookup: {
     local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/code_harmonization/Gender.harmonization.json"
