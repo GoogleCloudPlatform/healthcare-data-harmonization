@@ -293,16 +293,16 @@ filter
 
 expression
     : // Operator precedence is determined by order of alternatives.
-    source                                                 # ExprSource
-    | block                                                # ExprAnonBlock
-    | TOKEN '(' ')'                                        # ExprNoArg
-    | TOKEN arrayMod? '(' expression (',' expression)* ')' # ExprProjection
-    | expression postunoperator                            # ExprPostOp
-    | preunoperator expression                             # ExprPreOp
-    | expression bioperator1 expression                    # ExprBiOp
-    | expression bioperator2 expression                    # ExprBiOp
-    | expression bioperator3 expression                    # ExprBiOp
-    | expression bioperator4 expression                    # ExprBiOp
+    source                                                    # ExprSource
+    | block                                                   # ExprAnonBlock
+    | TOKEN arrayMod? '(' (expression (',' expression)*)? ')' # ExprProjection
+    | LISTOPEN (expression (',' expression)*)? LISTCLOSE      # ListInitialization
+    | expression postunoperator                               # ExprPostOp
+    | preunoperator expression                                # ExprPreOp
+    | expression bioperator1 expression                       # ExprBiOp
+    | expression bioperator2 expression                       # ExprBiOp
+    | expression bioperator3 expression                       # ExprBiOp
+    | expression bioperator4 expression                       # ExprBiOp
 ;
 
 source

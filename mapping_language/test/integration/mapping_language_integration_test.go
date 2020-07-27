@@ -1098,6 +1098,81 @@ func TestTranspile(t *testing.T) {
 			},
 		},
 		{
+			name: "root field mappings using inline list initialization",
+			whistle: `def root_fields(arg) {
+									field: arg
+									root one[]: "boo!"
+									root two: "three"
+									root empty[1]: "skipped"
+								}`,
+			wantValue: valueTest{
+				rootMappings: `red: "red"
+											blue: "blue"
+											one: ["one"]
+											one[]: root_fields("two")
+											int: [1]
+											empty: []`,
+				wantJSON: `{
+									   "red": "red",
+										 "blue": "blue",
+										 "one": [
+										 	 "one",
+											 "boo!",
+											 {
+											   "field": "two"
+											 }
+										 ],
+										 "two": "three",
+										 "int": [1],
+										 "empty": [
+										   null,
+										   "skipped"
+									   ]
+									 }`,
+			},
+		},
+		{
+			name: "complex list initialization",
+			whistle: `def add_field(arg) {
+									field: arg
+								}`,
+			wantValue: valueTest{
+				rootMappings: `nested: [1, ["n2"], [["nn3"], "n3"]]
+				               functions: [add_field("first"), add_field(add_field("second"))]
+											 empty: []
+											 empty[]: add_field("not_empty")`,
+				wantJSON: `{
+										 "nested": [
+										   1,
+										   [
+											   "n2"
+											 ],
+											 [
+											   [
+												   "nn3"
+												 ],
+												 "n3"
+											 ]
+									   ],
+										 "functions": [
+										   {
+											   "field": "first"
+											 },
+											 {
+											   "field": {
+												   "field": "second"
+												 }
+											 }
+										 ],
+										 "empty": [
+										   {
+										     "field": "not_empty"
+											 }
+										 ]
+									 }`,
+			},
+		},
+		{
 			name: "root field mappings does not affect non-root",
 			whistle: `def root_fields(arg) {
 									field: arg

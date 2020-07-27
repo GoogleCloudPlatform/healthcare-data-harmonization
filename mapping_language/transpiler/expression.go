@@ -25,6 +25,8 @@ import (
 
 const (
 	anonymousBlockNameFormat = "$anonblock_%d_%d"
+
+	listInitializationProjector = "$ListOf"
 )
 
 // Consts for builtins.
@@ -138,6 +140,27 @@ func (t *transpiler) VisitExprProjection(ctx *parser.ExprProjectionContext) inte
 	return vs
 }
 
+func (t *transpiler) VisitListInitialization(ctx *parser.ListInitializationContext) interface{} {
+	vs := &mpb.ValueSource{
+		Projector: listInitializationProjector,
+	}
+
+	for i := range ctx.AllExpression() {
+		source := ctx.Expression(i).Accept(t).(*mpb.ValueSource)
+
+		if i == 0 {
+			vs.Source = &mpb.ValueSource_ProjectedValue{
+				ProjectedValue: source,
+			}
+			continue
+		}
+
+		vs.AdditionalArg = append(vs.AdditionalArg, source)
+	}
+
+	return vs
+}
+
 func (t *transpiler) VisitExprSource(ctx *parser.ExprSourceContext) interface{} {
 	// No-op here, just visit the Source child.
 	return ctx.Source().Accept(t)
@@ -163,11 +186,4 @@ func (t *transpiler) VisitExprAnonBlock(ctx *parser.ExprAnonBlockContext) interf
 		t.fail(ctx, fmt.Errorf("unable to generate anonymous block callsite: %v", err))
 	}
 	return cs
-}
-
-func (t *transpiler) VisitExprNoArg(ctx *parser.ExprNoArgContext) interface{} {
-	// Simple projector call with no args, e.x. $UUID()
-	return &mpb.ValueSource{
-		Projector: getTokenText(ctx.TOKEN()),
-	}
 }
