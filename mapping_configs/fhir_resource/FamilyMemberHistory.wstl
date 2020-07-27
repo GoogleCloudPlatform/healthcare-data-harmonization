@@ -1,13 +1,5 @@
 def FamilyMemberHistoryBase(familyMemberHistory) {
-  resourceType: familyMemberHistory.resourceType
-  id: familyMemberHistory.id
-  meta: familyMemberHistory.meta
-  implicitRules: familyMemberHistory.implicitRules
-  language: familyMemberHistory.language
-  text: familyMemberHistory.text
-  contained: familyMemberHistory.contained
-  extension: familyMemberHistory.extension
-  modifierExtension: familyMemberHistory.modifierExtension
+  $this: ResourceBase(familyMemberHistory)
   identifier: familyMemberHistory.identifier
   instantiatesCanonical: familyMemberHistory.instantiatesCanonical
   patient: familyMemberHistory.patient
@@ -76,4 +68,3 @@ def R4FamilyMemberHistory_ConditionToR3(data) {
   onsetString: data.onsetString
   note: data.note
 }
-

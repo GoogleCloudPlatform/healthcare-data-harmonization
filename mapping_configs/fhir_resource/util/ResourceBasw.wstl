@@ -1,0 +1,11 @@
+def ResourceBase(resource) {
+  resourceType: resource.resourceType
+  id: resource.id
+  meta: resource.meta
+  implicitRules: resource.implicitRules
+  language: resource.language
+  text: resource.text
+  contained: resource.contained
+  extension: resource.extension
+  modifierExtension: resource.modifierExtension
+}

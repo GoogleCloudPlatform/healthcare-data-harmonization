@@ -1,6 +1,6 @@
 def CodeToCodeableConcept(system, data) {
-  coding.system: system
-  coding.code: data
+  coding[0].system: system
+  coding[0].code: data
 }
 
 def CodeableConceptToCode(data) {
@@ -24,10 +24,51 @@ def ReferenceToIdentifier(data) {
 }
 
 def ReferenceToCanonical(data) {
-  $this: data.identifier.uri
+  $this: data.type
 }
 
 def CanonicalToReference(data) {
-  identifier.uri: data
+  type: data
 }
 
+def StringToCoding(system, data) {
+  system: system
+  code: data
+}
+
+def CodingToString(data) {
+  $this: data.code
+}
+
+def IdentifierToCodeableConcept(data) {
+  $this: data.type
+}
+
+def CodeableConceptToIdentifier(data) {
+  type: data
+}
+
+def CodingToCodeableConcept(data) {
+  coding[]: data
+}
+
+def CodeableConceptToCoding(data) {
+  $this: data.coding[0]
+}
+
+def QuantityToMoney(low, high) {
+  low: low
+  high: high
+}
+
+def MoneyToQuantity(data) {
+  $this: data.low
+}
+
+def StringToAnnotation(data) {
+  text: data
+}
+
+def AnnotationToString(data) {
+  $this: data.text
+}
