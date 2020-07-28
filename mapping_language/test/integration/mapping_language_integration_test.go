@@ -1315,6 +1315,23 @@ func TestTranspile(t *testing.T) {
 									 }`,
 			},
 		},
+		{
+			name: "arraymod for target",
+			whistle: `def arr_mod(a, b, c) {
+									[]: a
+									[]: b
+									[]: c
+								}`,
+			wantValue: valueTest{
+				rootMappings: `arr: arr_mod(1, 2, 3)
+											 arr: arr_mod(4, 5, 6)
+											 arr2: arr_mod(7, 8, 9)`,
+				wantJSON: `{
+										 "arr": [1, 2, 3, 4, 5, 6],
+										 "arr2": [7, 8, 9]
+									 }`,
+			},
+		},
 		// TODO: Add more tests.
 	}
 	for _, test := range tests {

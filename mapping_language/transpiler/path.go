@@ -90,6 +90,12 @@ func (t *transpiler) VisitTargetPathHead(ctx *parser.TargetPathHeadContext) inte
 		}
 	}
 
+	if ctx.ArrayMod() != nil && ctx.ArrayMod().GetText() != "" {
+		return pathSpec{
+			index: ctx.ArrayMod().GetText(),
+		}
+	}
+
 	t.fail(ctx, fmt.Errorf("invalid target path head - no token, index, arraymod, or wildcard"))
 	return nil
 }
