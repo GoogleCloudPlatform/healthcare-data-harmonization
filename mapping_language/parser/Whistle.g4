@@ -281,7 +281,7 @@ mapping
 
 comment
   : COMMENT (EOF|NEWLINE)
-  ;
+;
 
 condition
     : IF expression
@@ -322,7 +322,7 @@ target
 ;
 
 targetPath
-    : targetPathHead targetPathSegment* arrayMod? OWMOD?
+    : targetPathHead targetPathSegment* OWMOD?
 ;
 
 targetPathHead

@@ -38,10 +38,6 @@ func (t *transpiler) VisitTargetPath(ctx *parser.TargetPathContext) interface{} 
 		p.field += ctx.TargetPathSegment(i).Accept(t).(string)
 	}
 
-	if ctx.ArrayMod() != nil && ctx.ArrayMod().GetText() != "" {
-		p.field += ctx.ArrayMod().GetText()
-	}
-
 	if ctx.OWMOD() != nil && ctx.OWMOD().GetText() != "" {
 		p.field += ctx.OWMOD().GetText()
 	}
