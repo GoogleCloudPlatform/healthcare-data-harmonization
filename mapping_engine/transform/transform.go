@@ -235,12 +235,6 @@ func (t *Transformer) Project(projector string, args ...jsonutil.JSONMetaNode) (
 // LoadMappingConfig loads the mapping config inline or from a GCS path.
 func (t *Transformer) LoadMappingConfig(config *dhpb.DataHarmonizationConfig) (*mappb.MappingConfig, error) {
 	mpc := &mappb.MappingConfig{}
-	if config.GetDeprecateStructureMappingConfig() != nil && config.GetStructureMappingConfig() != nil {
-		return nil, fmt.Errorf("only one of DeprecateStructureMappingConfig or StructureMappingConfig can be filled")
-	}
-	if config.GetDeprecateStructureMappingConfig() != nil {
-		return config.GetDeprecateStructureMappingConfig(), nil
-	}
 	if sm := config.GetStructureMappingConfig(); sm != nil {
 		switch mapping := config.GetStructureMappingConfig().Mapping.(type) {
 		case *hapb.StructureMappingConfig_MappingConfig:

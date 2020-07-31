@@ -16,8 +16,7 @@ message DataHarmonizationConfig {
   // The shared library configurations for structure mapping.
   repeated LibraryConfig library_config = 1;
 
-  // DEPRECATED: Use structure_mapping_config instead.
-  MappingConfig deprecate_structure_mapping_config = 2 [deprecated = true];
+  reserved 2;
 
   // The configuration defining the code harmonization.
   CodeHarmonizationConfig harmonization_config = 3;
