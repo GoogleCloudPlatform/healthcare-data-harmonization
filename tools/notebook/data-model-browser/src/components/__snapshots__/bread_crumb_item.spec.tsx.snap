@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BreadCrumbItem should render correctly 1`] = `
+<WithStyles(ForwardRef(Link))
+  color="textSecondary"
+  href="dummy_field"
+  onClick={[Function]}
+>
+  dummy_field
+</WithStyles(ForwardRef(Link))>
+`;

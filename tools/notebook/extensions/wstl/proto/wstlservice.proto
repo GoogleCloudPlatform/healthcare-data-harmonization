@@ -1,0 +1,119 @@
+// Copyright 2020 Google LLC.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// The definition of the Whistle Mapping Language service.
+syntax = "proto3";
+
+package cloud.healthcare.data_harmonization.notebook.extension.wstl.proto;
+
+import "google/rpc/status.proto";
+
+option go_package = "github.com/GoogleCloudPlatform/healthcare-data-harmonization/wstl/proto";
+
+// The location of a resource to be transformed.
+message Location {
+  oneof location {
+    // The gcs path following the gs://<bucket>/... naming convention.
+    // Wildcard expressions supported.
+    string gcs_location = 1;
+
+    // An inline json string.
+    string inline_json = 2;
+
+    // A local path
+    string local_path = 3;
+  }
+}
+
+// The records produced by executing a Whistle transformation.
+message TransformedRecords {
+  oneof record {
+    // JSON string containing output records.
+    string output = 1;
+
+    // Error messages
+    google.rpc.Status error = 2;
+  }
+}
+
+// Creates an incremental transformation session.
+message CreateIncrementalSessionRequest {
+  // Client provided session identifier. If empty, service will generate an
+  // identifier.
+  string session_id = 1;
+}
+
+// The response of an initialized incremental transformation session.
+message IncrementalSessionResponse {
+  oneof status {
+    // The session identifier.
+    string session_id = 1;
+
+    // Error message associated with session.
+    google.rpc.Status error = 2;
+  }
+}
+
+// Request to perform an incremental transformation.
+message IncrementalTransformRequest {
+  // Whistle mapping language
+  string wstl = 1;
+
+  // Location of additional library configurations.
+  repeated Location library_config = 2;
+
+  // Input records to be transformed.
+  repeated Location input = 3;
+
+  // Session to perform incremental transformation within.
+  string session_id = 4;
+}
+
+// Resulting artificants from a transformation request.
+message TransformResponse {
+  // Transformed records.
+  repeated TransformedRecords results = 1;
+}
+
+// Deletes an incremental transformation session.
+message DeleteIncrementalSessionRequest {
+  // Session to delete.
+  string session_id = 1;
+}
+
+message DeleteIncrementalSessionResponse {
+  oneof status {
+    // Session identifier.
+    string session_id = 1;
+
+    // Error message associated with session.
+    google.rpc.Status error = 2;
+  }
+}
+
+service WhistleService {
+  // Creates an incremental transformation session.
+  rpc GetOrCreateIncrementalSession(CreateIncrementalSessionRequest)
+      returns (IncrementalSessionResponse) {}
+
+  // Returns an incremetal transformation within an existing session. All
+  // functions defined in the incremental transformation will be accessible
+  // by subsequent incremental transformation calls.
+  rpc GetIncrementalTransform(IncrementalTransformRequest)
+      returns (TransformResponse) {}
+
+  // Deletes an incremental transformation session.
+  rpc DeleteIncrementalSession(DeleteIncrementalSessionRequest)
+      returns (DeleteIncrementalSessionResponse) {}
+}

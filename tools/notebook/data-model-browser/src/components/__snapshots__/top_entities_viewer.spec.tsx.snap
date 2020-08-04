@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TopEntitiesViewer should render correctly 1`] = `
+<WithStyles(ForwardRef(Table))>
+  <WithStyles(ForwardRef(TableBody))>
+    <InspectTooltip
+      disableFocusListener={true}
+      disableHoverListener={true}
+      disableTouchListener={true}
+      key="0"
+      open={true}
+      title={
+        <div>
+          <div>
+            Resource:
+            Test
+          </div>
+          <ForwardRef(WithStyles) />
+          <div>
+            Scope and Usage:
+          </div>
+          <p>
+            Verbose details
+          </p>
+        </div>
+      }
+    >
+      <WithStyles(ForwardRef(TableRow))
+        hover={true}
+        key="Test"
+        onClick={[Function]}
+        selected={true}
+      >
+        <WithStyles(ForwardRef(TableCell))
+          component="th"
+          scope="row"
+        >
+          <span
+            className="makeStyles-span-1"
+            onClick={[Function]}
+          >
+            Test
+          </span>
+        </WithStyles(ForwardRef(TableCell))>
+      </WithStyles(ForwardRef(TableRow))>
+    </InspectTooltip>
+  </WithStyles(ForwardRef(TableBody))>
+</WithStyles(ForwardRef(Table))>
+`;

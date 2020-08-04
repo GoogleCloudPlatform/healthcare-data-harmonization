@@ -24,10 +24,6 @@ message DataHarmonizationConfig {
   // The configuration defining the unit harmonization.
   UnitHarmonizationConfig unit_harmonization_config = 4;
 
-  // BEGIN GOOGLE-INTERNAL
-  // The configuration defining the note harmonization.
-  NoteHarmonizationConfig note_harmonization_config = 5;
-  // END GOOGLE-INTERNAL
   // The configuration defining the structure mapping.
   StructureMappingConfig structure_mapping_config = 6;
 }

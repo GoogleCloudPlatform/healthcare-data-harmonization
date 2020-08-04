@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InspectTooltip should render correctly 1`] = `
+<WithStyles(ForwardRef(Tooltip))
+  PopperProps={
+    Object {
+      "popperOptions": Object {
+        "modifiers": Object {
+          "arrow": Object {
+            "element": null,
+            "enabled": false,
+          },
+        },
+      },
+    }
+  }
+  classes={
+    Object {
+      "popper": "makeStyles-popper-2",
+      "tooltip": "makeStyles-tooltip-3",
+      "tooltipPlacementLeft": "makeStyles-tooltipPlacementLeft-4",
+    }
+  }
+  placement="left"
+  title={
+    <React.Fragment>
+      Test Tool Tip
+      <span />
+    </React.Fragment>
+  }
+>
+  <button
+    id="testChild"
+    type="submit"
+  >
+    Hello World
+  </button>
+</WithStyles(ForwardRef(Tooltip))>
+`;

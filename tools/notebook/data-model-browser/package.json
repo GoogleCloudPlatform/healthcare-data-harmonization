@@ -1,0 +1,116 @@
+{
+  "name": "data-model-browser",
+  "version": "0.0.1",
+  "description": "Notebooks Data Model Browser Extension Settings Schema",
+  "keywords": [
+    "jupyter",
+    "jupyterlab",
+    "jupyterlab-extension"
+  ],
+  "homepage": "https://github.com/GoogleCloudPlatform/healthcare-data-harmonization",
+  "bugs": {
+    "url": "https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/issues"
+  },
+  "license": "Apache-2.0",
+  "author": "Googler",
+  "files": [
+    "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
+    "schema/*.json",
+    "style/*.css",
+    "style/images/*.svg"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GoogleCloudPlatform/healthcare-data-harmonization.git"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.prod.json --allowJs --checkJs",
+    "clean": "rimraf lib",
+    "prepare": "npm run clean && npm run build",
+    "lint-warnings": "eslint \"src/**/*.{ts,tsx}\" --fix --quiet",
+    "lint": "npm run lint-warnings -- --quiet",
+    "start": "concurrently -k -p \"[{name}]\" -n \"Typescript,JupyterLab\" -c \"green.bold,yellow.bold\" \"npm run watch\" \"jupyter lab --ip=0.0.0.0 --watch\"",
+    "test": "jest --coverage --passWithNoTests && python tests.py",
+    "test-watch": "jest --watchAll",
+    "watch": "tsc -w"
+  },
+  "dependencies": {
+    "@jupyterlab/application": "^1.0.2",
+    "@jupyterlab/apputils": "^1.0.2",
+    "@jupyterlab/coreutils": "^3.0.0",
+    "@jupyterlab/docregistry": "^1.0.2",
+    "@jupyterlab/filebrowser": "^1.0.3",
+    "@jupyterlab/launcher": "^1.0.3",
+    "@jupyterlab/mainmenu": "^1.0.2",
+    "@jupyterlab/notebook": "^1.0.2",
+    "@lumino/disposable": "^1.2.0",
+    "@lumino/widgets": "^1.8.0",
+    "@material-ui/core": "^4.10.2",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
+    "@phosphor/disposable": "^1.2.0",
+    "@phosphor/widgets": "^1.8.1",
+    "@types/base64-js": "^1.2.5",
+    "acorn": ">=7.1.1",
+    "classnames": "^2.2.6",
+    "csstips": "^1.1.0",
+    "formik": "^1.5.8",
+    "fuse.js": "6.4.0",
+    "material-ui-search-bar": "1.0.0-beta.14",
+    "minimist": ">=1.2.2",
+    "typestyle": "^2.0.4",
+    "yaml": "^1.7.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.3",
+    "@babel/preset-env": "^7.5.5",
+    "@jupyterlab/testutils": "^1.0.2",
+    "@types/enzyme": "^3.10.4",
+    "@types/enzyme-adapter-react-16": "^1.0.5",
+    "@types/classnames": "^2.2.10",
+    "@types/fs-extra": "^8.0.0",
+    "@types/jest": "^24.9.1",
+    "@types/react": "~16.8.18",
+    "@types/react-dom": "^16.8.4",
+    "@types/react-router-dom": "^5.1.5",
+    "@types/react-router": "^5.1.8",
+    "@typescript-eslint/eslint-plugin": "^2.17.0",
+    "@typescript-eslint/parser": "^2.17.0",
+    "concurrently": "^4.1.1",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
+    "enzyme-to-json": "^3.4.3",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.2.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "jest": "^24.9.0",
+    "jest-junit": "^10.0.0",
+    "nodemon": "^2.0.2",
+    "prettier": "^1.18.2",
+    "rimraf": "^3.0.0",
+    "simulate-event": "^1.4.0",
+    "ts-jest": "^24.3.0",
+    "typescript": "^3.7.5"
+  },
+  "peerDependencies": {
+    "react": "~16.8.4",
+    "react-dom": "~16.8.4",
+    "react-router-dom": "~5.2.0",
+    "react-router": "~5.2.0"
+  },
+  "jupyterlab": {
+    "extension": true,
+    "discovery": {
+      "server": {
+        "base": {
+          "name": "data_model_browser",
+          "managers": [
+            "pip"
+          ]
+        }
+      }
+    }
+  }
+}

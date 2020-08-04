@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SubEntityTooltip should render correctly 1`] = `
+<Fragment>
+  <div>
+    Field:
+    <p>
+      DummyResource
+    </p>
+  </div>
+  <WithStyles(ForwardRef(Divider)) />
+  <div>
+    Required:
+    <p>
+      yes
+    </p>
+  </div>
+  <div>
+    Type:
+    <p>
+      dummy type
+    </p>
+  </div>
+  <div>
+    Scope and Usage:
+  </div>
+  <p>
+    dummy description
+  </p>
+</Fragment>
+`;

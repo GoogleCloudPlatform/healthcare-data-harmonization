@@ -1,0 +1,436 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FieldMetadataViewer should render correctly 1`] = `
+<WithStyles(FieldMetadataTable)
+  fieldMetadata={
+    Object {
+      "clickable": false,
+      "description": "dummy detailed description",
+      "name": "Test1",
+      "required": false,
+      "type": "string",
+    }
+  }
+>
+  <FieldMetadataTable
+    classes={
+      Object {
+        "root": "FieldMetadataTable-root-1",
+      }
+    }
+    fieldMetadata={
+      Object {
+        "clickable": false,
+        "description": "dummy detailed description",
+        "name": "Test1",
+        "required": false,
+        "type": "string",
+      }
+    }
+  >
+    <WithStyles(ForwardRef(Table))>
+      <ForwardRef(Table)
+        classes={
+          Object {
+            "root": "MuiTable-root",
+            "stickyHeader": "MuiTable-stickyHeader",
+          }
+        }
+      >
+        <table
+          className="MuiTable-root"
+          role={null}
+        >
+          <WithStyles(ForwardRef(TableBody))>
+            <ForwardRef(TableBody)
+              classes={
+                Object {
+                  "root": "MuiTableBody-root",
+                }
+              }
+            >
+              <tbody
+                className="MuiTableBody-root"
+                role={null}
+              >
+                <WithStyles(ForwardRef(TableRow))
+                  key="Field"
+                >
+                  <ForwardRef(TableRow)
+                    classes={
+                      Object {
+                        "footer": "MuiTableRow-footer",
+                        "head": "MuiTableRow-head",
+                        "hover": "MuiTableRow-hover",
+                        "root": "MuiTableRow-root",
+                        "selected": "Mui-selected",
+                      }
+                    }
+                  >
+                    <tr
+                      className="MuiTableRow-root"
+                      role={null}
+                    >
+                      <WithStyles(ForwardRef(TableCell))
+                        component="th"
+                        scope="row"
+                      >
+                        <ForwardRef(TableCell)
+                          classes={
+                            Object {
+                              "alignCenter": "MuiTableCell-alignCenter",
+                              "alignJustify": "MuiTableCell-alignJustify",
+                              "alignLeft": "MuiTableCell-alignLeft",
+                              "alignRight": "MuiTableCell-alignRight",
+                              "body": "MuiTableCell-body",
+                              "footer": "MuiTableCell-footer",
+                              "head": "MuiTableCell-head",
+                              "paddingCheckbox": "MuiTableCell-paddingCheckbox",
+                              "paddingNone": "MuiTableCell-paddingNone",
+                              "root": "MuiTableCell-root",
+                              "sizeSmall": "MuiTableCell-sizeSmall",
+                              "stickyHeader": "MuiTableCell-stickyHeader",
+                            }
+                          }
+                          component="th"
+                          scope="row"
+                        >
+                          <th
+                            aria-sort={null}
+                            className="MuiTableCell-root MuiTableCell-body"
+                            role="cell"
+                            scope="row"
+                          >
+                            <span>
+                              Field
+                            </span>
+                          </th>
+                        </ForwardRef(TableCell)>
+                      </WithStyles(ForwardRef(TableCell))>
+                      <WithStyles(ForwardRef(TableCell))
+                        component="th"
+                        scope="row"
+                      >
+                        <ForwardRef(TableCell)
+                          classes={
+                            Object {
+                              "alignCenter": "MuiTableCell-alignCenter",
+                              "alignJustify": "MuiTableCell-alignJustify",
+                              "alignLeft": "MuiTableCell-alignLeft",
+                              "alignRight": "MuiTableCell-alignRight",
+                              "body": "MuiTableCell-body",
+                              "footer": "MuiTableCell-footer",
+                              "head": "MuiTableCell-head",
+                              "paddingCheckbox": "MuiTableCell-paddingCheckbox",
+                              "paddingNone": "MuiTableCell-paddingNone",
+                              "root": "MuiTableCell-root",
+                              "sizeSmall": "MuiTableCell-sizeSmall",
+                              "stickyHeader": "MuiTableCell-stickyHeader",
+                            }
+                          }
+                          component="th"
+                          scope="row"
+                        >
+                          <th
+                            aria-sort={null}
+                            className="MuiTableCell-root MuiTableCell-body"
+                            role="cell"
+                            scope="row"
+                          >
+                            <span>
+                              Test1
+                            </span>
+                          </th>
+                        </ForwardRef(TableCell)>
+                      </WithStyles(ForwardRef(TableCell))>
+                    </tr>
+                  </ForwardRef(TableRow)>
+                </WithStyles(ForwardRef(TableRow))>
+                <WithStyles(ForwardRef(TableRow))
+                  key="Required"
+                >
+                  <ForwardRef(TableRow)
+                    classes={
+                      Object {
+                        "footer": "MuiTableRow-footer",
+                        "head": "MuiTableRow-head",
+                        "hover": "MuiTableRow-hover",
+                        "root": "MuiTableRow-root",
+                        "selected": "Mui-selected",
+                      }
+                    }
+                  >
+                    <tr
+                      className="MuiTableRow-root"
+                      role={null}
+                    >
+                      <WithStyles(ForwardRef(TableCell))
+                        component="th"
+                        scope="row"
+                      >
+                        <ForwardRef(TableCell)
+                          classes={
+                            Object {
+                              "alignCenter": "MuiTableCell-alignCenter",
+                              "alignJustify": "MuiTableCell-alignJustify",
+                              "alignLeft": "MuiTableCell-alignLeft",
+                              "alignRight": "MuiTableCell-alignRight",
+                              "body": "MuiTableCell-body",
+                              "footer": "MuiTableCell-footer",
+                              "head": "MuiTableCell-head",
+                              "paddingCheckbox": "MuiTableCell-paddingCheckbox",
+                              "paddingNone": "MuiTableCell-paddingNone",
+                              "root": "MuiTableCell-root",
+                              "sizeSmall": "MuiTableCell-sizeSmall",
+                              "stickyHeader": "MuiTableCell-stickyHeader",
+                            }
+                          }
+                          component="th"
+                          scope="row"
+                        >
+                          <th
+                            aria-sort={null}
+                            className="MuiTableCell-root MuiTableCell-body"
+                            role="cell"
+                            scope="row"
+                          >
+                            <span>
+                              Required
+                            </span>
+                          </th>
+                        </ForwardRef(TableCell)>
+                      </WithStyles(ForwardRef(TableCell))>
+                      <WithStyles(ForwardRef(TableCell))
+                        component="th"
+                        scope="row"
+                      >
+                        <ForwardRef(TableCell)
+                          classes={
+                            Object {
+                              "alignCenter": "MuiTableCell-alignCenter",
+                              "alignJustify": "MuiTableCell-alignJustify",
+                              "alignLeft": "MuiTableCell-alignLeft",
+                              "alignRight": "MuiTableCell-alignRight",
+                              "body": "MuiTableCell-body",
+                              "footer": "MuiTableCell-footer",
+                              "head": "MuiTableCell-head",
+                              "paddingCheckbox": "MuiTableCell-paddingCheckbox",
+                              "paddingNone": "MuiTableCell-paddingNone",
+                              "root": "MuiTableCell-root",
+                              "sizeSmall": "MuiTableCell-sizeSmall",
+                              "stickyHeader": "MuiTableCell-stickyHeader",
+                            }
+                          }
+                          component="th"
+                          scope="row"
+                        >
+                          <th
+                            aria-sort={null}
+                            className="MuiTableCell-root MuiTableCell-body"
+                            role="cell"
+                            scope="row"
+                          >
+                            <span>
+                              No
+                            </span>
+                          </th>
+                        </ForwardRef(TableCell)>
+                      </WithStyles(ForwardRef(TableCell))>
+                    </tr>
+                  </ForwardRef(TableRow)>
+                </WithStyles(ForwardRef(TableRow))>
+                <WithStyles(ForwardRef(TableRow))
+                  key="Type"
+                >
+                  <ForwardRef(TableRow)
+                    classes={
+                      Object {
+                        "footer": "MuiTableRow-footer",
+                        "head": "MuiTableRow-head",
+                        "hover": "MuiTableRow-hover",
+                        "root": "MuiTableRow-root",
+                        "selected": "Mui-selected",
+                      }
+                    }
+                  >
+                    <tr
+                      className="MuiTableRow-root"
+                      role={null}
+                    >
+                      <WithStyles(ForwardRef(TableCell))
+                        component="th"
+                        scope="row"
+                      >
+                        <ForwardRef(TableCell)
+                          classes={
+                            Object {
+                              "alignCenter": "MuiTableCell-alignCenter",
+                              "alignJustify": "MuiTableCell-alignJustify",
+                              "alignLeft": "MuiTableCell-alignLeft",
+                              "alignRight": "MuiTableCell-alignRight",
+                              "body": "MuiTableCell-body",
+                              "footer": "MuiTableCell-footer",
+                              "head": "MuiTableCell-head",
+                              "paddingCheckbox": "MuiTableCell-paddingCheckbox",
+                              "paddingNone": "MuiTableCell-paddingNone",
+                              "root": "MuiTableCell-root",
+                              "sizeSmall": "MuiTableCell-sizeSmall",
+                              "stickyHeader": "MuiTableCell-stickyHeader",
+                            }
+                          }
+                          component="th"
+                          scope="row"
+                        >
+                          <th
+                            aria-sort={null}
+                            className="MuiTableCell-root MuiTableCell-body"
+                            role="cell"
+                            scope="row"
+                          >
+                            <span>
+                              Type
+                            </span>
+                          </th>
+                        </ForwardRef(TableCell)>
+                      </WithStyles(ForwardRef(TableCell))>
+                      <WithStyles(ForwardRef(TableCell))
+                        component="th"
+                        scope="row"
+                      >
+                        <ForwardRef(TableCell)
+                          classes={
+                            Object {
+                              "alignCenter": "MuiTableCell-alignCenter",
+                              "alignJustify": "MuiTableCell-alignJustify",
+                              "alignLeft": "MuiTableCell-alignLeft",
+                              "alignRight": "MuiTableCell-alignRight",
+                              "body": "MuiTableCell-body",
+                              "footer": "MuiTableCell-footer",
+                              "head": "MuiTableCell-head",
+                              "paddingCheckbox": "MuiTableCell-paddingCheckbox",
+                              "paddingNone": "MuiTableCell-paddingNone",
+                              "root": "MuiTableCell-root",
+                              "sizeSmall": "MuiTableCell-sizeSmall",
+                              "stickyHeader": "MuiTableCell-stickyHeader",
+                            }
+                          }
+                          component="th"
+                          scope="row"
+                        >
+                          <th
+                            aria-sort={null}
+                            className="MuiTableCell-root MuiTableCell-body"
+                            role="cell"
+                            scope="row"
+                          >
+                            <span>
+                              string
+                            </span>
+                          </th>
+                        </ForwardRef(TableCell)>
+                      </WithStyles(ForwardRef(TableCell))>
+                    </tr>
+                  </ForwardRef(TableRow)>
+                </WithStyles(ForwardRef(TableRow))>
+                <WithStyles(ForwardRef(TableRow))
+                  key="Definition"
+                >
+                  <ForwardRef(TableRow)
+                    classes={
+                      Object {
+                        "footer": "MuiTableRow-footer",
+                        "head": "MuiTableRow-head",
+                        "hover": "MuiTableRow-hover",
+                        "root": "MuiTableRow-root",
+                        "selected": "Mui-selected",
+                      }
+                    }
+                  >
+                    <tr
+                      className="MuiTableRow-root"
+                      role={null}
+                    >
+                      <WithStyles(ForwardRef(TableCell))
+                        component="th"
+                        scope="row"
+                      >
+                        <ForwardRef(TableCell)
+                          classes={
+                            Object {
+                              "alignCenter": "MuiTableCell-alignCenter",
+                              "alignJustify": "MuiTableCell-alignJustify",
+                              "alignLeft": "MuiTableCell-alignLeft",
+                              "alignRight": "MuiTableCell-alignRight",
+                              "body": "MuiTableCell-body",
+                              "footer": "MuiTableCell-footer",
+                              "head": "MuiTableCell-head",
+                              "paddingCheckbox": "MuiTableCell-paddingCheckbox",
+                              "paddingNone": "MuiTableCell-paddingNone",
+                              "root": "MuiTableCell-root",
+                              "sizeSmall": "MuiTableCell-sizeSmall",
+                              "stickyHeader": "MuiTableCell-stickyHeader",
+                            }
+                          }
+                          component="th"
+                          scope="row"
+                        >
+                          <th
+                            aria-sort={null}
+                            className="MuiTableCell-root MuiTableCell-body"
+                            role="cell"
+                            scope="row"
+                          >
+                            <span>
+                              Definition
+                            </span>
+                          </th>
+                        </ForwardRef(TableCell)>
+                      </WithStyles(ForwardRef(TableCell))>
+                      <WithStyles(ForwardRef(TableCell))
+                        component="th"
+                        scope="row"
+                      >
+                        <ForwardRef(TableCell)
+                          classes={
+                            Object {
+                              "alignCenter": "MuiTableCell-alignCenter",
+                              "alignJustify": "MuiTableCell-alignJustify",
+                              "alignLeft": "MuiTableCell-alignLeft",
+                              "alignRight": "MuiTableCell-alignRight",
+                              "body": "MuiTableCell-body",
+                              "footer": "MuiTableCell-footer",
+                              "head": "MuiTableCell-head",
+                              "paddingCheckbox": "MuiTableCell-paddingCheckbox",
+                              "paddingNone": "MuiTableCell-paddingNone",
+                              "root": "MuiTableCell-root",
+                              "sizeSmall": "MuiTableCell-sizeSmall",
+                              "stickyHeader": "MuiTableCell-stickyHeader",
+                            }
+                          }
+                          component="th"
+                          scope="row"
+                        >
+                          <th
+                            aria-sort={null}
+                            className="MuiTableCell-root MuiTableCell-body"
+                            role="cell"
+                            scope="row"
+                          >
+                            <span>
+                              dummy detailed description
+                            </span>
+                          </th>
+                        </ForwardRef(TableCell)>
+                      </WithStyles(ForwardRef(TableCell))>
+                    </tr>
+                  </ForwardRef(TableRow)>
+                </WithStyles(ForwardRef(TableRow))>
+              </tbody>
+            </ForwardRef(TableBody)>
+          </WithStyles(ForwardRef(TableBody))>
+        </table>
+      </ForwardRef(Table)>
+    </WithStyles(ForwardRef(Table))>
+  </FieldMetadataTable>
+</WithStyles(FieldMetadataTable)>
+`;

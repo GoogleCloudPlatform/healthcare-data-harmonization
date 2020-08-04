@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TopEntityTooltip should render correctly 1`] = `
+<div>
+  <div>
+    Resource:
+    DummyResource
+  </div>
+  <WithStyles(ForwardRef(Divider)) />
+  <div>
+    Scope and Usage:
+  </div>
+  <p>
+    dummy description
+  </p>
+</div>
+`;

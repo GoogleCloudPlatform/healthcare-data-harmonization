@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SubEntitiesViewer should render correctly 1`] = `
+<WithStyles(ForwardRef(Table))>
+  <WithStyles(ForwardRef(TableHead))>
+    <WithStyles(ForwardRef(TableRow))>
+      <WithStyles(ForwardRef(TableCell))>
+        Field name
+      </WithStyles(ForwardRef(TableCell))>
+      <WithStyles(ForwardRef(TableCell))>
+        Type
+      </WithStyles(ForwardRef(TableCell))>
+    </WithStyles(ForwardRef(TableRow))>
+  </WithStyles(ForwardRef(TableHead))>
+  <WithStyles(ForwardRef(TableBody))>
+    <InspectTooltip
+      disableFocusListener={true}
+      disableHoverListener={true}
+      disableTouchListener={true}
+      key="0"
+      open={true}
+      title={
+        <React.Fragment>
+          <div>
+            Field:
+            <p>
+              Test1
+            </p>
+          </div>
+          <ForwardRef(WithStyles) />
+          <div>
+            Required:
+            <p>
+              yes
+            </p>
+          </div>
+          <div>
+            Type:
+            <p>
+              string
+            </p>
+          </div>
+          <div>
+            Scope and Usage:
+          </div>
+          <p>
+            Verbose details
+          </p>
+        </React.Fragment>
+      }
+    >
+      <WithStyles(ForwardRef(TableRow))
+        hover={true}
+        key="Test1"
+        onClick={[Function]}
+        selected={true}
+      >
+        <WithStyles(ForwardRef(TableCell))
+          component="th"
+          scope="row"
+        >
+          <span
+            className="makeStyles-span-1"
+            onClick={[Function]}
+          >
+            Test1
+          </span>
+        </WithStyles(ForwardRef(TableCell))>
+        <WithStyles(ForwardRef(TableCell))>
+          <span>
+            string
+          </span>
+        </WithStyles(ForwardRef(TableCell))>
+      </WithStyles(ForwardRef(TableRow))>
+    </InspectTooltip>
+  </WithStyles(ForwardRef(TableBody))>
+</WithStyles(ForwardRef(Table))>
+`;

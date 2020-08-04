@@ -61,10 +61,3 @@ message CodeHarmonizationConfig {
 message UnitHarmonizationConfig {
   Location unit_conversion = 2;
 }
-// BEGIN GOOGLE-INTERNAL
-
-// Specifies how notes should be normalized and harmonized.
-message NoteHarmonizationConfig {
-  repeated Location servers = 1;
-}
-// END GOOGLE-INTERNAL
