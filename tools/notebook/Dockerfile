@@ -89,6 +89,7 @@ RUN pip install jupyterlab-gcloud-auth==0.2.4 \
     google-cloud-storage==1.28.1 \
     https://storage.googleapis.com/deeplearning-platform-ui-public/jupyterlab_gcsfilebrowser-0.1.8.tar.gz
 
+WORKDIR $HOME/work
 RUN jupyter lab build -y
 
 # Add samples files into image

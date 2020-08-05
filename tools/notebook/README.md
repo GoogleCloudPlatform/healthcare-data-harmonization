@@ -56,8 +56,8 @@ $ docker-compose up --no-build
 
 ```
 
-*   In browser go to http://localhost:10000/lab
-*   If you prefer the container runs on a different port set the NOTEBOOK_HOST
+*   In browser go to http://localhost:8888/lab
+*   If you prefer the container runs on a different port set the NOTEBOOK_PORT
     environment variable to your desired port number.
 
 ```bash

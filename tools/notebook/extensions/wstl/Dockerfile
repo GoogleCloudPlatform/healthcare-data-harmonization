@@ -68,3 +68,4 @@ COPY --chown=$GO_USER ./tools/notebook/extensions/ $HOME/tools/notebook/extensio
 WORKDIR $HOME/tools/notebook/extensions/wstl/
 RUN ["chmod", "+x", "./build_go.sh"]
 RUN ./build_go.sh
+WORKDIR $HOME/work
