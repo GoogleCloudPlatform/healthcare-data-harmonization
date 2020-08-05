@@ -1,0 +1,118 @@
+// R3 to  R4
+input:
+{
+  "status": "active",
+  "subject": {
+    "reference": "Patient/example",
+    "display": "Peter James Chalmers"
+  },
+  "period": {
+    "start": "2016-01-01",
+    "end": "2016-06-30"
+  },
+  "active": {
+    "start": "2016-01-01",
+    "end": "2016-06-30"
+  },
+  "balance": {
+    "value": -1200,
+    "unit": "USD",
+    "system": "urn:iso:std:iso:4217",
+    "code": "USD"
+  }
+}
+
+output:
+{
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/account-definitions.html#Account.active",
+      "valuePeriod": {
+        "end": "2016-06-30",
+        "start": "2016-01-01"
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/account-definitions.html#Account.balance",
+      "valuePeriod": {
+        "code": "USD",
+        "system": "urn:iso:std:iso:4217",
+        "unit": "USD",
+        "value": -1200
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/account-definitions.html#Account.subject",
+      "valueReference": {
+        "display": "Peter James Chalmers",
+        "reference": "Patient/example"
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/account-definitions.html#Account.status",
+      "valueCode": "active"
+    }
+  ],
+  "servicePeriod": {
+    "end": "2016-06-30",
+    "start": "2016-01-01"
+  },
+  "subject": [
+    {
+      "display": "Peter James Chalmers",
+      "reference": "Patient/example"
+    }
+  ]
+}
+
+// R4 to R3
+input:
+{
+  "status": "active",
+  "subject": [
+    {
+      "reference": "Patient/example",
+      "display": "Peter James Chalmers"
+    }
+  ],
+  "servicePeriod": {
+    "start": "2016-01-01",
+    "end": "2016-06-30"
+  },
+  "partOf": {
+        "reference": "RelatedPerson/benedicte",
+        "display": "Bénédicte du Marché"
+  }
+}
+
+output:
+{
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/account-definitions.html#Account.subject",
+      "valueReference": {
+        "display": "Peter James Chalmers",
+        "reference": "Patient/example"
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/account-definitions.html#Account.partOf",
+      "valueReference": {
+        "display": "Bénédicte du Marché",
+        "reference": "RelatedPerson/benedicte"
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/account-definitions.html#Account.status",
+      "valueCode": "active"
+    }
+  ],
+  "period": {
+    "end": "2016-06-30",
+    "start": "2016-01-01"
+  },
+  "subject": {
+    "display": "Peter James Chalmers",
+    "reference": "Patient/example"
+  }
+}
