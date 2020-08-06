@@ -168,9 +168,10 @@ const localStyles = stylesheet({
   },
   tableName: {
     color: 'black',
-    fontSize: '1rem',
-    fontWeight: 900,
+    fontSize: '0.9rem',
+    fontWeight: 600,
     padding: '15px 2px 5px 2px',
+    margin: 'auto 16px',
   },
   selectRoot: {
     minWidth: '10rem',
@@ -212,11 +213,11 @@ export class DataModelViewer extends React.Component<Props, State> {
    * @param path - the JSON path, spread across a list, from the root of the
    * resource to the selected item.
    */
-  onListItemClicked(path: string[]) {
+  onListItemClicked = (path: string[]) => {
     this.setState({
       selectedPath: path,
     });
-  }
+  };
 
   /**
    * Callback invoked when either a TopEntity or SubEntity is selected for
@@ -225,11 +226,11 @@ export class DataModelViewer extends React.Component<Props, State> {
    * @param path - the JSON path from the root of the resource to the selected
    * item.
    */
-  onEntityInspected(path: string) {
+  onEntityInspected = (path: string) => {
     this.setState({
       inspectPath: path,
     });
-  }
+  };
 
   /**
    * Callback invoked when either a TopEntity or SubEntity is selectd for
@@ -237,12 +238,12 @@ export class DataModelViewer extends React.Component<Props, State> {
    *
    * @param name - the name of the entity that was selected.
    */
-  onEntitySelected(name: string) {
+  onEntitySelected = (name: string) => {
     this.setState({
       selectedPath: this.state.selectedPath.concat([name]),
       inspectPath: '',
     });
-  }
+  };
 
   render() {
     if (!this.state.hasLoaded) {
@@ -272,9 +273,9 @@ export class DataModelViewer extends React.Component<Props, State> {
           <header className={localStyles.header}>
             {HEADER_TITLE}
           </header>
-          <Typography className={localStyles.tableName}>
+          <div className={localStyles.tableName}>
             Select version
-          </Typography>
+          </div>
           <InputLabel></InputLabel>
           <Select
             value={this.state.activeDataModelId}
@@ -283,16 +284,16 @@ export class DataModelViewer extends React.Component<Props, State> {
           >
             <MenuItem value="FHIR">{'FHIR-stu3'}</MenuItem>
           </Select>
-          <Typography className={localStyles.tableName}>
+          <div className={localStyles.tableName}>
             Search tables and fields
-          </Typography>
+          </div>
           <SearchBar
             dataModel={this.state.activeDataModel}
             onSearchResultSelected={this.onSearchResultSelected}
           />
-          <Typography className={localStyles.tableName}>
+          <div className={localStyles.tableName}>
             Resource name
-          </Typography>
+          </div>
           <div className={localStyles.viewer}>
             <TopEntitiesViewer
               topEntities={this.state.topEntities}
@@ -330,7 +331,9 @@ export class DataModelViewer extends React.Component<Props, State> {
             <Typography color="textPrimary">{activePath}</Typography>
           </BreadCrumb>
         </div>
-        <div>Select or hover over a resource for more details</div>
+        <div className={localStyles.tableName}>
+            Select or hover over a resource for more details
+        </div>
         <SearchBar
           dataModel={this.state.activeDataModel}
           onSearchResultSelected={this.onSearchResultSelected}
@@ -367,7 +370,7 @@ export class DataModelViewer extends React.Component<Props, State> {
     }
   }
 
-  private onSearchResultSelected(path: string) {
+  private onSearchResultSelected = (path: string) => {
     if (!path || path.length === 0) {
       this.setState({selectedSearchResult: null});
       this.setState({selectedPath: [this.state.activeDataModelId]});
@@ -384,21 +387,21 @@ export class DataModelViewer extends React.Component<Props, State> {
       }
       this.setState({selectedSearchResult: searchResult});
     }
-  }
+  };
 
-  private extractTopEntityMeta(name: string): TopEntityMeta {
+  private extractTopEntityMeta = (name: string): TopEntityMeta => {
     const description = this.state.activeDataModel.schema.definitions[name]
       .description;
     return {name, description};
-  }
+  };
 
   // tslint:disable-next-line:no-any (data from JSON schema)
-  private extractReferenceType(fieldDetails: any): string {
+  private extractReferenceType = (fieldDetails: any): string => {
     return fieldDetails.$ref.slice(fieldDetails.$ref.lastIndexOf('/') + 1);
-  }
+  };
 
   // tslint:disable-next-line:no-any (data from JSON schema)
-  private resolveFieldProperties(field: string, fieldDetails: any): FieldProperties {
+  private resolveFieldProperties = (field: string, fieldDetails: any): FieldProperties => {
     const fieldProp: FieldProperties = {type: '', clickable: false};
     if ('type' in fieldDetails) {
       if ('items' in fieldDetails && '$ref' in fieldDetails.items) {
@@ -418,10 +421,10 @@ export class DataModelViewer extends React.Component<Props, State> {
       fieldProp.clickable = true;
     }
     return fieldProp;
-  }
+  };
 
   // tslint:disable-next-line:no-any (data from JSON schema)
-  private getSubEntityDetails(name: string, schema: any): SubEntityMeta[] {
+  private getSubEntityDetails = (name: string, schema: any): SubEntityMeta[] => {
     const subEntities: SubEntityMeta[] = [];
     const definition = schema.definitions[name];
     if (!!definition && 'properties' in definition) {
@@ -446,13 +449,13 @@ export class DataModelViewer extends React.Component<Props, State> {
       }
     }
     return subEntities;
-  }
+  };
 
-  private getSelectionDetails(
+  private getSelectionDetails = (
     pathParts: string[],
     // tslint:disable-next-line:no-any (data from JSON schema)
     schema: any
-  ): React.ReactNode {
+  ): React.ReactNode => {
     if (pathParts.length <= 1) {
       const subEntities = this.getSubEntityDetails(pathParts[0], schema);
       return (
@@ -530,5 +533,5 @@ export class DataModelViewer extends React.Component<Props, State> {
       };
       return <FieldMetadataViewer fieldMetadata={subEntity} />;
     }
-  }
+  };
 }

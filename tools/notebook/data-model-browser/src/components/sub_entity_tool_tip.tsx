@@ -14,6 +14,8 @@
 // tslint:disable-next-line:enforce-name-casing
 import * as React from 'react';
 import {Divider} from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 
 /**
  * Properites for a SubEntityProps component.
@@ -49,12 +51,21 @@ interface SubEntityProps {
 export function SubEntityTooltip(props: SubEntityProps) {
   return (
     <React.Fragment>
-      <div>Field:<p>{props.name}</p></div>
+      <Typography variant='overline' color='textSecondary'>Field:</Typography>
+      <Typography variant='subtitle1' color='textPrimary' gutterBottom>{props.name}</Typography>
       <Divider />
-      <div>Required:<p>{props.required ? 'yes' : 'no'}</p></div>
-      <div>Type:<p>{props.type}</p></div>
-      <div>Scope and Usage:</div>
-      <p>{props.description}</p>
+      <Grid container direction='row' justify='flex-start' alignItems='flex-start'>
+        <Grid item xs>
+            <Typography variant='overline' color='textSecondary'>Required:</Typography>
+            <Typography variant='subtitle1' color='textPrimary' gutterBottom>{props.required ? 'yes' : 'no'}</Typography>
+        </Grid>
+        <Grid item xs>
+            <Typography variant='overline' color='textSecondary'>Type:</Typography>
+            <Typography variant='subtitle1' color='textPrimary' gutterBottom>{props.type}</Typography>
+        </Grid>
+      </Grid>
+      <Typography variant='overline' color='textSecondary'>Scope and Usage:</Typography>
+      <Typography variant='caption' display='block' color='textPrimary' gutterBottom>{props.description}</Typography>
     </React.Fragment>
   );
 }

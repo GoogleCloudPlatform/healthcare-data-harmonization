@@ -14,6 +14,7 @@
 // tslint:disable-next-line:enforce-name-casing
 import * as React from 'react';
 import {Divider} from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 
 /**
  * Properites for a TopEntityTooltip component.
@@ -40,10 +41,11 @@ interface Props {
 export function TopEntityTooltip(props: Props) {
   return (
     <div>
-      <div>Resource:{props.name}</div>
+      <Typography variant='overline' color='textSecondary'>Resource:</Typography>
+      <Typography variant='subtitle1' color='textPrimary' gutterBottom>{props.name}</Typography>
       <Divider />
-      <div>Scope and Usage:</div>
-      <p>{props.description}</p>
+      <Typography variant='overline' color='textSecondary'>Scope and Usage:</Typography>
+      <Typography variant='caption' display='block' color='textPrimary'>{props.description}</Typography>
     </div>
   );
 }
