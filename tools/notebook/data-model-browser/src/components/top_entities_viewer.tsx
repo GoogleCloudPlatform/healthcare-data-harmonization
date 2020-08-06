@@ -15,6 +15,7 @@
 import * as React from 'react';
 
 import {makeStyles} from '@material-ui/core/styles';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -63,9 +64,14 @@ interface Props {
  */
 // tslint:disable-next-line:enforce-name-casing React component.
 export function TopEntitiesViewer(props: Props) {
-    const classes = localStyles();
-    let keyIndex = 0;
-    return (
+  const [open, setOpen] = React.useState(false);
+  const classes = localStyles();
+  let keyIndex = 0;
+  const handleTooltipClose = () => {
+    setOpen(false);
+  };
+  return (
+    <ClickAwayListener onClickAway={handleTooltipClose}>
       <Table>
         <TableBody>
           {props.topEntities.map(meta => {
@@ -74,7 +80,7 @@ export function TopEntitiesViewer(props: Props) {
               <InspectTooltip
                 key={keyIndex++}
                 title={TopEntityTooltip(meta)}
-                open={isSelected}
+                open={isSelected && open}
                 disableFocusListener
                 disableHoverListener
                 disableTouchListener
@@ -83,6 +89,7 @@ export function TopEntitiesViewer(props: Props) {
                   hover
                   key={meta.name}
                   onClick={e => {
+                    setOpen(true);
                     props.onInspect(meta.name);
                   }}
                   selected={isSelected}
@@ -103,6 +110,6 @@ export function TopEntitiesViewer(props: Props) {
           })}
         </TableBody>
       </Table>
-    );
+    </ClickAwayListener>
+  );
 }
-

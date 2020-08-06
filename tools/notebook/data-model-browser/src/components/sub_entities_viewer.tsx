@@ -15,6 +15,7 @@
 import * as React from 'react';
 
 import {makeStyles} from '@material-ui/core/styles';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
@@ -64,56 +65,63 @@ interface Props {
  */
 // tslint:disable-next-line:enforce-name-casing React component.
 export function SubEntitiesViewer(props: Props) {
+  const [open, setOpen] = React.useState(false);
+  const handleTooltipClose = () => {
+    setOpen(false);
+  };
   const classes = localStyles();
   let keyIndex = 0;
   return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Field name</TableCell>
-          <TableCell>Type</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {props.subEntities.map(meta => {
-          const isSelected = meta.name === props.selected;
-          return (
-            <InspectTooltip
-              key={keyIndex++}
-              title={SubEntityTooltip(meta)}
-              open={isSelected}
-              disableFocusListener
-              disableHoverListener
-              disableTouchListener
-            >
-              <TableRow
-                hover
-                key={meta.name}
-                onClick={e => {
-                  props.onInspect(meta.name);
-                }}
-                selected={isSelected}
+    <ClickAwayListener onClickAway={handleTooltipClose}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Field name</TableCell>
+            <TableCell>Type</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {props.subEntities.map(meta => {
+            const isSelected = meta.name === props.selected;
+            return (
+              <InspectTooltip
+                key={keyIndex++}
+                title={SubEntityTooltip(meta)}
+                open={isSelected && open}
+                disableFocusListener
+                disableHoverListener
+                disableTouchListener
               >
-                <TableCell component="th" scope="row">
-                  <span
-                    className={classes.span}
-                    onClick={e => {
-                      if (meta.clickable) {
-                        props.onSelect(meta.name);
-                      }
-                    }}
-                  >
-                    {meta.name}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <span>{meta.type}</span>
-                </TableCell>
-              </TableRow>
-            </InspectTooltip>
-          );
-        })}
-      </TableBody>
-    </Table>
+                <TableRow
+                  hover
+                  key={meta.name}
+                  onClick={e => {
+                    setOpen(true);
+                    props.onInspect(meta.name);
+                  }}
+                  selected={isSelected}
+                >
+                  <TableCell component="th" scope="row">
+                    <span
+                      className={classes.span}
+                      onClick={e => {
+                        if (meta.clickable) {
+                          props.onSelect(meta.name);
+                        }
+                      }}
+                    >
+                      {meta.name}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span>{meta.type}</span>
+                  </TableCell>
+                </TableRow>
+              </InspectTooltip>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </ClickAwayListener>
   );
 }
