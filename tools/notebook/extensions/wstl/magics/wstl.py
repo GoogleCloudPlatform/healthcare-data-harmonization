@@ -177,6 +177,8 @@ class LoadHL7Magics(Magics):
       filter: string, Restricts messages returned to those matching a filter. Syntax:
     https://cloud.google.com/appengine/docs/standard/python/search/query_strings
 
+    If the filter string contains white space, it must be surrounded by single quotes.
+
     Fields/functions available for filtering are:
 
     *  `message_type`, from the MSH-9.1 field. For example,
@@ -295,6 +297,8 @@ def _get_message_from_hl7v2_store(api_version, project, region, dataset,
       project, region, dataset)
   hl7v2_message_path = "{}/hl7V2Stores/{}".format(hl7v2_messages_parent,
                                                   data_store)
+  if filter_str:
+    filter_str = filter_str.strip("'")
   return (
       client.projects().locations().datasets().hl7V2Stores().messages().list(
           parent=hl7v2_message_path, view="FULL",
