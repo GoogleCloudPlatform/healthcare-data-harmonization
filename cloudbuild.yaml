@@ -16,4 +16,23 @@ steps:
   args:
   - 'push'
   - 'gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-notebook:latest'
-images: ['gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-notebook']
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '-t'
+  - 'gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-services:$COMMIT_SHA'
+  - '-t'
+  - 'gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-services:latest'
+  - '-f'
+  - 'tools/notebook/Dockerfile'
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'push'
+  - 'gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-services:$COMMIT_SHA'
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'push'
+  - 'gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-services:latest'
+images:
+  - 'gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-notebook'
+  - 'gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-services'
