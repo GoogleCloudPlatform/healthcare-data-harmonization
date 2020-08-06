@@ -350,6 +350,73 @@ func TestIsNil(t *testing.T) {
 	}
 }
 
+func TestSubStr(t *testing.T) {
+	tests := []struct {
+		name  string
+		in    jsonutil.JSONStr
+		start jsonutil.JSONNum
+		end   jsonutil.JSONNum
+		want  jsonutil.JSONStr
+	}{
+		{
+			name:  "simple",
+			in:    jsonutil.JSONStr("test"),
+			start: jsonutil.JSONNum(1),
+			end:   jsonutil.JSONNum(3),
+			want:  jsonutil.JSONStr("es"),
+		},
+		{
+			name:  "full string",
+			in:    jsonutil.JSONStr("test"),
+			start: jsonutil.JSONNum(0),
+			end:   jsonutil.JSONNum(4),
+			want:  jsonutil.JSONStr("test"),
+		},
+		{
+			name:  "end index bigger than string size",
+			in:    jsonutil.JSONStr("test"),
+			start: jsonutil.JSONNum(0),
+			end:   jsonutil.JSONNum(10),
+			want:  jsonutil.JSONStr("test"),
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := SubStr(test.in, test.start, test.end)
+			if err != nil {
+				t.Fatalf("Test %s returned unexpected error %v", test.name, err)
+			}
+			if !cmp.Equal(got, test.want) {
+				t.Errorf("SubStr(%v, %v, %v) = %v, want %v", test.in, test.start, test.end, got, test.want)
+			}
+		})
+	}
+}
+
+func TestSubStrErrs(t *testing.T) {
+	tests := []struct {
+		name  string
+		in    jsonutil.JSONStr
+		start jsonutil.JSONNum
+		end   jsonutil.JSONNum
+	}{
+		{
+			name:  "start and end index bigger than string size",
+			in:    jsonutil.JSONStr("test"),
+			start: jsonutil.JSONNum(10),
+			end:   jsonutil.JSONNum(15),
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := SubStr(test.in, test.start, test.end)
+			if err == nil {
+				t.Errorf("SubStr(%v, %v, %v) = %v, want error", test.in, test.start, test.end, got)
+			}
+		})
+	}
+}
+
 func TestStrJoin(t *testing.T) {
 	tests := []struct {
 		name string

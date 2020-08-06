@@ -87,6 +87,7 @@ var BuiltinFunctions = map[string]interface{}{
 	"$MatchesRegex": MatchesRegex,
 	"$ParseFloat":   ParseFloat,
 	"$ParseInt":     ParseInt,
+	"$SubStr":       SubStr,
 	"$StrCat":       StrCat,
 	"$StrFmt":       StrFmt,
 	"$StrJoin":      StrJoin,
@@ -745,6 +746,21 @@ func ParseInt(str jsonutil.JSONStr) (jsonutil.JSONNum, error) {
 		return -1, err
 	}
 	return jsonutil.JSONNum(i), nil
+}
+
+// SubStr returns a part of the string that is between the start index (inclusive) and the
+// end index (exclusive). If the end index is greater than the length of the string, the end
+// index is truncated to the length.
+func SubStr(str jsonutil.JSONStr, start, end jsonutil.JSONNum) (jsonutil.JSONStr, error) {
+	e := int(end)
+	l := len(str)
+	if e > l {
+		e = l
+	}
+	if int(start) > l {
+		return jsonutil.JSONStr(""), fmt.Errorf("start index %v is greater string length %v", start, l)
+	}
+	return jsonutil.JSONStr(string(str)[int(start):e]), nil
 }
 
 // StrCat joins the input strings with the separator.

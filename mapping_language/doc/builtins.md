@@ -411,7 +411,7 @@ Or is a logical OR of all given arguments.
 
 ## Strings
 
-### $MatchesRegex`
+### $MatchesRegex
 
 ```go
 $MatchesRegex(str string, regex string) boolean
@@ -434,6 +434,14 @@ $ParseInt(str string) number
 ```
 
 ParseInt parses a string into an int.
+
+### $SubStr
+
+```go
+$SubStr(input string, start number, end number) string
+```
+
+SubStr returns a part of the string that is between the start index (inclusive) and the end index (exclusive). If the end index is greater than the length of the string, the end index is truncated to the length.
 
 ### $StrCat
 
