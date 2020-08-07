@@ -78,8 +78,19 @@ class WSTLMagics(Magics):
       "--library_config",
       type=str,
       required=False,
-      help="""Path to the directory where the library mapping files are located"""
+      help="""Path to the directory where the library mapping files are located."""
   )
+  @magic_arguments.argument(
+      "--code_config",
+      type=str,
+      required=False,
+      help="""Path to the directory of FHIR ConceptMaps used for code harmonization."""
+  )
+  @magic_arguments.argument(
+      "--unit_config",
+      type=str,
+      required=False,
+      help="""Path to a unit harmonization file (textproto).""")
   @magic_arguments.argument(
       "--output",
       type=str,
@@ -344,13 +355,37 @@ def _get_incremental_transform(stub, shell, session_id, wstl_args, cell):
   req.wstl = cell
   if wstl_args.library_config:
     library_configs = _location.parse_location(
-        shell, wstl_args.library_config, file_ext=_constants.WSTL_FILE_EXT)
+        shell,
+        wstl_args.library_config,
+        file_ext=_constants.WSTL_FILE_EXT,
+        load_contents=False)
     if library_configs:
       req.library_config.extend(library_configs)
 
+  if wstl_args.code_config:
+    code_configs = _location.parse_location(
+        shell,
+        wstl_args.code_config,
+        file_ext=_constants.JSON_FILE_EXT,
+        load_contents=False)
+    if code_configs:
+      req.code_config.extend(code_configs)
+
+  if wstl_args.unit_config:
+    unit_config = _location.parse_location(
+        shell,
+        wstl_args.unit_config,
+        file_ext=_constants.TEXTPROTO_FILE_EXT,
+        load_contents=False)
+    if unit_config:
+      req.unit_config = unit_config[0]
+
   if wstl_args.input:
     inputs = _location.parse_location(
-        shell, wstl_args.input, file_ext=_constants.JSON_FILE_EXT)
+        shell,
+        wstl_args.input,
+        file_ext=_constants.JSON_FILE_EXT,
+        load_contents=True)
     if inputs:
       req.input.extend(inputs)
     else:

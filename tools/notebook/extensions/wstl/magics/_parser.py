@@ -43,16 +43,16 @@ def _serialize_to_json(shell_var):
     raise ValueError("variable {} is not json decodable".format(shell_var))
 
 
-def _load_files(path_name, file_ext):
-  """Loads files located at path_name.
+def _get_files(path_name, file_ext, load_contents):
+  """Retrieves a list of files located at path_name.
 
   Supports glob wildcard expressions.
 
   Args:
     path_name: the file path, including glob patterns supported by the python
       glob module.
-    file_ext: file extensions to be loaded. If .json or .ndjson that contents
-      will be loaded and decoded.
+    file_ext: file extensions to be loaded.
+    load_contents: Loads the contents of the files from disk.
 
   Returns:
     A list of file contents.
@@ -71,22 +71,25 @@ def _load_files(path_name, file_ext):
     if ext is None or ext not in file_ext:
       continue
     if os.path.isfile(name):
-      with open(name, "r") as f:
-        if ext == ".json":
-          # decode and encode to verify contents of file are valid JSON.
-          content = json.load(f)
-          contents.append(json.dumps(content))
-        elif ext == ".ndjson":
-          json_content = f.readlines()
-          if json_content:
-            for line in json_content:
-              # decode and encode to verify contents of line are valid JSON.
-              content = json.loads(line.strip())
-              contents.append(json.dumps(content))
-        elif ext == ".wstl":
-          contents.append(f.name)
-        else:
-          raise ValueError("invalid file prefix for file {}".format(name))
+      if load_contents:
+        with open(name, "r") as f:
+          if ext == ".json":
+            # decode and encode to verify contents of file are valid JSON.
+            content = json.load(f)
+            contents.append(json.dumps(content))
+          elif ext == ".ndjson":
+            json_content = f.readlines()
+            if json_content:
+              for line in json_content:
+                # decode and encode to verify contents of line are valid JSON.
+                content = json.loads(line.strip())
+                contents.append(json.dumps(content))
+          elif ext == ".wstl" or ext == ".textproto":
+            contents.append(f.read())
+          else:
+            raise ValueError("invalid file prefix for file {}".format(name))
+      else:
+        contents.append(name)
     elif os.path.isdir(name):
       raise ValueError(
           "use glob expression to specify files in directory {}".format(name))
@@ -140,7 +143,7 @@ def _list_gcs_bucket_blobs(path_name, file_ext=None):
   return blob_names
 
 
-def parse_object(shell, input_object_arg, file_ext=None):
+def parse_object(shell, input_object_arg, file_ext=None, load_contents=True):
   r"""Parses the argument and returns a tuple that has interpreted information.
 
   Input arguments with the following prefixes are supported:
@@ -155,6 +158,8 @@ def parse_object(shell, input_object_arg, file_ext=None):
     input_object_arg: magic command input argument.
     file_ext: list of valid file extensions. Either JSON_FILE_EXT or
       WSTL_FILE_EXT
+    load_contents: flag indicating whether to load contents from disk instead of
+      storing a path.
 
   Returns:
     A tuple of length 2 that has the objects that is interpreted from
@@ -174,7 +179,7 @@ def parse_object(shell, input_object_arg, file_ext=None):
     return None, _list_gcs_bucket_blobs(input_object_arg[offset:], file_ext)
   elif input_object_arg.startswith(_constants.FILE_ARG_PREFIX):
     offset = len(_constants.FILE_ARG_PREFIX)
-    return _load_files(input_object_arg[offset:], file_ext), None
+    return _get_files(input_object_arg[offset:], file_ext, load_contents), None
   elif input_object_arg.startswith(_constants.PYTHON_ARG_PREFIX):
     offset = len(_constants.PYTHON_ARG_PREFIX)
     var_name = input_object_arg[offset:]

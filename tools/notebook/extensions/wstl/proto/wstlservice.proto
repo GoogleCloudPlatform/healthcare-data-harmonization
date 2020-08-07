@@ -78,6 +78,12 @@ message IncrementalTransformRequest {
 
   // Session to perform incremental transformation within.
   string session_id = 4;
+
+  // Location of code harmonization FHIR ConceptMaps.
+  repeated Location code_config = 5;
+
+  // Location of unit harmonization file (textproto).
+  Location unit_config = 6;
 }
 
 // Resulting artificants from a transformation request.

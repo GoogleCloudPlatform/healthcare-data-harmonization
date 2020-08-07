@@ -23,3 +23,4 @@ JSON_FILE_EXT = (
     ".ndjson",
 )
 WSTL_FILE_EXT = (".wstl",)
+TEXTPROTO_FILE_EXT = (".textproto",)

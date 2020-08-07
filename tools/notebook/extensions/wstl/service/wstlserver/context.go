@@ -33,6 +33,7 @@ import (
 	wspb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/tools/notebook/extensions/wstl/proto" /* copybara-comment: wstlservice_go_proto */
 )
 
+// Context is a single transformation context that loosely corresponds to a Jupyter notebook cell.
 type Context struct {
 	// Whistle incremental transformer context.
 	incrementalTransformer *transform.Transformer
@@ -47,15 +48,7 @@ func NewContext(c gcsutil.StorageClient) (*Context, error) {
 	if c == nil {
 		return nil, fmt.Errorf("the argument to NewContext is nil")
 	}
-	var client gcsutil.StorageClient
-	client = c
-
-	trans, err := transform.NewTransformer(context.Background(), &dhpb.DataHarmonizationConfig{}, transform.GCSClient(client))
-	if err != nil {
-		return nil, err
-	}
-
-	return &Context{incrementalTransformer: trans, storageClient: client}, nil
+	return &Context{storageClient: c}, nil
 }
 
 // EvaluateIncrementalTransformation evaluates incremental updates to the whistle script and outputs
@@ -67,7 +60,7 @@ func (c *Context) EvaluateIncrementalTransformation(request *wspb.IncrementalTra
 	if request.GetWstl() == "" {
 		return nil, errors.New("missing wstl script from session")
 	}
-	config := newHarmonizationConfig(request.GetWstl(), request.GetLibraryConfig())
+	config := newHarmonizationConfig(request.GetWstl(), request.GetLibraryConfig(), request.GetCodeConfig(), request.GetUnitConfig())
 	trans, err := transform.NewTransformer(context.Background(), config, transform.GCSClient(c.storageClient))
 	if err != nil {
 		return nil, err
@@ -81,7 +74,7 @@ func (c *Context) EvaluateIncrementalTransformation(request *wspb.IncrementalTra
 }
 
 // TODO : move to wstlserver level.
-func newHarmonizationConfig(wstl string, libraryConfigs []*wspb.Location) *dhpb.DataHarmonizationConfig {
+func newHarmonizationConfig(wstl string, libraryConfigs []*wspb.Location, codeConfigs []*wspb.Location, unitConfig *wspb.Location) *dhpb.DataHarmonizationConfig {
 	libConfig := []*lpb.LibraryConfig{}
 	if len(libraryConfigs) > 0 {
 		for _, libraryConfig := range libraryConfigs {
@@ -122,13 +115,43 @@ func newHarmonizationConfig(wstl string, libraryConfigs []*wspb.Location) *dhpb.
 		}
 	}
 
+	var codeConfigLocs []*httppb.Location
+	if len(codeConfigs) > 0 {
+		for _, cConfig := range codeConfigs {
+			switch l := cConfig.GetLocation().(type) {
+			case *wspb.Location_LocalPath:
+				names := ioutil.MustReadGlob(l.LocalPath, "code_config")
+				for _, f := range names {
+					if !strings.HasSuffix(f, ".json") {
+						continue
+					}
+					codeConfigLocs = append(codeConfigLocs, &httppb.Location{Location: &httppb.Location_LocalPath{LocalPath: f}})
+				}
+			case *wspb.Location_GcsLocation:
+				codeConfigLocs = append(codeConfigLocs, &httppb.Location{Location: &httppb.Location_GcsLocation{GcsLocation: l.GcsLocation}})
+			}
+		}
+	}
+
+	uConfig := &hpb.UnitHarmonizationConfig{}
+	if unitConfig != nil {
+		switch l := unitConfig.GetLocation().(type) {
+		case *wspb.Location_LocalPath:
+			uConfig.UnitConversion = &httppb.Location{Location: &httppb.Location_LocalPath{LocalPath: l.LocalPath}}
+		case *wspb.Location_GcsLocation:
+			uConfig.UnitConversion = &httppb.Location{Location: &httppb.Location_GcsLocation{GcsLocation: l.GcsLocation}}
+		}
+	}
+
 	return &dhpb.DataHarmonizationConfig{
 		StructureMappingConfig: &hpb.StructureMappingConfig{
 			Mapping: &hpb.StructureMappingConfig_MappingLanguageString{
 				MappingLanguageString: wstl,
 			},
 		},
-		LibraryConfig: libConfig,
+		LibraryConfig:           libConfig,
+		HarmonizationConfig:     &hpb.CodeHarmonizationConfig{CodeLookup: codeConfigLocs},
+		UnitHarmonizationConfig: uConfig,
 	}
 }
 

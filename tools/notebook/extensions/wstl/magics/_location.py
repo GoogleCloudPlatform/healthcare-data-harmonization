@@ -18,7 +18,7 @@ from google3.third_party.cloud_healthcare_data_harmonization.tools.notebook.exte
 from google3.third_party.cloud_healthcare_data_harmonization.tools.notebook.extensions.wstl.proto import wstlservice_pb2
 
 
-def parse_location(shell, input_wstl_arg, file_ext=None):
+def parse_location(shell, input_wstl_arg, file_ext=None, load_contents=True):
   r"""Parses the argument and returns a Location protobuf message.
 
   Input arguments with the following prefixes are supported:
@@ -33,7 +33,9 @@ def parse_location(shell, input_wstl_arg, file_ext=None):
     shell: ipython interactive shell.
     input_wstl_arg: wstl magic command input argument.
     file_ext: list of valid file extensions. Either `_constants.JSON_FILE_EXT`
-    or `WSTL_FILE_EXT`.
+      or `WSTL_FILE_EXT`.
+    load_contents: flag indicating whether to load contents from disk instead of
+      storing a path.
 
   Returns:
     A Location protobuf message.
@@ -42,11 +44,12 @@ def parse_location(shell, input_wstl_arg, file_ext=None):
     ValueError: An unknown location prefix or the python variable can not be
     encoded into json.
   """
-  (inputs, gcs_paths) = _parser.parse_object(shell, input_wstl_arg, file_ext)
+  (inputs, gcs_paths) = _parser.parse_object(
+      shell, input_wstl_arg, file_ext=file_ext, load_contents=load_contents)
   if input_wstl_arg.startswith(_constants.JSON_ARG_PREFIX) or \
       input_wstl_arg.startswith(_constants.PYTHON_ARG_PREFIX) or \
       input_wstl_arg.startswith(_constants.FILE_ARG_PREFIX):
-    if file_ext == _constants.WSTL_FILE_EXT:
+    if not load_contents:
       return [
           wstlservice_pb2.Location(local_path=inline_json)
           for inline_json in inputs

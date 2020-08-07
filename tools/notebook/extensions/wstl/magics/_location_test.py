@@ -111,7 +111,10 @@ class LocationTest(absltest.TestCase):
     shell = mock.MagicMock()
     input_wstl_arg = "gs://dummy_bucket/lib_folder/*"
     locations = _location.parse_location(
-        shell, input_wstl_arg, file_ext=_constants.WSTL_FILE_EXT)
+        shell,
+        input_wstl_arg,
+        file_ext=_constants.WSTL_FILE_EXT,
+        load_contents=False)
     self.assertLen(locations, 2)
     self.assertTrue(locations[0].HasField("gcs_location"))
     self.assertEqual(locations[0].gcs_location,
@@ -150,7 +153,10 @@ class LocationTest(absltest.TestCase):
     shell = mock.MagicMock()
     input_wstl_arg = "gs://dummy_bucket/*.txt"
     locations = _location.parse_location(
-        shell, input_wstl_arg, file_ext=_constants.WSTL_FILE_EXT)
+        shell,
+        input_wstl_arg,
+        file_ext=_constants.WSTL_FILE_EXT,
+        load_contents=False)
     self.assertEmpty(locations)
 
   def test_parse_location_file_prefix_file_exists_success(self):
@@ -171,7 +177,10 @@ class LocationTest(absltest.TestCase):
         file_path="dummy.wstl", content=content, mode="w")
     input_wstl_arg = "file://{}".format(tmp_file.full_path)
     locations = _location.parse_location(
-        shell, input_wstl_arg, file_ext=_constants.WSTL_FILE_EXT)
+        shell,
+        input_wstl_arg,
+        file_ext=_constants.WSTL_FILE_EXT,
+        load_contents=False)
     self.assertTrue(locations[0].HasField("local_path"))
     self.assertEqual(locations[0].local_path, tmp_file.full_path)
 
@@ -182,7 +191,10 @@ class LocationTest(absltest.TestCase):
         file_path="dummy.wstl", content=content, mode="w")
     input_wstl_arg = "file://{}/*".format(path.dirname(tmp_file.full_path))
     locations = _location.parse_location(
-        shell, input_wstl_arg, file_ext=_constants.WSTL_FILE_EXT)
+        shell,
+        input_wstl_arg,
+        file_ext=_constants.WSTL_FILE_EXT,
+        load_contents=False)
     self.assertLen(locations, 1)
     self.assertTrue(locations[0].HasField("local_path"))
     self.assertEqual(locations[0].local_path, tmp_file.full_path)
@@ -212,6 +224,50 @@ class LocationTest(absltest.TestCase):
     self.assertEqual(locations[0].inline_json, "{\"first\": \"item\"}")
     self.assertTrue(locations[1].HasField("inline_json"))
     self.assertEqual(locations[1].inline_json, "{\"second\": \"item\"}")
+
+  def test_parse_location_file_prefix_textproto_suffix_success(self):
+    shell = mock.MagicMock()
+    content = """dummy_field: true"""
+    tmp_file = self.create_tempfile(
+        file_path="dummy.textproto", content=content, mode="w")
+    input_wstl_arg = "file://{}".format(tmp_file.full_path)
+    locations = _location.parse_location(
+        shell,
+        input_wstl_arg,
+        file_ext=_constants.TEXTPROTO_FILE_EXT,
+        load_contents=False)
+    self.assertTrue(locations[0].HasField("local_path"))
+    self.assertEqual(locations[0].local_path, tmp_file.full_path)
+
+  def test_parse_location_file_prefix_textproto_suffix_load_content_success(
+      self):
+    shell = mock.MagicMock()
+    content = """dummy_field: true"""
+    tmp_file = self.create_tempfile(
+        file_path="dummy.textproto", content=content, mode="w")
+    input_wstl_arg = "file://{}".format(tmp_file.full_path)
+    locations = _location.parse_location(
+        shell,
+        input_wstl_arg,
+        file_ext=_constants.TEXTPROTO_FILE_EXT,
+        load_contents=True)
+    self.assertTrue(locations[0].HasField("inline_json"))
+    self.assertEqual(locations[0].inline_json, "dummy_field: true")
+
+  def test_parse_location_file_prefix_no_load_content_success(self):
+    shell = mock.MagicMock()
+    content = """{"hello": "world"}"""
+    tmp_file = self.create_tempfile(
+        file_path="dummy.json", content=content, mode="w")
+    input_wstl_arg = "file://{}/*".format(path.dirname(tmp_file.full_path))
+    locations = _location.parse_location(
+        shell,
+        input_wstl_arg,
+        file_ext=_constants.JSON_FILE_EXT,
+        load_contents=False)
+    self.assertLen(locations, 1)
+    self.assertTrue(locations[0].HasField("local_path"))
+    self.assertEqual(locations[0].local_path, tmp_file.full_path)
 
   def test_parse_location_file_prefix_invalid_path(self):
     shell = mock.MagicMock()
