@@ -22,3 +22,4 @@ images:
   - 'gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-notebook:latest'
   - 'gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-services:$COMMIT_SHA'
   - 'gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-services:latest'
+timeout: 5000s
