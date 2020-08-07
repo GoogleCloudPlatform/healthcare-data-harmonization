@@ -1,0 +1,178 @@
+{
+  "resourceType": "MedicationStatement",
+  "id": "example002",
+  "text": {
+    "status": "stopped",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example002</p><p><b>contained</b>: </p><p><b>status</b>: active</p><p><b>medication</b>: id: med0309; Tylenol PM <span>(Details : {http://hl7.org/fhir/sid/ndc code '50580-506-02' = '50580-506-02', given as 'Tylenol PM'})</span>; isBrand; Film-coated tablet (qualifier value) <span>(Details : {SNOMED CT code '385057009' = 'Film-coated tablet', given as 'Film-coated tablet (qualifier value)'})</span></p><p><b>effective</b>: 23/01/2015</p><p><b>dateAsserted</b>: 22/02/2015</p><p><b>informationSource</b>: <a>Donald Duck</a></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>taken</b>: n</p><p><b>reasonNotTaken</b>: Liver enzymes abnormal <span>(Details : {SNOMED CT code '166643006' = 'Liver enzymes abnormal', given as 'Liver enzymes abnormal'})</span></p><p><b>note</b>: Patient can not take acetaminophen as per Dr instructions</p></div>"
+  },
+  "category": {
+         "coding":[
+            {
+               "system":"http://hl7.org/fhir/medication-statement-category",
+               "code":"inpatient",
+               "display":"Inpatient"
+            }
+         ]
+      },
+  "contained": [
+    {
+      "resourceType": "Medication",
+      "id": "med0309",
+      "code": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/sid/ndc",
+            "code": "50580-506-02",
+            "display": "Tylenol PM"
+          }
+        ]
+      },
+      "isBrand": true,
+      "form": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "385057009",
+            "display": "Film-coated tablet (qualifier value)"
+          }
+        ]
+      },
+      "ingredient": [
+        {
+          "itemCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+                "code": "315266",
+                "display": "Acetaminophen 500 MG"
+              }
+            ]
+          },
+          "amount": {
+            "numerator": {
+              "value": 500,
+              "system": "http://unitsofmeasure.org",
+              "code": "mg"
+            },
+            "denominator": {
+              "value": 1,
+              "system": "http://hl7.org/fhir/v3/orderableDrugForm",
+              "code": "Tab"
+            }
+          }
+        },
+        {
+          "itemCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+                "code": "901813",
+                "display": "Diphenhydramine Hydrochloride 25 mg"
+              }
+            ]
+          },
+          "amount": {
+            "numerator": {
+              "value": 25,
+              "system": "http://unitsofmeasure.org",
+              "code": "mg"
+            },
+            "denominator": {
+              "value": 1,
+              "system": "http://hl7.org/fhir/v3/orderableDrugForm",
+              "code": "Tab"
+            }
+          }
+        }
+      ],
+      "package": {
+        "batch": [
+          {
+            "lotNumber": "9494788",
+            "expirationDate": "2017-05-22"
+          }
+        ]
+      }
+    }
+  ],
+  "status": "stopped",
+"medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "27658006",
+        "display": "Amoxicillin (product)"
+      }
+    ]
+  },
+  "medicationReference": {
+    "reference": "Medication/med0309"
+  },
+  "effectiveDateTime": "2015-01-23T17:20:00-04:00",
+  "effectivePeriod":{
+      "start":"2009-07-04T17:20:00-04:00",
+      "end":"2009-07-04T17:35:00-04:00"
+   },
+  "dateAsserted": "2015-02-22",
+  "informationSource": {
+    "reference": "Practitioner/doc1",
+    "display": "Donald Duck"
+  },
+  "context": {
+    "reference": "Encounter/Enc1",
+    "display": "Donald Duck"
+  },
+  "subject": {
+    "reference": "Patient/pat1",
+    "display": "Donald Duck"
+  },
+  "taken": "n",
+  "reasonNotTaken": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "166643006",
+          "display": "Liver enzymes abnormal"
+        }
+      ]
+    }
+  ],
+  "note": [
+    {
+      "text": "Patient can not take acetaminophen as per Dr instructions"
+    }
+  ],
+  "dosage": [
+    {
+      "sequence": 1,
+      "text": "5ml three times daily",
+      "asNeededBoolean": false,
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "260548002",
+            "display": "Oral"
+          }
+        ]
+      },
+      "doseQuantity": {
+        "value": 5,
+        "unit": "mL",
+        "system": "http://unitsofmeasure.org",
+        "code": "mL"
+      },
+      "maxDosePerPeriod": {
+        "numerator": {
+          "value": 3
+        },
+        "denominator": {
+          "value": 1,
+          "system": "http://unitsofmeasure.org",
+          "code": "d"
+        }
+      }
+    }
+  ]
+}

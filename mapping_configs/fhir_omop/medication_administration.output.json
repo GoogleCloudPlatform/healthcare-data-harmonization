@@ -1,0 +1,21 @@
+{
+   "drug_exposure":{
+      "stop_reason":"Administration of medication not done due to a contraindication (situation)",
+      "drug_source_value":"Amoxicillin (product)",
+      "provider_id":2.309978743E+09,
+      "drug_source_concept_id":4.100819E+06,
+      "drug_exposure_start_datetime":"2015-01-15T04:30:00+01:00",
+      "drug_concept_id":4.100819E+06,
+      "drug_type_concept_id":706404,
+      "person_id":9.81593553E+08,
+      "route_concept_id":2.5556E+08,
+      "verbatim_end_date":"2015-01-15",
+      "sig":"1.8 mg/kg IV infusion over 30 minutes",
+      "drug_exposure_id":8.54579422E+08,
+      "quantity":8,
+      "drug_exposure_end_date":"2015-01-15",
+      "drug_exposure_start_date":"2015-01-15",
+      "visit_occurrence_id":2.276423505E+09,
+      "drug_exposure_end_datetime":"2015-01-15T14:30:00+01:00"
+   }
+}

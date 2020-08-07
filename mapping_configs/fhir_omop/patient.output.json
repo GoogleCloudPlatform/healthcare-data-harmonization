@@ -1,0 +1,32 @@
+{
+   "person":{
+      "race_source_value":"White",
+      "race_concept_id":8527,
+      "ethnicity_concept_id":3.8003564E+07,
+      "birth_datetime":"2003-07-05",
+      "gender_source_value":"male",
+      "gender_concept_id":8507,
+      "month_of_birth":7,
+      "provider_id":2.20987035E+09,
+      "race_source_concept_id":8527,
+      "gender_source_concept_id":8507,
+      "person_source_value":"2f2be27f-0598-4d69-84a6-32d28d7ad600",
+      "day_of_birth":5,
+      "person_id":3.287949759E+09,
+      "care_site_id":2.46266111E+09,
+      "location_id":1.391817041E+09,
+      "year_of_birth":2003,
+      "ethnicity_source_concept_id":3.8003564E+07,
+      "ethnicity_source_value":"Not Hispanic or Latino"
+   },
+   "location":{
+      "country":"US",
+      "latitude":41.903323,
+      "longitude":-71.094984,
+      "location_id":1.391817041E+09,
+      "address_1":"706 Weissnat Parade Unit 64",
+      "city":"Taunton",
+      "state":"Massachusetts",
+      "zip":"02718"
+   }
+}

@@ -1,0 +1,134 @@
+// Description: Define FHIR STU3 to OMOP (v6.0) transformation
+//
+// Argument(s):
+//   Condition: https://www.hl7.org/fhir/stu3/condition.html
+//
+// Output(s):
+//   ConditionOccurrence: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/CONDITION_OCCURRENCE.md
+//
+def Process_Condition(Condition) {
+  condition_occurrence : Condition_ConditionOccurrence(Condition);
+}
+
+// Description: Define FHIR STU3 to OMOP (v6.0) transformation
+//
+// Argument(s):
+//   Encounter: https://www.hl7.org/fhir/stu3/encounter.html
+//
+// Output(s):
+//   VisitOccurrence: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/VISIT_OCCURRENCE.md
+//
+def Process_Encounter(Encounter) {
+  visit_occurrence : Encounter_VisitOccurrence(Encounter);
+}
+
+// Description: Define FHIR STU3 to OMOP (v6.0) transformation
+//
+// Argument(s):
+//   MedicationAdministration: https://www.hl7.org/fhir/stu3/MedicationAdministration.html
+//
+// Output(s):
+//   Drug_Exposure: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/DRUG_EXPOSURE.md
+//
+def Process_MedicationAdministration(MedicationAdministration) {
+  drug_exposure : MedicationAdministration_DrugExposure(MedicationAdministration);
+}
+
+// Description: Define FHIR STU3 to OMOP (v6.0) transformation
+//
+// Argument(s):
+//   MedicationDispense: https://www.hl7.org/fhir/stu3/medicationdispense.html
+//
+// Output(s):
+//   Drug_Exposure: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/DRUG_EXPOSURE.md
+//
+def Process_MedicationDispense(MedicationDispense) {
+  drug_exposure : MedicationDispense_DrugExposure(MedicationDispense);
+}
+
+// Description: Define FHIR STU3 to OMOP (v6.0) transformation
+//
+// Argument(s):
+//   MedicationRequest: https://www.hl7.org/fhir/stu3/medicationrequest.html
+//
+// Output(s):
+//   Drug_Exposure: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/DRUG_EXPOSURE.md
+//
+def Process_MedicationRequest(MedicationRequest) {
+  drug_exposure : MedicationRequest_DrugExposure(MedicationRequest);
+}
+
+// Description: Define FHIR STU3 to OMOP (v6.0) transformation
+//
+// Argument(s):
+//   MedicationStatement: https://hl7.org/fhir/STU3/medicationstatement.html
+//
+// Output(s):
+//   Drug_Exposure: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/DRUG_EXPOSURE.md
+//
+def Process_MedicationStatement(MedicationStatement) {
+  drug_exposure : MedicationStatement_DrugExposure(MedicationStatement);
+}
+
+// Description: Define FHIR STU3 to OMOP (v6.0) transformation
+//
+// Argument(s):
+//   Observation: https://www.hl7.org/fhir/stu3/observation.html
+//
+// Output(s):
+//   Observation: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/OBSERVATION.md
+//
+def Process_Observation(Observation) {
+  observation : Observation_Observation(Observation);
+  observation_period : Observation_ObservationPeriod(Observation);
+}
+
+// Description: Define FHIR STU3 to OMOP (v6.0) transformation
+//
+// Argument(s):
+//   Patient: https://www.hl7.org/fhir/stu3/patient.html
+// Output(s):
+//   Location: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedHealthSystemDataTables/LOCATION.md
+//   Person: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/PERSON.md
+//
+def Process_Patient(Patient) {
+  var location : Address_Location(Patient.address[0]);
+  location : location;
+  person : Patient_Person(Patient, location.location_id);
+}
+
+// Description: Define FHIR STU3 to OMOP (v6.0) transformation
+//
+// Argument(s):
+//   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
+//
+// Output(s):
+//   Provider: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedHealthSystemDataTables/PROVIDER.md
+//
+def Process_Practitioner(Practitioner) {
+  provider : Practitioner_Provider(Practitioner);
+}
+
+// Description: Define FHIR STU3 to OMOP (v6.0) transformation
+//
+// Argument(s):
+//   Procedure: https://www.hl7.org/fhir/stu3/procedure.html
+//
+// Output(s):
+//   ProcedureOccurrence: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/PROCEDURE_OCCURRENCE.md
+//
+def Process_Procedure(Procedure) {
+  procedure_occurrence : Procedure_ProcedureOccurrence(Procedure);
+}
+
+// Description: Define FHIR STU3 to OMOP (v6.0) transformation
+//
+// Argument(s):
+//   Specimen: https://hl7.org/fhir/stu3/specimen.html
+//
+// Output(s):
+//   Specimen: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/SPECIMEN.md
+//
+def Process_Specimen(Specimen) {
+  specimen : Specimen_Specimen(Specimen);
+}

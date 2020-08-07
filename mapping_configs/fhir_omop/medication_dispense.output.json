@@ -1,0 +1,20 @@
+{
+   "drug_exposure":{
+      "drug_exposure_start_date":"2016-04-15",
+      "drug_source_value":"Amoxicillin (product)",
+      "person_id":9.81593553E+08,
+      "drug_source_concept_id":4.100819E+06,
+      "verbatim_end_date":"2016-01-15",
+      "drug_exposure_id":1.230236106E+09,
+      "sig":"one to two tablets every 4-6 hours as needed for rib pain",
+      "visit_occurrence_id":2.276423505E+09,
+      "quantity":30,
+      "drug_type_concept_id":706404,
+      "stop_reason":"Liver enzymes abnormal",
+      "drug_exposure_start_datetime":"2016-04-15T07:14:00+05:00",
+      "days_supply":10,
+      "provider_id":2.293201124E+09,
+      "route_concept_id":4.132161E+06,
+      "drug_concept_id":4.100819E+06
+   }
+}

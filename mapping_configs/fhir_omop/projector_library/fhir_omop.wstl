@@ -1,0 +1,39 @@
+// Description: Define FHIR STU3 to OMOP (v6.0) transformation
+//
+// Argument(s): Each of the following FHIR STU3 resources
+//   Condition: https://www.hl7.org/fhir/stu3/condition.html
+//   Encounter: https://www.hl7.org/fhir/stu3/encounter.html
+//   MedicationAdministration: https://www.hl7.org/fhir/stu3/MedicationAdministration.html
+//   MedicationDispense: https://www.hl7.org/fhir/stu3/medicationdispense.html
+//   MedicationRequest: https://www.hl7.org/fhir/stu3/medicationrequest.html
+//   MedicationStatement: https://hl7.org/fhir/STU3/medicationstatement.html
+//   Observation: https://www.hl7.org/fhir/stu3/observation.html
+//   Patient: https://www.hl7.org/fhir/stu3/patient.html
+//   Practitioner: https://www.hl7.org/fhir/stu3/practitioner.html
+//   Procedure: https://www.hl7.org/fhir/stu3/procedure.html
+//   Specimen: https://hl7.org/fhir/stu3/specimen.html
+//
+// Output(s): Each of the following OMOP (v6.0) tables
+//   ConditionOccurence: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/CONDITION_OCCURRENCE.md
+//   Drug_Exposure: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/DRUG_EXPOSURE.md
+//   Location: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedHealthSystemDataTables/LOCATION.md
+//   Observation: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/OBSERVATION.md
+//   Person: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/PERSON.md
+//   Provider: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedHealthSystemDataTables/PROVIDER.md
+//   ProcedureOccurence: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/PROCEDURE_OCCURRENCE.md
+//   Specimen: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/SPECIMEN.md
+//   VisitOccurrence: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/VISIT_OCCURRENCE.md
+//
+def FHIR_OMOP(resource) {
+  $this (if resource.resourceType = "Condition") : Process_Condition(resource);
+  $this (if resource.resourceType = "Encounter") : Process_Encounter(resource);
+  $this (if resource.resourceType = "MedicationAdministration") : Process_MedicationAdministration(resource);
+  $this (if resource.resourceType = "MedicationDispense") : Process_MedicationDispense(resource);
+  $this (if resource.resourceType = "MedicationRequest") : Process_MedicationRequest(resource);
+  $this (if resource.resourceType = "MedicationStatement") : Process_MedicationStatement(resource);
+  $this (if resource.resourceType = "Observation") : Process_Observation(resource);
+  $this (if resource.resourceType = "Patient") : Process_Patient(resource);
+  $this (if resource.resourceType = "Practitioner") : Process_Practitioner(resource);
+  $this (if resource.resourceType = "Procedure") : Process_Procedure(resource);
+  $this (if resource.resourceType = "Specimen") : Process_Specimen(resource);
+}

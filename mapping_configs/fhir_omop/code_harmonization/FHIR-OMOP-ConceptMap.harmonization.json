@@ -1,0 +1,522 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "AMB",
+          "display": "ambulatory",
+          "target": [
+            {
+              "code": "9202",
+              "display": "Outpatient Visit",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "EMER",
+          "display": "emergency",
+          "target": [
+            {
+              "code": "9203",
+              "display": "Emergency Room Visit",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "HH",
+          "display": "home health",
+          "target": [
+            {
+              "code": "581476",
+              "display": "Home Visit",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "IMP",
+          "display": "inpatient encounter",
+          "target": [
+            {
+              "code": "9201",
+              "display": "Inpatient Visit",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "NONAC",
+          "display": "inpatient non-acute",
+          "target": [
+            {
+              "code": "9201",
+              "display": "Inpatient Visit",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "PRENC",
+          "display": "pre-admission",
+          "target": [
+            {
+              "code": "262",
+              "display": "Emergency Room and Inpatient Visit",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/v3/ActCode",
+      "target": "Visit"
+    },
+    {
+      "element": [
+        {
+          "code": "ACUTE",
+          "display": "inpatient acute",
+          "target": [
+            {
+              "code": "38004279",
+              "display": "General Acute Care Hospital",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/v3/ActCode",
+      "target": "NUCC"
+    },
+    {
+      "element": [
+        {
+          "code": "8302-2",
+          "display": "Body Height",
+          "target": [
+            {
+              "code": "3036277",
+              "display": "Body Height",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://loinc.org",
+      "target": "LOINC"
+    },
+    {
+      "element": [
+        {
+          "code": "cm",
+          "display": "centimeter",
+          "target": [
+            {
+              "code": "8582",
+              "display": "centimeter",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ml",
+          "display": "milliliter",
+          "target": [
+            {
+              "code": "8587",
+              "display": "milliliter",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "mL",
+          "display": "milliliter",
+          "target": [
+            {
+              "code": "8587",
+              "display": "milliliter",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://unitsofmeasure.org",
+      "target": "UCUM"
+    },
+    {
+      "element": [
+        {
+          "code": "2186-5",
+          "display": "Not Hispanic or Latino",
+          "target": [
+            {
+              "code": "38003564",
+              "display": "Not Hispanic or Latino",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "urn:oid:2.16.840.1.113883.6.238",
+      "target": "Ethnicity"
+    },
+    {
+      "element": [
+        {
+          "code": "outpatient",
+          "display": "Outpatient",
+          "target": [
+            {
+              "code": "706404",
+              "display": "Outpatient",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/medication-admin-category",
+      "target": "LOINC"
+    },
+    {
+      "element": [
+        {
+          "code": "FLD",
+          "display": "field",
+          "target": [
+            {
+              "code": "32209",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "SS",
+          "display": "short stay",
+          "target": [
+            {
+              "code": "32209",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "VR",
+          "display": "virtual",
+          "target": [
+            {
+              "code": "32209",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/v3/ActCode",
+      "target": "UB04"
+    },
+    {
+      "element": [
+        {
+          "code": "2106-3",
+          "display": "White",
+          "target": [
+            {
+              "code": "8527",
+              "display": "White",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "urn:oid:2.16.840.1.113883.6.238",
+      "target": "Race"
+    },
+    {
+      "element": [
+        {
+          "code": "EMT",
+          "display": "Emergency Medical Technician",
+          "target": [
+            {
+              "code": "38003845",
+              "display": "Emergency Medicine",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/v2/0360/2.7",
+      "target": "NUCC"
+    },
+    {
+      "element": [
+        {
+          "code": "inpatient",
+          "display": "Inpatient",
+          "target": [
+            {
+              "code": "1026241",
+              "display": "Inpatient",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/medication-statement-category",
+      "target": "LOINC"
+    },
+    {
+      "element": [
+        {
+          "code": "outpatient",
+          "display": "Outpatient",
+          "target": [
+            {
+              "code": "706404",
+              "display": "Outpatient",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/medication-dispense-category",
+      "target": "LOINC"
+    },
+    {
+      "element": [
+        {
+          "code": "resolved",
+          "display": "Resolved",
+          "target": [
+            {
+              "code": "37109701",
+              "display": "Resolved",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/condition-clinical",
+      "target": "SNOMED"
+    },
+    {
+      "element": [
+        {
+          "code": "social-history",
+          "display": "Social History",
+          "target": [
+            {
+              "code": "4054438",
+              "display": "Social / personal history observable",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/observation-category",
+      "target": "SNOMED"
+    },
+    {
+      "element": [
+        {
+          "code": "vital-signs",
+          "display": "Vital Signs",
+          "target": [
+            {
+              "code": "3028553",
+              "display": "Vital signs",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/observation-category",
+      "target": "LOINC"
+    },
+    {
+      "element": [
+        {
+          "code": "3236",
+          "display": "EGFR",
+          "target": [
+            {
+              "code": "40776139",
+              "display": "EGFR gene",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://www.genenames.org",
+      "target": "LOINC"
+    },
+    {
+      "element": [
+        {
+          "code": "inpatient",
+          "display": "Inpatient",
+          "target": [
+            {
+              "code": "1026241",
+              "display": "Inpatient",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/medication-request-category",
+      "target": "LOINC"
+    },
+    {
+      "element": [
+        {
+          "code": "367336001",
+          "display": "Chemotherapy",
+          "target": [
+            {
+              "code": "4273629",
+              "display": "Chemotherapy",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "387713003",
+          "display": "Surgical procedure",
+          "target": [
+            {
+              "code": "4301351",
+              "display": "Surgical procedure",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "386661006",
+          "display": "Fever",
+          "target": [
+            {
+              "code": "437663",
+              "display": "Fever",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "55607006",
+          "display": "Problem",
+          "target": [
+            {
+              "code": "4206460",
+              "display": "Problem",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "27658006",
+          "display": "Amoxicillin (product)",
+          "target": [
+            {
+              "code": "4100819",
+              "display": "Amoxicillin",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "430127000",
+          "display": "Oral Form Oxycodone (product)",
+          "target": [
+            {
+              "code": "4324618",
+              "display": "Oxycodone-containing product in oral dose form",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "260548002",
+          "display": "Oral",
+          "target": [
+            {
+              "code": "4128794",
+              "display": "Oral",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "26643006",
+          "display": "Oral Route",
+          "target": [
+            {
+              "code": "4132161",
+              "display": "Oral",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "122555007",
+          "display": "Venous blood specimen",
+          "target": [
+            {
+              "code": "4045667",
+              "display": "Venous blood specimen",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "49852007",
+          "display": "Structure of median cubital vein (body structure)",
+          "target": [
+            {
+              "code": "4172448",
+              "display": "Structure of median cubital vein (body structure)",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://snomed.info/sct",
+      "target": "SNOMED"
+    },
+    {
+      "element": [
+        {
+          "code": "male",
+          "display": "Male",
+          "target": [
+            {
+              "code": "8507",
+              "display": "MALE",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "female",
+          "display": "Female",
+          "target": [
+            {
+              "code": "8532",
+              "display": "FEMALE",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/administrative-gender",
+      "target": "Gender"
+    }
+  ],
+  "id": "FHIR-OMOP-ConceptMap",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

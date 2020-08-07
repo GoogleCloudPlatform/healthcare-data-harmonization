@@ -1,0 +1,30 @@
+
+library_config: {
+  user_libraries: {
+    type: MAPPING_LANGUAGE
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/fhir_omop/projector_library/resources.wstl" }
+  }
+  user_libraries: {
+    type: MAPPING_LANGUAGE
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/fhir_omop/projector_library/process_resources.wstl" }
+  }
+  user_libraries: {
+    type: MAPPING_LANGUAGE
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/fhir_omop/projector_library/fhir_omop.wstl" }
+  }
+}
+
+harmonization_config: {
+  code_lookup: {
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/fhir_omop/code_harmonization/FHIR-OMOP-ConceptMap.harmonization.json"
+  }
+}
+
+structure_mapping_config: {
+  mapping_path_config: {
+    mapping_type: MAPPING_LANGUAGE
+    mapping_config_path: {
+      local_path: "$MAPPING_ENGINE_HOME/mapping_configs/fhir_omop/configurations/main.wstl"
+    }
+  }
+}

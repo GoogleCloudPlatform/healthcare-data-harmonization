@@ -1,0 +1,22 @@
+{
+   "drug_exposure":{
+      "drug_exposure_end_date":"2016-01-15",
+      "verbatim_end_date":"2016-01-15",
+      "visit_occurrence_id":2.276423505E+09,
+      "drug_exposure_end_datetime":"2016-01-15T17:50:00-04:00",
+      "drug_type_concept_id":1.026241E+06,
+      "drug_source_concept_id":4.100819E+06,
+      "quantity":30,
+      "drug_concept_id":4.100819E+06,
+      "days_supply":10,
+      "drug_source_value":"Amoxicillin (product)",
+      "refills":1,
+      "drug_exposure_start_datetime":"2015-01-15T17:20:00-04:00",
+      "provider_id":3.189841398E+09,
+      "sig":"one to two tablets every 4-6 hours as needed for rib pain",
+      "route_concept_id":4.132161E+06,
+      "drug_exposure_id":1.570410052E+09,
+      "drug_exposure_start_date":"2015-01-15",
+      "person_id":9.81593553E+08
+   }
+}
