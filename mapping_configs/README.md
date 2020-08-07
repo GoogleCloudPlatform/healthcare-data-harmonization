@@ -16,7 +16,7 @@ Every sample directory is composed of different files and directories, namely:
     that are used for
     [Code Harmonization](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md#code-harmonization)
 *   configurations
-    *   main.dhml: the mapping configuration
+    *   main.wstl: the mapping configuration
     *   main.textproto: the
         [Data Harmonization configuration](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine/proto/data_harmonization.proto).
         This configuration is composed of the mapping config,
@@ -26,7 +26,7 @@ Every sample directory is composed of different files and directories, namely:
         configuration
 *   test cases in the form:
     *   TEST_NAME.input.json: the input file used in the test
-    *   TEST_NAME.config.dhml: the mapping config file used in the test
+    *   TEST_NAME.config.wstl: the mapping config file used in the test
     *   TEST_NAME.output.json: the output file produced by the test
 
 ## Running
@@ -50,7 +50,7 @@ for more details and other flags that are supported.
 ```
 go run $MAPPING_ENGINE_HOME/mapping_engine/main:main --
 --input_file_spec=$MAPPING_ENGINE_HOME/mapping_configs/$CONVERSION/$INPUT_FILE
---mapping_file_spec=$MAPPING_ENGINE_HOME/mapping_configs/$CONVERSION/configurations/main.dhml
+--mapping_file_spec=$MAPPING_ENGINE_HOME/mapping_configs/$CONVERSION/configurations/main.wstl
 --lib_dir_spec=$MAPPING_ENGINE_HOME/mapping_configs/$CONVERSION/projector_library/
 --harmonize_code_dir_spec=$MAPPING_ENGINE_HOME/mapping_configs/$CONVERSION/code_harmonization/
 ```

@@ -7,12 +7,79 @@ testing, and debugging of data harmonization whistle scripts.
 
 # Jupyter Notebook Cloud Healthcare Data Harmonization Stack
 
-`cloud-healthcare-data-harmonization-notebook:1.0` includes extensions and
-packages to facilitate healthcare data harmonization
+`cloud-healthcare-data-harmonization-notebook:latest` includes extensions and
+packages to facilitate healthcare data harmonization and
+`gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-services:latest`
+is the mapping engine service that performs the transformations. The features
+include:
+
+*   **FHIR stu3 data model browser** - provides a mechanism to browse resource
+    structural documentation for [FHIR stu3](http://hl7.org/fhir/STU3/)
+    resources.
+    ![Demo](https://storage.googleapis.com/data-harmonization-sample-data/jupyterlab-data-model-browser-demo.gif)
+
+*   **load_hl7v2_datastore** - the line magic command allows you to load data
+    directly from a
+    [HL7v2Store](https://cloud.google.com/healthcare/docs/reference/rest/v1/projects.locations.datasets.hl7V2Stores/list)
+    and store the results either in a python variable or persist them to disk.
+    optional arguments:
+
+    *   --project_id PROJECT_ID - ID of the GCP project that the HL7v2 Store
+        belongs to.
+    *   --region REGION - Region of the HL7v2 Store.
+    *   --dataset_id DATASET_ID - ID of the dataset that the HL7v2 store belongs
+        to.
+    *   --hl7v2_store_id HL7V2_STORE_ID - ID of the HL7v2 store to load data
+        from.
+    *   --api_version <{v1,v1beta1}> - The version of the healthcare api to
+        call. Default to v1.
+    *   --filter FILTER - filter restricts messages returned to those matching a
+        filter. See the
+        [Healthcare API documentation](https://cloud.google.com/healthcare/docs/reference/rest/v1beta1/projects.locations.datasets.hl7V2Stores.messages/list#query-parameters)
+        for additional details.
+    *   --dest_file_name DEST_FILE_NAME - The destination file path to store the
+        loaded data. If not provided, the result will be directly returned to
+        the IPython kernel.
+
+*   **load_hl7v2_gcs** - the line magic command loads JSON data from a
+    [Google Cloud Storage](https://cloud.google.com/storage) bucket and allows
+    the user to either save the results to a python variable, persist them to
+    disk, or print the results.
+
+    *   --bucket_name BUCKET_NAME - The name of the GCS bucket to load data
+        from.
+    *   --source_blob_name SOURCE_BLOB_NAME - The name of the blob to load.
+    *   --dest_file_name DEST_FILE_NAME - The destination file path to store the
+        loaded data. If not provided, the result will be directly returned to
+        the IPython kernel.
+
+*   **wstl** - the cell magic to evaluate whistle mapping language from iPython
+    kernel. optional arguments:
+
+    *   --input INPUT - The input. Supports the following prefix notations:
+        py://<name_of_python_variable> json://<inline_json_object_or_array> :
+        python inline dict and list expressions are supported. e.g.
+        json://{"field":"value"} or
+        json://[{"first":"value"},{"second":"value"}]
+        file://<path_to_local_file_system> , supports glob wildcard expressions
+        and will only load .json or .ndjson file extensions. Each json
+        object/list defined within an ndjson will be a separate input to the
+        mapping.
+    *   --library_config LIBRARY_CONFIG - Path to the directory where the
+        library mapping files are located.
+    *   --code_config CODE_CONFIG - Path to the directory of
+        [FHIR ConceptMaps](https://www.hl7.org/fhir/conceptmap.html) used for
+        code harmonization.
+    *   --unit_config UNIT_CONFIG - Path to a unit harmonization file
+        (textproto).
+    *   --output OUTPUT - Name of python variable to store result.
+
+    ![Demo](https://storage.googleapis.com/data-harmonization-sample-data/jupyterlab-wstl-demo.gif)
 
 *   Includes everything in the
     [jupyter/minimal-notebook](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-minimal-notebook)
     and its ancestor images
+
 *   [Google Cloud Platform authentication extension](https://github.com/gclouduniverse/jupyterlab-gcloud-auth)
     and
     [Google Cloud Storage browser extension](https://github.com/gclouduniverse/jupyterlab_gcsfilebrowser)
@@ -36,24 +103,41 @@ packages to facilitate healthcare data harmonization
     *   Storage Admin - ability to list, read, and write GCS resources.
     *   Healthcare HL7v2 Message Editor - read/write to the HL7v2 Store.
 
-*   Store the service account key in a directory on your file system, and make
-    that directory the host mount directory for the /home/jovyan/.config/gcloud
-    directory, see the example below.
+*   Download and store the service account key in a directory on your file
+    system, and set the $NOTEBOOK_SERVICE_ACCOUNT_DIR environment to the
+    directory that contains the key and see the
+    $NOTEBOOK_SERVICE_ACCOUNT_FILENAME environment variable to the name of the
+    service account key.
 
 *   Create a working directory on your file system to store all notebooks. This
     directory will be mounted and used by the Jupyter.
 
+*   Set the following environment variables so that the docker images are able
+    to access the mapping configurations, all notebooks are persisted to your
+    local file system, and the appropriate service account key is used to access
+    GCP. If you would like the environment variables to persist across terminal
+    session,
+    [docker-compose supports reading from an environment file](https://docs.docker.com/compose/env-file/).
+
 ```bash
-export NOTEBOOK_UID=$UID
-export NOTEBOOK_WORKING_DIR="$PWD/work"
-export NOTEBOOK_SERVICE_ACCOUNT_FILENAME="<service_account_json>"
-export NOTEBOOK_SERVICE_ACCOUNT_DIR="<folder_containing_service_account_json>"
-export NOTEBOOK_FUNCTION_LIBRARY_DIR="<function_library_directory>"
-export GOOGLE_APPLICATION_CREDENTIALS="$NOTEBOOK_SERVICE_ACCOUNT_DIR/$NOTEBOOK_SERVICE_ACCOUNT_FILENAME"
+$ cd $DH_ROOT # where $DH_ROOT is the root of the git repository.
+$ export NOTEBOOK_UID=$UID
+$ export NOTEBOOK_WORKING_DIR="$PWD" # where $PWD is the root of the git repository.
+$ export NOTEBOOK_FUNCTION_LIBRARY_DIR="$PWD/mapping_configs/hl7v2_fhir_stu3"
+$ export NOTEBOOK_SERVICE_ACCOUNT_FILENAME="<replace_with_service_account_json>"
+$ export NOTEBOOK_SERVICE_ACCOUNT_DIR="<replace_with_folder_containing_service_account_json>"
+$ export GOOGLE_APPLICATION_CREDENTIALS="$NOTEBOOK_SERVICE_ACCOUNT_DIR/$NOTEBOOK_SERVICE_ACCOUNT_FILENAME"
+$ tee .env << EOF
+NOTEBOOK_UID=$NOTEBOOK_UID
+NOTEBOOK_WORKING_DIR=$NOTEBOOK_WORKING_DIR
+NOTEBOOK_FUNCTION_LIBRARY_DIR=$NOTEBOOK_FUNCTION_LIBRARY_DIR
+NOTEBOOK_SERVICE_ACCOUNT_FILENAME=$NOTEBOOK_SERVICE_ACCOUNT_FILENAME
+NOTEBOOK_SERVICE_ACCOUNT_DIR=$NOTEBOOK_SERVICE_ACCOUNT_DIR
+GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
+EOF
 
 $ docker-compose pull
 $ docker-compose up --no-build
-
 ```
 
 *   In browser go to http://localhost:8888/lab
@@ -61,9 +145,14 @@ $ docker-compose up --no-build
     environment variable to your desired port number.
 
 ```bash
-export NOTEBOOK_PORT="8888"
-docker-compose up --no-build
+$ tee -a .env << EOF
+NOTEBOOK_PORT=10000
+EOF
+$ docker-compose up --no-build
 ```
+
+*   Open the [example notebook](tools/notebook/examples/demo-sample.ipynb) from
+    the file browser within JupyterLab.
 
 ## Building the image
 

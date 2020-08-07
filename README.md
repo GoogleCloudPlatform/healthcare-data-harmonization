@@ -23,9 +23,10 @@ Run `build_all.sh`
 
 ### Details
 
-This project consists of two components, the mapping engine and the mapping
+This project consists of three components, the mapping engine, the mapping
 language, both of which can be built and tested independently with `go build`
-and `go test`. Please refer to their individual READMEs for more information.
+and `go test`, and Jupyter notebook extensions/magic commands. Please refer to
+their individual READMEs for more information.
 
 ### Language Reference
 
