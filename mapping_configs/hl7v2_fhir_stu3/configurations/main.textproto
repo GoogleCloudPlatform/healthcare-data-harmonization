@@ -1,7 +1,3 @@
-# BEGIN GOOGLE-INTERNAL
-# proto-file: third_party/cloud_healthcare_data_harmonization/mapping_engine/proto/data_harmonization.proto
-# proto-message: cloud.healthcare.cdw.etl.mapping.proto.DataHarmonizationConfig
-# END GOOGLE-INTERNAL
 
 library_config: {
   user_libraries: {
