@@ -40,6 +40,19 @@ Please refer to the
 for instructions on how to run the mapping engine and for getting familiar with
 the mapping language.
 
+### Sample pipelines
+
+Whistle configs can be executed in [Apache Beam](https://beam.apache.org/).
+Please refer to the
+[Whistle Dataflow Pipelines Repo](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization-dataflow)
+for sample pipelines.
+
+### Feedback
+
+Want to help the Google Cloud Healthcare and Life Sciences team improve Whistle?
+Please email: whistle-feedback@google.com to connect with the Whistle team for a
+further discussion on your experience with Whistle.
+
 ## License
 
 Apache License, Version 2.0
