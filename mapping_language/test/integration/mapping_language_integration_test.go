@@ -1300,6 +1300,10 @@ func TestTranspile(t *testing.T) {
 									\123\\_: \1ar\ g1
 									'поле': "field"
 									'😊'.status: "whoa"
+									var 'def': {
+									    'required': "keyword"
+									}
+									'required': 'def'.'required'
 								}`,
 			wantValue: valueTest{
 				inputJSON: `{"123": [{"123X" : "hi"}]}`,
@@ -1310,7 +1314,8 @@ func TestTranspile(t *testing.T) {
 												"поле": "field",
 												"😊": {
 													"status": "whoa"
-												}
+												},
+												"required": "keyword"
 										 }
 									 }`,
 			},

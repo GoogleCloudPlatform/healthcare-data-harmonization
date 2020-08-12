@@ -15,6 +15,11 @@
 grammar Whistle
 ;
 
+// Allow keywords as tokens by placing this at the very top.
+fragment ESCAPED_TOKEN
+    : '\'' ('\\\'' | ~['])+ '\''
+;
+
 IF
     : 'if'
     | 'iff'
@@ -143,7 +148,7 @@ DELIM
 
 TOKEN
     : TOKENINITCHAR TOKENCHAR*
-    | '\'' ('\\\'' | ~['])+ '\''
+    | ESCAPED_TOKEN
 ;
 
 fragment TOKENCHAR
