@@ -137,9 +137,6 @@ func EvaluateValueSource(vs *mappb.ValueSource, args []jsonutil.JSONMetaNode, ou
 		if len(nextArgs) == 0 {
 			return nil, errors.New("source was enumerated (ended with []) but source itself did not exist (?)")
 		}
-		if nextArgs[0] == nil {
-			return nil, nil
-		}
 
 		// Zip the arguments together - enumerate any additional args that need it.
 		zippedArgs, err := zip(nextArgs, iterableIndicies)
@@ -246,18 +243,26 @@ func isSelectorArray(selector string) bool {
 // 		["two",   [a, b], 2],
 // 		["three", [a, b], 3],
 // ]
+// zip(["foo", "bar", "baz", []], [false, false, false, true]) returns
+// [ ] (empty list)
+// zip(["foo", "bar", "baz", [1, 2, 3], []], [false, false, false, true, true]) returns
+// [ ] (empty list)
 func zip(values []jsonutil.JSONMetaNode, iterables []bool) ([][]jsonutil.JSONMetaNode, error) {
 	if len(values) != len(iterables) {
 		return nil, fmt.Errorf("bug: number of values (%d) did not match number of iterable flags (%d)", len(values), len(iterables))
 	}
 
 	// Validate that things flagged to be iterated are actually iterated.
-	baseLen := -1
+	baseLen := 0
 	basePath := ""
 	if iterables != nil {
 		for i, a := range values {
 			if !iterables[i] {
 				continue
+			}
+			if a == nil {
+				a = jsonutil.JSONMetaArrayNode{}
+				values[i] = a
 			}
 
 			arr, ok := a.(jsonutil.JSONMetaArrayNode)
@@ -265,19 +270,19 @@ func zip(values []jsonutil.JSONMetaNode, iterables []bool) ([][]jsonutil.JSONMet
 				return nil, fmt.Errorf("can't iterate non-array %q (it was the %s argument in the function call)", a.ProvenanceString(), errs.SuffixNumber(i+1))
 			}
 
-			if baseLen < 0 {
+			if baseLen == 0 {
 				baseLen = len(arr.Items)
 				basePath = arr.ProvenanceString()
 			}
 
-			if len(arr.Items) != baseLen {
+			if len(arr.Items) != baseLen && len(arr.Items) > 0 {
 				return nil, fmt.Errorf("can't zip/iterate arrays of different sizes together (%q had %d items, but %q had %d)", basePath, baseLen, arr.ProvenanceString(), len(arr.Items))
 			}
 		}
 	}
 
-	if baseLen < 0 {
-		return [][]jsonutil.JSONMetaNode{values}, nil
+	if baseLen == 0 {
+		return [][]jsonutil.JSONMetaNode{}, nil
 	}
 
 	// Zip together iterables and non-iterables.
@@ -287,7 +292,11 @@ func zip(values []jsonutil.JSONMetaNode, iterables []bool) ([][]jsonutil.JSONMet
 		for j, a := range values {
 			if iterables != nil && iterables[j] {
 				arr := values[j].(jsonutil.JSONMetaArrayNode)
-				z = append(z, arr.Items[i])
+				if len(arr.Items) > 0 {
+					z = append(z, arr.Items[i])
+				} else {
+					z = append(z, nil)
+				}
 			} else {
 				z = append(z, a)
 			}

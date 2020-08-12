@@ -221,6 +221,24 @@ func TestEvaluateValueSourceWhistler(t *testing.T) {
 			want: mustTokenToNode(t, mustParseArray(json.RawMessage(`[{"foo":{"meep": 1}, "bar":"bar"}, {"foo":{"meep": 2}, "bar":"bar"}, {"foo":{"meep": 3}, "bar":"bar"}]`), t)),
 		},
 		{
+			name: "enumerated value with zipped args where array is null",
+			argVs: mappb.ValueSource{
+				Source: &mappb.ValueSource_FromSource{
+					FromSource: "null[]",
+				},
+				AdditionalArg: []*mappb.ValueSource{
+					{
+						Source: &mappb.ValueSource_ConstString{
+							ConstString: "bar",
+						},
+					},
+				},
+				Projector: "UDFMakeFooBar",
+			},
+			args: []jsonutil.JSONToken{mustParseContainer(json.RawMessage(`{"foo": [{"meep": 1}, {"meep": 2}, {"meep": 3}]}`), t)},
+			want: jsonutil.JSONMetaArrayNode{Items: []jsonutil.JSONMetaNode{}},
+		},
+		{
 			name: "enumerated non-first value with zipped args",
 			argVs: mappb.ValueSource{
 				Source: &mappb.ValueSource_ConstString{
@@ -264,6 +282,30 @@ func TestEvaluateValueSourceWhistler(t *testing.T) {
 			},
 			args: []jsonutil.JSONToken{mustParseContainer(json.RawMessage(`{"foo": [{"meep": 1}, {"meep": 2}, {"meep": 3}]}`), t), mustParseArray(json.RawMessage(`["red", "green", "blue"]`), t)},
 			want: mustTokenToNode(t, mustParseArray(json.RawMessage(`[{"foo":{"meep": 1}, "bar":"red"}, {"foo":{"meep": 2}, "bar":"green"}, {"foo":{"meep": 3}, "bar":"blue"}]`), t)),
+		},
+		{
+			name: "enumerated multiple arrays as zipped args with one null",
+			argVs: mappb.ValueSource{
+				Source: &mappb.ValueSource_FromInput{
+					FromInput: &mappb.ValueSource_InputSource{
+						Arg:   1,
+						Field: "null[]",
+					},
+				},
+				AdditionalArg: []*mappb.ValueSource{
+					{
+						Source: &mappb.ValueSource_FromInput{
+							FromInput: &mappb.ValueSource_InputSource{
+								Arg:   2,
+								Field: "[]",
+							},
+						},
+					},
+				},
+				Projector: "UDFMakeFooBar",
+			},
+			args: []jsonutil.JSONToken{mustParseContainer(json.RawMessage(`{"foo": [{"meep": 1}, {"meep": 2}, {"meep": 3}]}`), t), mustParseArray(json.RawMessage(`["red", "green", "blue"]`), t)},
+			want: mustTokenToNode(t, mustParseArray(json.RawMessage(`[{"foo": null, "bar":"red"}, {"foo": null, "bar":"green"}, {"foo": null, "bar":"blue"}]`), t)),
 		},
 		{
 			name: "projected enumerated value",
@@ -337,7 +379,7 @@ func TestEvaluateValueSourceWhistler(t *testing.T) {
 				},
 			},
 			args: []jsonutil.JSONToken{mustParseContainer(json.RawMessage(`{"zip": {}}`), t)},
-			want: nil,
+			want: jsonutil.JSONMetaArrayNode{Items: []jsonutil.JSONMetaNode{}},
 		},
 		{
 			name: "from destination",
