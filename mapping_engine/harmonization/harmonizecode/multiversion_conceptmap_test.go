@@ -388,6 +388,7 @@ func TestUnmarshalR3ConceptMap(t *testing.T) {
 							Mode:    "fixed",
 						},
 						Target: "http://hl7.org/fhir/v3/AddressUse",
+						Source: "http://hl7.org/fhir/address-use",
 					},
 				},
 			},

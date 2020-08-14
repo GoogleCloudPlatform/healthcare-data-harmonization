@@ -42,6 +42,7 @@ func TestLoadConceptMap(t *testing.T) {
 		rawConceptMap  json.RawMessage
 		sourceCode     string
 		sourceSystem   string
+		sourceName     string
 		version        string
 		expectedOutput []HarmonizedCode
 	}{
@@ -71,6 +72,7 @@ func TestLoadConceptMap(t *testing.T) {
 			}`),
 			sourceCode:   "abc",
 			sourceSystem: "foo",
+			sourceName:   "foo",
 			expectedOutput: []HarmonizedCode{
 				HarmonizedCode{
 					Code:    "def",
@@ -119,6 +121,7 @@ func TestLoadConceptMap(t *testing.T) {
 			}`),
 			sourceCode:   "abc",
 			sourceSystem: "foo",
+			sourceName:   "foo",
 			expectedOutput: []HarmonizedCode{
 				HarmonizedCode{
 					Code:    "def1",
@@ -171,6 +174,7 @@ func TestLoadConceptMap(t *testing.T) {
 			}`),
 			sourceCode:   "abc",
 			sourceSystem: "foo",
+			sourceName:   "foo",
 			expectedOutput: []HarmonizedCode{
 				HarmonizedCode{
 					Code:    "def",
@@ -204,6 +208,7 @@ func TestLoadConceptMap(t *testing.T) {
 			}`),
 			sourceCode:   "unmatched",
 			sourceSystem: "foo",
+			sourceName:   "foo",
 			expectedOutput: []HarmonizedCode{
 				HarmonizedCode{
 					Code:    "unmatched",
@@ -231,15 +236,17 @@ func TestLoadConceptMap(t *testing.T) {
 						"unmapped": {
 							"mode": "provided"
 						},
-						"target": "xyz"
+						"target": "xyz",
+						"source": "foo"
 					}
 				],
-				"id": "foo",
+				"id": "map-id",
 				"version": "bar",
 				"resourceType": "ConceptMap"
 			}`),
 			sourceCode:   "unmatched",
 			sourceSystem: "foo",
+			sourceName:   "map-id",
 			expectedOutput: []HarmonizedCode{
 				HarmonizedCode{
 					Code:    "unmatched",
@@ -270,15 +277,17 @@ func TestLoadConceptMap(t *testing.T) {
 							"code": "unknown",
 							"display": "Unknown Code"
 						},
-						"target": "xyz"
+						"target": "xyz",
+						"source": "foo"
 					}
 				],
-				"id": "foo",
+				"id": "map-id",
 				"version": "bar",
 				"resourceType": "ConceptMap"
 			}`),
 			sourceCode:   "unmatched",
 			sourceSystem: "foo",
+			sourceName:   "map-id",
 			expectedOutput: []HarmonizedCode{
 				HarmonizedCode{
 					Code:    "unknown",
@@ -309,7 +318,8 @@ func TestLoadConceptMap(t *testing.T) {
 							"code": "unknown",
 							"display": "Unknown Code"
 						},
-						"target": "xyz1"
+						"target": "xyz1",
+						"source": "foo1"
 					},
 					{
 						"element":[
@@ -328,7 +338,8 @@ func TestLoadConceptMap(t *testing.T) {
 							"code": "unknown",
 							"display": "Unknown Code"
 						},
-						"target": "xyz2"
+						"target": "xyz2",
+						"source": "foo2"
 					},
 					{
 						"element":[
@@ -347,32 +358,23 @@ func TestLoadConceptMap(t *testing.T) {
 							"code": "unknown",
 							"display": "Unknown Code"
 						},
-						"target": "xyz3"
+						"target": "xyz3",
+						"source": "foo3"
 					}
 				],
-				"id": "foo",
+				"id": "map-id",
 				"version": "bar",
 				"resourceType": "ConceptMap"
 			}`),
 			sourceCode:   "source-code",
-			sourceSystem: "foo",
+			sourceSystem: "foo2",
+			sourceName:   "map-id",
 			expectedOutput: []HarmonizedCode{
 				HarmonizedCode{
 					Code:    "unknown",
-					Display: "Unknown Code",
-					System:  "xyz1",
-					Version: "bar",
-				},
-				HarmonizedCode{
-					Code:    "unknown",
-					Display: "Unknown Code",
 					System:  "xyz2",
 					Version: "bar",
-				},
-				HarmonizedCode{
-					Code:    "def",
-					System:  "xyz3",
-					Version: "bar",
+					Display: "Unknown Code",
 				},
 			},
 		},
@@ -384,9 +386,9 @@ func TestLoadConceptMap(t *testing.T) {
 				t.Fatalf("buildTestLocalHarmonizer returned unexpected error: %v", err)
 			}
 
-			actualOutput, err := harmonizer.Harmonize(test.sourceCode, test.sourceSystem, test.sourceSystem)
+			actualOutput, err := harmonizer.Harmonize(test.sourceCode, test.sourceSystem, test.sourceName)
 			if err != nil {
-				t.Fatalf("Harmonize(%s, %s, %s) returned unexpected error: %v", test.sourceCode, test.sourceSystem, test.sourceSystem, err)
+				t.Fatalf("Harmonize(%s, %s, %s) returned unexpected error: %v", test.sourceCode, test.sourceSystem, test.sourceName, err)
 			}
 
 			if diff := cmp.Diff(test.expectedOutput, actualOutput); diff != "" {

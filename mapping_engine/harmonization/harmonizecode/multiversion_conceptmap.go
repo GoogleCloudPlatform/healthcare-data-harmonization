@@ -32,6 +32,7 @@ type ConceptGroup struct {
 	Element  []ConceptElement
 	Unmapped *ConceptUnmapped
 	Target   string
+	Source   string
 }
 
 // ConceptElement (and the nested structs) represents a slimmed-down,

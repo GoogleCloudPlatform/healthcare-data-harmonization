@@ -2,13 +2,14 @@
 //
 // Argument(s):
 //   HL7 v2 Code:  https://hl7-definition.caristix.com/v2/HL7v2.7/Tables
+//   System: System of the source code specified in the concept map (https://build.fhir.org/conceptmap-definitions.html#ConceptMap.group.source).
 //   ConceptMapID: https://www.hl7.org/fhir/conceptmap.html
 //
 // Output(s):
 //   FHIR Code datatype: https://www.hl7.org/fhir/datatypes.html#code
 //
-def Convert_TerminologyCode(required Code, ConceptMapID){
-  var mapping : $HarmonizeCode("$Local", Code, "", ConceptMapID);
+def Convert_TerminologyCode(required Code, System, ConceptMapID){
+  var mapping : $HarmonizeCode("$Local", Code, System, ConceptMapID);
   $this : mapping[0].code;
 }
 
@@ -16,13 +17,14 @@ def Convert_TerminologyCode(required Code, ConceptMapID){
 //
 // Argument(s):
 //   HL7 v2 Code:  https://hl7-definition.caristix.com/v2/HL7v2.7/Tables
+//   System: System of the source code specified in the concept map (https://build.fhir.org/conceptmap-definitions.html#ConceptMap.group.source).
 //   ConceptMapID: https://www.hl7.org/fhir/conceptmap.html
 //
 // Output(s):
 //   FHIR Coding datatype: https://www.hl7.org/fhir/datatypes.html#Coding
 //
-def Convert_TerminologyCoding(required Code, ConceptMapID){
-  var mapping : $HarmonizeCode("$Local", Code, "", ConceptMapID);
+def Convert_TerminologyCoding(required Code, System, ConceptMapID){
+  var mapping : $HarmonizeCode("$Local", Code, System, ConceptMapID);
   $this : mapping[0];
 }
 
@@ -30,13 +32,14 @@ def Convert_TerminologyCoding(required Code, ConceptMapID){
 //
 // Argument(s):
 //   HL7 v2 Code:  https://hl7-definition.caristix.com/v2/HL7v2.7/Tables
+//   System: System of the source code specified in the concept map (https://build.fhir.org/conceptmap-definitions.html#ConceptMap.group.source).
 //   ConceptMapID: https://www.hl7.org/fhir/conceptmap.html
 //
 // Output(s):
 //   FHIR CodeableConcept datatype: https://www.hl7.org/fhir/datatypes.html#CodeableConcept
 //
-def Convert_Terminology(required Code, ConceptMapID){
-  coding : $HarmonizeCode("$Local", Code, "", ConceptMapID);
+def Convert_Terminology(required Code, System, ConceptMapID){
+  coding : $HarmonizeCode("$Local", Code, System, ConceptMapID);
 }
 
 // Description: Matches the given string is a Number or not
@@ -377,7 +380,7 @@ def XAD_Address(XAD) {
     type : XAD.7;
   }
   if (XAD.7 = "BA" or XAD.7 = "BI" or XAD.7 = "C" or XAD.7 = "B" or XAD.7 = "H" or XAD.7 = "O") {
-    use : Convert_TerminologyCode(XAD.7, "Address_Use");
+    use : Convert_TerminologyCode(XAD.7, "HL70190", "Address_Use");
   }
   district : CWE_String(XAD.9);
   period : DR_Period(XAD.12);
@@ -488,7 +491,7 @@ def XPN_HumanName(XPN) {
   suffix[] : XPN.4;
   prefix[] : XPN.5;
   suffix[] : XPN.6;
-  use : Convert_TerminologyCode(XPN.7, "Name_Type");
+  use : Convert_TerminologyCode(XPN.7, "HL70200", "Name_Type");
   if (~XPN.12 and ~XPN.13) {
     period : DR_Period(XPN.10);
   }
@@ -511,13 +514,13 @@ def NK1_Contact(required NK1) {
   telecom[] : XTN_ContactPoint(NK1.5[], "home");
   telecom[] : XTN_ContactPoint(NK1.6[], "work");
   var relationshipCC : CWE_CodeableConcept(NK1.7);
-  relationship[] (if relationshipCC) : Convert_Terminology(relationshipCC.coding[0].code, "Relationship");
+  relationship[] (if relationshipCC) : Convert_Terminology(relationshipCC.coding[0].code, "HL70063", "Relationship");
   period.start : Convert_DateTime(NK1.8);
   period.end : Convert_DateTime(NK1.9);
   var Organization : XON_Organization(NK1.13[0]);
   var Organization.contact[] (if Organization): XPN_XTN_XAD_OrganizationContact(NK1.30, NK1.31, NK1.32);
   organization :  Build_Reference(Output_Resource(Organization));
-  gender : Convert_TerminologyCode(CWE_Code(NK1.14), "Gender");
+  gender : Convert_TerminologyCode(CWE_Code(NK1.14), "HL70001", "Gender");
   telecom[] : XTN_ContactPoint(NK1.40, "home");
   telecom[] : XTN_ContactPoint(NK1.41, "work");
 }
@@ -570,7 +573,7 @@ def XCN_Practitioner(required XCN) {
   name[0].suffix[] : XCN.5;
   name[0].prefix[] : XCN.6;
   name[0].suffix[] : XCN.7;
-  name[0].use : Convert_TerminologyCode(XCN.10, "Name_Type");
+  name[0].use : Convert_TerminologyCode(XCN.10, "HL70200", "Name_Type");
   identifier[0].type.coding[].code : XCN.13;
   if (XCN.19 and ~XCN.20) {
     name[0].period : DR_Period(XCN.17);

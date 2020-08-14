@@ -56,7 +56,7 @@ def PID_PD1_Patient(required PID, PD1) {
   identifier[] : CX_Identifier(PID.4[]);
   name[] : XPN_HumanName(PID.5[]);
   birthDate : Extract_Date(PID.7);
-  gender : Convert_TerminologyCode(CWE_Code(PID.8), "Gender");
+  gender : Convert_TerminologyCode(CWE_Code(PID.8), "HL70001", "Gender");
   name[] : XPN_HumanName(PID.9[]);
   address[] : XAD_Address(PID.11[]);
   telecom[] : XTN_ContactPoint(PID.13[], "home");
@@ -113,16 +113,16 @@ def PID_Account(required PID_18, Patient) {
 def NK1_RelatedPerson(required NK1, Patient) {
   name[] : XPN_HumanName(NK1.2[]);
   var relationshipCC : CWE_CodeableConcept(NK1.3);
-  relationship[] (if relationshipCC) : Convert_Terminology(relationshipCC.coding[0].code, "Relationship");
+  relationship[] (if relationshipCC) : Convert_Terminology(relationshipCC.coding[0].code, "HL70063", "Relationship");
   address[] : XAD_Address(NK1.4[]);
   telecom[] :  XTN_ContactPoint(NK1.5[], "home");
   telecom[] : XTN_ContactPoint(NK1.6[], "work");
   var relationshipCC : CWE_CodeableConcept(NK1.7);
-  relationship[] (if relationshipCC) : Convert_Terminology(relationshipCC.coding[0].code, "Relationship");
+  relationship[] (if relationshipCC) : Convert_Terminology(relationshipCC.coding[0].code, "HL70063", "Relationship");
   period.start : Convert_DateTime(NK1.8);
   period.end : Convert_DateTime(NK1.9);
   identifier[] : CX_Identifier(NK1.12);
-  gender : Convert_TerminologyCode(CWE_Code(NK1.15), "Gender");
+  gender : Convert_TerminologyCode(CWE_Code(NK1.15), "HL70001", "Gender");
   birthDate : Extract_Date(NK1.16);
   communication[].language : CWE_CodeableConcept(NK1.20);
   name[] : XPN_HumanName(NK1.30[]);
@@ -179,7 +179,7 @@ def DG1_Condition(required DG1, Patient) {
 def PV1_DG1_Encounter(required PV1, DG1, Patient, Condition) {
   if (PV1.2) {
     var classCoding : CWE_Coding(PV1.2);
-    class : Convert_TerminologyCoding(classCoding.code, "Encounter_Class");
+    class : Convert_TerminologyCoding(classCoding.code, "HL70004", "Encounter_Class");
   } else {
     class.code : "AMB";
   }
@@ -210,7 +210,7 @@ def PV1_DG1_Encounter(required PV1, DG1, Patient, Condition) {
   period.start : Convert_DateTime(PV1.44);
   period.end : Convert_DateTime(PV1.45);
   if (~PV1.45 and PV1.2) {
-      status : Convert_TerminologyCode(CWE_Code(PV1.2), "Encounter_Status");
+      status : Convert_TerminologyCode(CWE_Code(PV1.2), "HL70004", "Encounter_Status");
   } else {
     status : "finished";
   }
@@ -235,12 +235,12 @@ def PV1_DG1_Encounter(required PV1, DG1, Patient, Condition) {
 //   AllergyIntolerance: https://www.hl7.org/fhir/allergyintolerance.html
 //
 def AL1_AllergyIntolerance (required AL1, Patient) {
-  category[] : Convert_TerminologyCode(CWE_Code(AL1.2), "Allergy_Category");
-  type : Convert_TerminologyCode(CWE_Code(AL1.2), "Allergy_Type");
+  category[] : Convert_TerminologyCode(CWE_Code(AL1.2), "http://terminology.hl7.org/CodeSystem/v2-0127", "Allergy_Category");
+  type : Convert_TerminologyCode(CWE_Code(AL1.2), "http://terminology.hl7.org/CodeSystem/v2-0127", "Allergy_Type");
   code : CWE_CodeableConcept(AL1.3);
   verificationStatus.coding[0].code : "confirmed";
   if (AL1.4 ~= "U") {
-    reaction[0].severity : Convert_TerminologyCode(CWE_Code(AL1.4), "Allergy_Severity");
+    reaction[0].severity : Convert_TerminologyCode(CWE_Code(AL1.4), "http://terminology.hl7.org/CodeSystem/v2-0128", "Allergy_Severity");
   }
 // TODO: Uncomment below
   //criticality : AL1.4 => CWE_Code;     Need Terminology Mapping: No mappings found in community sheet
@@ -280,7 +280,7 @@ def OBX_Observation (required OBX, Patient, Encounter) {
   }
   referenceRange[0].text : OBX.7;
   if (OBX.11) {
-    status : Convert_TerminologyCode(OBX.11, "Observation_Status");
+    status : Convert_TerminologyCode(OBX.11, "HL70085", "Observation_Status");
   } else {
     status : "registered";
   }
@@ -336,7 +336,7 @@ def OBR_ORC_DiagnosticReport(required OBR, ORC, Patient, Encounter) {
   issued : Convert_Instant(OBR.22);
 //  category[0].coding[0].code : OBR.24;      Need Terminology Mapping: No mappings found in community sheet
   if (OBR.25) {
-    status : Convert_TerminologyCode(OBR.25, "Report_Status");
+    status : Convert_TerminologyCode(OBR.25, "HL70123", "Report_Status");
   } else {
     status : "registered";    // place-holder for 1-1 cardinality
   }

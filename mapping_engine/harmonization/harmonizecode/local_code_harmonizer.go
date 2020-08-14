@@ -30,6 +30,7 @@ type cachedMap struct {
 }
 
 type cachedGroup struct {
+	sourceSystem string
 	targetSystem string
 	lookups      map[string][]ConceptElementTarget
 	unmapped     *ConceptUnmapped
@@ -65,20 +66,14 @@ func (h *LocalCodeHarmonizer) Harmonize(sourceCode, sourceSystem, sourceName str
 
 	var output []HarmonizedCode
 	for _, group := range mapGroups {
-		targets, _ := group.lookups[sourceCode]
-
-		matched := false
-		for _, target := range targets {
-			output = append(output, HarmonizedCode{
-				Version: conceptMap.version,
-				System:  group.targetSystem,
-				Code:    target.Code,
-				Display: target.Display,
-			})
-			matched = true
+		if group.sourceSystem != "" && sourceSystem != group.sourceSystem {
+			continue
 		}
-
-		if !matched && group.unmapped != nil {
+		targets, ok := group.lookups[sourceCode]
+		if !ok {
+			if group.unmapped == nil {
+				continue
+			}
 			switch mode := group.unmapped.Mode; mode {
 			case unmappedModeFixed:
 				output = append(output, HarmonizedCode{
@@ -95,6 +90,15 @@ func (h *LocalCodeHarmonizer) Harmonize(sourceCode, sourceSystem, sourceName str
 					Display: sourceCode,
 				})
 			}
+			continue
+		}
+		for _, target := range targets {
+			output = append(output, HarmonizedCode{
+				Version: conceptMap.version,
+				System:  group.targetSystem,
+				Code:    target.Code,
+				Display: target.Display,
+			})
 		}
 	}
 
@@ -149,6 +153,7 @@ func buildCachedMap(cm *ConceptMap) (cachedMap, string, error) {
 		cachedGroup := cachedGroup{
 			lookups:      lookup,
 			targetSystem: group.Target,
+			sourceSystem: group.Source,
 			unmapped:     group.Unmapped,
 		}
 		cache.groups = append(cache.groups, cachedGroup)
