@@ -249,7 +249,7 @@ func isSelectorArray(selector string) bool {
 // [ ] (empty list)
 func zip(values []jsonutil.JSONMetaNode, iterables []bool) ([][]jsonutil.JSONMetaNode, error) {
 	if len(values) != len(iterables) {
-		return nil, fmt.Errorf("bug: number of values (%d) did not match number of iterable flags (%d)", len(values), len(iterables))
+		return nil, fmt.Errorf("this is an internal bug: number of values (%d) did not match number of iterable flags (%d)", len(values), len(iterables))
 	}
 
 	// Validate that things flagged to be iterated are actually iterated.

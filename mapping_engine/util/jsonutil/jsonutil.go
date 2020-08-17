@@ -237,7 +237,7 @@ func (w DefaultAccessor) getFieldSegmented(src JSONToken, segments []string) (JS
 				if f != nil && hasArrayStar(segments[1:]) {
 					fArr, ok := f.(JSONArr)
 					if !ok {
-						return nil, fmt.Errorf("bug: found nested [*] but value was not an array (was %T)", f)
+						return nil, fmt.Errorf("this is an internal bug: found nested [*] but value was not an array (was %T)", f)
 					}
 					flatten = append(flatten, fArr...)
 				} else {
@@ -274,7 +274,7 @@ func (w DefaultAccessor) getFieldSegmented(src JSONToken, segments []string) (JS
 	case JSONNum, JSONStr, JSONBool:
 		return nil, fmt.Errorf("attempt to key into primitive with key %s", seg)
 	}
-	return nil, fmt.Errorf("JSON contained unknown data structure at %s", seg)
+	return nil, fmt.Errorf("this is an internal bug: JSON contained unknown data type %T at %s", src, seg)
 }
 
 // GetArray gets the specified array value for the provided JSON object.
@@ -435,7 +435,7 @@ func (w DefaultAccessor) setFieldSegmented(src JSONToken, segments []string, des
 	case JSONNum, JSONStr, JSONBool:
 		return fmt.Errorf("attempt to key into primitive with key %s", seg)
 	}
-	return fmt.Errorf("JSON contained unknown data structure %T at %s", *dest, seg)
+	return fmt.Errorf("this is an internal bug: JSON contained unknown data type %T at %s", *dest, seg)
 }
 
 // Merge merges two JSONTokens together. If failOnOverwrite is true, this method guarantees that no
@@ -488,7 +488,7 @@ func Merge(src JSONToken, dest *JSONToken, failOnOverwrite, overwriteArrays bool
 			return fmt.Errorf("can't merge source %T with destination %T", src, d)
 		}
 	default:
-		return fmt.Errorf("destination is of unknown type %T", d)
+		return fmt.Errorf("this is an internal bug: destination is of unknown type %T", d)
 	}
 
 	return nil
@@ -878,14 +878,14 @@ func hashObj(obj JSONToken, h hash.Hash, arrayWithoutOrder bool) error {
 	case nil:
 		return hashBytes("nil", []byte{}, h)
 	default:
-		return fmt.Errorf("unknown JSON type %T", obj)
+		return fmt.Errorf("this is an internal bug: unknown JSON type %T", obj)
 	}
 	return nil
 }
 
 func xor128(x []byte, y []byte) error {
 	if len(x) != 16 || len(y) != 16 {
-		return fmt.Errorf("xor128() got data that was not 128 bits long: %v, %v", x, y)
+		return fmt.Errorf("this is an internal bug: xor128() got data that was not 128 bits long: %v, %v", x, y)
 	}
 	for i := 0; i < 16; i++ {
 		x[i] ^= y[i]
@@ -906,7 +906,7 @@ func hashBytes(salt string, data []byte, h hash.Hash) error {
 		return err
 	}
 	if n != len(sb) {
-		return fmt.Errorf("could not write %d bytes to %T (only wrote %d): %v", len(sb), h, n, err)
+		return fmt.Errorf("this is an internal bug: could not write %d bytes to %T (only wrote %d): %v", len(sb), h, n, err)
 	}
 	return nil
 }
