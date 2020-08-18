@@ -362,6 +362,12 @@ func TestTranspile(t *testing.T) {
 									value: "foo";
 									value!: a[1].b;
 									partial.arr[].key: "bar"
+									partial.arr[].keyArr: a[0].b
+									partial.arr[].keyExpanded: a[0].b[]
+									new[].A[].C[].B:getNestedArr[](a)
+							 }
+							 def getNestedArr(arr) {
+							 		$this: arr[*].b
 							 }`,
 			wantValue: valueTest{
 				rootMappings: `out myOut: function($root.a)`,
@@ -396,9 +402,26 @@ func TestTranspile(t *testing.T) {
 									         "arr": [
 									           {
 									             "key": "bar"
-									           }
+									           },
+														 {
+														 	"keyArr": [1, 2, 3]
+														 },
+														 {"keyExpanded":1},
+														 {"keyExpanded":2},
+														 {"keyExpanded":3}
 									         ]
-									       }
+									       },
+												 "new": [
+												 		 {"A":[
+														 		{"C":[{"B":1}]},
+																{"C":[{"B":2}]},
+																{"C":[{"B":3}]}
+														 ]},
+														 {"A":[
+														 		{"C":[{"B":4}]},
+																{"C":[{"B":5}]},
+																{"C":[{"B":6}]}
+														 ]}]
 									     }
 									   ]
 									 }`,

@@ -92,9 +92,11 @@ func (w Whistler) EvaluateMapping(m *mappb.FieldMapping, args []jsonutil.JSONMet
 		m.Target = &mappb.FieldMapping_TargetField{TargetField: ""}
 	}
 
+	iterateSrc := isSrcIteratable(m.ValueSource)
+
 	switch t := m.Target.(type) {
 	case *mappb.FieldMapping_TargetField:
-		if err := writeField(srcToken, t.TargetField, output, false, w.accessor); err != nil {
+		if err := writeField(srcToken, t.TargetField, output, false, iterateSrc, w.accessor); err != nil {
 			return fmt.Errorf("could not write field %q: %v", t.TargetField, err)
 		}
 		return nil
@@ -113,7 +115,7 @@ func (w Whistler) EvaluateMapping(m *mappb.FieldMapping, args []jsonutil.JSONMet
 		// For variables, we allow to overwrite them without "!" except for array appending.
 		forceOverwrite := !isSelectorArray(field)
 
-		if err := writeField(srcToken, field, &cval, forceOverwrite, w.accessor); err != nil {
+		if err := writeField(srcToken, field, &cval, forceOverwrite, iterateSrc, w.accessor); err != nil {
 			return err
 		}
 
@@ -127,7 +129,7 @@ func (w Whistler) EvaluateMapping(m *mappb.FieldMapping, args []jsonutil.JSONMet
 		addObject(srcToken, t.TargetObject, pctx)
 		return nil
 	case *mappb.FieldMapping_TargetRootField:
-		if err := writeField(srcToken, t.TargetRootField, pctx.Output, false, w.accessor); err != nil {
+		if err := writeField(srcToken, t.TargetRootField, pctx.Output, false, iterateSrc, w.accessor); err != nil {
 			return fmt.Errorf("could not write root field %q: %v", t.TargetRootField, err)
 		}
 		return nil

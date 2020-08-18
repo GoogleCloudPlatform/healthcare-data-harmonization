@@ -88,7 +88,7 @@ func buildStackMap(layers ...map[string]jsonutil.JSONToken) types.StackMapInterf
 func makeTreeFromLeaves(t *testing.T, leaves map[string]jsonutil.JSONToken) jsonutil.JSONToken {
 	var root jsonutil.JSONToken = make(jsonutil.JSONContainer)
 	for k, v := range leaves {
-		if err := jsonutil.SetField(v, k, &root, true); err != nil {
+		if err := jsonutil.SetField(v, k, &root, true, false); err != nil {
 			t.Fatalf("error making tree from leaves: can't set %q to %v: %v", k, v, err)
 		}
 	}

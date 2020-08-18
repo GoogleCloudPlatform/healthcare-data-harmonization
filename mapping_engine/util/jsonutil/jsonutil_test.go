@@ -840,7 +840,7 @@ func TestSetField(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 
 			jOrig := mustParseJSON(t, testMsg)
-			err := SetField(test.val, test.field, &jOrig, test.overwrite)
+			err := SetField(test.val, test.field, &jOrig, test.overwrite, false)
 			if err != nil {
 				t.Errorf("SetField(%v, %v, %v, %v) returned unexpected error %v", test.val, test.field, jOrig, test.overwrite, err)
 			}
@@ -856,11 +856,12 @@ func TestSetField(t *testing.T) {
 
 func TestSetField_Arrays(t *testing.T) {
 	tests := []struct {
-		name      string
-		msg       json.RawMessage
-		values    map[string]interface{}
-		overwrite bool
-		want      json.RawMessage
+		name         string
+		msg          json.RawMessage
+		values       map[string]interface{}
+		overwrite    bool
+		matchNesting bool
+		want         json.RawMessage
 	}{
 		{
 			name: "new array",
@@ -901,6 +902,50 @@ func TestSetField_Arrays(t *testing.T) {
 			overwrite: false,
 			want:      json.RawMessage(`{"existing":[0,false,1,true]}`),
 		},
+		{
+			name: "matchNesting false - array append directly",
+			msg:  json.RawMessage(`{"existing":[0, false]}`),
+			values: map[string]interface{}{
+				"existing[].additional": []interface{}{1, true},
+			},
+			overwrite:    false,
+			matchNesting: false,
+			want:         json.RawMessage(`{"existing":[0,false, {"additional" : [1,true]}]}`),
+		},
+		{
+			name: "matchNesting true - array append with containers",
+			msg:  json.RawMessage(`{"existing":[0, false]}`),
+			values: map[string]interface{}{
+				"existing[].additional": []interface{}{1, true},
+			},
+			overwrite:    false,
+			matchNesting: true,
+			want:         json.RawMessage(`{"existing":[0,false,{"additional": 1}, {"additional": true}]}`),
+		},
+		{
+			name: "nested array fields matchNesting true - target have more nesting layers than source",
+			msg:  json.RawMessage(`{"existing":[{"A": [{"B": [{"C": false}]}]}]}`),
+			values: map[string]interface{}{ //"existing[].A.B[].C": [1, true]
+				"existing[].A[].B[].C": []interface{}{1, true},
+			},
+			overwrite:    false,
+			matchNesting: true,
+			want: json.RawMessage(`{"existing":[{"A":[{"B":[{"C":false}]}]},
+																									{"A":[{"B":[{"C":1}]}]},
+																									{"A":[{"B":[{"C":true}]}]}
+																								 ]}`),
+		},
+		{
+			name: "nested array fields matchNesting true - target has less nesting layers than source",
+			msg:  json.RawMessage(`{"existing":[{"A": [{"B": [{"C": false}]}] }]}`),
+			values: map[string]interface{}{ // existing[].A.B[].C: [[[1], [2]], [[3, 4]]]
+				"existing[].A[].B": []interface{}{[]interface{}{[]interface{}{1}, []interface{}{2}}, []interface{}{[]interface{}{3, 4}}},
+			},
+			overwrite:    false,
+			matchNesting: true,
+			// want:         json.RawMessage(`{"existing":[{"A":[{"B":[{"C":false}]}]},{"A":{"B":[{"C":[1]},{"C":[2]}]}},{"A":{"B":[{"C":[3,4]}]}}]}`),
+			want: json.RawMessage(`{"existing":[{"A":[{"B":[{"C":false}]}]},{"A":[{"B":[1]},{"B":[2]}]},{"A":[{"B":[3,4]}]}]}`),
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
@@ -912,7 +957,7 @@ func TestSetField_Arrays(t *testing.T) {
 					t.Fatalf("can't convert value %v to json: %v", v, err)
 				}
 
-				if err := SetField(jv, k, &jOrig, test.overwrite); err != nil {
+				if err := SetField(jv, k, &jOrig, test.overwrite, test.matchNesting); err != nil {
 					t.Errorf("SetField(%v, %v, %v, %v) returned unexpected error %v", k, v, jOrig, test.overwrite, err)
 				}
 			}

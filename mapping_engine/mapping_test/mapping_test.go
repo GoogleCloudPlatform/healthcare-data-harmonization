@@ -260,6 +260,32 @@ func TestEvaluateValueSourceWhistler(t *testing.T) {
 			want: mustTokenToNode(t, mustParseArray(json.RawMessage(`[{"bar":{"meep": 1}, "foo":"bar"}, {"bar":{"meep": 2}, "foo":"bar"}, {"bar":{"meep": 3}, "foo":"bar"}]`), t)),
 		},
 		{
+			name: "invalid json without []",
+			argVs: mappb.ValueSource{
+				Source: &mappb.ValueSource_FromInput{
+					FromInput: &mappb.ValueSource_InputSource{
+						Arg:   1,
+						Field: "foo",
+					},
+				},
+			},
+			args: []jsonutil.JSONToken{mustParseContainer(json.RawMessage(`{"foo": [{"meep": 1}, {"meep": 2}, {"meep": 3}]}`), t)},
+			want: mustTokenToNode(t, mustParseArray(json.RawMessage(`[{"meep": 1}, {"meep": 2}, {"meep": 3}]`), t)),
+		},
+		{
+			name: "invalid json []",
+			argVs: mappb.ValueSource{
+				Source: &mappb.ValueSource_FromInput{
+					FromInput: &mappb.ValueSource_InputSource{
+						Arg:   1,
+						Field: "foo[]",
+					},
+				},
+			},
+			args: []jsonutil.JSONToken{mustParseContainer(json.RawMessage(`{"foo": [{"meep": 1}, {"meep": 2}, {"meep": 3}]}`), t)},
+			want: mustTokenToNode(t, mustParseArray(json.RawMessage(`[{"meep": 1}, {"meep": 2},{"meep": 3}]`), t)),
+		},
+		{
 			name: "enumerated multiple arrays as zipped args",
 			argVs: mappb.ValueSource{
 				Source: &mappb.ValueSource_FromInput{

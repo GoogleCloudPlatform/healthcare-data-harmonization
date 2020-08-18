@@ -93,6 +93,8 @@ func addObject(src jsonutil.JSONToken, targetObject string, pctx *types.Context)
 
 // EvaluateValueSource "interprets" a single value source. The source is converted into a JSONToken
 // representation of its value (or an error).
+// More specifically, the value of each argument is either evaluated or fetched from the corresponding source/environment.
+// Then each set of argument is passed into the projector, the resulting value is stored into a JSONMetaNode.
 func EvaluateValueSource(vs *mappb.ValueSource, args []jsonutil.JSONMetaNode, output jsonutil.JSONToken, pctx *types.Context, a jsonutil.JSONTokenAccessor) (jsonutil.JSONMetaNode, error) {
 	if vs == nil {
 		return nil, errors.New("nil value source pointer")
@@ -640,6 +642,18 @@ func readField(src jsonutil.JSONToken, field string, a jsonutil.JSONTokenAccesso
 	return a.GetField(src, strings.TrimSuffix(field, "[]"))
 }
 
-func writeField(src jsonutil.JSONToken, field string, dest *jsonutil.JSONToken, forceOverwrite bool, a jsonutil.JSONTokenAccessor) error {
-	return a.SetField(src, strings.TrimSuffix(field, "!"), dest, forceOverwrite || strings.HasSuffix(field, "!"))
+func writeField(src jsonutil.JSONToken, field string, dest *jsonutil.JSONToken, forceOverwrite bool, srcIterate bool, a jsonutil.JSONTokenAccessor) error {
+	return a.SetField(src, strings.TrimSuffix(field, "!"), dest, forceOverwrite || strings.HasSuffix(field, "!"), srcIterate)
+}
+
+func isSrcIteratable(vs *mappb.ValueSource) bool {
+	if strings.HasSuffix(vs.Projector, "[]") {
+		return true
+	}
+	if vs.Projector == "" {
+		if vs.GetSource() != nil {
+			return isArray(vs)
+		}
+	}
+	return false
 }

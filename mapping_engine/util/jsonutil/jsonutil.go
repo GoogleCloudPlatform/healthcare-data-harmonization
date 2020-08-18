@@ -162,7 +162,8 @@ func hasArrayStar(segments []string) bool {
 // JSONTokenAccessor defines an interface for accessing JSONToken with different engines.
 type JSONTokenAccessor interface {
 	GetField(src JSONToken, field string) (JSONToken, error)
-	SetField(src JSONToken, field string, dest *JSONToken, forceOverwrite bool) error
+	SetField(src JSONToken, field string, dest *JSONToken, forceOverwrite bool, matchNesting bool) error
+	setFieldSegmented(src JSONToken, segments []string, dest *JSONToken, overwrite bool, matchNesting bool) error
 }
 
 // DefaultAccessor is a default JSONTokenAccessor to read/write JSONToken and used by the engine Whistler.
@@ -344,31 +345,35 @@ func HasField(j JSONToken, path string) (bool, error) {
 	return obj != nil, err
 }
 
-// SetField sets the specified field value for the provided JSON object.
+// SetField sets the specified field of dest JSONToken into the src provided.
 // Nested fields can be accessed using the "." notation and repeated fields can be accessed using
 // the "[i]" notation. E.g. name[0].first.
 // dest can be of primitive, array or object.
+// if matchNesting is set to True, each element in src will be unpacked at each level and pass to the corresponding field.
 // For example,
-// SetField({"foo": {"bar": 1}}, "foo.baz", 0, false) => {"foo": {"bar": 1, "baz": 0}}
-// SetField({"foo": {"bar": 1}}, "foo.bar", 0, true) => {"foo": {"bar": 0}}
-// SetField({"foo": [0]}, "foo[]", 1, false) => {"foo": [0, 1]}
-func SetField(src JSONToken, field string, dest *JSONToken, overwrite bool) error {
+// SetField(0, "foo.baz", &{"foo": {"bar": 1}}, false, false) => {"foo": {"bar": 1, "baz": 0}}
+// SetField(0, "foo.bar", &{"foo": {"bar": 1}}, true, false) => {"foo": {"bar": 0}}
+// SetField(1, "foo[]", &{"foo": [0]}, false, false) => {"foo": [0, 1]}
+// SetField(1, "foo[]", &{"foo": [0]}, false, false) => {"foo": [0, 1]}
+// SetField{[1, 2], "foo[].bar", &{"foo": [0]}, false, false) => {"foo": [0, {"bar": [1, 2]}]}
+// SetField{[1, 2], "foo[].bar", &{"foo": [0]}, false, true) => {"foo": [0, {"bar": 1}, {"bar": 2}]}
+func SetField(src JSONToken, field string, dest *JSONToken, overwrite bool, matchNesting bool) error {
 	w := DefaultAccessor{}
-	return w.SetField(src, field, dest, overwrite)
+	return w.SetField(src, field, dest, overwrite, matchNesting)
 }
 
 // SetField sets the specified field value for the provided JSON object.
-func (w DefaultAccessor) SetField(src JSONToken, field string, dest *JSONToken, overwrite bool) error {
+func (w DefaultAccessor) SetField(src JSONToken, field string, dest *JSONToken, overwrite bool, matchNesting bool) error {
 	segments, err := SegmentPath(field)
 	if err != nil {
 		return fmt.Errorf("failed to segment path: %v", err)
 	}
-	return w.setFieldSegmented(src, segments, dest, overwrite)
+	return w.setFieldSegmented(src, segments, dest, overwrite, matchNesting)
 }
 
 // setFieldSegmented sets the specified field value for the provided JSON object.
 // segments are path segments like ["foo", "bar", "array", "[2]", "value"].
-func (w DefaultAccessor) setFieldSegmented(src JSONToken, segments []string, dest *JSONToken, overwrite bool) error {
+func (w DefaultAccessor) setFieldSegmented(src JSONToken, segments []string, dest *JSONToken, overwrite bool, matchNesting bool) error {
 	if len(segments) == 0 {
 		if overwrite {
 			*dest = src
@@ -389,41 +394,11 @@ func (w DefaultAccessor) setFieldSegmented(src JSONToken, segments []string, des
 
 	switch o := (*dest).(type) {
 	case JSONArr:
-		if seg == "[]" {
-			// If both of src and dest are arrays, src will be appended into dest.
-			if a, isArr := src.(JSONArr); len(segments) == 1 && isArr {
-				*dest = append(o, a...)
-				return nil
-			}
-			seg = fmt.Sprintf("[%d]", len(o))
-		}
-		if !IsIndex(seg) {
-			return fmt.Errorf("expected an array index with brackets like [123] but got %s", seg)
-		}
-
-		idxSubstr := seg[1 : len(seg)-1]
-
-		if idxSubstr == "*" {
-			return fmt.Errorf("cannot use [*] when writing to a field (can only use it when reading)")
-		}
-
-		idx, err := strconv.Atoi(idxSubstr)
-		if err != nil {
-			return fmt.Errorf("could not parse array index %s: %v", seg, err)
-		}
-
-		if idx < 0 {
-			return fmt.Errorf("negative array indices are not supported but got %d", idx)
-		}
-		if idx >= len(o) {
-			o = append(o, make(JSONArr, idx-len(o)+1)...)
-			*dest = o
-		}
-		return w.setFieldSegmented(src, segments[1:], &o[idx], overwrite)
+		return setArrField(w, src, segments, dest, overwrite, matchNesting)
 	case JSONContainer:
 		if seg == "" || seg == "." {
 			var obj JSONToken = o
-			return w.setFieldSegmented(src, segments[1:], &obj, overwrite)
+			return w.setFieldSegmented(src, segments[1:], &obj, overwrite, matchNesting)
 		}
 		item, ok := o[seg]
 		if !ok {
@@ -431,11 +406,72 @@ func (w DefaultAccessor) setFieldSegmented(src JSONToken, segments []string, des
 			item = &n
 			o[seg] = item
 		}
-		return w.setFieldSegmented(src, segments[1:], item, overwrite)
+		return w.setFieldSegmented(src, segments[1:], item, overwrite, matchNesting)
 	case JSONNum, JSONStr, JSONBool:
 		return fmt.Errorf("attempt to key into primitive with key %s", seg)
 	}
 	return fmt.Errorf("this is an internal bug: JSON contained unknown data type %T at %s", *dest, seg)
+}
+
+// setArrField sets the specified field(s) in *dest to data in src using the
+// Accessor acc (either in parallel or sequentially) when *dest is a JSONArr.
+// the field(s) to set values are determined by path segments like like ["foo",
+// "bar", "array", "[2]", "value", "[]"]. when overwrite is set to true, the
+// field will be overwritten by the new data when matchNesting is set to true,
+// everytime the segment is '[]', each element in src array will be unpacked and
+// appended to the dest array as a separate container i.e. dest[].field: src[]
+// is equivalant to for s in src {dest[].field : s} When there are more
+// appending operation in dest than the src, the src will be expanded until the
+// deepest layer of the target
+// E.g.
+// setField([1,2], ['A', '[]', 'B', '[]', 'C'], &{"A": [0]}, false, true} => {"A": [0, {"B": [{"C": 1}, {"C": 2}]}]}
+// setField([[1, 2],[[3]], 4], ['A', '[]', 'B', '[]', 'C'], &{"A": [0]}, false, true} => {"A": [0, {"B": [{"C": 1}, {"C": 2}]}, {"B": [{"C": [3]}]}, {"B": [{"C": 4}]}]}
+func setArrField(acc JSONTokenAccessor, src JSONToken, segments []string, dest *JSONToken, overwrite bool, matchNesting bool) error {
+	o := (*dest).(JSONArr)
+	seg := segments[0]
+	if seg == "[]" {
+		// If both of src and dest are arrays, src will be appended into dest.
+		if a, isArr := src.(JSONArr); isArr {
+			if len(segments) == 1 {
+				*dest = append(o, a...)
+				return nil
+			} else if matchNesting {
+				for _, element := range a {
+					n := JSONToken(nil)
+					item := &n
+					if err := acc.setFieldSegmented(element, segments[1:], item, overwrite, matchNesting); err != nil {
+						return err
+					}
+					*dest = append((*dest).(JSONArr), n)
+				}
+				return nil
+			}
+		}
+		seg = fmt.Sprintf("[%d]", len(o))
+	}
+	if !IsIndex(seg) {
+		return fmt.Errorf("expected an array index with brackets like [123] but got %s", seg)
+	}
+
+	idxSubstr := seg[1 : len(seg)-1]
+
+	if idxSubstr == "*" {
+		return fmt.Errorf("cannot use [*] when writing to a field (can only use it when reading)")
+	}
+
+	idx, err := strconv.Atoi(idxSubstr)
+	if err != nil {
+		return fmt.Errorf("could not parse array index %s: %v", seg, err)
+	}
+
+	if idx < 0 {
+		return fmt.Errorf("negative array indices are not supported but got %d", idx)
+	}
+	if idx >= len(o) {
+		o = append(o, make(JSONArr, idx-len(o)+1)...)
+		*dest = o
+	}
+	return acc.setFieldSegmented(src, segments[1:], &o[idx], overwrite, matchNesting)
 }
 
 // Merge merges two JSONTokens together. If failOnOverwrite is true, this method guarantees that no
