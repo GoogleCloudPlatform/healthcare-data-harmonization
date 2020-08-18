@@ -28,6 +28,7 @@ def MSH_MessageHeader (required MSH) {
   }
   meta.security[0].code: MSH.8;
   eventCoding.code : MSH.9.2
+  eventCoding.display : $StrCat(MSH.9.1, "^", MSH.9.2, "^", MSH.9.3)
   eventCoding.system : "http://terminology.hl7.org/CodeSystem/v2-0003";
   meta.tag[0].code : MSH.11.1;
   meta.tag[0].system : "http://terminology.hl7.org/CodeSystem/v2-0103";
@@ -216,7 +217,7 @@ def PV1_DG1_Encounter(required PV1, DG1, Patient, Condition) {
   }
   identifier[] : CX_Identifier(PV1.50[]);
   participant[] : Build_Participant(PV1.52[], "PART", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType", "Participation");
-  if (DG1 ~= "" or Condition ~= "") {
+  if (DG1 or Condition) {
     diagnosis[] : DG1_Encounter(DG1[], Condition[]);
     episodeOfCare[] : Build_Reference(Output_Resource(CX_DG1_EpisodeOfCare(PV1.54, DG1, Condition, Patient)));
   }

@@ -1,8 +1,10 @@
 {
-   "resourceType":"Bundle",
-   "type":"transaction",
    "entry":[
       {
+         "request":{
+            "url":"Organization/01010101-0101-4101-8101-010101010101",
+            "method":"PUT"
+         },
          "resource":{
             "resourceType":"Organization",
             "identifier":[
@@ -11,51 +13,35 @@
                }
             ],
             "id":"01010101-0101-4101-8101-010101010101"
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Organization/01010101-0101-4101-8101-010101010101"
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"Organization/02020202-0202-4202-8202-020202020202"
+         },
          "resource":{
-            "resourceType":"Organization",
             "identifier":[
                {
                   "value":"UNV"
                }
             ],
-            "id":"02020202-0202-4202-8202-020202020202"
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Organization/02020202-0202-4202-8202-020202020202"
+            "id":"02020202-0202-4202-8202-020202020202",
+            "resourceType":"Organization"
          }
       },
       {
-         "request":{
-            "url":"MessageHeader/03030303-0303-4303-8303-030303030303",
-            "method":"PUT"
-         },
          "resource":{
-            "destination":[
-               {
-                  "name":"PREMISE",
-                  "receiver":{
-                     "reference":"Organization/02020202-0202-4202-8202-020202020202"
-                  },
-                  "endpoint":"UNV"
-               }
-            ],
             "eventCoding":{
+               "display":"ADT^A04^",
                "system":"http://terminology.hl7.org/CodeSystem/v2-0003",
                "code":"A04"
             },
             "meta":{
                "tag":[
                   {
-                     "code":"P",
-                     "system":"http://terminology.hl7.org/CodeSystem/v2-0103"
+                     "system":"http://terminology.hl7.org/CodeSystem/v2-0103",
+                     "code":"P"
                   },
                   {
                      "system":"http://terminology.hl7.org/CodeSystem/v2-0207"
@@ -70,14 +56,23 @@
             },
             "sender":{
                "reference":"Organization/01010101-0101-4101-8101-010101010101"
-            }
+            },
+            "destination":[
+               {
+                  "name":"PREMISE",
+                  "receiver":{
+                     "reference":"Organization/02020202-0202-4202-8202-020202020202"
+                  },
+                  "endpoint":"UNV"
+               }
+            ]
+         },
+         "request":{
+            "method":"PUT",
+            "url":"MessageHeader/03030303-0303-4303-8303-030303030303"
          }
       },
       {
-         "request":{
-            "url":"Device/04040404-0404-4404-8404-040404040404",
-            "method":"PUT"
-         },
          "resource":{
             "resourceType":"Device",
             "identifier":[
@@ -86,6 +81,10 @@
                }
             ],
             "id":"04040404-0404-4404-8404-040404040404"
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Device/04040404-0404-4404-8404-040404040404"
          }
       },
       {
@@ -107,16 +106,24 @@
             ]
          },
          "request":{
-            "method":"PUT",
-            "url":"Provenance/05050505-0505-4505-8505-050505050505"
+            "url":"Provenance/05050505-0505-4505-8505-050505050505",
+            "method":"PUT"
          }
       },
       {
-         "request":{
-            "method":"PUT",
-            "url":"Patient/06060606-0606-4606-8606-060606060606"
-         },
          "resource":{
+            "address":[
+               {
+                  "country":"USA",
+                  "line":[
+                     "1234 LOONEY RD",
+                     "APT A"
+                  ],
+                  "city":"CRAIGMONT",
+                  "state":"ID",
+                  "postalCode":"83523"
+               }
+            ],
             "active":true,
             "id":"06060606-0606-4606-8606-060606060606",
             "resourceType":"Patient",
@@ -125,10 +132,12 @@
                   "value":"19050114293307.1082"
                },
                {
+                  "system":"http://hl7.org/fhir/sid/us-ssn",
                   "value":"111-11-1111",
                   "type":{
                      "coding":[
                         {
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
                            "code":"SB"
                         }
                      ]
@@ -146,60 +155,52 @@
             ],
             "name":[
                {
-                  "family":"BUNNY",
                   "given":[
                      "BUGS",
                      "RABBIT"
                   ],
                   "suffix":[
                      "MS"
-                  ]
+                  ],
+                  "family":"BUNNY"
                }
             ],
             "birthDate":"1983-02-15",
-            "gender":"male",
-            "address":[
-               {
-                  "city":"CRAIGMONT",
-                  "state":"ID",
-                  "postalCode":"83523",
-                  "country":"USA",
-                  "line":[
-                     "1234 LOONEY RD",
-                     "APT A"
-                  ]
-               }
-            ]
+            "gender":"male"
+         },
+         "request":{
+            "url":"Patient/06060606-0606-4606-8606-060606060606",
+            "method":"PUT"
          }
       },
       {
-         "request":{
-            "url":"Account/07070707-0707-4707-8707-070707070707",
-            "method":"PUT"
-         },
          "resource":{
-            "subject":[
-               {
-                  "reference":"Patient/06060606-0606-4606-8606-060606060606"
-               }
-            ],
-            "status":"active",
             "id":"07070707-0707-4707-8707-070707070707",
             "resourceType":"Account",
             "identifier":[
                {
                   "value":"111-11-1111"
                }
-            ]
+            ],
+            "subject":[
+               {
+                  "reference":"Patient/06060606-0606-4606-8606-060606060606"
+               }
+            ],
+            "status":"active"
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Account/07070707-0707-4707-8707-070707070707"
          }
       },
       {
          "resource":{
-            "id":"0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b",
-            "resourceType":"Location",
             "partOf":{
                "reference":"Location/09090909-0909-4909-8909-090909090909"
             },
+            "id":"0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b",
+            "resourceType":"Location",
             "name":"ED",
             "mode":"instance",
             "physicalType":{
@@ -218,7 +219,6 @@
       },
       {
          "resource":{
-            "id":"0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c",
             "resourceType":"Location",
             "partOf":{
                "reference":"Location/0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b"
@@ -231,25 +231,21 @@
                      "code":"ro"
                   }
                ]
-            }
+            },
+            "id":"0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c"
          },
          "request":{
-            "method":"PUT",
-            "url":"Location/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c"
+            "url":"Location/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c",
+            "method":"PUT"
          }
       },
       {
-         "request":{
-            "method":"PUT",
-            "url":"Location/0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d"
-         },
          "resource":{
-            "id":"0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d",
             "resourceType":"Location",
-            "mode":"instance",
             "partOf":{
                "reference":"Location/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c"
             },
+            "mode":"instance",
             "physicalType":{
                "coding":[
                   {
@@ -257,23 +253,28 @@
                      "code":"bd"
                   }
                ]
-            }
+            },
+            "id":"0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d"
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Location/0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d"
          }
       },
       {
          "resource":{
-            "id":"08080808-0808-4808-8808-080808080808",
-            "resourceType":"Location",
-            "name":"UNV",
             "mode":"instance",
             "physicalType":{
                "coding":[
                   {
-                     "code":"si",
-                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type"
+                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type",
+                     "code":"si"
                   }
                ]
-            }
+            },
+            "id":"08080808-0808-4808-8808-080808080808",
+            "resourceType":"Location",
+            "name":"UNV"
          },
          "request":{
             "method":"PUT",
@@ -287,33 +288,27 @@
          },
          "resource":{
             "id":"09090909-0909-4909-8909-090909090909",
+            "partOf":{
+               "reference":"Location/08080808-0808-4808-8808-080808080808"
+            },
             "resourceType":"Location",
             "mode":"instance",
             "physicalType":{
                "coding":[
                   {
-                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type",
-                     "code":"bu"
+                     "code":"bu",
+                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type"
                   }
                ]
-            },
-            "partOf":{
-               "reference":"Location/08080808-0808-4808-8808-080808080808"
             }
          }
       },
       {
          "request":{
-            "url":"Location/0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a",
-            "method":"PUT"
+            "method":"PUT",
+            "url":"Location/0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a"
          },
          "resource":{
-            "id":"0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a",
-            "resourceType":"Location",
-            "partOf":{
-               "reference":"Location/09090909-0909-4909-8909-090909090909"
-            },
-            "mode":"instance",
             "physicalType":{
                "coding":[
                   {
@@ -321,13 +316,21 @@
                      "code":"lvl"
                   }
                ]
-            }
+            },
+            "id":"0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a",
+            "partOf":{
+               "reference":"Location/09090909-0909-4909-8909-090909090909"
+            },
+            "resourceType":"Location",
+            "mode":"instance"
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"Practitioner/0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e"
+         },
          "resource":{
-            "id":"0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e",
-            "resourceType":"Practitioner",
             "identifier":[
                {
                   "value":"999-99-9999"
@@ -335,7 +338,6 @@
             ],
             "name":[
                {
-                  "family":"MUNCHER",
                   "given":[
                      "CHANDRA",
                      "ANDRIA"
@@ -345,104 +347,87 @@
                   ],
                   "prefix":[
                      "DR"
-                  ]
+                  ],
+                  "family":"MUNCHER"
                }
-            ]
-         },
-         "request":{
-            "url":"Practitioner/0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e",
-            "method":"PUT"
+            ],
+            "id":"0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e",
+            "resourceType":"Practitioner"
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"Practitioner/0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f"
+         },
          "resource":{
+            "name":[
+               {
+                  "family":"SMETHERS",
+                  "given":[
+                     "ANNETTA",
+                     "JONI"
+                  ],
+                  "suffix":[
+                     "MD"
+                  ],
+                  "prefix":[
+                     "DR"
+                  ]
+               }
+            ],
             "id":"0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f",
             "resourceType":"Practitioner",
             "identifier":[
                {
                   "value":"888-88-8888"
                }
-            ],
-            "name":[
-               {
-                  "suffix":[
-                     "MD"
-                  ],
-                  "prefix":[
-                     "DR"
-                  ],
-                  "family":"SMETHERS",
-                  "given":[
-                     "ANNETTA",
-                     "JONI"
-                  ]
-               }
             ]
-         },
-         "request":{
-            "url":"Practitioner/0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f",
-            "method":"PUT"
          }
       },
       {
-         "request":{
-            "url":"EpisodeOfCare/10101010-1010-4010-9010-101010101010",
-            "method":"PUT"
-         },
          "resource":{
             "id":"10101010-1010-4010-9010-101010101010",
-            "resourceType":"EpisodeOfCare",
-            "status":"finished",
-            "patient":{
-               "reference":"Patient/06060606-0606-4606-8606-060606060606"
-            }
-         }
-      },
-      {
-         "request":{
-            "method":"PUT",
-            "url":"Encounter/11111111-1111-4111-9111-111111111111"
-         },
-         "resource":{
-            "period":{
-               "start":"2018-03-01T01:00:00+03:00"
-            },
-            "class":{
-               "version":"v1",
-               "display":"emergency",
-               "system":"http://terminology.hl7.org/CodeSystem/v3-ActCode",
-               "code":"EMER"
-            },
-            "status":"in-progress",
-            "identifier":[
+            "participant":[
                {
-                  "type":{
-                     "text":"visit number",
-                     "coding":[
-                        {
-                           "code":"VN",
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
-                        }
-                     ]
-                  }
-               }
-            ],
-            "id":"11111111-1111-4111-9111-111111111111",
-            "hospitalization":{
-               "admitSource":{
-                  "coding":[
+                  "type":[
                      {
-                        "code":"7"
+                        "coding":[
+                           {
+                              "system":"http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+                              "display":"attender",
+                              "code":"ATND"
+                           }
+                        ]
+                     }
+                  ],
+                  "individual":{
+                     "reference":"Practitioner/0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e"
+                  }
+               },
+               {
+                  "individual":{
+                     "reference":"Practitioner/0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f"
+                  },
+                  "type":[
+                     {
+                        "coding":[
+                           {
+                              "system":"http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+                              "display":"referrer",
+                              "code":"REF"
+                           }
+                        ]
                      }
                   ]
                }
-            },
+            ],
             "location":[
                {
-                  "status":"active",
                   "location":{
                      "reference":"Location/0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b"
-                  }
+                  },
+                  "status":"active"
                },
                {
                   "location":{
@@ -475,9 +460,29 @@
                   }
                }
             ],
-            "subject":{
-               "reference":"Patient/06060606-0606-4606-8606-060606060606"
+            "hospitalization":{
+               "admitSource":{
+                  "coding":[
+                     {
+                        "code":"7"
+                     }
+                  ]
+               }
             },
+            "identifier":[
+               {
+                  "type":{
+                     "text":"visit number",
+                     "coding":[
+                        {
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
+                           "code":"VN"
+                        }
+                     ]
+                  }
+               }
+            ],
+            "resourceType":"Encounter",
             "type":[
                {
                   "coding":[
@@ -487,51 +492,30 @@
                   ]
                }
             ],
-            "participant":[
-               {
-                  "type":[
-                     {
-                        "coding":[
-                           {
-                              "code":"ATND",
-                              "system":"http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
-                              "display":"attender"
-                           }
-                        ]
-                     }
-                  ],
-                  "individual":{
-                     "reference":"Practitioner/0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e"
-                  }
-               },
-               {
-                  "individual":{
-                     "reference":"Practitioner/0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f"
-                  },
-                  "type":[
-                     {
-                        "coding":[
-                           {
-                              "display":"referrer",
-                              "code":"REF",
-                              "system":"http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
-                           }
-                        ]
-                     }
-                  ]
-               }
-            ],
-            "resourceType":"Encounter",
-            "episodeOfCare":[
-               {
-                  "reference":"EpisodeOfCare/10101010-1010-4010-9010-101010101010"
-               }
-            ]
+            "class":{
+               "code":"EMER",
+               "version":"v1",
+               "display":"emergency",
+               "system":"http://terminology.hl7.org/CodeSystem/v3-ActCode"
+            },
+            "subject":{
+               "reference":"Patient/06060606-0606-4606-8606-060606060606"
+            },
+            "period":{
+               "start":"2018-03-01T01:00:00+03:00"
+            },
+            "status":"in-progress"
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Encounter/10101010-1010-4010-9010-101010101010"
          }
       }
    ],
    "timestamp":"2018-03-01T01:00:00.1331Z",
    "identifier":{
       "value":"IHS-20180301010000.00120"
-   }
+   },
+   "resourceType":"Bundle",
+   "type":"transaction"
 }

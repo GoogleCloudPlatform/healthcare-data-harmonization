@@ -17,31 +17,32 @@
             "resourceType":"Organization"
          },
          "request":{
-            "method":"PUT",
-            "url":"Organization/01010101-0101-4101-8101-010101010101"
-         }
-      },
-      {
-         "resource":{
-            "id":"02020202-0202-4202-8202-020202020202",
-            "resourceType":"Organization",
-            "identifier":[
-               {
-                  "value":"GH_CSF"
-               }
-            ]
-         },
-         "request":{
-            "url":"Organization/02020202-0202-4202-8202-020202020202",
+            "url":"Organization/01010101-0101-4101-8101-010101010101",
             "method":"PUT"
          }
       },
       {
+         "resource":{
+            "identifier":[
+               {
+                  "value":"GH_CSF"
+               }
+            ],
+            "id":"02020202-0202-4202-8202-020202020202",
+            "resourceType":"Organization"
+         },
          "request":{
             "method":"PUT",
-            "url":"MessageHeader/03030303-0303-4303-8303-030303030303"
-         },
+            "url":"Organization/02020202-0202-4202-8202-020202020202"
+         }
+      },
+      {
          "resource":{
+            "eventCoding":{
+               "code":"R01",
+               "display":"ORU^R01^",
+               "system":"http://terminology.hl7.org/CodeSystem/v2-0003"
+            },
             "meta":{
                "tag":[
                   {
@@ -64,20 +65,24 @@
             },
             "destination":[
                {
-                  "endpoint":"GH_CSF",
                   "name":"CE_CENTRAL",
                   "receiver":{
                      "reference":"Organization/02020202-0202-4202-8202-020202020202"
-                  }
+                  },
+                  "endpoint":"GH_CSF"
                }
-            ],
-            "eventCoding":{
-               "system":"http://terminology.hl7.org/CodeSystem/v2-0003",
-               "code":"R01"
-            }
+            ]
+         },
+         "request":{
+            "method":"PUT",
+            "url":"MessageHeader/03030303-0303-4303-8303-030303030303"
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"Device/04040404-0404-4404-8404-040404040404"
+         },
          "resource":{
             "resourceType":"Device",
             "identifier":[
@@ -86,21 +91,10 @@
                }
             ],
             "id":"04040404-0404-4404-8404-040404040404"
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Device/04040404-0404-4404-8404-040404040404"
          }
       },
       {
          "resource":{
-            "agent":[
-               {
-                  "who":{
-                     "reference":"Device/04040404-0404-4404-8404-040404040404"
-                  }
-               }
-            ],
             "recorded":"2025-10-14T15:40:01.14101014Z",
             "target":[
                {
@@ -108,30 +102,39 @@
                }
             ],
             "id":"05050505-0505-4505-8505-050505050505",
-            "resourceType":"Provenance"
+            "resourceType":"Provenance",
+            "agent":[
+               {
+                  "who":{
+                     "reference":"Device/04040404-0404-4404-8404-040404040404"
+                  }
+               }
+            ]
          },
          "request":{
-            "method":"PUT",
-            "url":"Provenance/05050505-0505-4505-8505-050505050505"
+            "url":"Provenance/05050505-0505-4505-8505-050505050505",
+            "method":"PUT"
          }
       },
       {
          "resource":{
             "identifier":[
                {
+                  "value":"10002",
                   "type":{
                      "coding":[
                         {
                            "code":"MR"
                         }
                      ]
-                  },
-                  "value":"10002"
+                  }
                },
                {
+                  "system":"http://hl7.org/fhir/sid/us-ssn",
                   "type":{
                      "coding":[
                         {
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
                            "code":"SB"
                         }
                      ]
@@ -162,7 +165,14 @@
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"Observation/07070707-0707-4707-8707-070707070707"
+         },
          "resource":{
+            "subject":{
+               "reference":"Patient/06060606-0606-4606-8606-060606060606"
+            },
             "id":"07070707-0707-4707-8707-070707070707",
             "resourceType":"Observation",
             "code":{
@@ -173,22 +183,18 @@
                ]
             },
             "valueString":"68",
-            "status":"unknown",
-            "subject":{
-               "reference":"Patient/06060606-0606-4606-8606-060606060606"
-            }
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Observation/07070707-0707-4707-8707-070707070707"
+            "status":"unknown"
          }
       },
       {
          "request":{
-            "url":"Observation/08080808-0808-4808-8808-080808080808",
-            "method":"PUT"
+            "method":"PUT",
+            "url":"Observation/08080808-0808-4808-8808-080808080808"
          },
          "resource":{
+            "subject":{
+               "reference":"Patient/06060606-0606-4606-8606-060606060606"
+            },
             "id":"08080808-0808-4808-8808-080808080808",
             "resourceType":"Observation",
             "code":{
@@ -199,19 +205,11 @@
                ]
             },
             "valueString":"0",
-            "status":"unknown",
-            "subject":{
-               "reference":"Patient/06060606-0606-4606-8606-060606060606"
-            }
+            "status":"unknown"
          }
       },
       {
          "resource":{
-            "subject":{
-               "reference":"Patient/06060606-0606-4606-8606-060606060606"
-            },
-            "id":"09090909-0909-4909-8909-090909090909",
-            "resourceType":"Observation",
             "code":{
                "coding":[
                   {
@@ -220,7 +218,12 @@
                ]
             },
             "valueString":"14",
-            "status":"unknown"
+            "status":"unknown",
+            "subject":{
+               "reference":"Patient/06060606-0606-4606-8606-060606060606"
+            },
+            "id":"09090909-0909-4909-8909-090909090909",
+            "resourceType":"Observation"
          },
          "request":{
             "method":"PUT",
@@ -251,6 +254,10 @@
       },
       {
          "resource":{
+            "subject":{
+               "reference":"Patient/06060606-0606-4606-8606-060606060606"
+            },
+            "id":"0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b",
             "resourceType":"Observation",
             "code":{
                "coding":[
@@ -260,11 +267,7 @@
                ]
             },
             "valueString":"3",
-            "status":"unknown",
-            "subject":{
-               "reference":"Patient/06060606-0606-4606-8606-060606060606"
-            },
-            "id":"0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b"
+            "status":"unknown"
          },
          "request":{
             "method":"PUT",
@@ -289,12 +292,22 @@
             }
          },
          "request":{
-            "url":"Observation/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c",
-            "method":"PUT"
+            "method":"PUT",
+            "url":"Observation/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c"
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"Observation/0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d"
+         },
          "resource":{
+            "valueString":"71",
+            "status":"unknown",
+            "subject":{
+               "reference":"Patient/06060606-0606-4606-8606-060606060606"
+            },
+            "id":"0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d",
             "resourceType":"Observation",
             "code":{
                "coding":[
@@ -302,21 +315,17 @@
                      "code":"SPO2R"
                   }
                ]
-            },
-            "valueString":"71",
-            "status":"unknown",
-            "subject":{
-               "reference":"Patient/06060606-0606-4606-8606-060606060606"
-            },
-            "id":"0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d"
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Observation/0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d"
+            }
          }
       },
       {
          "resource":{
+            "valueString":"100",
+            "status":"unknown",
+            "subject":{
+               "reference":"Patient/06060606-0606-4606-8606-060606060606"
+            },
+            "id":"0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e",
             "resourceType":"Observation",
             "code":{
                "coding":[
@@ -324,13 +333,7 @@
                      "code":"SPO2P"
                   }
                ]
-            },
-            "valueString":"100",
-            "status":"unknown",
-            "subject":{
-               "reference":"Patient/06060606-0606-4606-8606-060606060606"
-            },
-            "id":"0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e"
+            }
          },
          "request":{
             "method":"PUT",
@@ -339,19 +342,20 @@
       },
       {
          "resource":{
+            "id":"0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f",
+            "resourceType":"Specimen",
             "subject":{
                "reference":"Patient/06060606-0606-4606-8606-060606060606"
-            },
-            "id":"0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f",
-            "resourceType":"Specimen"
+            }
          },
          "request":{
-            "url":"Specimen/0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f",
-            "method":"PUT"
+            "method":"PUT",
+            "url":"Specimen/0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f"
          }
       },
       {
          "resource":{
+            "id":"10101010-1010-4010-9010-101010101010",
             "resourceType":"DiagnosticReport",
             "code":{
                "coding":[
@@ -369,8 +373,7 @@
             ],
             "subject":{
                "reference":"Patient/06060606-0606-4606-8606-060606060606"
-            },
-            "id":"10101010-1010-4010-9010-101010101010"
+            }
          },
          "request":{
             "method":"PUT",

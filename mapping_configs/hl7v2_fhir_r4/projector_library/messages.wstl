@@ -230,7 +230,7 @@ def OML_O21(OML_O21) {
   var Condition : DG1_Condition(OML_O21.ORDER[*].DG1[], Patient);
   out Resources : Condition;
 
-  var Encounter : PV1_DG1_Encounter(OML_O21.PATIENT.PATIENT_VISIT.PV1, OML_O21.ORDER[*].DG1[], Patient, Condition);
+  var Encounter : PV1_DG1_Encounter(OML_O21.PATIENT.PATIENT_VISIT.PV1, OML_O21.ORDER[*].DG1, Patient, Condition);
   out Resources : Encounter;
 
   out Resources : AL1_AllergyIntolerance(OML_O21.PATIENT.AL1, Patient);

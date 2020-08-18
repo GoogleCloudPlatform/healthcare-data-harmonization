@@ -400,6 +400,8 @@ def XAD_Address(XAD) {
 def ST_Identifier(ST) {
   value : ST;
   type.coding[0].code : "SB";
+  type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0203";
+  system : "http://hl7.org/fhir/sid/us-ssn";
 }
 
 // Description: Constructs Address datatype

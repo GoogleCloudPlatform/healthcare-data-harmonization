@@ -1,54 +1,48 @@
 {
+   "timestamp":"2020-05-08T13:06:44.8558Z",
+   "identifier":{
+      "value":"7"
+   },
+   "resourceType":"Bundle",
    "type":"transaction",
    "entry":[
       {
+         "request":{
+            "method":"PUT",
+            "url":"Organization/01010101-0101-4101-8101-010101010101"
+         },
          "resource":{
-            "identifier":[
-               {
-                  "value":"SFAC"
-               }
-            ],
-            "id":"01010101-0101-4101-8101-010101010101",
             "resourceType":"Organization",
             "address":[
                {
                   "country":"44"
                }
-            ]
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Organization/01010101-0101-4101-8101-010101010101"
+            ],
+            "identifier":[
+               {
+                  "value":"SFAC"
+               }
+            ],
+            "id":"01010101-0101-4101-8101-010101010101"
          }
       },
       {
          "resource":{
+            "resourceType":"Organization",
             "identifier":[
                {
                   "value":"RFAC"
                }
             ],
-            "id":"02020202-0202-4202-8202-020202020202",
-            "resourceType":"Organization"
+            "id":"02020202-0202-4202-8202-020202020202"
          },
          "request":{
-            "url":"Organization/02020202-0202-4202-8202-020202020202",
-            "method":"PUT"
+            "method":"PUT",
+            "url":"Organization/02020202-0202-4202-8202-020202020202"
          }
       },
       {
-         "request":{
-            "method":"PUT",
-            "url":"MessageHeader/03030303-0303-4303-8303-030303030303"
-         },
          "resource":{
-            "source":{
-               "endpoint":"unknown",
-               "name":"SIMHOSP"
-            },
-            "sender":{
-               "reference":"Organization/01010101-0101-4101-8101-010101010101"
-            },
             "destination":[
                {
                   "endpoint":"RFAC",
@@ -59,14 +53,15 @@
                }
             ],
             "eventCoding":{
-               "code":"R01",
-               "system":"http://terminology.hl7.org/CodeSystem/v2-0003"
+               "display":"ORU^R01^",
+               "system":"http://terminology.hl7.org/CodeSystem/v2-0003",
+               "code":"R01"
             },
             "meta":{
                "tag":[
                   {
-                     "code":"T",
-                     "system":"http://terminology.hl7.org/CodeSystem/v2-0103"
+                     "system":"http://terminology.hl7.org/CodeSystem/v2-0103",
+                     "code":"T"
                   },
                   {
                      "system":"http://terminology.hl7.org/CodeSystem/v2-0207"
@@ -74,7 +69,18 @@
                ]
             },
             "id":"03030303-0303-4303-8303-030303030303",
-            "resourceType":"MessageHeader"
+            "resourceType":"MessageHeader",
+            "source":{
+               "endpoint":"unknown",
+               "name":"SIMHOSP"
+            },
+            "sender":{
+               "reference":"Organization/01010101-0101-4101-8101-010101010101"
+            }
+         },
+         "request":{
+            "method":"PUT",
+            "url":"MessageHeader/03030303-0303-4303-8303-030303030303"
          }
       },
       {
@@ -94,6 +100,13 @@
       },
       {
          "resource":{
+            "recorded":"2020-05-08T13:06:44.8558Z",
+            "target":[
+               {
+                  "reference":"MessageHeader/03030303-0303-4303-8303-030303030303"
+               }
+            ],
+            "id":"05050505-0505-4505-8505-050505050505",
             "resourceType":"Provenance",
             "agent":[
                {
@@ -101,14 +114,7 @@
                      "reference":"Device/04040404-0404-4404-8404-040404040404"
                   }
                }
-            ],
-            "recorded":"2020-05-08T13:06:44.8558Z",
-            "target":[
-               {
-                  "reference":"MessageHeader/03030303-0303-4303-8303-030303030303"
-               }
-            ],
-            "id":"05050505-0505-4505-8505-050505050505"
+            ]
          },
          "request":{
             "method":"PUT",
@@ -116,24 +122,11 @@
          }
       },
       {
-         "request":{
-            "url":"Patient/06060606-0606-4606-8606-060606060606",
-            "method":"PUT"
-         },
          "resource":{
-            "active":true,
-            "resourceType":"Patient",
-            "name":[
+            "telecom":[
                {
-                  "use":"anonymous",
-                  "family":"Trivedi",
-                  "given":[
-                     "Jacqueline",
-                     "Pauline"
-                  ],
-                  "prefix":[
-                     "Mrs"
-                  ]
+                  "value":"070 0130 6118",
+                  "use":"home"
                }
             ],
             "address":[
@@ -147,15 +140,24 @@
                   "postalCode":"PK17 5OI"
                }
             ],
+            "id":"06060606-0606-4606-8606-060606060606",
             "birthDate":"1937-12-27",
-            "telecom":[
+            "resourceType":"Patient",
+            "gender":"female",
+            "active":true,
+            "name":[
                {
-                  "value":"070 0130 6118",
-                  "use":"home"
+                  "use":"anonymous",
+                  "family":"Trivedi",
+                  "given":[
+                     "Jacqueline",
+                     "Pauline"
+                  ],
+                  "prefix":[
+                     "Mrs"
+                  ]
                }
             ],
-            "id":"06060606-0606-4606-8606-060606060606",
-            "gender":"female",
             "identifier":[
                {
                   "value":"1076943130",
@@ -178,19 +180,21 @@
                   "value":"1076943130"
                },
                {
+                  "value":"2914785070",
                   "type":{
                      "coding":[
                         {
                            "code":"NHSNMBR"
                         }
                      ]
-                  },
-                  "value":"2914785070"
+                  }
                },
                {
+                  "system":"http://hl7.org/fhir/sid/us-ssn",
                   "type":{
                      "coding":[
                         {
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
                            "code":"SB"
                         }
                      ]
@@ -206,10 +210,19 @@
                   }
                }
             ]
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Patient/06060606-0606-4606-8606-060606060606"
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"Observation/07070707-0707-4707-8707-070707070707"
+         },
          "resource":{
+            "status":"final",
             "effectiveDateTime":"2020-05-08T13:06:44+05:00",
             "subject":{
                "reference":"Patient/06060606-0606-4606-8606-060606060606"
@@ -219,26 +232,21 @@
             "code":{
                "coding":[
                   {
+                     "code":"tt-0003-02",
                      "display":"Potassium",
-                     "system":"WinPath",
-                     "code":"tt-0003-02"
+                     "system":"WinPath"
                   }
                ]
             },
             "valueQuantity":{
-               "value":5.1,
-               "unit":"MMOLL"
+               "unit":"MMOLL",
+               "value":5.1
             },
             "referenceRange":[
                {
                   "text":"3.5 - 5.3"
                }
-            ],
-            "status":"final"
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Observation/07070707-0707-4707-8707-070707070707"
+            ]
          }
       },
       {
@@ -247,9 +255,9 @@
             "code":{
                "coding":[
                   {
-                     "display":"Sodium",
                      "system":"WinPath",
-                     "code":"tt-0003-03"
+                     "code":"tt-0003-03",
+                     "display":"Sodium"
                   }
                ]
             },
@@ -270,16 +278,29 @@
             "id":"08080808-0808-4808-8808-080808080808"
          },
          "request":{
-            "url":"Observation/08080808-0808-4808-8808-080808080808",
-            "method":"PUT"
+            "method":"PUT",
+            "url":"Observation/08080808-0808-4808-8808-080808080808"
          }
       },
       {
          "request":{
-            "url":"Observation/09090909-0909-4909-8909-090909090909",
-            "method":"PUT"
+            "method":"PUT",
+            "url":"Observation/09090909-0909-4909-8909-090909090909"
          },
          "resource":{
+            "code":{
+               "coding":[
+                  {
+                     "code":"tt-0003-04",
+                     "display":"Urea",
+                     "system":"WinPath"
+                  }
+               ]
+            },
+            "valueQuantity":{
+               "unit":"MMOLL",
+               "value":5.45
+            },
             "referenceRange":[
                {
                   "text":"2.5 - 7.8"
@@ -291,71 +312,48 @@
                "reference":"Patient/06060606-0606-4606-8606-060606060606"
             },
             "id":"09090909-0909-4909-8909-090909090909",
-            "resourceType":"Observation",
+            "resourceType":"Observation"
+         }
+      },
+      {
+         "resource":{
+            "valueQuantity":{
+               "unit":"MLMIN"
+            },
             "code":{
                "coding":[
                   {
-                     "code":"tt-0003-04",
-                     "display":"Urea",
+                     "code":"tt-0003-05",
+                     "display":"eGFR (MDRD)",
                      "system":"WinPath"
                   }
                ]
             },
-            "valueQuantity":{
-               "value":5.45,
-               "unit":"MMOLL"
-            }
-         }
-      },
-      {
-         "request":{
-            "url":"Observation/0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a",
-            "method":"PUT"
-         },
-         "resource":{
+            "id":"0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a",
+            "effectiveDateTime":"2020-05-08T13:06:44+05:00",
+            "status":"final",
+            "resourceType":"Observation",
             "referenceRange":[
                {
                   "text":"[ ]"
                }
             ],
-            "code":{
-               "coding":[
-                  {
-                     "display":"eGFR (MDRD)",
-                     "system":"WinPath",
-                     "code":"tt-0003-05"
-                  }
-               ]
-            },
-            "effectiveDateTime":"2020-05-08T13:06:44+05:00",
-            "id":"0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a",
-            "resourceType":"Observation",
-            "valueString":"<15",
-            "status":"final",
-            "valueQuantity":{
-               "unit":"MLMIN"
-            },
             "subject":{
                "reference":"Patient/06060606-0606-4606-8606-060606060606"
-            }
+            },
+            "valueString":"<15"
+         },
+         "request":{
+            "url":"Observation/0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a",
+            "method":"PUT"
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"Observation/0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b"
+         },
          "resource":{
-            "subject":{
-               "reference":"Patient/06060606-0606-4606-8606-060606060606"
-            },
-            "id":"0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b",
-            "resourceType":"Observation",
-            "code":{
-               "coding":[
-                  {
-                     "display":"Creatinine",
-                     "system":"WinPath",
-                     "code":"tt-0003-01"
-                  }
-               ]
-            },
             "valueQuantity":{
                "unit":"UMOLL",
                "value":86.25
@@ -366,18 +364,24 @@
                }
             ],
             "status":"final",
-            "effectiveDateTime":"2020-05-08T13:06:44+05:00"
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Observation/0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b"
+            "effectiveDateTime":"2020-05-08T13:06:44+05:00",
+            "subject":{
+               "reference":"Patient/06060606-0606-4606-8606-060606060606"
+            },
+            "id":"0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b",
+            "resourceType":"Observation",
+            "code":{
+               "coding":[
+                  {
+                     "system":"WinPath",
+                     "code":"tt-0003-01",
+                     "display":"Creatinine"
+                  }
+               ]
+            }
          }
       },
       {
-         "request":{
-            "method":"PUT",
-            "url":"Specimen/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c"
-         },
          "resource":{
             "receivedTime":"2020-05-08T13:06:44+05:00",
             "subject":{
@@ -385,27 +389,22 @@
             },
             "id":"0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c",
             "resourceType":"Specimen"
+         },
+         "request":{
+            "url":"Specimen/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c",
+            "method":"PUT"
          }
       },
       {
          "request":{
-            "method":"PUT",
-            "url":"DiagnosticReport/0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d"
+            "url":"DiagnosticReport/0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d",
+            "method":"PUT"
          },
          "resource":{
-            "specimen":[
-               {
-                  "reference":"Specimen/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c"
-               }
-            ],
-            "id":"0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d",
-            "issued":"2020-05-08T13:06:44.8558Z",
-            "status":"final",
             "subject":{
                "reference":"Patient/06060606-0606-4606-8606-060606060606"
             },
             "effectiveDateTime":"2020-05-08T13:06:44+05:00",
-            "resourceType":"DiagnosticReport",
             "code":{
                "coding":[
                   {
@@ -415,6 +414,14 @@
                   }
                ]
             },
+            "resourceType":"DiagnosticReport",
+            "specimen":[
+               {
+                  "reference":"Specimen/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c"
+               }
+            ],
+            "id":"0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d",
+            "status":"final",
             "identifier":[
                {
                   "value":"3529823179",
@@ -428,18 +435,17 @@
                   }
                },
                {
+                  "value":"2427424202",
                   "type":{
                      "coding":[
                         {
-                           "code":"FILL",
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
+                           "code":"FILL"
                         }
                      ]
-                  },
-                  "value":"2427424202"
+                  }
                },
                {
-                  "value":"3529823179",
                   "type":{
                      "coding":[
                         {
@@ -447,7 +453,8 @@
                            "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
                         }
                      ]
-                  }
+                  },
+                  "value":"3529823179"
                },
                {
                   "type":{
@@ -460,13 +467,9 @@
                   },
                   "value":"2427424202"
                }
-            ]
+            ],
+            "issued":"2020-05-08T13:06:44.8558Z"
          }
       }
-   ],
-   "timestamp":"2020-05-08T13:06:44.8558Z",
-   "identifier":{
-      "value":"7"
-   },
-   "resourceType":"Bundle"
+   ]
 }
