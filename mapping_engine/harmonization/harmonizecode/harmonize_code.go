@@ -33,6 +33,7 @@ import (
 const (
 
 	projectorName       = "$HarmonizeCode"
+	withTargetProjector = "$HarmonizeCodeWithTarget"
 	searchProjector     = "$HarmonizeCodeBySearch"
 	localHarmonizerName = "$Local"
 )
@@ -43,6 +44,11 @@ type CodeHarmonizer interface {
 	// sourceSystem is the system that this code belongs to.
 	// sourceName is the name of the concept map to use.
 	Harmonize(sourceCode, sourceSystem, sourceName string) ([]HarmonizedCode, error)
+	// sourceCode is the code being translated.
+	// sourceSystem is the system that this code belongs to.
+	// targetSystem is the system in which a translated code is sought.
+	// sourceName is the name of the concept map to use.
+	HarmonizeWithTarget(sourceCode, sourceSystem, targetSystem, sourceName string) ([]HarmonizedCode, error)
 	// sourceCode is the code being translated.
 	// sourceSystem is the system that this code belongs to.
 	// sourceValueset is the name of the source value set to search by.
@@ -132,7 +138,7 @@ func LoadCodeHarmonizationProjectors(r *types.Registry, hc *hpb.CodeHarmonizatio
 	}
 
 	if err = r.RegisterProjector(projectorName, proj); err != nil {
-		return fmt.Errorf("error registering projector %v", err)
+		return fmt.Errorf("error registering projector %q: %v", projectorName, err)
 	}
 
 	sproj, err := buildHarmonizeBySearchProjector(harmonizers, searchProjector)
@@ -141,7 +147,16 @@ func LoadCodeHarmonizationProjectors(r *types.Registry, hc *hpb.CodeHarmonizatio
 	}
 
 	if err = r.RegisterProjector(searchProjector, sproj); err != nil {
-		return fmt.Errorf("error registering projector %v", err)
+		return fmt.Errorf("error registering projector %q: %v", searchProjector, err)
+	}
+
+	tproj, err := buildHarmonizeWithTargetProjector(harmonizers, withTargetProjector)
+	if err != nil {
+		return err
+	}
+
+	if err = r.RegisterProjector(withTargetProjector, tproj); err != nil {
+		return fmt.Errorf("error registering projector %q: %v", withTargetProjector, err)
 	}
 
 	return nil
@@ -200,6 +215,28 @@ func codesToJSONArray(hcs []HarmonizedCode) jsonutil.JSONArr {
 		results = append(results, v.ToJSONContainer())
 	}
 	return results
+}
+
+func buildHarmonizeWithTargetProjector(harmonizers map[string]CodeHarmonizer, name string) (types.Projector, error) {
+	f := func(sourceType, sourceCode, sourceSystem, targetSystem, sourceName jsonutil.JSONStr) (jsonutil.JSONToken, error) {
+		st := string(sourceType)
+		if st == "" {
+			return nil, fmt.Errorf("the harmonization source type cannot be empty")
+		}
+		harmonizer, ok := harmonizers[st]
+		if !ok {
+			return nil, fmt.Errorf("the harmonization source %s does not exist", st)
+		}
+
+		harmonizedCodes, err := harmonizer.HarmonizeWithTarget(string(sourceCode), string(sourceSystem), string(targetSystem), string(sourceName))
+		if err != nil {
+			return nil, err
+		}
+
+		return codesToJSONArray(harmonizedCodes), nil
+	}
+
+	return projector.FromFunction(f, name)
 }
 
 func buildHarmonizeBySearchProjector(harmonizers map[string]CodeHarmonizer, name string) (types.Projector, error) {

@@ -160,7 +160,12 @@
         }
       ],
       "source": "urn:oid:2.16.840.1.113883.6.238",
-      "target": "Ethnicity"
+      "target": "Ethnicity",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "0",
+        "display": "Unknown"
+      }
     },
     {
       "element": [
@@ -233,7 +238,12 @@
         }
       ],
       "source": "urn:oid:2.16.840.1.113883.6.238",
-      "target": "Race"
+      "target": "Race",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "0",
+        "display": "Unknown"
+      }
     },
     {
       "element": [

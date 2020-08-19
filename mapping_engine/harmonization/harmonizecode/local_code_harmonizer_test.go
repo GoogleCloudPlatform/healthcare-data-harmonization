@@ -36,7 +36,7 @@ func buildTestLocalHarmonizer(rawMaps []json.RawMessage) (CodeHarmonizer, error)
 	return local, nil
 }
 
-func TestLoadConceptMap(t *testing.T) {
+func TestHarmonize(t *testing.T) {
 	tests := []struct {
 		name           string
 		rawConceptMap  json.RawMessage
@@ -392,13 +392,13 @@ func TestLoadConceptMap(t *testing.T) {
 			}
 
 			if diff := cmp.Diff(test.expectedOutput, actualOutput); diff != "" {
-				t.Errorf("Harmonize(%s, %s) => diff -%v +%v\n%s", test.sourceCode, test.sourceSystem, test.expectedOutput, actualOutput, diff)
+				t.Errorf("Harmonize(%s, %s, %s) => diff -%v +%v\n%s", test.sourceCode, test.sourceSystem, test.sourceName, test.expectedOutput, actualOutput, diff)
 			}
 		})
 	}
 }
 
-func TestLoadConceptMap_Errors(t *testing.T) {
+func TestHarmonize_Errors(t *testing.T) {
 	tests := []struct {
 		name          string
 		rawConceptMap json.RawMessage
@@ -487,6 +487,134 @@ func TestLoadConceptMap_Errors(t *testing.T) {
 			_, err := buildTestLocalHarmonizer([]json.RawMessage{test.rawConceptMap})
 			if err == nil {
 				t.Fatalf("Parsing concept map in test %s expected error but received no errors.", test.name)
+			}
+		})
+	}
+}
+
+func TestHarmonizeWithTarget(t *testing.T) {
+	testConceptMap1 := json.RawMessage(`{
+				"group":[
+					{
+						"element":[
+							{
+								"code": "abc",
+								"target":[
+									{
+										"code": "def1",
+										"equivalence": "EQUIVALENT"
+									}
+								]
+							}
+						],
+						"source": "s1",
+						"target": "t1"
+					},
+					{
+						"element":[
+							{
+								"code": "abc",
+								"target":[
+									{
+										"code": "def2",
+										"equivalence": "EQUIVALENT"
+									}
+								]
+							}
+						],
+						"source": "s2",
+						"target": "t2"
+					}
+				],
+				"id": "foo",
+				"version": "bar",
+   			"resourceType":"ConceptMap"
+			}`)
+	tests := []struct {
+		name           string
+		rawConceptMap  json.RawMessage
+		sourceCode     string
+		sourceSystem   string
+		targetSystem   string
+		sourceName     string
+		version        string
+		expectedOutput []HarmonizedCode
+	}{
+		{
+			name:          "match source and target systems 1",
+			rawConceptMap: testConceptMap1,
+			sourceCode:    "abc",
+			sourceSystem:  "s1",
+			targetSystem:  "t1",
+			sourceName:    "foo",
+			expectedOutput: []HarmonizedCode{
+				HarmonizedCode{
+					Code:    "def1",
+					System:  "t1",
+					Version: "bar",
+				},
+			},
+		},
+		{
+			name:          "match source and mismatch target 2",
+			rawConceptMap: testConceptMap1,
+			sourceCode:    "abc",
+			sourceSystem:  "s2",
+			targetSystem:  "t2",
+			sourceName:    "foo",
+			expectedOutput: []HarmonizedCode{
+				HarmonizedCode{
+					Code:    "def2",
+					System:  "t2",
+					Version: "bar",
+				},
+			},
+		},
+		{
+			name:          "match source and mismatch target",
+			rawConceptMap: testConceptMap1,
+			sourceCode:    "abc",
+			sourceSystem:  "s1",
+			targetSystem:  "t2",
+			sourceName:    "foo",
+			expectedOutput: []HarmonizedCode{
+				HarmonizedCode{
+					Code:    "abc",
+					System:  "foo-unharmonized",
+					Version: "bar",
+				},
+			},
+		},
+		{
+			name:          "match source and empty target",
+			rawConceptMap: testConceptMap1,
+			sourceCode:    "abc",
+			sourceSystem:  "s2",
+			targetSystem:  "",
+			sourceName:    "foo",
+			expectedOutput: []HarmonizedCode{
+				HarmonizedCode{
+					Code:    "def2",
+					System:  "t2",
+					Version: "bar",
+				},
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			harmonizer, err := buildTestLocalHarmonizer([]json.RawMessage{test.rawConceptMap})
+			if err != nil {
+				t.Fatalf("buildTestLocalHarmonizer returned unexpected error: %v", err)
+			}
+
+			actualOutput, err := harmonizer.HarmonizeWithTarget(test.sourceCode, test.sourceSystem, test.targetSystem, test.sourceName)
+			if err != nil {
+				t.Fatalf("HarmonizeWithTarget(%s, %s, %s, %s) returned unexpected error: %v", test.sourceCode, test.sourceSystem, test.targetSystem, test.sourceName, err)
+			}
+
+			if diff := cmp.Diff(test.expectedOutput, actualOutput); diff != "" {
+				t.Errorf("HarmonizeWithTarget(%s, %s, %s, %s) => diff -%v +%v\n%s", test.sourceCode, test.sourceSystem, test.targetSystem, test.sourceName, test.expectedOutput, actualOutput, diff)
 			}
 		})
 	}

@@ -109,6 +109,11 @@ func (h *RemoteCodeHarmonizer) HarmonizeBySearch(sourceCode, sourceSystem, sourc
 	return res, nil
 }
 
+// HarmonizeWithTarget implements CodeHarmonizer's HarmonizeWithTarget function.
+func (h *RemoteCodeHarmonizer) HarmonizeWithTarget(sourceCode, sourceSystem, targetSystem, sourceName string) ([]HarmonizedCode, error) {
+	return nil, fmt.Errorf("HarmonizeWithTarget is not implemented in remote code harmonizer yet")
+}
+
 // Harmonize implements CodeHarmonizer's Harmonize function.
 func (h *RemoteCodeHarmonizer) Harmonize(sourceCode, sourceSystem, sourceName string) ([]HarmonizedCode, error) {
 	key := CodeLookupKey{

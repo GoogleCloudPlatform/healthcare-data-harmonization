@@ -89,6 +89,11 @@ def Convert_Terminology(Code, System){
   $this : $ParseInt(mapping[0].code);
 }
 
+def Convert_Terminology_With_Target(Code, System, Target){
+  var mapping : $HarmonizeCodeWithTarget("$Local", Code, System, Target, "FHIR-OMOP-ConceptMap");
+  $this : $ParseInt(mapping[0].code);
+}
+
 // Description: Constructs an OMOP Concept Table (v6.0) based on FHIR STU3 CodeableConcept datatype
 //
 // Argument(s):
@@ -205,13 +210,13 @@ def Patient_Person(Patient, locationID) {
   month_of_birth : Extract_Month(Patient.birthDate);
   day_of_birth : Extract_Day(Patient.birthDate);
   var race : Patient.extension[where $.url = "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"];
-  race_concept_id : Convert_Terminology(race[0].extension[0].valueCoding.code, race[0].extension[0].valueCoding.system);
+  race_concept_id : Convert_Terminology_With_Target(race[0].extension[0].valueCoding.code, race[0].extension[0].valueCoding.system, "Race");
   race_source_value : race[0].extension[0].valueCoding.display;
-  race_source_concept_id : Convert_Terminology(race[0].extension[0].valueCoding.code, race[0].extension[0].valueCoding.system);
+  race_source_concept_id : Convert_Terminology_With_Target(race[0].extension[0].valueCoding.code, race[0].extension[0].valueCoding.system, "Race");
   var ethnicity : Patient.extension[where $.url = "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"];
-  ethnicity_concept_id : Convert_Terminology(ethnicity[0].extension[0].valueCoding.code, ethnicity[0].extension[0].valueCoding.system);
+  ethnicity_concept_id : Convert_Terminology_With_Target(ethnicity[0].extension[0].valueCoding.code, ethnicity[0].extension[0].valueCoding.system, "Ethnicity");
   ethnicity_source_value : ethnicity[0].extension[0].valueCoding.display;
-  ethnicity_source_concept_id : Convert_Terminology(ethnicity[0].extension[0].valueCoding.code, ethnicity[0].extension[0].valueCoding.system);
+  ethnicity_source_concept_id : Convert_Terminology_With_Target(ethnicity[0].extension[0].valueCoding.code, ethnicity[0].extension[0].valueCoding.system, "Ethnicity");
   var provider : Patient.generalPractitioner[where Extract_ReferenceName($.reference) = "Practitioner"];
   provider_id : Extract_ReferenceID(provider[0].reference);
   care_site_id : Extract_ReferenceID(Patient.managingOrganization.reference);

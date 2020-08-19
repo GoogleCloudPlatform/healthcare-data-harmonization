@@ -52,8 +52,15 @@ func (h *LocalCodeHarmonizer) HarmonizeBySearch(sourceCode, sourceSystem, source
 	return nil, fmt.Errorf("HarmonizeBySearch is not supported in local harmonizer")
 }
 
-// Harmonize implements CodeHarmonizer's Harmonize function.
-func (h *LocalCodeHarmonizer) Harmonize(sourceCode, sourceSystem, sourceName string) ([]HarmonizedCode, error) {
+func groupMatch(sourceSystem, targetSystem string, group cachedGroup) bool {
+	// If group.sourceSystem or group.targetSystem is empty, match it to all codes.
+	// For backward compatibility, if targetSystem is not provided, match it to all groups.
+	return (group.sourceSystem == "" || group.sourceSystem == sourceSystem) &&
+		(group.targetSystem == "" || targetSystem == group.targetSystem || targetSystem == "")
+}
+
+// HarmonizeWithTarget implements CodeHarmonizer's HarmonizeWithTarget function.
+func (h *LocalCodeHarmonizer) HarmonizeWithTarget(sourceCode, sourceSystem, targetSystem, sourceName string) ([]HarmonizedCode, error) {
 	conceptMap, ok := h.cachedMaps[sourceName]
 	if !ok {
 		return nil, fmt.Errorf("the harmonization source %q does not exist", sourceName)
@@ -66,7 +73,7 @@ func (h *LocalCodeHarmonizer) Harmonize(sourceCode, sourceSystem, sourceName str
 
 	var output []HarmonizedCode
 	for _, group := range mapGroups {
-		if group.sourceSystem != "" && sourceSystem != group.sourceSystem {
+		if !groupMatch(sourceSystem, targetSystem, group) {
 			continue
 		}
 		targets, ok := group.lookups[sourceCode]
@@ -110,6 +117,11 @@ func (h *LocalCodeHarmonizer) Harmonize(sourceCode, sourceSystem, sourceName str
 		})
 	}
 	return output, nil
+}
+
+// Harmonize implements CodeHarmonizer's Harmonize function.
+func (h *LocalCodeHarmonizer) Harmonize(sourceCode, sourceSystem, sourceName string) ([]HarmonizedCode, error) {
+	return h.HarmonizeWithTarget(sourceCode, sourceSystem, "", sourceName)
 }
 
 // Cache takes a conceptMap and caches it internally for lookups.
