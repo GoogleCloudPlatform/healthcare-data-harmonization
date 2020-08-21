@@ -25,5 +25,5 @@ message DataHarmonizationConfig {
   UnitHarmonizationConfig unit_harmonization_config = 4;
 
   // The configuration defining the structure mapping.
-  StructureMappingConfig structure_mapping_config = 6;
+  StructureMappingConfig structure_mapping_config = 7;
 }
