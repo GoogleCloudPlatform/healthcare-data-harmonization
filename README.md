@@ -21,17 +21,17 @@ This repository is organized into several packages that together enable you to
 author Whistle configs, extend existing mapping configurations, and test configs
 within a Jupyter notebook environment.
 
-*   [Mapping Engine](https://g3doc.corp.google.com/third_party/cloud_healthcare_data_harmonization/mapping_engine)
-*   [Mapping Language](https://g3doc.corp.google.com/third_party/cloud_healthcare_data_harmonization/mapping_language)
-*   [Mapping Configs](https://g3doc.corp.google.com/third_party/cloud_healthcare_data_harmonization/mapping_configs)
-*   [Jupyter Notebook](https://g3doc.corp.google.com/third_party/cloud_healthcare_data_harmonization/tools/notebook)
+*   [Mapping Engine](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine)
+*   [Mapping Language](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language)
+*   [Mapping Configs](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_configs)
+*   [Jupyter Notebook](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/tools/notebook)
 
 ## Getting Started
 
 We highly recommend that you start by setting up your
-[Jupyter Notebook](https://g3doc.corp.google.com/third_party/cloud_healthcare_data_harmonization/tools/notebook)
+[Jupyter Notebook](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/tools/notebook)
 environment using the published docker images and executing the
-[example notebook](https://g3doc.corp.google.com/third_party/cloud_healthcare_data_harmonization/tools/notebook/examples/demo-sample.ipynb).
+[example notebook](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/tools/notebook/examples/demo-sample.ipynb).
 Once setup, work through the
 [Whistle Data Transformation Language Codelab](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/codelab.md)
 to get yourself familiar with Whistle. As you author more Whistle configs, use
