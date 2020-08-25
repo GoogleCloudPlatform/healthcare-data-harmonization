@@ -31,6 +31,7 @@ function replace_modules() {
   go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto=$(abspath ./)/proto
   go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util=$(abspath ./)/util
   go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/transform=$(abspath ./)/transform
+  go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine=$(abspath ../)/mapping_engine
 
   cd main
   go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language=$(abspath ../../)/mapping_language
