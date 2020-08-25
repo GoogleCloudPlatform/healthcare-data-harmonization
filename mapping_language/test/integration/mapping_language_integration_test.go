@@ -20,15 +20,15 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/transform" /* copybara-comment: transform */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/transform"     /* copybara-comment: transform */
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
-	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language/transpiler" /* copybara-comment: transpiler */
-	"github.com/google/go-cmp/cmp" /* copybara-comment: cmp */
-	"google.golang.org/protobuf/encoding/prototext" /* copybara-comment: prototext */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language/transpiler"  /* copybara-comment: transpiler */
+	"github.com/google/go-cmp/cmp"                                                              /* copybara-comment: cmp */
+	"google.golang.org/protobuf/encoding/prototext"                                             /* copybara-comment: prototext */
 
 	dhpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: data_harmonization_go_proto */
-	hpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: harmonization_go_proto */
-	mpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: mapping_go_proto */
+	hpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto"  /* copybara-comment: harmonization_go_proto */
+	mpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto"  /* copybara-comment: mapping_go_proto */
 )
 
 func TestTranspile(t *testing.T) {
@@ -71,6 +71,22 @@ func TestTranspile(t *testing.T) {
 									   "MyObj": [
 									     "asd"
 									   ]
+									 }`,
+			},
+		},
+		{
+			name: "named projected pulls variable from global env",
+			whistle: `var myvar: "asd";
+			          x: projector();
+			
+			          def projector() {
+				      y: myvar
+			          }`,
+			wantValue: valueTest{
+				wantJSON: `{
+									   "x": {
+										 	"y": "asd"
+										 }
 									 }`,
 			},
 		},
