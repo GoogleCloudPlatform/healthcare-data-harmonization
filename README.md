@@ -15,18 +15,42 @@ The engine accepts data in JSON format and outputs it in JSON format. For
 information on the mapping configuration, look at the protobuf files in the
 proto directory.
 
-## Building and Testing
+## Overview
 
-### TL;DR
+This repository is organized into several packages that together enable you to
+author Whistle configs, extend existing mapping configurations, and test configs
+within a Jupyter notebook environment.
 
-Run `build_all.sh`
+*   [Mapping Engine](https://g3doc.corp.google.com/third_party/cloud_healthcare_data_harmonization/mapping_engine)
+*   [Mapping Language](https://g3doc.corp.google.com/third_party/cloud_healthcare_data_harmonization/mapping_language)
+*   [Mapping Configs](https://g3doc.corp.google.com/third_party/cloud_healthcare_data_harmonization/mapping_configs)
+*   [Jupyter Notebook](https://g3doc.corp.google.com/third_party/cloud_healthcare_data_harmonization/tools/notebook)
+
+## Getting Started
+
+We highly recommend that you start by setting up your
+[Jupyter Notebook](https://g3doc.corp.google.com/third_party/cloud_healthcare_data_harmonization/tools/notebook)
+environment using the published docker images and executing the
+[example notebook](https://g3doc.corp.google.com/third_party/cloud_healthcare_data_harmonization/tools/notebook/examples/demo-sample.ipynb).
+Once setup, work through the
+[Whistle Data Transformation Language Codelab](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/codelab.md)
+to get yourself familiar with Whistle. As you author more Whistle configs, use
+the
+[Whistle Data Transformation Language Reference](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md)
+to deepen your understanding of the language.
 
 ### Details
 
 This project consists of three components, the mapping engine, the mapping
-language, both of which can be built and tested independently with `go build`
-and `go test`, and Jupyter notebook extensions/magic commands. Please refer to
-their individual READMEs for more information.
+language, and Jupyter notebook UI extensions and magic commands. If you want to
+build the mapping engine and mapping language packages, run the `./build_all.sh`
+script. This command will build and run the tests of the above packages. In
+addition, there are a set of JupyterLab UI extensions and magic commands that
+simplify the authoring workflow. The extensions are packaged into a set of
+pre-built and published docker images that contain and Jupyter notebook
+extensions/magic commands and does not require you to build the mapping engine
+and mapping library packages. For more details about each package, please refer
+to their individual READMEs for more information.
 
 ### Language Reference
 

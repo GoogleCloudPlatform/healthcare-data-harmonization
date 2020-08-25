@@ -7,8 +7,8 @@ testing, and debugging of data harmonization whistle scripts.
 
 # Jupyter Notebook Cloud Healthcare Data Harmonization Stack
 
-`cloud-healthcare-data-harmonization-notebook:latest` includes extensions and
-packages to facilitate healthcare data harmonization and
+`gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-notebook:latest`
+includes extensions and packages to facilitate healthcare data harmonization and
 `gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-services:latest`
 is the mapping engine service that performs the transformations. The features
 include:
@@ -16,7 +16,7 @@ include:
 *   **FHIR stu3 data model browser** - provides a mechanism to browse resource
     structural documentation for [FHIR stu3](http://hl7.org/fhir/STU3/)
     resources.
-    ![Demo](https://storage.googleapis.com/data-harmonization-sample-data/jupyterlab-data-model-browser-demo.gif)
+    ![Demo](https://storage.googleapis.com/data-harmonization-sample-data/jupyterlab-data-model-browser-demo-sm.gif)
 
 *   **load_hl7v2_datastore** - the line magic command allows you to load data
     directly from a
@@ -74,15 +74,13 @@ include:
         (textproto).
     *   --output OUTPUT - Name of python variable to store result.
 
-    ![Demo](https://storage.googleapis.com/data-harmonization-sample-data/jupyterlab-wstl-demo.gif)
+    ![Demo](https://storage.googleapis.com/data-harmonization-sample-data/jupyterlab-wstl-demo-sm.gif)
+
+*   [Google Cloud Storage browser extension](https://github.com/gclouduniverse/jupyterlab_gcsfilebrowser)
 
 *   Includes everything in the
     [jupyter/minimal-notebook](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-minimal-notebook)
     and its ancestor images
-
-*   [Google Cloud Platform authentication extension](https://github.com/gclouduniverse/jupyterlab-gcloud-auth)
-    and
-    [Google Cloud Storage browser extension](https://github.com/gclouduniverse/jupyterlab_gcsfilebrowser)
 
 ### Prerequisites
 
