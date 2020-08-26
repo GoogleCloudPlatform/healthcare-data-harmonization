@@ -19,8 +19,12 @@ proto directory.
 
 ### TL;DR
 
-Make sure [Golang](https://golang.org/dl/) (>= 1.13) is installed, then run
-`build.sh`
+Make sure you have installed and added to PATH
+
+1. [Golang](https://golang.org/dl/) (>= 1.13)
+1. [Protobuf Compiler `protoc`](https://github.com/protocolbuffers/protobuf/releases/tag/v3.11.4) (>= 3.11.4)
+
+Then run `build.sh`
 
 ### Details
 

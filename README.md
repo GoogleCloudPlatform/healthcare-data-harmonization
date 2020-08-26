@@ -42,15 +42,25 @@ to deepen your understanding of the language.
 ### Details
 
 This project consists of three components, the mapping engine, the mapping
-language, and Jupyter notebook UI extensions and magic commands. If you want to
-build the mapping engine and mapping language packages, run the `./build_all.sh`
-script. This command will build and run the tests of the above packages. In
-addition, there are a set of JupyterLab UI extensions and magic commands that
-simplify the authoring workflow. The extensions are packaged into a set of
-pre-built and published docker images that contain and Jupyter notebook
-extensions/magic commands and does not require you to build the mapping engine
-and mapping library packages. For more details about each package, please refer
-to their individual READMEs for more information.
+language, and Jupyter notebook UI extensions and magic commands. **If you want
+to build the mapping engine and mapping language packages:**
+
+Make sure you have installed and added to PATH
+
+1.  [Golang](https://golang.org/dl/) (>= 1.13)
+1.  [Java JDK](https://openjdk.java.net/install/) (>= 8)
+1.  [Protobuf Compiler `protoc`](https://github.com/protocolbuffers/protobuf/releases/tag/v3.11.4)
+    (>= 3.11.4)
+
+Then run `build_all.sh`.
+
+This command will build and run the tests of the above packages. In addition,
+there are a set of JupyterLab UI extensions and magic commands that simplify the
+authoring workflow. The extensions are packaged into a set of pre-built and
+published docker images that contain and Jupyter notebook extensions/magic
+commands and does not require you to build the mapping engine and mapping
+library packages. For more details about each package, please refer to their
+individual READMEs for more information.
 
 ### Language Reference
 
