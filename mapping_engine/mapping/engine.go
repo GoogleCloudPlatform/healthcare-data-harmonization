@@ -632,7 +632,7 @@ func getVar(source string, pctx *types.Context) (jsonutil.JSONToken, string, err
 	}
 
 	if v == nil {
-		return nil, name, undefinedVarError{name: src}
+		return jsonutil.JSONToken(nil), name, nil
 	}
 
 	return *v, name, nil

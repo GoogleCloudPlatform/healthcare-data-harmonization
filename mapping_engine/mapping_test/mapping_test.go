@@ -60,7 +60,7 @@ func TestEvaluateFromVarWhistler(t *testing.T) {
 					"existing": jsonutil.JSONNum(33),
 				}),
 			},
-			wantErr: true,
+			want: jsonutil.JSONToken(nil),
 		},
 		{
 			name: "empty name",
