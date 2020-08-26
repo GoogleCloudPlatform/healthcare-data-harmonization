@@ -19,7 +19,7 @@ import json
 import os
 
 from google.cloud import storage
-from google3.third_party.cloud_healthcare_data_harmonization.tools.notebook.extensions.wstl.magics import _constants
+from wstl.magics import _constants
 
 
 def _serialize_to_json(shell_var):

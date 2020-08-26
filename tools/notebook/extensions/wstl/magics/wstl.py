@@ -26,11 +26,11 @@ from IPython.core.magic import magics_class
 from IPython.display import JSON
 
 from google.cloud import storage
-from google3.net.proto2.python.public import json_format
-from google3.third_party.cloud_healthcare_data_harmonization.tools.notebook.extensions.wstl.magics import _constants
-from google3.third_party.cloud_healthcare_data_harmonization.tools.notebook.extensions.wstl.magics import _location
-from google3.third_party.cloud_healthcare_data_harmonization.tools.notebook.extensions.wstl.proto import wstlservice_pb2
-from google3.third_party.cloud_healthcare_data_harmonization.tools.notebook.extensions.wstl.proto import wstlservice_pb2_grpc
+from google.protobuf import json_format
+from wstl.magics import _constants
+from wstl.magics import _location
+from wstl.proto import wstlservice_pb2
+from wstl.proto import wstlservice_pb2_grpc
 
 _GRPC_TIMEOUT = os.environ.get("NOTEBOOK_GRPC_TIMEOUT", 10.0)
 _DEFAULT_HOST = os.environ.get("NOTEBOOK_GRPC_HOST", "localhost")
@@ -121,31 +121,6 @@ class WSTLMagics(Magics):
       if args.output:
         self.shell.push({args.output: result})
       return JSON(result)
-
-  # BEGIN GOOGLE-INTERNAL
-  @magic_arguments.magic_arguments()
-  @magic_arguments.argument(
-      "--version",
-      choices=["stu3"],
-      type=str,
-      help="""The fhir version apply to the validation""")
-  @magic_arguments.argument(
-      "--input",
-      type=str,
-      help="""The path to the json resource(s) that will be validated""")
-  @line_magic("fhir_validate")
-  def fhir_validate(self, line):
-    """Validate input json resource(s) from iPython kernel."""
-    args = magic_arguments.parse_argstring(self.fhir_validate, line)
-
-    with grpc.insecure_channel(self.grpc_target) as channel:
-      stub = wstlservice_pb2_grpc.WhistleServiceStub(channel)
-
-      (resp, err) = _get_validation(stub, self.shell, args.version, args.input)
-      if err:
-        return err
-      return JSON(str(json_format.MessageToDict(resp)))
-# END GOOGLE-INTERNAL
 
 
 @magics_class

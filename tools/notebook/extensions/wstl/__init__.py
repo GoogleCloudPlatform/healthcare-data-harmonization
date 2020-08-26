@@ -14,8 +14,8 @@
 """Whistle Mapping Language magics package."""
 __version__ = '0.0.1'
 
-from google3.third_party.cloud_healthcare_data_harmonization.tools.notebook.extensions.wstl.magics.wstl import LoadHL7Magics
-from google3.third_party.cloud_healthcare_data_harmonization.tools.notebook.extensions.wstl.magics.wstl import WSTLMagics
+from wstl.magics.wstl import LoadHL7Magics
+from wstl.magics.wstl import WSTLMagics
 
 
 def load_ipython_extension(ipython):

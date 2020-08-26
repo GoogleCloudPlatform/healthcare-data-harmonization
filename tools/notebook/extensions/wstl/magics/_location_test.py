@@ -11,8 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# Lint as: python3
-"""Tests for google3.third_party.cloud_healthcare_data_harmonization.tools.notebook.extensions.wstl.magics._location."""
+#
+"""Tests for wstl.magics._location."""
 
 import json
 from os import path
@@ -20,10 +20,10 @@ from absl.testing import absltest
 
 from IPython.testing.globalipapp import get_ipython
 
-import mock
+from unittest import mock
 from google.cloud import storage
-from google3.third_party.cloud_healthcare_data_harmonization.tools.notebook.extensions.wstl.magics import _constants
-from google3.third_party.cloud_healthcare_data_harmonization.tools.notebook.extensions.wstl.magics import _location
+from wstl.magics import _constants
+from wstl.magics import _location
 
 _ip = get_ipython()
 

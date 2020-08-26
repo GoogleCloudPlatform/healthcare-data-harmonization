@@ -13,9 +13,9 @@
 # limitations under the License.
 """Utility functions for Location protobuf messages."""
 
-from google3.third_party.cloud_healthcare_data_harmonization.tools.notebook.extensions.wstl.magics import _constants
-from google3.third_party.cloud_healthcare_data_harmonization.tools.notebook.extensions.wstl.magics import _parser
-from google3.third_party.cloud_healthcare_data_harmonization.tools.notebook.extensions.wstl.proto import wstlservice_pb2
+from wstl.magics import _constants
+from wstl.magics import _parser
+from wstl.proto import wstlservice_pb2
 
 
 def parse_location(shell, input_wstl_arg, file_ext=None, load_contents=True):

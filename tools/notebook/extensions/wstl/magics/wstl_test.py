@@ -11,11 +11,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# Lint as: python3
-"""Tests for google3.third_party.cloud_healthcare_data_harmonization.tools.notebook.extensions.wstl.magics.wstl."""
+#
+"""Tests for wstl.magics.wstl."""
 
 import json
-from unittest import mock
+from unittest from unittest import mock
 
 from absl.testing import absltest
 from fakefs import fake_filesystem
@@ -30,9 +30,9 @@ from IPython.testing import tools
 from google.cloud import storage
 from google3.google.rpc import code_pb2
 from google3.google.rpc import status_pb2
-from google3.third_party.cloud_healthcare_data_harmonization.tools.notebook.extensions.wstl.magics import wstl
-from google3.third_party.cloud_healthcare_data_harmonization.tools.notebook.extensions.wstl.proto import wstlservice_pb2
-from google3.third_party.cloud_healthcare_data_harmonization.tools.notebook.extensions.wstl.proto import wstlservice_pb2_grpc
+from wstl.magics import wstl
+from wstl.proto import wstlservice_pb2
+from wstl.proto import wstlservice_pb2_grpc
 
 
 # pylint: disable=invalid-name
