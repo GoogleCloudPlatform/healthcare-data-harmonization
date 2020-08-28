@@ -28,11 +28,11 @@ func (t *transpiler) VisitMapping(ctx *parser.MappingContext) interface{} {
 	// If there is an existing condition stack, we first have to combine them with _And, then add
 	// the inline condition from this mapping if it exists.
 	var condition *mpb.ValueSource
-	if len(t.conditionStack) > 0 {
+	if len(*t.conditionStackTop()) > 0 {
 		if ctx.InlineCondition() != nil {
-			condition = t.conditionStack.and(ctx.InlineCondition().Accept(t).(*mpb.ValueSource))
+			condition = t.conditionStackTop().and(ctx.InlineCondition().Accept(t).(*mpb.ValueSource))
 		} else {
-			condition = t.conditionStack.and()
+			condition = t.conditionStackTop().and()
 		}
 	} else if ctx.InlineCondition() != nil {
 		condition = ctx.InlineCondition().Accept(t).(*mpb.ValueSource)

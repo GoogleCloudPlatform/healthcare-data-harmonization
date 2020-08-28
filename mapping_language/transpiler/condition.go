@@ -28,7 +28,7 @@ func (t *transpiler) VisitConditionBlock(ctx *parser.ConditionBlockContext) inte
 	}
 
 	// IfBlock below pushes a condition (with its awareness of the condition subtree).
-	t.conditionStack.pop()
+	t.conditionStackTop().pop()
 
 	// Since this is a block of mappings that get added to the environment, there is nothing to
 	// return.
@@ -37,7 +37,7 @@ func (t *transpiler) VisitConditionBlock(ctx *parser.ConditionBlockContext) inte
 
 func (t *transpiler) VisitIfBlock(ctx *parser.IfBlockContext) interface{} {
 	// Transpile and add the condition to the stack, and process the block as usual.
-	t.conditionStack.push(ctx.Condition().Accept(t).(*mpb.ValueSource))
+	t.conditionStackTop().push(ctx.Condition().Accept(t).(*mpb.ValueSource))
 	ctx.Block().Accept(t)
 
 	// Since this is a block of mappings that get added to the environment, there is nothing to
@@ -57,7 +57,7 @@ func not(vs *mpb.ValueSource) *mpb.ValueSource {
 
 func (t *transpiler) VisitElseBlock(ctx *parser.ElseBlockContext) interface{} {
 	// Else uses the condition in If, but inverted.
-	t.conditionStack.push(not(t.conditionStack.pop()))
+	t.conditionStackTop().push(not(t.conditionStackTop().pop()))
 	ctx.Block().Accept(t)
 
 	// Since this is a block of mappings that get added to the environment, there is nothing to

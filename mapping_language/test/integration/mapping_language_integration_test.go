@@ -1237,6 +1237,30 @@ func TestTranspile(t *testing.T) {
 			},
 		},
 		{
+			name: "block expression in condition",
+			whistle: `def test() {
+				var cond: true
+				if cond {
+					result: {
+						one: "two"
+						two: 2
+					}
+				}
+				if ~cond {
+					bad_result: {
+						one: "two"
+						two: 2
+					}
+				}
+			}`,
+			wantValue: valueTest{
+				rootMappings: `$this: test()`,
+				wantJSON: `{
+										 "result": {"one": "two", "two": 2}
+									 }`,
+			},
+		},
+		{
 			name: "block expression pulls from parent env",
 			whistle: `def projector(arg) {
 			            var v: arg + 1

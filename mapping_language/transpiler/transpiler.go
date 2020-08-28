@@ -28,15 +28,29 @@ import (
 type transpiler struct {
 	environment    *env
 	projectors     []*mpb.ProjectorDefinition
-	conditionStack valueStack
+	conditionStack []valueStack
+}
+
+func newTranspiler() *transpiler {
+	return &transpiler{
+		conditionStack: []valueStack{
+			make(valueStack, 0),
+		},
+	}
 }
 
 func (t *transpiler) pushEnv(e *env) {
 	t.environment = e
+	t.conditionStack = append(t.conditionStack, make(valueStack, 0))
 }
 
 func (t *transpiler) popEnv() {
 	t.environment = t.environment.parent
+	t.conditionStack = t.conditionStack[:len(t.conditionStack)-1]
+}
+
+func (t *transpiler) conditionStackTop() *valueStack {
+	return &t.conditionStack[len(t.conditionStack)-1]
 }
 
 // Transpile converts the given Whistle into a Whistler mapping config.
@@ -61,7 +75,7 @@ func Transpile(whistle string) (mp *mpb.MappingConfig, err error) {
 
 	// NOTE: explicitly specifying the type of transpiler is necessary so that the methods of
 	// the appropriate type, that implements the visitor interface, are invoked.
-	var transpiler parser.WhistleVisitor = &transpiler{}
+	var transpiler parser.WhistleVisitor = newTranspiler()
 
 	mp = p.Root().Accept(transpiler).(*mpb.MappingConfig)
 	return
