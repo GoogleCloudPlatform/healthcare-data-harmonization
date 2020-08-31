@@ -15,6 +15,5 @@
 
 # This script will run code generation for protos.
 
-go get -u github.com/golang/protobuf/protoc-gen-go
 protoc --go_out=./proto -I ../../../third_party/api-common-protos/ ../../../third_party/api-common-protos/google/rpc/status.proto
 protoc --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. -I ../../../third_party/api-common-protos/ -I ./ ./proto/wstlservice.proto

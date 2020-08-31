@@ -16,12 +16,13 @@
 # This script installs the necessary dependency for, builds and tests the backend
 # server for jupyter toolings.
 
-echo 'Installing go-grpc.'
-go get -u google.golang.org/grpc
-go get -u google.golang.org/protobuf/cmd/protoc-gen-go
-go install google.golang.org/protobuf/cmd/protoc-gen-go
-go get -u google.golang.org/grpc/cmd/protoc-gen-go-grpc
-go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
+export GO111MODULE=on
+echo 'Installing protoc and go-grpc.'
+# pinning protoc version
+go get -u google.golang.org/protobuf/cmd/protoc-gen-go@v1.25.0
+# pinning protoc golang grpc plugin version
+go get -u google.golang.org/grpc/cmd/protoc-gen-go-grpc@v0.0.0-20200822010404-0e72e09474d6
+# in service/go.mod pin the version of grpc dependency
 
 # install protoc
 echo 'Installing protoc.'

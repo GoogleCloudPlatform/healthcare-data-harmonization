@@ -15,7 +15,7 @@
 // The definition of the Whistle Mapping Language service.
 syntax = "proto3";
 
-package cloud.healthcare.data_harmonization.notebook.extension.wstl.proto;
+package wstl.proto;
 
 import "google/rpc/status.proto";
 
