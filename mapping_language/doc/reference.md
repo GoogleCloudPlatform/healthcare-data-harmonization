@@ -63,13 +63,15 @@ A field can contain spaces, dots or any special characters by escaping them with
 a <code><span>&#92;</span></code> (or two backslashes for a literal backslash in
 the field).
 
-A field can be composed of any characters (e.x. unicode) if it is quoted in
-single quotes. Beware that all delimiters inside the quotes are preserved
-literally and are not treated as delimiters in the path.
+A field can be composed of any characters (e.x. unicode), or use reserved
+Whistle keywords (like "var" or "required"), if it is quoted in single quotes.
+Beware that all delimiters inside the quotes are preserved literally and are not
+treated as delimiters in the path.
 
 ```
 patient\.data.first\\name: input_json.first\ name
 'patient.data'.'😊': true
+keyword.'var': "keywords must be quoted"
 ```
 
 outputs:
@@ -79,6 +81,9 @@ outputs:
   "patient.data": {
     "first\\name": "...",
     "😊": true
+  },
+  "keyword": {
+    "var": "keywords must be quoted"
   }
 }
 ```
@@ -86,6 +91,8 @@ outputs:
 NOTE: In the above example, the double <code><span>&#92;&#92;</span></code> is
 the JSON escape for a single <code><span>&#92;</span></code>. This means the
 above first name field, when parsed out of JSON, is `first\name`.
+
+NOTE: Unicode characters are not currently escaped in the output JSON.
 
 ### Constant
 
