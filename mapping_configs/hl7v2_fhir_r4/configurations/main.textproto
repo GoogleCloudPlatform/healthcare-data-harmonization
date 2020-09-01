@@ -2,47 +2,63 @@
 library_config: {
   user_libraries: {
     type: MAPPING_LANGUAGE
-    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/datatypes.wstl" }
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_r4/projector_library/datatypes.wstl" }
   }
   user_libraries: {
     type: MAPPING_LANGUAGE
-    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/hl7v2_fhir.wstl" }
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_r4/projector_library/hl7v2_fhir.wstl" }
   }
   user_libraries: {
     type: MAPPING_LANGUAGE
-    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/messages.wstl" }
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_r4/projector_library/id.wstl" }
   }
   user_libraries: {
     type: MAPPING_LANGUAGE
-    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/postprocess.wstl" }
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_r4/projector_library/messages.wstl" }
   }
   user_libraries: {
     type: MAPPING_LANGUAGE
-    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/projector_library/segments.wstl" }
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_r4/projector_library/postprocess.wstl" }
+  }
+  user_libraries: {
+    type: MAPPING_LANGUAGE
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_r4/projector_library/segments.wstl" }
   }
 }
 
 harmonization_config: {
   code_lookup: {
-    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/code_harmonization/Allergy_Category.harmonization.json"
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_r4/code_harmonization/Address_Use.harmonization.json"
   }
   code_lookup: {
-    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/code_harmonization/Allergy_Severity.harmonization.json"
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_r4/code_harmonization/Allergy_Category.harmonization.json"
   }
   code_lookup: {
-    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/code_harmonization/Allergy_Type.harmonization.json"
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_r4/code_harmonization/Allergy_Severity.harmonization.json"
   }
   code_lookup: {
-    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/code_harmonization/Gender.harmonization.json"
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_r4/code_harmonization/Allergy_Type.harmonization.json"
   }
   code_lookup: {
-    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/code_harmonization/Name_Type.harmonization.json"
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_r4/code_harmonization/Encounter_Class.harmonization.json"
   }
   code_lookup: {
-    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/code_harmonization/Observation_Status.harmonization.json"
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_r4/code_harmonization/Encounter_Status.harmonization.json"
   }
   code_lookup: {
-    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/code_harmonization/Report_Status.harmonization.json"
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_r4/code_harmonization/Gender.harmonization.json"
+  }
+  code_lookup: {
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_r4/code_harmonization/Name_Type.harmonization.json"
+  }
+  code_lookup: {
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_r4/code_harmonization/Observation_Status.harmonization.json"
+  }
+  code_lookup: {
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_r4/code_harmonization/Relationship.harmonize.json"
+  }
+  code_lookup: {
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_r4/code_harmonization/Report_Status.harmonization.json"
   }
 }
 
@@ -50,7 +66,7 @@ structure_mapping_config: {
   mapping_path_config: {
     mapping_type: MAPPING_LANGUAGE
     mapping_config_path: {
-      local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_stu3/configurations/main.wstl"
+      local_path: "$MAPPING_ENGINE_HOME/mapping_configs/hl7v2_fhir_r4/configurations/main.wstl"
     }
   }
 }
