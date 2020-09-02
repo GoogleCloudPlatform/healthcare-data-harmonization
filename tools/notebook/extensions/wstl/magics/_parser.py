@@ -66,7 +66,10 @@ def _get_files(path_name, file_ext, load_contents):
     raise ValueError("empty required extensions.")
 
   contents = list()
-  for name in glob.glob(path_name):
+  norm_path = os.path.normpath(path_name)
+  if norm_path.startswith("~"):
+    norm_path = os.path.expanduser(norm_path)
+  for name in glob.glob(os.path.abspath(norm_path)):
     _, ext = os.path.splitext(name)
     if ext is None or ext not in file_ext:
       continue

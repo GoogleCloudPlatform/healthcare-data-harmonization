@@ -16,6 +16,7 @@ ARG BASE_CONTAINER=jupyter/base-notebook:4011ed54844a
 FROM $BASE_CONTAINER
 
 USER root
+ARG WSTL_INSTALL_DIR="/etc/wstl"
 
 # Install all OS dependencies for fully functional notebook server
 RUN apt-get update && apt-get install -yq --no-install-recommends \
@@ -42,41 +43,30 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     nano \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-USER $NB_UID
+RUN mkdir -p $WSTL_INSTALL_DIR && \
+    chown $NB_USER:$NB_GID $WSTL_INSTALL_DIR
 
+USER $NB_UID
 RUN mkdir -p /home/$NB_USER/.config/gcloud
 
 # wstl syntax highlighting extension
-COPY --chown=$NB_UID ./wstl-syntax-highlighting /home/$NB_USER/wstl-syntax-highlighting/
+COPY --chown=$NB_UID ./wstl-syntax-highlighting $WSTL_INSTALL_DIR/wstl-syntax-highlighting/
 
-WORKDIR /home/$NB_USER/wstl-syntax-highlighting/
+WORKDIR $WSTL_INSTALL_DIR/wstl-syntax-highlighting/
 RUN jlpm && \
     jlpm build && \
-    jupyter labextension link . && \
-    jupyter lab build -y
+    jupyter labextension link .
 
 # wstl magic commands
-WORKDIR $HOME
-COPY --chown=$NB_UID ./extensions /home/$NB_USER/magics/wstl-extensions
-WORKDIR /home/$NB_USER/magics/wstl-extensions
+COPY --chown=$NB_UID ./extensions $WSTL_INSTALL_DIR/magics/wstl-extensions
+WORKDIR $WSTL_INSTALL_DIR/magics/wstl-extensions
 RUN ./build.sh && \
     pip install dist/wstl-extensions-0.0.1.tar.gz
 
-# copybara:strip_begin
-# Jupytext customizations with wstl support
-# TODO : uncomment this block when the jupytext extension
-# modifications have been submitted.
-# WORKDIR $HOME
-# COPY --chown=$NB_UID ../third_party/jupytext /home/$NB_USER/magics/jupytext
-# WORKDIR /home/$NB_USER/magics/jupytext
-# RUN python setup.py sdist bdist_wheel && \
-#     pip install dist/jupytext-1.5.0.tar.gz
-# copybara:strip_end
-
 # data model browser extension
-COPY --chown=$NB_UID ./data-model-browser /home/$NB_USER/data-model-browser/
+COPY --chown=$NB_UID ./data-model-browser $WSTL_INSTALL_DIR/data-model-browser/
 
-WORKDIR /home/$NB_USER/data-model-browser/
+WORKDIR $WSTL_INSTALL_DIR/data-model-browser/
 RUN python setup.py sdist && \
     pip install dist/data_model_browser-0.0.1.tar.gz && \
     npm install && \
@@ -89,8 +79,5 @@ RUN pip install jupyterlab-gcloud-auth==0.2.4 \
     google-cloud-storage==1.28.1 \
     https://storage.googleapis.com/deeplearning-platform-ui-public/jupyterlab_gcsfilebrowser-0.1.8.tar.gz
 
-WORKDIR $HOME/work
+WORKDIR $HOME
 RUN jupyter lab build -y
-
-# Add samples files into image
-COPY --chown=$NB_UID ./examples /home/$NB_USER/examples/

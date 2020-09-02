@@ -23,9 +23,9 @@ services:
     ports:
       - "${NOTEBOOK_PORT:-8888}:8888"
     volumes:
-      - "$NOTEBOOK_WORKING_DIR:/home/jovyan/work"
+      - "$NOTEBOOK_WORKING_DIR:/home/jovyan"
       - "$NOTEBOOK_SERVICE_ACCOUNT_DIR:/home/jovyan/.config/gcloud"
-      - "$NOTEBOOK_FUNCTION_LIBRARY_DIR:/home/jovyan/work/function_library"
+      - "$NOTEBOOK_FUNCTION_LIBRARY_DIR:/home/jovyan/function_library"
     environment:
       - NOTEBOOK_GRPC_HOST=grpc
       - NB_UID=$NOTEBOOK_UID
@@ -38,13 +38,13 @@ services:
     build:
       context: .
       dockerfile: ./tools/notebook/extensions/wstl/Dockerfile
-    entrypoint: ["/home/gopher/tools/notebook/extensions/wstl/service/main/main",  "-host=0.0.0.0"]
+    entrypoint: ["/etc/wstl/bin/main",  "-host=0.0.0.0"]
     image: "gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-services:latest"
     volumes:
-      - "$NOTEBOOK_WORKING_DIR:/home/gopher/work"
-      - "$NOTEBOOK_SERVICE_ACCOUNT_DIR:/home/gopher/.config/gcloud"
-      - "$NOTEBOOK_FUNCTION_LIBRARY_DIR:/home/gopher/work/function_library"
+      - "$NOTEBOOK_WORKING_DIR:/home/jovyan"
+      - "$NOTEBOOK_SERVICE_ACCOUNT_DIR:/home/jovyan/.config/gcloud"
+      - "$NOTEBOOK_FUNCTION_LIBRARY_DIR:/home/jovyan/function_library"
       - "/etc/ssl/certs:/etc/ssl/certs:ro"
     environment:
       - DH_ROOT=$PWD
-      - GOOGLE_APPLICATION_CREDENTIALS=/home/gopher/.config/gcloud/$NOTEBOOK_SERVICE_ACCOUNT_FILENAME
+      - GOOGLE_APPLICATION_CREDENTIALS=/home/jovyan/.config/gcloud/$NOTEBOOK_SERVICE_ACCOUNT_FILENAME

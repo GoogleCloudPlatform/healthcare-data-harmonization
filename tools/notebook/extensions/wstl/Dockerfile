@@ -22,6 +22,7 @@ FROM $BASE_CONTAINER
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 USER root
+ARG WSTL_INSTALL_DIR="/etc/wstl"
 
 # Install all OS dependencies for notebook server that starts but lacks all
 # features (e.g., download as all possible file formats)
@@ -47,25 +48,37 @@ RUN apt-get update && apt-get install -y git \
     curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN wget https://golang.org/dl/go1.14.6.linux-amd64.tar.gz
-RUN tar -C /usr/local -xzf go1.14.6.linux-amd64.tar.gz
+RUN wget https://golang.org/dl/go1.14.6.linux-amd64.tar.gz && \
+    tar -C /usr/local -xzf go1.14.6.linux-amd64.tar.gz && \
+    rm -f go1.14.6.linux-amd64.tar.gz
+
 ENV PATH $PATH:/usr/local/go/bin
 
-
-ENV GO_USER="gopher"
+ENV GO_USER="jovyan"
 RUN useradd -ms /bin/bash $GO_USER
 ENV HOME=/home/$GO_USER
 ENV GOPATH=$HOME
 ENV GOBIN=$GOPATH/bin
 ENV PATH $GOBIN:$PATH
 
-USER $GO_USER
-COPY --chown=$GO_USER ./mapping_engine $HOME/mapping_engine
-COPY --chown=$GO_USER ./mapping_language $HOME/mapping_language
-RUN mkdir -p $HOME/tools/notebook/
-COPY --chown=$GO_USER ./tools/notebook/extensions/ $HOME/tools/notebook/extensions/
+RUN mkdir -p $WSTL_INSTALL_DIR && \
+    chown $GO_USER $WSTL_INSTALL_DIR
 
-WORKDIR $HOME/tools/notebook/extensions/wstl/
-RUN ["chmod", "+x", "./build_go.sh"]
-RUN ./build_go.sh
-WORKDIR $HOME/work
+USER $GO_USER
+RUN mkdir -p $WSTL_INSTALL_DIR/bin && \
+    mkdir -p $WSTL_INSTALL_DIR/tools/notebook && \
+    chown $NB_USER:$NB_GID $WSTL_INSTALL_DIR
+
+COPY --chown=$GO_USER ./mapping_engine $WSTL_INSTALL_DIR/mapping_engine
+COPY --chown=$GO_USER ./mapping_language $WSTL_INSTALL_DIR/mapping_language
+COPY --chown=$GO_USER ./tools/notebook/extensions/ $WSTL_INSTALL_DIR/tools/notebook/extensions/
+
+WORKDIR $WSTL_INSTALL_DIR/tools/notebook/extensions/wstl/
+RUN chmod +x ./build_go.sh && \
+    ./build_go.sh && \
+    cp $WSTL_INSTALL_DIR/tools/notebook/extensions/wstl/service/main/main $WSTL_INSTALL_DIR/bin && \
+    rm -rf $WSTL_INSTALL_DIR/mapping_engine && \
+    rm -rf $WSTL_INSTALL_DIR/mapping_language && \
+    rm -rf $WSTL_INSTALL_DIR/tools
+
+WORKDIR $HOME
