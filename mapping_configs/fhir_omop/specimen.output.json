@@ -1,12 +1,14 @@
 {
    "specimen":{
-      "specimen_id":2.194925762E+09,
-      "person_id":1.085670747E+09,
-      "specimen_type_concept_id":4.045667E+06,
-      "specimen_date":"2011-05-30",
-      "specimen_datetime":"2011-05-30T06:15:00Z",
       "quantity":6,
+      "specimen_datetime":"2011-05-30T06:15:00Z",
+      "specimen_concept_id":4.045667E+06,
+      "specimen_date":"2011-05-30",
+      "person_id":1.085670747E+09,
       "unit_concept_id":8587,
-      "anatomic_site_concept_id":4.172448E+06
+      "anatomic_site_concept_id":4.172448E+06,
+      "specimen_type_concept_id":4.045667E+06,
+      "specimen_id":2.194925762E+09,
+      "disease_status_concept_id":0
    }
 }

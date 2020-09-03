@@ -86,12 +86,20 @@ def Extract_Day(str) {
 
 def Convert_Terminology(Code, System){
   var mapping : $HarmonizeCode("$Local", Code, System, "FHIR-OMOP-ConceptMap");
-  $this : $ParseInt(mapping[0].code);
+  if (mapping[0].system = "FHIR-OMOP-ConceptMap-unharmonized") {
+    $this : 0;
+  } else {
+    $this : $ParseInt(mapping[0].code);
+  }
 }
 
 def Convert_Terminology_With_Target(Code, System, Target){
   var mapping : $HarmonizeCodeWithTarget("$Local", Code, System, Target, "FHIR-OMOP-ConceptMap");
-  $this : $ParseInt(mapping[0].code);
+  if (mapping[0].system = "FHIR-OMOP-ConceptMap-unharmonized") {
+    $this : 0;
+  } else {
+    $this : $ParseInt(mapping[0].code);
+  }
 }
 
 // Description: Constructs an OMOP Concept Table (v6.0) based on FHIR STU3 CodeableConcept datatype
@@ -129,6 +137,10 @@ def Encounter_VisitOccurrence(Encounter) {
   visit_type_concept_id: 44818518;
   care_site_id: Extract_ReferenceID(Encounter.serviceProvider.reference);
   provider_id: Extract_ReferenceID(Encounter.participant[0].individual.reference);
+  admitted_from_concept_id : Convert_Terminology(Encounter.hospitalization.admitSource.coding[0].code, Encounter.hospitalization.admitSource.coding[0].system);
+  // No Matching Concept/Attribute found in FHIR STU3
+  visit_source_concept_id : 0;
+  discharge_to_concept_id : 0;
 }
 
 // Description: Constructs an OMOP Observation Table (v6.0) based on FHIR STU3 Observation Resource
@@ -145,7 +157,7 @@ def Observation_Observation(Observation) {
   observation_concept_id : Convert_Terminology(Observation.code.coding[0].code, Observation.code.coding[0].system);
   observation_date : Extract_Date(Observation.issued);
   observation_datetime : Observation.issued;
-  observation_type_concept_id : Convert_Terminology(Observation.category[0].coding[0].code, Observation.category[0].coding[0].system);
+  observation_type_concept_id : Convert_Terminology_With_Target(Observation.category[0].coding[0].code, Observation.category[0].coding[0].system,"LOINC");
   value_as_number : Observation.valueQuantity.value;
   value_as_string : Observation.valueString;
   value_as_concept_id : Convert_Terminology(Observation.valueCodeableConcept.coding[0].code, Observation.valueCodeableConcept.coding[0].system);
@@ -154,8 +166,10 @@ def Observation_Observation(Observation) {
   provider_id : Extract_ReferenceID(provider[0].reference);
   visit_occurrence_id (if Extract_ReferenceName(Observation.context.reference) = "Encounter") : Extract_ReferenceID(Observation.context.reference);
   observation_source_value : Observation.category[0].coding[0].display;
-  observation_source_concept_id : Convert_Terminology(Observation.category[0].coding[0].code, Observation.category[0].coding[0].system);
+  observation_source_concept_id : Convert_Terminology_With_Target(Observation.category[0].coding[0].code, Observation.category[0].coding[0].system,"LOINC");
   unit_source_value : Observation.valueQuantity.unit;
+  // No Matching Concept/Attribute found in FHIR STU3
+  obs_event_field_concept_id : 0;
 }
 
 // Description: Constructs an OMOP ObservationPeriod Table (v6.0) based on FHIR STU3 Encounter Resource
@@ -185,7 +199,7 @@ def Observation_ObservationPeriod(Observation){
   person_id (if Extract_ReferenceName(Observation.subject.reference) = "Patient") : Extract_ReferenceID(Observation.subject.reference);
   observation_period_start_date : Extract_Date(Observation.effectivePeriod.start);
   observation_period_end_date : Extract_Date(Observation.effectivePeriod.end);
-  period_type_concept_id : Convert_Terminology(Observation.category[0].coding[0].code, Observation.category[0].coding[0].system);
+  period_type_concept_id : Convert_Terminology_With_Target(Observation.category[0].coding[0].code, Observation.category[0].coding[0].system,"LOINC");
 }
 
 // Description: Constructs an OMOP Person Table (v6.0) based on FHIR STU3 Patient Resource
@@ -199,8 +213,6 @@ def Observation_ObservationPeriod(Observation){
 def Patient_Person(Patient, locationID) {
   person_id : $IntHash(Patient.id);
   person_source_value : Patient.identifier[0].value;
-//  first_name : Patient.name[0].given[0];
-//  last_name : Patient.name[0].family;
   gender_source_value : Patient.gender;
   gender_concept_id : Convert_Terminology(Patient.gender, "http://hl7.org/fhir/administrative-gender");
   gender_source_concept_id : Convert_Terminology(Patient.gender, "http://hl7.org/fhir/administrative-gender");
@@ -236,7 +248,7 @@ def Address_Location(Address) {
   address_1 : Address.line[0];
   address_2 : Address.line[1];
   city : Address.city;
-  state : Address.state;
+  state : $SubStr(Address.state,0,2);
   zip : Address.postalCode;
   county : Address.district;
   country : Address.country;
@@ -284,6 +296,7 @@ def Procedure_ProcedureOccurrence(Procedure) {
   visit_occurrence_id (if Extract_ReferenceName(Procedure.context.reference) = "Encounter") : Extract_ReferenceID(Procedure.context.reference);
   var provider : Procedure.performer[where Extract_ReferenceName($.actor.reference) = "Practitioner"];
   provider_id : Extract_ReferenceID(provider[0].actor.reference);
+  modifier_concept_id : Convert_Terminology(Procedure.bodySite[0].coding[0].code, Procedure.bodySite[0].coding[0].system);
 }
 
 // Description: Constructs an OMOP ConditionOccurrence Table (v6.0) based on FHIR STU3 Condition Resource
@@ -308,7 +321,12 @@ def Condition_ConditionOccurrence(Condition) {
   visit_occurrence_id (if Extract_ReferenceName(Condition.context.reference) = "Encounter") : Extract_ReferenceID(Condition.context.reference);
   condition_source_value : Condition.code.coding[0].display;
   condition_source_concept_id : Convert_Terminology(Condition.code.coding[0].code, Condition.code.coding[0].system);
+
+// For FHIR STU3
   condition_status_concept_id : Convert_Terminology(Condition.clinicalStatus, "http://hl7.org/fhir/condition-clinical");
+
+// For FHIR R4
+//  condition_status_concept_id : Convert_Terminology(Condition.clinicalStatus.coding[0].code, Condition.clinicalStatus.coding[0].system);
 }
 
 // Description: Constructs an OMOP Drug_Exposure Table (v6.0) based on FHIR STU3 MedicationStatement Resource
@@ -328,12 +346,10 @@ def MedicationStatement_DrugExposure(MedicationStatement) {
   drug_exposure_start_date : Extract_Date(MedicationStatement.effectivePeriod.start);
   drug_exposure_end_date : Extract_Date(MedicationStatement.effectivePeriod.end);
   verbatim_end_date : Extract_Date(MedicationStatement.effectivePeriod.end);
-//  effective_drug_dose : MedicationStatement.dosage[0].doseQuantity.value;
   drug_type_concept_id : Convert_Terminology(MedicationStatement.category.coding[0].code, MedicationStatement.category.coding[0].system);
   if (MedicationStatement.reasonNotTaken? and MedicationStatement.status = "stopped") {
-    stop_reason : MedicationStatement.reasonNotTaken[0].coding[0].display;
+    stop_reason : $SubStr(MedicationStatement.reasonNotTaken[0].coding[0].display,0,20);
   }
-//  dose_unit_concept_id : Convert_Terminology(MedicationStatement.dosage[0].doseQuantity.unit, "http://unitsofmeasure.org");
   sig : MedicationStatement.dosage[0].text;
   route_concept_id : Convert_Terminology(MedicationStatement.dosage[0].route.coding[0].code, MedicationStatement.dosage[0].route.coding[0].system);
   provider_id (if Extract_ReferenceName(MedicationStatement.informationSource.reference) = "Practitioner") : Extract_ReferenceID(MedicationStatement.informationSource.reference);
@@ -363,10 +379,8 @@ def MedicationRequest_DrugExposure(MedicationRequest) {
     drug_exposure_start_datetime : MedicationRequest.authoredOn;
     drug_exposure_start_date : Extract_Date(MedicationRequest.authoredOn);
   }
-//  effective_drug_dose : MedicationRequest.dosageInstruction[0].doseQuantity.value;
   verbatim_end_date : Extract_Date(MedicationRequest.dispenseRequest.validityPeriod.end);
   drug_type_concept_id : Convert_Terminology(MedicationRequest.category.coding[0].code, MedicationRequest.category.coding[0].system);
-//  dose_unit_concept_id : Convert_Terminology(MedicationRequest.dosageInstruction[0].doseQuantity.unit, MedicationRequest.dosageInstruction[0].doseQuantity.system);
   refills : MedicationRequest.dispenseRequest.numberOfRepeatsAllowed;
   quantity : MedicationRequest.dispenseRequest.quantity.value;
   days_supply : MedicationRequest.dispenseRequest.expectedSupplyDuration.value;
@@ -393,17 +407,19 @@ def MedicationDispense_DrugExposure(MedicationDispense) {
   if (MedicationDispense.whenPrepared?) {
     drug_exposure_start_datetime : MedicationDispense.whenPrepared;
     drug_exposure_start_date : Extract_Date(MedicationDispense.whenPrepared);
+    //TODO: DRUG_EXPOSURE_END_DATETIME = DRUG_EXPOSURE_START_DATETIME + DAYS_SUPPLY -1
+    drug_exposure_end_datetime : MedicationDispense.whenPrepared;
   } else {
     drug_exposure_start_datetime : MedicationDispense.whenHandedOver;
     drug_exposure_start_date : Extract_Date(MedicationDispense.whenHandedOver);
+    //TODO: DRUG_EXPOSURE_END_DATETIME = DRUG_EXPOSURE_START_DATETIME + DAYS_SUPPLY -1
+    drug_exposure_end_datetime : MedicationDispense.whenHandedOver;
   }
-//  effective_drug_dose : MedicationDispense.dosageInstruction[0].doseQuantity.value;
   verbatim_end_date : Extract_Date(MedicationDispense.dispenseRequest.validityPeriod.end);
   drug_type_concept_id : Convert_Terminology(MedicationDispense.category.coding[0].code, MedicationDispense.category.coding[0].system);
   if (MedicationDispense.notDoneReasonCodeableConcept? and MedicationDispense.notDone = true) {
-    stop_reason : MedicationDispense.notDoneReasonCodeableConcept.coding[0].display;
+    stop_reason : $SubStr(MedicationDispense.notDoneReasonCodeableConcept.coding[0].display,0,20);
   }
-//  dose_unit_concept_id : Convert_Terminology(MedicationDispense.dosageInstruction[0].doseQuantity.unit, MedicationDispense.dosageInstruction[0].doseQuantity.system);
   quantity : MedicationDispense.quantity.value;
   days_supply : MedicationDispense.daysSupply.value;
   sig : MedicationDispense.dosageInstruction[0].text;
@@ -437,10 +453,8 @@ def MedicationAdministration_DrugExposure(MedicationAdministration) {
     drug_exposure_start_datetime : MedicationAdministration.effectiveDateTime;
     drug_exposure_start_date : Extract_Date(MedicationAdministration.effectiveDateTime);
   }
-//  effective_drug_dose : MedicationAdministration.dosage.dose.value;
   drug_type_concept_id : Convert_Terminology(MedicationAdministration.category.coding[0].code, MedicationAdministration.category.coding[0].system);
-  stop_reason : MedicationAdministration.reasonNotGiven[0].coding[0].display;
-//  dose_unit_concept_id : Convert_Terminology(MedicationAdministration.dosage.rateRatio.numerator.code, MedicationAdministration.dosage.rateRatio.numerator.system);
+  stop_reason : $SubStr(MedicationAdministration.reasonNotGiven[0].coding[0].display,0,20);
   quantity : MedicationAdministration.dosage.rateRatio.numerator.value;
   sig : MedicationAdministration.dosage.text;
   route_concept_id : Convert_Terminology(MedicationAdministration.dosage.route.coding[0].code, MedicationAdministration.dosage.route.coding[0].system);
@@ -462,10 +476,13 @@ def MedicationAdministration_DrugExposure(MedicationAdministration) {
 def Specimen_Specimen(Specimen) {
   specimen_id : $IntHash(Specimen.id);
   person_id (if Extract_ReferenceName(Specimen.subject.reference) = "Patient") : Extract_ReferenceID(Specimen.subject.reference);
+  specimen_concept_id : Convert_Terminology(Specimen.type.coding[0].code, Specimen.type.coding[0].system);
   specimen_type_concept_id : Convert_Terminology(Specimen.type.coding[0].code, Specimen.type.coding[0].system);
   specimen_date : Extract_Date(Specimen.collection.collectedDateTime);
   specimen_datetime : Specimen.collection.collectedDateTime;
   quantity : Specimen.collection.quantity.value;
   unit_concept_id : Convert_Terminology(Specimen.collection.quantity.unit, "http://unitsofmeasure.org");
   anatomic_site_concept_id : Convert_Terminology(Specimen.collection.bodySite.coding[0].code, Specimen.collection.bodySite.coding[0].system);
+  // No Matching Concept/Attribute found in FHIR STU3
+  disease_status_concept_id : 0;
 }

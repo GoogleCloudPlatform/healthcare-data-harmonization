@@ -70,7 +70,12 @@
         }
       ],
       "source": "http://hl7.org/fhir/v3/ActCode",
-      "target": "Visit"
+      "target": "Visit",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "0",
+        "display": "Unknown"
+      }
     },
     {
       "element": [
@@ -87,7 +92,12 @@
         }
       ],
       "source": "http://hl7.org/fhir/v3/ActCode",
-      "target": "NUCC"
+      "target": "NUCC",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "0",
+        "display": "Unknown"
+      }
     },
     {
       "element": [
@@ -104,7 +114,12 @@
         }
       ],
       "source": "http://loinc.org",
-      "target": "LOINC"
+      "target": "LOINC",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "0",
+        "display": "Unknown"
+      }
     },
     {
       "element": [
@@ -143,7 +158,12 @@
         }
       ],
       "source": "http://unitsofmeasure.org",
-      "target": "UCUM"
+      "target": "UCUM",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "0",
+        "display": "Unknown"
+      }
     },
     {
       "element": [
@@ -182,7 +202,12 @@
         }
       ],
       "source": "http://hl7.org/fhir/medication-admin-category",
-      "target": "LOINC"
+      "target": "LOINC",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "0",
+        "display": "Unknown"
+      }
     },
     {
       "element": [
@@ -221,7 +246,12 @@
         }
       ],
       "source": "http://hl7.org/fhir/v3/ActCode",
-      "target": "UB04"
+      "target": "UB04",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "0",
+        "display": "Unknown"
+      }
     },
     {
       "element": [
@@ -260,7 +290,12 @@
         }
       ],
       "source": "http://hl7.org/fhir/v2/0360/2.7",
-      "target": "NUCC"
+      "target": "NUCC",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "0",
+        "display": "Unknown"
+      }
     },
     {
       "element": [
@@ -277,7 +312,12 @@
         }
       ],
       "source": "http://hl7.org/fhir/medication-statement-category",
-      "target": "LOINC"
+      "target": "LOINC",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "0",
+        "display": "Unknown"
+      }
     },
     {
       "element": [
@@ -294,7 +334,12 @@
         }
       ],
       "source": "http://hl7.org/fhir/medication-dispense-category",
-      "target": "LOINC"
+      "target": "LOINC",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "0",
+        "display": "Unknown"
+      }
     },
     {
       "element": [
@@ -311,7 +356,12 @@
         }
       ],
       "source": "http://hl7.org/fhir/condition-clinical",
-      "target": "SNOMED"
+      "target": "SNOMED",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "0",
+        "display": "Unknown"
+      }
     },
     {
       "element": [
@@ -328,7 +378,12 @@
         }
       ],
       "source": "http://hl7.org/fhir/observation-category",
-      "target": "SNOMED"
+      "target": "SNOMED",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "0",
+        "display": "Unknown"
+      }
     },
     {
       "element": [
@@ -345,7 +400,12 @@
         }
       ],
       "source": "http://hl7.org/fhir/observation-category",
-      "target": "LOINC"
+      "target": "LOINC",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "0",
+        "display": "Unknown"
+      }
     },
     {
       "element": [
@@ -362,7 +422,12 @@
         }
       ],
       "source": "http://www.genenames.org",
-      "target": "LOINC"
+      "target": "LOINC",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "0",
+        "display": "Unknown"
+      }
     },
     {
       "element": [
@@ -379,7 +444,12 @@
         }
       ],
       "source": "http://hl7.org/fhir/medication-request-category",
-      "target": "LOINC"
+      "target": "LOINC",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "0",
+        "display": "Unknown"
+      }
     },
     {
       "element": [
@@ -492,10 +562,26 @@
               "equivalence": "equivalent"
             }
           ]
+        },
+        {
+          "code": "255560000",
+          "display": "Intravenous",
+          "target": [
+            {
+              "code": "35807199",
+              "display": "Intravenous",
+              "equivalence": "equivalent"
+            }
+          ]
         }
       ],
       "source": "http://snomed.info/sct",
-      "target": "SNOMED"
+      "target": "SNOMED",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "0",
+        "display": "Unknown"
+      }
     },
     {
       "element": [
@@ -523,7 +609,12 @@
         }
       ],
       "source": "http://hl7.org/fhir/administrative-gender",
-      "target": "Gender"
+      "target": "Gender",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "0",
+        "display": "Unknown"
+      }
     }
   ],
   "id": "FHIR-OMOP-ConceptMap",
