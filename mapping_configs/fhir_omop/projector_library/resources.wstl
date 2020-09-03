@@ -290,8 +290,14 @@ def Procedure_ProcedureOccurrence(Procedure) {
   person_id (if Extract_ReferenceName(Procedure.subject.reference) = "Patient") : Extract_ReferenceID(Procedure.subject.reference);
   procedure_concept_id : Convert_Terminology(Procedure.code.coding[0].code, Procedure.code.coding[0].system);
   procedure_source_concept_id : Convert_Terminology(Procedure.code.coding[0].code, Procedure.code.coding[0].system);
-  procedure_date: Extract_Date(Procedure.performedDateTime);
-  procedure_datetime : Procedure.performedDateTime;
+  if (Procedure.performedPeriod) {
+    procedure_date : Extract_Date(Procedure.performedPeriod.start);
+    procedure_datetime : Procedure.performedPeriod.start
+  }
+  if (Procedure.performedDateTime) {
+    procedure_date : Extract_Date(Procedure.performedDateTime);
+    procedure_datetime : Procedure.performedDateTime
+  }
   procedure_type_concept_id : Convert_Terminology(Procedure.category.coding[0].code, Procedure.category.coding[0].system);
   visit_occurrence_id (if Extract_ReferenceName(Procedure.context.reference) = "Encounter") : Extract_ReferenceID(Procedure.context.reference);
   var provider : Procedure.performer[where Extract_ReferenceName($.actor.reference) = "Practitioner"];
@@ -311,10 +317,16 @@ def Condition_ConditionOccurrence(Condition) {
   condition_occurrence_id : $IntHash(Condition.id);
   person_id (if Extract_ReferenceName(Condition.subject.reference) = "Patient") : Extract_ReferenceID(Condition.subject.reference);
   condition_concept_id : Convert_Terminology(Condition.code.coding[0].code, Condition.code.coding[0].system);
-  condition_start_date : Extract_Date(Condition.onsetPeriod.start);
-  condition_start_datetime : Condition.onsetPeriod.start
-  condition_end_date : Extract_Date(Condition.onsetPeriod.end);
-  condition_end_datetime : Condition.onsetPeriod.end
+  if (Condition.onsetPeriod) {
+    condition_start_date : Extract_Date(Condition.onsetPeriod.start);
+    condition_start_datetime : Condition.onsetPeriod.start
+    condition_end_date : Extract_Date(Condition.onsetPeriod.end);
+    condition_end_datetime : Condition.onsetPeriod.end
+  }
+  if (Condition.onsetDateTime) {
+    condition_start_date : Extract_Date(Condition.onsetDateTime);
+    condition_start_datetime : Condition.onsetDateTime
+  }
   condition_type_concept_id : Convert_Terminology(Condition.category[0].coding[0].code, Condition.category[0].coding[0].system);
   stop_reason : Condition.abatementString;
   provider_id (if Extract_ReferenceName(Condition.asserter.reference) = "Practitioner") : Extract_ReferenceID(Condition.asserter.reference);
