@@ -216,7 +216,7 @@ def Patient_Person(Patient, locationID) {
   gender_source_value : Patient.gender;
   gender_concept_id : Convert_Terminology(Patient.gender, "http://hl7.org/fhir/administrative-gender");
   gender_source_concept_id : Convert_Terminology(Patient.gender, "http://hl7.org/fhir/administrative-gender");
-  birth_datetime : Patient.birthDate;
+  birth_datetime : $ReformatTime("2006-01-02", Patient.birthDate, "2006-01-02T15:04:05-07:00");
   death_datetime : Patient.deceasedDateTime;
   year_of_birth : Extract_Year(Patient.birthDate);
   month_of_birth : Extract_Month(Patient.birthDate);

@@ -11,7 +11,7 @@
    },
    "person":{
       "gender_source_value":"male",
-      "birth_datetime":"2003-07-05",
+      "birth_datetime":"2003-07-05T00:00:00+00:00",
       "race_source_concept_id":8527,
       "ethnicity_source_value":"Not Hispanic or Latino",
       "provider_id":2.20987035E+09,
