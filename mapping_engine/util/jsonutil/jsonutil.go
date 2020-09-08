@@ -759,7 +759,7 @@ func unmarshaledToJSONToken(object interface{}) (JSONToken, error) {
 
 // UnmarshalJSON sets the contents of the receiver to be the unmarshaled and converted contents of
 // the given JSON (hence given JSON must be of an object, rather than primitive or array).
-func (c *JSONContainer) UnmarshalJSON(j []byte) error {
+func (c *JSONContainer) UnmarshalJSON(j json.RawMessage) error {
 	var m map[string]interface{}
 	err := json.Unmarshal(j, &m)
 	if err != nil {
@@ -778,7 +778,7 @@ func (c *JSONContainer) UnmarshalJSON(j []byte) error {
 
 // UnmarshalJSON sets the contents of the receiver to be the unmarshaled and converted contents of
 // the given JSON (hence given JSON must be of an array, rather than primitive or object).
-func (a *JSONArr) UnmarshalJSON(j []byte) error {
+func (a *JSONArr) UnmarshalJSON(j json.RawMessage) error {
 	var m []interface{}
 	err := json.Unmarshal(j, &m)
 	if err != nil {

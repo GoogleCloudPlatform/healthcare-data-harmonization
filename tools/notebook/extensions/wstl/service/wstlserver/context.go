@@ -16,6 +16,7 @@ package wstlserver
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strings"
@@ -36,7 +37,7 @@ import (
 // Context is a single transformation context that loosely corresponds to a Jupyter notebook cell.
 type Context struct {
 	// Whistle incremental transformer context.
-	incrementalTransformer *transform.Transformer
+	incrementalTransformer transform.Transformer
 
 	// Google Cloud Storage client.
 	storageClient gcsutil.StorageClient
@@ -61,7 +62,7 @@ func (c *Context) EvaluateIncrementalTransformation(request *wspb.IncrementalTra
 		return nil, errors.New("missing wstl script from session")
 	}
 	config := newHarmonizationConfig(request.GetWstl(), request.GetLibraryConfig(), request.GetCodeConfig(), request.GetUnitConfig())
-	trans, err := transform.NewTransformer(context.Background(), config, transform.GCSClient(c.storageClient))
+	trans, err := transform.NewTransformer(context.Background(), config, transform.TransformationConfig{}, transform.GCSClient(c.storageClient))
 	if err != nil {
 		return nil, err
 	}
@@ -155,14 +156,14 @@ func newHarmonizationConfig(wstl string, libraryConfigs []*wspb.Location, codeCo
 	}
 }
 
-func executeTransformation(trans *transform.Transformer, inputs []*wspb.Location) []*wspb.TransformedRecords {
+func executeTransformation(trans transform.Transformer, inputs []*wspb.Location) []*wspb.TransformedRecords {
 	results := []*wspb.TransformedRecords{}
 	for _, input := range inputs {
 		tRecord := &wspb.TransformedRecords{}
-		var source []byte
+		var source json.RawMessage
 		switch l := input.GetLocation().(type) {
 		case *wspb.Location_InlineJson:
-			source = []byte(l.InlineJson)
+			source = json.RawMessage(l.InlineJson)
 		case *wspb.Location_GcsLocation:
 			var err error
 			if source, err = gcsutil.ReadFromGcs(context.Background(), l.GcsLocation); err != nil {
@@ -180,7 +181,7 @@ func executeTransformation(trans *transform.Transformer, inputs []*wspb.Location
 			continue
 		}
 
-		output, err := trans.JSONtoJSON(source, transform.TransformationConfigs{})
+		output, err := trans.JSONtoJSON(source)
 
 		if err != nil {
 			tRecord.Record = &wspb.TransformedRecords_Error{

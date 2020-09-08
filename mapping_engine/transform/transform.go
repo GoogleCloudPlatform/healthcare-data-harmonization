@@ -46,16 +46,38 @@ import (
 
 )
 
-// Transformer contains projectors initialized for a specific config, and receiver methods to
-// perform transformations.
-type Transformer struct {
-	Registry                *types.Registry
-	dataHarmonizationConfig *dhpb.DataHarmonizationConfig
-	mappingConfig           *mappb.MappingConfig
+// Transformer defines an interface to perform transformations.
+type Transformer interface {
+	// Transform transforms given JSONToken (parsed JSON) into a target JSONToken using the
+	// config.
+	Transform(jsonutil.JSONToken) (jsonutil.JSONToken, error)
+	// JSONtoJSON transforms given raw JSON into a target raw JSON using the config.
+	JSONtoJSON(json.RawMessage) (json.RawMessage, error)
+
+	// ParseJSON parses given raw JSON into a JSONToken.
+	ParseJSON(json.RawMessage) (jsonutil.JSONToken, error)
+
+	// LoadProjectors registers all given projectors in the config.
+	LoadProjectors([]*mappb.ProjectorDefinition) error
+
+	// Registry returns the registry used in Transformer.
+	Registry() *types.Registry
+
+	// HasPostProcessProjector returns true iff a post process projector is set.
+	HasPostProcessProjector() bool
 }
 
-// TransformationConfigs contains metadata used during transformation.
-type TransformationConfigs struct {
+// DefaultTransformer contains projectors initialized for a specific config, and receiver methods
+// to perform transformations.
+type DefaultTransformer struct {
+	registry                *types.Registry
+	dataHarmonizationConfig *dhpb.DataHarmonizationConfig
+	mappingConfig           *mappb.MappingConfig
+	transformationConfig    TransformationConfig
+}
+
+// TransformationConfig contains metadata used during transformation.
+type TransformationConfig struct {
 	LogTrace     bool
 	SkipBundling bool
 }
@@ -106,14 +128,21 @@ func GCSClient(c gcsutil.StorageClient) Option {
 	}
 }
 
-// NewTransformer creates and initializes a transformer.
-func NewTransformer(ctx context.Context, config *dhpb.DataHarmonizationConfig, setters ...Option) (*Transformer, error) {
-	t := &Transformer{
-		Registry:                types.NewRegistry(),
+// NewTransformer creates and initializes a transformer, and returns a new DefaultTransformer by
+// default.
+func NewTransformer(ctx context.Context, config *dhpb.DataHarmonizationConfig, tconfig TransformationConfig, setters ...Option) (Transformer, error) {
+	return NewDefaultTransformer(ctx, config, tconfig, setters...)
+}
+
+// NewDefaultTransformer creates and initializes a default transformer.
+func NewDefaultTransformer(ctx context.Context, config *dhpb.DataHarmonizationConfig, tconfig TransformationConfig, setters ...Option) (*DefaultTransformer, error) {
+	t := &DefaultTransformer{
+		registry:                types.NewRegistry(),
 		dataHarmonizationConfig: config,
+		transformationConfig:    tconfig,
 	}
 
-	if err := registerall.RegisterAll(t.Registry); err != nil {
+	if err := registerall.RegisterAll(t.registry); err != nil {
 		return nil, err
 	}
 
@@ -125,13 +154,13 @@ func NewTransformer(ctx context.Context, config *dhpb.DataHarmonizationConfig, s
 	gcsutil.InitializeClient(options.GCSClient)
 
 	if hc := config.GetHarmonizationConfig(); hc != nil {
-		if err := harmonizecode.LoadCodeHarmonizationProjectors(t.Registry, hc); err != nil {
+		if err := harmonizecode.LoadCodeHarmonizationProjectors(t.registry, hc); err != nil {
 			return nil, err
 		}
 	}
 
 	if uc := config.GetUnitHarmonizationConfig(); uc != nil {
-		if err := harmonizeunit.LoadUnitHarmonizationProjectors(t.Registry, uc); err != nil {
+		if err := harmonizeunit.LoadUnitHarmonizationProjectors(t.registry, uc); err != nil {
 			return nil, err
 		}
 	}
@@ -153,7 +182,7 @@ func NewTransformer(ctx context.Context, config *dhpb.DataHarmonizationConfig, s
 		}
 
 		if options.CloudFunctions {
-			if err := cloudfunction.LoadCloudFunctionProjectors(t.Registry, lc.CloudFunction); err != nil {
+			if err := cloudfunction.LoadCloudFunctionProjectors(t.registry, lc.CloudFunction); err != nil {
 				return nil, err
 			}
 		} else {
@@ -167,7 +196,7 @@ func NewTransformer(ctx context.Context, config *dhpb.DataHarmonizationConfig, s
 		}
 
 		if options.FetchConfigs {
-			if err := fetch.LoadFetchProjectors(context.Background(), t.Registry, lc.HttpQuery); err != nil {
+			if err := fetch.LoadFetchProjectors(context.Background(), t.registry, lc.HttpQuery); err != nil {
 				return nil, err
 			}
 		} else {
@@ -216,14 +245,14 @@ func (e invalidFetchProjectorError) Error() string {
 }
 
 // Project is a convenience function to call a single projector out of context.
-func (t *Transformer) Project(projector string, args ...jsonutil.JSONMetaNode) (res jsonutil.JSONToken, err error) {
-	pctx := types.NewContext(t.Registry)
+func (t *DefaultTransformer) Project(projector string, args ...jsonutil.JSONMetaNode) (res jsonutil.JSONToken, err error) {
+	pctx := types.NewContext(t.registry)
 
 	defer errors.Recover("Project", func(e error) {
 		err = e
 	})
 
-	proj, err := t.Registry.FindProjector(projector)
+	proj, err := t.registry.FindProjector(projector)
 	if err != nil {
 		return nil, err
 	}
@@ -233,7 +262,7 @@ func (t *Transformer) Project(projector string, args ...jsonutil.JSONMetaNode) (
 }
 
 // LoadMappingConfig loads the mapping config inline or from a GCS path.
-func (t *Transformer) LoadMappingConfig(config *dhpb.DataHarmonizationConfig) (*mappb.MappingConfig, error) {
+func (t *DefaultTransformer) LoadMappingConfig(config *dhpb.DataHarmonizationConfig) (*mappb.MappingConfig, error) {
 	mpc := &mappb.MappingConfig{}
 	if sm := config.GetStructureMappingConfig(); sm != nil {
 		switch mapping := config.GetStructureMappingConfig().Mapping.(type) {
@@ -251,11 +280,11 @@ func (t *Transformer) LoadMappingConfig(config *dhpb.DataHarmonizationConfig) (*
 }
 
 // LoadProjectors registers all given projectors.
-func (t *Transformer) LoadProjectors(projectors []*mappb.ProjectorDefinition) error {
+func (t *DefaultTransformer) LoadProjectors(projectors []*mappb.ProjectorDefinition) error {
 	for _, pd := range projectors {
 		p := projector.FromDef(pd, mapping.NewWhistler())
 
-		if err := t.Registry.RegisterProjector(pd.Name, p); err != nil {
+		if err := t.registry.RegisterProjector(pd.Name, p); err != nil {
 			return fmt.Errorf("error registering projector %s: %v", pd.Name, err)
 		}
 	}
@@ -263,15 +292,15 @@ func (t *Transformer) LoadProjectors(projectors []*mappb.ProjectorDefinition) er
 }
 
 // Transform converts the json tree using the specified config.
-func (t *Transformer) Transform(in *jsonutil.JSONContainer, tconfig TransformationConfigs) (res jsonutil.JSONToken, err error) {
-	pctx := types.NewContext(t.Registry)
+func (t *DefaultTransformer) Transform(in jsonutil.JSONToken) (res jsonutil.JSONToken, err error) {
+	pctx := types.NewContext(t.registry)
 	defer errors.Recover("Transform", func(e error) {
 		err = e
 	})
 
 	pctx.Variables.Push()
 
-	inn, err := jsonutil.TokenToNode(*in)
+	inn, err := jsonutil.TokenToNode(in)
 	if err != nil {
 		return nil, fmt.Errorf("input was invalid: %v", err)
 	}
@@ -282,7 +311,7 @@ func (t *Transformer) Transform(in *jsonutil.JSONContainer, tconfig Transformati
 		return nil, err
 	}
 
-	result, err := postprocess.Process(pctx, t.mappingConfig, tconfig.SkipBundling, e)
+	result, err := postprocess.Process(pctx, t.mappingConfig, t.transformationConfig.SkipBundling, e)
 	if err != nil {
 		return nil, err
 	}
@@ -291,27 +320,40 @@ func (t *Transformer) Transform(in *jsonutil.JSONContainer, tconfig Transformati
 }
 
 // JSONtoJSON converts the byte array (JSON format) using the specified config.
-// TODO: Refactor to use json.RawMessage instead of []byte.
-func (t *Transformer) JSONtoJSON(in []byte, tconfig TransformationConfigs) ([]byte, error) {
-	ji := &jsonutil.JSONContainer{}
-	if err := ji.UnmarshalJSON(in); err != nil {
+func (t *DefaultTransformer) JSONtoJSON(in json.RawMessage) (json.RawMessage, error) {
+	ji, err := t.ParseJSON(in)
+	if err != nil {
 		return nil, err
 	}
 
-	res, err := t.Transform(ji, tconfig)
+	res, err := t.Transform(ji)
 	if err != nil {
 		return nil, err
 	}
 	return json.Marshal(res)
 }
 
+// ParseJSON parses the given JSON into a JSONToken.
+func (t *DefaultTransformer) ParseJSON(in json.RawMessage) (jsonutil.JSONToken, error) {
+	mc, err := jsonutil.UnmarshalJSON(in)
+	if err != nil {
+		return nil, err
+	}
+	return mc, nil
+}
+
+// Registry returns the registry in DefaultTransformer.
+func (t *DefaultTransformer) Registry() *types.Registry {
+	return t.registry
+}
+
 // RegisterProjector adds the given Projector to this transformer's registry.
-func (t *Transformer) RegisterProjector(name string, proj types.Projector) error {
-	return t.Registry.RegisterProjector(name, proj)
+func (t *DefaultTransformer) RegisterProjector(name string, proj types.Projector) error {
+	return t.registry.RegisterProjector(name, proj)
 }
 
 // HasPostProcessProjector returns true iff a post process projector is set.
-func (t *Transformer) HasPostProcessProjector() bool {
+func (t *DefaultTransformer) HasPostProcessProjector() bool {
 	return t.mappingConfig.GetPostProcessProjectorDefinition() != nil || t.mappingConfig.GetPostProcessProjectorName() != ""
 }
 

@@ -16,6 +16,7 @@ package transform
 
 import (
 	"context"
+	"encoding/json"
 	"testing"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
@@ -75,7 +76,7 @@ var testModes = []struct {
 	{"sequential", false},
 }
 
-func TestTransform_InitsContext(t *testing.T) {
+func TestTransformer_InitsContext(t *testing.T) {
 	// This config tests two things:
 	// 1) the context is initialized before any root mappings get called (so
 	//    they can set variables).
@@ -103,19 +104,19 @@ func TestTransform_InitsContext(t *testing.T) {
 
 	for _, mode := range testModes {
 		t.Run(mode.name, func(t *testing.T) {
-			var tr *Transformer
-			var err error
-
-			if tr, err = NewTransformer(context.Background(), dhConfig, Parallel(mode.enableParallel)); err != nil {
-				t.Fatalf("could not initialize with config: %v", err)
-			}
-
-			tconfig := TransformationConfigs{
+			tconfig := TransformationConfig{
 				LogTrace:     false,
 				SkipBundling: false,
 			}
 
-			got, err := tr.Transform(&jsonutil.JSONContainer{}, tconfig)
+			var tr Transformer
+			var err error
+
+			if tr, err = NewTransformer(context.Background(), dhConfig, tconfig, Parallel(mode.enableParallel)); err != nil {
+				t.Fatalf("could not initialize with config: %v", err)
+			}
+
+			got, err := tr.Transform(jsonutil.JSONContainer{})
 			if err != nil {
 				t.Fatalf("Transform({}, %v, false, false, false) got unexpected error %v", config, err)
 			}
@@ -130,7 +131,7 @@ func TestTransform_InitsContext(t *testing.T) {
 	}
 }
 
-func TestTransform_NewTransformer(t *testing.T) {
+func TestNewTransformer(t *testing.T) {
 	config := &mappb.MappingConfig{
 		RootMapping: []*mappb.FieldMapping{
 			{
@@ -166,6 +167,10 @@ func TestTransform_NewTransformer(t *testing.T) {
 		id: input.ID;
 	}
 	`
+	tconfig := TransformationConfig{
+		LogTrace:     false,
+		SkipBundling: false,
+	}
 
 	tests := []struct {
 		name       string
@@ -346,7 +351,7 @@ func TestTransform_NewTransformer(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			tr, err := NewTransformer(context.Background(), test.config, test.options...)
+			tr, err := NewTransformer(context.Background(), test.config, tconfig, test.options...)
 
 			if test.wantErrors && err == nil {
 				t.Fatalf("expected error initializing: %v", test.config)
@@ -355,7 +360,7 @@ func TestTransform_NewTransformer(t *testing.T) {
 			}
 
 			if test.want.CloudFunctions && !test.wantErrors {
-				_, err := tr.Registry.FindProjector(test.wantCF)
+				_, err := tr.Registry().FindProjector(test.wantCF)
 				if err != nil {
 					t.Fatalf("expected cloud functions to be registered but missing in Registry: %v", err)
 				}
@@ -364,7 +369,7 @@ func TestTransform_NewTransformer(t *testing.T) {
 	}
 }
 
-func TestTransform_NewTransformer_UserLibraries(t *testing.T) {
+func TestTransformer_UserLibraries(t *testing.T) {
 	config := &mappb.MappingConfig{
 		RootMapping: []*mappb.FieldMapping{
 			{
@@ -450,6 +455,10 @@ func TestTransform_NewTransformer_UserLibraries(t *testing.T) {
 				},
 			},
 		},
+	}
+	tconfig := TransformationConfig{
+		LogTrace:     false,
+		SkipBundling: false,
 	}
 
 	tests := []struct {
@@ -673,7 +682,7 @@ func TestTransform_NewTransformer_UserLibraries(t *testing.T) {
 				},
 				LibraryConfig: []*libpb.LibraryConfig{&libpb.LibraryConfig{UserLibraries: test.userLibs}},
 			}
-			transform, err := NewTransformer(context.Background(), dhConfig, options...)
+			transform, err := NewTransformer(context.Background(), dhConfig, tconfig, options...)
 
 			if test.wantErrors && err == nil {
 				t.Fatalf("expected error initializing: %v", dhConfig)
@@ -682,7 +691,7 @@ func TestTransform_NewTransformer_UserLibraries(t *testing.T) {
 			}
 
 			for _, projector := range test.expectedUserProjectors {
-				if _, err := transform.Registry.FindProjector(projector); err != nil {
+				if _, err := transform.Registry().FindProjector(projector); err != nil {
 					t.Errorf("expected projector %s to be registered, but got error %v", projector, err)
 				}
 			}
@@ -690,7 +699,7 @@ func TestTransform_NewTransformer_UserLibraries(t *testing.T) {
 	}
 }
 
-func TestTransform_JSONtoJSON(t *testing.T) {
+func TestTransformer_JSONtoJSON(t *testing.T) {
 	mconfig := &mappb.MappingConfig{
 		RootMapping: []*mappb.FieldMapping{
 			{
@@ -725,19 +734,19 @@ func TestTransform_JSONtoJSON(t *testing.T) {
 
 	for _, mode := range testModes {
 		t.Run(mode.name, func(t *testing.T) {
-			var tr *Transformer
-			var err error
-			if tr, err = NewTransformer(context.Background(), dhconfig, Parallel(mode.enableParallel)); err != nil {
-				t.Fatalf("could not initialize with config: %v", err)
-			}
-
-			tconfig := TransformationConfigs{
+			tconfig := TransformationConfig{
 				LogTrace:     false,
 				SkipBundling: false,
 			}
 
+			var tr Transformer
+			var err error
+			if tr, err = NewTransformer(context.Background(), dhconfig, tconfig, Parallel(mode.enableParallel)); err != nil {
+				t.Fatalf("could not initialize with config: %v", err)
+			}
+
 			in := `{"ID": "test"}`
-			got, err := tr.JSONtoJSON([]byte(in), tconfig)
+			got, err := tr.JSONtoJSON(json.RawMessage(in))
 			if err != nil {
 				t.Fatalf("JSONtoJSON(%v) got expected error: %v", in, err)
 			}
@@ -751,7 +760,12 @@ func TestTransform_JSONtoJSON(t *testing.T) {
 	}
 }
 
-func TestTransform_HasPostProcessProjector(t *testing.T) {
+func TestTransformer_HasPostProcessProjector(t *testing.T) {
+	tconfig := TransformationConfig{
+		LogTrace:     false,
+		SkipBundling: false,
+	}
+
 	tests := []struct {
 		name   string
 		config *dhpb.DataHarmonizationConfig
@@ -800,7 +814,7 @@ func TestTransform_HasPostProcessProjector(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			tr, err := NewTransformer(context.Background(), test.config)
+			tr, err := NewTransformer(context.Background(), test.config, tconfig)
 			if err != nil {
 				t.Fatalf("could not initialize with config: %v", err)
 			}
@@ -811,5 +825,4 @@ func TestTransform_HasPostProcessProjector(t *testing.T) {
 		},
 		)
 	}
-
 }

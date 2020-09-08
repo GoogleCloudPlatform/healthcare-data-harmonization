@@ -1422,24 +1422,26 @@ func TestTranspile(t *testing.T) {
 
 func exec(t *testing.T, config *mpb.MappingConfig, inputJSON string) (jsonutil.JSONToken, error) {
 	t.Helper()
-	var tr *transform.Transformer
+	var tr transform.Transformer
 	var err error
-	if tr, err = transform.NewTransformer(context.TODO(), &dhpb.DataHarmonizationConfig{StructureMappingConfig: &hpb.StructureMappingConfig{
-		Mapping: &hpb.StructureMappingConfig_MappingConfig{MappingConfig: config}}}); err != nil {
+	if tr, err = transform.NewTransformer(
+		context.TODO(),
+		&dhpb.DataHarmonizationConfig{
+			StructureMappingConfig: &hpb.StructureMappingConfig{
+				Mapping: &hpb.StructureMappingConfig_MappingConfig{MappingConfig: config},
+			},
+		},
+		transform.TransformationConfig{
+			SkipBundling: false,
+			LogTrace:     true,
+		}); err != nil {
 		t.Fatalf("failed to initialize transformer: %v", err)
 	}
 
-	input, err := jsonutil.UnmarshalJSON(json.RawMessage(inputJSON))
+	input, err := tr.ParseJSON(json.RawMessage(inputJSON))
 	if err != nil {
 		t.Fatalf("error unmarshaling test input: %v", err)
 	}
 
-	ic := jsonutil.JSONContainer{}
-	if input != nil {
-		ic = input.(jsonutil.JSONContainer)
-	}
-
-	return tr.Transform(&ic, transform.TransformationConfigs{
-		SkipBundling: false,
-		LogTrace:     true})
+	return tr.Transform(input)
 }

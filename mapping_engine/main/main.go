@@ -26,7 +26,6 @@ import (
 	"strings"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/transform" /* copybara-comment: transform */
-	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
 	"google.golang.org/protobuf/encoding/prototext" /* copybara-comment: prototext */
 
 	dhpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: data_harmonization_go_proto */
@@ -171,26 +170,26 @@ func main() {
 		}
 	}
 
-	var tr *transform.Transformer
-	var err error
-
-	if tr, err = transform.NewTransformer(context.Background(), dhConfig); err != nil {
-		log.Fatalf("Failed to load mapping config: %v", err)
+	tconfig := transform.TransformationConfig{
+		LogTrace: *verbose,
 	}
 
-	tconfig := transform.TransformationConfigs{
-		LogTrace: *verbose,
+	var tr transform.Transformer
+	var err error
+
+	if tr, err = transform.NewTransformer(context.Background(), dhConfig, tconfig); err != nil {
+		log.Fatalf("Failed to load mapping config: %v", err)
 	}
 
 	for _, f := range readInputs(*inputFile) {
 		i := fileutil.MustRead(f, "input")
 
-		ji := &jsonutil.JSONContainer{}
-		if err := ji.UnmarshalJSON(i); err != nil {
-			log.Fatalf("Failed to parse input JSON in file %v: %v", f, err)
+		ji, err := tr.ParseJSON(i)
+		if err != nil {
+			log.Fatalf("Failed to parse inputJSON in file %v: %v", f, err)
 		}
 
-		res, err := tr.Transform(ji, tconfig)
+		res, err := tr.Transform(ji)
 		if err != nil {
 			log.Fatalf("Mapping failed for input file %v: %v", f, err)
 		}
