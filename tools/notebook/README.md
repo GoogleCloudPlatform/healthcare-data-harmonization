@@ -85,7 +85,10 @@ include:
 ### Prerequisites
 
 *   Install [docker](https://docs.docker.com/get-docker/) on your local file
-    system.
+    system. Note that you want to run docker without sudo, you need to follow
+    the
+    [post-installation steps](https://docs.docker.com/engine/install/linux-postinstall/)
+    on Linux.
 
 *   Install [docker compose](https://docs.docker.com/compose/install/) on your
     local file system.
@@ -118,14 +121,14 @@ include:
     [docker-compose supports reading from an environment file](https://docs.docker.com/compose/env-file/).
 
 ```bash
-$ cd $DH_ROOT # where $DH_ROOT is the root of the git repository.
-$ export NOTEBOOK_UID=$UID
-$ export NOTEBOOK_WORKING_DIR="$PWD" # where $PWD is the root of the git repository.
-$ export NOTEBOOK_FUNCTION_LIBRARY_DIR="$PWD/mapping_configs/hl7v2_fhir_stu3"
-$ export NOTEBOOK_SERVICE_ACCOUNT_FILENAME="<replace_with_service_account_json>"
-$ export NOTEBOOK_SERVICE_ACCOUNT_DIR="<replace_with_folder_containing_service_account_json>"
-$ export GOOGLE_APPLICATION_CREDENTIALS="$NOTEBOOK_SERVICE_ACCOUNT_DIR/$NOTEBOOK_SERVICE_ACCOUNT_FILENAME"
-$ tee .env << EOF
+cd $DH_ROOT # where $DH_ROOT is the root of the git repository.
+export NOTEBOOK_UID=$UID
+export NOTEBOOK_WORKING_DIR="$PWD" # where $PWD is the root of the git repository.
+export NOTEBOOK_FUNCTION_LIBRARY_DIR="$PWD/mapping_configs/hl7v2_fhir_stu3"
+export NOTEBOOK_SERVICE_ACCOUNT_FILENAME="<replace_with_service_account_json>"
+export NOTEBOOK_SERVICE_ACCOUNT_DIR="<replace_with_folder_containing_service_account_json>"
+export GOOGLE_APPLICATION_CREDENTIALS="$NOTEBOOK_SERVICE_ACCOUNT_DIR/$NOTEBOOK_SERVICE_ACCOUNT_FILENAME"
+tee .env << EOF
 NOTEBOOK_UID=$NOTEBOOK_UID
 NOTEBOOK_WORKING_DIR=$NOTEBOOK_WORKING_DIR
 NOTEBOOK_FUNCTION_LIBRARY_DIR=$NOTEBOOK_FUNCTION_LIBRARY_DIR
@@ -134,8 +137,8 @@ NOTEBOOK_SERVICE_ACCOUNT_DIR=$NOTEBOOK_SERVICE_ACCOUNT_DIR
 GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
 EOF
 
-$ docker-compose pull
-$ docker-compose up --no-build
+docker-compose pull
+docker-compose up --no-build
 ```
 
 *   In browser go to http://localhost:8888/lab
@@ -143,14 +146,14 @@ $ docker-compose up --no-build
     environment variable to your desired port number.
 
 ```bash
-$ tee -a .env << EOF
+tee -a .env << EOF
 NOTEBOOK_PORT=10000
 EOF
-$ docker-compose up --no-build
+docker-compose up --no-build
 ```
 
-*   Open the [example notebook](tools/notebook/examples/demo-sample.ipynb) from
-    the file browser within JupyterLab.
+*   Open the [example notebook](examples/demo-sample.ipynb) from the file
+    browser within JupyterLab.
 
 ## Building the image
 
