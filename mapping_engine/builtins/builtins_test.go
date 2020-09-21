@@ -350,6 +350,83 @@ func TestIsNil(t *testing.T) {
 	}
 }
 
+func TestType(t *testing.T) {
+	var v jsonutil.JSONToken = jsonutil.JSONNum(0)
+	tests := []struct {
+		name      string
+		arg       jsonutil.JSONToken
+		want      jsonutil.JSONStr
+		wantError bool
+	}{
+		{
+			name: "nil",
+			arg:  nil,
+			want: jsonutil.JSONStr("null"),
+		},
+		{
+			name: "JSON token interface",
+			arg:  jsonutil.JSONToken(nil),
+			want: jsonutil.JSONStr("null"),
+		},
+		{
+			name: "number",
+			arg:  jsonutil.JSONNum(0),
+			want: jsonutil.JSONStr("number"),
+		},
+		{
+			name: "bool",
+			arg:  jsonutil.JSONBool(false),
+			want: jsonutil.JSONStr("bool"),
+		},
+		{
+			name: "empty string",
+			arg:  jsonutil.JSONStr(""),
+			want: jsonutil.JSONStr("string"),
+		},
+		{
+			name: "non-empty string",
+			arg:  jsonutil.JSONStr("foo"),
+			want: jsonutil.JSONStr("string"),
+		},
+		{
+			name: "empty array",
+			arg:  jsonutil.JSONArr{},
+			want: jsonutil.JSONStr("array"),
+		},
+		{
+			name: "non-empty array",
+			arg:  jsonutil.JSONArr{jsonutil.JSONNum(1)},
+			want: jsonutil.JSONStr("array"),
+		},
+		{
+			name: "empty container",
+			arg:  jsonutil.JSONContainer{},
+			want: jsonutil.JSONStr("container"),
+		},
+		{
+			name: "non-empty container",
+			arg: jsonutil.JSONContainer{
+				"foo": &v,
+			},
+			want: jsonutil.JSONStr("container"),
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := Type(test.arg)
+			if err != nil && !test.wantError {
+				t.Fatalf("Type(%v) returned unexpected error %v.", test.arg, err)
+			}
+			if err == nil && test.wantError {
+				t.Fatalf("Type(%v) expected error but did not receive one.", test.arg)
+			}
+			if !cmp.Equal(got, test.want) && !test.wantError {
+				t.Errorf("Type(%v) = %s, got %s", test.arg, test.want, got)
+			}
+		})
+	}
+}
+
 func TestSubStr(t *testing.T) {
 	tests := []struct {
 		name  string

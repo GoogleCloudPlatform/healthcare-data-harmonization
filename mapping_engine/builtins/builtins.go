@@ -67,6 +67,7 @@ var BuiltinFunctions = map[string]interface{}{
 	"$IsNotNil":  IsNotNil,
 	"$MergeJSON": MergeJSON,
 	"$UUID":      UUID,
+	"$Type":      Type,
 
 	// Debugging
 	"$DebugString": DebugString,
@@ -614,6 +615,27 @@ func MergeJSON(arr jsonutil.JSONArr, overwriteArrays jsonutil.JSONBool) (jsonuti
 // UUID generates a RFC4122 (https://tools.ietf.org/html/rfc4122) UUID.
 func UUID() (jsonutil.JSONStr, error) {
 	return jsonutil.JSONStr(uuid.New().String()), nil
+}
+
+// Type returns the type of the given JSON Token as a string.
+func Type(object jsonutil.JSONToken) (jsonutil.JSONStr, error) {
+
+	switch object.(type) {
+	case jsonutil.JSONNum:
+		return jsonutil.JSONStr("number"), nil
+	case jsonutil.JSONBool:
+		return jsonutil.JSONStr("bool"), nil
+	case jsonutil.JSONStr:
+		return jsonutil.JSONStr("string"), nil
+	case jsonutil.JSONArr:
+		return jsonutil.JSONStr("array"), nil
+	case jsonutil.JSONContainer:
+		return jsonutil.JSONStr("container"), nil
+	case nil:
+		return jsonutil.JSONStr("null"), nil
+	}
+
+	return jsonutil.JSONStr(""), fmt.Errorf("Unrecognized JSON token type: %T", object)
 }
 
 // DebugString converts the JSON element to a string representation by

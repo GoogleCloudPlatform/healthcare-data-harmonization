@@ -307,6 +307,15 @@ calling the merge function. The merge function overwrites single fields and
 concatenates array fields (unless overwriteArrays is true, in which case arrays
 are overwritten).
 
+### $Type
+
+```go
+$Type(object any) string
+```
+
+Type returns the specific type the given object as a string. Possible values
+are: `"bool"`, `"number"`, `"string"`, `"array"`, `"container"`, `"null"`.
+
 ### $UUID
 
 ```go

@@ -446,6 +446,36 @@ func TestTranspile(t *testing.T) {
 			},
 		},
 		{
+			name: "Mapping based on value types",
+			whistle: `def function(a) {
+									value (if $Type(a) = "string"): "a is a string";
+									value (if $Type(a) = "container"): a.foo;
+									value (if $Type(a) = "null"): "this is a null";
+							 }`,
+			wantValue: valueTest{
+				rootMappings: `out myOut: function($root.nothing); out myOut: function($root.something); out myOut: function($root.bar)`,
+				wantJSON: `{
+											   "myOut": [
+											     {
+											       "value": "this is a null"
+											     },
+											     {
+											       "value": "something"
+											     },
+													 {
+													 	 "value": "a is a string"
+													 }
+											   ]
+											 }`,
+				inputJSON: `{
+											   "something": {
+											     "foo": "something"
+											   },
+												 "bar": "cat"
+											 }`,
+			},
+		},
+		{
 			name: "inline condition",
 			whistle: `def function(a) {
 									value (if $IsNotNil(a)): a.foo;
