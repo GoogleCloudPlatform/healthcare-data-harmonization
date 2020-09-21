@@ -1,0 +1,45 @@
+{
+    "identifier": [
+        {
+            "system": "urn:dicom:uid",
+            "value": "urn:oid:1"
+        }
+    ],
+    "interpreter": [
+        {
+            "display": "First1^Last1",
+            "identifier": {
+                "system": "hospital_physician_index",
+                "value": "id1"
+            }
+        },
+        {
+            "display": "First4^Last4",
+            "identifier": {
+                "system": "hospital_physician_index",
+                "value": "id2"
+            }
+        }
+    ],
+    "numberOfInstances": 1,
+    "numberOfSeries": 1,
+    "resourceType": "ImagingStudy",
+    "series": [
+        {
+            "instance": [
+                {
+                    "number": 1,
+                    "sopClass": {
+                        "code": "urn:oid:1.2.840.10008.5.1.4.1.1.7",
+                        "system": "urn:ietf:rfc:3986"
+                    },
+                    "uid": "1"
+                }
+            ],
+            "number": 123,
+            "numberOfInstances": 1,
+            "uid": "2"
+        }
+    ],
+    "status": "available"
+}

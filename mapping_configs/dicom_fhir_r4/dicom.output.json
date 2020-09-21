@@ -1,0 +1,247 @@
+{
+    "basedOn": [
+        {
+            "display": "procedure meaning",
+            "identifier": {
+                "system": "procedure_index",
+                "value": "procedure1"
+            }
+        },
+        {
+            "display": "procedure meaning",
+            "identifier": {
+                "system": "procedure_index",
+                "value": "procedure2"
+            }
+        },
+        {
+            "display": "procedure meaning",
+            "identifier": {
+                "system": "procedure_index",
+                "value": "procedure1"
+            }
+        },
+        {
+            "display": "procedure meaning",
+            "identifier": {
+                "system": "procedure_index",
+                "value": "procedure3"
+            }
+        }
+    ],
+    "description": "Some description",
+    "identifier": [
+        {
+            "system": "urn:dicom:uid",
+            "value": "urn:oid:1"
+        },
+        {
+            "value": "1"
+        }
+    ],
+    "location": {
+        "identifier": {
+            "value": "Radiology Department"
+        }
+    },
+    "modality": [
+        {
+            "code": "MR",
+            "system": "http://dicom.nema.org/resources/ontology/DCM"
+        },
+        {
+            "code": "CT",
+            "system": "http://dicom.nema.org/resources/ontology/DCM"
+        }
+    ],
+    "note": [
+        {
+            "text": "Some description"
+        }
+    ],
+    "numberOfInstances": 4,
+    "numberOfSeries": 2,
+    "procedureCode": [
+        {
+            "coding": [
+                {
+                    "code": "local_code",
+                    "display": "Some Procedure",
+                    "system": "local_system"
+                }
+            ]
+        },
+        {
+            "coding": [
+                {
+                    "code": "local_code2",
+                    "display": "Some Procedure",
+                    "system": "local_system"
+                }
+            ]
+        }
+    ],
+    "reasonCode": [
+        {
+            "coding": [
+                {
+                    "code": "code1",
+                    "display": "code_meaning",
+                    "system": "code_index"
+                }
+            ]
+        },
+        {
+            "coding": [
+                {
+                    "code": "code2",
+                    "display": "code_meaning",
+                    "system": "code_index"
+                }
+            ]
+        },
+        {
+            "coding": [
+                {
+                    "code": "code1",
+                    "display": "code_meaning",
+                    "system": "code_index"
+                }
+            ]
+        },
+        {
+            "coding": [
+                {
+                    "code": "code2",
+                    "display": "code_meaning",
+                    "system": "code_index"
+                }
+            ]
+        }
+    ],
+    "reasonReference": [
+        {
+            "display": "code_meaning",
+            "identifier": {
+                "system": "code_index",
+                "value": "code1"
+            }
+        },
+        {
+            "display": "code_meaning",
+            "identifier": {
+                "system": "code_index",
+                "value": "code2"
+            }
+        },
+        {
+            "display": "code_meaning",
+            "identifier": {
+                "system": "code_index",
+                "value": "code1"
+            }
+        },
+        {
+            "display": "code_meaning",
+            "identifier": {
+                "system": "code_index",
+                "value": "code2"
+            }
+        }
+    ],
+    "referrer": {
+        "display": "referring^physician",
+        "identifier": {
+            "system": "referring_physician_index",
+            "value": "referring_physician_id"
+        }
+    },
+    "resourceType": "ImagingStudy",
+    "series": [
+        {
+            "bodySite": {
+                "code": "818981001",
+                "system": "http://snomed.info/sct"
+            },
+            "description": "An MRI series.",
+            "instance": [
+                {
+                    "number": 1,
+                    "sopClass": {
+                        "code": "urn:oid:1.2.840.10008.5.1.4.1.1.7",
+                        "system": "urn:ietf:rfc:3986"
+                    },
+                    "uid": "1"
+                },
+                {
+                    "number": 2,
+                    "sopClass": {
+                        "code": "urn:oid:1.2.840.10008.5.1.4.1.1.7",
+                        "system": "urn:ietf:rfc:3986"
+                    },
+                    "uid": "2"
+                }
+            ],
+            "laterality": {
+                "code": "419161000",
+                "display": "Unilateral left",
+                "system": "http://snomed.info/sct"
+            },
+            "modality": {
+                "code": "MR",
+                "system": "http://dicom.nema.org/resources/ontology/DCM"
+            },
+            "number": 123,
+            "numberOfInstances": 2,
+            "started": "2000-01-01",
+            "uid": "2"
+        },
+        {
+            "bodySite": {
+                "code": "818982008",
+                "system": "http://snomed.info/sct"
+            },
+            "description": "A CT series.",
+            "instance": [
+                {
+                    "number": 3,
+                    "sopClass": {
+                        "code": "urn:oid:1.2.840.10008.5.1.4.1.1.7",
+                        "system": "urn:ietf:rfc:3986"
+                    },
+                    "uid": "3"
+                },
+                {
+                    "number": 4,
+                    "sopClass": {
+                        "code": "urn:oid:1.2.840.10008.5.1.4.1.1.7",
+                        "system": "urn:ietf:rfc:3986"
+                    },
+                    "uid": "4"
+                }
+            ],
+            "laterality": {
+                "code": "419465000",
+                "display": "Unilateral right",
+                "system": "http://snomed.info/sct"
+            },
+            "modality": {
+                "code": "CT",
+                "system": "http://dicom.nema.org/resources/ontology/DCM"
+            },
+            "number": 456,
+            "numberOfInstances": 2,
+            "started": "2000-12-01",
+            "uid": "3"
+        }
+    ],
+    "started": "2000-01-01T01:02:03+01:00",
+    "status": "available",
+    "subject": {
+        "display": "First^Last",
+        "identifier": {
+            "system": "SomeHospital",
+            "value": "SomeID"
+        }
+    }
+}

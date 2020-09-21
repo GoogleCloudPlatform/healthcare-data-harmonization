@@ -1,0 +1,691 @@
+// Description: Converts a DICOM JSON array to a FHIR ImagingStudy resource.
+//
+// Argument(s):
+//   study: array of DICOM instances in DICOM JSON format.
+//
+// Output(s):
+//   FHIR R4 ImagingStudy resource: https://www.hl7.org/fhir/imagingstudy.html
+//
+def DICOM_FHIR(study) {
+  resourceType: "ImagingStudy";
+  // 0020000D is the study UID tag.
+  var studyUID: study.study[0].'0020000D'.Value[0]
+  identifier[]: Build_StudyUIDIdentifier(studyUID)
+  // 00080050 is the accession number tag
+  var accessionNum: study.study[0].'00080050'.Value[0]
+  // 00080051 is the issuer of accession number sequence tag
+  var accessionIssuerSeq: study.study[0].'00080051'.Value[0]
+  identifier[]: Build_AccessionNumberIdentifier(accessionNum, accessionIssuerSeq)
+  // 00200010 is the study ID tag.
+  var studyID: study.study[0].'00200010'.Value[0]
+  if studyID? {
+    identifier[]: {
+      value: studyID
+    }
+  }
+  // 00081030 is the study description tag.
+  var studyDesc: study.study[0].'00081030'.Value[0]
+  description: studyDesc
+  // According to the FHIR mapping, note and description are both derived from
+  // study description.
+  if studyDesc? {
+    note[]: {
+      text: studyDesc
+    }
+  }
+  // 00080020 is the study date tag.
+  var studyDate: study.study[0].'00080020'.Value[0]
+  // 00080030 is the study time tag.
+  var studyTime: study.study[0].'00080030'.Value[0]
+  // 00080201 is the timezone offset from UTC tag.
+  var timezone: study.study[0].'00080201'.Value[0]
+  started: Build_FHIRDateTime(studyDate, studyTime, timezone)
+  // 00081032 is the Procedure Code Sequence tag.
+  var procedureCodeSequence: study.study[0].'00081032'.Value
+  procedureCode: BuildProcedureCoding(procedureCodeSequence[])
+  // 00081060 is the Name of Physician(s) Reading Study tag
+  var interpreterNames: study.study[0].'00081060'.Value
+  // 00081062 is the Physician(s) Reading Study Identification Sequence
+  var interpreterIDSequence: study.study[0].'00081062'.Value
+  interpreter[]: BuildInterpretersFromLists(interpreterNames, interpreterIDSequence)
+  // 00080090 is the Referring Physician's Name tag.
+  var referrerName: study.study[0].'00080090'.Value[0]
+  // 00080096 is the Referring Physician Identification Sequence tag.
+  var referrerIDSequence: study.study[0].'00080096'.Value[0]
+  // According to the standard there should only be one item in the referrer
+  // ID sequence, if any.
+  referrer: Build_PersonReference(referrerName, referrerIDSequence)
+  // 00100010 is the patient name tag.
+  var patientName: study.study[0].'00100010'.Value[0]
+  // 00100020 is the patient id tag.
+  var patientID: study.study[0].'00100020'.Value[0]
+  // 00100021 is the issuer of patient id tag.
+  var issuerOfPatientID: study.study[0].'00100021'.Value[0]
+  subject: Build_Subject(patientName, patientID, issuerOfPatientID)
+  // 00400243 is the Performed Location tag.
+  var studyLocation: study.study[0].'00400243'.Value[0]
+  if ~studyLocation? {
+    // 00081040 is the institution department name tag.
+    var studyLocation: study.study[0].'00081040'.Value[0]
+  }
+  if studyLocation? {
+    location: {
+      identifier: {
+        value: studyLocation
+      }
+    }
+  }
+  status: "available";
+  var nonUniqueSeries: Build_Series(study.study[])
+  var uniqueSeries: $UnionBy(nonUniqueSeries, "uid")
+  // It is unclear whether or not we should take a unique set of the following
+  // three elements which are derived from each series. For now, we do not.
+  basedOn: $ListCat(uniqueSeries[*].basedOn)
+  reasonCode: $ListCat(uniqueSeries[*].reasonCode)
+  reasonReference: $ListCat(uniqueSeries[*].reasonReference)
+
+  numberOfSeries: $ListLen(uniqueSeries)
+  numberOfInstances: $ListLen(study.study)
+  series: Populate_Instances(uniqueSeries[], study.study)
+  var allModalities: series[*].modality
+  // Filter out null values.
+  modality: $Unique(allModalities[where $?])
+  // Unmapped Fields:
+  //
+  // encounter: There is no mapping defined for this field in the FHIR standard.
+  //
+  // endoint: There is no way to derive this from the DICOM instances alone.
+  //
+  // procedureReference: For some reason the FHIR standard specifies that there
+  // can be only one procedure reference, even though DICOM codifies multiple.
+  // So here we do not populate a logical reference to a procedure, for now.
+}
+
+// Description: Mapping function for the study identifier from the UID.
+//
+// Argument(s):
+//   studyUID: the study UID string.
+//
+// Output(s):
+//   FHIR R4 ImagingStudy identifier: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.identifier
+//
+def Build_StudyUIDIdentifier(required studyUID) {
+  system: "urn:dicom:uid"
+  value: $StrCat("urn:oid:", studyUID)
+}
+
+// Description: Mapping function for the accession number identifier.
+//
+// Argument(s):
+//   accessionNum: the accession number.
+//   accessionIDSeqItem: a single item from the issuer of accession number
+//   sequence.
+//
+// Output(s):
+//   FHIR R4 ImagingStudy identifier: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.identifier
+//
+def Build_AccessionNumberIdentifier(required accessionNum, accessionIDSeqItem) {
+  type: {
+    coding[]: {
+      system : "http://terminology.hl7.org/CodeSystem/v2-0203"
+      code: "ACSN"
+    }
+  }
+  value: accessionNum
+  // 00400031 is the Local Namespace Entity ID tag
+  var localIssuerEntityID: accessionIDSeqItem.'00400031'.Value[0]
+  // 00400032 is the Universal Entity ID tag
+  var universalIssuerEntityID: accessionIDSeqItem.'00400032'.Value[0]
+  // 00400033 is the Universal Entity ID Type tag
+  var universalIssuerEntityType: accessionIDSeqItem.'00400033'.Value[0]
+  var issuer: localIssuerEntityID
+  if ~localIssuerEntityID and universalIssuerEntityID? {
+    var issuer: Cond(universalIssuerEntityType?, $StrCat(universalIssuerEntityType, ":", universalIssuerEntityID), universalIssuerEntityID)
+  }
+  system: issuer
+}
+
+// Description: Creates a procedure coding from an item in the procedure code
+// sequence.
+//
+// Argument(s):
+//   seqItem: an item in the procedure code sequence.
+//
+// Output(s):
+//   Procedure coding: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.procedureCode
+//
+def BuildProcedureCoding(seqItem) {
+  coding[]: {
+    code: seqItem.'00080100'.Value[0]
+    // TODO: consider incorporate coding scheme version every time we access 00080102
+    system: seqItem.'00080102'.Value[0]
+    display: seqItem.'00080104'.Value[0]
+  }
+}
+
+// Description: Builds a logical subject reference.
+//
+// Argument(s):
+//   name: the patient name.
+//   id: the patient ID.
+//   idIssuer: the issuer of patient ID.
+//
+// Output(s):
+//   Subject: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.subject
+//
+def Build_Subject(name, id, idIssuer) {
+  if id? and idIssuer? {
+    identifier: {
+      system: idIssuer
+      value: id
+    }
+  }
+  display: name.Alphabetic
+}
+
+// Description: Returns an array of interpreters from a list of names and the
+// id sequence.
+//
+// Argument(s):
+//   names: list of physician interpreter names.
+//   idSequence: Physician(s) Reading Study Identification Sequence
+//
+// Output(s):
+//   multiple ImagingStudy interpreter: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.interpreter
+//
+def BuildInterpretersFromLists(names, idSequence) {
+  if $ListLen(names) = $ListLen(idSequence) {
+    $this: Build_PersonReference(names[], idSequence[])
+  } else {
+    if $ListLen(idSequence) > 0 {
+      $this: Build_Interpreter_IDSequenceOnly(idSequence[])
+    }
+    if $ListLen(names) > 0 {
+      $this: Build_PersonReference(names[], {})
+    }
+  }
+}
+
+// Description: Helper function to allow iterated call to Build_Interpreter
+// with the first argument empty.
+//
+// Argument(s):
+//   idSequence: Physician(s) Reading Study Identification Sequence
+//
+// Output(s):
+//   multiple ImagingStudy interpreter: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.interpreter
+//
+def Build_Interpreter_IDSequenceOnly(idSequenceItem) {
+  $this: Build_PersonReference({}, idSequenceItem)
+}
+
+// Description: Builds a logical reference to a person.
+//
+// Argument(s):
+//   name: person's name.
+//   idSequenceItem: item of a sequence which contains the person identification
+//   sequence.
+//
+// Output(s):
+//   Logical FHIR reference to a person.
+//
+def Build_PersonReference(name, idSequenceItem) {
+  //  Person Identification Code Sequence >
+  //    Code Value
+  var idValue: idSequenceItem.'00401101'.Value[0].'00080100'.Value[0]
+  //  Person Identification Code Sequence >
+  //    Code Designator
+  var idSystem: idSequenceItem.'00401101'.Value[0].'00080102'.Value[0]
+  if idValue? and idSystem? {
+    identifier: {
+      system: idSystem
+      value: idValue
+    }
+  }
+  // TODO: express ideographic and phonetic names here too.
+  display: name.Alphabetic
+}
+
+// Description: Creates a series object from a DICOM instance.
+//
+// Argument(s):
+//   inst: a single instance in DICOM JSON format.
+//
+// Output(s):
+//   Partially Complete FHIR R4 ImagingStudy series: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.series
+//
+def Build_Series(inst) {
+  // 0020000E is the series UID tag.
+  uid: inst.'0020000E'.Value[0]
+  // 00200011 is the series number tag.
+  number: inst.'00200011'.Value[0]
+  // 00080060 is the modality tag.
+  var modality: inst.'00080060'.Value[0]
+  modality: Build_Modality(modality)
+  // 0008103E is the series description tag.
+  description: inst.'0008103E'.Value[0]
+  // 00080021 is the series date tag.
+  var seriesDate: inst.'00080021'.Value[0]
+  // 00080031 is the series time tag.
+  var seriesTime: inst.'00080031'.Value[0]
+  // 00080201 is the timezone offset from UTC tag.
+  var timezone: inst.'00080201'.Value[0]
+  started: Build_FHIRDateTime(seriesDate, seriesTime, timezone)
+  // 00180015 is the body part examined tag.
+  var bodySite: inst.'00180015'.Value[0]
+  bodySite: Build_BodySite(bodySite)
+  // 00200060 is the series laterality tag.
+  var laterality: inst.'00200060'.Value[0]
+  laterality: Build_Laterality(laterality)
+  // 00081050 is the Performing Physician Name tag.
+  var physNames: inst.'00081050'.Value
+  // 00081052 is the Performing Physician Identification Sequence tag.
+  var physIDSequence: inst.'00081052'.Value
+
+  performer[]: BuildPerformersFromLists(physNames, physIDSequence)
+  // 00081070 is the Operator's Name tag.
+  var operatorNames: inst.'00081070'.Value
+  // 00081072 is the Operator Identification Sequence tag.
+  var operatorIDSequence: inst.'00081072'.Value
+  performer[]: BuildPerformersFromLists(operatorNames, operatorIDSequence)
+
+  var requestAttributeSeq: inst.'00400275'.Value
+  basedOn[]: $ListCat(Build_BasedOn_FromList(requestAttributeSeq[]))
+  reasonCode[]: $ListCat(Build_ReasonCode_FromList(requestAttributeSeq[]))
+  reasonReference[]: $ListCat(Build_ReasonReference_FromList(requestAttributeSeq[]))
+}
+
+// Description: Builds basedOn from the request attributes sequence
+//
+// Argument(s):
+//   requestAttributeSeqItem: a single item from the request attributes
+//   sequence.
+//
+// Output(s):
+//   ImagingStudy basedOn for the series: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.basedOn
+//
+def Build_BasedOn_FromList(requestAttributeSeqItem) {
+  var requestedProcedureCodeSeq: requestAttributeSeqItem.'00321064'.Value
+  $this: Build_BasedOn(requestedProcedureCodeSeq[])
+}
+
+// Description: Builds basedOn reference from a request procedure code sequence
+// item.
+//
+// Argument(s):
+//   seqItem: a single item from the requested procedure code sequence.
+//
+// Output(s):
+//   a logical basedOn reference: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.basedOn
+//
+def Build_BasedOn(seqItem) {
+  // 00080104 is the code meaning tag.
+  display: seqItem.'00080104'.Value[0]
+  identifier: {
+    // 00080100 is the code value tag.
+    value: seqItem.'00080100'.Value[0]
+    // 00080102 is the code scheme designator tag.
+    system: seqItem.'00080102'.Value[0]
+  }
+}
+
+// Description: Builds reasonCode from the request attributes sequence
+//
+// Argument(s):
+//   requestAttributeSeqItem: a single item from the request attributes
+//   sequence.
+//
+// Output(s):
+//   ImagingStudy reasonCode for the series: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.reasonCode
+//
+def Build_ReasonCode_FromList(requestAttributeSeqItem) {
+  var reasonForRequestedProcedureCodeSeq: requestAttributeSeqItem.'0040100A'.Value
+  $this: Build_ReasonCode(reasonForRequestedProcedureCodeSeq[])
+}
+
+// Description: Builds reasonCode from a reason for requested
+// procedure code sequence item.
+//
+// Argument(s):
+//   seqItem: a single item from the reason for requested procedure code
+//   sequence.
+//
+// Output(s):
+//   ImagingStudy reasonCode: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.reasonCode
+//
+def Build_ReasonCode(seqItem) {
+  coding[]: {
+    code: seqItem.'00080100'.Value[0]
+    system: seqItem.'00080102'.Value[0]
+    display: seqItem.'00080104'.Value[0]
+  }
+}
+
+// Description: Builds reasonReference from the request attributes sequence
+//
+// Argument(s):
+//   requestAttributeSeqItem: a single item from the request attributes
+//   sequence.
+//
+// Output(s):
+//   ImagingStudy reasonReference for the series: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.reasonReference
+//
+def Build_ReasonReference_FromList(requestAttributeSeqItem) {
+  var reasonForRequestedProcedureCodeSeq: requestAttributeSeqItem.'0040100A'.Value
+  $this: Build_ReasonReference(reasonForRequestedProcedureCodeSeq[])
+}
+
+// Description: Builds reasonReference from a reason for requested
+// procedure code sequence item.
+//
+// Argument(s):
+//   seqItem: a single item from the reason for requested procedure code
+//   sequence.
+//
+// Output(s):
+//   ImagingStudy reasonReference: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.reasonReference
+//
+def Build_ReasonReference(seqItem) {
+  // 00080104 is the code meaning tag.
+  display: seqItem.'00080104'.Value[0]
+  identifier: {
+    // 00080102 is the code scheme designator tag.
+    system: seqItem.'00080102'.Value[0]
+    // 00080100 is the code value tag.
+    value: seqItem.'00080100'.Value[0]
+  }
+}
+
+// Description: This function builds entries in the performer array.
+//
+// Argument(s):
+//   names: list of Physician or Operator names.
+//   idSequence: The Performing Physician Identification Sequence or
+//   Operator Identification Sequence.
+//
+// Output(s):
+//   multiple ImagingStudy series performer: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.series.performer
+//
+def BuildPerformersFromLists(names, idSequence) {
+  if $ListLen(names) = $ListLen(idSequence) {
+    $this: Build_Performer(names[], idSequence[])
+  } else {
+    if $ListLen(idSequence) > 0 {
+      $this: Build_Performer_IDSequenceOnly(idSequence[])
+    }
+    if $ListLen(names) > 0 {
+      $this: Build_Performer(names[], {})
+    }
+  }
+}
+
+// Description: This function builds an entry in the performer array for a
+// given performing physician or operator.
+//
+// Argument(s):
+//   name: the value of the Performing Physician Name or Operator Name tag
+//   as a JSON object.
+//   idSequenceItem: a single item of the the Performing Physician
+//   Identification Sequence or Operator Identification Sequence tag.
+//
+// Output(s):
+//   ImagingStudy series performer: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.series.performer
+//
+def Build_Performer(name, idSequenceItem) {
+  function: Build_Actor()
+  // Here we build a logical FHIR reference from the code value and code
+  // designator in the identification sequence item.
+
+  actor: Build_PersonReference(name, idSequenceItem)
+}
+
+// Description: Create the actor function object for a performing physician or
+// operator. Use PRF code by default.
+//
+// Output(s):
+//   https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.series.performer.function
+//
+def Build_Actor() {
+  coding[0]: {
+    system: "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+    code: "PRF"
+  }
+}
+
+// Description: This is a helper function used to iterate through the
+// Build_Performer function. This must be done because
+// idSequenceItem is the second argument, and can't be iterated through with
+// an empty first argument in whistler.
+//
+// Argument(s):
+//   idSequenceItem: a single item of the the Performing Physician
+//   Identification Sequence or Operator Identification Sequence tag for an
+//   instance.
+//
+// Output(s):
+//   ImagingStudy series performer: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.series.performer
+//
+def Build_Performer_IDSequenceOnly(idSequenceItem) {
+  $this: Build_Performer({}, idSequenceItem)
+}
+
+// Description: Builds the Modality object.
+//
+// Argument(s):
+//   modality: the DICOM modality: http://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_CID_29.html
+//
+// Output(s):
+//   ImagingStudy series modality: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.series.modality
+//
+def Build_Modality(required modality) {
+  system: "http://dicom.nema.org/resources/ontology/DCM"
+  code: modality
+}
+
+
+// Description: Converts a DICOM date into a FHIR dateTime.
+//
+// Argument(s):
+//   dicomDA: a date in DICOM DA format.
+//   dicomTM: a time in DICOM TM format.
+//   http://dicom.nema.org/medical/dicom/current/output/html/part05.html#table_6.2-1
+//   utcOffset: the offset from UTC as a 5 character string.
+//   http://dicom.nema.org/medical/dicom/current/output/chtml/part03/sect_C.12.5.html
+//
+// Output(s):
+//   a date in FHIR dateTime format: https://www.hl7.org/fhir/datatypes.html
+//
+def Build_FHIRDateTime(required dicomDA, dicomTM, utcOffset) {
+  var ret: $ReformatTime("%Y%m%d", dicomDA, "%Y-%m-%d")
+  // FHIR date times require an offset from UTC. If we don't have one, we
+  // can't build a valid datetime.
+  if dicomTM? and utcOffset? {
+    var hour: $SubStr(dicomTM, 0, 2)
+    var min: $SubStr(dicomTM, 2, 4)
+    var sec: $SubStr(dicomTM, 4, 6)
+    var sign: $SubStr(utcOffset, 0, 1)
+    var offsetHour: $SubStr(utcOffset, 1, 3)
+    var offsetMin: $SubStr(utcOffset, 3, 5)
+    // This should be changed to length checks if StrLen becomes available.
+    if sec? and offsetMin? {
+      var ret: $StrCat(ret, "T", hour, ":", min, ":", sec, sign, offsetHour, ":", offsetMin)
+    }
+  }
+  $this: ret
+}
+
+// Description: Builds the bodySite object.
+//
+// Argument(s):
+//   bodySite: body site code as a string.
+//   "http://dicom.nema.org/medical/dicom/current/output/chtml/part16/chapter_L.html"
+//
+// Output(s):
+//   ImagingStudy series bodySite: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.series.bodySite
+//
+def Build_BodySite(required bodySite) {
+  system: "http://snomed.info/sct"
+  code: bodySite
+  // TODO: consider adding a mapping for the display name here.
+}
+
+// Description: Builds the series laterality coding.
+//
+// Argument(s):
+//   laterality: DICOM laterality coding as a string.
+//   http://dicom.nema.org/medical/dicom/current/output/chtml/part03/sect_C.7.3.html#table_C.7-5a
+//   see "Laterality".
+//
+// Output(s):
+//   ImagingStudy series laterality: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.series.laterality
+//
+def Build_Laterality(required laterality) {
+  if laterality = "L" {
+    system: "http://snomed.info/sct"
+    code: "419161000"
+    display: "Unilateral left"
+  }
+  if laterality = "R" {
+    system: "http://snomed.info/sct"
+    code: "419465000"
+    display: "Unilateral right"
+  }
+  // There is no code defined in the DICOM standard for unilateral series
+  // laterality, so this option goes unused here.
+}
+
+// Description: Given a series object and all of the instances in the study, populate instance related fields.
+//
+// Argument(s):
+//   series: a FHIR R4 ImagingStudy series without the instance and numberOfInstances fields populated.
+//   allInstances: all instances in the study in DICOM JSON format
+//
+// Output(s):
+//   Complete FHIR R4 ImagingStudy series: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.series
+//
+def Populate_Instances(series, allInstances) {
+  // Copy over series fields.
+  uid: series.uid
+  number: series.number
+  modality: series.modality
+  description: series.description
+  started: series.started
+  bodySite: series.bodySite
+  laterality: series.laterality
+  performer: series.performer
+  // 0020000E is the series UID tag.
+  var instancesInSeries: allInstances[where $.'0020000E'.Value[0] = series.uid]
+  instance: Build_Instance(instancesInSeries[])
+  numberOfInstances: $ListLen(instancesInSeries)
+  var specimensInInstances: BuildSpecimensInInstance(instancesInSeries[])
+  specimen: $Unique($ListCat(specimensInInstances))
+  // Unmapped Fields:
+  // endpoint: It is not possible to derive the endpoint attribute from DICOM
+  // JSON only.
+}
+
+// Description: Given an instance, return an array of all specimens defined
+// within the instance.
+//
+// Argument(s):
+//   inst: an instance in JSON format
+//
+// Output(s):
+//   Array of specimen: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.series.specimen
+//
+def BuildSpecimensInInstance(inst) {
+  // 00400560 is the Specimen Description Sequence tag.
+  var specimenDescriptionSequence: inst.'00400560'.Value
+  $this: BuildSpecimen(specimenDescriptionSequence[])
+}
+
+// Description: Given a specimen description item, build a specimen.
+//
+// Argument(s):
+//   descriptionSequenceItem: a single item of the specimen description
+//   sequence.
+//
+// Output(s):
+//   ImagingStudy specimen: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.series.specimen
+//
+def BuildSpecimen(descriptionSequenceItem) {
+  // 00400551 is the specimen identifier tag
+  var specimenIdentifier: descriptionSequenceItem.'00400551'.Value[0]
+  // The Issuer of the Specimen Identifier Sequence only contains one item.
+  // Issuer of the Specimen Identifier Sequence >
+  //   Local Namespace Entity ID
+  var localIssuerEntityID: descriptionSequenceItem.'00400562'.Value[0].'00400031'.Value[0]
+  // Issuer of the Specimen Identifier Sequence >
+  //   Universal Entity ID
+  var universalIssuerEntityID: descriptionSequenceItem.'00400562'.Value[0].'00400032'.Value[0]
+   // Issuer of the Specimen Identifier Sequence >
+  //   Universal Entity Type
+  var universalIssuerEntityType: descriptionSequenceItem.'00400562'.Value[0].'00400033'.Value[0]
+  var issuer: localIssuerEntityID
+  if ~localIssuerEntityID and universalIssuerEntityID? {
+    var issuer: Cond(universalIssuerEntityType?, $StrCat(universalIssuerEntityType, ":", universalIssuerEntityID), universalIssuerEntityID)
+  }
+  if specimenIdentifier? {
+    identifier: {
+      system: issuer
+      value: specimenIdentifier
+    }
+  }
+}
+
+// Description: Mapping function for an instance.
+//
+// Argument(s):
+//   inst: one instance in DICOM JSON format
+//
+// Output(s):
+//   FHIR R4 ImagingStudy instance: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.series.instance
+//
+def Build_Instance(inst) {
+  // 00080018 is the instance UID tag.
+  uid: inst.'00080018'.Value[0]
+  // 00080016 is the SOP class UID tag.
+  var sopClassUID: inst.'00080016'.Value[0]
+  sopClass: Build_SOPClassUID(sopClassUID)
+  // 00200013 is the instance number tag.
+  number: inst.'00200013'.Value[0]
+
+  // 00080008 is the ImageType tag.
+  var imageType: inst.'00080008'.Value
+  // 00700080 is the Presentation Label tag.
+  var presentationLabel: inst.'00700080'.Value[0]
+  // Concept Name Code Sequence > Code Meaning
+  var conceptMeaning: inst.'0040A043'.Value[0].'00080104'.Value[0]
+  // 00420010 is the DocumentTitle tag.
+  var documentTitle: inst.'00420010'.Value[0]
+  var imageType: Cond(imageType?, $StrCat("Image Type: ", $StrJoin(" ", imageType)), "")
+  var presentationLabel: Cond(presentationLabel?, $StrCat("Presentation Label: ", presentationLabel), "")
+  var conceptMeaning: Cond(conceptMeaning?, $StrCat("Concept Name Code Meaning: ", conceptMeaning), "")
+  var documentTitle: Cond(documentTitle?, $StrCat("Document Title: ", documentTitle), "")
+  title: $StrJoin(", ", imageType, presentationLabel, conceptMeaning, documentTitle)
+}
+
+// Description: Helper ternary operator function.
+// TODO: replace this function when this is supported by default.
+//
+def Cond(cond, one, two) {
+  if cond {
+    $this: one
+  } else {
+    $this: two
+  }
+}
+
+
+// Description: Mapping function for the SOP class UID.
+//
+// Argument(s):
+//   sopClassUID: the SOP class UID as a string.
+//
+// Output(s):
+//   FHIR R4 ImagingStudy sopClass object: https://www.hl7.org/fhir/imagingstudy-definitions.html#ImagingStudy.series.instance.sopClass
+//
+def Build_SOPClassUID(required sopClassUID) {
+  system: "urn:ietf:rfc:3986"
+  code: $StrCat("urn:oid:", sopClassUID)
+}

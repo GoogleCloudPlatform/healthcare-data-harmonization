@@ -1,0 +1,57 @@
+{
+    "identifier": [
+        {
+            "system": "urn:dicom:uid",
+            "value": "urn:oid:1"
+        }
+    ],
+    "numberOfInstances": 2,
+    "numberOfSeries": 1,
+    "resourceType": "ImagingStudy",
+    "series": [
+        {
+            "instance": [
+                {
+                    "number": 1,
+                    "sopClass": {
+                        "code": "urn:oid:1.2.840.10008.5.1.4.1.1.7",
+                        "system": "urn:ietf:rfc:3986"
+                    },
+                    "uid": "1"
+                },
+                {
+                    "number": 1,
+                    "sopClass": {
+                        "code": "urn:oid:1.2.840.10008.5.1.4.1.1.7",
+                        "system": "urn:ietf:rfc:3986"
+                    },
+                    "uid": "2"
+                }
+            ],
+            "number": 123,
+            "numberOfInstances": 2,
+            "specimen": [
+                {
+                    "identifier": {
+                        "system": "localid1",
+                        "value": "specimen1"
+                    }
+                },
+                {
+                    "identifier": {
+                        "system": "universalid1",
+                        "value": "specimen2"
+                    }
+                },
+                {
+                    "identifier": {
+                        "system": "UUID:universalid2",
+                        "value": "specimen3"
+                    }
+                }
+            ],
+            "uid": "2"
+        }
+    ],
+    "status": "available"
+}
