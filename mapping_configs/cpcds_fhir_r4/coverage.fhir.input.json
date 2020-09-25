@@ -1,0 +1,19 @@
+{
+ "Coverage":{
+    "Coverage_id": "65707118-a1f7-408e-935c-d7e441ab8564",
+    "Member_id": "19e0aea1-2681-40b0-b849-6ccdf7c57b28",
+    "Subscriber_id": "19e0aea1-2681-40b0-b849-6ccdf7c57b28",
+    "Dependent_number": "0",
+    "Coverage_type": "POS",
+    "Coverage_status": "active",
+    "Start_date": "1999-07-18",
+    "End_date": null,
+    "Group_id": "9f506bdc-739e-432e-9656-52d53ed0d9a8",
+    "Group_name": "Apollo Dynamics",
+    "Plan_identifier": "2",
+    "Plan_name": "Silver",
+    "Payer_identifier": "7c4411ce-02f1-39b5-b9ec-dfbea9ad3c1a",
+    "Payer_primary_identifier": "7c4411ce-02f1-39b5-b9ec-dfbea9ad3c1a",
+    "Relationship_to_subscriber": "self"
+  }
+}

@@ -1,0 +1,17 @@
+// Description: Define CPCDS to FHIR R4 transformation
+//
+// Argument(s): Each of the following CPCDS tables
+//   Claim: TODO
+//   Coverage:
+//   Patient:
+//
+// Output(s): Each of the following FHIR R4 resources
+//   ExplanationOfBenefit: https://www.hl7.org/fhir/explanationofbenefit.html
+//
+def CMS_FHIR(input) {
+  out Resources (if input.Claim) : Claim_EOB(input.Claim);
+  out Resources (if input.Patient): Patient_Patient(input.Patient);
+  out Resources (if input.Coverage): Coverage_Coverage(input.Coverage);
+  out Resources (if input.Organization): Organization_Organization(input.Organization);
+  out Resources (if input.PractitionerRole): PractitionerRole_PractitionerRole(input.PractitionerRole);
+}

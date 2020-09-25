@@ -1,0 +1,91 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "M",
+          "display": "MALE",
+          "target": [
+            {
+              "code": "male",
+              "display": "Male",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "F",
+          "display": "FEMALE",
+          "target": [
+            {
+              "code": "female",
+              "display": "Female",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "Gender",
+      "target": "http://hl7.org/fhir/administrative-gender"
+    },
+    {
+      "element": [
+        {
+          "code": "active",
+          "display": "active",
+          "target": [
+            {
+              "code": "active",
+              "display": "Active",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "inactive",
+          "display": "inactive",
+          "target": [
+            {
+              "code": "cancelled",
+              "display": "Cancelled",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "Status",
+      "target": "http://hl7.org/fhir/fm-status"
+    },
+    {
+      "element": [
+        {
+          "code": "active",
+          "display": "active",
+          "target": [
+            {
+              "code": "active",
+              "display": "Active",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "inactive",
+          "display": "inactive",
+          "target": [
+            {
+              "code": "cancelled",
+              "display": "Cancelled",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "Status",
+      "target": "http://hl7.org/fhir/explanationofbenefit-status"
+    }
+  ],
+  "id": "CMS-FHIR-ConceptMap",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}
