@@ -274,6 +274,7 @@ def Practitioner_Provider(Practitioner) {
   gender_concept_id : Convert_Terminology(Practitioner.gender, "http://hl7.org/fhir/administrative-gender");
   gender_source_concept_id : Convert_Terminology(Practitioner.gender, "http://hl7.org/fhir/administrative-gender");
   specialty_concept_id : Convert_Terminology(Practitioner.qualification[0].code.coding[0].code, Practitioner.qualification[0].code.coding[0].system);
+  specialty_source_concept_id : Convert_Terminology(Practitioner.qualification[0].code.coding[0].code, Practitioner.qualification[0].code.coding[0].system);
   year_of_birth (if Practitioner.birthDate) : Extract_Year(Practitioner.birthDate);
 }
 
