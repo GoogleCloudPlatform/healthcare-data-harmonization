@@ -30,7 +30,7 @@ and
 [`Location`](https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedHealthSystemDataTables/LOCATION.md)
 entities, shown below.
 
-![Gap Analysis](./img/FHIR-OMOP-Gap-Analysis.png "Gap Analysis")
+![Gap Analysis](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_configs/fhir_omop/doc/img/FHIR-OMOP-Gap-Analysis.png "Gap Analysis")
 
 ## Mapping Configurations
 
@@ -48,7 +48,7 @@ contains a complex datatype `Address` and needs to be mapped to the target
 concept `Location`. Additional mappings are needed to be defined to transform
 `Address` datatype into an `Location` datatype, shown below:
 
-![Mapping: DataType](./img/FHIR-OMOP-Add-Loc.png "Mapping: DataType")
+![Mapping: DataType](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_configs/fhir_omop/doc/img/FHIR-OMOP-Add-Loc.png "Mapping: DataType")
 
 The above highlighted datatype transformations are defined using
 [Whistle syntax](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/index.md?cl=head)
@@ -93,7 +93,7 @@ example, based on the above-mentioned gap analysis exercise, both `gender` and
 requires vocabulary transformation between their value-sets, shown in Figure
 below:
 
-![Gap Analysis: Vocabulary](./img/FHIR-OMOP-ConceptMap.png "Gap Analysis: Vocabulary"){style="display:block;width:610px;margin:auto"}
+![Gap Analysis: Vocabulary](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_configs/fhir_omop/doc/img/FHIR-OMOP-ConceptMap.png "Gap Analysis: Vocabulary"){style="display:block;width:610px;margin:auto"}
 
 Based on the above scenario, mappings between `gender` and `gender_concept_id`
 value-sets are defined as

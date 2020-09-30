@@ -87,7 +87,7 @@ complex, nested data formats into other complex and nested data formats.
 
 TODO: Write Mapping Healthcare Data Standards section
 
-### [HL7 v2 to FHIR](v2tofhir.md)
+### [HL7 v2 to FHIR](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_configs/hl7v2_fhir_stu3/doc/v2tofhir.md)
 
 ### OMOP to FHIR
 
