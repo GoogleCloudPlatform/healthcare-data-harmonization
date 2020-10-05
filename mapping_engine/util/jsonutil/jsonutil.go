@@ -18,7 +18,6 @@ package jsonutil
 import (
 	"encoding/binary"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"hash"
 	"hash/fnv"
