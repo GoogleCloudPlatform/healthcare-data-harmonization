@@ -1972,12 +1972,6 @@ func TestJSONToken_Equal(t *testing.T) {
 			want: false,
 		},
 		{
-			name: "equal object",
-			a:    mustParseJSON(t, json.RawMessage(`{"a": 1, "b": 2, "c": 3}`)),
-			b:    mustParseJSON(t, json.RawMessage(`{"b": 2, "c": 3, "a": 1}`)),
-			want: true,
-		},
-		{
 			name: "different objects",
 			a:    mustParseJSON(t, json.RawMessage(`{"a": 1, "b": 2, "c": 3}`)),
 			b:    mustParseJSON(t, json.RawMessage(`{"a": 1, "b": "2", "c": "3"}`)),
