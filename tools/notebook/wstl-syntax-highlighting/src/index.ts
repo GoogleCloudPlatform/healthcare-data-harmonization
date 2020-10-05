@@ -28,7 +28,7 @@ const WHISTLE_EXT = 'wstl';
 const DEFAULT_MODE = 'ipython';
 
 function defineWhistleMode(app: JupyterFrontEnd): void {
-  // TODO: autogenerate rules from whistle grammar.
+  // TODO(b/161140891): autogenerate rules from whistle grammar.
   CodeMirror.defineSimpleMode(WHISTLE_MODE, {
     // The start state contains the rules that are intially used.
     start: [

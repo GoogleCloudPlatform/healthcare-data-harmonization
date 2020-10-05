@@ -352,7 +352,7 @@ func getNodeFieldSegmented(node JSONMetaNode, segments []string) (JSONMetaNode, 
 			return nil, false, fmt.Errorf("negative array indices are not supported but got %d", idx)
 		}
 		if idx >= len(n.Items) {
-			// TODO: Consider returning a different value for fields that don't exist vs
+			// TODO(b/113520732): Consider returning a different value for fields that don't exist vs
 			// fields that are actually set to null.
 			return nil, false, nil
 		}
@@ -366,7 +366,7 @@ func getNodeFieldSegmented(node JSONMetaNode, segments []string) (JSONMetaNode, 
 		if val, ok := n.Children[seg]; ok {
 			return getNodeFieldSegmented(val, segments[1:])
 		}
-		// TODO: Consider returning a different value for fields that don't exist vs
+		// TODO(b/113520732): Consider returning a different value for fields that don't exist vs
 		// fields that are actually set to null.
 		return nil, false, nil
 	case nil:

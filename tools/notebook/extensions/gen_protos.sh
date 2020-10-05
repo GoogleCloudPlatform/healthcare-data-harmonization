@@ -15,6 +15,6 @@
 
 # This script will run code generation for protos.
 
-# TODO : generate client files with the appropriate import path.
+# TODO (b/160868756): generate client files with the appropriate import path.
 python -m grpc_tools.protoc -I./wstl/proto -I../../third_party/api-common-protos --python_out=./wstl/proto --grpc_python_out=./wstl/proto wstl/proto/wstlservice.proto
 sed -i 's/^import wstlservice_pb2 as wstlservice__pb2/import wstl.proto.wstlservice_pb2 as wstlservice__pb2/g' wstl/proto/wstlservice_pb2_grpc.py;

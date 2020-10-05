@@ -62,13 +62,13 @@ func Clear() {
 
 // GCPClient is used to call a service hosted on GCP.
 type GCPClient struct {
-	// TODO: Use healthcare Go client when open sourced.
+	// TODO(b/123300303): Use healthcare Go client when open sourced.
 	client *http.Client
 }
 
 // ExecuteRequest executes an http request (req). If the request fails, it is logged with the parameter name. Upon receiving a 404, it returns an error or empty JSON object depending on the failOnNotFound flag.
 func (sc *GCPClient) ExecuteRequest(ctx context.Context, req *http.Request, name string, failOnNotFound bool) (*json.RawMessage, error) {
-	// TODO: Use healthcare Go client when open sourced.
+	// TODO(b/123300303): Use healthcare Go client when open sourced.
 	var resp *http.Response
 
 	ts, err := getToken(ctx)

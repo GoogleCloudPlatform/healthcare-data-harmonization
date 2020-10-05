@@ -58,7 +58,7 @@ type CodeHarmonizer interface {
 }
 
 // HarmonizedCode is the result of harmonization.
-// TODO: Add original code and equivalence here.
+// TODO(b/149298236): Add original code and equivalence here.
 type HarmonizedCode struct {
 	Code    string
 	System  string
@@ -195,7 +195,7 @@ func makeCodeHarmonizers(lookups *hpb.CodeHarmonizationConfig) (map[string]CodeH
 			return nil, fmt.Errorf("location type %T is not supported", t)
 		}
 
-		// TODO: Add support for multiple FHIR versions.
+		// TODO(b/132161794): Add support for multiple FHIR versions.
 		cm, err := unmarshalR3ConceptMap(raw)
 		if err != nil {
 			return nil, fmt.Errorf("unmarshal failed with error %v", err)

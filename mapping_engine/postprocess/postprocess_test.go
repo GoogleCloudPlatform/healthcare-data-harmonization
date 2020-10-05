@@ -130,7 +130,7 @@ const postProcessProjectors = `
 		}
 	}`
 
-// TODO: Remove these when we have libraries built into the main code.
+// TODO(b/132261691): Remove these when we have libraries built into the main code.
 func LoadLibraryProjectors(t *testing.T) *types.Registry {
 	reg := types.NewRegistry()
 

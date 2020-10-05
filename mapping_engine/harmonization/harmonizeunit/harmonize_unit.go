@@ -58,7 +58,7 @@ type LocalUnitHarmonizer struct {
 // RemoteUnitHarmonizer will harmonize units using a remote lookup service.
 type RemoteUnitHarmonizer struct {
 	client auth.Client
-	// TODO: store cached results.
+	// TODO(b/149166249): store cached results.
 }
 
 // HarmonizedUnit is the result of harmonization.
@@ -147,7 +147,7 @@ func (h *LocalUnitHarmonizer) Harmonize(sourceQuantity float64, sourceUnit strin
 }
 
 // Harmonize implements UnitHarmonizer's Harmonize function.
-// TODO: Add support for this.
+// TODO(b/149166249): Add support for this.
 func (h *RemoteUnitHarmonizer) Harmonize(sourceQuantity float64, sourceUnit string, sourceCode string, sourceCodeSystem string) (HarmonizedUnit, error) {
 	return HarmonizedUnit{}, fmt.Errorf("remote harmonization unimplemented")
 }

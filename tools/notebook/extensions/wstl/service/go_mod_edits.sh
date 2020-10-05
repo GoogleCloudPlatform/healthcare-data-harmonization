@@ -27,7 +27,7 @@ function abspath() {
 
 
 function replace_modules() {
-  # TODO  clean up relative paths in go_mod_edits.sh
+  # TODO (b/162603178) clean up relative paths in go_mod_edits.sh
   DH_ROOT=$(abspath ../../../../../)
   go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto=$DH_ROOT/mapping_engine/proto
   go mod edit -replace github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util=$DH_ROOT/mapping_engine/util

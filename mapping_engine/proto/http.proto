@@ -14,11 +14,11 @@ message ServerDefinition {
   // Config that provides the information for authenticating with the server.
   oneof authentication_config {
     CustomGCPConfig custom_gcp = 2;
-    // TODO : Support additional server types.
+    // TODO (b/122273125): Support additional server types.
   }
 }
 
-// TODO: Remove since its not needed anymore.
+// TODO(b/130808132): Remove since its not needed anymore.
 message CustomGCPConfig {
   // Location of client secret JSON
   Location client_secret_file = 1;
@@ -64,7 +64,7 @@ message HttpFetchQuery {
 // The CloudFunction message defines a cloud function that can be called as a
 // projector.
 message CloudFunction {
-  // TODO: Evaluate the @ convention.
+  // TODO(b/130820563): Evaluate the @ convention.
   // The name of the cloud function, and it should start with '@' to indicate
   // it is a cloud function as a projector.
   string name = 1;

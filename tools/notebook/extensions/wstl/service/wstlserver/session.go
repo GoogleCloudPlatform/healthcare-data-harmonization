@@ -38,7 +38,7 @@ type Session struct {
 
 // NewSession instantiates a session with either the provided sessionID or the FallbackSessionID.
 func NewSession(sessionID string) (*Session, error) {
-	// TODO  Pass in StorageClient (not nill)
+	// TODO (b/162605320) Pass in StorageClient (not nill)
 	trans, err := NewContext(&storageClient{})
 	if err != nil {
 		return nil, err

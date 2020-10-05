@@ -235,10 +235,10 @@ def OML_O21(OML_O21) {
 
   out Resources : AL1_AllergyIntolerance(OML_O21.PATIENT.AL1, Patient);
 
-  // TODO: Decide if Encounter[0] is the right one.
+  // TODO(googler): Decide if Encounter[0] is the right one.
   out Resources : OBX_Observation(OML_O21.ORDER[*].OBSERVATION_REQUEST.OBSERVATION[*].OBX[], Patient, Encounter[0]);
 
-  // TODO: Decide if Encounter[0] is the right one.
+  // TODO(googler): Decide if Encounter[0] is the right one.
   var DiagnosticReport : OBR_ORC_DiagnosticReport(OML_O21.ORDER[*].OBSERVATION_REQUEST.OBR[], OML_O21.ORDER[*].ORC[], Patient, Encounter[0])
   out Resources : DiagnosticReport;
 }

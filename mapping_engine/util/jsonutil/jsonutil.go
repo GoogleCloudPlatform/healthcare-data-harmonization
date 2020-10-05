@@ -257,7 +257,7 @@ func (w DefaultAccessor) getFieldSegmented(src JSONToken, segments []string) (JS
 			return nil, fmt.Errorf("negative array indices are not supported but got %d", idx)
 		}
 		if idx >= len(o) {
-			// TODO: Consider returning a different value for fields that don't exist vs
+			// TODO(b/113520732): Consider returning a different value for fields that don't exist vs
 			// fields that are actually set to null.
 			return nil, nil
 		}
@@ -269,7 +269,7 @@ func (w DefaultAccessor) getFieldSegmented(src JSONToken, segments []string) (JS
 		if item, ok := o[seg]; ok {
 			return w.getFieldSegmented(*item, segments[1:])
 		}
-		// TODO: Consider returning a different value for fields that don't exist vs
+		// TODO(b/113520732): Consider returning a different value for fields that don't exist vs
 		// fields that are actually set to null.
 		return nil, nil
 	case JSONNum, JSONStr, JSONBool:
@@ -520,7 +520,7 @@ func Merge(src JSONToken, dest *JSONToken, failOnOverwrite, overwriteArrays bool
 			// If the destination is empty, allow type change.
 			*dest = src
 		} else {
-			// TODO: Append src as is to dest?
+			// TODO(b/120618463): Append src as is to dest?
 			return fmt.Errorf("can't merge source %T with destination %T", src, d)
 		}
 	default:

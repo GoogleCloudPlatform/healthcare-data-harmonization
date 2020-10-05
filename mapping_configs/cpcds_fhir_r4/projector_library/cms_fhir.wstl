@@ -1,7 +1,7 @@
 // Description: Define CPCDS to FHIR R4 transformation
 //
 // Argument(s): Each of the following CPCDS tables
-//   Claim: TODO
+//   Claim: TODO(b/160627201)
 //   Coverage:
 //   Patient:
 //

@@ -349,7 +349,7 @@ func evaluateValueSourceSource(vs *mappb.ValueSource, args []jsonutil.JSONMetaNo
 		metaNode, err = jsonutil.TokenToNodeWithProvenance(token, fmt.Sprintf("%s's output field %s", pctx.Projector(), s.FromDestination), jsonutil.Provenance{})
 	case *mappb.ValueSource_FromLocalVar:
 		location = fmt.Sprintf("From Var %q", s.FromLocalVar)
-		// TODO: Provenance support for vars.
+		// TODO(b/158323733): Provenance support for vars.
 		token, lerr := EvaluateFromVar(s, pctx, a)
 		if lerr != nil {
 			return nil, lerr
@@ -362,7 +362,7 @@ func evaluateValueSourceSource(vs *mappb.ValueSource, args []jsonutil.JSONMetaNo
 			location = "Nested expression"
 		}
 		metaNode, err = EvaluateValueSource(s.ProjectedValue, args, output, pctx, a)
-	// TODO: token Key = Gvid(); Parent = common ancestor of all args
+	// TODO(b/120618463): token Key = Gvid(); Parent = common ancestor of all args
 	// No need to mutate parent though.
 	case *mappb.ValueSource_FromArg:
 		if s.FromArg < 0 || int(s.FromArg) > len(args) {

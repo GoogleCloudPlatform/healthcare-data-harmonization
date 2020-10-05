@@ -44,7 +44,7 @@ type Context struct {
 }
 
 // NewContext instantiates a transformation context.
-// TODO  Modify the funtion to only take in non-nil StorageClient.
+// TODO (b/162605320) Modify the funtion to only take in non-nil StorageClient.
 func NewContext(c gcsutil.StorageClient) (*Context, error) {
 	if c == nil {
 		return nil, fmt.Errorf("the argument to NewContext is nil")
@@ -74,7 +74,7 @@ func (c *Context) EvaluateIncrementalTransformation(request *wspb.IncrementalTra
 	return executeTransformation(trans, inputs), nil
 }
 
-// TODO : move to wstlserver level.
+// TODO (b/156228336): move to wstlserver level.
 func newHarmonizationConfig(wstl string, libraryConfigs []*wspb.Location, codeConfigs []*wspb.Location, unitConfig *wspb.Location) *dhpb.DataHarmonizationConfig {
 	libConfig := []*lpb.LibraryConfig{}
 	if len(libraryConfigs) > 0 {

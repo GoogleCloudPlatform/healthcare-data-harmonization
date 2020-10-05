@@ -82,7 +82,7 @@ def Patient_Patient(Patient) {
   extension[0].extension[0].valueString : Patient.Race_code;
   extension[0].extension[0].url : "text";
 
-// TODO: Revisit CMS-FHIR mappings based on community mapping sheet
+// TODO(b/161729823): Revisit CMS-FHIR mappings based on community mapping sheet
 //  extension[0].extension[0].valueCoding.code : Patient.Race_code;
 //  extension[0].extension[0].url : "ombCategory";
 
@@ -90,7 +90,7 @@ def Patient_Patient(Patient) {
   extension[1].extension[0].valueString : Patient.Ethnicity;
   extension[1].extension[0].url : "text";
 
-// TODO: Revisit CMS-FHIR mappings based on community mapping sheet
+// TODO(b/161729823): Revisit CMS-FHIR mappings based on community mapping sheet
 // extension[1].extension[0].valueCoding.code : Patient.Ethnicity;
 // extension[1].extension[0].url : "ombCategory";
 
@@ -120,7 +120,7 @@ def Patient_Patient(Patient) {
 // Description: Constructs a FHIR R4 CARINBBExplanationOfBenefitInpatientFacility Resource based on CPCDS Claim Table
 //
 // Argument(s):
-//   Claim: TODO
+//   Claim: TODO(b/160627201)
 //
 // Output(s):
 //   CARINBBExplanationOfBenefitInpatientFacility: http://hl7.org/fhir/us/carin-bb/2020Feb/StructureDefinition-CARIN-BB-ExplanationOfBenefit-Inpatient-Facility.html
@@ -152,7 +152,7 @@ def Claim_EOB(Claim) {
   insurer: Build_ReferenceID("Organization", $Hash(Claim.Claim_payer_identifier));
   provider: Build_ReferenceID("Organization", $Hash(Claim.Claim_site_of_service_NPI));
 
-// TODO: Revisit CMS-FHIR mappings based on community mapping sheet
+// TODO(b/161729823): Revisit CMS-FHIR mappings based on community mapping sheet
 //  provider: Build_Reference(Output_Resource(Build_Organization($Hash(Claim.Claim_billing_provider_NPI))));
 //  insurer: Build_ReferenceID("Organization", $Hash(Claim.Claim_payer_identifier));
 //  provider: Build_ReferenceID("Organization", $Hash(Claim.Claim_billing_provider_NPI));
@@ -165,7 +165,7 @@ def Claim_EOB(Claim) {
   payee.type.coding[].code : Claim.Claim_payee_type_code;
   payee.party : Build_ReferenceID("Patient", $Hash(Claim.Claim_payee));
 
-// TODO: Revisit CMS-FHIR mappings based on community mapping sheet
+// TODO(b/161729823): Revisit CMS-FHIR mappings based on community mapping sheet
 //  facility : Build_ReferenceID("Location", $Hash(Claim.Claim_site_of_service_NPI));
 
   careTeam[] (if Claim.Claim_attending_provider_NPI and Claim.Claim_site_of_service_NPI): Build_CareTeam(1, $Hash($StrCat(Claim.Claim_attending_provider_NPI, Claim.Claim_site_of_service_NPI)), true, "supervising");
@@ -187,7 +187,7 @@ def Claim_EOB(Claim) {
   supportingInfo[] (if Claim.Place_of_service_code) : Build_SupportingInfo(11, Claim.Place_of_service_code, "placeofservice","","");
   supportingInfo[] (if Claim.Claim_received_date) : Build_SupportingInfo(15, "", "clmrecvddate",Claim.Claim_received_date,"");
 
-// TODO: Revisit CMS-FHIR mappings based on community mapping sheet
+// TODO(b/161729823): Revisit CMS-FHIR mappings based on community mapping sheet
   supportingInfo[] (if Claim.Claim_site_of_service_network_status) : Build_SupportingInfo(12, Claim.Claim_site_of_service_network_status, "sitenetworkcontractingstatus","","");
   supportingInfo[] (if Claim.Claim_performing_provider_network_status) : Build_SupportingInfo(13, Claim.Claim_performing_provider_network_status, "performingnetworkcontractingstatus","","");
 //  supportingInfo[] (if Claim.Claim_prescribing_provider_network_status) : Build_SupportingInfo(14, Claim.Claim_prescribing_provider_network_status, "prescribingnetworkcontractingstatus","","");
@@ -202,7 +202,7 @@ def Claim_EOB(Claim) {
 
   insurance[] : Build_InsuranceCoverage("false", Claim.Coverage_id);
 
-// TODO: Revisit CMS-FHIR mappings based on community mapping sheet
+// TODO(b/161729823): Revisit CMS-FHIR mappings based on community mapping sheet
 //  insurance[] : Build_Insurance (Claim.Coverages[], Claim.Claim_payer_identifier, Claim.Claim_primary_payer_identifier);
 
   item[] : Build_Item (Claim.Items[], Claim.Claim_type);
@@ -259,7 +259,7 @@ def Build_Organization(OrgID) {
 // Description: Constructs a FHIR R4 ExplanationOfBenefit item datatype
 //
 // Argument(s):
-//   Code: TODO
+//   Code: TODO(b/160627201)
 //   Sequence:
 //   Quantity:
 //
@@ -351,7 +351,7 @@ def Build_Class(Value, Name, Type) {
 // Description: Constructs a FHIR R4 ExplanationOfBenefit supportingInfo datatype
 //
 // Argument(s):
-//   Code: TODO
+//   Code: TODO(b/160627201)
 //   Category:
 //
 // Output(s):
@@ -369,7 +369,7 @@ def Build_SupportingInfo(Sequence, Code, Category, Date, Quantity) {
 // Description: Constructs a FHIR R4 ExplanationOfBenefit diagnosis datatype
 //
 // Argument(s):
-//   Code: TODO
+//   Code: TODO(b/160627201)
 //   Display:
 //   System:
 //   Type:
@@ -393,7 +393,7 @@ def Build_Diagnosis(required Item) {
 // Description: Constructs a FHIR R4 ExplanationOfBenefit procedure datatype
 //
 // Argument(s):
-//   Code: TODO
+//   Code: TODO(b/160627201)
 //   Display:
 //   System:
 //   Type:
@@ -416,7 +416,7 @@ def Build_Procedure(required Item) {
 // Description: Constructs a FHIR R4 ExplanationOfBenefit insurance datatype
 //
 // Argument(s):
-//   CIdentifier: TODO
+//   CIdentifier: TODO(b/160627201)
 //   Focal:
 //
 // Output(s):
@@ -442,7 +442,7 @@ def Build_Insurance(required Coverage, pIdentifier, ppIdentifier) {
 // Description: Constructs a FHIR R4 ExplanationOfBenefit payment datatype
 //
 // Argument(s):
-//   Type: TODO
+//   Type: TODO(b/160627201)
 //   Reason:
 //   Date:
 //

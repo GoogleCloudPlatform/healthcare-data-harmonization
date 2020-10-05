@@ -420,12 +420,12 @@ def MedicationDispense_DrugExposure(MedicationDispense) {
   if (MedicationDispense.whenPrepared?) {
     drug_exposure_start_datetime : MedicationDispense.whenPrepared;
     drug_exposure_start_date : Extract_Date(MedicationDispense.whenPrepared);
-    //TODO: DRUG_EXPOSURE_END_DATETIME = DRUG_EXPOSURE_START_DATETIME + DAYS_SUPPLY -1
+    //TODO(b/167421973): DRUG_EXPOSURE_END_DATETIME = DRUG_EXPOSURE_START_DATETIME + DAYS_SUPPLY -1
     drug_exposure_end_datetime : MedicationDispense.whenPrepared;
   } else {
     drug_exposure_start_datetime : MedicationDispense.whenHandedOver;
     drug_exposure_start_date : Extract_Date(MedicationDispense.whenHandedOver);
-    //TODO: DRUG_EXPOSURE_END_DATETIME = DRUG_EXPOSURE_START_DATETIME + DAYS_SUPPLY -1
+    //TODO(b/167421973): DRUG_EXPOSURE_END_DATETIME = DRUG_EXPOSURE_START_DATETIME + DAYS_SUPPLY -1
     drug_exposure_end_datetime : MedicationDispense.whenHandedOver;
   }
   verbatim_end_date : Extract_Date(MedicationDispense.dispenseRequest.validityPeriod.end);

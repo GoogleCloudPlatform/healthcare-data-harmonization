@@ -70,7 +70,7 @@ comprised of:
 
 ### Step 2: Mapping Configuration
 
-TODO: Write Mapping Configuration section
+TODO(b/158833342): Write Mapping Configuration section
 
 1.  Datatype Transformation
 2.  Vocabulary Transformation
@@ -85,7 +85,7 @@ complex, nested data formats into other complex and nested data formats.
 
 ## Mapping Healthcare Data Standards
 
-TODO: Write Mapping Healthcare Data Standards section
+TODO(b/158832819): Write Mapping Healthcare Data Standards section
 
 ### [HL7 v2 to FHIR](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_configs/hl7v2_fhir_stu3/doc/v2tofhir.md)
 

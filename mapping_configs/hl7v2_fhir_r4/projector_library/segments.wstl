@@ -62,7 +62,7 @@ def PID_PD1_Patient(required PID, PD1) {
   address[] : XAD_Address(PID.11[]);
   telecom[] : XTN_ContactPoint(PID.13[], "home");
   telecom[] : XTN_ContactPoint(PID.14[], "work");
-// TODO: Uncomment below
+// TODO(b/150794840): Uncomment below
 //  communication[0].language : PID.15 => CWE_CodeableConcept;   Need Terminology Mapping: No mappings found in community sheet
 //  communication[0].preferred : true;
   maritalStatus : CWE_CodeableConcept(PID.16);
@@ -243,10 +243,10 @@ def AL1_AllergyIntolerance (required AL1, Patient) {
   if (AL1.4 ~= "U") {
     reaction[0].severity : Convert_TerminologyCode(CWE_Code(AL1.4), "http://terminology.hl7.org/CodeSystem/v2-0128", "Allergy_Severity");
   }
-// TODO: Uncomment below
+// TODO(b/150794840): Uncomment below
   //criticality : AL1.4 => CWE_Code;     Need Terminology Mapping: No mappings found in community sheet
 //  reaction[0].manifestation[].text : AL1.5[];
-  // TODO: Generating invalid FHIR JSON
+  // TODO(b/150791234): Generating invalid FHIR JSON
   reaction[0].manifestation[].text : "Place Holder";
   onsetDateTime : Convert_DateTime(AL1.6);
   patient : Build_Reference(Patient);

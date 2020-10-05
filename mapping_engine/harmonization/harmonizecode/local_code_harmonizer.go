@@ -135,8 +135,8 @@ func (h *LocalCodeHarmonizer) Cache(cm *ConceptMap) error {
 	return nil
 }
 
-// TODO: Validate duplicate mappings.
-// TODO: Validation should be decoupled from caching.
+// TODO(b/143073219): Validate duplicate mappings.
+// TODO(b/149967983): Validation should be decoupled from caching.
 func buildCachedMap(cm *ConceptMap) (cachedMap, string, error) {
 	if cm.ID == "" {
 		return cachedMap{}, "", fmt.Errorf("concept map must have an id field")

@@ -102,7 +102,7 @@ class WSTLMagics(Magics):
     """Cell magic to evaluate whistle mapping language from iPython kernel."""
     args = magic_arguments.parse_argstring(self.wstl, line)
 
-    # TODO : migrate to secure channel.
+    # TODO (b/157468786): migrate to secure channel.
     with grpc.insecure_channel(self.grpc_target) as channel:
       stub = wstlservice_pb2_grpc.WhistleServiceStub(channel)
 
@@ -275,7 +275,7 @@ class LoadHL7Magics(Magics):
 def _get_message_from_hl7v2_store(api_version, project, region, dataset,
                                   data_store, filter_str):
   """Returns an authorized API client by discovering the Healthcare API and creating a service object using the service account credentials in the GOOGLE_APPLICATION_CREDENTIALS environment variable."""
-  # TODO: add paging support for HL7v2 messages.
+  # TODO(b/158861537): add paging support for HL7v2 messages.
   service_name = "healthcare"
 
   client = discovery.build(service_name, api_version)
