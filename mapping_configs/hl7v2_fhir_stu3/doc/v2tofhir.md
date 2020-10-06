@@ -3,7 +3,7 @@
 This document describes a mapping guide to transform
 [HL7 v2 (version 2.9) to FHIR STU3 resources](TODO:link to a runnable example of these mappings)(TODO)
 using the
-[Whistle Data Transformation Language](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/index.md?cl=head).
+[Whistle Data Transformation Language](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/index.md).
 A mapping process aims towards identifying alignments between source and target
 schemas for achieving data transformation and mediation between two or more data
 sources. A mapping process is outlined via the following steps:
@@ -35,7 +35,7 @@ segments and HL7 FHIR `Patient` resource, shown below.
 Based on the example mapping gap analysis discussed above, integration analysts
 and developers can define data tranformation by declaring mapping configurations
 using
-[Whistle Data Transformation Language](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md?cl=head).
+[Whistle Data Transformation Language](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md).
 
 ### Datatype Transformation {.leaf-numbered}
 
@@ -55,7 +55,7 @@ datatypes into an `Identifier` datatype, shown below:
 ![Mapping: DataType](./img/v2ToFHIR-GapAnalysis-Identifier.png "Mapping: DataType")
 
 The above highlighted datatype transformations are defined using
-[Whistle syntax](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/index.md?cl=head)
+[Whistle syntax](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/index.md)
 listed below:
 
 *   Datatype Transformation: `CX` to `Identifier`
@@ -427,7 +427,7 @@ Based on the above scenario, mappings between `PID-8` (Administrative Sex) and
 
 Based on the above-mentioned concept map, vocabulary transformation between
 value-sets are defined using
-[Whistle syntax](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md?cl=head#code-harmonization)
+[Whistle syntax](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md#code-harmonization)
 below:
 
 ```
@@ -452,7 +452,7 @@ Based on the mapping gap analysis perfomed between `PID`, `PD1` segments and
 `Patient` resource, and their Datatype and Vocabulary transformations, `PID`,
 `PD1` segments are transfomed into `Patient` resource by defining mappings
 between their attributes using
-[Whistle syntax](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/index.md?cl=head)
+[Whistle syntax](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/index.md)
 below:
 
 ```
@@ -501,7 +501,7 @@ def PID_PD1_Patient(PID, PD1) {
 
 ### Transformation Post-processing and Utilities {.leaf-numbered}
 
-[Post-processing](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md?cl=head#post-processing-post)
+[Post-processing](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md#post-processing-post)
 and outputing utilities are defined to collect and output transformation
 results, are listed below:
 

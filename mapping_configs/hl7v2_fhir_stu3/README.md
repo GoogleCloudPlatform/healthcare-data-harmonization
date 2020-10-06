@@ -25,7 +25,7 @@ freshness: { owner: 'sshussain' reviewed: '2020-04-29' }
 
 This document describes a mapping guide to transform various healthcare data
 standards and terminologies using the
-[Whistle Data Transformation Language](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/index.md?cl=head).
+[Whistle Data Transformation Language](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/index.md).
 
 ## Healthcare Data Standards
 
@@ -79,7 +79,7 @@ TODO(b/158833342): Write Mapping Configuration section
 ## Whistle Data Transformation Language
 
 The
-[Whistle Data Transformation Language](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/index.md?cl=head)
+[Whistle Data Transformation Language](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/index.md)
 expresses data mappings from one schema to another. It lets users transform
 complex, nested data formats into other complex and nested data formats.
 

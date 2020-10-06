@@ -21,15 +21,15 @@ This repository is organized into several packages that together enable you to
 author Whistle configs, extend existing mapping configurations, and test configs
 within a Jupyter notebook environment.
 
-*   [Mapping Engine](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine)
-*   [Mapping Language](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language)
-*   [Mapping Configs](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_configs)
-*   [Jupyter Notebook](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/tools/notebook)
+*   [Mapping Engine](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_engine/README.md)
+*   [Mapping Language](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/README.md)
+*   [Mapping Configs](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_configs/README.md)
+*   [Jupyter Notebook](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/tools/notebook/README.md)
 
 ## Getting Started
 
 We highly recommend that you start by setting up your
-[Jupyter Notebook](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/tools/notebook)
+[Jupyter Notebook](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/tools/notebook/README.md)
 environment using the published docker images and executing the
 [example notebook](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/tools/notebook/examples/demo-sample.ipynb).
 Once setup, work through the

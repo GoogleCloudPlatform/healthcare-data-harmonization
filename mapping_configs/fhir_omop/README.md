@@ -2,7 +2,7 @@
 
 This document describes a mapping guide to transform FHIR STU3 resources to OMOP
 CDM v6.0 entities using the
-[Whistle Data Transformation Language](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/index.md?cl=head).
+[Whistle Data Transformation Language](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/index.md).
 
 A mapping process aims towards identifying alignments between source and target
 schemas for achieving data transformation and mediation between two or more data
@@ -37,7 +37,7 @@ entities, shown below.
 Based on the example mapping gap analysis discussed above, integration analysts
 and developers can define data tranformation by declaring mapping configurations
 using
-[Whistle Data Transformation Language](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md?cl=head).
+[Whistle Data Transformation Language](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md).
 
 ### Datatype Transformation {.leaf-numbered}
 
@@ -51,7 +51,7 @@ concept `Location`. Additional mappings are needed to be defined to transform
 ![Mapping: DataType](./doc/img/FHIR-OMOP-Add-Loc.png "Mapping: DataType")
 
 The above highlighted datatype transformations are defined using
-[Whistle syntax](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/index.md?cl=head)
+[Whistle syntax](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/index.md)
 listed below:
 
 *   Datatype Transformation: `Address` to `Location`
@@ -139,7 +139,7 @@ value-sets are defined as
 
 Based on the above-mentioned concept map, vocabulary transformation between
 value-sets are defined using
-[Whistle syntax](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md?cl=head#code-harmonization)
+[Whistle syntax](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md#code-harmonization)
 below:
 
 ```
@@ -163,7 +163,7 @@ Based on the mapping gap analysis perfomed between the FHIR `Patient` resource
 and OMOP CDM `Person` table, and their Datatype and Vocabulary transformations,
 `Patient` resource is transfomed into `Person` table by defining mappings
 between their attributes using
-[Whistle syntax](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/index.md?cl=head)
+[Whistle syntax](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/index.md)
 below:
 
 ```
@@ -203,7 +203,7 @@ def Patient_Person(Patient, locationID) {
 
 ### Transformation Post-processing and Utilities {.leaf-numbered}
 
-[Post-processing](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md?cl=head#post-processing-post)
+[Post-processing](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md#post-processing-post)
 and outputing utilities are defined to collect and output transformation
 results, are listed below:
 
