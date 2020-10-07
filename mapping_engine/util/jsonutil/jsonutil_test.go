@@ -1842,68 +1842,6 @@ func TestGetStringOrDefault(t *testing.T) {
 	}
 }
 
-func TestMarshalJSON(t *testing.T) {
-	tests := []struct {
-		name  string
-		token JSONToken
-	}{
-		{
-			name:  "string",
-			token: JSONStr("asd"),
-		},
-		{
-			name:  "empty string",
-			token: JSONStr(""),
-		},
-		{
-			name:  "num",
-			token: JSONNum(-123.54223),
-		},
-		{
-			name:  "bool",
-			token: JSONBool(true),
-		},
-		{
-			name:  "null",
-			token: JSONToken(nil),
-		},
-		{
-			name:  "object",
-			token: mustParseJSON(t, json.RawMessage(`{"one": 1, "null": null}`)),
-		},
-		{
-			name:  "nested object",
-			token: mustParseJSON(t, json.RawMessage(`{"one": {"two": 2, "null2": null}, "null": null}`)),
-		},
-		{
-			name:  "nested object with array",
-			token: mustParseJSON(t, json.RawMessage(`{"one": {"two": 2, "arr": [1, 2, null, {"three": 3}]}, "null": null}`)),
-		},
-		{
-			name:  "array",
-			token: mustParseJSON(t, json.RawMessage(`[1, 2, 3, "asd", null, false]`)),
-		},
-		{
-			name:  "nested array",
-			token: mustParseJSON(t, json.RawMessage(`[1, 2, 3, "asd", null, false, [3, 2, 1, "asd", null, false]]`)),
-		},
-	}
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			serialized := MarshalJSON(test.token)
-
-			deserialized, err := UnmarshalJSON(json.RawMessage(serialized))
-			if err != nil {
-				t.Fatalf("could not deserialized test token %s: %v", serialized, err)
-			}
-
-			if diff := cmp.Diff(test.token, deserialized); diff != "" {
-				t.Errorf("reserialization got different result then original input; -want/+got %s", diff)
-			}
-		})
-	}
-}
-
 func TestJSONToken_Equal(t *testing.T) {
 	tests := []struct {
 		name string
