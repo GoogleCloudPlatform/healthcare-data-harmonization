@@ -17,6 +17,7 @@ package transform
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"testing"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/util/jsonutil" /* copybara-comment: jsonutil */
@@ -52,10 +53,7 @@ func (s *mockKeyValueGCSClient) ReadBytes(ctx context.Context, bucket string, fi
 	if v, ok := s.kv[path]; ok {
 		return []byte(v), nil
 	}
-	if s.t != nil {
-		s.t.Fatalf("tried to read path that has no value: %s", path)
-	}
-	return []byte{}, nil
+	return nil, fmt.Errorf("tried to read path that has no value: %s", path)
 }
 
 func mustMarshalConfig(t *testing.T, message proto.Message) string {
@@ -670,10 +668,7 @@ func TestTransformer_UserLibraries(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			options := []Option{}
-			if len(test.gcsFiles) > 0 {
-				options = append(options, GCSClient(&mockKeyValueGCSClient{kv: test.gcsFiles, t: t}))
-			}
+			options := []Option{GCSClient(&mockKeyValueGCSClient{kv: test.gcsFiles, t: t})}
 			dhConfig := &dhpb.DataHarmonizationConfig{
 				StructureMappingConfig: &hpb.StructureMappingConfig{
 					Mapping: &hpb.StructureMappingConfig_MappingConfig{
