@@ -77,6 +77,7 @@ WORKDIR $HOME
 RUN pip install jupyterlab-gcloud-auth==0.2.4 \
     google-api-python-client==1.9.2 \
     google-cloud-storage==1.28.1 \
+    pandas==1.1.2 \
     https://storage.googleapis.com/deeplearning-platform-ui-public/jupyterlab_gcsfilebrowser-0.1.8.tar.gz
 
 WORKDIR $HOME

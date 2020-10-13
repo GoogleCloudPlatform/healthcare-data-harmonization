@@ -82,6 +82,15 @@ include:
     [jupyter/minimal-notebook](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-minimal-notebook)
     and its ancestor images
 
+*   Includes support for all of the
+    [Jupyter notebook built-in magic commands](https://ipython.readthedocs.io/en/stable/interactive/magics.html).
+
+*   Includes the following python packages pre-installed:
+
+    *   [Google API Python Client](https://github.com/googleapis/google-api-python-client)
+    *   [Google Cloud Storage Python Client](https://github.com/googleapis/python-storage)
+    *   [Pandas](https://pandas.pydata.org/)
+
 ### Prerequisites
 
 *   Install [docker](https://docs.docker.com/get-docker/) on your local file
