@@ -95,6 +95,7 @@ var BuiltinFunctions = map[string]interface{}{
 	"$StrSplit":     StrSplit,
 	"$ToLower":      ToLower,
 	"$ToUpper":      ToUpper,
+	"$Trim":         Trim,
 }
 
 const (
@@ -837,4 +838,9 @@ func ToLower(str jsonutil.JSONStr) (jsonutil.JSONStr, error) {
 // ToUpper converts the given string with all unicode characters mapped to their uppercase.
 func ToUpper(str jsonutil.JSONStr) (jsonutil.JSONStr, error) {
 	return jsonutil.JSONStr(strings.ToUpper(string(str))), nil
+}
+
+// Trim strips the leading and trailing whitespace of the input string.
+func Trim(str jsonutil.JSONStr) (jsonutil.JSONStr, error) {
+	return jsonutil.JSONStr(strings.TrimSpace(string(str))), nil
 }

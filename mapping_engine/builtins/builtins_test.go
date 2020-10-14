@@ -2307,3 +2307,43 @@ func TestIntHash(t *testing.T) {
 		})
 	}
 }
+
+func TestTrim(t *testing.T) {
+	tests := []struct {
+		name string
+		in   jsonutil.JSONStr
+		want jsonutil.JSONStr
+	}{
+		{
+			name: "leading and trailing",
+			in:   jsonutil.JSONStr(" hello "),
+			want: jsonutil.JSONStr("hello"),
+		},
+		{
+			name: "just trailing",
+			in:   jsonutil.JSONStr("world.  "),
+			want: jsonutil.JSONStr("world."),
+		},
+		{
+			name: "no change",
+			in:   jsonutil.JSONStr("hello world"),
+			want: jsonutil.JSONStr("hello world"),
+		},
+		{
+			name: "new line",
+			in:   jsonutil.JSONStr(" hello world\n\n"),
+			want: jsonutil.JSONStr("hello world"),
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := Trim(test.in)
+			if err != nil {
+				t.Fatalf("Trim(%v) returned unexpected error %v", test.in, err)
+			}
+			if !cmp.Equal(got, test.want) {
+				t.Errorf("Trim(%v) = %v, want %v", test.in, got, test.want)
+			}
+		})
+	}
+}

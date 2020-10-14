@@ -503,3 +503,11 @@ $ToUpper(str string) string
 
 ToUpper converts the given string with all unicode characters mapped to their
 uppercase.
+
+### $Trim
+
+```go
+$Trim(str string) string
+```
+
+Trim removes the leading and trailing whitespace from the input string.
