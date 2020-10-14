@@ -100,7 +100,7 @@ include:
     on Linux.
 
 *   Install [docker compose](https://docs.docker.com/compose/install/) on your
-    local file system.
+    local file system. Minimum recommended version is 1.27.4.
 
 ## Running the image
 
@@ -175,3 +175,81 @@ docker-compose up --build
 ## Additional Information
 
 *   [Jupyter Docker Stacks on ReadTheDocs](http://jupyter-docker-stacks.readthedocs.io/en/latest/index.html)
+
+# FAQ
+
+## `docker-compose pull` fails to pull the latest images
+
+#### Error
+
+*   When running `docker-compose pull` you do not see a prompt showing the
+    download status of the
+    `gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-*:latest`
+    images.
+
+#### Diagnose
+
+*   Run `docker-compose --version` to see the version of docker-compose you have
+    installed on your system. If you are running version 1.25.0, you'll need to
+    upgrade to the latest version of
+    [docker compose](https://docs.docker.com/compose/install/) .
+
+#### Workaround
+
+*   When running docker-compose version 1.25.0, the docker-compose pull command
+    does not pull the most recent
+    `gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-*:latest`
+    published cloud healthcare data harmonization images. The reason is a change
+    in behaviour of docker-compose in version 1.25.0. See the following
+    [Github issue for the root cause](https://github.com/docker/compose/issues/7103).
+    Upgrading to the minimum recommended version, 1.27.4 will resolve your
+    issue.
+
+## How do I resolve `Cannot start service notebook` errors when running `docker-compose up`
+
+#### Error
+
+*   The full error message you encounter looks like below:
+
+```
+Creating network "dh1_default" with the default driver
+Creating dh1_grpc_1 ... done
+Creating dh1_notebook_1 ...
+Creating dh1_notebook_1 ... error
+
+ERROR: for dh1_notebook_1 Cannot start service notebook: driver failed
+programming external connectivity on endpoint dh1_notebook_1
+(b0c7181746a5b4ba5ac92b8a7f750d63f92cb50737a8294e455494f88bc673dd): Bind for
+0.0.0.0:8888 failed: port is already allocated
+
+ERROR: for notebook Cannot start service notebook: driver failed programming
+external connectivity on endpoint dh1_notebook_1
+(b0c7181746a5b4ba5ac92b8a7f750d63f92cb50737a8294e455494f88bc673dd): Bind for
+0.0.0.0:8888 failed: port is already allocated ERROR: Encountered errors while
+bringing up the project.
+```
+
+#### Diagnose
+
+*   A previous docker image may not have been shut down. Confirm by running
+    `docker ps` to see if any image with name
+    `gcr.io/cloud-healthcare-containers/*` is still alive. E.g.
+
+```
+$ docker ps
+CONTAINER ID        IMAGE                                                                                    COMMAND                  CREATED             STATUS              PORTS                    NAMES
+4fee4dacfa72        gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-services:latest   "/etc/wstl/bin/main …"   3 minutes ago       Up 3 minutes                                 dh1_grpc_1
+4276d5743860        gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-notebook:latest   "tini -g -- start-no…"   44 hours ago        Up 44 hours         0.0.0.0:8888->8888/tcp   dh_notebook_1
+2ec981b9df3f        gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-services:latest   "/etc/wstl/bin/main …"   44 hours ago        Up 44 hours                                  dh_grpc_1
+```
+
+#### Workaround
+
+*   You can stop all images related to data harmonization by
+
+```
+docker stop $(docker ps -a -q --filter ancestor=IMAGE_NAME --format="{{.ID}}")
+```
+
+where IMAGE_NAME would be replaced by the name of the running image listed with
+`docker ps`.
