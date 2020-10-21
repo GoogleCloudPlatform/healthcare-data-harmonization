@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "outDir": "./../out/server",
+    "composite": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true
+  },
+  "include": ["src", "test"]
+}
+

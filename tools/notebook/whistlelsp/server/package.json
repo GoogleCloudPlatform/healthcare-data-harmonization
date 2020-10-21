@@ -1,0 +1,31 @@
+{
+    "name": "whistle-lsp-server",
+    "description": "Whistle language server implementation in node.",
+    "version": "0.0.1",
+    "type": "module",
+    "engines": {
+        "node": "*"
+    },
+    "dependencies": {
+        "vscode-languageserver": "^6.1.1",
+        "vscode-languageserver-textdocument": "^1.0.1",
+        "@types/node": "^13.11.0"
+    },
+    "devDependencies": {
+        "@types/glob": "^7.1.1",
+        "@types/node": "^13.11.0",
+        "@types/vscode": "^1.47.0",
+        "@typescript-eslint/eslint-plugin": "^2.30.0",
+        "@typescript-eslint/parser": "^2.30.0",
+        "eslint": "^6.8.0",
+        "glob": "^7.1.6",
+        "nyc": "^15.1.0",
+        "ts-node": "^8.10.2",
+        "typescript": "^3.9.7",
+        "typings": "^2.1.1",
+        "vscode-languageclient": "^6.1.3",
+        "vscode-languageserver": "6.1.1",
+        "vscode-languageserver-textdocument": "1.0.1",
+        "vscode-test": "^1.3.0"
+    }
+}

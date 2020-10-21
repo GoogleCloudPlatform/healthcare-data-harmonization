@@ -1,0 +1,28 @@
+{
+    "name": "whistle-language-client",
+    "description": "VSCode part of the language server",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.22.0"
+    },
+    "dependencies": {
+        "vscode-languageclient": "^6.1.3"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.14.0",
+        "vscode-test": "^1.4.0"
+    },
+    "languages": [
+        {
+            "id": "whistle",
+            "extensions": [
+                ".wstl",
+                ".dhml"
+            ],
+            "aliases": [
+                "Whistle",
+                "whistle"
+            ]
+        }
+    ]
+}
