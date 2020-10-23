@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package cloud.healthcare.cdw.etl.mapping.proto;
 
+import "google/protobuf/any.proto";
+
 option go_package = "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto";
 option java_package = "com.google.cloud.healthcare.etl.proto";
 option java_outer_classname = "ETLMapping";
@@ -31,10 +33,15 @@ message MappingConfig {
     // resources.
     ProjectorDefinition post_process_projector_definition = 4;
   }
+
+  // Metadata associated with the post_process field.
+  Meta post_process_meta = 5;
 }
 
 // Represents a value to be set in the output.
 message ValueSource {
+  Meta meta = 13;
+
   message InputSource {
     // The number (1-based) of the projector argument to reference. If omitted
     // or set to 0, will search for the given field in context values. A context
@@ -110,6 +117,9 @@ message ValueSource {
     InputSource from_input = 12;
   }
 
+  // Metadata associated with the source field.
+  Meta source_meta = 14;
+
   // Additional arguments for the projector used to preprocess this argument. If
   // set, projector must be specified.
   repeated ValueSource additional_arg = 9;
@@ -120,6 +130,8 @@ message ValueSource {
 }
 
 message FieldMapping {
+  Meta meta = 7;
+
   // The source sub-element selector. Each one is a consequent argument
   // to the projector (unless one is an array, in which case it is expanded
   // and each element passed to the projector in individual invocations).
@@ -146,6 +158,9 @@ message FieldMapping {
     string target_root_field = 6;
   }
 
+  // Metadata associated with the target field.
+  Meta target_meta = 8;
+
   // A value that determines whether to apply this field mapping.
   // It is only applied if this value is true.
   ValueSource condition = 5;
@@ -154,9 +169,17 @@ message FieldMapping {
 // A projector is a function that converts one or more input elements into
 // one output element.
 message ProjectorDefinition {
+  Meta meta = 3;
+
   // The name of the projector, as referred to by the ValueSource.
   string name = 1;
 
   // A list of mappings for this projector.
   repeated FieldMapping mapping = 2;
+}
+
+// Custom metadata entries.
+message Meta {
+  // Entry type to metadata map.
+  map<string, google.protobuf.Any> entries = 1;
 }
