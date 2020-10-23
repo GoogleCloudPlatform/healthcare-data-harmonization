@@ -29,14 +29,31 @@ type transpiler struct {
 	environment    *env
 	projectors     []*mpb.ProjectorDefinition
 	conditionStack []valueStack
+
+	// TODO(b/170415411): Use this during transpilation.
+	includeSourcePositions bool
 }
 
-func newTranspiler() *transpiler {
-	return &transpiler{
+type option func(*transpiler)
+
+// IncludeSourcePositions is a transpiler option to add Whistle source position
+// metadata to the Whistler proto during transpilation.
+var IncludeSourcePositions option = func(t *transpiler) {
+	t.includeSourcePositions = true
+}
+
+func newTranspiler(opts ...option) *transpiler {
+	t := &transpiler{
 		conditionStack: []valueStack{
 			make(valueStack, 0),
 		},
 	}
+
+	for _, opt := range opts {
+		opt(t)
+	}
+
+	return t
 }
 
 func (t *transpiler) pushEnv(e *env) {
@@ -54,7 +71,7 @@ func (t *transpiler) conditionStackTop() *valueStack {
 }
 
 // Transpile converts the given Whistle into a Whistler mapping config.
-func Transpile(whistle string) (mp *mpb.MappingConfig, err error) {
+func Transpile(whistle string, opts ...option) (mp *mpb.MappingConfig, err error) {
 	defer func() {
 		if rec := recover(); rec != nil {
 			err = fmt.Errorf("%v\n\n%s", rec, debug.Stack())
@@ -75,7 +92,7 @@ func Transpile(whistle string) (mp *mpb.MappingConfig, err error) {
 
 	// NOTE: explicitly specifying the type of transpiler is necessary so that the methods of
 	// the appropriate type, that implements the visitor interface, are invoked.
-	var transpiler parser.WhistleVisitor = newTranspiler()
+	var transpiler parser.WhistleVisitor = newTranspiler(opts...)
 
 	mp = p.Root().Accept(transpiler).(*mpb.MappingConfig)
 	return
