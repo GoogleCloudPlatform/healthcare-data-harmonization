@@ -30,7 +30,7 @@ hands-on practice with the configuration language.
 
 *   View the *output* in `$HOME/wstl_codelab/codelab.output.json`
 *   Run your mapping using the mapping_engine binary, in mapping_engine/main. An
-    example command might look like (run from mapping_engine/main): `go run . --
+    example command might look like (run from mapping_engine/main): `go run .
     -input_file_spec=$HOME/wstl_codelab/codelab.json
     -output_dir=$HOME/wstl_codelab/
     -mapping_file_spec=$HOME/wstl_codelab/codelab.wstl`
@@ -2011,7 +2011,7 @@ Add your `code_harmonization` folder you made above to the CLI parameters as
 `-harmonize_code_dir_spec`:
 
 *   From now on, run your mapping using the mapping_engine binary, in mapping_engine/main. An
-    example command might look like (run from mapping_engine/main): `go run . --
+    example command might look like (run from mapping_engine/main): `go run .
     -input_file_spec=$HOME/wstl_codelab/codelab.json
     -output_dir=$HOME/wstl_codelab/
     -harmonize_code_dir_spec=$HOME/wstl_codelab/code_harmonization
@@ -2104,7 +2104,7 @@ Add your `codelab-units.textproto` file you made above to the CLI parameters as
 `-harmonize_unit_spec`:
 
 *   From now on, run your mapping using the mapping_engine binary, in mapping_engine/main. An
-    example command might look like (run from mapping_engine/main): `go run . --
+    example command might look like (run from mapping_engine/main): `go run .
     -input_file_spec=$HOME/wstl_codelab/codelab.json
     -output_dir=$HOME/wstl_codelab/
     -harmonize_unit_spec=$HOME/wstl_codelab/codelab-units.textproto

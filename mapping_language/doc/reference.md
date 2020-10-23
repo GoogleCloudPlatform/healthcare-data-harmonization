@@ -11,7 +11,7 @@ in Whistle.
 
 -   Run your mapping using the mapping_engine binary, in mapping_engine/main.
     An example command might look like (run from mapping_engine/main):
-    `go run . -- -input_file_spec=<PATH_TO_INPUT_FILE_OR_DIR>
+    `go run . -input_file_spec=<PATH_TO_INPUT_FILE_OR_DIR>
     -output_dir=<PATH_TO_INPUT_DIR>
     -mapping_file_spec=<PATH_TO_MAPPING_FILE>`
 
