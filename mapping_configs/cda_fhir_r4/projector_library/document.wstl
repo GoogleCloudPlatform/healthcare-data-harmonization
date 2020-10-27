@@ -1,0 +1,504 @@
+// Description: Creates a list of Time Formats to be used by MultiFormatParseTime()
+// The function has a default list of formats that can be modified to meet specific
+// requirements. Time formats should adhere to Golang time format layout
+// (https://golang.org/pkg/time/#Time.Format)
+//
+// Argument(s):
+//
+// Output(s):
+//    Array of DateTime Formats that will be used for parsing incoming DateTime fields.
+//
+def GetTimeFormats() {
+  $this: $ListOf("20060102150405-0600", "200601021504-0600", "20060102150405.999999", "20060102150405", "200601021504", "20060102", "200601", "2006")
+}
+
+// Description: Returns a Time format for RFC3339 with second or millisecond precision
+// Time Format should adhere to Golang time format layout
+// (https://golang.org/pkg/time/#Time.Format)
+//
+// Argument(s):
+//    precision: s or second and ms or millisecond
+// Output(s):
+//    Time format for RFC3339 to second or millisecond
+//
+def GetRFC3339(precision) {
+  $this (if precision = "s"): "2006-01-02T15:04:05Z";
+  $this (if precision = "ms"): "2006-01-02T15:04:05.99Z";
+}
+
+// Description: Extracts a date in FHIR format from a HL7 CDA DateTime datatype
+//
+// Argument(s):
+//   str:  HL7 CDA DateTime datatype
+//
+// Output(s):
+//   FHIR Date datatype: https://www.hl7.org/fhir/datatypes.html#date
+//
+def Extract_Date(required str) {
+  var input : $MultiFormatParseTime(GetTimeFormats(), str);
+  $this: $ReformatTime(GetRFC3339("s"), input, "2006-01-02");
+}
+
+// Description: Converts a HL7 CDA DateTime datatype to a FHIR Instant datatype
+//
+// Argument(s):
+//   str:  HL7 CDA DateTime datatype
+//
+// Output(s):
+//   FHIR Instant datatype: https://www.hl7.org/fhir/datatypes.html#instant
+//
+def Convert_Instant(required str) {
+  var input : $MultiFormatParseTime(GetTimeFormats(), str);
+  $this: $ReformatTime(GetRFC3339("ms"), input, "2006-01-02T15:04:05.2112Z");
+}
+
+// Description: Converts HL7 CDA DateTime to FHIR DateTime format
+//
+// Argument(s):
+//   str:  HL7 CDA DateTime datatype
+//
+// Output(s):
+//   FHIR DateTime datatype: https://www.hl7.org/fhir/datatypes.html#dateTime
+//
+def Convert_DateTime(required str) {
+  var input : $MultiFormatParseTime(GetTimeFormats(), str);
+  $this: $ReformatTime(GetRFC3339("s"), input, "2006-01-02T15:04:05+01:00");
+}
+
+// Description: Converts HL7 CDA terminology into FHIR STU3 terminology
+//
+// Argument(s):
+//   conceptID:  http://ccda.art-decor.org/ccda-html-20150727T182455/terminology.html
+//   system: System of the source code specified in the concept map (https://build.fhir.org/conceptmap-definitions.html#ConceptMap.group.source).
+//
+// Output(s):
+//   FHIR CodeableConcept datatype: https://www.hl7.org/fhir/stu3/datatypes.html#CodeableConcept
+//
+//def Convert_Terminology(conceptID, system) {
+//  var mapping : $HarmonizeCode("$Local", conceptID, system, "OMOP-FHIR-ConceptMap");
+//  coding : mapping;
+//}
+
+// Description: Converts HL7 CDA terminology into FHIR STU3 terminology
+//
+// Argument(s):
+//   conceptID:  http://ccda.art-decor.org/ccda-html-20150727T182455/terminology.html
+//   system: System of the source code specified in the concept map (https://build.fhir.org/conceptmap-definitions.html#ConceptMap.group.source).
+//
+// Output(s):
+//   FHIR Coding datatype: https://www.hl7.org/fhir/stu3/datatypes.html#Coding
+//
+//def Convert_TerminologyCoding(conceptID, system) {
+//  var mapping : $HarmonizeCode("$Local", conceptID, system, "OMOP-FHIR-ConceptMap");
+//  $this : mapping[0];
+//}
+
+// Description: Converts HL7 CDA terminology into FHIR STU3 terminology
+//
+// Argument(s):
+//   conceptID:  http://ccda.art-decor.org/ccda-html-20150727T182455/terminology.html
+//   system: System of the source code specified in the concept map (https://build.fhir.org/conceptmap-definitions.html#ConceptMap.group.source).
+//
+// Output(s):
+//   FHIR Code datatype: https://www.hl7.org/fhir/stu3/datatypes.html#code
+//
+def Convert_TerminologyCode(conceptID, system){
+  var mapping : $HarmonizeCode("$Local", conceptID, system, "CDA-FHIR");
+  $this : mapping[0].code;
+}
+
+// Description: Constructs a FHIR R4 Patient Resource and its related resources based on CDA PatientRole datatype
+//
+// Argument(s):
+//   CDA PatientRole datatype: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.1.1-2013-01-31T000000.html
+//   GeneralPractitioner Resource already constructed through AssignedEntity_PractitionerRole Projector: https://www.hl7.org/fhir/practitionerrole.html
+//
+// Output(s):
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//
+def PatientRole_Patient(required PatientRole, GeneralPractitioner) {
+  identifier[] : II_Identifier(PatientRole.id[]);
+  address[] : AD_Address(PatientRole.addr[]);
+  telecom[] : TEL_ContactPoint(PatientRole.telecom[]);
+  managingOrganization : Build_Reference(Output_Resource(ORG_Organization(PatientRole.providerOrganization)));
+  name[] : PN_HumanName(PatientRole.patient.name[]);
+  gender : Convert_TerminologyCode(PatientRole.patient.administrativeGenderCode.code, "2.16.840.1.113883.5.1");
+  birthDate : Extract_Date(PatientRole.patient.birthTime.value);
+  maritalStatus : CD_CodeableConcept(PatientRole.patient.maritalStatusCode);
+  communication[] : Build_Communication(PatientRole.patient.languageCommunication[]);
+  contact[] : Guardian_Contact(PatientRole.patient.guardian[]);
+  extension[0].url : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race";
+  extension[0].extension[0].valueCoding : CD_Coding(PatientRole.patient.raceCode);
+  extension[0].extension[0].url : "ombCategory";
+  extension[1].url : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity";
+  extension[1].extension[0].valueCoding : CD_Coding(PatientRole.patient.ethnicGroupCode);
+  extension[1].extension[0].url : "ombCategory";
+  extension[2].url : "http://hl7.org/fhir/StructureDefinition/patient-religion";
+  extension[2].extension[0].valueCodeableConcept : CD_CodeableConcept(PatientRole.patient.religiousAffiliationCode);
+  extension[2].extension[0].url : "http://hl7.org/fhir/StructureDefinition/patient-religion";
+  extension[3].url : "http://hl7.org/fhir/StructureDefinition/patient-birthPlace";
+  extension[3].extension[0].valueAddress : AD_Address(PatientRole.patient.birthplace.place.addr);
+  extension[3].extension[0].url : "http://hl7.org/fhir/StructureDefinition/patient-birthPlace";
+  generalPractitioner[] : Build_Reference(GeneralPractitioner[]);
+  resourceType : "Patient";
+  id : $UUID();
+}
+
+// Description: Constructs a FHIR R4 PractitionerRole Resource and its related resources based on CDA AssignedEntity datatype
+//
+// Argument(s):
+//   CDA AssignedEntity datatype: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.1.1-2013-01-31T000000.html
+//
+// Output(s):
+//   PractitionerRole: https://www.hl7.org/fhir/practitionerrole.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//
+def AssignedEntity_PractitionerRole(required AssignedEntity) {
+  identifier[]:  II_Identifier(AssignedEntity.id[]);
+  resourceType: "PractitionerRole";
+  id : $UUID();
+  code[] : CD_CodeableConcept(AssignedEntity.code);
+  telecom[]: TEL_ContactPoint(AssignedEntity.telecom[]);
+  location[]: Build_Reference(Output_Resource[](AD_Location[](AssignedEntity.addr[])));
+  practitioner : Build_Reference(Output_Resource(Person_Practitioner(AssignedEntity.assignedPerson)));
+  organization : Build_Reference(Output_Resource(ORG_Organization(AssignedEntity.representedOrganization)));
+}
+
+// Description: Constructs a FHIR R4 FamilyMemberHistory Resource based on CDA FamilyMemberHistory Section
+//
+// Argument(s):
+//   CDA FamilyMemberHistory Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.2.15-2013-01-31T000000.html
+//   Patient Resource already constructed through PatientRole_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   FamilyMemberHistory: https://www.hl7.org/fhir/familymemberhistory.html
+//
+def FamilyMemberHistorySection_FamilyMemberHistory(required Organizer, required Patient){
+  resourceType: "FamilyMemberHistory"
+  id : $UUID();
+  identifier[] : II_Identifier(Organizer.id[]);
+  status : Organizer.statusCode.code;
+  relationship :  CD_CodeableConcept(Organizer.subject.relatedSubject.code);
+  sex : CD_CodeableConcept(Organizer.subject.relatedSubject.subject.administrativeGenderCode);
+  name : PARSE_Name(Organizer.subject.relatedSubject.subject.name[0]);
+  bornDate (if ~IsInterval(Organizer.subject.relatedSubject.subject.birthTime)): Extract_Date(Organizer.subject.relatedSubject.subject.birthTime.value);
+  patient : Build_Reference(Patient);
+  // templateId = 2.16.840.1.113883.10.20.22.4.46 corresponds to observation describing a family member condition
+  var Observation : Organizer.component[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.46")];
+  condition[] (if Observation) : Observation_ConditionDataType(Observation[]);
+  // templateId = 2.16.840.1.113883.10.20.22.4.47 corresponds to observation describing a family member death status
+  var Death : Observation[*].entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.47")];
+  if ($ListLen(Death) > 0) {
+    deceasedBoolean : true;
+  } else {
+    deceasedBoolean : false;
+  }
+}
+
+// Description: Constructs a FHIR R4 Observation Resource and its related resources based on CDA Social History, Vital Sign,and Functional Status Result Observation Sections
+//
+// Argument(s):
+//   Functional Status Result Observation Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.4.67-2013-01-31T000000.html
+//   Social History Observation Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.4.38-2013-01-31T000000.html
+//   Vital Sign Observation Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.4.27-2013-01-31T000000.html
+//   Patient Resource already constructed through PatientRole_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Device: https://www.hl7.org/fhir/device.html
+//
+def Observation_Observation(required Observation, Patient) {
+  resourceType: "Observation"
+  id : $UUID();
+  identifier[] : II_Identifier(Observation.id[]);
+  code : CD_CodeableConcept(Observation.code);
+  status : Convert_TerminologyCode(Observation.statusCode.code, "ObservationStatusCode");
+  if (IsInterval(Observation.effectiveTime)) {
+    effectivePeriod.start : Convert_DateTime(Observation.effectiveTime.low.value);
+    effectivePeriod.end : Convert_DateTime(Observation.effectiveTime.high.value);
+  } else {
+    effectiveDateTime : Convert_DateTime(Observation.effectiveTime.value);
+  }
+  bodySite : CD_CodeableConcept(Observation.targetSiteCode[0]);
+  component[] : Build_Component(Observation.code, Observation.value[]);
+  encounter : Build_Reference(Output_Resource(Encounter_Encounter(Observation.encounter)));
+  performer[] : Build_Reference(Output_Resource[](AssignedEntity_PractitionerRole[](Observation.author[*].assignedAuthor[])));
+  issued (if ~IsInterval(Observation.author[0].time)): Convert_Instant(Observation.author[0].time.value);
+  method : CD_CodeableConcept(Observation.methodCode[0]);
+  interpretation : CD_CodeableConcept(Observation.interpretationCode[]);
+  referenceRange[] : ObservationRange_ReferenceRange(Observation.referenceRange[*].observationRange[]);
+  // templateId = 2.16.840.1.113883.10.20.22.4.50 corresponds to a supply contributing to the given observation
+  var Supply : Observation.entryRelationship[*].supply[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.50")];
+  // templateId = 2.16.840.1.113883.10.20.22.4.37 corresponds to a participantRole contributing as device to the given observation
+  var ParticipantRole (if Supply) : Supply[*].participant[*].participantRole[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.37")];
+  device (if ParticipantRole): Build_Reference(Output_Resource(ParticipantRole_Device(ParticipantRole[0])));
+  subject : Build_Reference(Patient);
+}
+
+// Description: Constructs a FHIR R4 Device Resource based on CDA Observation ParticipantRole
+//
+// Argument(s):
+//   Vital Sign Observation Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.4.27-2013-01-31T000000.html
+//
+// Output(s):
+//   Device: https://www.hl7.org/fhir/device.html
+//
+def ParticipantRole_Device(required ParticipantRole) {
+  resourceType: "Device"
+  id : $UUID();
+  identifier[] : II_Identifier(ParticipantRole.id[]);
+  type : CD_CodeableConcept(ParticipantRole.playingDevice.code);
+}
+
+// Description: Constructs a FHIR R4 Encounter Resource and its related resources based on CDA Encounter Section
+//
+// Argument(s):
+//   Encounter Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.2.22.1-2013-01-31T000000.html
+//
+// Output(s):
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   PractitionerRole: https://www.hl7.org/fhir/practitionerrole.html
+//   Location: https://www.hl7.org/fhir/location.html
+//
+def Encounter_Encounter(required Encounter) {
+  resourceType: "Encounter"
+  id : $UUID();
+  identifier[] : II_Identifier(Encounter.id[]);
+  type[] : CD_CodeableConcept(Encounter.code);
+  class : CD_Coding(Encounter.code);
+  status : Convert_TerminologyCode(Encounter.statusCode.code, "EncounterStatusCode");
+  priority : CD_CodeableConcept(Encounter.priorityCode);
+  participant[].individual : Build_Reference[](Output_Resource[](AssignedEntity_PractitionerRole[](Encounter.performer[*].assignedEntity[])));
+  if (IsInterval(Encounter.effectiveTime)){
+    period.start : Convert_DateTime(Encounter.effectiveTime.low.value);
+    period.end : Convert_DateTime(Encounter.effectiveTime.high.value);
+  }
+  var Participant : Encounter.participant[*][where hasCode($.typeCode, "LOC")];
+  // templateId = 2.16.840.1.113883.10.20.22.4.32 corresponds to a participantRole contributing as location to the given encounter
+  var ParticipantRole : Participant[*].participantRole[where hasCode($.classCode, "SDLOC") or templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.32")];
+  location[].location : Build_Reference[](Output_Resource[](ParticipantRole_Location[](ParticipantRole[])));
+}
+
+// Description: Constructs a FHIR R4 Condition Resource and its related resources based on CDA Problem Observation Section
+//
+// Argument(s):
+//   Problem Observation Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.4.4-2013-01-31T000000.html
+//   Patient Resource already constructed through PatientRole_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Condition: https://www.hl7.org/fhir/condition.html
+//   PractitionerRole: https://www.hl7.org/fhir/practitionerrole.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//
+def Observation_Condition(required Observation, StatusCode, required Patient) {
+  id : $UUID();
+  resourceType: "Condition";
+  identifier[] : II_Identifier(Observation.id[]);
+  category[] : CD_CodeableConcept(Observation.code);
+  clinicalStatus.coding[0].code (if StatusCode): StatusCode;
+  var ObservationValue : Observation.value[where hasCode($.'xsi:type', "CD")];
+  code (if ObservationValue): CD_CodeableConcept(ObservationValue[0]);
+  if (IsInterval(Observation.effectiveTime)) {
+    if (~StatusCode and Observation.effectiveTime.low.value and Observation.effectiveTime.high.value) {
+      clinicalStatus.coding[0].code : "resolved";
+      clinicalStatus.coding[0].system : "http://terminology.hl7.org/CodeSystem/condition-clinical";
+    }
+    if (~StatusCode and Observation.effectiveTime.low.value and ~Observation.effectiveTime.high.value) {
+      clinicalStatus.coding[0].code : "active";
+      clinicalStatus.coding[0].system : "http://terminology.hl7.org/CodeSystem/condition-clinical";
+    }
+    onsetDateTime : Convert_DateTime(Observation.effectiveTime.low.value);
+    abatementDateTime : Convert_DateTime(Observation.effectiveTime.high.value);
+  } else {
+    onsetDateTime (if Observation.effectiveTime.value): Convert_DateTime(Observation.effectiveTime.value);
+    if (~StatusCode and Observation.effectiveTime.value) {
+      clinicalStatus.coding[0].code : "active";
+      clinicalStatus.coding[0].system : "http://terminology.hl7.org/CodeSystem/condition-clinical";
+    }
+  }
+  asserter : Build_Reference(Output_Resource(AssignedEntity_PractitionerRole(Observation.author[0].assignedAuthor)));
+  recordedDate (if ~IsInterval(Observation.author[0].time)) : Convert_DateTime(Observation.author[0].time.value);
+  encounter : Build_Reference(Output_Resource(Encounter_Encounter(Observation.encounter[0])));
+  subject : Build_Reference(Patient);
+}
+
+// Description: Constructs a FHIR R4 Procedure Resource and its related resources based on CDA Procedure Section
+//
+// Argument(s):
+//   Procedure Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.2.7.1-2013-01-31T000000.html
+//   Patient Resource already constructed through PatientRole_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Procedure: https://www.hl7.org/fhir/procedure.html
+//   PractitionerRole: https://www.hl7.org/fhir/practitionerrole.html
+//
+def Procedure_Procedure(required Procedure, required Patient) {
+  id : $UUID();
+  resourceType: "Procedure";
+  identifier[] : II_Identifier(Procedure.id[]);
+  if (IsInterval(Procedure.effectiveTime)) {
+    performedPeriod.start : Convert_DateTime(Procedure.effectiveTime.low.value);
+    performedPeriod.end : Convert_DateTime(Procedure.effectiveTime.high.value);
+  } else {
+    performedDateTime (if Procedure.effectiveTime.value): Convert_DateTime(Procedure.effectiveTime.value);
+  }
+  bodySite[] : CD_CodeableConcept(Procedure.targetSiteCode[]);
+  performer[].actor : Build_Reference[](Output_Resource[](AssignedEntity_PractitionerRole[](Procedure.performer[*].assignedEntity[])));
+  status : Procedure.statusCode.code;
+  code : CD_CodeableConcept(Procedure.code);
+  subject : Build_Reference(Patient);
+}
+
+// Description: Constructs a FHIR R4 DiagnosticReport Resource and its related resources based on CDA Results Section
+//
+// Argument(s):
+//   Results Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.2.3.1-2013-01-31T000000.html
+//   Patient Resource already constructed through PatientRole_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   DiagnosticReport: https://www.hl7.org/fhir/diagnosticreport.html
+//   PractitionerRole: https://www.hl7.org/fhir/practitionerrole.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//
+def ResultSection_DiagnosticReport(required Organizer, required Patient){
+  resourceType: "DiagnosticReport"
+  id : $UUID();
+  identifier[] : II_Identifier(Organizer.id[]);
+  status : Convert_TerminologyCode(Organizer.statusCode.code, "ResultOrganizerStatusCode");
+  code : CD_CodeableConcept(Organizer.code);
+  if (IsInterval(Organizer.effectiveTime)) {
+    effectivePeriod.start : Convert_DateTime(Organizer.effectiveTime.low.value);
+    effectivePeriod.end : Convert_DateTime(Organizer.effectiveTime.high.value);
+  } else {
+    effectiveDateTime (if Organizer.effectiveTime.value): Convert_DateTime(Organizer.effectiveTime.value);
+  }
+  // templateId = 2.16.840.1.113883.10.20.22.4.2 corresponds to Result Observation
+  var Observation : Organizer.component[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.2")];
+  result[] : Build_Reference(Output_Resource[](Observation_Observation[](Observation[], Patient)));
+  //It is already covered under Observation.performer
+  //performer[] : Build_Reference(Output_Resource[](AssignedEntity_PractitionerRole[](Observation[*].author[*].assignedAuthor[])));
+  issued (if ~IsInterval(Observation[0].author[0].time)) : Convert_Instant(Observation[0].author[0].time.value);
+}
+
+// Description: Constructs a FHIR R4 MedicationStatement Resource and its related resources based on CDA Medications Section
+//
+// Argument(s):
+//   Medications Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.2.1.1-2013-01-31T000000.html
+//   Patient Resource already constructed through PatientRole_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   MedicationStatement: https://www.hl7.org/fhir/medicationstatement.html
+//   PractitionerRole: https://www.hl7.org/fhir/practitionerrole.html
+//   Medication: http://hl7.org/fhir/r4/medication.html
+//   Condition: https://www.hl7.org/fhir/condition.html
+//   MedicationDispense: https://www.hl7.org/fhir/medicationdispense.html
+//
+def SubstanceAdministration_MedicationStatement(required SubstanceAdministration, required Patient) {
+  resourceType: "MedicationStatement";
+  id : $UUID();
+  identifier[] : II_Identifier(SubstanceAdministration.id[]);
+  informationSource : Build_Reference(Output_Resource(AssignedEntity_PractitionerRole(SubstanceAdministration.author[0].assignedAuthor)));
+  status : Convert_TerminologyCode(SubstanceAdministration.statusCode.code, "SubstanceAdministrationStatusCode");
+  // templateId = 2.16.840.1.113883.10.20.22.4.23 corresponds to Medication Information
+  if (templateIdHasRoot(SubstanceAdministration.consumable.manufacturedProduct.templateId, "2.16.840.1.113883.10.20.22.4.23")) {
+    medicationReference : Build_Reference(Output_Resource(ManufacturedProduct_Medication(SubstanceAdministration.consumable.manufacturedProduct)));
+  }
+  dosage[0].route : CD_CodeableConcept(SubstanceAdministration.routeCode);
+  dosage[0].doseAndRate[0].doseQuantity : PQ_Quantity(SubstanceAdministration.doseQuantity);
+  dosage[0].doseAndRate[0].rateQuantity : PQ_Quantity(SubstanceAdministration.rateQuantity);
+  dosage[0].maxDosePerPeriod.numerator : PQ_Quantity(SubstanceAdministration.maxDoseQuantity.numerator);
+  dosage[0].maxDosePerPeriod.denominator : PQ_Quantity(SubstanceAdministration.maxDoseQuantity.denominator);
+  // templateId = 2.16.840.1.113883.10.20.22.4.19 corresponds to Indication
+  var Observation : SubstanceAdministration.entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.19")];
+  reasonReference[] : Build_Reference(Output_Resource[](Observation_Condition[](Observation[], "", Patient)));
+  // templateId = 2.16.840.1.113883.10.20.22.4.18 corresponds to Medication Dispense
+  var Supply : SubstanceAdministration.entryRelationship[*].supply[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.18")];
+  partOf[] : Build_Reference(Output_Resource[](Supply_MedicationDispense[](Supply[], Patient)));
+  subject : Build_Reference(Patient);
+}
+
+// Description: Constructs a FHIR R4 AllergyIntolerance Resource and its related resources based on CDA Allergies Section
+//
+// Argument(s):
+//   Allergies Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.2.6.1-2013-01-31T000000.html
+//   Patient Resource already constructed through PatientRole_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   AllergyIntolerance: https://www.hl7.org/fhir/allergyintolerance.html
+//   PractitionerRole: https://www.hl7.org/fhir/practitionerrole.html
+//
+def Act_AllergyIntolerance(required Act, required Patient) {
+  resourceType: "AllergyIntolerance";
+  id : $UUID();
+  identifier[] : II_Identifier(Act.id[]);
+  recorder : Build_Reference(Output_Resource(AssignedEntity_PractitionerRole(Act.author[0].assignedAuthor)));
+  clinicalStatus.coding[0].code : Act.statusCode.code;
+  clinicalStatus.coding[0].system : "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical";
+  if (IsInterval(Act.effectiveTime)) {
+    onsetPeriod.start : Convert_DateTime(Act.effectiveTime.low.value);
+    onsetPeriod.end : Convert_DateTime(Act.effectiveTime.high.value);
+  } else {
+    onsetDateTime (if Act.effectiveTime.value): Convert_DateTime(Act.effectiveTime.value);
+  }
+  // templateId = 2.16.840.1.113883.10.20.22.4.7 corresponds to Allergy Observation
+  var AllergyObservation : Act.entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.7")];
+  var AllergyObservationValue (if AllergyObservation) : AllergyObservation[*].value[*][where hasCode($.'xsi:type', "CD")];
+  category[] (if AllergyObservationValue): Convert_TerminologyCode(AllergyObservationValue[*].code[], "AllergyCategoryCode");
+  // templateId = 2.16.840.1.113883.10.20.22.4.145 corresponds to Criticality Observation
+  var CriticalityObservation : AllergyObservation[*].entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.145")];
+  var CriticalityObservationValue (if CriticalityObservation) : CriticalityObservation[*].value[*][where hasCode($.'xsi:type', "CD")];
+  criticality : CriticalityObservationValue[0].code;
+
+  var AllergySubstanceCode (if AllergyObservation) : AllergyObservation[*].participant[*].participantRole.playingEntity.code[];
+  // templateId = 2.16.840.1.113883.10.20.22.4.9 corresponds to Reaction Observation
+  var ReactionObservation : AllergyObservation[*].entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.9")];
+  var ReactionObservationValue (if ReactionObservation) : ReactionObservation[*].value[*][where hasCode($.'xsi:type', "CD")];
+  // templateId = 2.16.840.1.113883.10.20.22.4.8 corresponds to Severity Observation
+  var SeverityObservation : ReactionObservation[*].entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.8")];
+  var SeverityObservationValue (if SeverityObservation) : SeverityObservation[*].value[*][where hasCode($.'xsi:type', "CD")];
+  reaction[] : Build_AllergyReaction(AllergySubstanceCode[], ReactionObservationValue[], ReactionObservation[*].effectiveTime[*].low[], SeverityObservationValue[]);
+  patient : Build_Reference(Patient);
+}
+
+// Description: Constructs a FHIR R4 Immunization Resource and its related resources based on CDA Immunizations Section
+//
+// Argument(s):
+//   Immunizations Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.2.2.1-2013-01-31T000000.html
+//   Patient Resource already constructed through PatientRole_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Immunization: https://www.hl7.org/fhir/immunization.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//
+def SubstanceAdministration_Immunization(required SubstanceAdministration, required Patient) {
+  resourceType: "Immunization";
+  id : $UUID();
+  identifier[] : II_Identifier(SubstanceAdministration.id[]);
+  recorded (if ~IsInterval(SubstanceAdministration.effectiveTime[0])): Convert_DateTime(SubstanceAdministration.effectiveTime[0].value);
+  occurrenceDateTime (if ~IsInterval(SubstanceAdministration.effectiveTime[0])): Convert_DateTime(SubstanceAdministration.effectiveTime[0].value);
+  doseQuantity : PQ_Quantity(SubstanceAdministration.doseQuantity);
+  route : CD_CodeableConcept(SubstanceAdministration.routeCode);
+  status : Convert_TerminologyCode(SubstanceAdministration.statusCode.code, "SubstanceAdministrationStatusCode");
+  site : CD_CodeableConcept(SubstanceAdministration.approachSiteCode[0]);
+  // templateId = 2.16.840.1.113883.10.20.22.4.54 corresponds to Immunization Medication Information
+  if (templateIdHasRoot(SubstanceAdministration.consumable.manufacturedProduct.templateId, "2.16.840.1.113883.10.20.22.4.54")) {
+    manufacturer : Build_Reference(Output_Resource(ORG_Organization(SubstanceAdministration.consumable.manufacturedProduct.manufacturerOrganization)));
+  }
+  vaccineCode : CD_CodeableConcept(SubstanceAdministration.consumable.manufacturedProduct.manufacturedMaterial.code);
+  lotNumber : SubstanceAdministration.consumable.manufacturedProduct.manufacturedMaterial.lotNumberText;
+  performer[].actor : Build_Reference[](Output_Resource[](AssignedEntity_PractitionerRole[](SubstanceAdministration.performer[*].assignedEntity[])));
+  // templateId = 2.16.840.1.113883.10.20.22.4.53 corresponds to Immunization Refusal Reason
+  var RefusalReason : SubstanceAdministration.entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.53")];
+  statusReason : CD_CodeableConcept(RefusalReason[0].code);
+  // templateId = 2.16.840.1.113883.10.20.22.4.19 corresponds to Indication
+  var IndicationReason : SubstanceAdministration.entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.19")];
+  var IndicationReasonValue : IndicationReason[*].value[*][where hasCode($.'xsi:type', "CD")];
+  reasonCode[] : CD_CodeableConcept(IndicationReasonValue[]);
+  // templateId = 2.16.840.1.113883.10.20.22.4.9 corresponds to Reaction Observation
+  var ReactionObservation : SubstanceAdministration.entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.9")];
+  reaction[] : Build_ImmunizationReaction(ReactionObservation[], Patient);
+  patient : Build_Reference(Patient);
+}

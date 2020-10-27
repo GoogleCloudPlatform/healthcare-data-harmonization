@@ -1,0 +1,689 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "F",
+          "display": "Female",
+          "target": [
+            {
+              "code": "female",
+              "display": "Female",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "M",
+          "display": "Male",
+          "target": [
+            {
+              "code": "male",
+              "display": "Male",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "O",
+          "display": "Other",
+          "target": [
+            {
+              "code": "other",
+              "display": "Other",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "UN",
+          "display": "Unknown",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "Unknown",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "A",
+          "display": "Ambiguous",
+          "target": [
+            {
+              "code": "other",
+              "display": "Other",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "N",
+          "display": "Not applicable",
+          "target": [
+            {
+              "code": "other",
+              "display": "Other",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "2.16.840.1.113883.5.1",
+      "target": "http://hl7.org/fhir/administrative-gender",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "unknown",
+        "display": "Unknown"
+      }
+    },
+    {
+      "element": [
+        {
+          "code": "completed",
+          "display": "Completed",
+          "target": [
+            {
+              "code": "final",
+              "display": "Final",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "error",
+          "display": "Error",
+          "target": [
+            {
+              "code": "entered-in-error",
+              "display": "Entered in Error",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "un",
+          "display": "Unknown",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "Unknown",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "cancelled",
+          "display": "Cancelled",
+          "target": [
+            {
+              "code": "cancelled",
+              "display": "Cancelled",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "amended",
+          "display": "Amended",
+          "target": [
+            {
+              "code": "amended",
+              "display": "Amended",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "ObservationStatusCode",
+      "target": "http://hl7.org/fhir/observation-status",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "unknown",
+        "display": "Unknown"
+      }
+    },
+    {
+      "element": [
+        {
+          "code": "in-progress",
+          "display": "In Progress",
+          "target": [
+            {
+              "code": "in-progress",
+              "display": "In Progress",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "active",
+          "display": "Active",
+          "target": [
+            {
+              "code": "in-progress",
+              "display": "In Progress",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "onleave",
+          "display": "On Leave",
+          "target": [
+            {
+              "code": "onleave",
+              "display": "On Leave",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "on-leave",
+          "display": "On Leave",
+          "target": [
+            {
+              "code": "onleave",
+              "display": "On Leave",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "finished",
+          "display": "Finished",
+          "target": [
+            {
+              "code": "finished",
+              "display": "Finished",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "completed",
+          "display": "Completed",
+          "target": [
+            {
+              "code": "finished",
+              "display": "Finished",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "planned",
+          "display": "Planned",
+          "target": [
+            {
+              "code": "planned",
+              "display": "Planned",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "arrived",
+          "display": "Arrived",
+          "target": [
+            {
+              "code": "arrived",
+              "display": "Arrived",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "EncounterStatusCode",
+      "target": "http://hl7.org/fhir/observation-status",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "unknown",
+        "display": "Unknown"
+      }
+    },
+    {
+      "element": [
+        {
+          "code": "aborted",
+          "display": "Aborted",
+          "target": [
+            {
+              "code": "cancelled",
+              "display": "Cancelled",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "active",
+          "display": "Active",
+          "target": [
+            {
+              "code": "partial",
+              "display": "Partial",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "cancelled",
+          "display": "Cancelled",
+          "target": [
+            {
+              "code": "cancelled",
+              "display": "Cancelled",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "completed",
+          "display": "Completed",
+          "target": [
+            {
+              "code": "final",
+              "display": "Final",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "held",
+          "display": "Held",
+          "target": [
+            {
+              "code": "registered",
+              "display": "Registered",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "suspended",
+          "display": "Suspended",
+          "target": [
+            {
+              "code": "entered-in-error",
+              "display": "Entered in Error",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "ResultOrganizerStatusCode",
+      "target": "http://hl7.org/fhir/diagnostic-report-status",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "unknown",
+        "display": "Unknown"
+      }
+    },
+    {
+      "element": [
+        {
+          "code": "active",
+          "display": "Active",
+          "target": [
+            {
+              "code": "active",
+              "display": "Active",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "completed",
+          "display": "Completed",
+          "target": [
+            {
+              "code": "completed",
+              "display": "Completed",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "intended",
+          "display": "intended",
+          "target": [
+            {
+              "code": "intended",
+              "display": "Intended",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "nullified",
+          "display": "Nullified",
+          "target": [
+            {
+              "code": "entered-in-error",
+              "display": "Entered in Error",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "SubstanceAdministrationStatusCode",
+      "target": "http://hl7.org/fhir/CodeSystem/medication-statement-status",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "unknown",
+        "display": "Unknown"
+      }
+    },
+    {
+      "element": [
+        {
+          "code": "active",
+          "display": "Active",
+          "target": [
+            {
+              "code": "in-progress",
+              "display": "In Progress",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "in-progress",
+          "display": "In Progress",
+          "target": [
+            {
+              "code": "in-progress",
+              "display": "In Progress",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "inprogress",
+          "display": "In Progress",
+          "target": [
+            {
+              "code": "in-progress",
+              "display": "In Progress",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "on-hold",
+          "display": "On Hold",
+          "target": [
+            {
+              "code": "on-hold",
+              "display": "On Hold",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "onhold",
+          "display": "On Hold",
+          "target": [
+            {
+              "code": "on-hold",
+              "display": "On Hold",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "suspended",
+          "display": "Suspended",
+          "target": [
+            {
+              "code": "on-hold",
+              "display": "On Hold",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "completed",
+          "display": "Completed",
+          "target": [
+            {
+              "code": "completed",
+              "display": "Completed",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "stopped",
+          "display": "Stopped",
+          "target": [
+            {
+              "code": "stopped",
+              "display": "Stopped",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "nullified",
+          "display": "Nullified",
+          "target": [
+            {
+              "code": "entered-in-error",
+              "display": "Entered in Error",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "error",
+          "display": "Error",
+          "target": [
+            {
+              "code": "entered-in-error",
+              "display": "Entered in Error",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "entered-in-error",
+          "display": "Entered in Error",
+          "target": [
+            {
+              "code": "entered-in-error",
+              "display": "Entered in Error",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "SupplyStatusCode",
+      "target": "http://terminology.hl7.org/CodeSystem/medicationdispense-status",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "unknown",
+        "display": "Unknown"
+      }
+    },
+    {
+      "element": [
+        {
+          "code": "416098002",
+          "display": "Drug allergy (disorder)",
+          "target": [
+            {
+              "code": "medication",
+              "display": "Medication",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "59037007",
+          "display": "Drug Intolerance (Disorder)",
+          "target": [
+            {
+              "code": "medication",
+              "display": "Medication",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "419511003",
+          "display": "Propensity to adverse reactions to drug (finding)",
+          "target": [
+            {
+              "code": "medication",
+              "display": "Medication",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "414285001",
+          "display": "Allergy to food (finding)",
+          "target": [
+            {
+              "code": "food",
+              "display": "Food",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "232347008",
+          "display": "Allergy to animal dander (finding)",
+          "target": [
+            {
+              "code": "environment",
+              "display": "Environment",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "420134006",
+          "display": "Propensity to adverse reaction (finding)",
+          "target": [
+            {
+              "code": "environment",
+              "display": "Environment",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "418038007",
+          "display": "Propensity to adverse reactions to substance (finding)",
+          "target": [
+            {
+              "code": "environment",
+              "display": "Environment",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "419199007",
+          "display": "Allergy to substance (finding)",
+          "target": [
+            {
+              "code": "environment",
+              "display": "Environment",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "AllergyCategoryCode",
+      "target": "http://hl7.org/fhir/allergy-intolerance-category",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "environment",
+        "display": "Environment"
+      }
+    },
+    {
+      "element": [
+        {
+          "code": "255604002",
+          "display": "Mild",
+          "target": [
+            {
+              "code": "mild",
+              "display": "Mild",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "371923003",
+          "display": "Mild to moderate",
+          "target": [
+            {
+              "code": "mild",
+              "display": "Mild",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "6736007",
+          "display": "Moderate (severity modifier)",
+          "target": [
+            {
+              "code": "moderate",
+              "display": "Moderate",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "371924009",
+          "display": "Moderate to severe (qualifier value)",
+          "target": [
+            {
+              "code": "moderate",
+              "display": "Moderate",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "24484000",
+          "display": "Severe (severity modifier)",
+          "target": [
+            {
+              "code": "severe",
+              "display": "Severe",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "399166001",
+          "display": "Fatal (qualifier value)",
+          "target": [
+            {
+              "code": "severe",
+              "display": "Severe",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "SeverityCode",
+      "target": "http://hl7.org/fhir/reaction-event-severity",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "unknown",
+        "display": "Unknown"
+      }
+    }
+  ],
+  "id": "CDA-FHIR",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

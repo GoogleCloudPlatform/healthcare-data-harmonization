@@ -1,0 +1,445 @@
+// Description: Constructs an Address datatype
+//
+// Argument(s):
+//   AD datatype
+//
+// Output(s):
+//   Address datatype: https://www.hl7.org/fhir/datatypes.html#Address
+//
+def AD_Address(required AD) {
+  use (if AD.use = "HP"): "home";
+  line[] : AD.streetAddressLine[];
+  city : AD.city[0];
+  state : AD.state[0];
+  postalCode (if ~$Type(AD.postalCode[0]) = "container") : AD.postalCode[0];
+  country : AD.country[0];
+}
+
+// Description: Checks whether a TS datatype is an interval
+//
+// Argument(s):
+//   TS datatype
+//
+// Output(s):
+//   Boolean
+//
+def IsInterval (TS) {
+  if ($Type(TS) = "container") {
+    if (TS.value) {
+      $this : false;
+    } else {
+      $this : true;
+    }
+  }
+}
+
+// Description: Constructs a Location resource
+//
+// Argument(s):
+//   AD datatype
+//
+// Output(s):
+//   Location: https://www.hl7.org/fhir/location.html
+//
+def AD_Location(required AD) {
+  id : $UUID();
+  resourceType : "Location"
+  address : AD_Address(AD);
+}
+
+// Description: Constructs a ContactPoint datatype
+//
+// Argument(s):
+//   TEL datatype
+//
+// Output(s):
+//   ContactPoint datatype: https://www.hl7.org/fhir/datatypes.html#ContactPoint
+//
+def TEL_ContactPoint(required TEL) {
+  system : "phone";
+  value : TEL.value
+  use : "home"
+}
+
+// Description: Constructs an Organization resource
+//
+// Argument(s):
+//   ORG datatype
+//
+// Output(s):
+//   Organization: https://www.hl7.org/fhir/organization.html
+//
+def ORG_Organization(required ORG) {
+  id : $UUID();
+  resourceType : "Organization"
+  identifier[] :  II_Identifier(ORG.id[])
+  name : ORG.name[0]
+  telecom[] : TEL_ContactPoint(ORG.telecom[])
+  address[] : AD_Address(ORG.addr[])
+}
+
+// Description: Constructs an Organization resource
+//
+// Argument(s):
+//   ORG datatype
+//
+// Output(s):
+//   Organization: https://www.hl7.org/fhir/organization.html
+//
+def ORG_CustodianOrganization(required ORG) {
+  id : $UUID();
+  resourceType : "Organization"
+  identifier[] :  II_Identifier(ORG.id[])
+  name : ORG.name;
+  telecom[] : TEL_ContactPoint(ORG.telecom)
+  address[] : AD_Address(ORG.addr)
+}
+
+// Description: Constructs an Identifier datatype
+//
+// Argument(s):
+//   II datatype
+//
+// Output(s):
+//   Identifier datatype: https://www.hl7.org/fhir/datatypes.html#Identifier
+//
+def II_Identifier(required II) {
+  value : II.extension;
+  system : $StrCat("urn:oid:", II.'root');
+}
+
+// Description: Constructs a HumanName datatype
+//
+// Argument(s):
+//   PN datatype
+//
+// Output(s):
+//   HumanName datatype: https://www.hl7.org/fhir/datatypes.html#HumanName
+//
+def PN_HumanName(required PN) {
+  use : "usual";
+  family : PARSE_Name(PN.family[0]);
+  given[] : PARSE_Name(PN.given[]);
+  suffix[] : PARSE_Name(PN.suffix[]);
+}
+
+// Description: Parse Name datatype
+//
+// Argument(s):
+//   Name datatype
+//
+// Output(s):
+//   Name string: https://www.hl7.org/fhir/datatypes.html#string
+//
+def PARSE_Name(required Name) {
+  if ($Type(Name) = "container") {
+    $this : Name.text;
+  } else {
+    $this : Name;
+  }
+}
+
+// Description: Constructs a CodeableConcept datatype
+//
+// Argument(s):
+//   CD datatype
+//
+// Output(s):
+//   CodeableConcept datatype: https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def CD_CodeableConcept(required CD) {
+  coding[0].system : $StrCat("urn:oid:", CD.codeSystem);
+  coding[0].code : CD.code
+  coding[0].display : CD.displayName
+}
+
+// Description: Constructs a Coding datatype
+//
+// Argument(s):
+//   CD datatype
+//
+// Output(s):
+//   Coding datatype: https://www.hl7.org/fhir/datatypes.html#Coding
+//
+def CD_Coding(required CD) {
+  system : $StrCat("urn:oid:", CD.codeSystem);
+  code : CD.code
+  display : CD.displayName
+}
+
+// Description: Constructs a Communication datatype
+//
+// Argument(s):
+//   Language datatype
+//
+// Output(s):
+//   Communication datatype: https://www.hl7.org/fhir/patient-definitions.html#Patient.communication
+//
+def Build_Communication(required Language) {
+  language : CD_CodeableConcept(Language.languageCode);
+  preferred : Language.preferenceInd.value = "true";
+}
+
+// Description: Constructs a Contact datatype
+//
+// Argument(s):
+//   Guardian datatype
+//
+// Output(s):
+//   Contact datatype: https://www.hl7.org/fhir/patient-definitions.html#Patient.contact
+//
+def Guardian_Contact(required Guardian) {
+  relationship[] : CD_CodeableConcept(Guardian.code);
+  telecom[] : TEL_ContactPoint(Guardian.telecom[]);
+  address : AD_Address(Guardian.addr[0]);
+  name : PN_HumanName(Guardian.guardianPerson.name[0]);
+}
+
+// Description: Constructs a Practitioner resource
+//
+// Argument(s):
+//   PR datatype
+//
+// Output(s):
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def Person_Practitioner(required PR) {
+  id : $UUID();
+  resourceType: "Practitioner";
+  name[]: PN_HumanName(PR.name[]);
+}
+
+// Description: Constructs a Quantity datatype
+//
+// Argument(s):
+//   PQ datatype
+//
+// Output(s):
+//   Quantity datatype: https://www.hl7.org/fhir/datatypes.html#SimpleQuantity
+//
+def PQ_Quantity(required PQ) {
+  value (if PQ.value) : $ParseFloat(PQ.value);
+  unit : PQ.unit;
+}
+
+// Description: Constructs a UCUM Age datatype
+//
+// Argument(s):
+//   PQ datatype
+//
+// Output(s):
+//   UCUM Age datatype: https://www.hl7.org/fhir/datatypes.html#Age
+//
+def PQ_UCUM(required PQ){
+  value : $ParseFloat(PQ.value);
+  code : PQ.unit;
+  unit: "yr";
+  system: "http://unitsofmeasure.org";
+}
+
+// Description: Constructs a FamilyMemberHistory.condition datatype
+//
+// Argument(s):
+//   Observation datatype
+//
+// Output(s):
+//   FamilyMemberHistory.condition datatype: https://www.hl7.org/fhir/familymemberhistory-definitions.html#FamilyMemberHistory.condition
+//
+def Observation_ConditionDataType(required Observation) {
+  code (if Observation.value[0].'xsi:type' = "CD"): CD_CodeableConcept(Observation.value[0]);
+  // templateId = 2.16.840.1.113883.10.20.22.4.31 corresponds to an age observation
+  var AgeObservation : Observation.entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.31")];
+  onsetAge : PQ_UCUM(AgeObservation[0].value[0]);
+  // templateId = 2.16.840.1.113883.10.20.22.4.47 corresponds to an death observation
+  var DeathObservation : Observation.entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.47")];
+  if ($ListLen(DeathObservation) > 0) {
+    outcome : CD_CodeableConcept(DeathObservation[0].value[0]);
+    contributedToDeath : true;
+  } else {
+    contributedToDeath : false;
+  }
+}
+
+// Description: Constructs a Medication resource
+//
+// Argument(s):
+//   ManufacturedProduct datatype
+//
+// Output(s):
+//   Medication: https://www.hl7.org/fhir/medication.html
+//
+def ManufacturedProduct_Medication(required ManufacturedProduct) {
+  resourceType: "Medication";
+  id : $UUID();
+  identifier[] : II_Identifier(ManufacturedProduct.id[]);
+  code : CD_CodeableConcept(ManufacturedProduct.manufacturedMaterial.code);
+  ingredient[].itemCodeableConcept : CD_CodeableConcept[](ManufacturedProduct.manufacturedMaterial.code.translation[]);
+  manufacturer : Build_Reference(Output_Resource(ORG_Organization(ManufacturedProduct.manufacturerOrganization)));
+}
+
+// Description: Constructs a MedicationDispense resource
+//
+// Argument(s):
+//   Supply datatype
+//   Patient Resource already constructed through PatientRole_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   MedicationDispense: https://www.hl7.org/fhir/medicationdispense.html
+//
+def Supply_MedicationDispense(required Supply, Patient) {
+  resourceType: "MedicationDispense";
+  id : $UUID();
+  identifier[] : II_Identifier(Supply.id[]);
+  status : Convert_TerminologyCode(Supply.statusCode.code, "SupplyStatusCode");
+  type : CD_CodeableConcept(Supply.code);
+  // templateId = 2.16.840.1.113883.10.20.22.4.23 corresponds to Medication Information
+  if (templateIdHasRoot(Supply.product.manufacturedProduct.templateId, "2.16.840.1.113883.10.20.22.4.23")) {
+    medicationReference : Build_Reference(Output_Resource(ManufacturedProduct_Medication(Supply.product.manufacturedProduct)));
+  }
+  performer[].actor : Build_Reference[](Output_Resource[](AssignedEntity_PractitionerRole[](Supply.performer[*].assignedEntity[])));
+  quantity : PQ_Quantity(Supply.quantity);
+  if (~IsInterval(Supply.effectiveTime[0])) {
+    whenPrepared : Convert_DateTime(Supply.effectiveTime[0].value);
+    whenHandedOver : Convert_DateTime(Supply.effectiveTime[0].value);
+  }
+  dosageInstruction[0].doseAndRate[0].doseQuantity : PQ_Quantity(Supply.quantity);
+}
+
+// Description: Constructs a ReferenceRange datatype
+//
+// Argument(s):
+//   ObservationRange datatype
+//
+// Output(s):
+//   Observation.referenceRange: https://www.hl7.org/fhir/observation-definitions.html#Observation.referenceRange
+//
+def ObservationRange_ReferenceRange(ObservationRange) {
+  type : CD_CodeableConcept(ObservationRange.interpretationCode);
+  text : ObservationRange.text;
+  low : PQ_Quantity(ObservationRange.value.low);
+  high : PQ_Quantity(ObservationRange.value.high);
+}
+
+// Description: Constructs a Composition.attester datatype
+//
+// Argument(s):
+//   Attester datatype
+//   mode: string
+//
+// Output(s):
+//   Composition.attester: https://www.hl7.org/fhir/composition-definitions.html#Composition.attester
+//
+def Build_Attester(required Attester, Mode) {
+  mode : Mode;
+  party : Build_Reference(Attester);
+}
+
+// Description: Constructs a Composition.section datatype
+//
+// Argument(s):
+//   Section datatype
+//   Resource: already constructed through Process_Document Projector
+//
+// Output(s):
+//   Composition.section: https://www.hl7.org/fhir/composition-definitions.html#Composition.section
+//
+def Build_Section(Section, Resource) {
+  title : Section.title;
+  code : CD_CodeableConcept(Section.code);
+  entry[] : Build_Reference(Resource[]);
+}
+
+// Description: Constructs a Location resource
+//
+// Argument(s):
+//   ParticipantRole datatype
+//
+// Output(s):
+//   Location: https://www.hl7.org/fhir/location.html
+//
+def ParticipantRole_Location(ParticipantRole) {
+  id : $UUID();
+  resourceType: "Location";
+  identifier[] : II_Identifier(ParticipantRole.id[]);
+  type[] : CD_CodeableConcept(ParticipantRole.code);
+  name : ParticipantRole.playingEntity.name[0];
+  telecom[] : TEL_ContactPoint(ParticipantRole.telecom[]);
+  address : AD_Address(ParticipantRole.addr[0]);
+}
+
+// Description: Checks whether a TypeCode matches to a desired Code
+//
+// Argument(s):
+//   TypeCode: string
+//   Code: string
+//
+// Output(s):
+//   Boolean
+//
+def hasCode(TypeCode, Code) {
+  $this : TypeCode = Code;
+}
+
+// Description: Checks whether a templateId matches to a desired value
+//
+// Argument(s):
+//   templateId: array
+//   value: string
+//
+// Output(s):
+//   Boolean
+//
+def templateIdHasRoot(templateId, value) {
+   $this: $ListLen(templateId[where $.'root' = value]) > 0
+}
+
+// Description: Constructs a Immunization.reaction datatype
+//
+// Argument(s):
+//   Observation datatype
+//   Patient Resource already constructed through PatientRole_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Immunization.reaction: https://www.hl7.org/fhir/immunization-definitions.html#Immunization.reaction
+//
+def Build_ImmunizationReaction(required Observation, Patient) {
+  detail : Build_Reference(Output_Resource(Observation_Observation(Observation, Patient)));
+  if (IsInterval(Observation.effectiveTime)) {
+    date : Convert_DateTime(Observation.effectiveTime.low.value);
+  } else {
+    date : Convert_DateTime(Observation.effectiveTime.value);
+  }
+}
+
+// Description: Constructs a AllergyIntolerance.reaction datatype
+//
+// Argument(s):
+//   Substance datatype: already constructed through Act_AllergyIntolerance Projector
+//   Manifestation: already constructed through Act_AllergyIntolerance Projector
+//   Onset: already constructed through Act_AllergyIntolerance Projector
+//   Severity: already constructed through Act_AllergyIntolerance Projector
+//
+// Output(s):
+//   AllergyIntolerance.reaction: https://www.hl7.org/fhir/allergyintolerance-definitions.html#AllergyIntolerance.reaction
+//
+def Build_AllergyReaction(Substance, required Manifestation, Onset, Severity) {
+  substance : CD_CodeableConcept(Substance);
+  manifestation[] : CD_CodeableConcept(Manifestation);
+  onset : Convert_DateTime(Onset.value);
+  severity : Convert_TerminologyCode(Severity.code, "SeverityCode");
+}
+
+// Description: Constructs a Observation.component datatype
+//
+// Argument(s):
+//   Code datatype: already constructed through Observation_Observation Projector
+//   Value: already constructed through Observation_Observation Projector
+//
+// Output(s):
+//   Observation.component: https://www.hl7.org/fhir/observation-definitions.html#Observation.component
+//
+def Build_Component(required Code, required Value) {
+  code : CD_CodeableConcept(Code);
+  valueCodeableConcept (if Value.'xsi:type' = "CD") : CD_CodeableConcept(Value);
+  valueQuantity (if Value.'xsi:type' = "PQ" and Value.value) : PQ_Quantity(Value);
+}

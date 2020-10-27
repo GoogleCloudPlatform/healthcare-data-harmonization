@@ -1,0 +1,4 @@
+//TODO(b/168889603): Needs Documentation
+def CDA_FHIR(Document) {
+  out Resources (if Document.ClinicalDocument) : Process_Document(Document.ClinicalDocument);
+}
