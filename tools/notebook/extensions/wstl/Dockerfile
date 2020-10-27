@@ -12,21 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-# TODO:(b/162604113) Add multistage build.
-ARG BASE_CONTAINER=openjdk:11.0.6-jdk@sha256:a487fbdcf210c435c38cd36dc946591119a064d560354498d67d13d1e9a385a5
-
-FROM $BASE_CONTAINER
-
-# Fix DL4006
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+FROM openjdk:11-jdk-slim AS java-build-env
 
 USER root
-ARG WSTL_INSTALL_DIR="/etc/wstl"
-
-# Install all OS dependencies for notebook server that starts but lacks all
-# features (e.g., download as all possible file formats)
-ENV DEBIAN_FRONTEND noninteractive
 
 # set up installation tools
 RUN apt-get update && apt-get install -yq --no-install-recommends \
@@ -61,13 +49,13 @@ ENV GOPATH=$HOME
 ENV GOBIN=$GOPATH/bin
 ENV PATH $GOBIN:$PATH
 
+ARG WSTL_INSTALL_DIR="/etc/wstl"
 RUN mkdir -p $WSTL_INSTALL_DIR && \
     chown $GO_USER $WSTL_INSTALL_DIR
 
 USER $GO_USER
 RUN mkdir -p $WSTL_INSTALL_DIR/bin && \
-    mkdir -p $WSTL_INSTALL_DIR/tools/notebook && \
-    chown $NB_USER:$NB_GID $WSTL_INSTALL_DIR
+    mkdir -p $WSTL_INSTALL_DIR/tools/notebook
 
 COPY --chown=$GO_USER ./mapping_engine $WSTL_INSTALL_DIR/mapping_engine
 COPY --chown=$GO_USER ./mapping_language $WSTL_INSTALL_DIR/mapping_language
@@ -81,4 +69,8 @@ RUN chmod +x ./build_go.sh && \
     rm -rf $WSTL_INSTALL_DIR/mapping_language && \
     rm -rf $WSTL_INSTALL_DIR/tools
 
-WORKDIR $HOME
+# Now copy it into our base image.
+FROM gcr.io/distroless/base-debian10
+COPY --from=java-build-env /etc/wstl/* /etc/wstl/bin/
+WORKDIR "/home/jovyan"
+CMD ["/etc/wstl/bin/main",  "-host=0.0.0.0"]
