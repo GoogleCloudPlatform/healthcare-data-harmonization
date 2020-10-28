@@ -57,17 +57,29 @@ func (t *transpiler) VisitRoot(ctx *parser.RootContext) interface{} {
 }
 
 func (t *transpiler) VisitPostProcessName(ctx *parser.PostProcessNameContext) interface{} {
-	return &mpb.MappingConfig{
+	mc := &mpb.MappingConfig{
 		PostProcess: &mpb.MappingConfig_PostProcessProjectorName{
 			PostProcessProjectorName: getTokenText(ctx.TOKEN()),
 		},
 	}
+
+	if t.includeSourcePositions {
+		mc.PostProcessMeta = makeSourcePositionMeta(ctx, mc.PostProcessMeta)
+	}
+
+	return mc
 }
 
 func (t *transpiler) VisitPostProcessInline(ctx *parser.PostProcessInlineContext) interface{} {
-	return &mpb.MappingConfig{
+	mc := &mpb.MappingConfig{
 		PostProcess: &mpb.MappingConfig_PostProcessProjectorDefinition{
 			PostProcessProjectorDefinition: ctx.ProjectorDef().Accept(t).(*mpb.ProjectorDefinition),
 		},
 	}
+
+	if t.includeSourcePositions {
+		mc.PostProcessMeta = makeSourcePositionMeta(ctx, mc.PostProcessMeta)
+	}
+
+	return mc
 }

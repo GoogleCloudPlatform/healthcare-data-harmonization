@@ -19,13 +19,15 @@ import (
 	"runtime/debug"
 	"testing"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language/errors" /* copybara-comment: errors */
+	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language/parser" /* copybara-comment: parser */
 	"github.com/antlr/antlr4/runtime/Go/antlr" /* copybara-comment: antlr */
 	"github.com/google/go-cmp/cmp" /* copybara-comment: cmp */
 	"google.golang.org/protobuf/proto" /* copybara-comment: proto */
 	"google.golang.org/protobuf/testing/protocmp" /* copybara-comment: protocmp */
 
-	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language/errors" /* copybara-comment: errors */
-	"github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_language/parser" /* copybara-comment: parser */
+	anypb "google.golang.org/protobuf/types/known/anypb"
+	mpb "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto" /* copybara-comment: mapping_go_proto */
 )
 
 type transpilerTest struct {
@@ -79,4 +81,15 @@ func testRule(t *testing.T, tests []transpilerTest, transpiler parser.WhistleVis
 			}
 		})
 	}
+}
+
+// makeAny marshals the given SourcePosition into an Any and returns it.
+func makeAny(t *testing.T, sp *mpb.SourcePosition) *anypb.Any {
+	t.Helper()
+
+	any, err := anypb.New(sp)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return any
 }

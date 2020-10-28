@@ -183,3 +183,12 @@ message Meta {
   // Entry type to metadata map.
   map<string, google.protobuf.Any> entries = 1;
 }
+
+// Represents a position in Whistle source code.
+message SourcePosition {
+  // Line number, starting at 1.
+  int32 line = 1;
+
+  // Column number, starting at 0 (byte count).
+  int32 column = 2;
+}
