@@ -37,5 +37,9 @@ func (t *transpiler) VisitProjectorDef(ctx *parser.ProjectorDefContext) interfac
 
 	t.popEnv()
 
+	if t.includeSourcePositions {
+		proj.Meta = makeSourcePositionMeta(ctx, proj.Meta)
+	}
+
 	return proj
 }

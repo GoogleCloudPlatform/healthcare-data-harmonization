@@ -99,6 +99,12 @@ func TestVisitPostProcessInline_IncludeSourcePositions(t *testing.T) {
 				PostProcess: &mpb.MappingConfig_PostProcessProjectorDefinition{
 					PostProcessProjectorDefinition: &mpb.ProjectorDefinition{
 						Name: "projName",
+						Meta: &mpb.Meta{
+							Entries: map[string]*anypb.Any{
+								SourcePosStart: makeAny(t, &mpb.SourcePosition{Line: 1, Column: 5}),
+								SourcePosStop:  makeAny(t, &mpb.SourcePosition{Line: 1, Column: 22}),
+							},
+						},
 					},
 				},
 				PostProcessMeta: &mpb.Meta{
@@ -118,6 +124,12 @@ func TestVisitPostProcessInline_IncludeSourcePositions(t *testing.T) {
 				PostProcess: &mpb.MappingConfig_PostProcessProjectorDefinition{
 					PostProcessProjectorDefinition: &mpb.ProjectorDefinition{
 						Name: "projName",
+						Meta: &mpb.Meta{
+							Entries: map[string]*anypb.Any{
+								SourcePosStart: makeAny(t, &mpb.SourcePosition{Line: 1, Column: 5}),
+								SourcePosStop:  makeAny(t, &mpb.SourcePosition{Line: 3, Column: 7}),
+							},
+						},
 					},
 				},
 				PostProcessMeta: &mpb.Meta{
@@ -133,6 +145,6 @@ func TestVisitPostProcessInline_IncludeSourcePositions(t *testing.T) {
 	tp := &transpiler{}
 	IncludeSourcePositions(tp)
 	testRule(t, tests, tp, func(p *parser.WhistleParser) (antlr.ParseTree, string) {
-		return p.PostProcess(), "PostProcessInline"
+		return p.PostProcess(), "PostProcessInline_IncludeSourcePositions"
 	})
 }
