@@ -23,7 +23,7 @@ import (
 func (t *transpiler) VisitMapping(ctx *parser.MappingContext) interface{} {
 	// Mapping rule has 3 components: target, condition, source. Parse each with their rules and
 	// combine into a FieldMapping.
-	target := ctx.Target().Accept(t).(*mpb.FieldMapping).Target
+	targetFM := ctx.Target().Accept(t).(*mpb.FieldMapping)
 
 	// If there is an existing condition stack, we first have to combine them with _And, then add
 	// the inline condition from this mapping if it exists.
@@ -41,9 +41,13 @@ func (t *transpiler) VisitMapping(ctx *parser.MappingContext) interface{} {
 	source := ctx.Expression().Accept(t).(*mpb.ValueSource)
 
 	f := &mpb.FieldMapping{
-		Target:      target,
+		Target:      targetFM.Target,
 		Condition:   condition,
 		ValueSource: source,
+	}
+
+	if t.includeSourcePositions {
+		f.TargetMeta = targetFM.TargetMeta
 	}
 
 	// Register the mapping in the environment if applicable.

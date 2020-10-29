@@ -39,19 +39,31 @@ func (t *transpiler) VisitTargetVar(ctx *parser.TargetVarContext) interface{} {
 		}
 	}
 
-	return &mpb.FieldMapping{
+	fm := &mpb.FieldMapping{
 		Target: &mpb.FieldMapping_TargetLocalVar{
 			TargetLocalVar: jsonutil.JoinPath(p.arg, p.field),
 		},
 	}
+
+	if t.includeSourcePositions {
+		fm.TargetMeta = makeSourcePositionMeta(ctx, fm.TargetMeta)
+	}
+
+	return fm
 }
 
 func (t *transpiler) VisitTargetObj(ctx *parser.TargetObjContext) interface{} {
-	return &mpb.FieldMapping{
+	fm := &mpb.FieldMapping{
 		Target: &mpb.FieldMapping_TargetObject{
 			TargetObject: getTokenText(ctx.TOKEN()),
 		},
 	}
+
+	if t.includeSourcePositions {
+		fm.TargetMeta = makeSourcePositionMeta(ctx, fm.TargetMeta)
+	}
+
+	return fm
 }
 
 func (t *transpiler) VisitTargetRootField(ctx *parser.TargetRootFieldContext) interface{} {
@@ -63,19 +75,31 @@ func (t *transpiler) VisitTargetRootField(ctx *parser.TargetRootFieldContext) in
 
 	t.environment.declareTarget(p.arg + p.index)
 
-	return &mpb.FieldMapping{
+	fm := &mpb.FieldMapping{
 		Target: &mpb.FieldMapping_TargetRootField{
 			TargetRootField: jsonutil.JoinPath(p.arg, p.index, p.field),
 		},
 	}
+
+	if t.includeSourcePositions {
+		fm.TargetMeta = makeSourcePositionMeta(ctx, fm.TargetMeta)
+	}
+
+	return fm
 }
 
 func (t *transpiler) VisitTargetThis(ctx *parser.TargetThisContext) interface{} {
-	return &mpb.FieldMapping{
+	fm := &mpb.FieldMapping{
 		Target: &mpb.FieldMapping_TargetField{
 			TargetField: jsonThis,
 		},
 	}
+
+	if t.includeSourcePositions {
+		fm.TargetMeta = makeSourcePositionMeta(ctx, fm.TargetMeta)
+	}
+
+	return fm
 }
 
 func (t *transpiler) VisitTargetField(ctx *parser.TargetFieldContext) interface{} {
@@ -83,9 +107,15 @@ func (t *transpiler) VisitTargetField(ctx *parser.TargetFieldContext) interface{
 
 	t.environment.declareTarget(p.arg + p.index)
 
-	return &mpb.FieldMapping{
+	fm := &mpb.FieldMapping{
 		Target: &mpb.FieldMapping_TargetField{
 			TargetField: jsonutil.JoinPath(p.arg, p.index, p.field),
 		},
 	}
+
+	if t.includeSourcePositions {
+		fm.TargetMeta = makeSourcePositionMeta(ctx, fm.TargetMeta)
+	}
+
+	return fm
 }
