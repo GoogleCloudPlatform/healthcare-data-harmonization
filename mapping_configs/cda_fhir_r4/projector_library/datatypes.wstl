@@ -177,7 +177,7 @@ def CD_Coding(required CD) {
 //
 def Build_Communication(required Language) {
   language : CD_CodeableConcept(Language.languageCode);
-  preferred : Language.preferenceInd.value = "true";
+  preferred : Language.preferenceInd.value;
 }
 
 // Description: Constructs a Contact datatype

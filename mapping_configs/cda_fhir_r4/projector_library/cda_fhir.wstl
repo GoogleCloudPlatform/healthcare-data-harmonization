@@ -1,4 +1,28 @@
-//TODO(b/168889603): Needs Documentation
+// Description: Constructs a FHIR R4 Composition Resource and its related resources based on CDA Document
+//
+// Argument(s):
+//   HL7 CDA Document: http://ccda.art-decor.org/ccda-html-20150727T182455/rules.html
+//
+// Output(s):
+//   AllergyIntolerance: https://www.hl7.org/fhir/allergyintolerance.html
+//   Condition: https://www.hl7.org/fhir/condition.html
+//   Composition: https://www.hl7.org/fhir/composition.html
+//   Device: https://www.hl7.org/fhir/device.html
+//   DiagnosticReport: https://www.hl7.org/fhir/diagnosticreport.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   FamilyMemberHistory: https://www.hl7.org/fhir/familymemberhistory.html
+//   Immunization: https://www.hl7.org/fhir/immunization.html
+//   Location: https://www.hl7.org/fhir/location.html
+//   MedicationStatement: https://www.hl7.org/fhir/medicationstatement.html
+//   Medication: http://hl7.org/fhir/r4/medication.html
+//   MedicationDispense: https://www.hl7.org/fhir/medicationdispense.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   PractitionerRole: https://www.hl7.org/fhir/practitionerrole.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Procedure: https://www.hl7.org/fhir/procedure.html
+//
 def CDA_FHIR(Document) {
   out Resources (if Document.ClinicalDocument) : Process_Document(Document.ClinicalDocument);
 }

@@ -6,6 +6,7 @@
 // Output(s):
 //   AllergyIntolerance: https://www.hl7.org/fhir/allergyintolerance.html
 //   Condition: https://www.hl7.org/fhir/condition.html
+//   Composition: https://www.hl7.org/fhir/composition.html
 //   Device: https://www.hl7.org/fhir/device.html
 //   DiagnosticReport: https://www.hl7.org/fhir/diagnosticreport.html
 //   Encounter: https://www.hl7.org/fhir/encounter.html
