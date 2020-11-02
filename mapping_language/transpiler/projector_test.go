@@ -105,6 +105,12 @@ func TestVisitProjectorDef_IncludeSourcePositions(t *testing.T) {
 				Name: "single",
 				Mapping: []*mpb.FieldMapping{
 					&mpb.FieldMapping{
+						Meta: &mpb.Meta{
+							Entries: map[string]*anypb.Any{
+								SourcePosStart: makeAny(t, &mpb.SourcePosition{Line: 2, Column: 4}),
+								SourcePosStop:  makeAny(t, &mpb.SourcePosition{Line: 2, Column: 13}),
+							},
+						},
 						Target:      &mpb.FieldMapping_TargetField{TargetField: "."},
 						ValueSource: &mpb.ValueSource{Source: &mpb.ValueSource_ConstFloat{ConstFloat: 5}},
 						TargetMeta: &mpb.Meta{
@@ -134,6 +140,12 @@ func TestVisitProjectorDef_IncludeSourcePositions(t *testing.T) {
 				Name: "complex",
 				Mapping: []*mpb.FieldMapping{
 					&mpb.FieldMapping{
+						Meta: &mpb.Meta{
+							Entries: map[string]*anypb.Any{
+								SourcePosStart: makeAny(t, &mpb.SourcePosition{Line: 2, Column: 4}),
+								SourcePosStop:  makeAny(t, &mpb.SourcePosition{Line: 2, Column: 13}),
+							},
+						},
 						Target:      &mpb.FieldMapping_TargetField{TargetField: "."},
 						ValueSource: &mpb.ValueSource{Source: &mpb.ValueSource_FromInput{FromInput: &mpb.ValueSource_InputSource{Arg: 1}}},
 						TargetMeta: &mpb.Meta{
@@ -144,6 +156,12 @@ func TestVisitProjectorDef_IncludeSourcePositions(t *testing.T) {
 						},
 					},
 					&mpb.FieldMapping{
+						Meta: &mpb.Meta{
+							Entries: map[string]*anypb.Any{
+								SourcePosStart: makeAny(t, &mpb.SourcePosition{Line: 3, Column: 4}),
+								SourcePosStop:  makeAny(t, &mpb.SourcePosition{Line: 3, Column: 15}),
+							},
+						},
 						Target:      &mpb.FieldMapping_TargetLocalVar{TargetLocalVar: "a"},
 						ValueSource: &mpb.ValueSource{Source: &mpb.ValueSource_ConstString{ConstString: "b"}},
 						TargetMeta: &mpb.Meta{
@@ -154,6 +172,12 @@ func TestVisitProjectorDef_IncludeSourcePositions(t *testing.T) {
 						},
 					},
 					&mpb.FieldMapping{
+						Meta: &mpb.Meta{
+							Entries: map[string]*anypb.Any{
+								SourcePosStart: makeAny(t, &mpb.SourcePosition{Line: 4, Column: 4}),
+								SourcePosStop:  makeAny(t, &mpb.SourcePosition{Line: 4, Column: 9}),
+							},
+						},
 						Target:      &mpb.FieldMapping_TargetField{TargetField: "c"},
 						ValueSource: &mpb.ValueSource{Source: &mpb.ValueSource_FromLocalVar{FromLocalVar: "a"}},
 						TargetMeta: &mpb.Meta{

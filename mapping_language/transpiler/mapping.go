@@ -47,6 +47,7 @@ func (t *transpiler) VisitMapping(ctx *parser.MappingContext) interface{} {
 	}
 
 	if t.includeSourcePositions {
+		f.Meta = makeSourcePositionMeta(ctx, f.Meta)
 		f.TargetMeta = targetFM.TargetMeta
 	}
 
