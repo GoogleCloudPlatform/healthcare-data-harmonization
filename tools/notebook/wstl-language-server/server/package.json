@@ -1,5 +1,5 @@
 {
-    "name": "whistle-lsp-server",
+    "name": "wstl-language-server-server",
     "description": "Whistle language server implementation in node.",
     "version": "0.0.1",
     "type": "module",

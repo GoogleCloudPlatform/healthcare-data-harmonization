@@ -1,5 +1,5 @@
 {
-    "name": "whistle-language-client",
+    "name": "wstl-language-server-client",
     "description": "VSCode part of the language server",
     "version": "0.0.1",
     "engines": {

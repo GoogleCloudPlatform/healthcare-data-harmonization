@@ -1,11 +1,11 @@
 {
-  "name": "whistle-language-server",
+  "name": "wstl-language-server",
   "displayName": "Whistle Language Server",
   "description": "",
   "version": "0.0.1",
-  "type": "module",
   "engines": {
-    "vscode": "^1.47.0"
+    "vscode": "^1.47.0",
+    "node": "*"
   },
   "categories": [
     "Other"
@@ -13,7 +13,9 @@
   "activationEvents": [
     "onLanguage:plaintext"
   ],
-  "main": "./out/client/src/extension.js",
+  "bin": {
+    "wstl-language-server": "./bin/wstl-language-server"
+  },
   "contributes": {
     "configuration": {
       "type": "object",
@@ -28,10 +30,9 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
     "compile": "tsc -b ./",
     "lint": "eslint ./server ./client --ext ts",
-    "watch": "tsc -watch -b ./",
+    "watch": "tsc -b --watch ./",
     "pretest": "npm run compile && npm run lint",
     "test": "ts-node ./node_modules/jasmine/bin/jasmine --config=./spec/support/jasmine.json"
   },
