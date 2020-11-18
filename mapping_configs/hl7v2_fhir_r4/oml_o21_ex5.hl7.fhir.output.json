@@ -13,16 +13,16 @@
                   "value":"NIST EHR Facility"
                },
                {
-                  "value":"2.16.840.1.113883.3.72.5.23",
                   "type":{
                      "coding":[
                         {
-                           "code":"ISO",
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0301"
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0301",
+                           "code":"ISO"
                         }
                      ]
                   },
-                  "system":"urn:ietf:rfc:3986"
+                  "system":"urn:ietf:rfc:3986",
+                  "value":"2.16.840.1.113883.3.72.5.23"
                }
             ],
             "id":"01010101-0101-4101-8101-010101010101",
@@ -35,11 +35,13 @@
       },
       {
          "resource":{
+            "resourceType":"Organization",
             "identifier":[
                {
                   "value":"NIST Lab Facility"
                },
                {
+                  "system":"urn:ietf:rfc:3986",
                   "value":"2.16.840.1.113883.3.72.5.21",
                   "type":{
                      "coding":[
@@ -48,12 +50,10 @@
                            "code":"ISO"
                         }
                      ]
-                  },
-                  "system":"urn:ietf:rfc:3986"
+                  }
                }
             ],
-            "id":"02020202-0202-4202-8202-020202020202",
-            "resourceType":"Organization"
+            "id":"02020202-0202-4202-8202-020202020202"
          },
          "request":{
             "method":"PUT",
@@ -62,26 +62,19 @@
       },
       {
          "resource":{
-            "source":{
-               "name":"NIST EHR",
-               "endpoint":"unknown"
-            },
-            "sender":{
-               "reference":"Organization/01010101-0101-4101-8101-010101010101"
-            },
             "destination":[
                {
+                  "name":"NIST Test Lab APP",
+                  "endpoint":"urn:oid:2.16.840.1.113883.3.72.5.20",
                   "receiver":{
                      "reference":"Organization/02020202-0202-4202-8202-020202020202"
-                  },
-                  "endpoint":"NIST Lab Facility",
-                  "name":"NIST Test Lab APP"
+                  }
                }
             ],
             "eventCoding":{
-               "display":"OML^O21^OML_O21",
                "system":"http://terminology.hl7.org/CodeSystem/v2-0003",
-               "code":"O21"
+               "code":"O21",
+               "display":"OML^O21^OML_O21"
             },
             "meta":{
                "tag":[
@@ -95,7 +88,14 @@
                ]
             },
             "id":"03030303-0303-4303-8303-030303030303",
-            "resourceType":"MessageHeader"
+            "resourceType":"MessageHeader",
+            "source":{
+               "endpoint":"urn:oid:2.16.840.1.113883.3.72.5.22",
+               "name":"NIST EHR"
+            },
+            "sender":{
+               "reference":"Organization/01010101-0101-4101-8101-010101010101"
+            }
          },
          "request":{
             "method":"PUT",
@@ -103,34 +103,35 @@
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"Device/04040404-0404-4404-8404-040404040404"
+         },
          "resource":{
+            "id":"04040404-0404-4404-8404-040404040404",
             "resourceType":"Device",
             "identifier":[
                {
                   "value":"NIST EHR"
                },
                {
-                  "system":"urn:ietf:rfc:3986",
                   "value":"2.16.840.1.113883.3.72.5.22",
                   "type":{
                      "coding":[
                         {
-                           "code":"ISO",
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0301"
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0301",
+                           "code":"ISO"
                         }
                      ]
-                  }
+                  },
+                  "system":"urn:ietf:rfc:3986"
                }
-            ],
-            "id":"04040404-0404-4404-8404-040404040404"
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Device/04040404-0404-4404-8404-040404040404"
+            ]
          }
       },
       {
          "resource":{
+            "resourceType":"Provenance",
             "agent":[
                {
                   "who":{
@@ -144,17 +145,38 @@
                   "reference":"MessageHeader/03030303-0303-4303-8303-030303030303"
                }
             ],
-            "id":"05050505-0505-4505-8505-050505050505",
-            "resourceType":"Provenance"
+            "id":"05050505-0505-4505-8505-050505050505"
          },
          "request":{
-            "method":"PUT",
-            "url":"Provenance/05050505-0505-4505-8505-050505050505"
+            "url":"Provenance/05050505-0505-4505-8505-050505050505",
+            "method":"PUT"
          }
       },
       {
          "resource":{
+            "name":[
+               {
+                  "use":"maiden",
+                  "family":"Smirnoff",
+                  "given":[
+                     "Peggy"
+                  ]
+               }
+            ],
+            "active":true,
+            "address":[
+               {
+                  "city":"Los Angeles",
+                  "state":"CA",
+                  "postalCode":"90012",
+                  "use":"home",
+                  "line":[
+                     "450 Bauchet Street"
+                  ]
+               }
+            ],
             "resourceType":"Patient",
+            "birthDate":"1975-04-01",
             "identifier":[
                {
                   "value":"PATID1239",
@@ -167,7 +189,6 @@
                   }
                },
                {
-                  "system":"http://hl7.org/fhir/sid/us-ssn",
                   "type":{
                      "coding":[
                         {
@@ -175,67 +196,46 @@
                            "code":"SB"
                         }
                      ]
-                  }
+                  },
+                  "system":"http://hl7.org/fhir/sid/us-ssn"
                },
                {
                   "type":{
                      "coding":[
                         {
-                           "code":"DL"
+                           "code":"DL",
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
                         }
                      ]
                   }
                }
             ],
-            "name":[
-               {
-                  "family":"Smirnoff",
-                  "given":[
-                     "Peggy"
-                  ],
-                  "use":"maiden"
-               }
-            ],
-            "birthDate":"1975-04-01",
-            "gender":"female",
-            "address":[
-               {
-                  "city":"Los Angeles",
-                  "state":"CA",
-                  "postalCode":"90012",
-                  "use":"home",
-                  "line":[
-                     "450 Bauchet Street"
-                  ]
-               }
-            ],
-            "active":true,
-            "id":"06060606-0606-4606-8606-060606060606"
+            "id":"06060606-0606-4606-8606-060606060606",
+            "multipleBirthBoolean":false,
+            "gender":"female"
          },
          "request":{
-            "method":"PUT",
-            "url":"Patient/06060606-0606-4606-8606-060606060606"
+            "url":"Patient/06060606-0606-4606-8606-060606060606",
+            "method":"PUT"
          }
       },
       {
          "resource":{
-            "id":"07070707-0707-4707-8707-070707070707",
-            "resourceType":"Observation",
             "code":{
                "coding":[
                   {
+                     "system":"LN",
                      "code":"67471-3",
-                     "display":"Pregnancy",
-                     "system":"LN"
+                     "display":"Pregnancy"
                   }
                ]
             },
             "valueCodeableConcept":{
                "coding":[
                   {
+                     "system":"HL70353",
                      "code":"UNK",
-                     "display":"Unknown",
-                     "system":"HL70353"
+                     "display":"Unknown"
                   },
                   {
                      "code":"3118003",
@@ -249,7 +249,9 @@
             "effectiveDateTime":"2012-06-28T00:00:00+06:00",
             "subject":{
                "reference":"Patient/06060606-0606-4606-8606-060606060606"
-            }
+            },
+            "id":"07070707-0707-4707-8707-070707070707",
+            "resourceType":"Observation"
          },
          "request":{
             "method":"PUT",
@@ -258,11 +260,11 @@
       },
       {
          "resource":{
-            "id":"08080808-0808-4808-8808-080808080808",
             "resourceType":"Specimen",
             "subject":{
                "reference":"Patient/06060606-0606-4606-8606-060606060606"
-            }
+            },
+            "id":"08080808-0808-4808-8808-080808080808"
          },
          "request":{
             "method":"PUT",
@@ -271,6 +273,8 @@
       },
       {
          "resource":{
+            "effectiveDateTime":"2012-06-28T07:01:00+06:00",
+            "status":"registered",
             "specimen":[
                {
                   "reference":"Specimen/08080808-0808-4808-8808-080808080808"
@@ -286,15 +290,14 @@
                   "type":{
                      "coding":[
                         {
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
-                           "code":"PLAC"
+                           "code":"PLAC",
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
                         }
                      ]
                   },
                   "value":"ORD448811"
                },
                {
-                  "value":"ORD448811",
                   "type":{
                      "coding":[
                         {
@@ -302,20 +305,19 @@
                            "code":"PLAC"
                         }
                      ]
-                  }
+                  },
+                  "value":"ORD448811"
                }
             ],
             "code":{
                "coding":[
                   {
+                     "system":"99USL",
                      "code":"1000",
-                     "display":"Hepatitis A B  C Panel_WithReflex",
-                     "system":"99USL"
+                     "display":"Hepatitis A B  C Panel_WithReflex"
                   }
                ]
-            },
-            "effectiveDateTime":"2012-06-28T07:01:00+06:00",
-            "status":"registered"
+            }
          },
          "request":{
             "method":"PUT",

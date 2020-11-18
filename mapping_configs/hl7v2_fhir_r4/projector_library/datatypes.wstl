@@ -356,7 +356,8 @@ def CWE_CodeableConcept(CWE) {
 //
 def DLN_Identifier(DLN, varCode) {
   value : DLN.1;
-  type.coding[].code: varCode;
+  type.coding[0].code: varCode;
+  type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0203";
   system : DLN.2.1;
   period.end : DLN.3;
 }
@@ -1103,4 +1104,36 @@ def OBR_Specimen (required OBR, Patient) {
   subject : Build_Reference(Patient);
   id : $UUID();
   resourceType : "Specimen";
+}
+
+// Description: Constructs a MessageHeader.source datatype
+//
+// Argument(s):
+//   DH datatype
+//
+// Output(s):
+//   MessageHeader.source : https://www.hl7.org/fhir/messageheader-definitions.html#MessageHeader.source
+//
+def HD_MessageHeaderEndpoint(required HD) {
+  name : HD.1;
+  endpoint (if HD.3 = "ISO"): $StrCat("urn:oid:", HD.2);
+  endpoint (if HD.3 = "UUID"): $StrCat("urn:uuid:", HD.2);
+  endpoint (if ~HD.3 or (HD.3 ~= "UUID" and HD.3 ~= "ISO")): "unknown"   // place-holder for 1-* cardinality
+}
+
+// Description: Constructs a MessageHeader.destination datatype
+//
+// Argument(s):
+//   DH datatype
+//
+// Output(s):
+//   MessageHeader.destination : https://www.hl7.org/fhir/messageheader-definitions.html#MessageHeader.destination
+//
+def HD_MessageHeaderDestination(required HD, MSH6, MSH23) {
+  $this : HD_MessageHeaderEndpoint(HD);
+  if (~MSH23) {
+     receiver : Build_Reference(Output_Resource(HD_Organization(MSH6)));
+  } else {
+     receiver : Build_Reference(Output_Resource(XON_Organization(MSH23)));
+  }
 }

@@ -8,23 +8,16 @@
 //   Organization: https://www.hl7.org/fhir/organization.html
 //
 def MSH_MessageHeader (required MSH) {
-  source.name : MSH.3.1;
-  if (MSH.3.3 = "URI" and ~MSH.24) {
-    source.endpoint : MSH.3.2;
+  if (~MSH.24) {
+    source : HD_MessageHeaderEndpoint(MSH.3);
   } else {
-    source.endpoint : "unknown"   // place-holder for 1-* cardinality
+    source : HD_MessageHeaderEndpoint(MSH.24);
   }
   sender : Build_Reference(Output_Resource(HD_CC_Organization(MSH.4, MSH.17)));
-  destination[0].name : MSH.5.1;
-  if (~MSH.23) {
-     destination[0].receiver : Build_Reference(Output_Resource(HD_Organization(MSH.6)));
-  } else {
-      destination[0].receiver : Build_Reference(Output_Resource(XON_Organization(MSH.23)));
-  }
   if (~MSH.25) {
-    destination[0].endpoint : MSH.6.1;
+    destination[] : HD_MessageHeaderDestination(MSH.5, MSH.6, MSH.23);
   } else {
-    destination[0].endpoint : MSH.25.2;
+    destination[] : HD_MessageHeaderDestination(MSH.25, MSH.6, MSH.23);
   }
   meta.security[0].code: MSH.8;
   eventCoding.code : MSH.9.2
@@ -60,16 +53,18 @@ def PID_PD1_Patient(required PID, PD1) {
   gender : Convert_TerminologyCode(CWE_Code(PID.8), "HL70001", "Gender");
   name[] : XPN_HumanName(PID.9[]);
   address[] : XAD_Address(PID.11[]);
+  address[].district : PID.12;
   telecom[] : XTN_ContactPoint(PID.13[], "home");
   telecom[] : XTN_ContactPoint(PID.14[], "work");
 // TODO(b/150794840): Uncomment below
-//  communication[0].language : PID.15 => CWE_CodeableConcept;   Need Terminology Mapping: No mappings found in community sheet
+//  communication[0].language : CWE_CodeableConcept(PID.15);   Need Terminology Mapping: No mappings found in community sheet
 //  communication[0].preferred : true;
+//TODO(b/): Define Concept Map
   maritalStatus : CWE_CodeableConcept(PID.16);
   identifier[] : ST_Identifier(PID.19);
   identifier[] : DLN_Identifier(PID.20, "DL");
   if (~PID.25) {
-    multipleBirthBoolean : PID.24;
+    multipleBirthBoolean : PID.24="Y";
   }
   multipleBirthInteger : PID.25;
   deceasedDateTime : Convert_DateTime(PID.29);
@@ -259,7 +254,6 @@ def AL1_AllergyIntolerance (required AL1, Patient) {
 // Argument(s):
 //   OBX V2 Segment
 //   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
-//   Encounter Resource already constructed through PV1_DG1_Encounter Projector: https://www.hl7.org/fhir/encounter.html
 //
 // Output(s):
 //   Observation: https://www.hl7.org/fhir/observation.html
@@ -268,7 +262,7 @@ def AL1_AllergyIntolerance (required AL1, Patient) {
 //   Organization: https://www.hl7.org/fhir/organization.html
 //   Practitioner: https://www.hl7.org/fhir/practitioner.html
 //
-def OBX_Observation (required OBX, Patient, Encounter) {
+def OBX_Observation (required OBX, Patient) {
   if ($ListLen(OBX.5) > 1) {
     component[] : Build_ObservationComponent(OBX.5[], OBX.2, OBX.3, OBX.6);
   } else {
@@ -294,7 +288,6 @@ def OBX_Observation (required OBX, Patient, Encounter) {
   performer[] : Build_Reference(Output_Resource(XON_XAD_Organization(OBX.23, OBX.24)));
   performer[] : Build_Reference(Output_Resource(XCN_Practitioner(OBX.25)));
   subject : Build_Reference(Patient);
-  encounter (if Encounter): Build_Reference(Encounter);
   id : $UUID();
   resourceType : "Observation";
 }
@@ -304,16 +297,14 @@ def OBX_Observation (required OBX, Patient, Encounter) {
 // Argument(s):
 //   OBR V2 Segment
 //   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
-//   Encounter Resource already constructed through PV1_DG1_Encounter Projector: https://www.hl7.org/fhir/encounter.html
 //
 // Output(s):
 //   DiagnosticReport: https://hl7.org/fhir/diagnosticreport.html
-//   Encounter: https://www.hl7.org/fhir/encounter.html
 //   Patient: https://www.hl7.org/fhir/patient.html
 //   Practitioner: https://www.hl7.org/fhir/practitioner.html
 //   Specimen : https://hl7.org/fhir/specimen.html
 //
-def OBR_ORC_DiagnosticReport(required OBR, ORC, Patient, Encounter) {
+def OBR_ORC_DiagnosticReport(required OBR, ORC, Patient) {
     identifier[] : EI_Identifier(OBR.2, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203");
     identifier[] : EI_Identifier(OBR.3, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203");
     identifier[] : EI_Identifier(ORC.2, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203");
@@ -345,7 +336,6 @@ def OBR_ORC_DiagnosticReport(required OBR, ORC, Patient, Encounter) {
   performer[] : Build_Reference(Output_Resource(CNN_Practitioner(OBR.35.1)));
   specimen[] : Build_Reference(Output_Resource(OBR_Specimen(OBR, Patient)));
   subject : Build_Reference(Patient);
-  encounter : Build_Reference(Encounter);
   id : $UUID();
   resourceType : "DiagnosticReport";
 }
@@ -365,11 +355,11 @@ def OBR_ORC_DiagnosticReport(required OBR, ORC, Patient, Encounter) {
 //   Practitioner: https://www.hl7.org/fhir/practitioner.html
 //   Specimen : https://hl7.org/fhir/specimen.html
 //
-def PARSE_ORDER_OBSERVATION (required ORDER_OBSERVATION, Patient, Encounter) {
-  var Observation : OBX_Observation(ORDER_OBSERVATION.OBSERVATION[*].OBX[], Patient, Encounter);
+def PARSE_ORDER_OBSERVATION (required ORDER_OBSERVATION, Patient) {
+  var Observation : OBX_Observation(ORDER_OBSERVATION.OBSERVATION[*].OBX[], Patient);
   out Resources : Observation;
 
-  var DiagnosticReport : OBR_ORC_DiagnosticReport(ORDER_OBSERVATION.OBR, ORDER_OBSERVATION.COMMON_ORDER.ORC, Patient, Encounter)
+  var DiagnosticReport : OBR_ORC_DiagnosticReport(ORDER_OBSERVATION.OBR, ORDER_OBSERVATION.COMMON_ORDER.ORC, Patient)
   out Resources : DiagnosticReport;
 }
 
@@ -404,8 +394,8 @@ def Parse_PATIENT_RESULT (required PATIENT_RESULT) {
   out Resources : Encounter;
 
   if (PATIENT_RESULT.PATIENT.PATIENT_OBSERVATION.OBX) {
-    out Resources : OBX_Observation(PATIENT_RESULT.PATIENT.PATIENT_OBSERVATION.OBX, Patient, Encounter);
+    out Resources : OBX_Observation(PATIENT_RESULT.PATIENT.PATIENT_OBSERVATION.OBX, Patient);
   }
 
-  $this : PARSE_ORDER_OBSERVATION(PATIENT_RESULT.ORDER_OBSERVATION[], Patient, Encounter);
+  $this : PARSE_ORDER_OBSERVATION(PATIENT_RESULT.ORDER_OBSERVATION[], Patient);
 }

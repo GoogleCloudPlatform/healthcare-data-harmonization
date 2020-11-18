@@ -1,4 +1,10 @@
 {
+   "timestamp":"1988-08-18T11:26:00.188818Z",
+   "identifier":{
+      "value":"MSG00001"
+   },
+   "resourceType":"Bundle",
+   "type":"transaction",
    "entry":[
       {
          "resource":{
@@ -16,6 +22,10 @@
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"Organization/02020202-0202-4202-8202-020202020202"
+         },
          "resource":{
             "identifier":[
                {
@@ -24,18 +34,26 @@
             ],
             "id":"02020202-0202-4202-8202-020202020202",
             "resourceType":"Organization"
-         },
-         "request":{
-            "url":"Organization/02020202-0202-4202-8202-020202020202",
-            "method":"PUT"
          }
       },
       {
-         "request":{
-            "method":"PUT",
-            "url":"MessageHeader/03030303-0303-4303-8303-030303030303"
-         },
          "resource":{
+            "source":{
+               "name":"ADT1",
+               "endpoint":"unknown"
+            },
+            "sender":{
+               "reference":"Organization/01010101-0101-4101-8101-010101010101"
+            },
+            "destination":[
+               {
+                  "receiver":{
+                     "reference":"Organization/02020202-0202-4202-8202-020202020202"
+                  },
+                  "name":"GHH LAB, INC.",
+                  "endpoint":"unknown"
+               }
+            ],
             "meta":{
                "tag":[
                   {
@@ -53,43 +71,31 @@
                ]
             },
             "eventCoding":{
+               "display":"ADT^A01^ADT_A01",
                "system":"http://terminology.hl7.org/CodeSystem/v2-0003",
-               "code":"A01",
-               "display":"ADT^A01^ADT_A01"
+               "code":"A01"
             },
             "id":"03030303-0303-4303-8303-030303030303",
-            "resourceType":"MessageHeader",
-            "source":{
-               "endpoint":"unknown",
-               "name":"ADT1"
-            },
-            "sender":{
-               "reference":"Organization/01010101-0101-4101-8101-010101010101"
-            },
-            "destination":[
-               {
-                  "name":"GHH LAB, INC.",
-                  "receiver":{
-                     "reference":"Organization/02020202-0202-4202-8202-020202020202"
-                  },
-                  "endpoint":"GOOD HEALTH HOSPITAL"
-               }
-            ]
+            "resourceType":"MessageHeader"
+         },
+         "request":{
+            "url":"MessageHeader/03030303-0303-4303-8303-030303030303",
+            "method":"PUT"
          }
       },
       {
-         "request":{
-            "url":"Device/04040404-0404-4404-8404-040404040404",
-            "method":"PUT"
-         },
          "resource":{
+            "resourceType":"Device",
             "identifier":[
                {
                   "value":"ADT1"
                }
             ],
-            "id":"04040404-0404-4404-8404-040404040404",
-            "resourceType":"Device"
+            "id":"04040404-0404-4404-8404-040404040404"
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Device/04040404-0404-4404-8404-040404040404"
          }
       },
       {
@@ -111,88 +117,22 @@
             ]
          },
          "request":{
-            "method":"PUT",
-            "url":"Provenance/05050505-0505-4505-8505-050505050505"
+            "url":"Provenance/05050505-0505-4505-8505-050505050505",
+            "method":"PUT"
          }
       },
       {
          "resource":{
-            "contact":[
-               {
-                  "relationship":[
-                     {
-                        "coding":[
-                           {
-                              "code":"NK",
-                              "version":"v1",
-                              "display":"",
-                              "system":"Relationship-unharmonized"
-                           }
-                        ]
-                     }
-                  ],
-                  "name":{
-                     "family":"NUCLEAR",
-                     "given":[
-                        "NELDA",
-                        "W"
-                     ]
-                  }
-               }
-            ],
-            "resourceType":"Patient",
-            "maritalStatus":{
-               "coding":[
-                  {
-                     "code":"S"
-                  }
-               ]
-            },
-            "name":[
-               {
-                  "given":[
-                     "ADAM",
-                     "A"
-                  ],
-                  "suffix":[
-                     "III"
-                  ],
-                  "family":"EVERYMAN"
-               }
-            ],
-            "address":[
-               {
-                  "line":[
-                     "2222 HOME STREET"
-                  ],
-                  "city":"GREENSBORO",
-                  "state":"NC",
-                  "postalCode":"27401-1020"
-               }
-            ],
-            "gender":"male",
-            "id":"06060606-0606-4606-8606-060606060606",
-            "birthDate":"1961-06-15",
-            "telecom":[
-               {
-                  "use":"home",
-                  "value":"(555) 555-2004"
-               },
-               {
-                  "value":"(555)555-2004",
-                  "use":"work"
-               }
-            ],
             "identifier":[
                {
+                  "value":"PATID1234",
                   "type":{
                      "coding":[
                         {
                            "code":"MR"
                         }
                      ]
-                  },
-                  "value":"PATID1234"
+                  }
                },
                {
                   "value":"123456789",
@@ -209,26 +149,97 @@
                   "type":{
                      "coding":[
                         {
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
-                           "code":"SB"
+                           "code":"SB",
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
                         }
                      ]
                   },
                   "system":"http://hl7.org/fhir/sid/us-ssn"
                },
                {
-                  "system":"NC",
-                  "value":"987654",
                   "type":{
                      "coding":[
                         {
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
                            "code":"DL"
                         }
                      ]
-                  }
+                  },
+                  "system":"NC",
+                  "value":"987654"
                }
             ],
-            "active":true
+            "birthDate":"1961-06-15",
+            "telecom":[
+               {
+                  "value":"(555) 555-2004",
+                  "use":"home"
+               },
+               {
+                  "value":"(555)555-2004",
+                  "use":"work"
+               }
+            ],
+            "multipleBirthBoolean":false,
+            "resourceType":"Patient",
+            "address":[
+               {
+                  "line":[
+                     "2222 HOME STREET"
+                  ],
+                  "city":"GREENSBORO",
+                  "state":"NC",
+                  "postalCode":"27401-1020"
+               },
+               {
+                  "district":"GL"
+               }
+            ],
+            "gender":"male",
+            "contact":[
+               {
+                  "name":{
+                     "family":"NUCLEAR",
+                     "given":[
+                        "NELDA",
+                        "W"
+                     ]
+                  },
+                  "relationship":[
+                     {
+                        "coding":[
+                           {
+                              "code":"NK",
+                              "version":"v1",
+                              "display":"",
+                              "system":"Relationship-unharmonized"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            ],
+            "active":true,
+            "id":"06060606-0606-4606-8606-060606060606",
+            "name":[
+               {
+                  "suffix":[
+                     "III"
+                  ],
+                  "family":"EVERYMAN",
+                  "given":[
+                     "ADAM",
+                     "A"
+                  ]
+               }
+            ],
+            "maritalStatus":{
+               "coding":[
+                  {
+                     "code":"S"
+                  }
+               ]
+            }
          },
          "request":{
             "method":"PUT",
@@ -236,53 +247,62 @@
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"Account/07070707-0707-4707-8707-070707070707"
+         },
          "resource":{
-            "subject":[
-               {
-                  "reference":"Patient/06060606-0606-4606-8606-060606060606"
-               }
-            ],
-            "status":"active",
-            "id":"07070707-0707-4707-8707-070707070707",
             "resourceType":"Account",
             "identifier":[
                {
+                  "value":"PATID12345001",
                   "type":{
                      "coding":[
                         {
                            "code":"AN"
                         }
                      ]
-                  },
-                  "value":"PATID12345001"
+                  }
                }
-            ]
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Account/07070707-0707-4707-8707-070707070707"
+            ],
+            "subject":[
+               {
+                  "reference":"Patient/06060606-0606-4606-8606-060606060606"
+               }
+            ],
+            "status":"active",
+            "id":"07070707-0707-4707-8707-070707070707"
          }
       },
       {
          "resource":{
+            "name":[
+               {
+                  "given":[
+                     "NELDA",
+                     "W"
+                  ],
+                  "family":"NUCLEAR"
+               }
+            ],
             "relationship":[
                {
                   "coding":[
                      {
-                        "code":"SPS",
-                        "version":"v1",
                         "display":"spouse",
-                        "system":"http://terminology.hl7.org/CodeSystem/v3-RoleCode"
+                        "system":"http://terminology.hl7.org/CodeSystem/v3-RoleCode",
+                        "code":"SPS",
+                        "version":"v1"
                      }
                   ]
                },
                {
                   "coding":[
                      {
+                        "display":"",
                         "system":"Relationship-unharmonized",
                         "code":"NK",
-                        "version":"v1",
-                        "display":""
+                        "version":"v1"
                      }
                   ]
                }
@@ -292,8 +312,8 @@
                   "type":{
                      "coding":[
                         {
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
-                           "code":"SB"
+                           "code":"SB",
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
                         }
                      ]
                   },
@@ -304,48 +324,38 @@
                "reference":"Patient/06060606-0606-4606-8606-060606060606"
             },
             "id":"08080808-0808-4808-8808-080808080808",
-            "resourceType":"RelatedPerson",
-            "name":[
-               {
-                  "family":"NUCLEAR",
-                  "given":[
-                     "NELDA",
-                     "W"
-                  ]
-               }
-            ]
+            "resourceType":"RelatedPerson"
          },
          "request":{
-            "url":"RelatedPerson/08080808-0808-4808-8808-080808080808",
+            "method":"PUT",
+            "url":"RelatedPerson/08080808-0808-4808-8808-080808080808"
+         }
+      },
+      {
+         "resource":{
+            "resourceType":"Location",
+            "name":"2000",
+            "mode":"instance",
+            "partOf":{
+               "reference":"Location/0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a"
+            },
+            "physicalType":{
+               "coding":[
+                  {
+                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type",
+                     "code":"si"
+                  }
+               ]
+            },
+            "id":"0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c"
+         },
+         "request":{
+            "url":"Location/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c",
             "method":"PUT"
          }
       },
       {
          "resource":{
-            "partOf":{
-               "reference":"Location/0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a"
-            },
-            "id":"0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c",
-            "resourceType":"Location",
-            "name":"2000",
-            "mode":"instance",
-            "physicalType":{
-               "coding":[
-                  {
-                     "code":"si",
-                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type"
-                  }
-               ]
-            }
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Location/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c"
-         }
-      },
-      {
-         "resource":{
-            "id":"0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d",
             "resourceType":"Location",
             "name":"2012",
             "mode":"instance",
@@ -355,42 +365,45 @@
             "physicalType":{
                "coding":[
                   {
-                     "code":"ro",
-                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type"
+                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type",
+                     "code":"ro"
                   }
                ]
-            }
+            },
+            "id":"0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d"
          },
          "request":{
-            "method":"PUT",
-            "url":"Location/0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d"
+            "url":"Location/0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d",
+            "method":"PUT"
          }
       },
       {
-         "request":{
-            "method":"PUT",
-            "url":"Location/0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e"
-         },
          "resource":{
-            "name":"01",
-            "mode":"instance",
             "physicalType":{
                "coding":[
                   {
-                     "code":"bd",
-                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type"
+                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type",
+                     "code":"bd"
                   }
                ]
             },
-            "id":"0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e",
             "partOf":{
                "reference":"Location/0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d"
             },
-            "resourceType":"Location"
+            "id":"0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e",
+            "resourceType":"Location",
+            "name":"01",
+            "mode":"instance"
+         },
+         "request":{
+            "url":"Location/0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e",
+            "method":"PUT"
          }
       },
       {
          "resource":{
+            "resourceType":"Location",
+            "mode":"instance",
             "physicalType":{
                "coding":[
                   {
@@ -399,9 +412,7 @@
                   }
                ]
             },
-            "id":"09090909-0909-4909-8909-090909090909",
-            "resourceType":"Location",
-            "mode":"instance"
+            "id":"09090909-0909-4909-8909-090909090909"
          },
          "request":{
             "url":"Location/09090909-0909-4909-8909-090909090909",
@@ -410,20 +421,20 @@
       },
       {
          "resource":{
-            "mode":"instance",
             "partOf":{
                "reference":"Location/09090909-0909-4909-8909-090909090909"
             },
+            "resourceType":"Location",
+            "mode":"instance",
             "physicalType":{
                "coding":[
                   {
-                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type",
-                     "code":"bu"
+                     "code":"bu",
+                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type"
                   }
                ]
             },
-            "id":"0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a",
-            "resourceType":"Location"
+            "id":"0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a"
          },
          "request":{
             "method":"PUT",
@@ -432,11 +443,6 @@
       },
       {
          "resource":{
-            "partOf":{
-               "reference":"Location/0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a"
-            },
-            "resourceType":"Location",
-            "mode":"instance",
             "physicalType":{
                "coding":[
                   {
@@ -445,11 +451,16 @@
                   }
                ]
             },
-            "id":"0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b"
+            "partOf":{
+               "reference":"Location/0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a"
+            },
+            "id":"0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b",
+            "resourceType":"Location",
+            "mode":"instance"
          },
          "request":{
-            "url":"Location/0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b",
-            "method":"PUT"
+            "method":"PUT",
+            "url":"Location/0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b"
          }
       },
       {
@@ -458,8 +469,6 @@
             "url":"Practitioner/0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f"
          },
          "resource":{
-            "id":"0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f",
-            "resourceType":"Practitioner",
             "identifier":[
                {
                   "value":"004777"
@@ -467,53 +476,31 @@
             ],
             "name":[
                {
-                  "family":"ATTEND",
                   "given":[
                      "AARON",
                      "A"
-                  ]
+                  ],
+                  "family":"ATTEND"
                }
-            ]
+            ],
+            "id":"0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f",
+            "resourceType":"Practitioner"
          }
       },
       {
-         "request":{
-            "method":"PUT",
-            "url":"Encounter/10101010-1010-4010-9010-101010101010"
-         },
          "resource":{
-            "resourceType":"Encounter",
-            "status":"unknown",
-            "participant":[
-               {
-                  "type":[
-                     {
-                        "coding":[
-                           {
-                              "display":"attender",
-                              "code":"ATND",
-                              "system":"http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
-                           }
-                        ]
-                     }
-                  ],
-                  "individual":{
-                     "reference":"Practitioner/0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f"
-                  }
-               }
-            ],
             "location":[
+               {
+                  "location":{
+                     "reference":"Location/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c"
+                  },
+                  "status":"active"
+               },
                {
                   "status":"active",
                   "location":{
-                     "reference":"Location/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c"
-                  }
-               },
-               {
-                  "location":{
                      "reference":"Location/0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d"
-                  },
-                  "status":"active"
+                  }
                },
                {
                   "location":{
@@ -522,10 +509,10 @@
                   "status":"active"
                },
                {
-                  "status":"active",
                   "location":{
                      "reference":"Location/09090909-0909-4909-8909-090909090909"
-                  }
+                  },
+                  "status":"active"
                },
                {
                   "status":"active",
@@ -540,29 +527,26 @@
                   }
                }
             ],
-            "class":{
-               "code":"IMP",
-               "version":"v1",
-               "display":"inpatient encounter",
-               "system":"http://terminology.hl7.org/CodeSystem/v3-ActCode"
-            },
-            "identifier":[
+            "id":"10101010-1010-4010-9010-101010101010",
+            "resourceType":"Encounter",
+            "participant":[
                {
-                  "type":{
-                     "coding":[
-                        {
-                           "code":"VN",
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
-                        }
-                     ],
-                     "text":"visit number"
-                  }
+                  "individual":{
+                     "reference":"Practitioner/0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f"
+                  },
+                  "type":[
+                     {
+                        "coding":[
+                           {
+                              "code":"ATND",
+                              "system":"http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+                              "display":"attender"
+                           }
+                        ]
+                     }
+                  ]
                }
             ],
-            "subject":{
-               "reference":"Patient/06060606-0606-4606-8606-060606060606"
-            },
-            "id":"10101010-1010-4010-9010-101010101010",
             "hospitalization":{
                "admitSource":{
                   "coding":[
@@ -571,14 +555,35 @@
                      }
                   ]
                }
-            }
+            },
+            "class":{
+               "code":"IMP",
+               "version":"v1",
+               "display":"inpatient encounter",
+               "system":"http://terminology.hl7.org/CodeSystem/v3-ActCode"
+            },
+            "subject":{
+               "reference":"Patient/06060606-0606-4606-8606-060606060606"
+            },
+            "status":"unknown",
+            "identifier":[
+               {
+                  "type":{
+                     "text":"visit number",
+                     "coding":[
+                        {
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
+                           "code":"VN"
+                        }
+                     ]
+                  }
+               }
+            ]
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Encounter/10101010-1010-4010-9010-101010101010"
          }
       }
-   ],
-   "timestamp":"1988-08-18T11:26:00.188818Z",
-   "identifier":{
-      "value":"MSG00001"
-   },
-   "resourceType":"Bundle",
-   "type":"transaction"
+   ]
 }
