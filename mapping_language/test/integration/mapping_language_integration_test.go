@@ -146,6 +146,26 @@ func TestTranspile(t *testing.T) {
 			},
 		},
 		{
+			name: "one arg function definition with required - bool",
+			whistle: `def MyProjector(required boolArg) {
+									a: boolArg;
+							  }`,
+			wantValue: valueTest{
+				rootMappings: `out myOut: MyProjector($root.something)
+											 `,
+				wantJSON: `{
+									   "myOut": [
+									     {
+											 		"a": false
+											 }
+									   ]
+									 }`,
+				inputJSON: `{
+											   "something": false
+											 }`,
+			},
+		},
+		{
 			name: "required keyword multiple argument function nil with nested",
 			whistle: `def MyProjector(rt) {
 									nested_1: both_required(rt.Abcdefghijklmnop, "Constant")
@@ -163,6 +183,8 @@ func TestTranspile(t *testing.T) {
 									if 1 < 0 {
 										nested_11: first_required("false & required satisfied", rt.lkdjaklfj)
 									}
+									nested_12: both_required(rt.Bool_True, rt.Red)
+									nested_13: both_required(rt.Bool_False, rt.Red)
 								}
 
 								def none_required(one, two) {
@@ -202,14 +224,18 @@ func TestTranspile(t *testing.T) {
 											"nested_5": {"one":{"Blue":1}},
 											"nested_6": { "two":"Constant"},
 											"nested_9": { "two":1, "conclusion":"bigger than 0"},
-											"nested_10": {"one":"true & required satisfied"}
+											"nested_10": {"one":"true & required satisfied"},
+											"nested_12": {"one":true, "two": {"Blue":1}},
+											"nested_13": {"one":false, "two": {"Blue":1}}
 									}
 								]
 							}`,
 				inputJSON: `{
 										"Red": {
 											"Blue": 1
-										}
+										},
+										"Bool_True": true,
+										"Bool_False": false
 									}`,
 			},
 		},

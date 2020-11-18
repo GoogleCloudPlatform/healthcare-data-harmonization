@@ -146,7 +146,15 @@ func (n *env) generateProjector() *mpb.ProjectorDefinition {
 
 	requiredArgStack := &valueStack{}
 	for _, k := range n.requiredArgs {
-		requiredArgStack.push(n.readInput(k, ""))
+		requiredArgStack.push(
+			&mpb.ValueSource{
+				Source: &mpb.ValueSource_ProjectedValue{
+					ProjectedValue: &mpb.ValueSource{
+						Source:    n.readInput(k, "").GetSource(),
+						Projector: "$IsNotNil",
+					},
+				},
+			})
 	}
 
 	for i := range result.Mapping {
