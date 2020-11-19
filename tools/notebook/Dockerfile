@@ -17,6 +17,7 @@ FROM $BASE_CONTAINER
 
 USER root
 ARG WSTL_INSTALL_DIR="/etc/wstl"
+ARG WSTL_JUPYTER_CONFIG_DIR="/usr/local/etc"
 
 # Install all OS dependencies for fully functional notebook server
 RUN apt-get update && apt-get install -yq --no-install-recommends \
@@ -44,7 +45,8 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p $WSTL_INSTALL_DIR && \
-    chown $NB_USER:$NB_GID $WSTL_INSTALL_DIR
+    chown $NB_USER:$NB_GID $WSTL_INSTALL_DIR && \
+    chown $NB_USER:$NB_GID $WSTL_JUPYTER_CONFIG_DIR
 
 USER $NB_UID
 RUN mkdir -p /home/$NB_USER/.config/gcloud
@@ -56,6 +58,20 @@ WORKDIR $WSTL_INSTALL_DIR/wstl-syntax-highlighting/
 RUN jlpm && \
     jlpm build && \
     jupyter labextension link .
+
+# wstl language server extension
+COPY --chown=$NB_UID ./wstl-language-server $WSTL_INSTALL_DIR/wstl-language-server/
+
+# Ensure the JupyterLab user, joyvan, has read/execute access to the following directories.
+# The fix-permissions script is provided by the base-notebook docker-stacks image.
+# See https://github.com/jupyter/docker-stacks/blob/master/base-notebook/fix-permissions
+WORKDIR $WSTL_INSTALL_DIR/wstl-language-server/
+RUN conda install --quiet --yes --freeze-installed -c conda-forge 'jupyter-lsp==0.9.2' && \
+    jupyter labextension install @krassowski/jupyterlab-lsp@0.8.0 && \
+    npm install && \
+    npm run-script gen-lsp-client-spec && \
+    fix-permissions $WSTL_JUPYTER_CONFIG_DIR && \
+    fix-permissions $WSTL_INSTALL_DIR/wstl-language-server/bin
 
 # wstl magic commands
 COPY --chown=$NB_UID ./extensions $WSTL_INSTALL_DIR/magics/wstl-extensions
@@ -78,6 +94,7 @@ RUN pip install jupyterlab-gcloud-auth==0.2.4 \
     google-api-python-client==1.9.2 \
     google-cloud-storage==1.28.1 \
     pandas==1.1.2 \
+    python-language-server==0.36.1 \
     https://storage.googleapis.com/deeplearning-platform-ui-public/jupyterlab_gcsfilebrowser-0.1.8.tar.gz
 
 WORKDIR $HOME
