@@ -1,6 +1,5 @@
 const {writeFile, existsSync, mkdirSync, readFileSync} = require('fs');
 const {join} = require('path');
-const {homedir} = require('os');
 const PromptSync = require('prompt-sync');
 
 const pathServer = join(__dirname, 'bin', 'wstl-language-server');
