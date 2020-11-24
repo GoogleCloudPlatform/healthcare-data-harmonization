@@ -9,7 +9,14 @@ def Build_Reference(Resource) {
   }
 }
 
-def Build_BundleEntry(Resource,Verb) {
+def Build_BundleEntry(Resource) {
+  resource : Resource;
+  if (~Resource.id) {
+    resource.id : $Hash(Resource);
+  }
+}
+
+def Build_TransactionBundleEntry(Resource,Verb) {
   resource : Resource;
   if (~Resource.id) {
     resource.id : $Hash(Resource);
@@ -20,9 +27,21 @@ def Build_BundleEntry(Resource,Verb) {
 
 def Output_Document(Output) {
   var Resources: $Unique(Output.Resources);
-  timestamp : Output.Bundle.timestamp;
-  identifier : Output.Bundle.identifier;
   resourceType : "Bundle";
+  identifier : Output.Bundle.identifier;
+  timestamp : Output.Bundle.timestamp;
   type : "document";
-  entry[] : Build_BundleEntry(Resources[], "PUT");
+  entry[] : Build_BundleEntry(Resources[where $.resourceType = "Composition"][]);
+  entry[] : Build_BundleEntry(Resources[where $.resourceType ~= "Composition"][]);
+}
+
+def Output_Bundle(Output) {
+  var Resources: $Unique(Output.Resources);
+  resourceType : "Bundle";
+  identifier : Output.Bundle.identifier;
+  timestamp : Output.Bundle.timestamp;
+  type : "transaction";
+  entry[] : Build_TransactionBundleEntry(Output_Document(Output), "PUT");
+  entry[] : Build_TransactionBundleEntry(Resources[where $.resourceType = "Composition"][], "PUT");
+  entry[] : Build_TransactionBundleEntry(Resources[where $.resourceType ~= "Composition"][], "PUT");
 }

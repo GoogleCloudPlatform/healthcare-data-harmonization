@@ -1,3 +1,7 @@
+def isNotNI(Object) {
+  $this : $Type(Object) ~= "container";
+}
+
 // Description: Constructs an Address datatype
 //
 // Argument(s):
@@ -8,11 +12,12 @@
 //
 def AD_Address(required AD) {
   use (if AD.use = "HP"): "home";
-  line[] : AD.streetAddressLine[];
+  line[] : AD.streetAddressLine[where $Type($) ~= "container"][];
   city : AD.city[0];
   state : AD.state[0];
   postalCode (if ~$Type(AD.postalCode[0]) = "container") : AD.postalCode[0];
-  country : AD.country[0];
+  var Country : AD.country[where isNotNI($)]
+  country : Country[0];
 }
 
 // Description: Checks whether a TS datatype is an interval
@@ -23,7 +28,7 @@ def AD_Address(required AD) {
 // Output(s):
 //   Boolean
 //
-def IsInterval (TS) {
+def IsInterval (required TS) {
   if ($Type(TS) = "container") {
     if (TS.value) {
       $this : false;
@@ -58,7 +63,7 @@ def AD_Location(required AD) {
 def TEL_ContactPoint(required TEL) {
   system : "phone";
   value : TEL.value
-  use : "home"
+  //use : "home"
 }
 
 // Description: Constructs an Organization resource
@@ -71,11 +76,14 @@ def TEL_ContactPoint(required TEL) {
 //
 def ORG_Organization(required ORG) {
   id : $UUID();
-  resourceType : "Organization"
-  identifier[] :  II_Identifier(ORG.id[])
-  name : ORG.name[0]
-  telecom[] : TEL_ContactPoint(ORG.telecom[])
-  address[] : AD_Address(ORG.addr[])
+  resourceType : "Organization";
+  identifier[] :  II_Identifier(ORG.id[]);
+  var Name : ORG.name[where $Type($) ~= "container"]
+  name : Name[0];
+  // Fixed-value to ensure fhirpath-constraint-violation-ContainedResource.ofType(Bundle).entry.resource.ofType(Organization): "(identifier.count() + name.count()) > 0"
+  name (if ~Name) : "unknown";
+  telecom[] : TEL_ContactPoint(ORG.telecom[]);
+  address[] : AD_Address(ORG.addr[]);
 }
 
 // Description: Constructs an Organization resource
@@ -90,7 +98,9 @@ def ORG_CustodianOrganization(required ORG) {
   id : $UUID();
   resourceType : "Organization"
   identifier[] :  II_Identifier(ORG.id[])
-  name : ORG.name;
+  name (if $Type(ORG.name) ~= "container") : ORG.name;
+  // Fixed-value to ensure fhirpath-constraint-violation-ContainedResource.ofType(Bundle).entry.resource.ofType(Organization): "(identifier.count() + name.count()) > 0"
+  name (if ~ORG.name) : "unknown";
   telecom[] : TEL_ContactPoint(ORG.telecom)
   address[] : AD_Address(ORG.addr)
 }
@@ -104,6 +114,11 @@ def ORG_CustodianOrganization(required ORG) {
 //   Identifier datatype: https://www.hl7.org/fhir/datatypes.html#Identifier
 //
 def II_Identifier(required II) {
+  value : II.extension;
+  system : $StrCat("urn:oid:", II.'root');
+}
+
+def BUILD_ReconciledIdentifier(required II) {
   value : II.extension;
   system : $StrCat("urn:oid:", II.'root');
 }
@@ -246,7 +261,7 @@ def PQ_UCUM(required PQ){
 //   FamilyMemberHistory.condition datatype: https://www.hl7.org/fhir/familymemberhistory-definitions.html#FamilyMemberHistory.condition
 //
 def Observation_ConditionDataType(required Observation) {
-  code (if Observation.value[0].'xsi:type' = "CD"): CD_CodeableConcept(Observation.value[0]);
+  code (if Observation.value[0].'type' = "CD"): CD_CodeableConcept(Observation.value[0]);
   // templateId = 2.16.840.1.113883.10.20.22.4.31 corresponds to an age observation
   var AgeObservation : Observation.entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.31")];
   onsetAge : PQ_UCUM(AgeObservation[0].value[0]);
@@ -315,7 +330,7 @@ def Supply_MedicationDispense(required Supply, Patient) {
 //
 def ObservationRange_ReferenceRange(ObservationRange) {
   type : CD_CodeableConcept(ObservationRange.interpretationCode);
-  text : ObservationRange.text;
+  text (if isNotNI(ObservationRange.text)): ObservationRange.text;
   low : PQ_Quantity(ObservationRange.value.low);
   high : PQ_Quantity(ObservationRange.value.high);
 }
@@ -343,10 +358,11 @@ def Build_Attester(required Attester, Mode) {
 // Output(s):
 //   Composition.section: https://www.hl7.org/fhir/composition-definitions.html#Composition.section
 //
-def Build_Section(Section, Resource) {
+def Build_Section(required Section, required Resource) {
   title : Section.title;
   code : CD_CodeableConcept(Section.code);
   entry[] : Build_Reference(Resource[]);
+  //TODO:  Add text also ...
 }
 
 // Description: Constructs a Location resource
@@ -426,7 +442,7 @@ def Build_AllergyReaction(Substance, required Manifestation, Onset, Severity) {
   substance : CD_CodeableConcept(Substance);
   manifestation[] : CD_CodeableConcept(Manifestation);
   onset : Convert_DateTime(Onset.value);
-  severity : Convert_TerminologyCode(Severity.code, "SeverityCode");
+  severity (if Severity.code) : Convert_TerminologyCode(Severity.code, "SeverityCode");
 }
 
 // Description: Constructs a Observation.component datatype
@@ -440,6 +456,20 @@ def Build_AllergyReaction(Substance, required Manifestation, Onset, Severity) {
 //
 def Build_Component(required Code, required Value) {
   code : CD_CodeableConcept(Code);
-  valueCodeableConcept (if Value.'xsi:type' = "CD") : CD_CodeableConcept(Value);
-  valueQuantity (if Value.'xsi:type' = "PQ" and Value.value) : PQ_Quantity(Value);
+  valueCodeableConcept (if Value.'type' = "CD") : CD_CodeableConcept(Value);
+  valueQuantity (if Value.'type' = "PQ" and Value.value) : PQ_Quantity(Value);
+}
+
+def ClinicalDocument_Bundle(II, Time) {
+  if (~II.extension) {
+    identifier.value : "unknown";
+  } else {
+    identifier.value : II.extension;
+  }
+  identifier.system : $StrCat("urn:oid:", II.'root');
+  timestamp : Convert_Instant(Time);
+}
+
+def Build_ID(Identifier) {
+  $this : $Hash(Identifier[where $]);
 }

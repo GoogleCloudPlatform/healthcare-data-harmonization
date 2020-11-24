@@ -42,6 +42,8 @@ def Process_Document(ClinicalDocument) {
   var Custodian : ORG_CustodianOrganization(ClinicalDocument.custodian.assignedCustodian.representedCustodianOrganization);
   out Resources : Custodian;
 
+  root Bundle : ClinicalDocument_Bundle(ClinicalDocument.id, ClinicalDocument.effectiveTime.value);
+
   resourceType : "Composition";
   identifier :  II_Identifier(ClinicalDocument.id);
   date : Extract_Date(ClinicalDocument.effectiveTime.value);
@@ -83,7 +85,7 @@ def Process_Document(ClinicalDocument) {
   var EncounterSection : ClinicalDocument.component.structuredBody.component[*].section[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.2.22.1") or templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.2.22")];
   // templateId = 2.16.840.1.113883.10.20.22.4.49 corresponds to an Encounter Activity
   var EncounterSectionEntryEncounter: EncounterSection[*].entry[*].encounter[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.49")];
-  var Encounter : Encounter_Encounter(EncounterSectionEntryEncounter[]);
+  var Encounter : Encounter_Encounter(EncounterSectionEntryEncounter[], Patient[0]);
   out Resources : Encounter;
   section[] : Build_Section(EncounterSection[0], Encounter);
 

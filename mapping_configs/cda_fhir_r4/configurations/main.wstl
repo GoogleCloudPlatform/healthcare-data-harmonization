@@ -1,0 +1,3 @@
+$this : CDA_FHIR($root);
+
+post Output_Document

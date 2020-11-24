@@ -9,7 +9,7 @@
 //    Array of DateTime Formats that will be used for parsing incoming DateTime fields.
 //
 def GetTimeFormats() {
-  $this: $ListOf("20060102150405-0600", "200601021504-0600", "20060102150405.999999", "20060102150405", "200601021504", "20060102", "200601", "2006")
+  $this: $ListOf("20060102150405+0600", "20060102150405-0600", "200601021504-0600", "20060102150405.999999", "20060102150405", "200601021504", "2006010215", "20060102", "200601", "2006")
 }
 
 // Description: Returns a Time format for RFC3339 with second or millisecond precision
@@ -126,7 +126,7 @@ def PatientRole_Patient(required PatientRole, GeneralPractitioner) {
   gender : Convert_TerminologyCode(PatientRole.patient.administrativeGenderCode.code, "2.16.840.1.113883.5.1");
   birthDate : Extract_Date(PatientRole.patient.birthTime.value);
   maritalStatus : CD_CodeableConcept(PatientRole.patient.maritalStatusCode);
-  communication[] : Build_Communication(PatientRole.patient.languageCommunication[]);
+  communication[] : Build_Communication(PatientRole.patient.languageCommunication[where $IsNotNil($.languageCode)][]);
   contact[] : Guardian_Contact(PatientRole.patient.guardian[]);
   extension[0].url : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race";
   extension[0].extension[0].valueCoding : CD_Coding(PatientRole.patient.raceCode);
@@ -161,9 +161,15 @@ def AssignedEntity_PractitionerRole(required AssignedEntity) {
   id : $UUID();
   code[] : CD_CodeableConcept(AssignedEntity.code);
   telecom[]: TEL_ContactPoint(AssignedEntity.telecom[]);
-  location[]: Build_Reference(Output_Resource[](AD_Location[](AssignedEntity.addr[])));
-  practitioner : Build_Reference(Output_Resource(Person_Practitioner(AssignedEntity.assignedPerson)));
-  organization : Build_Reference(Output_Resource(ORG_Organization(AssignedEntity.representedOrganization)));
+  var Location : AD_Location(AssignedEntity.addr[]);
+  var ReferenceID[] : Location[*].id[];
+  location[]: Build_Reference(Output_Resource[](Location[]));
+  var Practitioner : Person_Practitioner(AssignedEntity.assignedPerson);
+  var ReferenceID[] : Practitioner.id;
+  practitioner : Build_Reference(Output_Resource(Practitioner));
+  var Organization : ORG_Organization(AssignedEntity.representedOrganization);
+  var ReferenceID[] : Organization.id;
+  organization : Build_Reference(Output_Resource(Organization));
 }
 
 // Description: Constructs a FHIR R4 FamilyMemberHistory Resource based on CDA FamilyMemberHistory Section
@@ -213,7 +219,11 @@ def Observation_Observation(required Observation, Patient) {
   resourceType: "Observation"
   id : $UUID();
   identifier[] : II_Identifier(Observation.id[]);
-  code : CD_CodeableConcept(Observation.code);
+  if (Observation.code) {
+    code : CD_CodeableConcept(Observation.code);
+  } else {
+    code.coding[0].code : "unknown";
+  }
   status : Convert_TerminologyCode(Observation.statusCode.code, "ObservationStatusCode");
   if (IsInterval(Observation.effectiveTime)) {
     effectivePeriod.start : Convert_DateTime(Observation.effectiveTime.low.value);
@@ -223,7 +233,7 @@ def Observation_Observation(required Observation, Patient) {
   }
   bodySite : CD_CodeableConcept(Observation.targetSiteCode[0]);
   component[] : Build_Component(Observation.code, Observation.value[]);
-  encounter : Build_Reference(Output_Resource(Encounter_Encounter(Observation.encounter)));
+  encounter : Build_Reference(Output_Resource(Encounter_Encounter(Observation.encounter, Patient)));
   performer[] : Build_Reference(Output_Resource[](AssignedEntity_PractitionerRole[](Observation.author[*].assignedAuthor[])));
   issued (if ~IsInterval(Observation.author[0].time)): Convert_Instant(Observation.author[0].time.value);
   method : CD_CodeableConcept(Observation.methodCode[0]);
@@ -262,12 +272,16 @@ def ParticipantRole_Device(required ParticipantRole) {
 //   PractitionerRole: https://www.hl7.org/fhir/practitionerrole.html
 //   Location: https://www.hl7.org/fhir/location.html
 //
-def Encounter_Encounter(required Encounter) {
+def Encounter_Encounter(required Encounter, Patient) {
   resourceType: "Encounter"
   id : $UUID();
   identifier[] : II_Identifier(Encounter.id[]);
   type[] : CD_CodeableConcept(Encounter.code);
-  class : CD_Coding(Encounter.code);
+  if (Encounter.code) {
+    class : CD_Coding(Encounter.code);
+  } else {
+    class.coding.code : "unknown";
+  }
   status : Convert_TerminologyCode(Encounter.statusCode.code, "EncounterStatusCode");
   priority : CD_CodeableConcept(Encounter.priorityCode);
   participant[].individual : Build_Reference[](Output_Resource[](AssignedEntity_PractitionerRole[](Encounter.performer[*].assignedEntity[])));
@@ -279,6 +293,7 @@ def Encounter_Encounter(required Encounter) {
   // templateId = 2.16.840.1.113883.10.20.22.4.32 corresponds to a participantRole contributing as location to the given encounter
   var ParticipantRole : Participant[*].participantRole[where hasCode($.classCode, "SDLOC") or templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.32")];
   location[].location : Build_Reference[](Output_Resource[](ParticipantRole_Location[](ParticipantRole[])));
+  subject : Build_Reference(Patient);
 }
 
 // Description: Constructs a FHIR R4 Condition Resource and its related resources based on CDA Problem Observation Section
@@ -297,20 +312,23 @@ def Observation_Condition(required Observation, StatusCode, required Patient) {
   resourceType: "Condition";
   identifier[] : II_Identifier(Observation.id[]);
   category[] : CD_CodeableConcept(Observation.code);
-  clinicalStatus.coding[0].code (if StatusCode): StatusCode;
-  var ObservationValue : Observation.value[where hasCode($.'xsi:type', "CD")];
+  if (StatusCode) {
+    clinicalStatus.coding[0].code : StatusCode;
+    clinicalStatus.coding[0].system : "http://terminology.hl7.org/CodeSystem/condition-clinical";
+  }
+  var ObservationValue : Observation.value[where hasCode($.'type', "CD")];
   code (if ObservationValue): CD_CodeableConcept(ObservationValue[0]);
   if (IsInterval(Observation.effectiveTime)) {
     if (~StatusCode and Observation.effectiveTime.low.value and Observation.effectiveTime.high.value) {
       clinicalStatus.coding[0].code : "resolved";
       clinicalStatus.coding[0].system : "http://terminology.hl7.org/CodeSystem/condition-clinical";
+      abatementDateTime : Convert_DateTime(Observation.effectiveTime.high.value);
     }
     if (~StatusCode and Observation.effectiveTime.low.value and ~Observation.effectiveTime.high.value) {
       clinicalStatus.coding[0].code : "active";
       clinicalStatus.coding[0].system : "http://terminology.hl7.org/CodeSystem/condition-clinical";
     }
     onsetDateTime : Convert_DateTime(Observation.effectiveTime.low.value);
-    abatementDateTime : Convert_DateTime(Observation.effectiveTime.high.value);
   } else {
     onsetDateTime (if Observation.effectiveTime.value): Convert_DateTime(Observation.effectiveTime.value);
     if (~StatusCode and Observation.effectiveTime.value) {
@@ -320,7 +338,7 @@ def Observation_Condition(required Observation, StatusCode, required Patient) {
   }
   asserter : Build_Reference(Output_Resource(AssignedEntity_PractitionerRole(Observation.author[0].assignedAuthor)));
   recordedDate (if ~IsInterval(Observation.author[0].time)) : Convert_DateTime(Observation.author[0].time.value);
-  encounter : Build_Reference(Output_Resource(Encounter_Encounter(Observation.encounter[0])));
+  encounter : Build_Reference(Output_Resource(Encounter_Encounter(Observation.encounter[0], Patient)));
   subject : Build_Reference(Patient);
 }
 
@@ -367,7 +385,11 @@ def ResultSection_DiagnosticReport(required Organizer, required Patient){
   id : $UUID();
   identifier[] : II_Identifier(Organizer.id[]);
   status : Convert_TerminologyCode(Organizer.statusCode.code, "ResultOrganizerStatusCode");
-  code : CD_CodeableConcept(Organizer.code);
+  if (Organizer.code) {
+    code : CD_CodeableConcept(Organizer.code);
+  } else {
+    code.coding[0].code : "unknown";
+  }
   if (IsInterval(Organizer.effectiveTime)) {
     effectivePeriod.start : Convert_DateTime(Organizer.effectiveTime.low.value);
     effectivePeriod.end : Convert_DateTime(Organizer.effectiveTime.high.value);
@@ -444,20 +466,20 @@ def Act_AllergyIntolerance(required Act, required Patient) {
   }
   // templateId = 2.16.840.1.113883.10.20.22.4.7 corresponds to Allergy Observation
   var AllergyObservation : Act.entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.7")];
-  var AllergyObservationValue (if AllergyObservation) : AllergyObservation[*].value[*][where hasCode($.'xsi:type', "CD")];
+  var AllergyObservationValue (if AllergyObservation) : AllergyObservation[*].value[*][where hasCode($.'type', "CD")];
   category[] (if AllergyObservationValue): Convert_TerminologyCode(AllergyObservationValue[*].code[], "AllergyCategoryCode");
   // templateId = 2.16.840.1.113883.10.20.22.4.145 corresponds to Criticality Observation
   var CriticalityObservation : AllergyObservation[*].entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.145")];
-  var CriticalityObservationValue (if CriticalityObservation) : CriticalityObservation[*].value[*][where hasCode($.'xsi:type', "CD")];
+  var CriticalityObservationValue (if CriticalityObservation) : CriticalityObservation[*].value[*][where hasCode($.'type', "CD")];
   criticality : CriticalityObservationValue[0].code;
 
   var AllergySubstanceCode (if AllergyObservation) : AllergyObservation[*].participant[*].participantRole.playingEntity.code[];
   // templateId = 2.16.840.1.113883.10.20.22.4.9 corresponds to Reaction Observation
   var ReactionObservation : AllergyObservation[*].entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.9")];
-  var ReactionObservationValue (if ReactionObservation) : ReactionObservation[*].value[*][where hasCode($.'xsi:type', "CD")];
+  var ReactionObservationValue (if ReactionObservation) : ReactionObservation[*].value[*][where hasCode($.'type', "CD")];
   // templateId = 2.16.840.1.113883.10.20.22.4.8 corresponds to Severity Observation
   var SeverityObservation : ReactionObservation[*].entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.8")];
-  var SeverityObservationValue (if SeverityObservation) : SeverityObservation[*].value[*][where hasCode($.'xsi:type', "CD")];
+  var SeverityObservationValue (if SeverityObservation) : SeverityObservation[*].value[*][where hasCode($.'type', "CD")];
   reaction[] : Build_AllergyReaction(AllergySubstanceCode[], ReactionObservationValue[], ReactionObservation[*].effectiveTime[*].low[], SeverityObservationValue[]);
   patient : Build_Reference(Patient);
 }
@@ -478,7 +500,12 @@ def SubstanceAdministration_Immunization(required SubstanceAdministration, requi
   id : $UUID();
   identifier[] : II_Identifier(SubstanceAdministration.id[]);
   recorded (if ~IsInterval(SubstanceAdministration.effectiveTime[0])): Convert_DateTime(SubstanceAdministration.effectiveTime[0].value);
-  occurrenceDateTime (if ~IsInterval(SubstanceAdministration.effectiveTime[0])): Convert_DateTime(SubstanceAdministration.effectiveTime[0].value);
+  if (~IsInterval(SubstanceAdministration.effectiveTime[0]) and SubstanceAdministration.effectiveTime) {
+    occurrenceDateTime : Convert_DateTime(SubstanceAdministration.effectiveTime[0].value);
+  } else {
+    // Fixed-value to ensure cardinality 1..1: https://www.hl7.org/fhir/immunization-definitions.html#Immunization.occurrence_x_
+    occurrenceDateTime : "0000";
+  }
   doseQuantity : PQ_Quantity(SubstanceAdministration.doseQuantity);
   route : CD_CodeableConcept(SubstanceAdministration.routeCode);
   status : Convert_TerminologyCode(SubstanceAdministration.statusCode.code, "SubstanceAdministrationStatusCode");
@@ -487,7 +514,11 @@ def SubstanceAdministration_Immunization(required SubstanceAdministration, requi
   if (templateIdHasRoot(SubstanceAdministration.consumable.manufacturedProduct.templateId, "2.16.840.1.113883.10.20.22.4.54")) {
     manufacturer : Build_Reference(Output_Resource(ORG_Organization(SubstanceAdministration.consumable.manufacturedProduct.manufacturerOrganization)));
   }
-  vaccineCode : CD_CodeableConcept(SubstanceAdministration.consumable.manufacturedProduct.manufacturedMaterial.code);
+  if (SubstanceAdministration.consumable.manufacturedProduct.manufacturedMaterial.code) {
+    vaccineCode : CD_CodeableConcept(SubstanceAdministration.consumable.manufacturedProduct.manufacturedMaterial.code);
+  } else {
+    vaccineCode.coding[0].code : "unknown";
+  }
   lotNumber : SubstanceAdministration.consumable.manufacturedProduct.manufacturedMaterial.lotNumberText;
   performer[].actor : Build_Reference[](Output_Resource[](AssignedEntity_PractitionerRole[](SubstanceAdministration.performer[*].assignedEntity[])));
   // templateId = 2.16.840.1.113883.10.20.22.4.53 corresponds to Immunization Refusal Reason
@@ -495,7 +526,7 @@ def SubstanceAdministration_Immunization(required SubstanceAdministration, requi
   statusReason : CD_CodeableConcept(RefusalReason[0].code);
   // templateId = 2.16.840.1.113883.10.20.22.4.19 corresponds to Indication
   var IndicationReason : SubstanceAdministration.entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.19")];
-  var IndicationReasonValue : IndicationReason[*].value[*][where hasCode($.'xsi:type', "CD")];
+  var IndicationReasonValue : IndicationReason[*].value[*][where hasCode($.'type', "CD")];
   reasonCode[] : CD_CodeableConcept(IndicationReasonValue[]);
   // templateId = 2.16.840.1.113883.10.20.22.4.9 corresponds to Reaction Observation
   var ReactionObservation : SubstanceAdministration.entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.9")];

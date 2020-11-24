@@ -1,0 +1,38 @@
+
+library_config: {
+  user_libraries: {
+    type: MAPPING_LANGUAGE
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/cda_fhir_r4/projector_library/document.wstl" }
+  }
+  user_libraries: {
+    type: MAPPING_LANGUAGE
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/cda_fhir_r4/projector_library/process_document.wstl" }
+  }
+  user_libraries: {
+    type: MAPPING_LANGUAGE
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/cda_fhir_r4/projector_library/datatypes.wstl" }
+  }
+  user_libraries: {
+    type: MAPPING_LANGUAGE
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/cda_fhir_r4/projector_library/cda_fhir.wstl" }
+  }
+  user_libraries: {
+    type: MAPPING_LANGUAGE
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/cda_fhir_r4/projector_library/postprocess.wstl" }
+  }
+}
+
+harmonization_config: {
+  code_lookup: {
+    local_path: "$MAPPING_ENGINE_HOME/mapping_configs/cda_fhir_r4/code_harmonization/cda_fhir.harmonization.json"
+  }
+}
+
+structure_mapping_config: {
+  mapping_path_config: {
+    mapping_type: MAPPING_LANGUAGE
+    mapping_config_path: {
+      local_path: "$MAPPING_ENGINE_HOME/mapping_configs/cda_fhir_r4/configurations/main.wstl"
+    }
+  }
+}

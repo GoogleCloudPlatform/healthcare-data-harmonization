@@ -675,12 +675,7 @@
         }
       ],
       "source": "SeverityCode",
-      "target": "http://hl7.org/fhir/reaction-event-severity",
-      "unmapped": {
-        "mode": "fixed",
-        "code": "unknown",
-        "display": "Unknown"
-      }
+      "target": "http://hl7.org/fhir/reaction-event-severity"
     }
   ],
   "id": "CDA-FHIR",
