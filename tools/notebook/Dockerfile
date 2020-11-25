@@ -12,90 +12,60 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG BASE_CONTAINER=jupyter/base-notebook:4011ed54844a
-FROM $BASE_CONTAINER
+FROM gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-services:latest as wstl-service-env
 
-USER root
-ARG WSTL_INSTALL_DIR="/etc/wstl"
-ARG WSTL_JUPYTER_CONFIG_DIR="/usr/local/etc"
+FROM gcr.io/deeplearning-platform-release/base-cpu:latest AS aip-build-env
 
-# Install all OS dependencies for fully functional notebook server
-RUN apt-get update && apt-get install -yq --no-install-recommends \
-    build-essential \
-    emacs-nox \
-    vim-tiny \
-    git \
-    inkscape \
-    jed \
-    libsm6 \
-    libxext-dev \
-    libxrender1 \
-    lmodern \
-    netcat \
-    python-dev \
-    # ---- nbconvert dependencies ----
-    texlive-xetex \
-    texlive-fonts-recommended \
-    texlive-plain-generic \
-    # Optional dependency
-    texlive-fonts-extra \
-    tzdata \
-    unzip \
-    nano \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-RUN mkdir -p $WSTL_INSTALL_DIR && \
-    chown $NB_USER:$NB_GID $WSTL_INSTALL_DIR && \
-    chown $NB_USER:$NB_GID $WSTL_JUPYTER_CONFIG_DIR
-
-USER $NB_UID
-RUN mkdir -p /home/$NB_USER/.config/gcloud
-
-# wstl syntax highlighting extension
-COPY --chown=$NB_UID ./wstl-syntax-highlighting $WSTL_INSTALL_DIR/wstl-syntax-highlighting/
-
-WORKDIR $WSTL_INSTALL_DIR/wstl-syntax-highlighting/
-RUN jlpm && \
-    jlpm build && \
-    jupyter labextension link .
-
-# wstl language server extension
-COPY --chown=$NB_UID ./wstl-language-server $WSTL_INSTALL_DIR/wstl-language-server/
-
-# Ensure the JupyterLab user, joyvan, has read/execute access to the following directories.
-# The fix-permissions script is provided by the base-notebook docker-stacks image.
-# See https://github.com/jupyter/docker-stacks/blob/master/base-notebook/fix-permissions
-WORKDIR $WSTL_INSTALL_DIR/wstl-language-server/
-RUN conda install --quiet --yes --freeze-installed -c conda-forge 'jupyter-lsp==0.9.2' && \
-    jupyter labextension install @krassowski/jupyterlab-lsp@0.8.0 && \
-    npm install && \
-    npm run-script gen-lsp-client-spec && \
-    fix-permissions $WSTL_JUPYTER_CONFIG_DIR && \
-    fix-permissions $WSTL_INSTALL_DIR/wstl-language-server/bin
-
-# wstl magic commands
-COPY --chown=$NB_UID ./extensions $WSTL_INSTALL_DIR/magics/wstl-extensions
-WORKDIR $WSTL_INSTALL_DIR/magics/wstl-extensions
-RUN ./build.sh && \
-    pip install dist/wstl-extensions-0.0.1.tar.gz
-
-# data model browser extension
-COPY --chown=$NB_UID ./data-model-browser $WSTL_INSTALL_DIR/data-model-browser/
-
-WORKDIR $WSTL_INSTALL_DIR/data-model-browser/
-RUN python setup.py sdist && \
-    pip install dist/data_model_browser-0.0.1.tar.gz && \
-    npm install && \
-    jupyter labextension install .
-
-# Various third_party extensions
-WORKDIR $HOME
-RUN pip install jupyterlab-gcloud-auth==0.2.4 \
+# Install base dependencies
+RUN pip install \
     google-api-python-client==1.9.2 \
     google-cloud-storage==1.28.1 \
+    jupyterlab-gcloud-auth==0.2.4 \
     pandas==1.1.2 \
     python-language-server==0.36.1 \
-    https://storage.googleapis.com/deeplearning-platform-ui-public/jupyterlab_gcsfilebrowser-0.1.8.tar.gz
+    https://storage.googleapis.com/deeplearning-platform-ui-public/jupyterlab_bigquery-0.1.4.tar.gz \
+    https://storage.googleapis.com/deeplearning-platform-ui-public/jupyterlab_gcsfilebrowser-0.1.10.tar.gz
 
-WORKDIR $HOME
-RUN jupyter lab build -y
+
+ARG WSTL_INSTALL_DIR="/opt/google/wstl"
+RUN mkdir -p $WSTL_INSTALL_DIR
+
+# wstl syntax highlighting extension
+COPY ./wstl-syntax-highlighting $WSTL_INSTALL_DIR/wstl-syntax-highlighting/
+WORKDIR $WSTL_INSTALL_DIR/wstl-syntax-highlighting/
+RUN jlpm install && \
+    jlpm build && \
+    jupyter labextension install . --no-build
+
+# wstl language server extension
+COPY ./wstl-language-server $WSTL_INSTALL_DIR/wstl-language-server/
+WORKDIR $WSTL_INSTALL_DIR/wstl-language-server/
+RUN conda install --quiet --yes --freeze-installed -c conda-forge 'jupyter-lsp==0.9.2' && \
+    jupyter labextension install @krassowski/jupyterlab-lsp@0.8.0 --no-build && \
+    npm install && \
+    npm run-script compile && \
+    npm run-script gen-lsp-client-spec
+
+# wstl magic commands
+COPY ./extensions $WSTL_INSTALL_DIR/magics/wstl-extensions
+WORKDIR $WSTL_INSTALL_DIR/magics/wstl-extensions
+RUN ./build.sh
+
+# data model browser extension and building JupyterLab
+COPY ./data-model-browser $WSTL_INSTALL_DIR/data-model-browser/
+WORKDIR $WSTL_INSTALL_DIR/data-model-browser/
+RUN python setup.py sdist && \
+    npm install && \
+    npm run-script build && \
+    jupyter labextension install . --no-build && \
+    pip install \
+    $WSTL_INSTALL_DIR/data-model-browser/dist/data_model_browser-0.0.1.tar.gz \
+    $WSTL_INSTALL_DIR/magics/wstl-extensions/dist/wstl-extensions-0.0.1.tar.gz && \
+    jupyter lab build --dev-build=False --minimize=True
+
+COPY --from=wstl-service-env /etc/wstl/bin/main /usr/local/bin/wstl-service
+COPY run_services.sh /run_services.sh
+RUN chmod +x /run_services.sh
+CMD ["/run_services.sh"]
+
+WORKDIR /home/jupyter

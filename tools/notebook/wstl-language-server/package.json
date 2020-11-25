@@ -1,76 +1,79 @@
 {
-  "name": "wstl-language-server",
-  "displayName": "Whistle Language Server",
-  "description": "The Whistle Language Server extension to provide language server support for Whistle langauge on Jupyter Notebook.",
-  "version": "0.0.1",
-  "homepage": "https://github.com/GoogleCloudPlatform/healthcare-data-harmonization",
-  "bugs": {
-    "url": "https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/issues"
-  },
-  "license": "Apache-2.0",
-  "author": "Googler <noreply@google.com>",
-  "engines": {
-    "vscode": "^1.47.0",
-    "node": "*"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onLanguage:wstl"
-  ],
-  "bin": {
-    "wstl-language-server": "./bin/wstl-language-server"
-  },
-  "contributes": {
-    "configuration": {
-      "type": "object",
-      "title": "Whistle Language Server Configuration",
-      "properties": {
-        "whistleLspServerSettings.rootPath": {
-          "type": "string",
-          "url": "./",
-          "default": "./"
+    "name": "wstl-language-server",
+    "displayName": "Whistle Language Server",
+    "description": "The Whistle Language Server extension to provide language server support for Whistle langauge on Jupyter Notebook.",
+    "version": "0.0.1",
+    "homepage": "https://github.com/GoogleCloudPlatform/healthcare-data-harmonization",
+    "bugs": {
+      "url": "https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/issues"
+    },
+    "license": "Apache-2.0",
+    "author": "Googler <noreply@google.com>",
+    "engines": {
+      "vscode": "^1.47.0",
+      "node": "*"
+    },
+    "categories": [
+      "Other"
+    ],
+    "activationEvents": [
+      "onLanguage:wstl"
+    ],
+    "bin": {
+      "wstl-language-server": "./bin/wstl-language-server"
+    },
+    "contributes": {
+      "configuration": {
+        "type": "object",
+        "title": "Whistle Language Server Configuration",
+        "properties": {
+          "whistleLspServerSettings.rootPath": {
+            "type": "string",
+            "url": "./",
+            "default": "./"
+          }
         }
       }
+    },
+    "scripts": {
+      "clean": "rimraf build dist out *tsbuildinfo *tgz",
+      "compile": "tsc -b ./",
+      "gen-lsp-client-spec": "node config-wstl-spec",
+      "lint": "eslint ./server ./client --ext ts",
+      "postinstall": "npm run compile",
+      "prepack": "npm run clean && npm run compile",
+      "pretest": "npm run compile && npm run lint",
+      "test": "ts-node ./node_modules/jasmine/bin/jasmine --config=./spec/support/jasmine.json",
+      "watch": "tsc -b --watch ./"
+    },
+    "dev": "nodemon —exec babel-node completion.test.ts",
+    "dependencies": {
+      "@babel/core": "^7.11.6",
+      "@babel/node": "^7.10.5",
+      "@babel/preset-env": "^7.11.5",
+      "@babel/preset-typescript": "^7.10.4",
+      "@types/glob": "^7.1.1",
+      "@types/jasmine": "^3.5.14",
+      "@types/node": "^13.11.0",
+      "@types/vscode": "^1.14.0",
+      "@typescript-eslint/eslint-plugin": "^4.5.0",
+      "@typescript-eslint/parser": "^4.5.0",
+      "babel-cli": "^6.26.0",
+      "babel-preset-env": "^1.7.0",
+      "eslint": "^7.11.0",
+      "fs": "0.0.1-security",
+      "glob": "^7.1.6",
+      "jasmine": "^3.6.1",
+      "jasmine-spec-reporter": "^6.0.0",
+      "nodemon": "^2.0.4",
+      "nyc": "^15.1.0",
+      "prompt-sync": "^4.2.0",
+      "rimraf": "^3.0.0",
+      "ts-node": "^7.0.1",
+      "typescript": "^3.9.7",
+      "vscode-languageclient": "^6.1.3",
+      "vscode-languageserver": "^6.1.1",
+      "vscode-languageserver-textdocument": "^1.0.1",
+      "vscode-test": "^1.4.0"
     }
-  },
-  "scripts": {
-    "compile": "tsc -b ./",
-    "gen-lsp-client-spec": "node config-wstl-spec",
-    "lint": "eslint ./server ./client --ext ts",
-    "postinstall": "npm run compile",
-    "pretest": "npm run compile && npm run lint",
-    "test": "ts-node ./node_modules/jasmine/bin/jasmine --config=./spec/support/jasmine.json",
-    "watch": "tsc -b --watch ./"
-  },
-  "dev": "nodemon —exec babel-node completion.test.ts",
-  "dependencies": {
-    "@babel/core": "^7.11.6",
-    "@babel/node": "^7.10.5",
-    "@babel/preset-env": "^7.11.5",
-    "@babel/preset-typescript": "^7.10.4",
-    "@types/glob": "^7.1.1",
-    "@types/jasmine": "^3.5.14",
-    "@types/node": "^13.11.0",
-    "@types/vscode": "^1.14.0",
-    "@typescript-eslint/eslint-plugin": "^4.5.0",
-    "@typescript-eslint/parser": "^4.5.0",
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "eslint": "^7.11.0",
-    "fs": "0.0.1-security",
-    "glob": "^7.1.6",
-    "jasmine": "^3.6.1",
-    "jasmine-spec-reporter": "^6.0.0",
-    "nodemon": "^2.0.4",
-    "nyc": "^15.1.0",
-    "prompt-sync": "^4.2.0",
-    "ts-node": "^7.0.1",
-    "typescript": "^3.9.7",
-    "vscode-languageclient": "^6.1.3",
-    "vscode-languageserver": "^6.1.1",
-    "vscode-languageserver-textdocument": "^1.0.1",
-    "vscode-test": "^1.4.0"
   }
-}

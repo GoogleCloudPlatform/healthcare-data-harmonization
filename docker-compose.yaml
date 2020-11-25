@@ -14,37 +14,21 @@
 version: '3'
 services:
   notebook:
-    user: root
     build:
       context: ./tools/notebook
       dockerfile: ./Dockerfile
     image: gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-notebook:latest
-    command: start-notebook.sh --FileCheckpoints.checkpoint_dir=/tmp --NotebookApp.ip='*' --NotebookApp.open_browser=False --NotebookApp.port=8888 --NotebookApp.allow_origin='*'
     ports:
-      - "${NOTEBOOK_PORT:-8888}:8888"
+      - "${NOTEBOOK_PORT:-8888}:8080"
     volumes:
-      - "$NOTEBOOK_WORKING_DIR:/home/jovyan"
-      - "$NOTEBOOK_SERVICE_ACCOUNT_DIR:/home/jovyan/.config/gcloud"
-      - "$NOTEBOOK_FUNCTION_LIBRARY_DIR:/home/jovyan/function_library"
+      - "$NOTEBOOK_WORKING_DIR:/home/jupyter"
+      - "$NOTEBOOK_SERVICE_ACCOUNT_DIR:/home/jupyter/.config/gcloud"
     environment:
-      - NOTEBOOK_GRPC_HOST=grpc
-      - NB_UID=$NOTEBOOK_UID
-      - JUPYTER_ENABLE_LAB='yes'
-      - GOOGLE_APPLICATION_CREDENTIALS=/home/jovyan/.config/gcloud/$NOTEBOOK_SERVICE_ACCOUNT_FILENAME
+      - GOOGLE_APPLICATION_CREDENTIALS=/home/jupyter/.config/gcloud/$NOTEBOOK_SERVICE_ACCOUNT_FILENAME
     depends_on:
       - grpc
   grpc:
-    user: root
     build:
       context: .
       dockerfile: ./tools/notebook/extensions/wstl/Dockerfile
-    entrypoint: ["/etc/wstl/bin/main",  "-host=0.0.0.0"]
     image: "gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-services:latest"
-    volumes:
-      - "$NOTEBOOK_WORKING_DIR:/home/jovyan"
-      - "$NOTEBOOK_SERVICE_ACCOUNT_DIR:/home/jovyan/.config/gcloud"
-      - "$NOTEBOOK_FUNCTION_LIBRARY_DIR:/home/jovyan/function_library"
-      - "/etc/ssl/certs:/etc/ssl/certs:ro"
-    environment:
-      - DH_ROOT=$PWD
-      - GOOGLE_APPLICATION_CREDENTIALS=/home/jovyan/.config/gcloud/$NOTEBOOK_SERVICE_ACCOUNT_FILENAME
