@@ -38,11 +38,12 @@ Only
 is supported at this moment. Even though, the tool should be extensible to
 support more versions.
 
-Please add the schemas for CCDA Release 2 in directory `src\main\javaschemas\ccdarev2`
-making sure there is a top-level file called `CDA.xsd` in the root of the
-previous directory.
+NOTE: This repository does not contain XSD schema files by default. Please add
+the schemas for CCDA Release 2 in directory `src\main\javaschemas\ccdarev2`
+making sure there is a top-level file called `CDA.xsd` in the root of this
+directory.
 
 ### Build steps
 
-After previous steps are ready, please execute a gradle build by using
-the provided `build.gradle` script.
+After previous steps are ready, please execute a gradle build by using the
+provided `build.gradle` script.
