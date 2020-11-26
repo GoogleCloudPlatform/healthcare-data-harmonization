@@ -1,0 +1,81 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs('src/main/java')
+        }
+        resources {
+            srcDirs('src/main/resources')
+        }
+    }
+}
+
+test {
+    if (project.hasProperty('excludeTests')) {
+        exclude project.property('excludeTests')
+    }
+}
+
+// Reproduciable builds.
+tasks.withType(AbstractArchiveTask) {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'org.mockito:mockito-core:2.8.9'
+    }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    implementation "commons-io:commons-io:2.8.0"
+    implementation "javax.xml.bind:jaxb-api:2.3.0"
+    implementation "com.sun.xml.bind:jaxb-core:2.2.7"
+    implementation "org.glassfish.jaxb:jaxb-runtime:2.3.0"
+    implementation "org.eclipse.persistence:eclipselink:2.4.2"
+    implementation "javax.xml:jaxb-impl:2.1"
+    implementation 'org.json:json:20201115'
+
+    testImplementation 'com.google.code.gson:gson:2.8.6'
+}
+
+compileJava {
+    dependsOn 'generateXJCClasses'
+}
+
+task generateXJCClasses() {
+    doLast {
+        generateXJCClassesCDARev2()
+    }
+}
+
+void generateXJCClassesCDARev2() {
+    exec {
+        workingDir './'
+        commandLine 'sh','./genccdarev2classes.sh'
+    }
+}
+
+//=============================================================================
+// Clean - Must remove generated sources.
+//=============================================================================
+clean {
+    delete 'build'
+    delete 'lib'
+    delete 'src/main/java/com/google/cloud/healthcare/etl/xmltojson/xjcgen/ccdarev2'
+    delete fileTree(dir: 'src/main/java/com/google/cloud/healthcare/etl/xmltojson/schemas' , include: '**/*.xsd')
+    delete files('gradle/wrapper')
+}
