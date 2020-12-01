@@ -57,9 +57,10 @@ cp ${BASEDIR}/cda_r2_normativewebedition2010/processable/coreschemas/*.xsd ./src
 
 ### Build steps
 
-After previous steps are ready, please execute a gradle build by using the
-provided `build.gradle` script. The command is:
+After previous steps are ready, install Gradle making sure it is added to
+`PATH`, then run the following:
 
 ```
-gradle build
+gradle wrapper --gradle-version 6.1.1
+./gradlew build
 ```
