@@ -4,6 +4,7 @@
    "entry":[
       {
          "resource":{
+            "id":"01010101-0101-4101-8101-010101010101",
             "resourceType":"Organization",
             "name":"YIEWSLEY FAMILY PRACTICE",
             "identifier":[
@@ -11,15 +12,14 @@
                   "type":{
                      "coding":[
                         {
-                           "code":"CLN",
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
+                           "code":"CLN"
                         }
                      ]
                   },
                   "value":"6020"
                }
-            ],
-            "id":"01010101-0101-4101-8101-010101010101"
+            ]
          },
          "request":{
             "method":"PUT",
@@ -28,6 +28,7 @@
       },
       {
          "resource":{
+            "id":"02020202-0202-4202-8202-020202020202",
             "resourceType":"Practitioner",
             "identifier":[
                {
@@ -62,8 +63,7 @@
                      "Alex"
                   ]
                }
-            ],
-            "id":"02020202-0202-4202-8202-020202020202"
+            ]
          },
          "request":{
             "method":"PUT",
@@ -71,62 +71,29 @@
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"Patient/03030303-0303-4303-8303-030303030303"
+         },
          "resource":{
-            "birthDate":"1994-06-15",
-            "deceasedDateTime":"2018-07-25T14:01:56+07:00",
-            "gender":"unknown",
-            "resourceType":"Patient",
             "id":"03030303-0303-4303-8303-030303030303",
-            "address":[
-               {
-                  "period":{
-                     "end":"2018-07-25T14:01:56+07:00",
-                     "start":"2018-07-25T14:01:56+07:00"
-                  },
-                  "line":[
-                     "25 Dahlia House",
-                     "Plough Avenue",
-                     "Some Guy"
-                  ],
-                  "city":"Croydon",
-                  "state":"N/A",
-                  "postalCode":"SV20 3BC",
-                  "country":"GBR"
-               }
-            ],
             "telecom":[
                {
+                  "use":"home",
                   "value":"020 0921 5742",
-                  "use":"home"
+                  "system":"phone"
                },
                {
                   "use":"work",
-                  "value":"020 0921 5748"
+                  "value":"020 0921 5748",
+                  "system":"phone"
                },
                {
                   "use":"home",
-                  "value":"020 0921 5700"
+                  "value":"020 0921 5700",
+                  "system":"phone"
                }
             ],
-            "multipleBirthInteger":2,
-            "meta":{
-               "lastUpdated":"2018-07-25T14:01:56+07:00"
-            },
-            "generalPractitioner":[
-               {
-                  "reference":"Organization/01010101-0101-4101-8101-010101010101"
-               },
-               {
-                  "reference":"Practitioner/02020202-0202-4202-8202-020202020202"
-               }
-            ],
-            "maritalStatus":{
-               "coding":[
-                  {
-                     "code":"MARRIED"
-                  }
-               ]
-            },
             "identifier":[
                {
                   "type":{
@@ -139,24 +106,24 @@
                   "value":"1419055458"
                },
                {
-                  "value":"1419055458",
                   "type":{
                      "coding":[
                         {
                            "code":"MRN"
                         }
                      ]
-                  }
+                  },
+                  "value":"1419055458"
                },
                {
+                  "value":"3870146052",
                   "type":{
                      "coding":[
                         {
                            "code":"NHSNMBR"
                         }
                      ]
-                  },
-                  "value":"3870146052"
+                  }
                },
                {
                   "value":"1419055459",
@@ -169,19 +136,18 @@
                   }
                },
                {
+                  "value":"SSN-48383",
                   "type":{
                      "coding":[
                         {
-                           "code":"SB",
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
+                           "code":"SB"
                         }
                      ]
                   },
-                  "system":"http://hl7.org/fhir/sid/us-ssn",
-                  "value":"SSN-48383"
+                  "system":"http://hl7.org/fhir/sid/us-ssn"
                },
                {
-                  "value":"43211234",
                   "type":{
                      "coding":[
                         {
@@ -189,12 +155,28 @@
                            "code":"DL"
                         }
                      ]
-                  }
+                  },
+                  "value":"43211234"
                }
             ],
-            "active":true,
+            "resourceType":"Patient",
+            "multipleBirthInteger":2,
+            "maritalStatus":{
+               "coding":[
+                  {
+                     "code":"MARRIED"
+                  }
+               ]
+            },
+            "deceasedDateTime":"2018-07-25T14:01:56+07:00",
+            "birthDate":"1994-06-15",
             "name":[
                {
+                  "suffix":[
+                     "Jr",
+                     "PhD",
+                     "Eng."
+                  ],
                   "prefix":[
                      "Miss"
                   ],
@@ -207,11 +189,6 @@
                   "given":[
                      "Jane",
                      "Janny"
-                  ],
-                  "suffix":[
-                     "Jr",
-                     "PhD",
-                     "Eng."
                   ]
                },
                {
@@ -234,11 +211,37 @@
                      "Al-Eng."
                   ]
                }
+            ],
+            "gender":"unknown",
+            "meta":{
+               "lastUpdated":"2018-07-25T14:01:56+07:00"
+            },
+            "active":true,
+            "address":[
+               {
+                  "line":[
+                     "25 Dahlia House",
+                     "Plough Avenue",
+                     "Some Guy"
+                  ],
+                  "city":"Croydon",
+                  "state":"N/A",
+                  "postalCode":"SV20 3BC",
+                  "country":"GBR",
+                  "period":{
+                     "start":"2018-07-25T14:01:56+07:00",
+                     "end":"2018-07-25T14:01:56+07:00"
+                  }
+               }
+            ],
+            "generalPractitioner":[
+               {
+                  "reference":"Organization/01010101-0101-4101-8101-010101010101"
+               },
+               {
+                  "reference":"Practitioner/02020202-0202-4202-8202-020202020202"
+               }
             ]
-         },
-         "request":{
-            "url":"Patient/03030303-0303-4303-8303-030303030303",
-            "method":"PUT"
          }
       },
       {
@@ -258,8 +261,8 @@
             ]
          },
          "request":{
-            "url":"Account/04040404-0404-4404-8404-040404040404",
-            "method":"PUT"
+            "method":"PUT",
+            "url":"Account/04040404-0404-4404-8404-040404040404"
          }
       }
    ]

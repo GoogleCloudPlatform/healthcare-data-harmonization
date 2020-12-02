@@ -1,29 +1,25 @@
 {
-   "timestamp":"2020-05-08T13:06:43.8558Z",
-   "identifier":{
-      "value":"5"
-   },
    "resourceType":"Bundle",
    "type":"transaction",
    "entry":[
       {
+         "request":{
+            "url":"Organization/01010101-0101-4101-8101-010101010101",
+            "method":"PUT"
+         },
          "resource":{
-            "identifier":[
-               {
-                  "value":"SFAC"
-               }
-            ],
-            "id":"01010101-0101-4101-8101-010101010101",
             "resourceType":"Organization",
             "address":[
                {
                   "country":"44"
                }
-            ]
-         },
-         "request":{
-            "url":"Organization/01010101-0101-4101-8101-010101010101",
-            "method":"PUT"
+            ],
+            "identifier":[
+               {
+                  "value":"SFAC"
+               }
+            ],
+            "id":"01010101-0101-4101-8101-010101010101"
          }
       },
       {
@@ -37,16 +33,28 @@
             "resourceType":"Organization"
          },
          "request":{
-            "method":"PUT",
-            "url":"Organization/02020202-0202-4202-8202-020202020202"
+            "url":"Organization/02020202-0202-4202-8202-020202020202",
+            "method":"PUT"
          }
       },
       {
          "resource":{
+            "sender":{
+               "reference":"Organization/01010101-0101-4101-8101-010101010101"
+            },
+            "destination":[
+               {
+                  "receiver":{
+                     "reference":"Organization/02020202-0202-4202-8202-020202020202"
+                  },
+                  "endpoint":"unknown",
+                  "name":"RAPP"
+               }
+            ],
             "eventCoding":{
-               "code":"A01",
                "display":"ADT^A01^",
-               "system":"http://terminology.hl7.org/CodeSystem/v2-0003"
+               "system":"http://terminology.hl7.org/CodeSystem/v2-0003",
+               "code":"A01"
             },
             "meta":{
                "tag":[
@@ -62,25 +70,13 @@
             "id":"03030303-0303-4303-8303-030303030303",
             "resourceType":"MessageHeader",
             "source":{
-               "endpoint":"unknown",
-               "name":"SIMHOSP"
-            },
-            "sender":{
-               "reference":"Organization/01010101-0101-4101-8101-010101010101"
-            },
-            "destination":[
-               {
-                  "receiver":{
-                     "reference":"Organization/02020202-0202-4202-8202-020202020202"
-                  },
-                  "name":"RAPP",
-                  "endpoint":"unknown"
-               }
-            ]
+               "name":"SIMHOSP",
+               "endpoint":"unknown"
+            }
          },
          "request":{
-            "method":"PUT",
-            "url":"MessageHeader/03030303-0303-4303-8303-030303030303"
+            "url":"MessageHeader/03030303-0303-4303-8303-030303030303",
+            "method":"PUT"
          }
       },
       {
@@ -94,12 +90,17 @@
             ]
          },
          "request":{
-            "method":"PUT",
-            "url":"Device/04040404-0404-4404-8404-040404040404"
+            "url":"Device/04040404-0404-4404-8404-040404040404",
+            "method":"PUT"
          }
       },
       {
          "resource":{
+            "target":[
+               {
+                  "reference":"MessageHeader/03030303-0303-4303-8303-030303030303"
+               }
+            ],
             "id":"05050505-0505-4505-8505-050505050505",
             "resourceType":"Provenance",
             "agent":[
@@ -109,22 +110,19 @@
                   }
                }
             ],
-            "recorded":"2020-05-08T13:06:43.8558Z",
-            "target":[
-               {
-                  "reference":"MessageHeader/03030303-0303-4303-8303-030303030303"
-               }
-            ]
+            "recorded":"2020-05-08T13:06:43.8558Z"
          },
          "request":{
-            "method":"PUT",
-            "url":"Provenance/05050505-0505-4505-8505-050505050505"
+            "url":"Provenance/05050505-0505-4505-8505-050505050505",
+            "method":"PUT"
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"Organization/06060606-0606-4606-8606-060606060606"
+         },
          "resource":{
-            "resourceType":"Organization",
-            "name":"FAMILY PRACTICE",
             "identifier":[
                {
                   "type":{
@@ -137,25 +135,42 @@
                   "value":"12345"
                }
             ],
-            "id":"06060606-0606-4606-8606-060606060606"
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Organization/06060606-0606-4606-8606-060606060606"
+            "id":"06060606-0606-4606-8606-060606060606",
+            "resourceType":"Organization",
+            "name":"FAMILY PRACTICE"
          }
       },
       {
          "request":{
-            "method":"PUT",
-            "url":"Patient/07070707-0707-4707-8707-070707070707"
+            "url":"Patient/07070707-0707-4707-8707-070707070707",
+            "method":"PUT"
          },
          "resource":{
-            "generalPractitioner":[
+            "name":[
                {
-                  "reference":"Organization/06060606-0606-4606-8606-060606060606"
+                  "family":"Esterkin",
+                  "given":[
+                     "AKI Scenario 6"
+                  ],
+                  "prefix":[
+                     "Miss"
+                  ],
+                  "use":"anonymous"
                }
             ],
-            "id":"07070707-0707-4707-8707-070707070707",
+            "gender":"female",
+            "address":[
+               {
+                  "line":[
+                     "170 Juice Place"
+                  ],
+                  "city":"London",
+                  "postalCode":"RW21 6KC",
+                  "country":"GBR"
+               }
+            ],
+            "resourceType":"Patient",
+            "active":true,
             "identifier":[
                {
                   "type":{
@@ -202,46 +217,28 @@
                   "type":{
                      "coding":[
                         {
-                           "code":"DL",
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
+                           "code":"DL"
                         }
                      ]
                   }
                }
             ],
-            "birthDate":"1989-01-18",
-            "address":[
-               {
-                  "line":[
-                     "170 Juice Place"
-                  ],
-                  "city":"London",
-                  "postalCode":"RW21 6KC",
-                  "country":"GBR"
-               }
-            ],
-            "gender":"female",
             "telecom":[
                {
-                  "use":"home",
-                  "value":"020 5368 1665"
+                  "value":"020 5368 1665",
+                  "system":"phone",
+                  "use":"home"
                }
             ],
-            "resourceType":"Patient",
-            "active":true,
-            "name":[
+            "multipleBirthBoolean":false,
+            "id":"07070707-0707-4707-8707-070707070707",
+            "generalPractitioner":[
                {
-                  "use":"anonymous",
-                  "family":"Esterkin",
-                  "given":[
-                     "AKI Scenario 6"
-                  ],
-                  "prefix":[
-                     "Miss"
-                  ]
+                  "reference":"Organization/06060606-0606-4606-8606-060606060606"
                }
             ],
-            "multipleBirthBoolean":false
+            "birthDate":"1989-01-18"
          }
       },
       {
@@ -250,25 +247,29 @@
             "url":"Location/0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b"
          },
          "resource":{
-            "partOf":{
-               "reference":"Location/09090909-0909-4909-8909-090909090909"
-            },
+            "mode":"instance",
             "physicalType":{
                "coding":[
                   {
-                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type",
-                     "code":"si"
+                     "code":"si",
+                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type"
                   }
                ]
             },
             "id":"0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b",
             "resourceType":"Location",
             "name":"RenalWard",
-            "mode":"instance"
+            "partOf":{
+               "reference":"Location/09090909-0909-4909-8909-090909090909"
+            }
          }
       },
       {
          "resource":{
+            "id":"0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c",
+            "resourceType":"Location",
+            "name":"MainRoom",
+            "mode":"instance",
             "physicalType":{
                "coding":[
                   {
@@ -277,10 +278,6 @@
                   }
                ]
             },
-            "id":"0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c",
-            "resourceType":"Location",
-            "name":"MainRoom",
-            "mode":"instance",
             "partOf":{
                "reference":"Location/0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b"
             }
@@ -291,16 +288,8 @@
          }
       },
       {
-         "request":{
-            "method":"PUT",
-            "url":"Location/0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d"
-         },
          "resource":{
-            "name":"Bed 1",
             "mode":"instance",
-            "partOf":{
-               "reference":"Location/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c"
-            },
             "physicalType":{
                "coding":[
                   {
@@ -310,7 +299,15 @@
                ]
             },
             "id":"0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d",
-            "resourceType":"Location"
+            "partOf":{
+               "reference":"Location/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c"
+            },
+            "resourceType":"Location",
+            "name":"Bed 1"
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Location/0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d"
          }
       },
       {
@@ -334,79 +331,79 @@
          }
       },
       {
+         "resource":{
+            "name":"Main Building",
+            "mode":"instance",
+            "physicalType":{
+               "coding":[
+                  {
+                     "code":"bu",
+                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type"
+                  }
+               ]
+            },
+            "id":"09090909-0909-4909-8909-090909090909",
+            "resourceType":"Location",
+            "partOf":{
+               "reference":"Location/08080808-0808-4808-8808-080808080808"
+            }
+         },
          "request":{
             "method":"PUT",
             "url":"Location/09090909-0909-4909-8909-090909090909"
+         }
+      },
+      {
+         "request":{
+            "method":"PUT",
+            "url":"Location/0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a"
          },
          "resource":{
             "physicalType":{
                "coding":[
                   {
                      "system":"http://terminology.hl7.org/CodeSystem/location-physical-type",
-                     "code":"bu"
+                     "code":"lvl"
                   }
                ]
             },
-            "id":"09090909-0909-4909-8909-090909090909",
+            "id":"0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a",
             "resourceType":"Location",
-            "name":"Main Building",
+            "name":"5",
             "mode":"instance",
             "partOf":{
-               "reference":"Location/08080808-0808-4808-8808-080808080808"
+               "reference":"Location/09090909-0909-4909-8909-090909090909"
             }
          }
       },
       {
          "resource":{
-            "mode":"instance",
-            "physicalType":{
-               "coding":[
-                  {
-                     "code":"lvl",
-                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type"
-                  }
-               ]
-            },
-            "partOf":{
-               "reference":"Location/09090909-0909-4909-8909-090909090909"
-            },
-            "id":"0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a",
-            "resourceType":"Location",
-            "name":"5"
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Location/0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a"
-         }
-      },
-      {
-         "resource":{
-            "id":"0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e",
             "resourceType":"Practitioner",
             "identifier":[
                {
-                  "value":"C006",
                   "type":{
                      "coding":[
                         {
                            "code":"ORGDR"
                         }
                      ]
-                  }
+                  },
+                  "value":"C006"
                }
             ],
             "name":[
                {
-                  "prefix":[
-                     "Dr"
-                  ],
-                  "use":"anonymous",
                   "family":"Wolf",
                   "given":[
                      "Kathy"
-                  ]
+                  ],
+                  "prefix":[
+                     "Dr"
+                  ],
+                  "use":"anonymous"
                }
-            ]
+            ],
+            "id":"0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e"
          },
          "request":{
             "method":"PUT",
@@ -414,12 +411,13 @@
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"Encounter/0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f"
+         },
          "resource":{
             "participant":[
                {
-                  "individual":{
-                     "reference":"Practitioner/0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e"
-                  },
                   "type":[
                      {
                         "coding":[
@@ -430,9 +428,19 @@
                            }
                         ]
                      }
-                  ]
+                  ],
+                  "individual":{
+                     "reference":"Practitioner/0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e"
+                  }
                }
             ],
+            "class":{
+               "display":"inpatient encounter",
+               "system":"http://terminology.hl7.org/CodeSystem/v3-ActCode",
+               "code":"IMP",
+               "version":"v1"
+            },
+            "resourceType":"Encounter",
             "type":[
                {
                   "coding":[
@@ -442,39 +450,19 @@
                   ]
                }
             ],
-            "status":"unknown",
-            "identifier":[
-               {
-                  "value":"6145914547062969032",
-                  "type":{
-                     "text":"visit number",
-                     "coding":[
-                        {
-                           "code":"visitid",
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
-                        }
-                     ]
-                  }
-               }
-            ],
-            "subject":{
-               "reference":"Patient/07070707-0707-4707-8707-070707070707"
-            },
-            "class":{
-               "system":"http://terminology.hl7.org/CodeSystem/v3-ActCode",
-               "code":"IMP",
-               "version":"v1",
-               "display":"inpatient encounter"
-            },
+            "id":"0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f",
             "period":{
                "start":"2020-05-08T13:06:43+05:00"
             },
+            "subject":{
+               "reference":"Patient/07070707-0707-4707-8707-070707070707"
+            },
             "location":[
                {
+                  "status":"active",
                   "location":{
                      "reference":"Location/0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b"
-                  },
-                  "status":"active"
+                  }
                },
                {
                   "location":{
@@ -495,25 +483,38 @@
                   }
                },
                {
+                  "status":"active",
                   "location":{
                      "reference":"Location/09090909-0909-4909-8909-090909090909"
-                  },
-                  "status":"active"
+                  }
                },
                {
+                  "status":"active",
                   "location":{
                      "reference":"Location/0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a"
-                  },
-                  "status":"active"
+                  }
                }
             ],
-            "id":"0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f",
-            "resourceType":"Encounter"
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Encounter/0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f"
+            "status":"unknown",
+            "identifier":[
+               {
+                  "value":"6145914547062969032",
+                  "type":{
+                     "coding":[
+                        {
+                           "code":"visitid",
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
+                        }
+                     ],
+                     "text":"visit number"
+                  }
+               }
+            ]
          }
       }
-   ]
+   ],
+   "timestamp":"2020-05-08T13:06:43.8558Z",
+   "identifier":{
+      "value":"5"
+   }
 }

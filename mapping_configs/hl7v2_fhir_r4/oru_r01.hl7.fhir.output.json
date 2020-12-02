@@ -1,64 +1,63 @@
 {
+   "identifier":{
+      "value":"8971"
+   },
    "resourceType":"Bundle",
    "type":"transaction",
    "entry":[
       {
          "request":{
-            "method":"PUT",
-            "url":"Organization/01010101-0101-4101-8101-010101010101"
+            "url":"Organization/01010101-0101-4101-8101-010101010101",
+            "method":"PUT"
          },
          "resource":{
-            "id":"01010101-0101-4101-8101-010101010101",
             "resourceType":"Organization",
-            "identifier":[
-               {
-                  "value":"RAL"
-               }
-            ],
             "address":[
                {
                   "country":"44"
                }
-            ]
-         }
-      },
-      {
-         "resource":{
-            "resourceType":"Organization",
+            ],
             "identifier":[
                {
                   "value":"RAL"
                }
             ],
-            "id":"02020202-0202-4202-8202-020202020202"
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Organization/02020202-0202-4202-8202-020202020202"
+            "id":"01010101-0101-4101-8101-010101010101"
          }
       },
       {
          "request":{
             "method":"PUT",
-            "url":"MessageHeader/03030303-0303-4303-8303-030303030303"
+            "url":"Organization/02020202-0202-4202-8202-020202020202"
          },
+         "resource":{
+            "identifier":[
+               {
+                  "value":"RAL"
+               }
+            ],
+            "id":"02020202-0202-4202-8202-020202020202",
+            "resourceType":"Organization"
+         }
+      },
+      {
          "resource":{
             "sender":{
                "reference":"Organization/01010101-0101-4101-8101-010101010101"
             },
             "destination":[
                {
-                  "name":"STREAMS",
                   "endpoint":"unknown",
                   "receiver":{
                      "reference":"Organization/02020202-0202-4202-8202-020202020202"
-                  }
+                  },
+                  "name":"STREAMS"
                }
             ],
             "eventCoding":{
+               "code":"R01",
                "display":"ORU^R01^",
-               "system":"http://terminology.hl7.org/CodeSystem/v2-0003",
-               "code":"R01"
+               "system":"http://terminology.hl7.org/CodeSystem/v2-0003"
             },
             "meta":{
                "tag":[
@@ -74,28 +73,41 @@
             "id":"03030303-0303-4303-8303-030303030303",
             "resourceType":"MessageHeader",
             "source":{
-               "name":"CERNER",
-               "endpoint":"unknown"
+               "endpoint":"unknown",
+               "name":"CERNER"
             }
+         },
+         "request":{
+            "url":"MessageHeader/03030303-0303-4303-8303-030303030303",
+            "method":"PUT"
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"Device/04040404-0404-4404-8404-040404040404"
+         },
          "resource":{
+            "id":"04040404-0404-4404-8404-040404040404",
             "resourceType":"Device",
             "identifier":[
                {
                   "value":"CERNER"
                }
-            ],
-            "id":"04040404-0404-4404-8404-040404040404"
-         },
-         "request":{
-            "url":"Device/04040404-0404-4404-8404-040404040404",
-            "method":"PUT"
+            ]
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"Provenance/05050505-0505-4505-8505-050505050505"
+         },
          "resource":{
+            "target":[
+               {
+                  "reference":"MessageHeader/03030303-0303-4303-8303-030303030303"
+               }
+            ],
             "id":"05050505-0505-4505-8505-050505050505",
             "resourceType":"Provenance",
             "agent":[
@@ -105,33 +117,22 @@
                   }
                }
             ],
-            "recorded":"2014-08-11T19:38:05.118811Z",
-            "target":[
-               {
-                  "reference":"MessageHeader/03030303-0303-4303-8303-030303030303"
-               }
-            ]
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Provenance/05050505-0505-4505-8505-050505050505"
+            "recorded":"2014-08-11T19:38:05.118811Z"
          }
       },
       {
          "resource":{
-            "address":[
+            "telecom":[
                {
-                  "country":"GBR",
-                  "line":[
-                     "140 Heater Lane"
-                  ],
-                  "city":"Ilford",
-                  "postalCode":"JN83 4OE"
+                  "value":"020 2295 8931",
+                  "system":"phone",
+                  "use":"home"
                }
             ],
-            "birthDate":"1977-04-20",
+            "multipleBirthBoolean":false,
             "gender":"female",
             "active":true,
+            "birthDate":"1977-04-20",
             "identifier":[
                {
                   "type":{
@@ -144,14 +145,14 @@
                   "value":"1325463202"
                },
                {
-                  "value":"1325463202",
                   "type":{
                      "coding":[
                         {
                            "code":"MRN"
                         }
                      ]
-                  }
+                  },
+                  "value":"1325463202"
                },
                {
                   "type":{
@@ -164,15 +165,15 @@
                   "value":"3789692603"
                },
                {
+                  "system":"http://hl7.org/fhir/sid/us-ssn",
                   "type":{
                      "coding":[
                         {
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
-                           "code":"SB"
+                           "code":"SB",
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
                         }
                      ]
-                  },
-                  "system":"http://hl7.org/fhir/sid/us-ssn"
+                  }
                },
                {
                   "type":{
@@ -185,16 +186,8 @@
                   }
                }
             ],
-            "multipleBirthBoolean":false,
-            "telecom":[
-               {
-                  "value":"020 2295 8931",
-                  "use":"home"
-               }
-            ],
             "name":[
                {
-                  "use":"official",
                   "family":"Bradley",
                   "given":[
                      "Angela",
@@ -202,11 +195,22 @@
                   ],
                   "prefix":[
                      "Mrs"
+                  ],
+                  "use":"official"
+               }
+            ],
+            "address":[
+               {
+                  "city":"Ilford",
+                  "postalCode":"JN83 4OE",
+                  "country":"GBR",
+                  "line":[
+                     "140 Heater Lane"
                   ]
                }
             ],
-            "resourceType":"Patient",
-            "id":"06060606-0606-4606-8606-060606060606"
+            "id":"06060606-0606-4606-8606-060606060606",
+            "resourceType":"Patient"
          },
          "request":{
             "url":"Patient/06060606-0606-4606-8606-060606060606",
@@ -214,12 +218,7 @@
          }
       },
       {
-         "request":{
-            "method":"PUT",
-            "url":"Observation/07070707-0707-4707-8707-070707070707"
-         },
          "resource":{
-            "valueString":"No fracture or dislocation is present. The joint spaces are normal.  Soft tissue is normal.",
             "status":"final",
             "effectiveDateTime":"2014-08-11T19:38:05+08:00",
             "subject":{
@@ -234,49 +233,49 @@
                      "code":"APELV"
                   }
                ]
-            }
+            },
+            "valueString":"No fracture or dislocation is present. The joint spaces are normal.  Soft tissue is normal."
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Observation/07070707-0707-4707-8707-070707070707"
          }
       },
       {
-         "request":{
-            "method":"PUT",
-            "url":"Specimen/08080808-0808-4808-8808-080808080808"
-         },
          "resource":{
-            "resourceType":"Specimen",
-            "receivedTime":"2014-08-11T19:38:05+08:00",
             "subject":{
                "reference":"Patient/06060606-0606-4606-8606-060606060606"
             },
-            "id":"08080808-0808-4808-8808-080808080808"
+            "id":"08080808-0808-4808-8808-080808080808",
+            "resourceType":"Specimen",
+            "receivedTime":"2014-08-11T19:38:05+08:00"
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Specimen/08080808-0808-4808-8808-080808080808"
          }
       },
       {
          "resource":{
-            "specimen":[
-               {
-                  "reference":"Specimen/08080808-0808-4808-8808-080808080808"
-               }
-            ],
             "identifier":[
                {
-                  "value":"1909829541",
                   "type":{
                      "coding":[
                         {
-                           "code":"PLAC",
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
+                           "code":"PLAC"
                         }
                      ]
-                  }
+                  },
+                  "value":"1909829541"
                },
                {
                   "value":"3496264291",
                   "type":{
                      "coding":[
                         {
-                           "code":"FILL",
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
+                           "code":"FILL"
                         }
                      ]
                   }
@@ -304,6 +303,19 @@
                   "value":"3496264291"
                }
             ],
+            "resourceType":"DiagnosticReport",
+            "subject":{
+               "reference":"Patient/06060606-0606-4606-8606-060606060606"
+            },
+            "status":"final",
+            "issued":"2014-08-11T19:38:05.118811Z",
+            "id":"09090909-0909-4909-8909-090909090909",
+            "specimen":[
+               {
+                  "reference":"Specimen/08080808-0808-4808-8808-080808080808"
+               }
+            ],
+            "effectiveDateTime":"2014-08-11T19:38:05+08:00",
             "code":{
                "coding":[
                   {
@@ -311,15 +323,7 @@
                      "display":"AP Pelvis"
                   }
                ]
-            },
-            "issued":"2014-08-11T19:38:05.118811Z",
-            "subject":{
-               "reference":"Patient/06060606-0606-4606-8606-060606060606"
-            },
-            "resourceType":"DiagnosticReport",
-            "id":"09090909-0909-4909-8909-090909090909",
-            "status":"final",
-            "effectiveDateTime":"2014-08-11T19:38:05+08:00"
+            }
          },
          "request":{
             "method":"PUT",
@@ -327,8 +331,5 @@
          }
       }
    ],
-   "timestamp":"2014-08-11T19:38:05.118811Z",
-   "identifier":{
-      "value":"8971"
-   }
+   "timestamp":"2014-08-11T19:38:05.118811Z"
 }

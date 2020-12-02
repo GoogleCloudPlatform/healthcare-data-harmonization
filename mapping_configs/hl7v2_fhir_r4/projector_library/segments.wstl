@@ -234,7 +234,8 @@ def AL1_AllergyIntolerance (required AL1, Patient) {
   category[] : Convert_TerminologyCode(CWE_Code(AL1.2), "http://terminology.hl7.org/CodeSystem/v2-0127", "Allergy_Category");
   type : Convert_TerminologyCode(CWE_Code(AL1.2), "http://terminology.hl7.org/CodeSystem/v2-0127", "Allergy_Type");
   code : CWE_CodeableConcept(AL1.3);
-  verificationStatus.coding[0].code : "confirmed";
+  clinicalStatus.coding[0].code : "active";
+  clinicalStatus.coding[0].system : "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical";
   if (AL1.4 ~= "U") {
     reaction[0].severity : Convert_TerminologyCode(CWE_Code(AL1.4), "http://terminology.hl7.org/CodeSystem/v2-0128", "Allergy_Severity");
   }

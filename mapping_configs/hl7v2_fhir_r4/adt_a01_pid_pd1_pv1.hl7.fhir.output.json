@@ -3,10 +3,6 @@
    "type":"transaction",
    "entry":[
       {
-         "request":{
-            "url":"Organization/01010101-0101-4101-8101-010101010101",
-            "method":"PUT"
-         },
          "resource":{
             "identifier":[
                {
@@ -24,12 +20,39 @@
             "id":"01010101-0101-4101-8101-010101010101",
             "resourceType":"Organization",
             "name":"YIEWSLEY FAMILY PRACTICE"
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Organization/01010101-0101-4101-8101-010101010101"
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"Practitioner/02020202-0202-4202-8202-020202020202"
+         },
          "resource":{
+            "id":"02020202-0202-4202-8202-020202020202",
+            "resourceType":"Practitioner",
+            "identifier":[
+               {
+                  "value":"C184726198",
+                  "type":{
+                     "coding":[
+                        {
+                           "code":"CC"
+                        }
+                     ]
+                  }
+               }
+            ],
             "name":[
                {
+                  "suffix":[
+                     "Sr",
+                     "MD",
+                     "MSc."
+                  ],
                   "prefix":[
                      "Dr"
                   ],
@@ -42,59 +65,34 @@
                   "given":[
                      "Alistair",
                      "Alex"
-                  ],
-                  "suffix":[
-                     "Sr",
-                     "MD",
-                     "MSc."
                   ]
                }
-            ],
-            "id":"02020202-0202-4202-8202-020202020202",
-            "resourceType":"Practitioner",
-            "identifier":[
-               {
-                  "type":{
-                     "coding":[
-                        {
-                           "code":"CC"
-                        }
-                     ]
-                  },
-                  "value":"C184726198"
-               }
             ]
-         },
-         "request":{
-            "url":"Practitioner/02020202-0202-4202-8202-020202020202",
-            "method":"PUT"
          }
       },
       {
          "request":{
-            "url":"Patient/03030303-0303-4303-8303-030303030303",
-            "method":"PUT"
+            "method":"PUT",
+            "url":"Patient/03030303-0303-4303-8303-030303030303"
          },
          "resource":{
-            "meta":{
-               "lastUpdated":"2018-07-25T14:01:56+07:00"
-            },
-            "birthDate":"1994-06-15",
             "telecom":[
                {
                   "use":"home",
-                  "value":"020 0921 5742"
+                  "value":"020 0921 5742",
+                  "system":"phone"
                },
                {
                   "value":"020 0921 5748",
+                  "system":"phone",
                   "use":"work"
                },
                {
+                  "system":"phone",
                   "use":"home",
                   "value":"020 0921 5700"
                }
             ],
-            "resourceType":"Patient",
             "maritalStatus":{
                "coding":[
                   {
@@ -102,18 +100,18 @@
                   }
                ]
             },
-            "id":"03030303-0303-4303-8303-030303030303",
+            "active":true,
+            "generalPractitioner":[
+               {
+                  "reference":"Organization/01010101-0101-4101-8101-010101010101"
+               },
+               {
+                  "reference":"Practitioner/02020202-0202-4202-8202-020202020202"
+               }
+            ],
+            "gender":"unknown",
             "name":[
                {
-                  "period":{
-                     "start":"2018-07-25T14:01:56+07:00",
-                     "end":"2018-07-25T14:01:56+07:00"
-                  },
-                  "family":"Doe",
-                  "given":[
-                     "Jane",
-                     "Janny"
-                  ],
                   "suffix":[
                      "Jr",
                      "PhD",
@@ -122,9 +120,19 @@
                   "prefix":[
                      "Miss"
                   ],
-                  "use":"anonymous"
+                  "use":"anonymous",
+                  "period":{
+                     "end":"2018-07-25T14:01:56+07:00",
+                     "start":"2018-07-25T14:01:56+07:00"
+                  },
+                  "family":"Doe",
+                  "given":[
+                     "Jane",
+                     "Janny"
+                  ]
                },
                {
+                  "use":"anonymous",
                   "period":{
                      "start":"2018-07-25T14:01:56+07:00",
                      "end":"2018-07-25T14:01:56+07:00"
@@ -141,10 +149,34 @@
                   ],
                   "prefix":[
                      "Al-Miss"
-                  ],
-                  "use":"anonymous"
+                  ]
                }
             ],
+            "deceasedDateTime":"2018-07-25T14:01:56+07:00",
+            "address":[
+               {
+                  "postalCode":"SV20 3BC",
+                  "country":"GBR",
+                  "period":{
+                     "end":"2018-07-25T14:01:56+07:00",
+                     "start":"2018-07-25T14:01:56+07:00"
+                  },
+                  "line":[
+                     "25 Dahlia House",
+                     "Plough Avenue",
+                     "Some Guy"
+                  ],
+                  "city":"Croydon",
+                  "state":"N/A"
+               }
+            ],
+            "meta":{
+               "lastUpdated":"2018-07-25T14:01:56+07:00"
+            },
+            "id":"03030303-0303-4303-8303-030303030303",
+            "multipleBirthInteger":2,
+            "birthDate":"1994-06-15",
+            "resourceType":"Patient",
             "identifier":[
                {
                   "type":{
@@ -177,18 +209,16 @@
                   "value":"3870146052"
                },
                {
-                  "value":"1419055459",
                   "type":{
                      "coding":[
                         {
                            "code":"MRN4"
                         }
                      ]
-                  }
+                  },
+                  "value":"1419055459"
                },
                {
-                  "system":"http://hl7.org/fhir/sid/us-ssn",
-                  "value":"SSN-48383",
                   "type":{
                      "coding":[
                         {
@@ -196,7 +226,9 @@
                            "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
                         }
                      ]
-                  }
+                  },
+                  "system":"http://hl7.org/fhir/sid/us-ssn",
+                  "value":"SSN-48383"
                },
                {
                   "type":{
@@ -209,45 +241,11 @@
                   },
                   "value":"43211234"
                }
-            ],
-            "multipleBirthInteger":2,
-            "gender":"unknown",
-            "deceasedDateTime":"2018-07-25T14:01:56+07:00",
-            "active":true,
-            "generalPractitioner":[
-               {
-                  "reference":"Organization/01010101-0101-4101-8101-010101010101"
-               },
-               {
-                  "reference":"Practitioner/02020202-0202-4202-8202-020202020202"
-               }
-            ],
-            "address":[
-               {
-                  "line":[
-                     "25 Dahlia House",
-                     "Plough Avenue",
-                     "Some Guy"
-                  ],
-                  "city":"Croydon",
-                  "state":"N/A",
-                  "postalCode":"SV20 3BC",
-                  "country":"GBR",
-                  "period":{
-                     "end":"2018-07-25T14:01:56+07:00",
-                     "start":"2018-07-25T14:01:56+07:00"
-                  }
-               }
             ]
          }
       },
       {
-         "request":{
-            "url":"Practitioner/04040404-0404-4404-8404-040404040404",
-            "method":"PUT"
-         },
          "resource":{
-            "resourceType":"Practitioner",
             "identifier":[
                {
                   "value":"C3557206",
@@ -262,22 +260,26 @@
             ],
             "name":[
                {
-                  "family":"Prout",
-                  "given":[
-                     "J"
-                  ],
                   "prefix":[
                      "Dr"
                   ],
-                  "use":"anonymous"
+                  "use":"anonymous",
+                  "family":"Prout",
+                  "given":[
+                     "J"
+                  ]
                }
             ],
-            "id":"04040404-0404-4404-8404-040404040404"
+            "id":"04040404-0404-4404-8404-040404040404",
+            "resourceType":"Practitioner"
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Practitioner/04040404-0404-4404-8404-040404040404"
          }
       },
       {
          "resource":{
-            "resourceType":"Practitioner",
             "identifier":[
                {
                   "type":{
@@ -292,21 +294,22 @@
             ],
             "name":[
                {
+                  "given":[
+                     "J"
+                  ],
                   "prefix":[
                      "Dr"
                   ],
                   "use":"anonymous",
-                  "family":"Prout",
-                  "given":[
-                     "J"
-                  ]
+                  "family":"Prout"
                }
             ],
-            "id":"06060606-0606-4606-8606-060606060606"
+            "id":"06060606-0606-4606-8606-060606060606",
+            "resourceType":"Practitioner"
          },
          "request":{
-            "method":"PUT",
-            "url":"Practitioner/06060606-0606-4606-8606-060606060606"
+            "url":"Practitioner/06060606-0606-4606-8606-060606060606",
+            "method":"PUT"
          }
       },
       {
@@ -315,23 +318,7 @@
             "url":"Condition/05050505-0505-4505-8505-050505050505"
          },
          "resource":{
-            "resourceType":"Condition",
-            "id":"05050505-0505-4505-8505-050505050505",
-            "onsetDateTime":"2019-03-09T14:01:56+03:00",
-            "code":{
-               "text":"Chest pain on breathing",
-               "coding":[
-                  {
-                     "code":"R07.1",
-                     "display":"Chest pain on breathing"
-                  }
-               ]
-            },
-            "identifier":[
-               {
-                  "value":"EI29202"
-               }
-            ],
+            "recordedDate":"2020-03-09T14:01:56+03:00",
             "verificationStatus":{
                "coding":[
                   {
@@ -340,118 +327,134 @@
                   }
                ]
             },
-            "recordedDate":"2020-03-09T14:01:56+03:00",
+            "asserter":{
+               "reference":"Practitioner/04040404-0404-4404-8404-040404040404"
+            },
+            "identifier":[
+               {
+                  "value":"EI29202"
+               }
+            ],
+            "onsetDateTime":"2019-03-09T14:01:56+03:00",
+            "id":"05050505-0505-4505-8505-050505050505",
+            "code":{
+               "text":"Chest pain on breathing",
+               "coding":[
+                  {
+                     "display":"Chest pain on breathing",
+                     "code":"R07.1"
+                  }
+               ]
+            },
             "subject":{
                "reference":"Patient/03030303-0303-4303-8303-030303030303"
             },
-            "asserter":{
-               "reference":"Practitioner/04040404-0404-4404-8404-040404040404"
-            }
+            "resourceType":"Condition"
          }
       },
       {
+         "request":{
+            "url":"Condition/07070707-0707-4707-8707-070707070707",
+            "method":"PUT"
+         },
          "resource":{
-            "recordedDate":"2019-03-09T14:01:56+03:00",
-            "onsetDateTime":"2019-03-09T14:01:56+03:00",
-            "asserter":{
-               "reference":"Practitioner/06060606-0606-4606-8606-060606060606"
-            },
-            "code":{
-               "coding":[
-                  {
-                     "code":"R07.2",
-                     "display":"Chest pain on breathing2"
-                  }
-               ],
-               "text":"Chest pain on breathing2"
-            },
             "subject":{
                "reference":"Patient/03030303-0303-4303-8303-030303030303"
+            },
+            "verificationStatus":{
+               "coding":[
+                  {
+                     "code":"entered-in-error",
+                     "system":"http://terminology.hl7.org/CodeSystem/condition-ver-status"
+                  }
+               ]
+            },
+            "recordedDate":"2019-03-09T14:01:56+03:00",
+            "code":{
+               "text":"Chest pain on breathing2",
+               "coding":[
+                  {
+                     "display":"Chest pain on breathing2",
+                     "code":"R07.2"
+                  }
+               ]
             },
             "identifier":[
                {
                   "value":"EI29204"
                }
             ],
+            "onsetDateTime":"2019-03-09T14:01:56+03:00",
             "resourceType":"Condition",
             "id":"07070707-0707-4707-8707-070707070707",
-            "verificationStatus":{
-               "coding":[
-                  {
-                     "system":"http://terminology.hl7.org/CodeSystem/condition-ver-status",
-                     "code":"entered-in-error"
-                  }
-               ]
+            "asserter":{
+               "reference":"Practitioner/06060606-0606-4606-8606-060606060606"
             }
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Condition/07070707-0707-4707-8707-070707070707"
          }
       },
       {
-         "request":{
-            "method":"PUT",
-            "url":"Location/0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b"
-         },
          "resource":{
             "id":"0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b",
             "resourceType":"Location",
             "name":"Orthopaedic",
             "mode":"instance",
+            "partOf":{
+               "reference":"Location/09090909-0909-4909-8909-090909090909"
+            },
             "physicalType":{
                "coding":[
                   {
-                     "code":"si",
-                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type"
+                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type",
+                     "code":"si"
                   }
                ]
-            },
-            "partOf":{
-               "reference":"Location/09090909-0909-4909-8909-090909090909"
             }
+         },
+         "request":{
+            "url":"Location/0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b",
+            "method":"PUT"
          }
       },
       {
-         "request":{
-            "method":"PUT",
-            "url":"Location/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c"
-         },
          "resource":{
-            "partOf":{
-               "reference":"Location/0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b"
-            },
-            "physicalType":{
-               "coding":[
-                  {
-                     "code":"ro",
-                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type"
-                  }
-               ]
-            },
             "id":"0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c",
             "resourceType":"Location",
             "name":"Bay A",
-            "mode":"instance"
-         }
-      },
-      {
-         "resource":{
+            "partOf":{
+               "reference":"Location/0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b"
+            },
             "mode":"instance",
             "physicalType":{
                "coding":[
                   {
-                     "code":"bd",
-                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type"
+                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type",
+                     "code":"ro"
+                  }
+               ]
+            }
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Location/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c"
+         }
+      },
+      {
+         "resource":{
+            "physicalType":{
+               "coding":[
+                  {
+                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type",
+                     "code":"bd"
                   }
                ]
             },
             "id":"0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d",
             "resourceType":"Location",
+            "name":"Bed 1",
             "partOf":{
                "reference":"Location/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c"
             },
-            "name":"Bed 1"
+            "mode":"instance"
          },
          "request":{
             "method":"PUT",
@@ -459,30 +462,26 @@
          }
       },
       {
-         "request":{
-            "method":"PUT",
-            "url":"Location/08080808-0808-4808-8808-080808080808"
-         },
          "resource":{
+            "resourceType":"Location",
+            "name":"Simulated Hospital",
             "mode":"instance",
             "physicalType":{
                "coding":[
                   {
-                     "code":"si",
-                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type"
+                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type",
+                     "code":"si"
                   }
                ]
             },
-            "id":"08080808-0808-4808-8808-080808080808",
-            "resourceType":"Location",
-            "name":"Simulated Hospital"
+            "id":"08080808-0808-4808-8808-080808080808"
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Location/08080808-0808-4808-8808-080808080808"
          }
       },
       {
-         "request":{
-            "url":"Location/09090909-0909-4909-8909-090909090909",
-            "method":"PUT"
-         },
          "resource":{
             "mode":"instance",
             "physicalType":{
@@ -493,27 +492,31 @@
                   }
                ]
             },
-            "id":"09090909-0909-4909-8909-090909090909",
             "partOf":{
                "reference":"Location/08080808-0808-4808-8808-080808080808"
             },
+            "id":"09090909-0909-4909-8909-090909090909",
             "resourceType":"Location",
             "name":"Orthopaedic ward"
+         },
+         "request":{
+            "url":"Location/09090909-0909-4909-8909-090909090909",
+            "method":"PUT"
          }
       },
       {
          "resource":{
+            "resourceType":"Location",
             "partOf":{
                "reference":"Location/09090909-0909-4909-8909-090909090909"
             },
-            "resourceType":"Location",
             "name":"1",
             "mode":"instance",
             "physicalType":{
                "coding":[
                   {
-                     "code":"lvl",
-                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type"
+                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type",
+                     "code":"lvl"
                   }
                ]
             },
@@ -529,6 +532,9 @@
             "id":"11111111-1111-4111-9111-111111111111",
             "resourceType":"Location",
             "name":"PV1-6-Orthopaedic",
+            "partOf":{
+               "reference":"Location/0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f"
+            },
             "mode":"instance",
             "physicalType":{
                "coding":[
@@ -537,9 +543,6 @@
                      "code":"si"
                   }
                ]
-            },
-            "partOf":{
-               "reference":"Location/0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f"
             }
          },
          "request":{
@@ -548,34 +551,36 @@
          }
       },
       {
-         "request":{
-            "url":"Location/12121212-1212-4212-9212-121212121212",
-            "method":"PUT"
-         },
          "resource":{
-            "name":"PV1-6-Bay A",
             "mode":"instance",
             "physicalType":{
                "coding":[
                   {
-                     "code":"ro",
-                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type"
+                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type",
+                     "code":"ro"
                   }
                ]
             },
+            "id":"12121212-1212-4212-9212-121212121212",
+            "resourceType":"Location",
             "partOf":{
                "reference":"Location/11111111-1111-4111-9111-111111111111"
             },
-            "id":"12121212-1212-4212-9212-121212121212",
-            "resourceType":"Location"
+            "name":"PV1-6-Bay A"
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Location/12121212-1212-4212-9212-121212121212"
          }
       },
       {
-         "request":{
-            "method":"PUT",
-            "url":"Location/13131313-1313-4313-9313-131313131313"
-         },
          "resource":{
+            "id":"13131313-1313-4313-9313-131313131313",
+            "resourceType":"Location",
+            "partOf":{
+               "reference":"Location/12121212-1212-4212-9212-121212121212"
+            },
+            "name":"PV1-6-Bed 1",
             "mode":"instance",
             "physicalType":{
                "coding":[
@@ -584,33 +589,31 @@
                      "system":"http://terminology.hl7.org/CodeSystem/location-physical-type"
                   }
                ]
-            },
-            "id":"13131313-1313-4313-9313-131313131313",
-            "resourceType":"Location",
-            "name":"PV1-6-Bed 1",
-            "partOf":{
-               "reference":"Location/12121212-1212-4212-9212-121212121212"
             }
+         },
+         "request":{
+            "url":"Location/13131313-1313-4313-9313-131313131313",
+            "method":"PUT"
          }
       },
       {
-         "request":{
-            "method":"PUT",
-            "url":"Location/0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e"
-         },
          "resource":{
+            "name":"PV1-6-Simulated Hospital",
             "mode":"instance",
             "physicalType":{
                "coding":[
                   {
-                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type",
-                     "code":"si"
+                     "code":"si",
+                     "system":"http://terminology.hl7.org/CodeSystem/location-physical-type"
                   }
                ]
             },
             "id":"0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e",
-            "resourceType":"Location",
-            "name":"PV1-6-Simulated Hospital"
+            "resourceType":"Location"
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Location/0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e"
          }
       },
       {
@@ -622,6 +625,8 @@
             "partOf":{
                "reference":"Location/0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e"
             },
+            "id":"0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f",
+            "resourceType":"Location",
             "name":"PV1-6-Orthopaedic ward",
             "mode":"instance",
             "physicalType":{
@@ -631,18 +636,13 @@
                      "code":"bu"
                   }
                ]
-            },
-            "id":"0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f",
-            "resourceType":"Location"
+            }
          }
       },
       {
          "resource":{
             "name":"PV1-6-0",
             "mode":"instance",
-            "partOf":{
-               "reference":"Location/0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f"
-            },
             "physicalType":{
                "coding":[
                   {
@@ -652,6 +652,9 @@
                ]
             },
             "id":"10101010-1010-4010-9010-101010101010",
+            "partOf":{
+               "reference":"Location/0f0f0f0f-0f0f-4f0f-8f0f-0f0f0f0f0f0f"
+            },
             "resourceType":"Location"
          },
          "request":{
@@ -660,13 +663,26 @@
          }
       },
       {
-         "request":{
-            "method":"PUT",
-            "url":"Practitioner/14141414-1414-4414-9414-141414141414"
-         },
          "resource":{
+            "identifier":[
+               {
+                  "type":{
+                     "coding":[
+                        {
+                           "code":"CC"
+                        }
+                     ]
+                  },
+                  "value":"C184726198"
+               }
+            ],
             "name":[
                {
+                  "family":"Connell",
+                  "given":[
+                     "Alistair",
+                     "Alex"
+                  ],
                   "suffix":[
                      "Sr",
                      "MD",
@@ -679,16 +695,19 @@
                   "period":{
                      "end":"2018-07-25T14:01:56+07:00",
                      "start":"2018-07-25T14:01:56+07:00"
-                  },
-                  "family":"Connell",
-                  "given":[
-                     "Alistair",
-                     "Alex"
-                  ]
+                  }
                }
             ],
             "id":"14141414-1414-4414-9414-141414141414",
-            "resourceType":"Practitioner",
+            "resourceType":"Practitioner"
+         },
+         "request":{
+            "url":"Practitioner/14141414-1414-4414-9414-141414141414",
+            "method":"PUT"
+         }
+      },
+      {
+         "resource":{
             "identifier":[
                {
                   "value":"C184726198",
@@ -700,30 +719,9 @@
                      ]
                   }
                }
-            ]
-         }
-      },
-      {
-         "request":{
-            "method":"PUT",
-            "url":"Practitioner/15151515-1515-4515-9515-151515151515"
-         },
-         "resource":{
-            "identifier":[
-               {
-                  "type":{
-                     "coding":[
-                        {
-                           "code":"CC"
-                        }
-                     ]
-                  },
-                  "value":"C184726198"
-               }
             ],
             "name":[
                {
-                  "use":"official",
                   "period":{
                      "start":"2018-07-25T14:01:56+07:00",
                      "end":"2018-07-25T14:01:56+07:00"
@@ -740,39 +738,20 @@
                   ],
                   "prefix":[
                      "Dr"
-                  ]
+                  ],
+                  "use":"official"
                }
             ],
             "id":"15151515-1515-4515-9515-151515151515",
             "resourceType":"Practitioner"
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Practitioner/15151515-1515-4515-9515-151515151515"
          }
       },
       {
          "resource":{
-            "name":[
-               {
-                  "use":"official",
-                  "period":{
-                     "start":"2018-07-25T14:01:56+07:00",
-                     "end":"2018-07-25T14:01:56+07:00"
-                  },
-                  "family":"Connell",
-                  "given":[
-                     "Alistair",
-                     "Alex"
-                  ],
-                  "suffix":[
-                     "Sr",
-                     "MD",
-                     "MSc."
-                  ],
-                  "prefix":[
-                     "Dr"
-                  ]
-               }
-            ],
-            "id":"16161616-1616-4616-9616-161616161616",
-            "resourceType":"Practitioner",
             "identifier":[
                {
                   "type":{
@@ -783,28 +762,6 @@
                      ]
                   },
                   "value":"C184726198"
-               }
-            ]
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Practitioner/16161616-1616-4616-9616-161616161616"
-         }
-      },
-      {
-         "resource":{
-            "id":"17171717-1717-4717-9717-171717171717",
-            "resourceType":"Practitioner",
-            "identifier":[
-               {
-                  "value":"C184726198",
-                  "type":{
-                     "coding":[
-                        {
-                           "code":"CC"
-                        }
-                     ]
-                  }
                }
             ],
             "name":[
@@ -828,42 +785,17 @@
                   },
                   "family":"Connell"
                }
-            ]
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Practitioner/17171717-1717-4717-9717-171717171717"
-         }
-      },
-      {
-         "request":{
-            "method":"PUT",
-            "url":"Location/18181818-1818-4818-9818-181818181818"
-         },
-         "resource":{
-            "id":"18181818-1818-4818-9818-181818181818",
-            "resourceType":"Location",
-            "identifier":[
-               {
-                  "value":"New Home"
-               }
-            ]
-         }
-      },
-      {
-         "resource":{
-            "identifier":[
-               {
-                  "type":{
-                     "coding":[
-                        {
-                           "code":"CC"
-                        }
-                     ]
-                  },
-                  "value":"C184726198"
-               }
             ],
+            "id":"16161616-1616-4616-9616-161616161616",
+            "resourceType":"Practitioner"
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Practitioner/16161616-1616-4616-9616-161616161616"
+         }
+      },
+      {
+         "resource":{
             "name":[
                {
                   "period":{
@@ -886,27 +818,98 @@
                   "use":"official"
                }
             ],
-            "id":"19191919-1919-4919-9919-191919191919",
-            "resourceType":"Practitioner"
+            "id":"17171717-1717-4717-9717-171717171717",
+            "resourceType":"Practitioner",
+            "identifier":[
+               {
+                  "type":{
+                     "coding":[
+                        {
+                           "code":"CC"
+                        }
+                     ]
+                  },
+                  "value":"C184726198"
+               }
+            ]
          },
          "request":{
-            "url":"Practitioner/19191919-1919-4919-9919-191919191919",
+            "method":"PUT",
+            "url":"Practitioner/17171717-1717-4717-9717-171717171717"
+         }
+      },
+      {
+         "resource":{
+            "identifier":[
+               {
+                  "value":"New Home"
+               }
+            ],
+            "id":"18181818-1818-4818-9818-181818181818",
+            "resourceType":"Location"
+         },
+         "request":{
+            "url":"Location/18181818-1818-4818-9818-181818181818",
             "method":"PUT"
+         }
+      },
+      {
+         "request":{
+            "method":"PUT",
+            "url":"Practitioner/19191919-1919-4919-9919-191919191919"
+         },
+         "resource":{
+            "name":[
+               {
+                  "prefix":[
+                     "Dr"
+                  ],
+                  "use":"official",
+                  "period":{
+                     "start":"2018-07-25T14:01:56+07:00",
+                     "end":"2018-07-25T14:01:56+07:00"
+                  },
+                  "family":"Connell",
+                  "given":[
+                     "Alistair",
+                     "Alex"
+                  ],
+                  "suffix":[
+                     "Sr",
+                     "MD",
+                     "MSc."
+                  ]
+               }
+            ],
+            "id":"19191919-1919-4919-9919-191919191919",
+            "resourceType":"Practitioner",
+            "identifier":[
+               {
+                  "type":{
+                     "coding":[
+                        {
+                           "code":"CC"
+                        }
+                     ]
+                  },
+                  "value":"C184726198"
+               }
+            ]
          }
       },
       {
          "resource":{
             "diagnosis":[
                {
+                  "condition":{
+                     "reference":"Condition/05050505-0505-4505-8505-050505050505"
+                  },
                   "role":{
                      "coding":[
                         {
                            "code":"Working"
                         }
                      ]
-                  },
-                  "condition":{
-                     "reference":"Condition/05050505-0505-4505-8505-050505050505"
                   }
                },
                {
@@ -929,18 +932,18 @@
             "resourceType":"EpisodeOfCare",
             "identifier":[
                {
+                  "period":{
+                     "end":"2018-07-25T14:01:56+07:00",
+                     "start":"2018-07-25T14:01:56+07:00"
+                  },
+                  "value":"5609582645793883000",
                   "type":{
                      "coding":[
                         {
                            "code":"visitid"
                         }
                      ]
-                  },
-                  "period":{
-                     "end":"2018-07-25T14:01:56+07:00",
-                     "start":"2018-07-25T14:01:56+07:00"
-                  },
-                  "value":"5609582645793883000"
+                  }
                }
             ],
             "status":"finished"
@@ -951,11 +954,17 @@
          }
       },
       {
-         "request":{
-            "url":"Encounter/1b1b1b1b-1b1b-4b1b-9b1b-1b1b1b1b1b1b",
-            "method":"PUT"
-         },
          "resource":{
+            "type":[
+               {
+                  "coding":[
+                     {
+                        "code":"28b"
+                     }
+                  ]
+               }
+            ],
+            "resourceType":"Encounter",
             "diagnosis":[
                {
                   "condition":{
@@ -968,12 +977,98 @@
                   }
                }
             ],
+            "period":{
+               "start":"2009-03-09T13:01:56+03:00",
+               "end":"2011-03-09T13:01:56+03:00"
+            },
+            "class":{
+               "system":"Encounter_Class-unharmonized",
+               "code":"INPATIENT",
+               "version":"v1",
+               "display":""
+            },
+            "hospitalization":{
+               "dischargeDisposition":{
+                  "coding":[
+                     {
+                        "code":"Ready to go"
+                     }
+                  ]
+               },
+               "destination":{
+                  "reference":"Location/18181818-1818-4818-9818-181818181818"
+               },
+               "dietPreference":[
+                  {
+                     "coding":[
+                        {
+                           "code":"Vegi"
+                        }
+                     ]
+                  }
+               ],
+               "preAdmissionIdentifier":{
+                  "value":"PV1-5"
+               },
+               "reAdmission":{
+                  "coding":[
+                     {
+                        "code":"PV1.13"
+                     }
+                  ]
+               },
+               "admitSource":{
+                  "coding":[
+                     {
+                        "code":"PV1.14"
+                     }
+                  ]
+               }
+            },
+            "identifier":[
+               {
+                  "type":{
+                     "text":"visit number",
+                     "coding":[
+                        {
+                           "code":"visitid",
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
+                        }
+                     ]
+                  },
+                  "period":{
+                     "end":"2018-07-25T14:01:56+07:00",
+                     "start":"2018-07-25T14:01:56+07:00"
+                  },
+                  "value":"5609582645793881888"
+               },
+               {
+                  "period":{
+                     "end":"2018-07-25T14:01:56+07:00",
+                     "start":"2018-07-25T14:01:56+07:00"
+                  },
+                  "value":"5609582645793882000",
+                  "type":{
+                     "coding":[
+                        {
+                           "code":"visitid"
+                        }
+                     ]
+                  }
+               }
+            ],
+            "episodeOfCare":[
+               {
+                  "reference":"EpisodeOfCare/1a1a1a1a-1a1a-4a1a-9a1a-1a1a1a1a1a1a"
+               }
+            ],
+            "status":"finished",
             "location":[
                {
+                  "status":"active",
                   "location":{
                      "reference":"Location/0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b"
-                  },
-                  "status":"active"
+                  }
                },
                {
                   "location":{
@@ -1000,16 +1095,16 @@
                   }
                },
                {
+                  "status":"active",
                   "location":{
                      "reference":"Location/0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a"
-                  },
-                  "status":"active"
+                  }
                },
                {
-                  "status":"completed",
                   "location":{
                      "reference":"Location/11111111-1111-4111-9111-111111111111"
-                  }
+                  },
+                  "status":"completed"
                },
                {
                   "status":"completed",
@@ -1018,10 +1113,10 @@
                   }
                },
                {
-                  "status":"completed",
                   "location":{
                      "reference":"Location/13131313-1313-4313-9313-131313131313"
-                  }
+                  },
+                  "status":"completed"
                },
                {
                   "location":{
@@ -1036,91 +1131,28 @@
                   "status":"completed"
                },
                {
-                  "status":"completed",
                   "location":{
                      "reference":"Location/10101010-1010-4010-9010-101010101010"
-                  }
+                  },
+                  "status":"completed"
                }
             ],
-            "episodeOfCare":[
-               {
-                  "reference":"EpisodeOfCare/1a1a1a1a-1a1a-4a1a-9a1a-1a1a1a1a1a1a"
-               }
-            ],
-            "class":{
-               "display":"",
-               "system":"Encounter_Class-unharmonized",
-               "code":"INPATIENT",
-               "version":"v1"
-            },
-            "type":[
-               {
-                  "coding":[
-                     {
-                        "code":"28b"
-                     }
-                  ]
-               }
-            ],
-            "hospitalization":{
-               "reAdmission":{
-                  "coding":[
-                     {
-                        "code":"PV1.13"
-                     }
-                  ]
-               },
-               "admitSource":{
-                  "coding":[
-                     {
-                        "code":"PV1.14"
-                     }
-                  ]
-               },
-               "dischargeDisposition":{
-                  "coding":[
-                     {
-                        "code":"Ready to go"
-                     }
-                  ]
-               },
-               "destination":{
-                  "reference":"Location/18181818-1818-4818-9818-181818181818"
-               },
-               "dietPreference":[
-                  {
-                     "coding":[
-                        {
-                           "code":"Vegi"
-                        }
-                     ]
-                  }
-               ],
-               "preAdmissionIdentifier":{
-                  "value":"PV1-5"
-               }
-            },
-            "subject":{
-               "reference":"Patient/03030303-0303-4303-8303-030303030303"
-            },
-            "resourceType":"Encounter",
-            "status":"finished",
             "participant":[
                {
+                  "individual":{
+                     "reference":"Practitioner/14141414-1414-4414-9414-141414141414"
+                  },
                   "type":[
                      {
                         "coding":[
                            {
+                              "display":"attender",
                               "code":"ATND",
-                              "system":"http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
-                              "display":"attender"
+                              "system":"http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
                            }
                         ]
                      }
-                  ],
-                  "individual":{
-                     "reference":"Practitioner/14141414-1414-4414-9414-141414141414"
-                  }
+                  ]
                },
                {
                   "individual":{
@@ -1130,18 +1162,15 @@
                      {
                         "coding":[
                            {
+                              "display":"referrer",
                               "code":"REF",
-                              "system":"http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
-                              "display":"referrer"
+                              "system":"http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
                            }
                         ]
                      }
                   ]
                },
                {
-                  "individual":{
-                     "reference":"Practitioner/16161616-1616-4616-9616-161616161616"
-                  },
                   "type":[
                      {
                         "coding":[
@@ -1152,16 +1181,19 @@
                            }
                         ]
                      }
-                  ]
+                  ],
+                  "individual":{
+                     "reference":"Practitioner/16161616-1616-4616-9616-161616161616"
+                  }
                },
                {
                   "type":[
                      {
                         "coding":[
                            {
-                              "display":"admitter",
                               "code":"ADM",
-                              "system":"http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+                              "system":"http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+                              "display":"admitter"
                            }
                         ]
                      }
@@ -1188,42 +1220,13 @@
                }
             ],
             "id":"1b1b1b1b-1b1b-4b1b-9b1b-1b1b1b1b1b1b",
-            "period":{
-               "end":"2011-03-09T13:01:56+03:00",
-               "start":"2019-03-09T13:01:56+03:00"
-            },
-            "identifier":[
-               {
-                  "period":{
-                     "start":"2018-07-25T14:01:56+07:00",
-                     "end":"2018-07-25T14:01:56+07:00"
-                  },
-                  "value":"5609582645793881888",
-                  "type":{
-                     "text":"visit number",
-                     "coding":[
-                        {
-                           "code":"visitid",
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
-                        }
-                     ]
-                  }
-               },
-               {
-                  "type":{
-                     "coding":[
-                        {
-                           "code":"visitid"
-                        }
-                     ]
-                  },
-                  "period":{
-                     "start":"2018-07-25T14:01:56+07:00",
-                     "end":"2018-07-25T14:01:56+07:00"
-                  },
-                  "value":"5609582645793882000"
-               }
-            ]
+            "subject":{
+               "reference":"Patient/03030303-0303-4303-8303-030303030303"
+            }
+         },
+         "request":{
+            "url":"Encounter/1b1b1b1b-1b1b-4b1b-9b1b-1b1b1b1b1b1b",
+            "method":"PUT"
          }
       }
    ]

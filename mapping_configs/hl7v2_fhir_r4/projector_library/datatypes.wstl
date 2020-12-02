@@ -456,7 +456,7 @@ def DR_Period(DR) {
 // Output(s):
 //   ContactPoint datatype : https://www.hl7.org/fhir/datatypes.html#ContactPoint
 //
-def Build_ContactPoint(varValue, varSystem, varUse, varRank, varStart, varEnd) {
+def Build_ContactPoint(required varValue, varSystem, varUse, varRank, varStart, varEnd) {
   value : varValue;
   system : varSystem;
   use : varUse;
@@ -474,8 +474,16 @@ def Build_ContactPoint(varValue, varSystem, varUse, varRank, varStart, varEnd) {
 //   ContactPoint datatype : https://www.hl7.org/fhir/datatypes.html#ContactPoint
 //
 def XTN_ContactPoint(XTN, cUse) {
-  if (XTN.1) {
-    $this: Build_ContactPoint(XTN.1, "", cUse, XTN.18, XTN.13, XTN.14);
+  if (XTN.3 ~= "Internet" and XTN.3 ~= "X.400") {
+    if (~XTN.7 and ~XTN.12) {
+      $this: Build_ContactPoint(XTN.1, "phone", cUse, XTN.18, XTN.13, XTN.14);
+    } else {
+      $this: Build_ContactPoint(XTN.12, "phone", cUse, XTN.18, XTN.13, XTN.14);
+    }
+  } else {
+      if (XTN.3 = "Internet" or XTN.3 = "X.400") {
+        $this: Build_ContactPoint(XTN.4, "phone", cUse, XTN.18, XTN.13, XTN.14);
+      }
   }
 }
 
