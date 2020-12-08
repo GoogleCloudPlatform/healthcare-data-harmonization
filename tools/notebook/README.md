@@ -56,15 +56,21 @@ include:
 *   **wstl** - the cell magic to evaluate whistle mapping language from iPython
     kernel. optional arguments:
 
-    *   --input INPUT - The input. Supports the following prefix notations:
-        py://<name_of_python_variable> json://<inline_json_object_or_array> :
-        python inline dict and list expressions are supported. e.g.
-        json://{"field":"value"} or
-        json://[{"first":"value"},{"second":"value"}]
-        file://<path_to_local_file_system> , supports glob wildcard expressions
-        and will only load .json or .ndjson file extensions. Each json
-        object/list defined within an ndjson will be a separate input to the
-        mapping.
+    *   --input INPUT - The input. Supports the following prefix notations
+        *   py://\<name_of_python_variable> - name of a python variable
+            instantiated within session. Note that a python list will be parsed
+            as a single JSON Array. If list entries should be parsed separately,
+            use pylist instead.
+        *   pylist://\<name_of_python_variable> - name of a python list variable
+            instantiated within session. Each entry in the list will be parsed
+            separately.
+        *   json://\<inline_json_object_or_array> - python inline dict and list
+            expressions are supported. e.g. json://{"field":"value"} or
+            json://[{"first":"value"},{"second":"value"}]
+        *   file://\<path_to_local_file_system> - supports glob wildcard
+            expressions and will only load .json or .ndjson file extensions.
+            Each json object/list defined within an ndjson will be a separate
+            input to the mapping.
     *   --library_config LIBRARY_CONFIG - Path to the directory where the
         library mapping files are located.
     *   --code_config CODE_CONFIG - Path to the directory of

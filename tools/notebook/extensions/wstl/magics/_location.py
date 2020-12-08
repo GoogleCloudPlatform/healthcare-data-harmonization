@@ -27,7 +27,12 @@ def parse_location(shell, input_wstl_arg, file_ext=None, load_contents=True):
   * file://<file_path> - path to file on local file system.
   * gs://<gcs_path> - path to file on Google Cloud Storage.
   * py://<name_of_python_variable> - name of python variable instantiated within
-  session.
+  session. Note that a python list will be parsed as a single JSON Array and a
+  single Location protobuf message is created. If list entries should be parsed
+  separately, use pylist instead.
+  * pylist://<name_of_python_variable> - name of python list variable
+  instantiated within session. Each entry in the list will be parsed as a
+  separate Location protobuf message.
 
   Args:
     shell: ipython interactive shell.
@@ -48,6 +53,7 @@ def parse_location(shell, input_wstl_arg, file_ext=None, load_contents=True):
       shell, input_wstl_arg, file_ext=file_ext, load_contents=load_contents)
   if input_wstl_arg.startswith(_constants.JSON_ARG_PREFIX) or \
       input_wstl_arg.startswith(_constants.PYTHON_ARG_PREFIX) or \
+      input_wstl_arg.startswith(_constants.PYTHON_LIST_ARG_PREFIX) or \
       input_wstl_arg.startswith(_constants.FILE_ARG_PREFIX):
     if not load_contents:
       return [
@@ -67,5 +73,5 @@ def parse_location(shell, input_wstl_arg, file_ext=None, load_contents=True):
   else:
     raise ValueError("Missing {} supported prefix".format(",".join([
         _constants.JSON_ARG_PREFIX, _constants.GS_ARG_PREFIX,
-        _constants.PYTHON_ARG_PREFIX
+        _constants.PYTHON_ARG_PREFIX, _constants.PYTHON_LIST_ARG_PREFIX
     ])))

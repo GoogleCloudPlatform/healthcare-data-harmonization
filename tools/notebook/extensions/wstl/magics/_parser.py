@@ -43,6 +43,27 @@ def _serialize_to_json(shell_var):
     raise ValueError("variable {} is not json decodable".format(shell_var))
 
 
+def _serialize_to_list_of_json(shell_var):
+  """Serializes the python list variable into a list of JSON strings.
+
+  Args:
+    shell_var: ipython shell python list.
+
+  Returns:
+    A list of JSON strings, one entry for each entry in the input list. Any
+    nested lists will be serialized to JSON arrays, and not further mapped as
+    python lists.
+
+  Raises:
+    ValueError: When serializing a type other than list.
+    JSONDecodeError: When unable to encode the variable into JSON.
+  """
+  if isinstance(shell_var, list):
+    return list(map(_serialize_to_json, shell_var))
+  else:
+    raise ValueError("variable {} is not a list".format(shell_var))
+
+
 def _get_files(path_name, file_ext, load_contents):
   """Retrieves a list of files located at path_name.
 
@@ -154,7 +175,10 @@ def parse_object(shell, input_object_arg, file_ext=None, load_contents=True):
   * file://<file_path> - path or glob expression to files on local file system.
   * gs://<gcs_path> - path to file on Google Cloud Storage.
   * py://<name_of_python_variable> - name of python variable instantiated within
-  session.
+  session. Note that a python list will be parsed as a single JSON Array. If
+  list entries should be parsed separately, use pylist instead.
+  * pylist://<name_of_python_variable> - name of python list variable
+  instantiated within session. Each entry in the list will be parsed separately.
 
   Args:
     shell: ipython interactive shell.
@@ -167,8 +191,9 @@ def parse_object(shell, input_object_arg, file_ext=None, load_contents=True):
   Returns:
     A tuple of length 2 that has the objects that is interpreted from
     input_object_arg. The tuple must have only one non-empty item. The first
-    item is either None or an in-line json, and the second item is either None
-    or a gcs path that directs to an in-line json object or whistle.
+    item is either None or a list of in-line json strings, and the second item
+    is either None or a gcs path that directs to an in-line json object or
+    whistle.
 
   Raises:
     ValueError: An unknown location prefix or the python variable can not be
@@ -190,6 +215,13 @@ def parse_object(shell, input_object_arg, file_ext=None, load_contents=True):
       raise ValueError("There is no python variable named {}".format(var_name))
     # Only supports json as UTF-8 string not byte array.
     return [_serialize_to_json(shell.user_ns[var_name])], None
+  elif input_object_arg.startswith(_constants.PYTHON_LIST_ARG_PREFIX):
+    offset = len(_constants.PYTHON_LIST_ARG_PREFIX)
+    var_name = input_object_arg[offset:]
+    if var_name not in shell.user_ns:
+      raise ValueError("There is no python variable named {}".format(var_name))
+    # Only supports json as UTF-8 string not byte array.
+    return _serialize_to_list_of_json(shell.user_ns[var_name]), None
   else:
     raise ValueError("Missing {} supported prefix".format(",".join([
         _constants.JSON_ARG_PREFIX, _constants.GS_ARG_PREFIX, \

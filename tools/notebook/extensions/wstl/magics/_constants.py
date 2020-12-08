@@ -17,6 +17,7 @@ JSON_ARG_PREFIX = "json://"
 FILE_ARG_PREFIX = "file://"
 GS_ARG_PREFIX = "gs://"
 PYTHON_ARG_PREFIX = "py://"
+PYTHON_LIST_ARG_PREFIX = "pylist://"
 
 JSON_FILE_EXT = (
     ".json",

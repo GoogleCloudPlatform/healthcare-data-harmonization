@@ -329,10 +329,14 @@ class WstlTest(absltest.TestCase):
     self.assertIsNone(failure)
     st1 = "{'id':'example','resourceType':'Device','udi':{'carrierHRF':'test'}}"
     st2 = "{'id':'example','resourceType':'3','udi':{'carrierHRF':'test'}}"
+    stList = [st1, st1]
     ip.push("st1")
     ip.push("st2")
+    ip.push("stList")
     lines = [
-        "--version=stu3 --input=py://st1", "--version=stu3 --input=py://st2"
+        "--version=stu3 --input=py://st1", "--version=stu3 --input=py://st2",
+        "--version=stu3 --input=py://stList",
+        "--version=stu3 --input=pylist://stList"
     ]
     results = []
     resps = [
@@ -342,7 +346,14 @@ class WstlTest(absltest.TestCase):
         wstlservice_pb2.ValidationResponse(status=[
             status_pb2.Status(
                 code=code_pb2.INVALID_ARGUMENT, message="invalid FHIR resource")
-        ])
+        ]),
+        wstlservice_pb2.ValidationResponse(status=[
+            status_pb2.Status(
+                code=code_pb2.INVALID_ARGUMENT, message="invalid FHIR resource")
+        ]),
+        wstlservice_pb2.ValidationResponse(status=[
+            status_pb2.Status(code=code_pb2.OK, message="Validation Success")
+        ]),
     ]
     reqs = [
         wstlservice_pb2.ValidationRequest(
@@ -358,7 +369,26 @@ class WstlTest(absltest.TestCase):
                 wstlservice_pb2.Location(
                     inline_json="{'id':'example','resourceType':" +
                     "'3','udi':{'carrierHRF':'test'}}")
-            ])
+            ]),
+        wstlservice_pb2.ValidationRequest(
+            fhir_version=wstlservice_pb2.ValidationRequest.FhirVersion.STU3,
+            input=[
+                wstlservice_pb2.Location(
+                    inline_json="[\"{'id':'example','resourceType':" +
+                    "'Device','udi':{'carrierHRF':'test'}}\", " +
+                    "\"{'id':'example','resourceType':" +
+                    "'Device','udi':{'carrierHRF':'test'}}\"]")
+            ]),
+        wstlservice_pb2.ValidationRequest(
+            fhir_version=wstlservice_pb2.ValidationRequest.FhirVersion.STU3,
+            input=[
+                wstlservice_pb2.Location(
+                    inline_json="{'id':'example','resourceType':" +
+                    "'Device','udi':{'carrierHRF':'test'}}"),
+                wstlservice_pb2.Location(
+                    inline_json="{'id':'example','resourceType':" +
+                    "'Device','udi':{'carrierHRF':'test'}}"),
+            ]),
     ]
     for i in range(len(lines)):
       mock_service = mock.create_autospec(DummyService)
@@ -370,7 +400,9 @@ class WstlTest(absltest.TestCase):
 
     wants = [
         "{'status': [{'message': 'Validation Success'}]}",
-        "{'status': [{'code': 3, 'message': 'invalid FHIR resource'}]}"
+        "{'status': [{'code': 3, 'message': 'invalid FHIR resource'}]}",
+        "{'status': [{'code': 3, 'message': 'invalid FHIR resource'}]}",
+        "{'status': [{'message': 'Validation Success'}]}",
     ]
     for j in range(len(wants)):
       result = results[j]
@@ -387,9 +419,10 @@ class WstlTest(absltest.TestCase):
           result.filename,
           want.filename,
           msg="JSON.filename mismatch on input {}".format(lines[j]))
-    # Delete st1 and st2 to suppress the unused-variable linter warning.
+    # Delete created variables to suppress the unused-variable linter warning.
     del st1
     del st2
+    del stList
 
   @mock.patch.object(grpc, "insecure_channel", autospec=True)
   @mock.patch.object(wstlservice_pb2_grpc, "WhistleServiceStub", autospec=True)
