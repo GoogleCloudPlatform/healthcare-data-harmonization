@@ -16,6 +16,7 @@
 import json
 import os
 
+from google.cloud import storage
 from googleapiclient import discovery
 import grpc
 from IPython.core import magic_arguments
@@ -25,7 +26,6 @@ from IPython.core.magic import Magics
 from IPython.core.magic import magics_class
 from IPython.display import JSON
 
-from google.cloud import storage
 from google.protobuf import json_format
 from wstl.magics import _constants
 from wstl.magics import _location
@@ -422,7 +422,9 @@ def _get_validation(stub, shell, version, input_arg):
   """
   req = wstlservice_pb2.ValidationRequest(
       input=_location.parse_location(shell, input_arg))
-  if version.lower() == "stu3":
+  if version.lower() == "r4":
+    req.fhir_version = wstlservice_pb2.ValidationRequest.FhirVersion.R4
+  elif version.lower() == "stu3":
     req.fhir_version = wstlservice_pb2.ValidationRequest.FhirVersion.STU3
   else:
     return None, ValueError("""FHIR version {} is incorrect or not supported,

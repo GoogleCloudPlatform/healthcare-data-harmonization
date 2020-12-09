@@ -240,6 +240,10 @@ class WstlTest(absltest.TestCase):
     failure = ip.magics_manager.register(wstl.WSTLMagics)
     self.assertIsNone(failure)
     lines = [
+        "--input=json://{'id':'example','resourceType':" +
+        "'Device','udi':{'carrierHRF':'test'}}",
+        "--version=r4 --input=json://{'id':'example','resourceType':" +
+        "'Device','udi':{'carrierHRF':'test'}}",
         "--version=stu3 --input=json://{'id':'example','resourceType':" +
         "'Device','udi':{'carrierHRF':'test'}}",
         "--version=stu3 --input=json://{'id':'example','resourceType':" +
@@ -251,11 +255,31 @@ class WstlTest(absltest.TestCase):
             status_pb2.Status(code=code_pb2.OK, message="Validation Success")
         ]),
         wstlservice_pb2.ValidationResponse(status=[
+            status_pb2.Status(code=code_pb2.OK, message="Validation Success")
+        ]),
+        wstlservice_pb2.ValidationResponse(status=[
+            status_pb2.Status(code=code_pb2.OK, message="Validation Success")
+        ]),
+        wstlservice_pb2.ValidationResponse(status=[
             status_pb2.Status(
                 code=code_pb2.INVALID_ARGUMENT, message="invalid FHIR resource")
         ])
     ]
     reqs = [
+        wstlservice_pb2.ValidationRequest(
+            fhir_version=wstlservice_pb2.ValidationRequest.FhirVersion.R4,
+            input=[
+                wstlservice_pb2.Location(
+                    inline_json="{'id':'example','resourceType':" +
+                    "'Device','udi':{'carrierHRF':'test'}}")
+            ]),
+        wstlservice_pb2.ValidationRequest(
+            fhir_version=wstlservice_pb2.ValidationRequest.FhirVersion.R4,
+            input=[
+                wstlservice_pb2.Location(
+                    inline_json="{'id':'example','resourceType':" +
+                    "'Device','udi':{'carrierHRF':'test'}}")
+            ]),
         wstlservice_pb2.ValidationRequest(
             fhir_version=wstlservice_pb2.ValidationRequest.FhirVersion.STU3,
             input=[
@@ -279,6 +303,8 @@ class WstlTest(absltest.TestCase):
       results.append(result)
       mock_service.FhirValidate.assert_called_once_with(reqs[i])
     wants = [
+        "{'status': [{'message': 'Validation Success'}]}",
+        "{'status': [{'message': 'Validation Success'}]}",
         "{'status': [{'message': 'Validation Success'}]}",
         "{'status': [{'code': 3, 'message': 'invalid FHIR resource'}]}"
     ]
@@ -578,14 +604,20 @@ class WstlTest(absltest.TestCase):
     failure = ip.magics_manager.register(wstl.WSTLMagics)
     self.assertIsNone(failure)
     lines = [
-        "--version=r4 --input=json://{'id':'example','resourceType':" +
+        "--input={'id':'example','resourceType':" +
+        "'Device','udi':{'carrierHRF':'test'}}",
+        "--version=r4 --input={'id':'example','resourceType':" +
+        "'Device','udi':{'carrierHRF':'test'}}",
+        "--version=R4 --input=json://{'id':'example','resourceType':" +
         "'Device','udi':{'carrierHRF':'test'}}",
         "--version=stu3 --input={'id':'example','resourceType':" +
         "'Device','udi':{'carrierHRF':'test'}}",
-        "--version=STU3 --input={'id':'example','resourceType':" +
+        "--version=STU3 --input=json://{'id':'example','resourceType':" +
         "'Device','udi':{'carrierHRF':'test'}}"
     ]
-    errors = [error.UsageError, ValueError, error.UsageError]
+    errors = [
+        ValueError, ValueError, error.UsageError, ValueError, error.UsageError
+    ]
     for i in range(len(lines)):
       self.assertRaises(errors[i], ip.run_line_magic, "fhir_validate", lines[i])
   # END GOOGLE_INTERNAL
