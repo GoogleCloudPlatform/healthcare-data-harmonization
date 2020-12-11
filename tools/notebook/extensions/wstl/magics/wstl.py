@@ -122,6 +122,38 @@ class WSTLMagics(Magics):
         self.shell.push({args.output: result})
       return JSON(result)
 
+  @magic_arguments.magic_arguments()
+  @magic_arguments.argument(
+      "--version",
+      choices=["stu3", "r4"],
+      default="r4",
+      type=str,
+      help="""The fhir version to apply to the validation.
+      The default is r4.""")
+  @magic_arguments.argument(
+      "--input",
+      type=str,
+      help="""The input. Supports the following prefix notations:
+      py://<name_of_python_variable>
+      json://<inline_json_object_or_array> : python inline dict and list
+      expressions are supported. e.g. json://{"field":"value"} or
+      json://[{"first":"value"},{"second":"value"}]
+      file://<path_to_local_file_system> , supports glob wildcard expressions
+      and will only load .json or .ndjson file extensions. Each json object/list
+      defined within an ndjson will be a separate input to the validation.""")
+  @line_magic("fhir_validate")
+  def fhir_validate(self, line):
+    """Line magic to validate json FHIR resource(s) from iPython kernel."""
+    args = magic_arguments.parse_argstring(self.fhir_validate, line)
+
+    with grpc.insecure_channel(self.grpc_target) as channel:
+      stub = wstlservice_pb2_grpc.WhistleServiceStub(channel)
+
+      (resp, err) = _get_validation(stub, self.shell, args.version, args.input)
+      if err:
+        return err
+      return JSON(str(json_format.MessageToDict(resp)))
+
 
 @magics_class
 class LoadHL7Magics(Magics):

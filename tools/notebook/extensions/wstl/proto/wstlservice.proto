@@ -108,6 +108,38 @@ message DeleteIncrementalSessionResponse {
   }
 }
 
+// The request which contains input to be validated and the desired FHIR
+// version.
+message ValidationRequest {
+  // The FHIR version can be either DSTU3 or R4.
+  enum FhirVersion {
+    // The default value for FHIR Version.
+    FHIR_VERSION_UNSPECIFIED = 0;
+
+    // The DSTU3 version of FHIR.
+    STU3 = 1;
+
+    // The R4 version of FHIR.
+    R4 = 2;
+  }
+
+  // The version of FHIR that the user wants to validate the input with.
+  // can check if it's set to "unspecified" in implementation of validate
+  // function
+  FhirVersion fhir_version = 1;
+
+  // The input(s) that will be validated.
+  // If the input(s) are entered as a GCS path, this field can not be repeated.
+  repeated Location input = 2;
+}
+
+// The response message of the validation result.
+message ValidationResponse {
+  // If there is any invalid FHIR resource, this will give an array of error
+  // items that contains the detailed error messages. Otherwise it will be null.
+  repeated google.rpc.Status status = 1;
+}
+
 service WhistleService {
   // Creates an incremental transformation session.
   rpc GetOrCreateIncrementalSession(CreateIncrementalSessionRequest)
@@ -122,4 +154,9 @@ service WhistleService {
   // Deletes an incremental transformation session.
   rpc DeleteIncrementalSession(DeleteIncrementalSessionRequest)
       returns (DeleteIncrementalSessionResponse) {}
+
+  // FHIRValidate validates the input with the desired FHIR version. It returns
+  // an array of status with indication and details of a success or failure on
+  // each FHIR reosurce validation.
+  rpc FhirValidate(ValidationRequest) returns (ValidationResponse) {}
 }

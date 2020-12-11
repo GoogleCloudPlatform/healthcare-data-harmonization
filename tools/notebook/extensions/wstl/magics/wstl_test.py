@@ -200,7 +200,6 @@ class WstlTest(absltest.TestCase):
         ip.run_line_magic("load_hl7v2_gcs",
                           """--bucket_name=foo --source_blob_name=bar""")
 
-  # BEGIN GOOGLE_INTERNAL
   def test_fhir_validate_magic_is_correctly_defined(self):
     ip = self.shell.get_ipython()
     failure = ip.magics_manager.register(wstl.WSTLMagics)
@@ -620,7 +619,6 @@ class WstlTest(absltest.TestCase):
     ]
     for i in range(len(lines)):
       self.assertRaises(errors[i], ip.run_line_magic, "fhir_validate", lines[i])
-  # END GOOGLE_INTERNAL
 
 
 if __name__ == "__main__":

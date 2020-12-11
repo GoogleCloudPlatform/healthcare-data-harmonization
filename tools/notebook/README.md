@@ -80,6 +80,27 @@ include:
         (textproto).
     *   --output OUTPUT - Name of python variable to store result.
 
+*   **fhir_validate** - the line magic to validate json FHIR resource(s) from
+    iPython kernel. Arguments:
+
+    *   --input INPUT - The input. Supports the following prefix notations
+        *   py://\<name_of_python_variable> - name of a python variable
+            instantiated within session. Note that a python list will be parsed
+            as a single JSON Array. If list entries should be parsed separately,
+            use pylist instead.
+        *   pylist://\<name_of_python_variable> - name of a python list variable
+            instantiated within session. Each entry in the list will be parsed
+            separately.
+        *   json://\<inline_json> - python inline expressions are supported.
+            e.g. json:// {"field":"value"}
+        *   file://\<path_to_local_file_system> - supports glob wildcard
+            expressions and will only load .json or .ndjson file extensions.
+            Each json object/list defined within an ndjson will be a separate
+            input to the validation.
+    *   --version <{r4,stu3}> - The
+        [FHIR version](http://hl7.org/fhir/directory.html) to apply to the
+        validation. The default is r4.
+
     ![Demo](https://storage.googleapis.com/data-harmonization-sample-data/jupyterlab-wstl-demo-sm.gif)
 
 *   [Google Cloud Storage browser extension](https://github.com/gclouduniverse/jupyterlab_gcsfilebrowser)

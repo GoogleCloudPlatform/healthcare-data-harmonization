@@ -29,6 +29,7 @@ import (
 func NewWstlServiceServer() *WstlServiceServer {
 	return &WstlServiceServer{
 		env: NewEnvironment(),
+		val: NewValidator(),
 	}
 }
 
@@ -36,6 +37,7 @@ func NewWstlServiceServer() *WstlServiceServer {
 type WstlServiceServer struct {
 	wsgrpc.WhistleServiceServer
 	env *Environment
+	val *Validator
 }
 
 // GetOrCreateIncrementalSession returns an incremental transformation session.
@@ -84,4 +86,12 @@ func (s *WstlServiceServer) DeleteIncrementalSession(ctx context.Context, reques
 		Status: &wspb.DeleteIncrementalSessionResponse_SessionId{
 			SessionId: request.GetSessionId(),
 		}}, nil
+}
+
+// Validate the FHIR sources with the FHIR version in ValidationRequest. The default version is STU3.
+func (s *WstlServiceServer) FhirValidate(ctx context.Context, req *wspb.ValidationRequest) (*wspb.ValidationResponse, error) {
+	if s.val == nil {
+		s.val = NewValidator()
+	}
+	return s.val.Validate(ctx, req)
 }
