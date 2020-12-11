@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package cloud.healthcare.cdw.etl.mapping.proto;
+
+option go_package = "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto";
+option java_multiple_files = true;
+option java_outer_classname = "Deidentification";
+option java_package = "com.google.cloud.healthcare.etl.proto.mapping.library";
+
+// DeidentificationConfig defines de-identification in Data Harmonization.
+message DeidentificationConfig {}
