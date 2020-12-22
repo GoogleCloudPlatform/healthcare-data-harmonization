@@ -27,6 +27,7 @@ def Process_ADT_A01(ADT_A01) {
   out Resources : Condition;
 
   out Resources : PV1_DG1_Encounter(ADT_A01.PV1, ADT_A01.DG1, Patient, Condition);
+  root Provenance : MSH_Provenance(ADT_A01.MSH);
 }
 
 post Output_Transaction

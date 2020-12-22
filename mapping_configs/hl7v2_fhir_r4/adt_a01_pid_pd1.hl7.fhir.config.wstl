@@ -18,6 +18,7 @@ def Process_ADT_A01(ADT_A01) {
   var Patient : PID_PD1_Patient(ADT_A01.PID, ADT_A01.PD1);
   out Resources : Patient;
   out Resources : PID_Account(ADT_A01.PID.18, Patient);
+  root Provenance : MSH_Provenance(ADT_A01.MSH);
 }
 
 post Output_Transaction

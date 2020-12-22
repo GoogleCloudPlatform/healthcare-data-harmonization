@@ -19,6 +19,7 @@ def Process_ADT_A01(ADT_A01) {
   out Resources : MH;
   out Resources : HD_Provenance(ADT_A01.MSH.3, ADT_A01.MSH.7, MH);
   root Bundle : MSH_Bundle(ADT_A01.MSH.7, ADT_A01.MSH.10);
+  root Provenance : MSH_Provenance(ADT_A01.MSH);
 }
 
 post Output_Transaction

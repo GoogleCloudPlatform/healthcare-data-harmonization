@@ -27,6 +27,7 @@ def Transform_ADT(required ADT) {
   out Resources : MessageHeader;
   out Resources : HD_Provenance(ADT.MSH.3, ADT.MSH.7, MessageHeader);
   root Bundle : MSH_Bundle(ADT.MSH.7, ADT.MSH.10);
+  root Provenance : MSH_Provenance(ADT.MSH);
 
   var Patient : PID_PD1_Patient(ADT.PID, ADT.PD1);
   var Patient.contact[] (if ADT.NK1) : NK1_Contact(ADT.NK1[]);
@@ -190,6 +191,7 @@ def ORU_R01(ORU_R01) {
   out Resources : MessageHeader;
   out Resources : HD_Provenance(ORU_R01.MSH.3, ORU_R01.MSH.7, MessageHeader);
   root Bundle : MSH_Bundle(ORU_R01.MSH.7, ORU_R01.MSH.10);
+  root Provenance : MSH_Provenance(ORU_R01.MSH);
 
   $this : Parse_PATIENT_RESULT(ORU_R01.PATIENT_RESULT[]);
 }
@@ -222,6 +224,7 @@ def OML_O21(OML_O21) {
   out Resources : MessageHeader;
   out Resources : HD_Provenance(OML_O21.MSH.3, OML_O21.MSH.7, MessageHeader);
   root Bundle : MSH_Bundle(OML_O21.MSH.7, OML_O21.MSH.10);
+  root Provenance : MSH_Provenance(OML_O21.MSH);
 
   var Patient : PID_PD1_Patient(OML_O21.PATIENT.PID, OML_O21.PATIENT.PD1);
   out Resources : Patient;
@@ -269,6 +272,7 @@ def ORM_O01(ORM_O01) {
   out Resources : MessageHeader;
   out Resources : HD_Provenance(ORM_O01.MSH.3, ORM_O01.MSH.7, MessageHeader);
   root Bundle : MSH_Bundle(ORM_O01.MSH.7, ORM_O01.MSH.10);
+  root Provenance : MSH_Provenance(ORM_O01.MSH);
 
   var Patient : PID_PD1_Patient(ORM_O01.PATIENT.PID, ORM_O01.PATIENT.PD1);
   out Resources : Patient;

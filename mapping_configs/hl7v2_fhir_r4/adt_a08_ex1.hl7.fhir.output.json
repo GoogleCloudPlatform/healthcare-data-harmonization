@@ -7,18 +7,18 @@
    "type":"transaction",
    "entry":[
       {
-         "request":{
-            "url":"Organization/01010101-0101-4101-8101-010101010101",
-            "method":"PUT"
-         },
          "resource":{
-            "id":"01010101-0101-4101-8101-010101010101",
             "resourceType":"Organization",
             "identifier":[
                {
                   "value":"Ntierprise Clinic"
                }
-            ]
+            ],
+            "id":"01010101-0101-4101-8101-010101010101"
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Organization/01010101-0101-4101-8101-010101010101"
          }
       },
       {
@@ -38,6 +38,22 @@
       },
       {
          "resource":{
+            "eventCoding":{
+               "code":"A08",
+               "display":"ADT^A08^",
+               "system":"http://terminology.hl7.org/CodeSystem/v2-0003"
+            },
+            "meta":{
+               "tag":[
+                  {
+                     "system":"http://terminology.hl7.org/CodeSystem/v2-0103",
+                     "code":"P"
+                  },
+                  {
+                     "system":"http://terminology.hl7.org/CodeSystem/v2-0207"
+                  }
+               ]
+            },
             "id":"03030303-0303-4303-8303-030303030303",
             "resourceType":"MessageHeader",
             "source":{
@@ -49,33 +65,17 @@
             },
             "destination":[
                {
+                  "name":"Healthmatics EHR",
                   "endpoint":"unknown",
                   "receiver":{
                      "reference":"Organization/02020202-0202-4202-8202-020202020202"
-                  },
-                  "name":"Healthmatics EHR"
-               }
-            ],
-            "eventCoding":{
-               "system":"http://terminology.hl7.org/CodeSystem/v2-0003",
-               "code":"A08",
-               "display":"ADT^A08^"
-            },
-            "meta":{
-               "tag":[
-                  {
-                     "code":"P",
-                     "system":"http://terminology.hl7.org/CodeSystem/v2-0103"
-                  },
-                  {
-                     "system":"http://terminology.hl7.org/CodeSystem/v2-0207"
                   }
-               ]
-            }
+               }
+            ]
          },
          "request":{
-            "url":"MessageHeader/03030303-0303-4303-8303-030303030303",
-            "method":"PUT"
+            "method":"PUT",
+            "url":"MessageHeader/03030303-0303-4303-8303-030303030303"
          }
       },
       {
@@ -89,15 +89,11 @@
             "resourceType":"Device"
          },
          "request":{
-            "method":"PUT",
-            "url":"Device/04040404-0404-4404-8404-040404040404"
+            "url":"Device/04040404-0404-4404-8404-040404040404",
+            "method":"PUT"
          }
       },
       {
-         "request":{
-            "method":"PUT",
-            "url":"Provenance/05050505-0505-4505-8505-050505050505"
-         },
          "resource":{
             "resourceType":"Provenance",
             "agent":[
@@ -114,166 +110,201 @@
                }
             ],
             "id":"05050505-0505-4505-8505-050505050505"
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Provenance/05050505-0505-4505-8505-050505050505"
          }
       },
       {
-         "request":{
-            "url":"Patient/06060606-0606-4606-8606-060606060606",
-            "method":"PUT"
-         },
          "resource":{
+            "id":"06060606-0606-4606-8606-060606060606",
+            "resourceType":"Device",
+            "identifier":[
+               {
+                  "value":"Ntierprise"
+               }
+            ]
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Device/06060606-0606-4606-8606-060606060606"
+         }
+      },
+      {
+         "resource":{
+            "id":"07070707-0707-4707-8707-070707070707",
+            "resourceType":"Organization",
+            "identifier":[
+               {
+                  "value":"Ntierprise Clinic"
+               }
+            ]
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Organization/07070707-0707-4707-8707-070707070707"
+         }
+      },
+      {
+         "resource":{
+            "name":[
+               {
+                  "given":[
+                     "Tiny"
+                  ],
+                  "family":"Bond"
+               }
+            ],
+            "deceasedBoolean":false,
+            "resourceType":"Patient",
+            "birthDate":"1999-07-23",
+            "multipleBirthBoolean":false,
             "contact":[
                {
+                  "address":{
+                     "state":"NC",
+                     "postalCode":"27511",
+                     "line":[
+                        "007 Soho Lane"
+                     ],
+                     "city":"Cary"
+                  },
                   "name":{
                      "family":"Bond",
                      "given":[
                         "Lady",
                         "T"
                      ]
-                  },
-                  "address":{
-                     "line":[
-                        "007 Soho Lane"
-                     ],
-                     "city":"Cary",
-                     "state":"NC",
-                     "postalCode":"27511"
                   }
                }
             ],
-            "address":[
-               {
-                  "state":"NC",
-                  "postalCode":"27677",
-                  "line":[
-                     "8388 Secret Agent Way"
-                  ],
-                  "city":"Raleigh"
-               }
-            ],
-            "gender":"male",
-            "active":true,
-            "deceasedBoolean":false,
-            "name":[
-               {
-                  "family":"Bond",
-                  "given":[
-                     "Tiny"
-                  ]
-               }
-            ],
-            "birthDate":"1999-07-23",
-            "resourceType":"Patient",
-            "id":"06060606-0606-4606-8606-060606060606",
             "identifier":[
                {
                   "value":"151"
                },
                {
-                  "system":"http://hl7.org/fhir/sid/us-ssn",
                   "type":{
                      "coding":[
                         {
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
-                           "code":"SB"
+                           "code":"SB",
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
                         }
                      ]
-                  }
+                  },
+                  "system":"http://hl7.org/fhir/sid/us-ssn"
                },
                {
                   "type":{
                      "coding":[
                         {
-                           "code":"DL",
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
+                           "code":"DL"
+                        }
+                     ]
+                  }
+               }
+            ],
+            "gender":"male",
+            "address":[
+               {
+                  "postalCode":"27677",
+                  "line":[
+                     "8388 Secret Agent Way"
+                  ],
+                  "city":"Raleigh",
+                  "state":"NC"
+               }
+            ],
+            "id":"09090909-0909-4909-8909-090909090909",
+            "active":true
+         },
+         "request":{
+            "url":"Patient/09090909-0909-4909-8909-090909090909",
+            "method":"PUT"
+         }
+      },
+      {
+         "request":{
+            "method":"PUT",
+            "url":"Account/0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a"
+         },
+         "resource":{
+            "resourceType":"Account",
+            "identifier":[
+               {
+                  "value":"151"
+               }
+            ],
+            "subject":[
+               {
+                  "reference":"Patient/09090909-0909-4909-8909-090909090909"
+               }
+            ],
+            "status":"active",
+            "id":"0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a"
+         }
+      },
+      {
+         "resource":{
+            "identifier":[
+               {
+                  "system":"http://hl7.org/fhir/sid/us-ssn",
+                  "type":{
+                     "coding":[
+                        {
+                           "code":"SB",
                            "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
                         }
                      ]
                   }
                }
             ],
-            "multipleBirthBoolean":false
-         }
-      },
-      {
-         "resource":{
-            "subject":[
-               {
-                  "reference":"Patient/06060606-0606-4606-8606-060606060606"
-               }
-            ],
-            "status":"active",
-            "id":"07070707-0707-4707-8707-070707070707",
-            "resourceType":"Account",
-            "identifier":[
-               {
-                  "value":"151"
-               }
-            ]
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Account/07070707-0707-4707-8707-070707070707"
-         }
-      },
-      {
-         "resource":{
+            "patient":{
+               "reference":"Patient/09090909-0909-4909-8909-090909090909"
+            },
+            "id":"0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b",
+            "resourceType":"RelatedPerson",
             "name":[
                {
-                  "family":"Bond",
                   "given":[
                      "Lady",
                      "T"
-                  ]
+                  ],
+                  "family":"Bond"
                }
             ],
             "relationship":[
                {
                   "coding":[
                      {
-                        "code":"Spouse",
-                        "version":"v1",
                         "display":"",
-                        "system":"Relationship-unharmonized"
+                        "system":"Relationship-unharmonized",
+                        "code":"Spouse",
+                        "version":"v1"
                      }
                   ]
                }
             ],
             "address":[
                {
+                  "city":"Cary",
                   "state":"NC",
                   "postalCode":"27511",
                   "line":[
                      "007 Soho Lane"
-                  ],
-                  "city":"Cary"
+                  ]
                }
-            ],
-            "identifier":[
-               {
-                  "type":{
-                     "coding":[
-                        {
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
-                           "code":"SB"
-                        }
-                     ]
-                  },
-                  "system":"http://hl7.org/fhir/sid/us-ssn"
-               }
-            ],
-            "patient":{
-               "reference":"Patient/06060606-0606-4606-8606-060606060606"
-            },
-            "id":"08080808-0808-4808-8808-080808080808",
-            "resourceType":"RelatedPerson"
+            ]
          },
          "request":{
-            "method":"PUT",
-            "url":"RelatedPerson/08080808-0808-4808-8808-080808080808"
+            "url":"RelatedPerson/0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b",
+            "method":"PUT"
          }
       },
       {
          "resource":{
+            "resourceType":"Practitioner",
             "identifier":[
                {
                   "value":"Manning"
@@ -281,22 +312,22 @@
             ],
             "name":[
                {
-                  "family":"Manning",
                   "given":[
                      "Terry"
-                  ]
+                  ],
+                  "family":"Manning"
                }
             ],
-            "id":"09090909-0909-4909-8909-090909090909",
-            "resourceType":"Practitioner"
+            "id":"0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c"
          },
          "request":{
             "method":"PUT",
-            "url":"Practitioner/09090909-0909-4909-8909-090909090909"
+            "url":"Practitioner/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c"
          }
       },
       {
          "resource":{
+            "resourceType":"Encounter",
             "class":{
                "version":"v1",
                "display":"",
@@ -305,6 +336,9 @@
             },
             "participant":[
                {
+                  "individual":{
+                     "reference":"Practitioner/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c"
+                  },
                   "type":[
                      {
                         "coding":[
@@ -315,35 +349,108 @@
                            }
                         ]
                      }
-                  ],
-                  "individual":{
-                     "reference":"Practitioner/09090909-0909-4909-8909-090909090909"
-                  }
+                  ]
                }
             ],
             "identifier":[
                {
                   "type":{
-                     "text":"visit number",
                      "coding":[
                         {
                            "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
                            "code":"VN"
                         }
-                     ]
+                     ],
+                     "text":"visit number"
                   }
                }
             ],
             "status":"in-progress",
             "subject":{
-               "reference":"Patient/06060606-0606-4606-8606-060606060606"
+               "reference":"Patient/09090909-0909-4909-8909-090909090909"
             },
-            "id":"0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a",
-            "resourceType":"Encounter"
+            "id":"0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d"
          },
          "request":{
             "method":"PUT",
-            "url":"Encounter/0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a"
+            "url":"Encounter/0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d"
+         }
+      },
+      {
+         "resource":{
+            "id":"08080808-0808-4808-8808-080808080808",
+            "resourceType":"Provenance",
+            "agent":[
+               {
+                  "type":{
+                     "coding":[
+                        {
+                           "code":"assembler",
+                           "system":"http://terminology.hl7.org/CodeSystem/provenance-participant-type"
+                        }
+                     ]
+                  },
+                  "who":{
+                     "reference":"Device/06060606-0606-4606-8606-060606060606"
+                  }
+               },
+               {
+                  "type":{
+                     "coding":[
+                        {
+                           "code":"author",
+                           "system":"http://terminology.hl7.org/CodeSystem/provenance-participant-type"
+                        }
+                     ]
+                  },
+                  "who":{
+                     "reference":"Organization/07070707-0707-4707-8707-070707070707"
+                  }
+               }
+            ],
+            "recorded":"2019-04-23T11:39:10.234423Z",
+            "target":[
+               {
+                  "reference":"Organization/01010101-0101-4101-8101-010101010101"
+               },
+               {
+                  "reference":"Organization/02020202-0202-4202-8202-020202020202"
+               },
+               {
+                  "reference":"MessageHeader/03030303-0303-4303-8303-030303030303"
+               },
+               {
+                  "reference":"Device/04040404-0404-4404-8404-040404040404"
+               },
+               {
+                  "reference":"Provenance/05050505-0505-4505-8505-050505050505"
+               },
+               {
+                  "reference":"Device/06060606-0606-4606-8606-060606060606"
+               },
+               {
+                  "reference":"Organization/07070707-0707-4707-8707-070707070707"
+               },
+               {
+                  "reference":"Patient/09090909-0909-4909-8909-090909090909"
+               },
+               {
+                  "reference":"Account/0a0a0a0a-0a0a-4a0a-8a0a-0a0a0a0a0a0a"
+               },
+               {
+                  "reference":"RelatedPerson/0b0b0b0b-0b0b-4b0b-8b0b-0b0b0b0b0b0b"
+               },
+               {
+                  "reference":"Practitioner/0c0c0c0c-0c0c-4c0c-8c0c-0c0c0c0c0c0c"
+               },
+               {
+                  "reference":"Encounter/0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d"
+               }
+            ]
+         },
+         "request":{
+            "url":"Provenance/08080808-0808-4808-8808-080808080808",
+            "method":"PUT"
          }
       }
    ]

@@ -121,6 +121,23 @@ def Convert_DateTime(required str) {
   $this: $ReformatTime(GetRFC3339("s"), input, "2006-01-02T15:04:05+01:00");
 }
 
+// Description: Constructs a Provenance Resource based on MSH Segment
+//
+// Argument(s):
+//   MSH Segment
+//
+// Output(s):
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   Device: https://www.hl7.org/fhir/device.html
+//
+def MSH_Provenance(required MSH) {
+  agent[] (if MSH.3): Build_Agent("assembler", "http://terminology.hl7.org/CodeSystem/provenance-participant-type", Output_Resource(HD_Device(MSH.3)));
+  agent[] (if MSH.4): Build_Agent("author", "http://terminology.hl7.org/CodeSystem/provenance-participant-type", Output_Resource(HD_Organization(MSH.4)));
+  recorded : Convert_Instant(MSH.7);
+  id : $UUID();
+  resourceType : "Provenance";
+}
+
 // Description: Constructs a Provenance Resource, and the Device Resource being referenced
 //
 // Argument(s):
@@ -1144,4 +1161,19 @@ def HD_MessageHeaderDestination(required HD, MSH6, MSH23) {
   } else {
      receiver : Build_Reference(Output_Resource(XON_Organization(MSH23)));
   }
+}
+
+// Description: Constructs a Provenance.agent datatype
+//
+// Argument(s):
+//   Provenance.Type: https://www.hl7.org/fhir/provenance-definitions.html#Provenance.agent.type
+//   Provenance.Who: https://www.hl7.org/fhir/provenance-definitions.html#Provenance.agent.who
+//
+// Output(s):
+//   Provenance.agent : https://www.hl7.org/fhir/provenance-definitions.html#Provenance.agent
+//
+def Build_Agent(Code, System, required Who) {
+  type.coding[0].code : Code;
+  type.coding[0].system : System;
+  who : Build_Reference(Who);
 }
