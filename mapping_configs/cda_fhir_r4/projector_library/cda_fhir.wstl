@@ -24,5 +24,8 @@
 //   Procedure: https://www.hl7.org/fhir/procedure.html
 //
 def CDA_FHIR(Document) {
-  out Resources (if Document.ClinicalDocument) : Process_Document(Document.ClinicalDocument);
+  var OutputDocument (if Document.ClinicalDocument) : Process_Document(Document.ClinicalDocument);
+  var ReconciledDocument (if OutputDocument) : OutputDocument;
+  var ReconciledDocument.identifier (if ~OutputDocument.identifier): II_HashIdentifier(OutputDocument);
+  out Resources : ReconciledDocument;
 }

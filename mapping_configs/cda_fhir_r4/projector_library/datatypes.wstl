@@ -1,7 +1,3 @@
-def isNotNI(Object) {
-  $this : $Type(Object) ~= "container";
-}
-
 // Description: Constructs an Address datatype
 //
 // Argument(s):
@@ -12,11 +8,11 @@ def isNotNI(Object) {
 //
 def AD_Address(required AD) {
   use (if AD.use = "HP"): "home";
-  line[] : AD.streetAddressLine[where $Type($) ~= "container"][];
+  line[] : AD.streetAddressLine[];
   city : AD.city[0];
   state : AD.state[0];
-  postalCode (if ~$Type(AD.postalCode[0]) = "container") : AD.postalCode[0];
-  var Country : AD.country[where isNotNI($)]
+  postalCode : AD.postalCode[0];
+  var Country : AD.country[]
   country : Country[0];
 }
 
@@ -47,7 +43,6 @@ def IsInterval (required TS) {
 //   Location: https://www.hl7.org/fhir/location.html
 //
 def AD_Location(required AD) {
-  id : $UUID();
   resourceType : "Location"
   address : AD_Address(AD);
 }
@@ -63,7 +58,6 @@ def AD_Location(required AD) {
 def TEL_ContactPoint(required TEL) {
   system : "phone";
   value : TEL.value
-  //use : "home"
 }
 
 // Description: Constructs an Organization resource
@@ -75,7 +69,6 @@ def TEL_ContactPoint(required TEL) {
 //   Organization: https://www.hl7.org/fhir/organization.html
 //
 def ORG_Organization(required ORG) {
-  id : $UUID();
   resourceType : "Organization";
   identifier[] :  II_Identifier(ORG.id[]);
   var Name : ORG.name[where $Type($) ~= "container"]
@@ -95,7 +88,6 @@ def ORG_Organization(required ORG) {
 //   Organization: https://www.hl7.org/fhir/organization.html
 //
 def ORG_CustodianOrganization(required ORG) {
-  id : $UUID();
   resourceType : "Organization"
   identifier[] :  II_Identifier(ORG.id[])
   name (if $Type(ORG.name) ~= "container") : ORG.name;
@@ -114,13 +106,23 @@ def ORG_CustodianOrganization(required ORG) {
 //   Identifier datatype: https://www.hl7.org/fhir/datatypes.html#Identifier
 //
 def II_Identifier(required II) {
-  value : II.extension;
-  system : $StrCat("urn:oid:", II.'root');
+  if (II.extension) {
+    value : II.extension;
+    system (if II.'root'): $StrCat("urn:oid:", II.'root');
+  }
 }
 
-def BUILD_ReconciledIdentifier(required II) {
-  value : II.extension;
-  system : $StrCat("urn:oid:", II.'root');
+// Description: Constructs an Hash Identifier datatype
+//
+// Argument(s):
+//   II datatype
+//
+// Output(s):
+//   Identifier datatype: https://www.hl7.org/fhir/datatypes.html#Identifier
+//
+def II_HashIdentifier(required II) {
+  value : $Hash(II);
+  system : $StrCat("urn:oid:google/reconciliation-id");
 }
 
 // Description: Constructs a HumanName datatype
@@ -163,7 +165,7 @@ def PARSE_Name(required Name) {
 //   CodeableConcept datatype: https://www.hl7.org/fhir/datatypes.html#CodeableConcept
 //
 def CD_CodeableConcept(required CD) {
-  coding[0].system : $StrCat("urn:oid:", CD.codeSystem);
+  coding[0].system (if CD.codeSystem): $StrCat("urn:oid:", CD.codeSystem);
   coding[0].code : CD.code
   coding[0].display : CD.displayName
 }
@@ -177,7 +179,7 @@ def CD_CodeableConcept(required CD) {
 //   Coding datatype: https://www.hl7.org/fhir/datatypes.html#Coding
 //
 def CD_Coding(required CD) {
-  system : $StrCat("urn:oid:", CD.codeSystem);
+  system (if CD.codeSystem) : $StrCat("urn:oid:", CD.codeSystem);
   code : CD.code
   display : CD.displayName
 }
@@ -218,8 +220,7 @@ def Guardian_Contact(required Guardian) {
 // Output(s):
 //   Practitioner: https://www.hl7.org/fhir/practitioner.html
 //
-def Person_Practitioner(required PR) {
-  id : $UUID();
+def Person_Practitioner(required PR, ID) {
   resourceType: "Practitioner";
   name[]: PN_HumanName(PR.name[]);
 }
@@ -261,7 +262,11 @@ def PQ_UCUM(required PQ){
 //   FamilyMemberHistory.condition datatype: https://www.hl7.org/fhir/familymemberhistory-definitions.html#FamilyMemberHistory.condition
 //
 def Observation_ConditionDataType(required Observation) {
-  code (if Observation.value[0].'type' = "CD"): CD_CodeableConcept(Observation.value[0]);
+  if (Observation.value[0].'type' = "CD" and Observation.value[0].code) {
+    code (if Observation.value[0].'type' = "CD"): CD_CodeableConcept(Observation.value[0]);
+  } else {
+    code.coding[0].code : "unknown";
+  }
   // templateId = 2.16.840.1.113883.10.20.22.4.31 corresponds to an age observation
   var AgeObservation : Observation.entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.31")];
   onsetAge : PQ_UCUM(AgeObservation[0].value[0]);
@@ -285,7 +290,6 @@ def Observation_ConditionDataType(required Observation) {
 //
 def ManufacturedProduct_Medication(required ManufacturedProduct) {
   resourceType: "Medication";
-  id : $UUID();
   identifier[] : II_Identifier(ManufacturedProduct.id[]);
   code : CD_CodeableConcept(ManufacturedProduct.manufacturedMaterial.code);
   ingredient[].itemCodeableConcept : CD_CodeableConcept[](ManufacturedProduct.manufacturedMaterial.code.translation[]);
@@ -303,7 +307,6 @@ def ManufacturedProduct_Medication(required ManufacturedProduct) {
 //
 def Supply_MedicationDispense(required Supply, Patient) {
   resourceType: "MedicationDispense";
-  id : $UUID();
   identifier[] : II_Identifier(Supply.id[]);
   status : Convert_TerminologyCode(Supply.statusCode.code, "SupplyStatusCode");
   type : CD_CodeableConcept(Supply.code);
@@ -330,7 +333,7 @@ def Supply_MedicationDispense(required Supply, Patient) {
 //
 def ObservationRange_ReferenceRange(ObservationRange) {
   type : CD_CodeableConcept(ObservationRange.interpretationCode);
-  text (if isNotNI(ObservationRange.text)): ObservationRange.text;
+  text : ObservationRange.text;
   low : PQ_Quantity(ObservationRange.value.low);
   high : PQ_Quantity(ObservationRange.value.high);
 }
@@ -361,7 +364,7 @@ def Build_Attester(required Attester, Mode) {
 def Build_Section(required Section, required Resource) {
   title : Section.title;
   code : CD_CodeableConcept(Section.code);
-  entry[] : Build_Reference(Resource[]);
+  entry[] : Build_Reference(Output_Resource[](Resource[]));
   //TODO:  Add text also ...
 }
 
@@ -374,7 +377,6 @@ def Build_Section(required Section, required Resource) {
 //   Location: https://www.hl7.org/fhir/location.html
 //
 def ParticipantRole_Location(ParticipantRole) {
-  id : $UUID();
   resourceType: "Location";
   identifier[] : II_Identifier(ParticipantRole.id[]);
   type[] : CD_CodeableConcept(ParticipantRole.code);
@@ -440,7 +442,11 @@ def Build_ImmunizationReaction(required Observation, Patient) {
 //
 def Build_AllergyReaction(Substance, required Manifestation, Onset, Severity) {
   substance : CD_CodeableConcept(Substance);
-  manifestation[] : CD_CodeableConcept(Manifestation);
+  if (Manifestation.code) {
+    manifestation[] : CD_CodeableConcept(Manifestation);
+  } else {
+    manifestation[].coding[0].code : "unknown";
+  }
   onset : Convert_DateTime(Onset.value);
   severity (if Severity.code) : Convert_TerminologyCode(Severity.code, "SeverityCode");
 }
@@ -455,21 +461,44 @@ def Build_AllergyReaction(Substance, required Manifestation, Onset, Severity) {
 //   Observation.component: https://www.hl7.org/fhir/observation-definitions.html#Observation.component
 //
 def Build_Component(required Code, required Value) {
-  code : CD_CodeableConcept(Code);
+  if (Code.code) {
+    code : CD_CodeableConcept(Code);
+  } else {
+    code.coding[0].code : "unknown";
+  }
   valueCodeableConcept (if Value.'type' = "CD") : CD_CodeableConcept(Value);
   valueQuantity (if Value.'type' = "PQ" and Value.value) : PQ_Quantity(Value);
 }
 
+// Description: Constructs a Bundle identifier and timestamp datatype
+//
+// Argument(s):
+//   II Datatype: http://ccda.art-decor.org/ccda-html-20150727T182455/rules.html
+//   Time Datatype: http://ccda.art-decor.org/ccda-html-20150727T182455/rules.html
+//
+// Output(s):
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//
 def ClinicalDocument_Bundle(II, Time) {
   if (~II.extension) {
     identifier.value : "unknown";
   } else {
     identifier.value : II.extension;
   }
-  identifier.system : $StrCat("urn:oid:", II.'root');
+  identifier.system (if II.'root') : $StrCat("urn:oid:", II.'root');
   timestamp : Convert_Instant(Time);
 }
 
-def Build_ID(Identifier) {
-  $this : $Hash(Identifier[where $]);
+// Description: Constructs a DocumentReference Resource based on Document URL
+//
+// Argument(s):
+//   URL Datatype: https://www.hl7.org/fhir/datatypes.html#Attachment
+//
+// Output(s):
+//   DocumentReference: https://www.hl7.org/fhir/documentreference.html
+//
+def Build_DocumentReference(required URL) {
+  resourceType : "DocumentReference";
+  content[0].attachment.url : URL;
+  status : "current";
 }

@@ -23,26 +23,24 @@
 //   Practitioner: https://www.hl7.org/fhir/practitioner.html
 //   Procedure: https://www.hl7.org/fhir/procedure.html
 //
-def Process_Document(ClinicalDocument) {
+def Process_Document(required ClinicalDocument) {
   var Author : AssignedEntity_PractitionerRole(ClinicalDocument.author[*].assignedAuthor[]);
-  out Resources : Author;
 
   var Authenticator : AssignedEntity_PractitionerRole(ClinicalDocument.authenticator[*].assignedEntity[]);
-  out Resources : Authenticator;
 
   var LegalAuthenticator : AssignedEntity_PractitionerRole(ClinicalDocument.legalAuthenticator.assignedEntity);
-  out Resources : LegalAuthenticator;
 
   var GeneralPractitioner : AssignedEntity_PractitionerRole(ClinicalDocument.documentationOf[*].serviceEvent.performer[*].assignedEntity[]);
-  out Resources : GeneralPractitioner;
 
   var Patient : PatientRole_Patient(ClinicalDocument.recordTarget[*].patientRole[], GeneralPractitioner);
-  out Resources : Patient;
+  var PatientResource (if Patient): Output_Resource(Patient[0]);
 
-  var Custodian : ORG_CustodianOrganization(ClinicalDocument.custodian.assignedCustodian.representedCustodianOrganization);
-  out Resources : Custodian;
+  var Custodian : Output_Resource(ORG_CustodianOrganization(ClinicalDocument.custodian.assignedCustodian.representedCustodianOrganization));
+  root CustodianOrganization : Custodian;
 
   root Bundle : ClinicalDocument_Bundle(ClinicalDocument.id, ClinicalDocument.effectiveTime.value);
+
+  root DocumentReference : Output_Resource(Build_DocumentReference("http://example.com/url"));
 
   resourceType : "Composition";
   identifier :  II_Identifier(ClinicalDocument.id);
@@ -51,18 +49,17 @@ def Process_Document(ClinicalDocument) {
   title : ClinicalDocument.title;
   status: "preliminary";
   confidentiality : ClinicalDocument.confidentialityCode.code;
-  subject : Build_Reference(Patient[0]);
-  author[] : Build_Reference(Author[]);
-  attester[] : Build_Attester(Authenticator[],"professional");
-  attester[] : Build_Attester(LegalAuthenticator,"legal");
+  subject : Build_Reference(PatientResource);
+  author[] : Build_Reference(Output_Resource[](Author[]));
+  attester[] : Build_Attester(Output_Resource[](Authenticator[]),"professional");
+  attester[] : Build_Attester(Output_Resource(LegalAuthenticator),"legal");
   custodian : Build_Reference(Custodian);
 
   // templateId = 2.16.840.1.113883.10.20.22.2.15 corresponds to Family History Section
   var FamilyMemberHistorySection : ClinicalDocument.component.structuredBody.component[*].section[where templateIdHasRoot($.templateId,"2.16.840.1.113883.10.20.22.2.15")];
   // templateId = 2.16.840.1.113883.10.20.22.4.45 corresponds to Family History Organizer
   var FamilyMemberHistorySectionOrganizer: FamilyMemberHistorySection[*].entry[*].organizer[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.45")];
-  var FamilyMemberHistory (if FamilyMemberHistorySectionOrganizer) : FamilyMemberHistorySection_FamilyMemberHistory(FamilyMemberHistorySectionOrganizer[], Patient[0]);
-  out Resources (if FamilyMemberHistory) : FamilyMemberHistory;
+  var FamilyMemberHistory (if FamilyMemberHistorySectionOrganizer) : FamilyMemberHistorySection_FamilyMemberHistory(FamilyMemberHistorySectionOrganizer[], PatientResource);
   section[] (if FamilyMemberHistory) : Build_Section(FamilyMemberHistorySection[0], FamilyMemberHistory);
 
   // templateId = 2.16.840.1.113883.10.20.22.2.4.1 corresponds to Vital Signs Section
@@ -71,30 +68,26 @@ def Process_Document(ClinicalDocument) {
   var VitalSignSectionOrganizer: VitalSignSection[*].entry[*].organizer[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.26")];
   // templateId = 2.16.840.1.113883.10.20.22.4.27 corresponds to Vital Sign Observation (V2)
   var VitalSignSectionObservation: VitalSignSectionOrganizer[*].component[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.27")];
-  var VitalSign : Observation_Observation(VitalSignSectionObservation[], Patient[0]);
-  out Resources : VitalSign;
+  var VitalSign : Observation_Observation(VitalSignSectionObservation[], PatientResource);
   section[] : Build_Section(VitalSignSection[0], VitalSign);
 
   // templateId = 2.16.840.1.113883.10.20.22.2.17 corresponds to Social History Section
   var SocialHistorySection : ClinicalDocument.component.structuredBody.component[*].section[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.2.17")];
-  var SocialHistory : Observation_Observation(SocialHistorySection[*].entry[*].observation[], Patient[0]);
-  out Resources : SocialHistory;
+  var SocialHistory : Observation_Observation(SocialHistorySection[*].entry[*].observation[], PatientResource);
   section[] : Build_Section(SocialHistorySection[0], SocialHistory);
 
   // templateId = 2.16.840.1.113883.10.20.22.2.22.1 corresponds to Encounters Section
   var EncounterSection : ClinicalDocument.component.structuredBody.component[*].section[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.2.22.1") or templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.2.22")];
   // templateId = 2.16.840.1.113883.10.20.22.4.49 corresponds to an Encounter Activity
   var EncounterSectionEntryEncounter: EncounterSection[*].entry[*].encounter[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.49")];
-  var Encounter : Encounter_Encounter(EncounterSectionEntryEncounter[], Patient[0]);
-  out Resources : Encounter;
+  var Encounter : Encounter_Encounter(EncounterSectionEntryEncounter[], PatientResource);
   section[] : Build_Section(EncounterSection[0], Encounter);
 
   // templateId = 2.16.840.1.113883.10.20.22.2.14 corresponds to Functional Status Section
   var FunctionalStatusSection : ClinicalDocument.component.structuredBody.component[*].section[where templateIdHasRoot($.templateId,"2.16.840.1.113883.10.20.22.2.14")];
   // templateId = 2.16.840.1.113883.10.20.22.4.66 corresponds to Functional Status Organizer
   var FunctionalStatusSectionOrganizer: FunctionalStatusSection[*].entry[*].organizer[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.66")];
-  var FunctionalStatus (if FunctionalStatusSectionOrganizer) : Observation_Observation(FunctionalStatusSectionOrganizer[*].component[*].observation[], Patient[0]);
-  out Resources (if FunctionalStatus) : FunctionalStatus;
+  var FunctionalStatus (if FunctionalStatusSectionOrganizer) : Observation_Observation(FunctionalStatusSectionOrganizer[*].component[*].observation[], PatientResource);
   section[] (if FunctionalStatus) : Build_Section(FunctionalStatusSection[0], FunctionalStatus);
 
   // templateId = 2.16.840.1.113883.10.20.22.2.5.1 corresponds to Problem Section
@@ -103,24 +96,21 @@ def Process_Document(ClinicalDocument) {
   var ProblemSectionEntryAct (if ProblemSection): ProblemSection[*].entry[*].act[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.3")];
   // templateId = 2.16.840.1.113883.10.20.22.4.4 corresponds to an Problem Observation
   var ProblemSectionObservation (if ProblemSectionEntryAct): ProblemSectionEntryAct[*].entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.4")];
-  var Condition : Observation_Condition(ProblemSectionObservation[], ProblemSectionEntryAct[0].statusCode.code, Patient[0]);
-  out Resources : Condition;
+  var Condition : Observation_Condition(ProblemSectionObservation[], ProblemSectionEntryAct[0].statusCode.code, PatientResource);
   section[] : Build_Section(ProblemSection[0], Condition);
 
   // templateId = 2.16.840.1.113883.10.20.22.2.7.1 corresponds to Procedures Section
   var ProcedureSection : ClinicalDocument.component.structuredBody.component[*].section[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.2.7.1") or templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.2.7")];
   // templateId = 2.16.840.1.113883.10.20.22.4.14 corresponds to Procedure Activity Procedure (V2)
   var ProcedureSectionEntryProcedure (if ProcedureSection) : ProcedureSection[*].entry[*].procedure[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.14")];
-  var Procedure (if ProcedureSectionEntryProcedure) : Procedure_Procedure(ProcedureSectionEntryProcedure[], Patient[0]);
-  out Resources : Procedure;
+  var Procedure (if ProcedureSectionEntryProcedure) : Procedure_Procedure(ProcedureSectionEntryProcedure[], PatientResource);
   section[] : Build_Section(ProcedureSection[0], Procedure);
 
   // templateId = 2.16.840.1.113883.10.20.22.2.3.1 corresponds to Results Section
   var ResultSection : ClinicalDocument.component.structuredBody.component[*].section[where templateIdHasRoot($.templateId,"2.16.840.1.113883.10.20.22.2.3.1") or templateIdHasRoot($.templateId,"2.16.840.1.113883.10.20.22.2.3")];
   // templateId = 2.16.840.1.113883.10.20.22.4.1 corresponds to Result Organizer
   var ResultSectionOrganizer: ResultSection[*].entry[*].organizer[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.1")];
-  var DiagnosticReport (if ResultSectionOrganizer) : ResultSection_DiagnosticReport(ResultSectionOrganizer[], Patient[0]);
-  out Resources (if DiagnosticReport) : DiagnosticReport;
+  var DiagnosticReport (if ResultSectionOrganizer) : ResultSection_DiagnosticReport(ResultSectionOrganizer[], PatientResource);
   section[] (if DiagnosticReport) : Build_Section(ResultSection[0], DiagnosticReport);
 
   // templateId = 2.16.840.1.113883.10.20.22.2.23 corresponds to Medical Equipment Section
@@ -132,41 +122,37 @@ def Process_Document(ClinicalDocument) {
   var MedicalEquipmentSectionReference[] (if ParticipantRole): ParticipantRole_Device(ParticipantRole[]);
   // templateId = 2.16.840.1.113883.10.20.22.4.14 corresponds to Procedure Activity Procedure (V2)
   var MedicalEquipmentProcedure: MedicalEquipmentSection[*].entry[*].procedure[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.14")];
-  var MedicalEquipmentSectionReference[] (if MedicalEquipmentProcedure) : Procedure_Procedure(MedicalEquipmentProcedure[], Patient[0]);
+  var MedicalEquipmentSectionReference[] (if MedicalEquipmentProcedure) : Procedure_Procedure(MedicalEquipmentProcedure[], PatientResource);
   //templateId = 2.16.840.1.113883.10.20.22.4.135 corresponds to Medical Equipment Organizer
   var MedicalEquipmentOrganizer : MedicalEquipmentSection[*].entry[*].organizer[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.135")];
   // templateId = 2.16.840.1.113883.10.20.22.4.14 corresponds to Procedure Activity Procedure (V2)
   var MedicalEquipmentOrganizerProcedure (if MedicalEquipmentOrganizer) : MedicalEquipmentOrganizer[*].component[*].procedure[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.14")];
-  var MedicalEquipmentSectionReference[] (if MedicalEquipmentOrganizerProcedure) : Procedure_Procedure(MedicalEquipmentOrganizerProcedure[], Patient[0]);
+  var MedicalEquipmentSectionReference[] (if MedicalEquipmentOrganizerProcedure) : Procedure_Procedure(MedicalEquipmentOrganizerProcedure[], PatientResource);
   // templateId = 2.16.840.1.113883.10.20.22.4.50 corresponds to Non-Medicinal Supply Activity (V2)
   var NonMedicinalOrganizerSupply : MedicalEquipmentOrganizer[*].component[*].supply[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.50")];
   // templateId = 2.16.840.1.113883.10.20.22.4.37 corresponds to a participantRole contributing as device to the given Medicinal Supply
   var OrganizerParticipantRole (if NonMedicinalOrganizerSupply) : NonMedicinalOrganizerSupply[*].participant[*].participantRole[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.37")];
   var MedicalEquipmentSectionReference[] (if OrganizerParticipantRole): ParticipantRole_Device(OrganizerParticipantRole[]);
-  out Resources (if MedicalEquipmentSectionReference) : MedicalEquipmentSectionReference;
   section[] (if MedicalEquipmentSectionReference) : Build_Section(MedicalEquipmentSection[0], MedicalEquipmentSectionReference);
 
   // templateId = 2.16.840.1.113883.10.20.22.2.1.1 corresponds to Medications Section
   var MedicationSection : ClinicalDocument.component.structuredBody.component[*].section[where templateIdHasRoot($.templateId,"2.16.840.1.113883.10.20.22.2.1.1") or templateIdHasRoot($.templateId,"2.16.840.1.113883.10.20.22.2.1")];
   // templateId = 2.16.840.1.113883.10.20.22.4.16 corresponds to Medication Activity
   var MedicationSubstanceAdministration (if MedicationSection) : MedicationSection[*].entry[*].substanceAdministration[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.16")];
-  var MedicationStatement (if MedicationSubstanceAdministration): SubstanceAdministration_MedicationStatement(MedicationSubstanceAdministration[], Patient[0]);
-  out Resources (if MedicationStatement) : MedicationStatement;
+  var MedicationStatement (if MedicationSubstanceAdministration): SubstanceAdministration_MedicationStatement(MedicationSubstanceAdministration[], PatientResource);
   section[] (if MedicationStatement) : Build_Section(MedicationSection[0], MedicationStatement);
 
   // templateId = 2.16.840.1.113883.10.20.22.2.2.1 corresponds to Immunizations Section
   var ImmunizationSection : ClinicalDocument.component.structuredBody.component[*].section[where templateIdHasRoot($.templateId,"2.16.840.1.113883.10.20.22.2.2.1") or templateIdHasRoot($.templateId,"2.16.840.1.113883.10.20.22.2.2")];
   // templateId = 2.16.840.1.113883.10.20.22.4.52 corresponds to Immunization Activity
   var ImmunizationSubstanceAdministration (if ImmunizationSection) : ImmunizationSection[*].entry[*].substanceAdministration[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.52")];
-  var Immunization (if ImmunizationSubstanceAdministration) : SubstanceAdministration_Immunization(ImmunizationSubstanceAdministration[], Patient[0]);
-  out Resources (if Immunization) : Immunization;
+  var Immunization (if ImmunizationSubstanceAdministration) : SubstanceAdministration_Immunization(ImmunizationSubstanceAdministration[], PatientResource);
   section[] (if ImmunizationSection) : Build_Section(ImmunizationSection[0], Immunization);
 
   // templateId = 2.16.840.1.113883.10.20.22.2.6.1 corresponds to Allergies and Intolerances Section
   var AllergyIntoleranceSection : ClinicalDocument.component.structuredBody.component[*].section[where templateIdHasRoot($.templateId,"2.16.840.1.113883.10.20.22.2.6.1") or templateIdHasRoot($.templateId,"2.16.840.1.113883.10.20.22.2.6")];
   // templateId = 2.16.840.1.113883.10.20.22.4.30 corresponds to Allergy Concern Act
   var AllergyIntoleranceAct (if AllergyIntoleranceSection) : AllergyIntoleranceSection[*].entry[*].act[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.30")];
-  var AllergyIntolerance (if AllergyIntoleranceAct) : Act_AllergyIntolerance(AllergyIntoleranceAct[], Patient[0]);
-  out Resources (if AllergyIntolerance) : AllergyIntolerance;
+  var AllergyIntolerance (if AllergyIntoleranceAct) : Act_AllergyIntolerance(AllergyIntoleranceAct[], PatientResource);
   section[] (if AllergyIntolerance) : Build_Section(AllergyIntoleranceSection[0], AllergyIntolerance);
 }

@@ -1,7 +1,6 @@
 // Description: Creates a list of Time Formats to be used by MultiFormatParseTime()
 // The function has a default list of formats that can be modified to meet specific
-// requirements. Time formats should adhere to Golang time format layout
-// (https://golang.org/pkg/time/#Time.Format)
+// requirements. Time formats should adhere to Golang time format layout (https://golang.org/pkg/time/#Time.Format)
 //
 // Argument(s):
 //
@@ -72,34 +71,6 @@ def Convert_DateTime(required str) {
 //   system: System of the source code specified in the concept map (https://build.fhir.org/conceptmap-definitions.html#ConceptMap.group.source).
 //
 // Output(s):
-//   FHIR CodeableConcept datatype: https://www.hl7.org/fhir/stu3/datatypes.html#CodeableConcept
-//
-//def Convert_Terminology(conceptID, system) {
-//  var mapping : $HarmonizeCode("$Local", conceptID, system, "OMOP-FHIR-ConceptMap");
-//  coding : mapping;
-//}
-
-// Description: Converts HL7 CDA terminology into FHIR STU3 terminology
-//
-// Argument(s):
-//   conceptID:  http://ccda.art-decor.org/ccda-html-20150727T182455/terminology.html
-//   system: System of the source code specified in the concept map (https://build.fhir.org/conceptmap-definitions.html#ConceptMap.group.source).
-//
-// Output(s):
-//   FHIR Coding datatype: https://www.hl7.org/fhir/stu3/datatypes.html#Coding
-//
-//def Convert_TerminologyCoding(conceptID, system) {
-//  var mapping : $HarmonizeCode("$Local", conceptID, system, "OMOP-FHIR-ConceptMap");
-//  $this : mapping[0];
-//}
-
-// Description: Converts HL7 CDA terminology into FHIR STU3 terminology
-//
-// Argument(s):
-//   conceptID:  http://ccda.art-decor.org/ccda-html-20150727T182455/terminology.html
-//   system: System of the source code specified in the concept map (https://build.fhir.org/conceptmap-definitions.html#ConceptMap.group.source).
-//
-// Output(s):
 //   FHIR Code datatype: https://www.hl7.org/fhir/stu3/datatypes.html#code
 //
 def Convert_TerminologyCode(conceptID, system){
@@ -140,9 +111,8 @@ def PatientRole_Patient(required PatientRole, GeneralPractitioner) {
   extension[3].url : "http://hl7.org/fhir/StructureDefinition/patient-birthPlace";
   extension[3].extension[0].valueAddress : AD_Address(PatientRole.patient.birthplace.place.addr);
   extension[3].extension[0].url : "http://hl7.org/fhir/StructureDefinition/patient-birthPlace";
-  generalPractitioner[] : Build_Reference(GeneralPractitioner[]);
+  generalPractitioner[] : Build_Reference(Output_Resource[](GeneralPractitioner[]));
   resourceType : "Patient";
-  id : $UUID();
 }
 
 // Description: Constructs a FHIR R4 PractitionerRole Resource and its related resources based on CDA AssignedEntity datatype
@@ -158,18 +128,11 @@ def PatientRole_Patient(required PatientRole, GeneralPractitioner) {
 def AssignedEntity_PractitionerRole(required AssignedEntity) {
   identifier[]:  II_Identifier(AssignedEntity.id[]);
   resourceType: "PractitionerRole";
-  id : $UUID();
   code[] : CD_CodeableConcept(AssignedEntity.code);
   telecom[]: TEL_ContactPoint(AssignedEntity.telecom[]);
-  var Location : AD_Location(AssignedEntity.addr[]);
-  var ReferenceID[] : Location[*].id[];
-  location[]: Build_Reference(Output_Resource[](Location[]));
-  var Practitioner : Person_Practitioner(AssignedEntity.assignedPerson);
-  var ReferenceID[] : Practitioner.id;
-  practitioner : Build_Reference(Output_Resource(Practitioner));
-  var Organization : ORG_Organization(AssignedEntity.representedOrganization);
-  var ReferenceID[] : Organization.id;
-  organization : Build_Reference(Output_Resource(Organization));
+  location[]: Build_Reference(Output_Resource[](AD_Location[](AssignedEntity.addr[])));
+  practitioner : Build_Reference(Output_Resource(Person_Practitioner(AssignedEntity.assignedPerson, AssignedEntity.id)));
+  organization : Build_Reference(Output_Resource(ORG_Organization(AssignedEntity.representedOrganization)));
 }
 
 // Description: Constructs a FHIR R4 FamilyMemberHistory Resource based on CDA FamilyMemberHistory Section
@@ -183,7 +146,6 @@ def AssignedEntity_PractitionerRole(required AssignedEntity) {
 //
 def FamilyMemberHistorySection_FamilyMemberHistory(required Organizer, required Patient){
   resourceType: "FamilyMemberHistory"
-  id : $UUID();
   identifier[] : II_Identifier(Organizer.id[]);
   status : Organizer.statusCode.code;
   relationship :  CD_CodeableConcept(Organizer.subject.relatedSubject.code);
@@ -191,10 +153,8 @@ def FamilyMemberHistorySection_FamilyMemberHistory(required Organizer, required 
   name : PARSE_Name(Organizer.subject.relatedSubject.subject.name[0]);
   bornDate (if ~IsInterval(Organizer.subject.relatedSubject.subject.birthTime)): Extract_Date(Organizer.subject.relatedSubject.subject.birthTime.value);
   patient : Build_Reference(Patient);
-  // templateId = 2.16.840.1.113883.10.20.22.4.46 corresponds to observation describing a family member condition
   var Observation : Organizer.component[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.46")];
   condition[] (if Observation) : Observation_ConditionDataType(Observation[]);
-  // templateId = 2.16.840.1.113883.10.20.22.4.47 corresponds to observation describing a family member death status
   var Death : Observation[*].entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.47")];
   if ($ListLen(Death) > 0) {
     deceasedBoolean : true;
@@ -217,9 +177,8 @@ def FamilyMemberHistorySection_FamilyMemberHistory(required Organizer, required 
 //
 def Observation_Observation(required Observation, Patient) {
   resourceType: "Observation"
-  id : $UUID();
   identifier[] : II_Identifier(Observation.id[]);
-  if (Observation.code) {
+  if (Observation.code.code) {
     code : CD_CodeableConcept(Observation.code);
   } else {
     code.coding[0].code : "unknown";
@@ -257,7 +216,6 @@ def Observation_Observation(required Observation, Patient) {
 //
 def ParticipantRole_Device(required ParticipantRole) {
   resourceType: "Device"
-  id : $UUID();
   identifier[] : II_Identifier(ParticipantRole.id[]);
   type : CD_CodeableConcept(ParticipantRole.playingDevice.code);
 }
@@ -274,13 +232,12 @@ def ParticipantRole_Device(required ParticipantRole) {
 //
 def Encounter_Encounter(required Encounter, Patient) {
   resourceType: "Encounter"
-  id : $UUID();
   identifier[] : II_Identifier(Encounter.id[]);
   type[] : CD_CodeableConcept(Encounter.code);
-  if (Encounter.code) {
+  if (Encounter.code.code) {
     class : CD_Coding(Encounter.code);
   } else {
-    class.coding.code : "unknown";
+    class.code : "unknown";
   }
   status : Convert_TerminologyCode(Encounter.statusCode.code, "EncounterStatusCode");
   priority : CD_CodeableConcept(Encounter.priorityCode);
@@ -308,7 +265,6 @@ def Encounter_Encounter(required Encounter, Patient) {
 //   Encounter: https://www.hl7.org/fhir/encounter.html
 //
 def Observation_Condition(required Observation, StatusCode, required Patient) {
-  id : $UUID();
   resourceType: "Condition";
   identifier[] : II_Identifier(Observation.id[]);
   category[] : CD_CodeableConcept(Observation.code);
@@ -353,7 +309,6 @@ def Observation_Condition(required Observation, StatusCode, required Patient) {
 //   PractitionerRole: https://www.hl7.org/fhir/practitionerrole.html
 //
 def Procedure_Procedure(required Procedure, required Patient) {
-  id : $UUID();
   resourceType: "Procedure";
   identifier[] : II_Identifier(Procedure.id[]);
   if (IsInterval(Procedure.effectiveTime)) {
@@ -382,10 +337,9 @@ def Procedure_Procedure(required Procedure, required Patient) {
 //
 def ResultSection_DiagnosticReport(required Organizer, required Patient){
   resourceType: "DiagnosticReport"
-  id : $UUID();
   identifier[] : II_Identifier(Organizer.id[]);
   status : Convert_TerminologyCode(Organizer.statusCode.code, "ResultOrganizerStatusCode");
-  if (Organizer.code) {
+  if (Organizer.code.code) {
     code : CD_CodeableConcept(Organizer.code);
   } else {
     code.coding[0].code : "unknown";
@@ -419,7 +373,6 @@ def ResultSection_DiagnosticReport(required Organizer, required Patient){
 //
 def SubstanceAdministration_MedicationStatement(required SubstanceAdministration, required Patient) {
   resourceType: "MedicationStatement";
-  id : $UUID();
   identifier[] : II_Identifier(SubstanceAdministration.id[]);
   informationSource : Build_Reference(Output_Resource(AssignedEntity_PractitionerRole(SubstanceAdministration.author[0].assignedAuthor)));
   status : Convert_TerminologyCode(SubstanceAdministration.statusCode.code, "SubstanceAdministrationStatusCode");
@@ -453,7 +406,6 @@ def SubstanceAdministration_MedicationStatement(required SubstanceAdministration
 //
 def Act_AllergyIntolerance(required Act, required Patient) {
   resourceType: "AllergyIntolerance";
-  id : $UUID();
   identifier[] : II_Identifier(Act.id[]);
   recorder : Build_Reference(Output_Resource(AssignedEntity_PractitionerRole(Act.author[0].assignedAuthor)));
   clinicalStatus.coding[0].code : Act.statusCode.code;
@@ -497,7 +449,6 @@ def Act_AllergyIntolerance(required Act, required Patient) {
 //
 def SubstanceAdministration_Immunization(required SubstanceAdministration, required Patient) {
   resourceType: "Immunization";
-  id : $UUID();
   identifier[] : II_Identifier(SubstanceAdministration.id[]);
   recorded (if ~IsInterval(SubstanceAdministration.effectiveTime[0])): Convert_DateTime(SubstanceAdministration.effectiveTime[0].value);
   if (~IsInterval(SubstanceAdministration.effectiveTime[0]) and SubstanceAdministration.effectiveTime) {
@@ -514,7 +465,7 @@ def SubstanceAdministration_Immunization(required SubstanceAdministration, requi
   if (templateIdHasRoot(SubstanceAdministration.consumable.manufacturedProduct.templateId, "2.16.840.1.113883.10.20.22.4.54")) {
     manufacturer : Build_Reference(Output_Resource(ORG_Organization(SubstanceAdministration.consumable.manufacturedProduct.manufacturerOrganization)));
   }
-  if (SubstanceAdministration.consumable.manufacturedProduct.manufacturedMaterial.code) {
+  if (SubstanceAdministration.consumable.manufacturedProduct.manufacturedMaterial.code.code) {
     vaccineCode : CD_CodeableConcept(SubstanceAdministration.consumable.manufacturedProduct.manufacturedMaterial.code);
   } else {
     vaccineCode.coding[0].code : "unknown";
