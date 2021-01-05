@@ -30,14 +30,20 @@ tasks.withType(AbstractArchiveTask) {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-
     compile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.3'
     compile group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.3'
     compile group: 'org.eclipse.persistence', name: 'eclipselink', version: '2.4.2'
     compile group: 'org.json', name: 'json', version: '20201115'
 
-    testImplementation 'com.google.code.gson:gson:2.8.6'
+    testImplementation(
+        'com.google.code.gson:gson:2.8.6',
+        'junit:junit:4.12',
+        'org.junit.jupiter:junit-jupiter-api:5.4.2'
+    )
+    testRuntime(
+        'org.junit.jupiter:junit-jupiter-engine:5.4.2',
+        'org.junit.vintage:junit-vintage-engine:5.4.2'
+    )
 }
 
 compileJava {
