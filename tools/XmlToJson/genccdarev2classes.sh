@@ -2,12 +2,14 @@
 #
 # Generates JAXB bindings for CCDA Revision 2.
 
+# Set the schema variable to the relative location of the HL7v3 CDA.xsd file
+schema="../hl7v3xsd/cda_r2_normativewebedition2010/infrastructure/cda/CDA.xsd"
+
 basedir="./src/main"
-schemas="${basedir}/javaschemas/ccdarev2/infrastructure/cda"
 outdir="${basedir}/java/com/google/cloud/healthcare/etl/xmltojson/xjcgen/ccdarev2"
 
 mkdir -p "${outdir}"
-xjc "${schemas}/CDA.xsd" \
+xjc "${schema}" \
   -xmlschema -b \
   "./ccdarev2_binding.xml" \
   -d "${basedir}/java" \

@@ -38,22 +38,36 @@ Only
 is currently supported, although the tool can be easily extended to support
 additional versions.
 
-NOTE: This repository does not contain XSD schema files by default. Please add
-the schemas for CCDA Release 2 in the directory
-`src/main/javaschemas/ccdarev2/infrastructure/cda`. The `CDA.xsd` file must
-exist in the root of this directory. If all XSDs file have flattened import
-paths, all CCDA related XSDs can be placed in this directory.
+NOTE: This repository does not contain the CCDA XSD schema files, which must be
+obtained directly from HL7 (https://hl7.org).
 
-If the XSD files are not flattened, you should mimic the related directory
-structure found in the HL7v3 package which includes a set of XSDs that you will
-copy to the directory `src/main/javaschemas/ccdarev2/processable/coreschemas`.
+The genccdarev2classes.sh script generates Java classes from the HL7v3 CCDA
+XSDs, which also relies on the provided ccdarev2_binding.xml binding file. The
+script and binding files look for the XSD files in the following directory:
 
-For example:
+../hl7v3xsd/cda_r2_normativewebedition2010/infrastructure/cda
 
-```
-cp ${BASEDIR}/cda_r2_normativewebedition2010/infrastructure/cda/*.xsd ./src/main/javaschemas/ccdarev2/infrastructure/cda/
-cp ${BASEDIR}/cda_r2_normativewebedition2010/processable/coreschemas/*.xsd ./src/main/javaschemas/ccdarev2/processable/coreschemas/
-```
+Simply unzipping the cda_r2_normativewebedition2010.zip package in the
+../hl7v3xsd directory will result in the correct directory structure.
+
+Alternatively, you can use CCDA XSDs in a different location by making the
+following two changes:
+
+1.  Modify the *'schema'* variable found at the top of
+    **genccdarev2classes.sh** script by setting it to the location of your
+    CDA.xsd file:
+
+    ```
+        schema="yourLocation/CDA.xsd"
+    ```
+
+2.  Modify the provided **ccdarev2_binding.xml** file so that the binding for
+    *CCDA POCD_MT000040.xsd* file has it's *schemaLocation* set to the correct
+    location:
+
+    ```
+        <jaxb:bindings schemaLocation="yourLocation/POCD_MT000040.xsd">
+    ```
 
 ### Build steps
 
