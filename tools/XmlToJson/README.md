@@ -69,6 +69,9 @@ following two changes:
         <jaxb:bindings schemaLocation="yourLocation/POCD_MT000040.xsd">
     ```
 
+The classes will only be generated if the root generated Java class
+`xjcgen/ccdarev2/org/hl7/v3/POCDMT000040ClinicalDocument.java` does not exist.
+
 ### Build steps
 
 After previous steps are ready, install Gradle making sure it is added to

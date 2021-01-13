@@ -6,6 +6,8 @@ repositories {
     mavenCentral()
 }
 
+sourceCompatibility = 1.8
+
 sourceSets {
     main {
         java {
@@ -30,17 +32,17 @@ tasks.withType(AbstractArchiveTask) {
 }
 
 dependencies {
-    compile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.3'
-    compile group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.3'
-    compile group: 'org.eclipse.persistence', name: 'eclipselink', version: '2.4.2'
-    compile group: 'org.json', name: 'json', version: '20201115'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.3'
+    implementation 'com.sun.xml.bind:jaxb-impl:2.3.3'
+    implementation 'org.eclipse.persistence:eclipselink:2.4.2'
+    implementation 'org.json:json:20201115'
 
     testImplementation(
         'com.google.code.gson:gson:2.8.6',
         'junit:junit:4.12',
         'org.junit.jupiter:junit-jupiter-api:5.4.2'
     )
-    testRuntime(
+    testRuntimeOnly(
         'org.junit.jupiter:junit-jupiter-engine:5.4.2',
         'org.junit.vintage:junit-vintage-engine:5.4.2'
     )
@@ -57,6 +59,10 @@ task generateXJCClasses() {
 }
 
 void generateXJCClassesCDARev2() {
+    // Only regenerate classes if the main generated class POCDMT000040ClinicalDocument.java does not exist.
+    if (file("./src/main/java/com/google/cloud/healthcare/etl/xmltojson/xjcgen/ccdarev2/org/hl7/v3/POCDMT000040ClinicalDocument.java").exists()) {
+        return;
+    }
     exec {
         workingDir './'
         commandLine 'sh','./genccdarev2classes.sh'
