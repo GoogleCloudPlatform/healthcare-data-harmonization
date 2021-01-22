@@ -98,6 +98,9 @@ var BuiltinFunctions = map[string]interface{}{
 	"$Trim":         Trim,
 }
 
+// Now is exported to allow for mocking in tests.
+var Now = time.Now
+
 const (
 	defaultTimeFormat   = "2006-01-02 03:04:05"
 	pythonStyleDateTime = 0
@@ -393,7 +396,7 @@ func CurrentTime(format jsonutil.JSONStr, tz jsonutil.JSONStr) (jsonutil.JSONStr
 	if len(format) == 0 {
 		format = defaultTimeFormat
 	}
-	tm := time.Now().UTC()
+	tm := Now().UTC()
 	loc, err := time.LoadLocation(string(tz))
 	if err != nil {
 		return jsonutil.JSONStr(""), err
