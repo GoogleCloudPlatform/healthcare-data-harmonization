@@ -20,6 +20,10 @@ library_config: {
     type: MAPPING_LANGUAGE
     path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/cda_fhir_r4/projector_library/postprocess.wstl" }
   }
+  user_libraries: {
+    type: MAPPING_LANGUAGE
+    path: { local_path: "$MAPPING_ENGINE_HOME/mapping_configs/cda_fhir_r4/projector_library/id.wstl" }
+  }
 }
 
 harmonization_config: {
