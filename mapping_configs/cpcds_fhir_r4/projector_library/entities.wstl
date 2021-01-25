@@ -13,11 +13,11 @@ def Convert_TerminologyCode(conceptID, system){
 
 def PractitionerRole_PractitionerRole(PractitionerRole) {
   meta.profile[0] : "http://hl7.org/fhir/us/carin/StructureDefinition/carin-bb-practitionerrole";
-
-  id : $Hash($StrCat(PractitionerRole.Practitioner_NPI,PractitionerRole.Organization_NPI));
-  identifier[0].value: PractitionerRole.Practitioner_NPI;
+  identifier[0].value: $StrCat(PractitionerRole.Practitioner_NPI,PractitionerRole.Organization_NPI);
   identifier[0].system: "http://www.bcbs.com/fhir/ns/NamingSystem/practitionerrole-identifier-inpatient";
-  practitioner : Build_Reference(Output_Resource(Practitioner_Practitioner(PractitionerRole)));
+  var PractitionerResource : Output_Resource(Practitioner_Practitioner(PractitionerRole));
+  out Resources (if PractitionerResource) : PractitionerResource;
+  practitioner : Build_Reference(PractitionerResource);
   organization : Build_ReferenceID("Organization", $Hash(PractitionerRole.Organization_NPI));
 
 //ConceptMap needed for PractitionerRole.Code
@@ -34,7 +34,6 @@ def PractitionerRole_PractitionerRole(PractitionerRole) {
 
 def Practitioner_Practitioner(Practitioner) {
   meta.profile[0] : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitioner";
-  id : $Hash(Practitioner.Practitioner_NPI);
   identifier[0].value: Practitioner.Practitioner_NPI;
   identifier[0].system: "http://hl7.org/fhir/sid/us-npi";
   var Name : $StrSplit(Practitioner.Name, " ");
@@ -46,14 +45,10 @@ def Practitioner_Practitioner(Practitioner) {
 
 def Coverage_Coverage(Coverage) {
   meta.profile[0] : "http://hl7.org/fhir/us/carin/StructureDefinition/carin-bb-coverage";
-
-  id : $Hash(Coverage.Coverage_id);
   status : Convert_TerminologyCode(Coverage.Coverage_status, "Status");
-
   identifier[0].value: Coverage.Coverage_id;
   identifier[0].type.coding[0].code: "mb";
   identifier[0].type.coding[0].system: "http://hl7.org/fhir/us/carin-bb/CodeSystem/IdentifierTypeCS";
-
   type.coding[0].code : Coverage.Coverage_type;
   type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v3-ActCode";   //Need to use ConceptMap
   subscriberId : Coverage.Subscriber_id;
@@ -70,8 +65,6 @@ def Coverage_Coverage(Coverage) {
 }
 
 def Patient_Patient(Patient) {
-  id : $Hash(Patient.Member_id);
-
   meta.profile[0] : "http://hl7.org/fhir/us/carin/StructureDefinition/carin-bb-patient";
 
   identifier[] : Build_Identifier("MB", "Member Number", "http://www.bcbs.com/fhir/ns/NamingSystem/patient-mb", Patient.Member_id);
@@ -129,8 +122,6 @@ def Patient_Patient(Patient) {
 //   CARINBBExplanationOfBenefitProfessionalNonClinician: http://hl7.org/fhir/us/carin-bb/2020Feb/StructureDefinition-CARIN-BB-ExplanationOfBenefit-Professional-NonClinician.html
 //
 def Claim_EOB(Claim) {
-  id : $Hash(Claim.Claim_unique_identifier);
-
   meta.profile[0] : "http://hl7.org/fhir/us/carin/StructureDefinition/carin-bb-explanationofbenefit";
 
   identifier[0].value : Claim.Claim_unique_identifier;
@@ -227,8 +218,6 @@ def Claim_EOB(Claim) {
 
 def Organization_Organization(Organization) {
   meta.profile[0] : "http://hl7.org/fhir/us/carin/StructureDefinition/carin-bb-organization";
-
-  id : $Hash(Organization.Id);
   identifier[0].value : Organization.Id;
   identifier[0].system : "http://hl7.org/fhir/sid/us-npi";
   identifier[0].type.coding[0].code : "NPI";
@@ -454,4 +443,17 @@ def Build_Payment(Type, Reason, Date) {
   type.coding[0].system : "http://terminology.hl7.org/CodeSystem/ex-paymenttype";
   adjustmentReason.coding[].code : Reason;
   date : Date;
+}
+
+// Description: Constructs an Hash Identifier datatype
+//
+// Argument(s):
+//   II datatype
+//
+// Output(s):
+//   Identifier datatype: https://www.hl7.org/fhir/datatypes.html#Identifier
+//
+def II_HashIdentifier(required II) {
+  value : $Hash(II);
+  system : $StrCat("urn:oid:google/reconciliation-id");
 }

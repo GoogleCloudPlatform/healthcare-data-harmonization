@@ -1,6 +1,14 @@
 def Output_Resource(item) {
-  out Resources : item;
-  $this : item;
+  var Item : item;
+  var HashID (if item.identifier) : II_HashIdentifier(item.identifier[0].value);
+  var HashID (if ~item.identifier) : II_HashIdentifier(item);
+  if (ID_Reconciliation()) {
+    var Item.id : $Hash(item);
+    var Item.identifier[] : HashID;
+  } else {
+    var Item.id (if ~item.id) : $Hash(item.identifier[0].value);
+  }
+  $this : Item;
 }
 
 def Build_ReferenceID(resourceType, id) {
@@ -8,7 +16,11 @@ def Build_ReferenceID(resourceType, id) {
 }
 
 def Build_Reference(Resource) {
-  if (Resource.resourceType?){
+  var ReconciledIdentifier : Resource.identifier[where $.system = "urn:oid:google/reconciliation-id"];
+  var ReconciledID : ReconciledIdentifier[0].value;
+  if (ID_Reconciliation()) {
+    reference : $StrCat(Resource.resourceType, "/", ReconciledID);
+  } else {
     reference : $StrCat(Resource.resourceType, "/", Resource.id);
   }
 }
@@ -27,4 +39,19 @@ def Output_Transaction(Output) {
   resourceType : "Bundle";
   type : "transaction";
   entry[] : Build_BundleEntry(Resources[], "PUT");
+  entry[] : Build_BundleEntry(Build_Provenance(Resources), "PUT");
+}
+
+def Build_Provenance(required Resources) {
+  resourceType : "Provenance";
+  id : $UUID();
+  recorded : $CurrentTime("2006-01-02T15:04:05.2112Z", "");
+  target[] : Build_Reference(Resources[]);
+  agent[0].type.coding[0].code : "transmitter";
+  agent[0].type.coding[0].system : "http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type";
+  // An Organization resource will be created to model HPDI Customer
+  agent[0].who : Build_ReferenceID("Organization",$UUID());
+  entity[0].role : "source";
+  // A DocumentReference resource will be created to model input payload
+  entity[0].what :  Build_ReferenceID("DocumentReference",$UUID());
 }

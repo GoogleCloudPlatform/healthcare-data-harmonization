@@ -4,29 +4,31 @@
    "entry":[
       {
          "resource":{
+            "deceasedBoolean":false,
+            "address":[
+               {
+                  "state":"California",
+                  "postalCode":"91326",
+                  "country":"United States",
+                  "district":"Los Angeles County"
+               }
+            ],
+            "gender":"female",
             "meta":{
                "profile":[
                   "http://hl7.org/fhir/us/carin/StructureDefinition/carin-bb-patient"
                ]
             },
-            "address":[
-               {
-                  "country":"United States",
-                  "district":"Los Angeles County",
-                  "state":"California",
-                  "postalCode":"91326"
-               }
-            ],
             "id":"a916e0dc02d8490fcda48a87aef9993f",
             "extension":[
                {
-                  "url":"http://hl7.org/fhir/us/core/StructureDefinition/us-core-race",
                   "extension":[
                      {
-                        "valueString":"white",
-                        "url":"text"
+                        "url":"text",
+                        "valueString":"white"
                      }
-                  ]
+                  ],
+                  "url":"http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"
                },
                {
                   "extension":[
@@ -41,38 +43,32 @@
                   "url":"http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",
                   "extension":[
                      {
-                        "url":"ombCategory",
-                        "valueCode":"F"
+                        "valueCode":"F",
+                        "url":"ombCategory"
                      }
                   ]
                }
             ],
-            "deceasedBoolean":false,
+            "name":[
+               {
+                  "text":"Elsa29 Rodríquez611",
+                  "given":[
+                     "Elsa29"
+                  ],
+                  "family":"Rodríquez611"
+               }
+            ],
             "birthDate":"1971-05-09",
             "resourceType":"Patient",
-            "gender":"female",
             "identifier":[
                {
+                  "system":"http://www.bcbs.com/fhir/ns/NamingSystem/patient-mb",
+                  "value":"19e0aea1-2681-40b0-b849-6ccdf7c57b28",
                   "type":{
                      "coding":[
                         {
                            "code":"MB",
                            "display":"Member Number",
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
-                        }
-                     ]
-                  },
-                  "system":"http://www.bcbs.com/fhir/ns/NamingSystem/patient-mb",
-                  "value":"19e0aea1-2681-40b0-b849-6ccdf7c57b28"
-               },
-               {
-                  "system":"http://www.external-org.com/fhir/NamingSystem/patient-identifier",
-                  "value":"19e0aea1-2681-40b0-b849-6ccdf7c57b28",
-                  "type":{
-                     "coding":[
-                        {
-                           "code":"PT",
-                           "display":"Patient External Identifier",
                            "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
                         }
                      ]
@@ -83,28 +79,71 @@
                   "type":{
                      "coding":[
                         {
-                           "display":"Medical Record Number",
                            "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
-                           "code":"MR"
+                           "code":"PT",
+                           "display":"Patient External Identifier"
+                        }
+                     ]
+                  },
+                  "system":"http://www.external-org.com/fhir/NamingSystem/patient-identifier"
+               },
+               {
+                  "value":"19e0aea1-2681-40b0-b849-6ccdf7c57b28",
+                  "type":{
+                     "coding":[
+                        {
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
+                           "code":"MR",
+                           "display":"Medical Record Number"
                         }
                      ]
                   },
                   "system":"http://www.bcbs.com/fhir/ns/NamingSystem/patient-mrn"
-               }
-            ],
-            "name":[
-               {
-                  "given":[
-                     "Elsa29"
-                  ],
-                  "family":"Rodríquez611",
-                  "text":"Elsa29 Rodríquez611"
                }
             ]
          },
          "request":{
             "method":"PUT",
             "url":"Patient/a916e0dc02d8490fcda48a87aef9993f"
+         }
+      },
+      {
+         "request":{
+            "method":"PUT",
+            "url":"Provenance/01010101-0101-4101-8101-010101010101"
+         },
+         "resource":{
+            "recorded":"2020-01-01T01:01:01.1111Z",
+            "target":[
+               {
+                  "reference":"Patient/a916e0dc02d8490fcda48a87aef9993f"
+               }
+            ],
+            "agent":[
+               {
+                  "type":{
+                     "coding":[
+                        {
+                           "code":"transmitter",
+                           "system":"http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type"
+                        }
+                     ]
+                  },
+                  "who":{
+                     "reference":"Organization/02020202-0202-4202-8202-020202020202"
+                  }
+               }
+            ],
+            "entity":[
+               {
+                  "role":"source",
+                  "what":{
+                     "reference":"DocumentReference/03030303-0303-4303-8303-030303030303"
+                  }
+               }
+            ],
+            "resourceType":"Provenance",
+            "id":"01010101-0101-4101-8101-010101010101"
          }
       }
    ]
