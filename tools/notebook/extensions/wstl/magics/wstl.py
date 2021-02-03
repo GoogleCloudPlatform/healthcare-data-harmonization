@@ -184,7 +184,7 @@ class LoadHL7Magics(Magics):
       "--api_version",
       type=str,
       required=False,
-      default="v1",
+      default="v1beta1",
       choices=["v1", "v1beta1"],
       help="""The version of healthcare api to call. Default to v1.""")
   @magic_arguments.argument(
