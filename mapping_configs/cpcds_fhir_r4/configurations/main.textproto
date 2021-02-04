@@ -1,0 +1,34 @@
+
+library_config: {
+  user_libraries: {
+    type: MAPPING_LANGUAGE
+    path: { gcs_location: "$MAPPING_ENGINE_HOME/mapping_configs/cpcds_fhir_r4/projector_library/cms_fhir.wstl" }
+  }
+  user_libraries: {
+    type: MAPPING_LANGUAGE
+    path: { gcs_location: "$MAPPING_ENGINE_HOME/mapping_configs/cpcds_fhir_r4/projector_library/entities.wstl" }
+  }
+  user_libraries: {
+    type: MAPPING_LANGUAGE
+    path: { gcs_location: "$MAPPING_ENGINE_HOME/mapping_configs/cpcds_fhir_r4/projector_library/postprocess.wstl" }
+  }
+  user_libraries: {
+    type: MAPPING_LANGUAGE
+    path: { gcs_location: "$MAPPING_ENGINE_HOME/mapping_configs/cpcds_fhir_r4/projector_library/id.wstl" }
+  }
+}
+
+harmonization_config: {
+  code_lookup: {
+    gcs_location: "$MAPPING_ENGINE_HOME/mapping_configs/cpcds_fhir_r4/code_harmonization/CMS-FHIR-ConceptMap.harmonization.json"
+  }
+}
+
+structure_mapping_config: {
+  mapping_path_config: {
+    mapping_type: MAPPING_LANGUAGE
+    mapping_config_path: {
+      gcs_location: "$MAPPING_ENGINE_HOME/mapping_configs/cpcds_fhir_r4/configurations/main.wstl"
+    }
+  }
+}
