@@ -3,15 +3,35 @@
    "type":"transaction",
    "entry":[
       {
-         "request":{
-            "url":"Coverage/6b96cb407bdae0149cb56755c0161dd8",
-            "method":"PUT"
-         },
          "resource":{
-            "period":{
-               "start":"1999-07-18"
-            },
-            "subscriberId":"19e0aea1-2681-40b0-b849-6ccdf7c57b28",
+            "resourceType":"Coverage",
+            "class":[
+               {
+                  "type":{
+                     "coding":[
+                        {
+                           "code":"group",
+                           "system":"http://terminology.hl7.org/CodeSystem/coverage-class"
+                        }
+                     ]
+                  },
+                  "value":"9f506bdc-739e-432e-9656-52d53ed0d9a8",
+                  "name":"Apollo Dynamics"
+               },
+               {
+                  "name":"Silver",
+                  "type":{
+                     "coding":[
+                        {
+                           "code":"plan",
+                           "system":"http://terminology.hl7.org/CodeSystem/coverage-class"
+                        }
+                     ]
+                  },
+                  "value":"2"
+               }
+            ],
+            "id":"6b96cb407bdae0149cb56755c0161dd8",
             "identifier":[
                {
                   "value":"65707118-a1f7-408e-935c-d7e441ab8564",
@@ -25,7 +45,7 @@
                   }
                }
             ],
-            "id":"6b96cb407bdae0149cb56755c0161dd8",
+            "status":"active",
             "payor":[
                {
                   "reference":"Organization/624f39a4d9f4cb017f45f0703707f10f"
@@ -42,40 +62,9 @@
                   "http://hl7.org/fhir/us/carin/StructureDefinition/carin-bb-coverage"
                ]
             },
-            "class":[
-               {
-                  "type":{
-                     "coding":[
-                        {
-                           "code":"group",
-                           "system":"http://terminology.hl7.org/CodeSystem/coverage-class"
-                        }
-                     ]
-                  },
-                  "value":"9f506bdc-739e-432e-9656-52d53ed0d9a8",
-                  "name":"Apollo Dynamics"
-               },
-               {
-                  "value":"2",
-                  "name":"Silver",
-                  "type":{
-                     "coding":[
-                        {
-                           "system":"http://terminology.hl7.org/CodeSystem/coverage-class",
-                           "code":"plan"
-                        }
-                     ]
-                  }
-               }
-            ],
-            "resourceType":"Coverage",
-            "type":{
-               "coding":[
-                  {
-                     "system":"http://terminology.hl7.org/CodeSystem/v3-ActCode",
-                     "code":"POS"
-                  }
-               ]
+            "subscriberId":"19e0aea1-2681-40b0-b849-6ccdf7c57b28",
+            "period":{
+               "start":"1999-07-18"
             },
             "relationship":{
                "coding":[
@@ -85,15 +74,33 @@
                   }
                ]
             },
-            "status":"active"
+            "type":{
+               "coding":[
+                  {
+                     "code":"POS",
+                     "system":"http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                  }
+               ]
+            }
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Coverage/6b96cb407bdae0149cb56755c0161dd8"
          }
       },
       {
-         "request":{
-            "method":"PUT",
-            "url":"Provenance/01010101-0101-4101-8101-010101010101"
-         },
          "resource":{
+            "entity":[
+               {
+                  "role":"source",
+                  "what":{
+                     "reference":"DocumentReference/02020202-0202-4202-8202-020202020202"
+                  }
+               }
+            ],
+            "resourceType":"Provenance",
+            "recorded":"2020-01-01T01:01:01.1111Z",
+            "id":"a68bb2842f8b5822836dbc78c69b2f9a",
             "target":[
                {
                   "reference":"Coverage/6b96cb407bdae0149cb56755c0161dd8"
@@ -110,21 +117,14 @@
                      ]
                   },
                   "who":{
-                     "reference":"Organization/02020202-0202-4202-8202-020202020202"
+                     "reference":"Organization/01010101-0101-4101-8101-010101010101"
                   }
                }
-            ],
-            "entity":[
-               {
-                  "role":"source",
-                  "what":{
-                     "reference":"DocumentReference/03030303-0303-4303-8303-030303030303"
-                  }
-               }
-            ],
-            "resourceType":"Provenance",
-            "id":"01010101-0101-4101-8101-010101010101",
-            "recorded":"2020-01-01T01:01:01.1111Z"
+            ]
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Provenance/a68bb2842f8b5822836dbc78c69b2f9a"
          }
       }
    ]

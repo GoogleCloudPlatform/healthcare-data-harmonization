@@ -2,25 +2,11 @@
    "type":"transaction",
    "entry":[
       {
+         "request":{
+            "method":"PUT",
+            "url":"Organization/37ce68f1a1ac2e3c6b9ca2bd31e3b5ec"
+         },
          "resource":{
-            "address":[
-               {
-                  "state":"CA",
-                  "postalCode":"91342-4748",
-                  "line":[
-                     "12661 GLENOAKS BLVD"
-                  ],
-                  "city":"SYLMAR"
-               }
-            ],
-            "telecom":[
-               {
-                  "system":"phone",
-                  "use":"work",
-                  "value":"818-367-2171"
-               }
-            ],
-            "resourceType":"Organization",
             "id":"37ce68f1a1ac2e3c6b9ca2bd31e3b5ec",
             "meta":{
                "profile":[
@@ -29,30 +15,47 @@
             },
             "identifier":[
                {
-                  "value":"375398774584",
                   "system":"http://hl7.org/fhir/sid/us-npi",
                   "type":{
                      "coding":[
                         {
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
-                           "code":"NPI"
+                           "code":"NPI",
+                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203"
                         }
                      ]
-                  }
+                  },
+                  "value":"375398774584"
                }
             ],
             "active":true,
-            "name":"PCP6875"
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Organization/37ce68f1a1ac2e3c6b9ca2bd31e3b5ec"
+            "name":"PCP6875",
+            "address":[
+               {
+                  "line":[
+                     "12661 GLENOAKS BLVD"
+                  ],
+                  "city":"SYLMAR",
+                  "state":"CA",
+                  "postalCode":"91342-4748"
+               }
+            ],
+            "telecom":[
+               {
+                  "value":"818-367-2171",
+                  "system":"phone",
+                  "use":"work"
+               }
+            ],
+            "resourceType":"Organization"
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"Provenance/a68bb2842f8b5822836dbc78c69b2f9a"
+         },
          "resource":{
-            "id":"01010101-0101-4101-8101-010101010101",
-            "recorded":"2020-01-01T01:01:01.1111Z",
+            "id":"a68bb2842f8b5822836dbc78c69b2f9a",
             "target":[
                {
                   "reference":"Organization/37ce68f1a1ac2e3c6b9ca2bd31e3b5ec"
@@ -69,23 +72,20 @@
                      ]
                   },
                   "who":{
-                     "reference":"Organization/02020202-0202-4202-8202-020202020202"
+                     "reference":"Organization/01010101-0101-4101-8101-010101010101"
                   }
                }
             ],
             "entity":[
                {
-                  "role":"source",
                   "what":{
-                     "reference":"DocumentReference/03030303-0303-4303-8303-030303030303"
-                  }
+                     "reference":"DocumentReference/02020202-0202-4202-8202-020202020202"
+                  },
+                  "role":"source"
                }
             ],
-            "resourceType":"Provenance"
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Provenance/01010101-0101-4101-8101-010101010101"
+            "resourceType":"Provenance",
+            "recorded":"2020-01-01T01:01:01.1111Z"
          }
       }
    ],

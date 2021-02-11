@@ -3,44 +3,48 @@
    "type":"transaction",
    "entry":[
       {
-         "request":{
-            "method":"PUT",
-            "url":"Practitioner/d41187ed45024518fb323012695c6b91"
-         },
          "resource":{
+            "identifier":[
+               {
+                  "system":"http://hl7.org/fhir/sid/us-npi",
+                  "value":"998592645930"
+               }
+            ],
+            "name":[
+               {
+                  "family":"Veum823",
+                  "text":"Dr. Tia76 Veum823",
+                  "given":[
+                     "Dr. Tia76"
+                  ]
+               }
+            ],
+            "resourceType":"Practitioner",
+            "id":"d41187ed45024518fb323012695c6b91",
             "meta":{
                "profile":[
                   "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitioner"
                ]
-            },
-            "identifier":[
-               {
-                  "value":"998592645930",
-                  "system":"http://hl7.org/fhir/sid/us-npi"
-               }
-            ],
-            "id":"d41187ed45024518fb323012695c6b91",
-            "name":[
-               {
-                  "given":[
-                     "Dr. Tia76"
-                  ],
-                  "family":"Veum823",
-                  "text":"Dr. Tia76 Veum823"
-               }
-            ],
-            "resourceType":"Practitioner"
+            }
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Practitioner/d41187ed45024518fb323012695c6b91"
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"PractitionerRole/0dc611ff817199534dbfa16a6b1437ef"
+         },
          "resource":{
             "code":[
                {
                   "coding":[
                      {
+                        "display":"Internal Medicine",
                         "system":"http://nucc.org/provider-taxonomy",
-                        "code":"207R00000X",
-                        "display":"Internal Medicine"
+                        "code":"207R00000X"
                      }
                   ]
                }
@@ -49,14 +53,13 @@
                {
                   "coding":[
                      {
+                        "code":"163WG0000X",
                         "display":"General Practice",
-                        "system":"http://nucc.org/provider-taxonomy",
-                        "code":"163WG0000X"
+                        "system":"http://nucc.org/provider-taxonomy"
                      }
                   ]
                }
             ],
-            "id":"0dc611ff817199534dbfa16a6b1437ef",
             "resourceType":"PractitionerRole",
             "meta":{
                "profile":[
@@ -65,8 +68,8 @@
             },
             "identifier":[
                {
-                  "system":"http://www.bcbs.com/fhir/ns/NamingSystem/practitionerrole-identifier-inpatient",
-                  "value":"998592645930375398774584"
+                  "value":"998592645930375398774584",
+                  "system":"http://www.bcbs.com/fhir/ns/NamingSystem/practitionerrole-identifier-inpatient"
                }
             ],
             "practitioner":{
@@ -74,15 +77,27 @@
             },
             "organization":{
                "reference":"Organization/37ce68f1a1ac2e3c6b9ca2bd31e3b5ec"
-            }
-         },
-         "request":{
-            "method":"PUT",
-            "url":"PractitionerRole/0dc611ff817199534dbfa16a6b1437ef"
+            },
+            "id":"0dc611ff817199534dbfa16a6b1437ef"
          }
       },
       {
+         "request":{
+            "method":"PUT",
+            "url":"Provenance/a68bb2842f8b5822836dbc78c69b2f9a"
+         },
          "resource":{
+            "entity":[
+               {
+                  "what":{
+                     "reference":"DocumentReference/02020202-0202-4202-8202-020202020202"
+                  },
+                  "role":"source"
+               }
+            ],
+            "resourceType":"Provenance",
+            "recorded":"2020-01-01T01:01:01.1111Z",
+            "id":"a68bb2842f8b5822836dbc78c69b2f9a",
             "target":[
                {
                   "reference":"Practitioner/d41187ed45024518fb323012695c6b91"
@@ -93,34 +108,19 @@
             ],
             "agent":[
                {
+                  "who":{
+                     "reference":"Organization/01010101-0101-4101-8101-010101010101"
+                  },
                   "type":{
                      "coding":[
                         {
-                           "code":"transmitter",
-                           "system":"http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type"
+                           "system":"http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type",
+                           "code":"transmitter"
                         }
                      ]
-                  },
-                  "who":{
-                     "reference":"Organization/02020202-0202-4202-8202-020202020202"
                   }
                }
-            ],
-            "entity":[
-               {
-                  "what":{
-                     "reference":"DocumentReference/03030303-0303-4303-8303-030303030303"
-                  },
-                  "role":"source"
-               }
-            ],
-            "resourceType":"Provenance",
-            "id":"01010101-0101-4101-8101-010101010101",
-            "recorded":"2020-01-01T01:01:01.1111Z"
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Provenance/01010101-0101-4101-8101-010101010101"
+            ]
          }
       }
    ]

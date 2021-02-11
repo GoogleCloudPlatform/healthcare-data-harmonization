@@ -1,3 +1,30 @@
+// Description: Constructs a Reconciled ID as an extension; due to lack of identifier attribute in Provenance Resource: https://www.hl7.org/fhir/provenance.html
+//
+// Argument(s):
+//   Resource Hash ID
+//
+// Output(s):
+//   ReconciledID
+//
+def Build_ReconciledIDExtension(ID) {
+  url : "reconciliation-id";
+  extension[] : Build_ValueString(ID, "urn:oid:google/reconciliation-id");
+}
+
+// Description: Constructs a ValueString datatype
+//
+// Argument(s):
+//   Value: String
+//   URL: string
+//
+// Output(s):
+//   ValueString
+//
+def Build_ValueString(required Value, URL) {
+  valueString : Value;
+  url : URL;
+}
+
 // Description: Converts CPCDS terminology into FHIR R4 terminology
 //
 // Argument(s):
