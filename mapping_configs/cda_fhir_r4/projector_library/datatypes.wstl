@@ -1,3 +1,30 @@
+// Description: Constructs a Reconciled ID as an extension; due to lack of identifier attribute in Provenance Resource: https://www.hl7.org/fhir/provenance.html
+//
+// Argument(s):
+//   Resource Hash ID
+//
+// Output(s):
+//   ReconciledID
+//
+def Build_ReconciledIDExtension(ID) {
+  url : "reconciliation-id";
+  extension[] : Build_ValueString(ID, "urn:oid:google/reconciliation-id");
+}
+
+// Description: Constructs a ValueString datatype
+//
+// Argument(s):
+//   Value: String
+//   URL: string
+//
+// Output(s):
+//   ValueString
+//
+def Build_ValueString(required Value, URL) {
+  valueString : Value;
+  url : URL;
+}
+
 // Description: Constructs an Address datatype
 //
 // Argument(s):
@@ -43,7 +70,9 @@ def IsInterval (required TS) {
 //   Location: https://www.hl7.org/fhir/location.html
 //
 def AD_Location(required AD) {
-  resourceType : "Location"
+  resourceType : "Location";
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-location-definitions.html#Location.name
+  name : "unknown";
   address : AD_Address(AD);
 }
 
@@ -68,15 +97,44 @@ def TEL_ContactPoint(required TEL) {
 // Output(s):
 //   Organization: https://www.hl7.org/fhir/organization.html
 //
-def ORG_Organization(required ORG) {
+def ORG_Organization(ORG) {
   resourceType : "Organization";
-  identifier[] :  II_Identifier(ORG.id[]);
-  var Name : ORG.name[where $Type($) ~= "container"]
-  name : Name[0];
-  // Fixed-value to ensure fhirpath-constraint-violation-ContainedResource.ofType(Bundle).entry.resource.ofType(Organization): "(identifier.count() + name.count()) > 0"
-  name (if ~Name) : "unknown";
+  if (ORG.id) {
+    identifier[] :  II_Identifier(ORG.id[]);
+  } else {
+    // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-organization-definitions.html#Organization.identifier
+    identifier[0].value : "unkown";
+    identifier[0].system : "http://hl7.org/fhir/sid/us-npi";
+  }
+  if (ORG.name) {
+    var Name : ORG.name[where $Type($) ~= "container"]
+    name : Name[0];
+  } else {
+    // Fixed-value to ensure fhirpath-constraint-violation-ContainedResource.ofType(Bundle).entry.resource.ofType(Organization): "(identifier.count() + name.count()) > 0"
+    name : "unknown";
+  }
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-organization-definitions.html#Organization.active
+  active : true;
   telecom[] : TEL_ContactPoint(ORG.telecom[]);
   address[] : AD_Address(ORG.addr[]);
+}
+
+// Description: Constructs a default Organization resource
+//
+// Argument(s):
+//
+// Output(s):
+//   Organization: https://www.hl7.org/fhir/organization.html
+//
+def Build_Organization() {
+  resourceType : "Organization";
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-organization-definitions.html#Organization.identifier
+  identifier[0].value : "unkown";
+  identifier[0].system : "http://hl7.org/fhir/sid/us-npi";
+  // Fixed-value to ensure fhirpath-constraint-violation-ContainedResource.ofType(Bundle).entry.resource.ofType(Organization): "(identifier.count() + name.count()) > 0"
+  name : "unknown";
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-organization-definitions.html#Organization.active
+  active : true;
 }
 
 // Description: Constructs an Organization resource
@@ -93,6 +151,8 @@ def ORG_CustodianOrganization(required ORG) {
   name (if $Type(ORG.name) ~= "container") : ORG.name;
   // Fixed-value to ensure fhirpath-constraint-violation-ContainedResource.ofType(Bundle).entry.resource.ofType(Organization): "(identifier.count() + name.count()) > 0"
   name (if ~ORG.name) : "unknown";
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-organization-definitions.html#Organization.active
+  active : true;
   telecom[] : TEL_ContactPoint(ORG.telecom)
   address[] : AD_Address(ORG.addr)
 }
@@ -220,9 +280,37 @@ def Guardian_Contact(required Guardian) {
 // Output(s):
 //   Practitioner: https://www.hl7.org/fhir/practitioner.html
 //
-def Person_Practitioner(required PR, ID) {
+def Person_Practitioner(PR, ID) {
+  if (ID){
+    identifier[]: II_Identifier(ID[]);
+  } else {
+    // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-practitioner-definitions.html#Practitioner.identifier
+    identifier[0].value : "unkown";
+    identifier[0].system : "http://hl7.org/fhir/sid/us-npi";
+  }
   resourceType: "Practitioner";
-  name[]: PN_HumanName(PR.name[]);
+  if (PR.name) {
+    name[]: PN_HumanName(PR.name[]);
+  } else {
+    // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-practitioner-definitions.html#Practitioner.name.family
+    name[0].family : "unkown";
+  }
+}
+
+// Description: Constructs a default Practitioner resource
+//
+// Argument(s):
+//
+// Output(s):
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def Build_Practitioner() {
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-practitioner-definitions.html#Practitioner.identifier
+  identifier[0].value : "unkown";
+  identifier[0].system : "http://hl7.org/fhir/sid/us-npi";
+  resourceType: "Practitioner";
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-practitioner-definitions.html#Practitioner.name.family
+  name[0].family : "unkown";
 }
 
 // Description: Constructs a Quantity datatype
@@ -380,7 +468,12 @@ def ParticipantRole_Location(ParticipantRole) {
   resourceType: "Location";
   identifier[] : II_Identifier(ParticipantRole.id[]);
   type[] : CD_CodeableConcept(ParticipantRole.code);
-  name : ParticipantRole.playingEntity.name[0];
+  if (ParticipantRole.playingEntity.name[0]) {
+    name : ParticipantRole.playingEntity.name[0];
+  } else {
+    // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-location-definitions.html#Location.name
+    name : "unknown";
+  }
   telecom[] : TEL_ContactPoint(ParticipantRole.telecom[]);
   address : AD_Address(ParticipantRole.addr[0]);
 }
@@ -421,7 +514,7 @@ def templateIdHasRoot(templateId, value) {
 //   Immunization.reaction: https://www.hl7.org/fhir/immunization-definitions.html#Immunization.reaction
 //
 def Build_ImmunizationReaction(required Observation, Patient) {
-  detail : Build_Reference(Output_Resource(Observation_Observation(Observation, Patient)));
+  detail : Build_Reference(Output_Resource(Observation_Observation(Observation, Patient, "laboratory")));
   if (IsInterval(Observation.effectiveTime)) {
     date : Convert_DateTime(Observation.effectiveTime.low.value);
   } else {
@@ -497,8 +590,14 @@ def ClinicalDocument_Bundle(II, Time) {
 // Output(s):
 //   DocumentReference: https://www.hl7.org/fhir/documentreference.html
 //
-def Build_DocumentReference(required URL) {
+def Build_DocumentReference(required URL, Patient) {
   resourceType : "DocumentReference";
   content[0].attachment.url : URL;
+  content[0].attachment.contentType : "unknown";
   status : "current";
+  type.coding[0].code : "UNK";
+  type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v3-NullFlavor";
+  category[0].coding[0].code : "clinical-note";
+  category[0].coding[0].system : "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category";
+  subject : Build_Reference(Patient);
 }

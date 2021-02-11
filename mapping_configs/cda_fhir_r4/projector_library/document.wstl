@@ -100,17 +100,29 @@ def PatientRole_Patient(required PatientRole, GeneralPractitioner) {
   communication[] : Build_Communication(PatientRole.patient.languageCommunication[where $IsNotNil($.languageCode)][]);
   contact[] : Guardian_Contact(PatientRole.patient.guardian[]);
   extension[0].url : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race";
-  extension[0].extension[0].valueCoding : CD_Coding(PatientRole.patient.raceCode);
-  extension[0].extension[0].url : "ombCategory";
+  if (PatientRole.patient.raceCode) {
+    extension[0].extension[0].valueCoding : CD_Coding(PatientRole.patient.raceCode);
+    extension[0].extension[0].url : "ombCategory";
+    extension[0].extension[1].valueString : PatientRole.patient.raceCode.display;
+    extension[0].extension[1].url : "text";
+  }
   extension[1].url : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity";
-  extension[1].extension[0].valueCoding : CD_Coding(PatientRole.patient.ethnicGroupCode);
-  extension[1].extension[0].url : "ombCategory";
+  if (PatientRole.patient.ethnicGroupCode){
+    extension[1].extension[0].valueCoding : CD_Coding(PatientRole.patient.ethnicGroupCode);
+    extension[1].extension[0].url : "ombCategory";
+    extension[1].extension[1].valueString : PatientRole.patient.ethnicGroupCode.display;
+    extension[1].extension[1].url : "text";
+  }
   extension[2].url : "http://hl7.org/fhir/StructureDefinition/patient-religion";
-  extension[2].extension[0].valueCodeableConcept : CD_CodeableConcept(PatientRole.patient.religiousAffiliationCode);
-  extension[2].extension[0].url : "http://hl7.org/fhir/StructureDefinition/patient-religion";
+  if (PatientRole.patient.religiousAffiliationCode) {
+    extension[2].extension[0].valueCodeableConcept : CD_CodeableConcept(PatientRole.patient.religiousAffiliationCode);
+    extension[2].extension[0].url : "http://hl7.org/fhir/StructureDefinition/patient-religion";
+  }
   extension[3].url : "http://hl7.org/fhir/StructureDefinition/patient-birthPlace";
-  extension[3].extension[0].valueAddress : AD_Address(PatientRole.patient.birthplace.place.addr);
-  extension[3].extension[0].url : "http://hl7.org/fhir/StructureDefinition/patient-birthPlace";
+  if (PatientRole.patient.birthplace.place.addr){
+    extension[3].extension[0].valueAddress : AD_Address(PatientRole.patient.birthplace.place.addr);
+    extension[3].extension[0].url : "http://hl7.org/fhir/StructureDefinition/patient-birthPlace";
+  }
   generalPractitioner[] : Build_Reference(Output_Resource[](GeneralPractitioner[]));
   resourceType : "Patient";
 }
@@ -128,11 +140,23 @@ def PatientRole_Patient(required PatientRole, GeneralPractitioner) {
 def AssignedEntity_PractitionerRole(required AssignedEntity) {
   identifier[]:  II_Identifier(AssignedEntity.id[]);
   resourceType: "PractitionerRole";
+  // Fixed value to ensure US-Core validation http://hl7.org/fhir/us/davinci-pdex-plan-net/STU1/StructureDefinition-plannet-PractitionerRole-definitions.html#PractitionerRole.active
+  active : true;
   code[] : CD_CodeableConcept(AssignedEntity.code);
   telecom[]: TEL_ContactPoint(AssignedEntity.telecom[]);
   location[]: Build_Reference(Output_Resource[](AD_Location[](AssignedEntity.addr[])));
-  practitioner : Build_Reference(Output_Resource(Person_Practitioner(AssignedEntity.assignedPerson, AssignedEntity.id)));
-  organization : Build_Reference(Output_Resource(ORG_Organization(AssignedEntity.representedOrganization)));
+  if (AssignedEntity.assignedPerson) {
+    practitioner : Build_Reference(Output_Resource(Person_Practitioner(AssignedEntity.assignedPerson, AssignedEntity.id)));
+  } else {
+    // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-practitionerrole-definitions.html#PractitionerRole.practitioner
+    practitioner : Build_Reference(Output_Resource(Build_Practitioner()));
+  }
+  if (AssignedEntity.representedOrganization) {
+    organization : Build_Reference(Output_Resource(ORG_Organization(AssignedEntity.representedOrganization)));
+  } else {
+    // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-practitionerrole-definitions.html#PractitionerRole.organization
+    organization : Build_Reference(Output_Resource(Build_Organization()));
+  }
 }
 
 // Description: Constructs a FHIR R4 FamilyMemberHistory Resource based on CDA FamilyMemberHistory Section
@@ -170,12 +194,13 @@ def FamilyMemberHistorySection_FamilyMemberHistory(required Organizer, required 
 //   Social History Observation Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.4.38-2013-01-31T000000.html
 //   Vital Sign Observation Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.4.27-2013-01-31T000000.html
 //   Patient Resource already constructed through PatientRole_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Category: https://www.hl7.org/fhir/observation-definitions.html#Observation.category
 //
 // Output(s):
 //   Observation: https://www.hl7.org/fhir/observation.html
 //   Device: https://www.hl7.org/fhir/device.html
 //
-def Observation_Observation(required Observation, Patient) {
+def Observation_Observation(required Observation, required Patient, required Category) {
   resourceType: "Observation"
   identifier[] : II_Identifier(Observation.id[]);
   if (Observation.code.code) {
@@ -183,6 +208,8 @@ def Observation_Observation(required Observation, Patient) {
   } else {
     code.coding[0].code : "unknown";
   }
+  category[0].coding[0].code : Category;
+  category[0].coding[0].system : "http://terminology.hl7.org/CodeSystem/observation-category";
   status : Convert_TerminologyCode(Observation.statusCode.code, "ObservationStatusCode");
   if (IsInterval(Observation.effectiveTime)) {
     effectivePeriod.start : Convert_DateTime(Observation.effectiveTime.low.value);
@@ -194,7 +221,12 @@ def Observation_Observation(required Observation, Patient) {
   component[] : Build_Component(Observation.code, Observation.value[]);
   encounter : Build_Reference(Output_Resource(Encounter_Encounter(Observation.encounter, Patient)));
   performer[] : Build_Reference(Output_Resource[](AssignedEntity_PractitionerRole[](Observation.author[*].assignedAuthor[])));
-  issued (if ~IsInterval(Observation.author[0].time)): Convert_Instant(Observation.author[0].time.value);
+  if (Observation.author[0].time and ~IsInterval(Observation.author[0].time)){
+    issued : Convert_Instant(Observation.author[0].time.value);
+  } else {
+    // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-smokingstatus-definitions.html#Observation.issued
+    issued : $CurrentTime("2006-01-02T15:04:05.2112Z", "");
+  }
   method : CD_CodeableConcept(Observation.methodCode[0]);
   interpretation : CD_CodeableConcept(Observation.interpretationCode[]);
   referenceRange[] : ObservationRange_ReferenceRange(Observation.referenceRange[*].observationRange[]);
@@ -202,7 +234,7 @@ def Observation_Observation(required Observation, Patient) {
   var Supply : Observation.entryRelationship[*].supply[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.50")];
   // templateId = 2.16.840.1.113883.10.20.22.4.37 corresponds to a participantRole contributing as device to the given observation
   var ParticipantRole (if Supply) : Supply[*].participant[*].participantRole[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.37")];
-  device (if ParticipantRole): Build_Reference(Output_Resource(ParticipantRole_Device(ParticipantRole[0])));
+  device (if ParticipantRole): Build_Reference(Output_Resource(ParticipantRole_Device(ParticipantRole[0], Patient)));
   subject : Build_Reference(Patient);
 }
 
@@ -214,10 +246,12 @@ def Observation_Observation(required Observation, Patient) {
 // Output(s):
 //   Device: https://www.hl7.org/fhir/device.html
 //
-def ParticipantRole_Device(required ParticipantRole) {
+def ParticipantRole_Device(required ParticipantRole, required Patient) {
   resourceType: "Device"
   identifier[] : II_Identifier(ParticipantRole.id[]);
   type : CD_CodeableConcept(ParticipantRole.playingDevice.code);
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-implantable-device-definitions.html#Device.patient
+  patient : Build_Reference(Patient);
 }
 
 // Description: Constructs a FHIR R4 Encounter Resource and its related resources based on CDA Encounter Section
@@ -233,10 +267,16 @@ def ParticipantRole_Device(required ParticipantRole) {
 def Encounter_Encounter(required Encounter, Patient) {
   resourceType: "Encounter"
   identifier[] : II_Identifier(Encounter.id[]);
-  type[] : CD_CodeableConcept(Encounter.code);
+  if (Encounter.code.code) {
+    type[] : CD_CodeableConcept(Encounter.code);
+  } else {
+   // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-encounter-definitions.html#Encounter.type
+    type[0].coding[0].code : "unknown";
+  }
   if (Encounter.code.code) {
     class : CD_Coding(Encounter.code);
   } else {
+    // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-encounter-definitions.html#Encounter.class
     class.code : "unknown";
   }
   status : Convert_TerminologyCode(Encounter.statusCode.code, "EncounterStatusCode");
@@ -320,7 +360,12 @@ def Procedure_Procedure(required Procedure, required Patient) {
   bodySite[] : CD_CodeableConcept(Procedure.targetSiteCode[]);
   performer[].actor : Build_Reference[](Output_Resource[](AssignedEntity_PractitionerRole[](Procedure.performer[*].assignedEntity[])));
   status : Procedure.statusCode.code;
-  code : CD_CodeableConcept(Procedure.code);
+  if (Procedure.code) {
+    code : CD_CodeableConcept(Procedure.code);
+  } else {
+    // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-procedure-definitions.html#Procedure.code
+    code.coding[0].code : "unknown";
+  }
   subject : Build_Reference(Patient);
 }
 
@@ -338,12 +383,20 @@ def Procedure_Procedure(required Procedure, required Patient) {
 def ResultSection_DiagnosticReport(required Organizer, required Patient){
   resourceType: "DiagnosticReport"
   identifier[] : II_Identifier(Organizer.id[]);
-  status : Convert_TerminologyCode(Organizer.statusCode.code, "ResultOrganizerStatusCode");
+  if (Organizer.statusCode.code) {
+    status : Convert_TerminologyCode(Organizer.statusCode.code, "ResultOrganizerStatusCode");
+  } else {
+    // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-diagnosticreport-note-definitions.html#DiagnosticReport.status
+    status : "unknown";
+  }
   if (Organizer.code.code) {
     code : CD_CodeableConcept(Organizer.code);
   } else {
+    // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-diagnosticreport-lab-definitions.html#DiagnosticReport.code
     code.coding[0].code : "unknown";
   }
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-diagnosticreport-note-definitions.html#DiagnosticReport.category
+  category[0].coding[0].code : "unknown";
   if (IsInterval(Organizer.effectiveTime)) {
     effectivePeriod.start : Convert_DateTime(Organizer.effectiveTime.low.value);
     effectivePeriod.end : Convert_DateTime(Organizer.effectiveTime.high.value);
@@ -352,10 +405,15 @@ def ResultSection_DiagnosticReport(required Organizer, required Patient){
   }
   // templateId = 2.16.840.1.113883.10.20.22.4.2 corresponds to Result Observation
   var Observation : Organizer.component[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.2")];
-  result[] : Build_Reference(Output_Resource[](Observation_Observation[](Observation[], Patient)));
+  result[] : Build_Reference(Output_Resource[](Observation_Observation[](Observation[], Patient, "laboratory")));
   //It is already covered under Observation.performer
   //performer[] : Build_Reference(Output_Resource[](AssignedEntity_PractitionerRole[](Observation[*].author[*].assignedAuthor[])));
-  issued (if ~IsInterval(Observation[0].author[0].time)) : Convert_Instant(Observation[0].author[0].time.value);
+  if (Observation[0].author[0].time and ~IsInterval(Observation[0].author[0].time)){
+    issued : Convert_Instant(Observation[0].author[0].time.value);
+  } else {
+    issued : $CurrentTime("2006-01-02T15:04:05.2112Z", "");
+  }
+  subject : Build_Reference(Patient);
 }
 
 // Description: Constructs a FHIR R4 MedicationStatement Resource and its related resources based on CDA Medications Section
@@ -410,6 +468,8 @@ def Act_AllergyIntolerance(required Act, required Patient) {
   recorder : Build_Reference(Output_Resource(AssignedEntity_PractitionerRole(Act.author[0].assignedAuthor)));
   clinicalStatus.coding[0].code : Act.statusCode.code;
   clinicalStatus.coding[0].system : "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical";
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-allergyintolerance-definitions.html#AllergyIntolerance.code
+  code.coding[0].code : "unknown";
   if (IsInterval(Act.effectiveTime)) {
     onsetPeriod.start : Convert_DateTime(Act.effectiveTime.low.value);
     onsetPeriod.end : Convert_DateTime(Act.effectiveTime.high.value);
@@ -483,4 +543,6 @@ def SubstanceAdministration_Immunization(required SubstanceAdministration, requi
   var ReactionObservation : SubstanceAdministration.entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.9")];
   reaction[] : Build_ImmunizationReaction(ReactionObservation[], Patient);
   patient : Build_Reference(Patient);
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-immunization-definitions.html#Immunization.primarySource
+  primarySource : true;
 }
