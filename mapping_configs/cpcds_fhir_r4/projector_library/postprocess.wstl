@@ -20,9 +20,18 @@ def Build_ReferenceID(resourceType, id) {
     reference : $StrCat(resourceType, "/", id);
 }
 
+def Get_ReconciledID(Resource) {
+  if (Resource.identifier and $Type(Resource.identifier) = "array") {
+    var ReconciledIdentifier : Resource.identifier[where $.system = "urn:oid:google/reconciliation-id"];
+    $this : ReconciledIdentifier[0].value;
+  } else {
+    var ReconciledIdentifier : Resource.extension[where $.url = "reconciliation-id"];
+    $this : ReconciledIdentifier[0].extension[0].valueString;
+  }
+}
+
 def Build_Reference(Resource) {
-  var ReconciledIdentifier : Resource.identifier[where $.system = "urn:oid:google/reconciliation-id"];
-  var ReconciledID : ReconciledIdentifier[0].value;
+  var ReconciledID : Get_ReconciledID(Resource);
   if (ID_Reconciliation()) {
     reference : $StrCat(Resource.resourceType, "/", ReconciledID);
   } else {
