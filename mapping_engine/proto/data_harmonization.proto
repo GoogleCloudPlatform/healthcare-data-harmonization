@@ -4,7 +4,6 @@ package cloud.healthcare.cdw.etl.mapping.proto;
 
 import "proto/harmonization.proto";
 import "proto/library.proto";
-import "proto/mapping.proto";
 
 option go_package = "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/proto";
 

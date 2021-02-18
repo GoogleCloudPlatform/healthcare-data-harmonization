@@ -13,18 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# This script replaces go module dependencies with local paths, and builds and
-# tests all modules.
-
-cd mapping_engine
-./go_mod_edits.sh
-cd ../mapping_language
-./go_mod_edits.sh
-
 # Exit with the failing error code if one of the builds fails. Useful for CI.
 set -o errexit
 
-cd ../mapping_engine
+cd mapping_engine
 ./build.sh
 cd ../mapping_language
 ./build.sh

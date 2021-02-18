@@ -59,9 +59,7 @@ check_tools
 source ./generate_grammar.sh
 
 # BEGIN LOCAL-MOD-REPLACE
-source ./go_mod_edits.sh
 cd ../mapping_engine
-source ./go_mod_edits.sh
 source ./generate_protos.sh
 cd ../mapping_language
 # END LOCAL-MOD-REPLACE

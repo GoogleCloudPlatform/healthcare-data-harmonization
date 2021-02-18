@@ -52,11 +52,8 @@ echo 'Compiling protobuf.'
 source ./gen_go_protos.sh
 
 # build wstl server
-cd service/
-source ./go_mod_edits.sh
-
 echo Building wstlserver
-cd wstlserver
+cd service/wstlserver
 go build ./...
 go test ./...
 
