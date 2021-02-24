@@ -20,6 +20,7 @@ import com.google.cloud.healthcare.etl.xmltojson.postprocessor.transformers.Tran
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,7 +74,7 @@ public class PostProcessorCdaRev2 implements PostProcessor {
   }
 
   /**
-   * Method in charge of post process a CCDA Release 2 json string
+   * Method in charge of post processing a CCDA Release 2 json string.
    *
    * @param jsonInput json string to be post processed
    * @return json string transformed to be compiant with CCDA release 2
@@ -81,9 +82,35 @@ public class PostProcessorCdaRev2 implements PostProcessor {
    */
   @Override
   public String postProcess(String jsonInput) throws PostProcessorException {
+    JSONObject jsonObj = doPostProcess(jsonInput);
+    return jsonObj.toString(INDENTATION);
+  }
+
+  /**
+   * Method in charge of post processing a CCDA Release 2 json string with additional fields added
+   * to the top level JSON object (i.e. on the same level as the FHIR resources).
+   *
+   * @param jsonInput json string to be post processed
+   * @param fields the data source to be included in the JSON
+   * @return json string transformed to be compiant with CCDA release 2
+   * @throws PostProcessorException
+   */
+  @Override
+  public String postProcessWithAdditionalFields(String jsonInput, Map<String, String> fields)
+      throws PostProcessorException {
+    JSONObject jsonObj = doPostProcess(jsonInput);
+    if (!jsonObj.isEmpty()) {
+      for (Map.Entry<String, String> field : fields.entrySet()) {
+        jsonObj.put(field.getKey(), field.getValue());
+      }
+    }
+    return jsonObj.toString(INDENTATION);
+  }
+
+  private JSONObject doPostProcess(String jsonInput) throws PostProcessorException {
     JSONObject jsonObj = unmarshallJSON(jsonInput);
     applyTransforms(jsonObj);
-    return jsonObj.toString(INDENTATION);
+    return jsonObj;
   }
 
   private JSONObject unmarshallJSON(String jsonStr) throws PostProcessorException {

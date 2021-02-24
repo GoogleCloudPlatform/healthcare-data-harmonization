@@ -14,18 +14,17 @@
 
 package com.google.cloud.healthcare.etl.xmltojson.postprocessor;
 
-import com.google.gson.JsonParser;
 import java.util.Arrays;
 import java.util.Collection;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+import org.skyscreamer.jsonassert.JSONAssert;
 
-/** Unit Tests for Post Processor for CDA Rev 2 Array to Single Conversion * */
+/** Unit Tests for Post Processor for CDA Rev 2 Array to Single Conversion. */
 @RunWith(Parameterized.class)
 public class PostProcessorCdaRev2ArrayToSingleTest {
   private PostProcessor ppCDARev2;
@@ -82,8 +81,7 @@ public class PostProcessorCdaRev2ArrayToSingleTest {
             key);
 
     String actualJSON = ppCDARev2.postProcess(inputJSON);
-
-    Assert.assertEquals(JsonParser.parseString(expectedJSON), JsonParser.parseString(actualJSON));
+    JSONAssert.assertEquals(expectedJSON, actualJSON, /* strict */ false);
   }
 
   /** This test verifies, that the arrays with specified keys are correctly converted to single. */
@@ -118,8 +116,7 @@ public class PostProcessorCdaRev2ArrayToSingleTest {
             key);
 
     String actualJSON = ppCDARev2.postProcess(inputJSON);
-
-    Assert.assertEquals(JsonParser.parseString(expectedJSON), JsonParser.parseString(actualJSON));
+    JSONAssert.assertEquals(expectedJSON, actualJSON, /* strict */ false);
   }
 
   /** This test verifies, that the arrays with specified keys are correctly converted to single. */
@@ -154,8 +151,7 @@ public class PostProcessorCdaRev2ArrayToSingleTest {
             key);
 
     String actualJSON = ppCDARev2.postProcess(inputJSON);
-
-    Assert.assertEquals(JsonParser.parseString(expectedJSON), JsonParser.parseString(actualJSON));
+    JSONAssert.assertEquals(expectedJSON, actualJSON, /* strict */ false);
   }
 
   /**
@@ -185,8 +181,7 @@ public class PostProcessorCdaRev2ArrayToSingleTest {
             key);
 
     String actualJSON = ppCDARev2.postProcess(inputJSON);
-
-    Assert.assertEquals(JsonParser.parseString(inputJSON), JsonParser.parseString(actualJSON));
+    JSONAssert.assertEquals(inputJSON, actualJSON, /* strict */ false);
   }
 
   /** This test verifies, that if JSON does not contain array keys there is no transformation. */
@@ -203,8 +198,7 @@ public class PostProcessorCdaRev2ArrayToSingleTest {
             + "   }"
             + "}", key);
 
-    String actualJson = ppCDARev2.postProcess(inputJSON);
-
-    Assert.assertEquals(JsonParser.parseString(inputJSON), JsonParser.parseString(actualJson));
+    String actualJSON = ppCDARev2.postProcess(inputJSON);
+    JSONAssert.assertEquals(inputJSON, actualJSON, /* strict */ false);
   }
 }

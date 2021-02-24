@@ -22,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Collections;
+import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -41,6 +42,7 @@ public class XmlToJsonCDARev2 implements XmlToJson {
   private Marshaller marshaller;
   private Unmarshaller unmarshaller;
   private PostProcessor ppCDARev2;
+  private Map<String, String> fieldsToAdd;
 
   private static final String MEDIA_TYPE = "application/json";
 
@@ -55,6 +57,18 @@ public class XmlToJsonCDARev2 implements XmlToJson {
     setJAXBMarshallerProperties();
     createJAXBUnmarshaller();
     createPostProcessor();
+  }
+
+  /**
+   * Constructor for XML to JSON parser for CCDA Release 2 with additional fields. The fields
+   * provided will be added at the top-most level of the JSON produced, i.e. once per JSON object.
+   *
+   * @param fieldsToAdd Key-value pairs of fields to be added to the top level JSON.
+   * @throws XmlToJsonException
+   */
+  public XmlToJsonCDARev2(Map<String, String> fieldsToAdd) throws XmlToJsonException {
+    this();
+    this.fieldsToAdd = fieldsToAdd;
   }
 
   private void createJAXBContext() throws XmlToJsonException {
@@ -112,13 +126,14 @@ public class XmlToJsonCDARev2 implements XmlToJson {
   }
 
   private String postProcess(String input) throws XmlToJsonException {
-    String output;
     try {
-      output = ppCDARev2.postProcess(input);
+      if (fieldsToAdd == null || fieldsToAdd.isEmpty()) {
+        return ppCDARev2.postProcess(input);
+      }
+      return ppCDARev2.postProcessWithAdditionalFields(input, fieldsToAdd);
     } catch (PostProcessorException e) {
       throw new XmlToJsonException("error post processing jaxb output", e);
     }
-    return output;
   }
 
   private String marshallJAXBElementToJSON(JAXBElement<POCDMT000040ClinicalDocument> jaxbXml)

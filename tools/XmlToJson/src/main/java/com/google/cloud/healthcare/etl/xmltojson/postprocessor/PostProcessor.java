@@ -14,6 +14,8 @@
 
 package com.google.cloud.healthcare.etl.xmltojson.postprocessor;
 
+import java.util.Map;
+
 /** Apply post processing steps into a serialized JSON string * */
 public interface PostProcessor {
   /**
@@ -24,4 +26,15 @@ public interface PostProcessor {
    * @throws PostProcessorException
    */
   public String postProcess(String jsonInput) throws PostProcessorException;
+
+  /**
+   * Method in charge of post process a CCDA json string with additional fields
+   *
+   * @param jsonInput json string to be post processed
+   * @param fields map of additional fields to add to the top level JSON
+   * @return json string transformed to be compiant with CCDA release 2
+   * @throws PostProcessorException
+   */
+  public String postProcessWithAdditionalFields(String jsonInput, Map<String, String> fields)
+      throws PostProcessorException;
 }

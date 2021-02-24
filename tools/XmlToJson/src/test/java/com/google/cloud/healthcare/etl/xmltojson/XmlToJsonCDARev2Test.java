@@ -18,15 +18,19 @@ import static com.google.cloud.healthcare.etl.xmltojson.XmlToJsonCDARev2Utils.cr
 import static com.google.cloud.healthcare.etl.xmltojson.XmlToJsonCDARev2Utils.parseXml;
 import static com.google.cloud.healthcare.etl.xmltojson.XmlToJsonCDARev2Utils.readFile;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.util.Arrays;
 import java.util.Collection;
-import org.junit.Assert;
+import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+import org.skyscreamer.jsonassert.JSONAssert;
 
 /** Unit Tests for XML To JSON parser * */
 @RunWith(Parameterized.class)
@@ -64,8 +68,22 @@ public class XmlToJsonCDARev2Test {
     String inputXml = readFile("src/test/resources/synthea/inputs/" + fileName + ".xml");
     XmlToJson parser = createCDARev2XmlToJsonParser();
     String actualJSON = parseXml(parser, inputXml);
-    String expectedJSON =
-        readFile("src/test/resources/synthea/outputs/" + fileName + ".json");
-    Assert.assertEquals(JsonParser.parseString(expectedJSON), JsonParser.parseString(actualJSON));
+    String expectedJSON = readFile("src/test/resources/synthea/outputs/" + fileName + ".json");
+    JSONAssert.assertEquals(expectedJSON, actualJSON, /* strict */ true);
+  }
+
+  @Test
+  public void xmlToJSONCDARev2ValidCCDARev2WithAdditionalFields() throws XmlToJsonException {
+    String fieldKey = "__data_source__";
+    String fieldValue = "source";
+    Map<String, String> fields = ImmutableMap.of(fieldKey, fieldValue);
+    String inputXml = readFile("src/test/resources/synthea/inputs/" + fileName + ".xml");
+    XmlToJson parser = new XmlToJsonCDARev2(fields);
+    String actualJSON = parseXml(parser, inputXml);
+    JsonObject expectedJSON =
+        JsonParser.parseString(readFile("src/test/resources/synthea/outputs/" + fileName + ".json"))
+            .getAsJsonObject();
+    expectedJSON.addProperty(fieldKey, fieldValue);
+    JSONAssert.assertEquals(new Gson().toJson(expectedJSON), actualJSON, /* strict */ true);
   }
 }

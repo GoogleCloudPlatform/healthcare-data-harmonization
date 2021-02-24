@@ -18,9 +18,8 @@ import static com.google.cloud.healthcare.etl.xmltojson.XmlToJsonCDARev2Utils.cr
 import static com.google.cloud.healthcare.etl.xmltojson.XmlToJsonCDARev2Utils.parseXml;
 import static com.google.cloud.healthcare.etl.xmltojson.XmlToJsonCDARev2Utils.readFile;
 
-import com.google.gson.JsonParser;
-import org.junit.Assert;
 import org.junit.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 
 /** Unit Tests for XmlToJson parser CDA Rev 2 Exceptions * */
 public class XmlToJsonCDARev2ExceptionsTest {
@@ -44,6 +43,6 @@ public class XmlToJsonCDARev2ExceptionsTest {
     String actualJSON = parseXml(parser, inputXml);
     String expectedJSON =
         readFile("src/test/resources/synthea/outputs/invalid_ccda_rev2.json");
-    Assert.assertEquals(JsonParser.parseString(expectedJSON), JsonParser.parseString(actualJSON));
+    JSONAssert.assertEquals(expectedJSON, actualJSON, /* strict */ false);
   }
 }

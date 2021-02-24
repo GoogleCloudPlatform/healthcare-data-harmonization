@@ -17,7 +17,7 @@ package com.google.cloud.healthcare.etl.xmltojson.postprocessor;
 import org.junit.Before;
 import org.junit.Test;
 
-/** Unit Tests for Post Processor for CDA Rev 2 Exceptions * */
+/** Unit Tests for Post Processor for CDA Rev 2 Exceptions. */
 public class PostProcessorCdaRev2ExceptionsTest {
   private PostProcessor ppCDARev2;
 

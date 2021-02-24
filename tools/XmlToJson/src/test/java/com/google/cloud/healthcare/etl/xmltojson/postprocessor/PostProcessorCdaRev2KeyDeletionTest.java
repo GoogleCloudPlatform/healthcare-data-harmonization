@@ -14,18 +14,17 @@
 
 package com.google.cloud.healthcare.etl.xmltojson.postprocessor;
 
-import com.google.gson.JsonParser;
 import java.util.Arrays;
 import java.util.Collection;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+import org.skyscreamer.jsonassert.JSONAssert;
 
-/** Unit Tests for Post Processor for CDA Rev 2 Key Deletion * */
+/** Unit Tests for Post Processor for CDA Rev 2 Key Deletion. */
 @RunWith(Parameterized.class)
 public class PostProcessorCdaRev2KeyDeletionTest {
   private PostProcessor ppCDARev2;
@@ -95,8 +94,7 @@ public class PostProcessorCdaRev2KeyDeletionTest {
             key);
 
     String actualJSON = ppCDARev2.postProcess(inputJSON);
-
-    Assert.assertEquals(JsonParser.parseString(expectedJSON), JsonParser.parseString(actualJSON));
+    JSONAssert.assertEquals(expectedJSON, actualJSON, /* strict */ false);
   }
 
   /**
@@ -141,8 +139,7 @@ public class PostProcessorCdaRev2KeyDeletionTest {
             + "}";
 
     String actualJSON = ppCDARev2.postProcess(inputJSON);
-
-    Assert.assertEquals(JsonParser.parseString(expectedJSON), JsonParser.parseString(actualJSON));
+    JSONAssert.assertEquals(expectedJSON, actualJSON, /* strict */ false);
   }
 
   /**
@@ -173,8 +170,7 @@ public class PostProcessorCdaRev2KeyDeletionTest {
     String expectedJSON = "{}";
 
     String actualJSON = ppCDARev2.postProcess(inputJSON);
-
-    Assert.assertEquals(JsonParser.parseString(expectedJSON), JsonParser.parseString(actualJSON));
+    JSONAssert.assertEquals(expectedJSON, actualJSON, /* strict */ false);
   }
 
   /**
@@ -208,8 +204,7 @@ public class PostProcessorCdaRev2KeyDeletionTest {
     String expectedJSON = "{}";
 
     String actualJSON = ppCDARev2.postProcess(inputJSON);
-
-    Assert.assertEquals(JsonParser.parseString(expectedJSON), JsonParser.parseString(actualJSON));
+    JSONAssert.assertEquals(expectedJSON, actualJSON, /* strict */ false);
   }
 
   /** This test verifies, that keys are correctly deleted when contained in an object. */
@@ -253,8 +248,7 @@ public class PostProcessorCdaRev2KeyDeletionTest {
             key);
 
     String actualJSON = ppCDARev2.postProcess(inputJSON);
-
-    Assert.assertEquals(JsonParser.parseString(expectedJSON), JsonParser.parseString(actualJSON));
+    JSONAssert.assertEquals(expectedJSON, actualJSON, /* strict */ false);
   }
 
   /**
@@ -298,8 +292,7 @@ public class PostProcessorCdaRev2KeyDeletionTest {
             + "}";
 
     String actualJSON = ppCDARev2.postProcess(inputJSON);
-
-    Assert.assertEquals(JsonParser.parseString(expectedJSON), JsonParser.parseString(actualJSON));
+    JSONAssert.assertEquals(expectedJSON, actualJSON, /* strict */ false);
   }
 
   /**
@@ -329,7 +322,6 @@ public class PostProcessorCdaRev2KeyDeletionTest {
     String expectedJSON = "{}";
 
     String actualJSON = ppCDARev2.postProcess(inputJSON);
-
-    Assert.assertEquals(JsonParser.parseString(expectedJSON), JsonParser.parseString(actualJSON));
+    JSONAssert.assertEquals(expectedJSON, actualJSON, /* strict */ false);
   }
 }
