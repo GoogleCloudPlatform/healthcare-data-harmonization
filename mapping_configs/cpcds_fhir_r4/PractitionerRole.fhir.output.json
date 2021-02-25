@@ -4,12 +4,7 @@
    "entry":[
       {
          "resource":{
-            "identifier":[
-               {
-                  "system":"http://hl7.org/fhir/sid/us-npi",
-                  "value":"998592645930"
-               }
-            ],
+            "id":"d41187ed45024518fb323012695c6b91",
             "name":[
                {
                   "family":"Veum823",
@@ -20,12 +15,17 @@
                }
             ],
             "resourceType":"Practitioner",
-            "id":"d41187ed45024518fb323012695c6b91",
             "meta":{
                "profile":[
                   "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitioner"
                ]
-            }
+            },
+            "identifier":[
+               {
+                  "value":"998592645930",
+                  "system":"http://hl7.org/fhir/sid/us-npi"
+               }
+            ]
          },
          "request":{
             "method":"PUT",
@@ -33,11 +33,10 @@
          }
       },
       {
-         "request":{
-            "method":"PUT",
-            "url":"PractitionerRole/0dc611ff817199534dbfa16a6b1437ef"
-         },
          "resource":{
+            "organization":{
+               "reference":"Organization/37ce68f1a1ac2e3c6b9ca2bd31e3b5ec"
+            },
             "code":[
                {
                   "coding":[
@@ -53,9 +52,9 @@
                {
                   "coding":[
                      {
+                        "system":"http://nucc.org/provider-taxonomy",
                         "code":"163WG0000X",
-                        "display":"General Practice",
-                        "system":"http://nucc.org/provider-taxonomy"
+                        "display":"General Practice"
                      }
                   ]
                }
@@ -75,52 +74,60 @@
             "practitioner":{
                "reference":"Practitioner/d41187ed45024518fb323012695c6b91"
             },
-            "organization":{
-               "reference":"Organization/37ce68f1a1ac2e3c6b9ca2bd31e3b5ec"
-            },
             "id":"0dc611ff817199534dbfa16a6b1437ef"
+         },
+         "request":{
+            "url":"PractitionerRole/0dc611ff817199534dbfa16a6b1437ef",
+            "method":"PUT"
          }
       },
       {
+         "resource":{
+            "resourceType":"Organization",
+            "active":true,
+            "id":"d56dc295815a158a6b4b2f9a4cb88bd6",
+            "name":"Xyz Organization"
+         },
          "request":{
             "method":"PUT",
-            "url":"Provenance/a68bb2842f8b5822836dbc78c69b2f9a"
-         },
+            "url":"Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
+         }
+      },
+      {
          "resource":{
-            "entity":[
-               {
-                  "what":{
-                     "reference":"DocumentReference/02020202-0202-4202-8202-020202020202"
-                  },
-                  "role":"source"
-               }
-            ],
+            "id":"e1b9cde5aec8918baf593db6804a03e4",
             "resourceType":"Provenance",
             "recorded":"2020-01-01T01:01:01.1111Z",
-            "id":"a68bb2842f8b5822836dbc78c69b2f9a",
             "target":[
                {
                   "reference":"Practitioner/d41187ed45024518fb323012695c6b91"
                },
                {
                   "reference":"PractitionerRole/0dc611ff817199534dbfa16a6b1437ef"
+               },
+               {
+                  "reference":"Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
                }
             ],
             "agent":[
                {
                   "who":{
-                     "reference":"Organization/01010101-0101-4101-8101-010101010101"
+                     "reference":"Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
                   },
                   "type":{
                      "coding":[
                         {
-                           "system":"http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type",
-                           "code":"transmitter"
+                           "code":"transmitter",
+                           "system":"http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type"
                         }
                      ]
                   }
                }
             ]
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Provenance/e1b9cde5aec8918baf593db6804a03e4"
          }
       }
    ]

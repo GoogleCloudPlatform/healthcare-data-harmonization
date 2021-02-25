@@ -11,7 +11,10 @@ def Output_Resource(item) {
       var Item.identifier[] : HashID;
     }
   } else {
-    var Item.id (if ~item.id) : $Hash(item.identifier[0].value);
+    if (~item.id) {
+      var Item.id (if item.identifier) : $Hash(item.identifier[0].value);
+      var Item.id (if ~item.identifier) : $Hash(item);
+    }
   }
   $this : Item;
 }
@@ -25,8 +28,8 @@ def Get_ReconciledID(Resource) {
     var ReconciledIdentifier : Resource.identifier[where $.system = "urn:oid:google/reconciliation-id"];
     $this : ReconciledIdentifier[0].value;
   } else {
-    var ReconciledIdentifier : Resource.extension[where $.url = "reconciliation-id"];
-    $this : ReconciledIdentifier[0].extension[0].valueString;
+    var ReconciledIdentifier : Resource.extension[where $.url = "urn:oid:google/reconciliation-id"];
+    $this : ReconciledIdentifier[0].valueId;
   }
 }
 
@@ -53,18 +56,15 @@ def Output_Transaction(Output) {
   resourceType : "Bundle";
   type : "transaction";
   entry[] : Build_BundleEntry(Resources[], "PUT");
-  entry[] : Build_BundleEntry(Output_Resource(Build_Provenance(Resources)), "PUT");
+  entry[] : Build_BundleEntry(Output_Resource(Build_Provenance(Resources, Output.TransmitterOrganization)), "PUT");
 }
 
-def Build_Provenance(required Resources) {
+def Build_Provenance(required Resources, required TransmitterOrganization) {
   resourceType : "Provenance";
   recorded : $CurrentTime("2006-01-02T15:04:05.2112Z", "");
   target[] : Build_Reference(Resources[]);
   agent[0].type.coding[0].code : "transmitter";
   agent[0].type.coding[0].system : "http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type";
-  // An Organization resource will be created to model HPDI Customer
-  agent[0].who : Build_ReferenceID("Organization",$UUID());
-  entity[0].role : "source";
-  // A DocumentReference resource will be created to model input payload
-  entity[0].what :  Build_ReferenceID("DocumentReference",$UUID());
+  // An Organization resource that represents HPDI Customer Organization
+  agent[0].who : Build_Reference(TransmitterOrganization);
 }

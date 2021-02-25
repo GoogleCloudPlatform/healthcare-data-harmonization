@@ -1,32 +1,308 @@
 {
-   "resourceType":"Bundle",
    "type":"transaction",
    "entry":[
       {
          "resource":{
+            "billablePeriod":{
+               "start":"1994-07-03",
+               "end":"1994-07-03"
+            },
+            "supportingInfo":[
+               {
+                  "category":{
+                     "coding":[
+                        {
+                           "code":"billingnetworkcontractingstatus",
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
+                        }
+                     ]
+                  },
+                  "code":{
+                     "coding":[
+                        {
+                           "code":"in"
+                        }
+                     ]
+                  },
+                  "sequence":1
+               },
+               {
+                  "code":{
+                     "coding":[
+                        {
+                           "code":"in"
+                        }
+                     ]
+                  },
+                  "sequence":2,
+                  "category":{
+                     "coding":[
+                        {
+                           "code":"attendingnetworkcontractingstatus",
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
+                        }
+                     ]
+                  }
+               },
+               {
+                  "category":{
+                     "coding":[
+                        {
+                           "code":"referringnetworkcontractingstatus",
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
+                        }
+                     ]
+                  },
+                  "code":{
+                     "coding":[
+                        {
+                           "code":"in"
+                        }
+                     ]
+                  },
+                  "sequence":3
+               },
+               {
+                  "category":{
+                     "coding":[
+                        {
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory",
+                           "code":"tob-typeoffacility"
+                        }
+                     ]
+                  },
+                  "code":{
+                     "coding":[
+                        {
+                           "code":"1"
+                        }
+                     ]
+                  },
+                  "sequence":5
+               },
+               {
+                  "category":{
+                     "coding":[
+                        {
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory",
+                           "code":"tob-billclassification"
+                        }
+                     ]
+                  },
+                  "code":{
+                     "coding":[
+                        {
+                           "code":"1"
+                        }
+                     ]
+                  },
+                  "sequence":6
+               },
+               {
+                  "code":{
+                     "coding":[
+                        {
+                           "code":"2"
+                        }
+                     ]
+                  },
+                  "sequence":7,
+                  "category":{
+                     "coding":[
+                        {
+                           "code":"tob-frequency",
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
+                        }
+                     ]
+                  }
+               },
+               {
+                  "code":{
+                     "coding":[
+                        {
+                           "code":"gp"
+                        }
+                     ]
+                  },
+                  "sequence":8,
+                  "category":{
+                     "coding":[
+                        {
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory",
+                           "code":"admsrc"
+                        }
+                     ]
+                  }
+               },
+               {
+                  "code":{
+                     "coding":[
+                        {
+                           "code":"other"
+                        }
+                     ]
+                  },
+                  "sequence":9,
+                  "category":{
+                     "coding":[
+                        {
+                           "code":"admtype",
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
+                        }
+                     ]
+                  }
+               },
+               {
+                  "sequence":10,
+                  "category":{
+                     "coding":[
+                        {
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory",
+                           "code":"discharge-status"
+                        }
+                     ]
+                  },
+                  "code":{
+                     "coding":[
+                        {
+                           "code":"home"
+                        }
+                     ]
+                  }
+               },
+               {
+                  "category":{
+                     "coding":[
+                        {
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory",
+                           "code":"clmrecvddate"
+                        }
+                     ]
+                  },
+                  "timingDate":"1994-07-03",
+                  "sequence":15
+               },
+               {
+                  "code":{
+                     "coding":[
+                        {
+                           "code":"in"
+                        }
+                     ]
+                  },
+                  "sequence":12,
+                  "category":{
+                     "coding":[
+                        {
+                           "code":"sitenetworkcontractingstatus",
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
+                        }
+                     ]
+                  }
+               },
+               {
+                  "code":{
+                     "coding":[
+                        {
+                           "code":"in"
+                        }
+                     ]
+                  },
+                  "sequence":13,
+                  "category":{
+                     "coding":[
+                        {
+                           "code":"performingnetworkcontractingstatus",
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
+                        }
+                     ]
+                  }
+               }
+            ],
             "provider":{
                "reference":"Organization/f72ab7f59e010936469cf732e8941f82"
             },
-            "diagnosis":[
+            "outcome":"complete",
+            "status":"active",
+            "careTeam":[
                {
-                  "type":[
-                     {
-                        "coding":[
-                           {
-                              "code":"principal",
-                              "system":"http://hl7.org/fhir/us/carin-bb/CodeSystem/PayerDiagnosisTypeCS"
-                           }
-                        ]
-                     }
-                  ],
-                  "onAdmission":{
+                  "responsible":true,
+                  "role":{
                      "coding":[
                         {
-                           "code":"U"
+                           "code":"supervising"
                         }
                      ]
                   },
                   "sequence":1,
+                  "provider":{
+                     "reference":"PractitionerRole/98871c385f1480edd19396abb38127a1"
+                  }
+               },
+               {
+                  "sequence":2,
+                  "provider":{
+                     "reference":"PractitionerRole/98871c385f1480edd19396abb38127a1"
+                  },
+                  "role":{
+                     "coding":[
+                        {
+                           "code":"referrer"
+                        }
+                     ]
+                  }
+               },
+               {
+                  "provider":{
+                     "reference":"PractitionerRole/98871c385f1480edd19396abb38127a1"
+                  },
+                  "role":{
+                     "coding":[
+                        {
+                           "code":"performing"
+                        }
+                     ]
+                  },
+                  "sequence":3
+               },
+               {
+                  "role":{
+                     "coding":[
+                        {
+                           "code":"prescribing"
+                        }
+                     ]
+                  },
+                  "sequence":4,
+                  "provider":{
+                     "reference":"PractitionerRole/98871c385f1480edd19396abb38127a1"
+                  }
+               },
+               {
+                  "role":{
+                     "coding":[
+                        {
+                           "code":"pcp"
+                        }
+                     ]
+                  },
+                  "sequence":5,
+                  "provider":{
+                     "reference":"PractitionerRole/98871c385f1480edd19396abb38127a1"
+                  }
+               }
+            ],
+            "patient":{
+               "reference":"Patient/b7524a7f2054f376fd8f900b9ae65b6b"
+            },
+            "id":"511d8cf33d4651625625aa7095ec81d7",
+            "meta":{
+               "profile":[
+                  "http://hl7.org/fhir/us/carin/StructureDefinition/carin-bb-explanationofbenefit"
+               ]
+            },
+            "diagnosis":[
+               {
                   "diagnosisCodeableConcept":{
                      "coding":[
                         {
@@ -34,22 +310,6 @@
                         },
                         {
                            "display":"Body mass index 30+ - obesity (finding)"
-                        },
-                        {
-                           "system":"SNOMED"
-                        }
-                     ]
-                  }
-               },
-               {
-                  "sequence":2,
-                  "diagnosisCodeableConcept":{
-                     "coding":[
-                        {
-                           "code":"59621000"
-                        },
-                        {
-                           "display":"Hypertension"
                         },
                         {
                            "system":"SNOMED"
@@ -69,12 +329,47 @@
                   "onAdmission":{
                      "coding":[
                         {
+                           "code":"U"
+                        }
+                     ]
+                  },
+                  "sequence":1
+               },
+               {
+                  "type":[
+                     {
+                        "coding":[
+                           {
+                              "system":"http://hl7.org/fhir/us/carin-bb/CodeSystem/PayerDiagnosisTypeCS",
+                              "code":"principal"
+                           }
+                        ]
+                     }
+                  ],
+                  "onAdmission":{
+                     "coding":[
+                        {
                            "code":"N"
+                        }
+                     ]
+                  },
+                  "sequence":2,
+                  "diagnosisCodeableConcept":{
+                     "coding":[
+                        {
+                           "code":"59621000"
+                        },
+                        {
+                           "display":"Hypertension"
+                        },
+                        {
+                           "system":"SNOMED"
                         }
                      ]
                   }
                },
                {
+                  "sequence":3,
                   "diagnosisCodeableConcept":{
                      "coding":[
                         {
@@ -104,17 +399,203 @@
                            "code":"U"
                         }
                      ]
-                  },
-                  "sequence":3
+                  }
                }
             ],
-            "billablePeriod":{
-               "start":"1994-07-03",
-               "end":"1994-07-03"
-            },
+            "created":"1994-07-03",
+            "use":"claim",
             "insurer":{
                "reference":"Organization/edffb1457a91eb05568c73ee34792f1c"
             },
+            "payment":{
+               "type":{
+                  "coding":[
+                     {
+                        "code":"complete",
+                        "system":"http://terminology.hl7.org/CodeSystem/ex-paymenttype"
+                     }
+                  ]
+               },
+               "date":"1994-07-03"
+            },
+            "total":[
+               {
+                  "amount":{
+                     "value":435.12
+                  },
+                  "category":{
+                     "coding":[
+                        {
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory",
+                           "code":"submittedamount"
+                        }
+                     ]
+                  }
+               },
+               {
+                  "amount":{
+                     "value":435.12
+                  },
+                  "category":{
+                     "coding":[
+                        {
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory",
+                           "code":"allowedamount"
+                        }
+                     ]
+                  }
+               },
+               {
+                  "amount":{
+                     "value":393.48
+                  },
+                  "category":{
+                     "coding":[
+                        {
+                           "code":"patientpayamount",
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
+                        }
+                     ]
+                  }
+               },
+               {
+                  "amount":{
+                     "value":435.12
+                  },
+                  "category":{
+                     "coding":[
+                        {
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory",
+                           "code":"paymentamount"
+                        }
+                     ]
+                  }
+               },
+               {
+                  "category":{
+                     "coding":[
+                        {
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory",
+                           "code":"???"
+                        }
+                     ]
+                  },
+                  "amount":{
+                     "value":0
+                  }
+               },
+               {
+                  "category":{
+                     "coding":[
+                        {
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory",
+                           "code":"paymentamount"
+                        }
+                     ]
+                  },
+                  "amount":{
+                     "value":435.12
+                  }
+               },
+               {
+                  "amount":{
+                     "value":393.48
+                  },
+                  "category":{
+                     "coding":[
+                        {
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory",
+                           "code":"???"
+                        }
+                     ]
+                  }
+               },
+               {
+                  "category":{
+                     "coding":[
+                        {
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory",
+                           "code":"???"
+                        }
+                     ]
+                  },
+                  "amount":{
+                     "value":13022.92
+                  }
+               },
+               {
+                  "amount":{
+                     "value":0
+                  },
+                  "category":{
+                     "coding":[
+                        {
+                           "code":"???",
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
+                        }
+                     ]
+                  }
+               },
+               {
+                  "category":{
+                     "coding":[
+                        {
+                           "code":"???",
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
+                        }
+                     ]
+                  },
+                  "amount":{
+                     "value":0
+                  }
+               },
+               {
+                  "amount":{
+                     "value":41.64
+                  },
+                  "category":{
+                     "coding":[
+                        {
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory",
+                           "code":"???"
+                        }
+                     ]
+                  }
+               },
+               {
+                  "amount":{
+                     "value":0
+                  },
+                  "category":{
+                     "coding":[
+                        {
+                           "code":"???",
+                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
+                        }
+                     ]
+                  }
+               }
+            ],
+            "payee":{
+               "party":{
+                  "reference":"Patient/b7524a7f2054f376fd8f900b9ae65b6b"
+               },
+               "type":{
+                  "coding":[
+                     {
+                        "code":"subscriber"
+                     }
+                  ]
+               }
+            },
+            "insurance":[
+               {
+                  "coverage":{
+                     "reference":"Coverage/ec3d4c49c7c24c9df33685d4be9602fa"
+                  },
+                  "focal":false
+               }
+            ],
             "type":{
                "coding":[
                   {
@@ -123,43 +604,15 @@
                   }
                ]
             },
-            "use":"claim",
-            "insurance":[
-               {
-                  "focal":false,
-                  "coverage":{
-                     "reference":"Coverage/ec3d4c49c7c24c9df33685d4be9602fa"
-                  }
-               }
-            ],
             "item":[
                {
-                  "productOrService":{
-                     "coding":[
-                        {
-                           "system":"http://snomed.info/sct",
-                           "code":"394656005"
-                        }
-                     ]
-                  },
-                  "locationCodeableConcept":{
-                     "coding":[
-                        {
-                           "code":"21"
-                        }
-                     ]
-                  },
-                  "servicedPeriod":{
-                     "end":"1994-07-03",
-                     "start":"1994-07-03"
-                  },
                   "adjudication":[
                      {
                         "category":{
                            "coding":[
                               {
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication",
-                                 "code":"inoutnetwork"
+                                 "code":"inoutnetwork",
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
                               }
                            ]
                         },
@@ -172,29 +625,16 @@
                         }
                      },
                      {
-                        "category":{
-                           "coding":[
-                              {
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication",
-                                 "code":"disallowed"
-                              }
-                           ]
-                        },
                         "amount":{
                            "value":0
-                        }
-                     },
-                     {
+                        },
                         "category":{
                            "coding":[
                               {
-                                 "code":"paidtopatient",
+                                 "code":"disallowed",
                                  "system":"http://terminology.hl7.org/CodeSystem/adjudication"
                               }
                            ]
-                        },
-                        "amount":{
-                           "value":0
                         }
                      },
                      {
@@ -202,12 +642,25 @@
                            "coding":[
                               {
                                  "system":"http://terminology.hl7.org/CodeSystem/adjudication",
-                                 "code":"paidbypatient"
+                                 "code":"paidtopatient"
                               }
                            ]
                         },
                         "amount":{
                            "value":0
+                        }
+                     },
+                     {
+                        "amount":{
+                           "value":0
+                        },
+                        "category":{
+                           "coding":[
+                              {
+                                 "code":"paidbypatient",
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
+                              }
+                           ]
                         }
                      },
                      {
@@ -237,50 +690,24 @@
                         }
                      },
                      {
+                        "category":{
+                           "coding":[
+                              {
+                                 "code":"deductible",
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
+                              }
+                           ]
+                        },
                         "amount":{
                            "value":13022.92
-                        },
+                        }
+                     },
+                     {
                         "category":{
                            "coding":[
                               {
                                  "system":"http://terminology.hl7.org/CodeSystem/adjudication",
-                                 "code":"deductible"
-                              }
-                           ]
-                        }
-                     },
-                     {
-                        "amount":{
-                           "value":0
-                        },
-                        "category":{
-                           "coding":[
-                              {
-                                 "code":"priorpayerpaid",
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
-                              }
-                           ]
-                        }
-                     },
-                     {
-                        "amount":{
-                           "value":0
-                        },
-                        "category":{
-                           "coding":[
-                              {
-                                 "code":"coins",
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
-                              }
-                           ]
-                        }
-                     },
-                     {
-                        "category":{
-                           "coding":[
-                              {
-                                 "code":"submitted",
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
+                                 "code":"priorpayerpaid"
                               }
                            ]
                         },
@@ -289,6 +716,35 @@
                         }
                      },
                      {
+                        "category":{
+                           "coding":[
+                              {
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication",
+                                 "code":"coins"
+                              }
+                           ]
+                        },
+                        "amount":{
+                           "value":0
+                        }
+                     },
+                     {
+                        "category":{
+                           "coding":[
+                              {
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication",
+                                 "code":"submitted"
+                              }
+                           ]
+                        },
+                        "amount":{
+                           "value":0
+                        }
+                     },
+                     {
+                        "amount":{
+                           "value":0
+                        },
                         "category":{
                            "coding":[
                               {
@@ -296,22 +752,19 @@
                                  "system":"http://terminology.hl7.org/CodeSystem/adjudication"
                               }
                            ]
-                        },
-                        "amount":{
-                           "value":0
                         }
                      },
                      {
-                        "amount":{
-                           "value":0
-                        },
                         "category":{
                            "coding":[
                               {
-                                 "code":"member",
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication",
+                                 "code":"member"
                               }
                            ]
+                        },
+                        "amount":{
+                           "value":0
                         }
                      },
                      {
@@ -331,8 +784,8 @@
                         "category":{
                            "coding":[
                               {
-                                 "code":"discount",
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication",
+                                 "code":"discount"
                               }
                            ]
                         },
@@ -341,16 +794,28 @@
                         }
                      }
                   ],
-                  "sequence":1
-               },
-               {
+                  "sequence":1,
                   "productOrService":{
                      "coding":[
                         {
-                           "code":"310798"
+                           "code":"394656005",
+                           "system":"http://snomed.info/sct"
                         }
                      ]
                   },
+                  "locationCodeableConcept":{
+                     "coding":[
+                        {
+                           "code":"21"
+                        }
+                     ]
+                  },
+                  "servicedPeriod":{
+                     "start":"1994-07-03",
+                     "end":"1994-07-03"
+                  }
+               },
+               {
                   "quantity":{
                      "value":0
                   },
@@ -367,7 +832,6 @@
                   },
                   "adjudication":[
                      {
-                        "value":0,
                         "category":{
                            "coding":[
                               {
@@ -375,14 +839,15 @@
                                  "code":"units-allowed"
                               }
                            ]
-                        }
+                        },
+                        "value":0
                      },
                      {
                         "category":{
                            "coding":[
                               {
-                                 "code":"inoutnetwork",
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication",
+                                 "code":"inoutnetwork"
                               }
                            ]
                         },
@@ -401,8 +866,8 @@
                         "category":{
                            "coding":[
                               {
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication",
-                                 "code":"disallowed"
+                                 "code":"disallowed",
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
                               }
                            ]
                         }
@@ -427,16 +892,13 @@
                         "category":{
                            "coding":[
                               {
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication",
-                                 "code":"paidbypatient"
+                                 "code":"paidbypatient",
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
                               }
                            ]
                         }
                      },
                      {
-                        "amount":{
-                           "value":0
-                        },
                         "category":{
                            "coding":[
                               {
@@ -444,19 +906,9 @@
                                  "system":"http://terminology.hl7.org/CodeSystem/adjudication"
                               }
                            ]
-                        }
-                     },
-                     {
-                        "category":{
-                           "coding":[
-                              {
-                                 "code":"paymet",
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
-                              }
-                           ]
                         },
                         "amount":{
-                           "value":217.56
+                           "value":0
                         }
                      },
                      {
@@ -464,7 +916,7 @@
                            "coding":[
                               {
                                  "system":"http://terminology.hl7.org/CodeSystem/adjudication",
-                                 "code":"paidtoprovider"
+                                 "code":"paymet"
                               }
                            ]
                         },
@@ -474,8 +926,18 @@
                      },
                      {
                         "amount":{
-                           "value":13022.92
+                           "value":217.56
                         },
+                        "category":{
+                           "coding":[
+                              {
+                                 "code":"paidtoprovider",
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
+                              }
+                           ]
+                        }
+                     },
+                     {
                         "category":{
                            "coding":[
                               {
@@ -483,12 +945,12 @@
                                  "code":"deductible"
                               }
                            ]
+                        },
+                        "amount":{
+                           "value":13022.92
                         }
                      },
                      {
-                        "amount":{
-                           "value":217.56
-                        },
                         "category":{
                            "coding":[
                               {
@@ -496,14 +958,17 @@
                                  "system":"http://terminology.hl7.org/CodeSystem/adjudication"
                               }
                            ]
+                        },
+                        "amount":{
+                           "value":217.56
                         }
                      },
                      {
                         "category":{
                            "coding":[
                               {
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication",
-                                 "code":"coins"
+                                 "code":"coins",
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
                               }
                            ]
                         },
@@ -515,8 +980,8 @@
                         "category":{
                            "coding":[
                               {
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication",
-                                 "code":"submitted"
+                                 "code":"submitted",
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
                               }
                            ]
                         },
@@ -551,9 +1016,6 @@
                         }
                      },
                      {
-                        "amount":{
-                           "value":0
-                        },
                         "category":{
                            "coding":[
                               {
@@ -561,14 +1023,17 @@
                                  "system":"http://terminology.hl7.org/CodeSystem/adjudication"
                               }
                            ]
+                        },
+                        "amount":{
+                           "value":0
                         }
                      },
                      {
                         "category":{
                            "coding":[
                               {
-                                 "code":"discount",
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication",
+                                 "code":"discount"
                               }
                            ]
                         },
@@ -577,19 +1042,16 @@
                         }
                      }
                   ],
-                  "sequence":2
-               },
-               {
-                  "quantity":{
-                     "value":1
-                  },
-                  "locationCodeableConcept":{
+                  "sequence":2,
+                  "productOrService":{
                      "coding":[
                         {
-                           "code":"1"
+                           "code":"310798"
                         }
                      ]
-                  },
+                  }
+               },
+               {
                   "servicedPeriod":{
                      "start":"1994-07-03",
                      "end":"1994-07-03"
@@ -600,25 +1062,25 @@
                         "category":{
                            "coding":[
                               {
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication",
-                                 "code":"units-allowed"
+                                 "code":"units-allowed",
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
                               }
                            ]
                         }
                      },
                      {
+                        "reason":{
+                           "coding":[
+                              {
+                                 "code":"ar001"
+                              }
+                           ]
+                        },
                         "category":{
                            "coding":[
                               {
                                  "code":"inoutnetwork",
                                  "system":"http://terminology.hl7.org/CodeSystem/adjudication"
-                              }
-                           ]
-                        },
-                        "reason":{
-                           "coding":[
-                              {
-                                 "code":"ar001"
                               }
                            ]
                         }
@@ -637,16 +1099,16 @@
                         }
                      },
                      {
-                        "amount":{
-                           "value":0
-                        },
                         "category":{
                            "coding":[
                               {
-                                 "code":"paidtopatient",
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication",
+                                 "code":"paidtopatient"
                               }
                            ]
+                        },
+                        "amount":{
+                           "value":0
                         }
                      },
                      {
@@ -666,8 +1128,8 @@
                         "category":{
                            "coding":[
                               {
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication",
-                                 "code":"drugcost"
+                                 "code":"drugcost",
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
                               }
                            ]
                         },
@@ -702,9 +1164,6 @@
                         }
                      },
                      {
-                        "amount":{
-                           "value":13022.92
-                        },
                         "category":{
                            "coding":[
                               {
@@ -712,6 +1171,9 @@
                                  "code":"deductible"
                               }
                            ]
+                        },
+                        "amount":{
+                           "value":13022.92
                         }
                      },
                      {
@@ -731,13 +1193,26 @@
                         "category":{
                            "coding":[
                               {
+                                 "code":"coins",
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
+                              }
+                           ]
+                        },
+                        "amount":{
+                           "value":0
+                        }
+                     },
+                     {
+                        "category":{
+                           "coding":[
+                              {
                                  "system":"http://terminology.hl7.org/CodeSystem/adjudication",
-                                 "code":"coins"
+                                 "code":"submitted"
                               }
                            ]
                         },
                         "amount":{
-                           "value":0
+                           "value":217.56
                         }
                      },
                      {
@@ -747,29 +1222,13 @@
                         "category":{
                            "coding":[
                               {
-                                 "code":"submitted",
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication",
+                                 "code":"allowed"
                               }
                            ]
                         }
                      },
                      {
-                        "amount":{
-                           "value":217.56
-                        },
-                        "category":{
-                           "coding":[
-                              {
-                                 "code":"allowed",
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
-                              }
-                           ]
-                        }
-                     },
-                     {
-                        "amount":{
-                           "value":0
-                        },
                         "category":{
                            "coding":[
                               {
@@ -777,14 +1236,17 @@
                                  "system":"http://terminology.hl7.org/CodeSystem/adjudication"
                               }
                            ]
+                        },
+                        "amount":{
+                           "value":0
                         }
                      },
                      {
                         "category":{
                            "coding":[
                               {
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication",
-                                 "code":"copay"
+                                 "code":"copay",
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
                               }
                            ]
                         },
@@ -799,8 +1261,8 @@
                         "category":{
                            "coding":[
                               {
-                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication",
-                                 "code":"discount"
+                                 "code":"discount",
+                                 "system":"http://terminology.hl7.org/CodeSystem/adjudication"
                               }
                            ]
                         }
@@ -813,224 +1275,19 @@
                            "code":"308136"
                         }
                      ]
-                  }
-               }
-            ],
-            "supportingInfo":[
-               {
-                  "code":{
-                     "coding":[
-                        {
-                           "code":"in"
-                        }
-                     ]
                   },
-                  "sequence":1,
-                  "category":{
-                     "coding":[
-                        {
-                           "code":"billingnetworkcontractingstatus",
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
-                        }
-                     ]
-                  }
-               },
-               {
-                  "code":{
-                     "coding":[
-                        {
-                           "code":"in"
-                        }
-                     ]
+                  "quantity":{
+                     "value":1
                   },
-                  "sequence":2,
-                  "category":{
-                     "coding":[
-                        {
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory",
-                           "code":"attendingnetworkcontractingstatus"
-                        }
-                     ]
-                  }
-               },
-               {
-                  "sequence":3,
-                  "category":{
-                     "coding":[
-                        {
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory",
-                           "code":"referringnetworkcontractingstatus"
-                        }
-                     ]
-                  },
-                  "code":{
-                     "coding":[
-                        {
-                           "code":"in"
-                        }
-                     ]
-                  }
-               },
-               {
-                  "category":{
-                     "coding":[
-                        {
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory",
-                           "code":"tob-typeoffacility"
-                        }
-                     ]
-                  },
-                  "code":{
-                     "coding":[
-                        {
-                           "code":"1"
-                        }
-                     ]
-                  },
-                  "sequence":5
-               },
-               {
-                  "sequence":6,
-                  "category":{
-                     "coding":[
-                        {
-                           "code":"tob-billclassification",
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
-                        }
-                     ]
-                  },
-                  "code":{
+                  "locationCodeableConcept":{
                      "coding":[
                         {
                            "code":"1"
                         }
                      ]
                   }
-               },
-               {
-                  "sequence":7,
-                  "category":{
-                     "coding":[
-                        {
-                           "code":"tob-frequency",
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
-                        }
-                     ]
-                  },
-                  "code":{
-                     "coding":[
-                        {
-                           "code":"2"
-                        }
-                     ]
-                  }
-               },
-               {
-                  "sequence":8,
-                  "category":{
-                     "coding":[
-                        {
-                           "code":"admsrc",
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
-                        }
-                     ]
-                  },
-                  "code":{
-                     "coding":[
-                        {
-                           "code":"gp"
-                        }
-                     ]
-                  }
-               },
-               {
-                  "category":{
-                     "coding":[
-                        {
-                           "code":"admtype",
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
-                        }
-                     ]
-                  },
-                  "code":{
-                     "coding":[
-                        {
-                           "code":"other"
-                        }
-                     ]
-                  },
-                  "sequence":9
-               },
-               {
-                  "category":{
-                     "coding":[
-                        {
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory",
-                           "code":"discharge-status"
-                        }
-                     ]
-                  },
-                  "code":{
-                     "coding":[
-                        {
-                           "code":"home"
-                        }
-                     ]
-                  },
-                  "sequence":10
-               },
-               {
-                  "category":{
-                     "coding":[
-                        {
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory",
-                           "code":"clmrecvddate"
-                        }
-                     ]
-                  },
-                  "timingDate":"1994-07-03",
-                  "sequence":15
-               },
-               {
-                  "category":{
-                     "coding":[
-                        {
-                           "code":"sitenetworkcontractingstatus",
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
-                        }
-                     ]
-                  },
-                  "code":{
-                     "coding":[
-                        {
-                           "code":"in"
-                        }
-                     ]
-                  },
-                  "sequence":12
-               },
-               {
-                  "sequence":13,
-                  "category":{
-                     "coding":[
-                        {
-                           "code":"performingnetworkcontractingstatus",
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
-                        }
-                     ]
-                  },
-                  "code":{
-                     "coding":[
-                        {
-                           "code":"in"
-                        }
-                     ]
-                  }
                }
             ],
-            "patient":{
-               "reference":"Patient/b7524a7f2054f376fd8f900b9ae65b6b"
-            },
             "identifier":[
                {
                   "system":"http://www.bcbs.com/fhir/ns/NamingSystem/explanationOfBenefit-identifier",
@@ -1040,282 +1297,32 @@
                   "system":"http://www.bcbs.com/fhir/ns/NamingSystem/explanationOfBenefit-identifier"
                }
             ],
-            "payee":{
-               "type":{
-                  "coding":[
-                     {
-                        "code":"subscriber"
-                     }
-                  ]
-               },
-               "party":{
-                  "reference":"Patient/b7524a7f2054f376fd8f900b9ae65b6b"
-               }
-            },
-            "id":"511d8cf33d4651625625aa7095ec81d7",
-            "meta":{
-               "profile":[
-                  "http://hl7.org/fhir/us/carin/StructureDefinition/carin-bb-explanationofbenefit"
-               ]
-            },
-            "created":"1994-07-03",
-            "total":[
-               {
-                  "category":{
-                     "coding":[
-                        {
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory",
-                           "code":"submittedamount"
-                        }
-                     ]
-                  },
-                  "amount":{
-                     "value":435.12
-                  }
-               },
-               {
-                  "amount":{
-                     "value":435.12
-                  },
-                  "category":{
-                     "coding":[
-                        {
-                           "code":"allowedamount",
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
-                        }
-                     ]
-                  }
-               },
-               {
-                  "category":{
-                     "coding":[
-                        {
-                           "code":"patientpayamount",
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
-                        }
-                     ]
-                  },
-                  "amount":{
-                     "value":393.48
-                  }
-               },
-               {
-                  "amount":{
-                     "value":435.12
-                  },
-                  "category":{
-                     "coding":[
-                        {
-                           "code":"paymentamount",
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
-                        }
-                     ]
-                  }
-               },
-               {
-                  "amount":{
-                     "value":0
-                  },
-                  "category":{
-                     "coding":[
-                        {
-                           "code":"???",
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
-                        }
-                     ]
-                  }
-               },
-               {
-                  "amount":{
-                     "value":435.12
-                  },
-                  "category":{
-                     "coding":[
-                        {
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory",
-                           "code":"paymentamount"
-                        }
-                     ]
-                  }
-               },
-               {
-                  "amount":{
-                     "value":393.48
-                  },
-                  "category":{
-                     "coding":[
-                        {
-                           "code":"???",
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
-                        }
-                     ]
-                  }
-               },
-               {
-                  "category":{
-                     "coding":[
-                        {
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory",
-                           "code":"???"
-                        }
-                     ]
-                  },
-                  "amount":{
-                     "value":13022.92
-                  }
-               },
-               {
-                  "amount":{
-                     "value":0
-                  },
-                  "category":{
-                     "coding":[
-                        {
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory",
-                           "code":"???"
-                        }
-                     ]
-                  }
-               },
-               {
-                  "amount":{
-                     "value":0
-                  },
-                  "category":{
-                     "coding":[
-                        {
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory",
-                           "code":"???"
-                        }
-                     ]
-                  }
-               },
-               {
-                  "category":{
-                     "coding":[
-                        {
-                           "code":"???",
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
-                        }
-                     ]
-                  },
-                  "amount":{
-                     "value":41.64
-                  }
-               },
-               {
-                  "category":{
-                     "coding":[
-                        {
-                           "code":"???",
-                           "system":"http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
-                        }
-                     ]
-                  },
-                  "amount":{
-                     "value":0
-                  }
-               }
-            ],
-            "payment":{
-               "type":{
-                  "coding":[
-                     {
-                        "system":"http://terminology.hl7.org/CodeSystem/ex-paymenttype",
-                        "code":"complete"
-                     }
-                  ]
-               },
-               "date":"1994-07-03"
-            },
-            "status":"active",
-            "resourceType":"ExplanationOfBenefit",
-            "outcome":"complete",
-            "careTeam":[
-               {
-                  "role":{
-                     "coding":[
-                        {
-                           "code":"supervising"
-                        }
-                     ]
-                  },
-                  "sequence":1,
-                  "provider":{
-                     "reference":"PractitionerRole/98871c385f1480edd19396abb38127a1"
-                  },
-                  "responsible":true
-               },
-               {
-                  "sequence":2,
-                  "provider":{
-                     "reference":"PractitionerRole/98871c385f1480edd19396abb38127a1"
-                  },
-                  "role":{
-                     "coding":[
-                        {
-                           "code":"referrer"
-                        }
-                     ]
-                  }
-               },
-               {
-                  "sequence":3,
-                  "provider":{
-                     "reference":"PractitionerRole/98871c385f1480edd19396abb38127a1"
-                  },
-                  "role":{
-                     "coding":[
-                        {
-                           "code":"performing"
-                        }
-                     ]
-                  }
-               },
-               {
-                  "provider":{
-                     "reference":"PractitionerRole/98871c385f1480edd19396abb38127a1"
-                  },
-                  "role":{
-                     "coding":[
-                        {
-                           "code":"prescribing"
-                        }
-                     ]
-                  },
-                  "sequence":4
-               },
-               {
-                  "provider":{
-                     "reference":"PractitionerRole/98871c385f1480edd19396abb38127a1"
-                  },
-                  "role":{
-                     "coding":[
-                        {
-                           "code":"pcp"
-                        }
-                     ]
-                  },
-                  "sequence":5
-               }
-            ]
+            "resourceType":"ExplanationOfBenefit"
          },
          "request":{
+            "url":"ExplanationOfBenefit/511d8cf33d4651625625aa7095ec81d7",
+            "method":"PUT"
+         }
+      },
+      {
+         "request":{
             "method":"PUT",
-            "url":"ExplanationOfBenefit/511d8cf33d4651625625aa7095ec81d7"
+            "url":"Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
+         },
+         "resource":{
+            "id":"d56dc295815a158a6b4b2f9a4cb88bd6",
+            "active":true,
+            "name":"Xyz Organization",
+            "resourceType":"Organization"
          }
       },
       {
          "resource":{
-            "id":"a68bb2842f8b5822836dbc78c69b2f9a",
-            "recorded":"2020-01-01T01:01:01.1111Z",
-            "target":[
-               {
-                  "reference":"ExplanationOfBenefit/511d8cf33d4651625625aa7095ec81d7"
-               }
-            ],
             "agent":[
                {
+                  "who":{
+                     "reference":"Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
+                  },
                   "type":{
                      "coding":[
                         {
@@ -1323,26 +1330,26 @@
                            "code":"transmitter"
                         }
                      ]
-                  },
-                  "who":{
-                     "reference":"Organization/01010101-0101-4101-8101-010101010101"
                   }
                }
             ],
-            "entity":[
+            "resourceType":"Provenance",
+            "recorded":"2020-01-01T01:01:01.1111Z",
+            "target":[
                {
-                  "what":{
-                     "reference":"DocumentReference/02020202-0202-4202-8202-020202020202"
-                  },
-                  "role":"source"
+                  "reference":"ExplanationOfBenefit/511d8cf33d4651625625aa7095ec81d7"
+               },
+               {
+                  "reference":"Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
                }
             ],
-            "resourceType":"Provenance"
+            "id":"648b60016c3f2242c78df25c27a181f0"
          },
          "request":{
             "method":"PUT",
-            "url":"Provenance/a68bb2842f8b5822836dbc78c69b2f9a"
+            "url":"Provenance/648b60016c3f2242c78df25c27a181f0"
          }
       }
-   ]
+   ],
+   "resourceType":"Bundle"
 }

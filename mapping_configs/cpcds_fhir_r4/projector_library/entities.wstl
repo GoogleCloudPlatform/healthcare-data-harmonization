@@ -7,22 +7,8 @@
 //   ReconciledID
 //
 def Build_ReconciledIDExtension(ID) {
-  url : "reconciliation-id";
-  extension[] : Build_ValueString(ID, "urn:oid:google/reconciliation-id");
-}
-
-// Description: Constructs a ValueString datatype
-//
-// Argument(s):
-//   Value: String
-//   URL: string
-//
-// Output(s):
-//   ValueString
-//
-def Build_ValueString(required Value, URL) {
-  valueString : Value;
-  url : URL;
+  url : "urn:oid:google/reconciliation-id";
+  valueId : ID;
 }
 
 // Description: Converts CPCDS terminology into FHIR R4 terminology
@@ -73,9 +59,7 @@ def Practitioner_Practitioner(Practitioner) {
 def Coverage_Coverage(Coverage) {
   meta.profile[0] : "http://hl7.org/fhir/us/carin/StructureDefinition/carin-bb-coverage";
   status : Convert_TerminologyCode(Coverage.Coverage_status, "Status");
-  identifier[0].value: Coverage.Coverage_id;
-  identifier[0].type.coding[0].code: "mb";
-  identifier[0].type.coding[0].system: "http://hl7.org/fhir/us/carin-bb/CodeSystem/IdentifierTypeCS";
+  identifier[] : Build_Identifier("MB", "Member Number", "http://hl7.org/fhir/us/carin-bb/CodeSystem/IdentifierTypeCS", Coverage.Coverage_id);
   type.coding[0].code : Coverage.Coverage_type;
   type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v3-ActCode";   //Need to use ConceptMap
   subscriberId : Coverage.Subscriber_id;
@@ -265,10 +249,16 @@ def Build_Address(Line, City, State, PostalCode) {
   postalCode : PostalCode;
 }
 
-def Build_Organization(OrgID) {
-  id : OrgID;
+// Description: Constructs a default Organization resource
+//
+// Argument(s):
+//
+// Output(s):
+//   Organization: https://www.hl7.org/fhir/organization.html
+//
+def Build_Organization(required OrgName) {
   active : true;
-  name : "XYZ Organization";
+  name : OrgName;
   resourceType: "Organization";
 }
 

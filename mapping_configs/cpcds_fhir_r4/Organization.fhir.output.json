@@ -1,12 +1,17 @@
 {
+   "resourceType":"Bundle",
    "type":"transaction",
    "entry":[
       {
-         "request":{
-            "method":"PUT",
-            "url":"Organization/37ce68f1a1ac2e3c6b9ca2bd31e3b5ec"
-         },
          "resource":{
+            "telecom":[
+               {
+                  "use":"work",
+                  "value":"818-367-2171",
+                  "system":"phone"
+               }
+            ],
+            "resourceType":"Organization",
             "id":"37ce68f1a1ac2e3c6b9ca2bd31e3b5ec",
             "meta":{
                "profile":[
@@ -15,7 +20,6 @@
             },
             "identifier":[
                {
-                  "system":"http://hl7.org/fhir/sid/us-npi",
                   "type":{
                      "coding":[
                         {
@@ -24,7 +28,8 @@
                         }
                      ]
                   },
-                  "value":"375398774584"
+                  "value":"375398774584",
+                  "system":"http://hl7.org/fhir/sid/us-npi"
                }
             ],
             "active":true,
@@ -38,31 +43,32 @@
                   "state":"CA",
                   "postalCode":"91342-4748"
                }
-            ],
-            "telecom":[
-               {
-                  "value":"818-367-2171",
-                  "system":"phone",
-                  "use":"work"
-               }
-            ],
-            "resourceType":"Organization"
+            ]
+         },
+         "request":{
+            "url":"Organization/37ce68f1a1ac2e3c6b9ca2bd31e3b5ec",
+            "method":"PUT"
          }
       },
       {
+         "resource":{
+            "active":true,
+            "name":"Xyz Organization",
+            "id":"d56dc295815a158a6b4b2f9a4cb88bd6",
+            "resourceType":"Organization"
+         },
          "request":{
             "method":"PUT",
-            "url":"Provenance/a68bb2842f8b5822836dbc78c69b2f9a"
-         },
+            "url":"Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
+         }
+      },
+      {
          "resource":{
-            "id":"a68bb2842f8b5822836dbc78c69b2f9a",
-            "target":[
-               {
-                  "reference":"Organization/37ce68f1a1ac2e3c6b9ca2bd31e3b5ec"
-               }
-            ],
             "agent":[
                {
+                  "who":{
+                     "reference":"Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
+                  },
                   "type":{
                      "coding":[
                         {
@@ -70,24 +76,25 @@
                            "system":"http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type"
                         }
                      ]
-                  },
-                  "who":{
-                     "reference":"Organization/01010101-0101-4101-8101-010101010101"
                   }
                }
             ],
-            "entity":[
-               {
-                  "what":{
-                     "reference":"DocumentReference/02020202-0202-4202-8202-020202020202"
-                  },
-                  "role":"source"
-               }
-            ],
             "resourceType":"Provenance",
-            "recorded":"2020-01-01T01:01:01.1111Z"
+            "recorded":"2020-01-01T01:01:01.1111Z",
+            "id":"36840d2e786afed43c07c5b90ffcfdb9",
+            "target":[
+               {
+                  "reference":"Organization/37ce68f1a1ac2e3c6b9ca2bd31e3b5ec"
+               },
+               {
+                  "reference":"Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
+               }
+            ]
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Provenance/36840d2e786afed43c07c5b90ffcfdb9"
          }
       }
-   ],
-   "resourceType":"Bundle"
+   ]
 }
