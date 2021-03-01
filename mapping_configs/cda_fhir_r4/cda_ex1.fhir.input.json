@@ -1,4 +1,6 @@
-{"ClinicalDocument": {
+{
+  "__data_source__": "Xyz Organization",
+"ClinicalDocument": {
     "documentationOf": [{"serviceEvent": {
         "classCode": "PCPR",
         "performer": [{

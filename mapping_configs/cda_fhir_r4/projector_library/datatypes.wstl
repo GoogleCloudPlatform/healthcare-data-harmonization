@@ -7,22 +7,8 @@
 //   ReconciledID
 //
 def Build_ReconciledIDExtension(ID) {
-  url : "reconciliation-id";
-  extension[] : Build_ValueString(ID, "urn:oid:google/reconciliation-id");
-}
-
-// Description: Constructs a ValueString datatype
-//
-// Argument(s):
-//   Value: String
-//   URL: string
-//
-// Output(s):
-//   ValueString
-//
-def Build_ValueString(required Value, URL) {
-  valueString : Value;
-  url : URL;
+  url : "urn:oid:google/reconciliation-id";
+  valueId : ID;
 }
 
 // Description: Constructs an Address datatype
@@ -126,13 +112,10 @@ def ORG_Organization(ORG) {
 // Output(s):
 //   Organization: https://www.hl7.org/fhir/organization.html
 //
-def Build_Organization() {
+def Build_Organization(OrgName) {
   resourceType : "Organization";
-  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-organization-definitions.html#Organization.identifier
-  identifier[0].value : "unkown";
-  identifier[0].system : "http://hl7.org/fhir/sid/us-npi";
   // Fixed-value to ensure fhirpath-constraint-violation-ContainedResource.ofType(Bundle).entry.resource.ofType(Organization): "(identifier.count() + name.count()) > 0"
-  name : "unknown";
+  name : OrgName;
   // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-organization-definitions.html#Organization.active
   active : true;
 }

@@ -24,8 +24,7 @@
 //   Procedure: https://www.hl7.org/fhir/procedure.html
 //
 def CDA_FHIR(Document) {
-  var OutputDocument (if Document.ClinicalDocument) : Process_Document(Document.ClinicalDocument);
-  var ReconciledDocument (if OutputDocument) : OutputDocument;
-  var ReconciledDocument.identifier (if ~OutputDocument.identifier): II_HashIdentifier(OutputDocument);
-  out Resources : ReconciledDocument;
+  $this : Output_Resource(Process_Document(Document.ClinicalDocument));
+
+  root TransmitterOrganization : Output_Resource(Build_Organization(Document.__data_source__));
 }

@@ -2,30 +2,42 @@ def Output_Resource(required item) {
   var Item : item;
   var Item.id (if ~item.id) : $Hash(item);
   if (ID_Reconciliation()) {
-    if (item.resourceType = "Provenance") {
+    if (item.resourceType = "Provenance" or item.resourceType = "Composition") {
       // Constructs a Reconciled ID as an extension; due to lack of identifier attribute in Provenance Resource: https://www.hl7.org/fhir/provenance.html
-      var Item.extension[] : Build_ReconciledIDExtension($Hash(item));
+      if (item.identifier) {
+        var Item.extension[] : Build_ReconciledIDExtension($Hash(item.identifier));
+      } else {
+        var Item.extension[] : Build_ReconciledIDExtension($Hash(item));
+      }
     } else {
-      var Item.identifier[] (if item.identifier): II_HashIdentifier(item.identifier);
-      var Item.identifier[] (if ~item.identifier): II_HashIdentifier(item);
+      if (item.identifier) {
+        var Item.identifier[] : II_HashIdentifier(item.identifier);
+      } else {
+        var Item.identifier[] : II_HashIdentifier(item);
+      }
     }
   }
   out Resources : Item;
   $this : Item;
 }
 
+def Get_ReconciledID(Resource) {
+  if (Resource.identifier and $Type(Resource.identifier) = "array") {
+    var ReconciledIdentifier : Resource.identifier[where $.system = "urn:oid:google/reconciliation-id"];
+    $this : ReconciledIdentifier[0].value;
+  } else {
+    var ReconciledIdentifier : Resource.extension[where $.url = "urn:oid:google/reconciliation-id"];
+    $this : ReconciledIdentifier[0].valueId;
+  }
+}
+
 def Build_Reference(required Resource) {
-    if ($Type(Resource.identifier) = "container") {
-      var ReconciledID : Resource.identifier.value;
-    } else {
-      var ReconciledIdentifier : Resource.identifier[where $.system = "urn:oid:google/reconciliation-id"];
-      var ReconciledID : ReconciledIdentifier[0].value;
-    }
-    if (ID_Reconciliation()) {
-      reference : $StrCat(Resource.resourceType, "/", ReconciledID);
-    } else {
-      reference : $StrCat(Resource.resourceType, "/", Resource.id);
-    }
+  var ReconciledID : Get_ReconciledID(Resource);
+  if (ID_Reconciliation()) {
+    reference : $StrCat(Resource.resourceType, "/", ReconciledID);
+  } else {
+    reference : $StrCat(Resource.resourceType, "/", Resource.id);
+  }
 }
 
 def Build_BundleEntry(required Resource) {
@@ -52,7 +64,7 @@ def Output_Document(required Output) {
   type : "document";
   entry[] : Build_BundleEntry(Resources[where $.resourceType = "Composition"][]);
   entry[] : Build_BundleEntry(Resources[where $.resourceType ~= "Composition"][]);
-  entry[] : Build_BundleEntry(Output_Resource(Build_Provenance(Resources, Output)));
+  entry[] : Build_BundleEntry(Output_Resource(Build_Provenance(Resources, Output.TransmitterOrganization, Output.CustodianOrganization)));
 }
 
 def Output_Bundle(required Output) {
@@ -64,18 +76,20 @@ def Output_Bundle(required Output) {
   entry[] : Build_TransactionBundleEntry(Output_Document(Output), "PUT");
   entry[] : Build_TransactionBundleEntry(Resources[where $.resourceType = "Composition"][], "PUT");
   entry[] : Build_TransactionBundleEntry(Resources[where $.resourceType ~= "Composition"][], "PUT");
-  entry[] : Build_TransactionBundleEntry(Output_Resource(Build_Provenance(Resources, Output)), "PUT");
+  entry[] : Build_TransactionBundleEntry(Output_Resource(Build_Provenance(Resources, Output.TransmitterOrganization, Output.CustodianOrganization)), "PUT");
 }
 
-def Build_Provenance(required Resources, Output) {
+def Build_Provenance(required Resources, required TransmitterOrganization, CustodianOrganization) {
   resourceType : "Provenance";
-  recorded : Output.Bundle.timestamp;
+  recorded : $CurrentTime("2006-01-02T15:04:05.2112Z", "");
   target[] : Build_Reference(Resources[]);
-  if (Output.CustodianOrganization) {
-    agent[0].type.coding[0].code : "custodian";
-    agent[0].type.coding[0].system : "http://terminology.hl7.org/CodeSystem/provenance-participant-type";
-    agent[0].who : Build_Reference(Output.CustodianOrganization);
+  agent[0].type.coding[0].code : "transmitter";
+  agent[0].type.coding[0].system : "http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type";
+  // An Organization resource that represents HPDI Customer Organization
+  agent[0].who : Build_Reference(TransmitterOrganization);
+  if (CustodianOrganization) {
+    agent[1].type.coding[0].code : "custodian";
+    agent[1].type.coding[0].system : "http://terminology.hl7.org/CodeSystem/provenance-participant-type";
+    agent[1].who : Build_Reference(CustodianOrganization);
   }
-  entity[0].role : "source";
-  entity[0].what :  Build_Reference(Output.DocumentReference);
 }

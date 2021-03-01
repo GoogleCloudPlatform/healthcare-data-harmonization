@@ -40,8 +40,6 @@ def Process_Document(required ClinicalDocument) {
 
   root Bundle : ClinicalDocument_Bundle(ClinicalDocument.id, ClinicalDocument.effectiveTime.value);
 
-  root DocumentReference : Output_Resource(Build_DocumentReference("http://example.com/url", PatientResource));
-
   resourceType : "Composition";
   identifier :  II_Identifier(ClinicalDocument.id);
   date : Extract_Date(ClinicalDocument.effectiveTime.value);

@@ -155,7 +155,7 @@ def AssignedEntity_PractitionerRole(required AssignedEntity) {
     organization : Build_Reference(Output_Resource(ORG_Organization(AssignedEntity.representedOrganization)));
   } else {
     // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-practitionerrole-definitions.html#PractitionerRole.organization
-    organization : Build_Reference(Output_Resource(Build_Organization()));
+    organization : Build_Reference(Output_Resource(Build_Organization("unknown")));
   }
 }
 
