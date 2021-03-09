@@ -62,7 +62,7 @@ class LocationTest(absltest.TestCase):
       def __init__(self, bucket_name):
         self.name = bucket_name
 
-    bucket = FakeBucket("dummy_bucket")
+    bucket = FakeBucket("fake_bucket")
     items = [
         Item(bucket, "file1.wstl"),
         Item(bucket, "lib_folder/file2.wstl"),
@@ -74,7 +74,7 @@ class LocationTest(absltest.TestCase):
     mock_client.return_value.get_bucket.return_value = mock_bucket
 
     shell = mock.MagicMock()
-    input_wstl_arg = "gs://dummy_bucket/input.json"
+    input_wstl_arg = "gs://fake_bucket/input.json"
     locations = _location.parse_location(
         shell, input_wstl_arg, file_ext=_constants.JSON_FILE_EXT)
     self.assertLen(locations, 1)
@@ -97,7 +97,7 @@ class LocationTest(absltest.TestCase):
       def __init__(self, bucket_name):
         self.name = bucket_name
 
-    bucket = FakeBucket("dummy_bucket")
+    bucket = FakeBucket("fake_bucket")
     items = [
         Item(bucket, "file1.txt"),
         Item(bucket, "lib_folder/file2.wstl"),
@@ -109,7 +109,7 @@ class LocationTest(absltest.TestCase):
     mock_client.return_value.get_bucket.return_value = mock_bucket
 
     shell = mock.MagicMock()
-    input_wstl_arg = "gs://dummy_bucket/lib_folder/*"
+    input_wstl_arg = "gs://fake_bucket/lib_folder/*"
     locations = _location.parse_location(
         shell,
         input_wstl_arg,
@@ -118,10 +118,10 @@ class LocationTest(absltest.TestCase):
     self.assertLen(locations, 2)
     self.assertTrue(locations[0].HasField("gcs_location"))
     self.assertEqual(locations[0].gcs_location,
-                     "gs://dummy_bucket/lib_folder/file2.wstl")
+                     "gs://fake_bucket/lib_folder/file2.wstl")
     self.assertTrue(locations[1].HasField("gcs_location"))
     self.assertEqual(locations[1].gcs_location,
-                     "gs://dummy_bucket/lib_folder/file3.wstl")
+                     "gs://fake_bucket/lib_folder/file3.wstl")
 
   @mock.patch.object(storage, "Client", autospec=True)
   @mock.patch.object(storage, "Bucket", autospec=True)
@@ -139,7 +139,7 @@ class LocationTest(absltest.TestCase):
       def __init__(self, bucket_name):
         self.name = bucket_name
 
-    bucket = FakeBucket("dummy_bucket")
+    bucket = FakeBucket("fake_bucket")
     items = [
         Item(bucket, "file1.txt"),
         Item(bucket, "lib_folder/file2.wstl"),
@@ -151,7 +151,7 @@ class LocationTest(absltest.TestCase):
     mock_client.return_value.get_bucket.return_value = mock_bucket
 
     shell = mock.MagicMock()
-    input_wstl_arg = "gs://dummy_bucket/*.txt"
+    input_wstl_arg = "gs://fake_bucket/*.txt"
     locations = _location.parse_location(
         shell,
         input_wstl_arg,
@@ -163,7 +163,7 @@ class LocationTest(absltest.TestCase):
     shell = mock.MagicMock()
     content = """{"hello": "world"}"""
     tmp_file = self.create_tempfile(
-        file_path="dummy.json", content=content, mode="w")
+        file_path="fake.json", content=content, mode="w")
     input_wstl_arg = "file://{}".format(tmp_file.full_path)
     locations = _location.parse_location(
         shell, input_wstl_arg, file_ext=_constants.JSON_FILE_EXT)
@@ -174,7 +174,7 @@ class LocationTest(absltest.TestCase):
     shell = mock.MagicMock()
     content = """Result: $ToUpper("a")"""
     tmp_file = self.create_tempfile(
-        file_path="dummy.wstl", content=content, mode="w")
+        file_path="fake.wstl", content=content, mode="w")
     input_wstl_arg = "file://{}".format(tmp_file.full_path)
     locations = _location.parse_location(
         shell,
@@ -188,7 +188,7 @@ class LocationTest(absltest.TestCase):
     shell = mock.MagicMock()
     content = """Result: $ToUpper("a")"""
     tmp_file = self.create_tempfile(
-        file_path="dummy.wstl", content=content, mode="w")
+        file_path="fake.wstl", content=content, mode="w")
     input_wstl_arg = "file://{}/*".format(path.dirname(tmp_file.full_path))
     locations = _location.parse_location(
         shell,
@@ -203,7 +203,7 @@ class LocationTest(absltest.TestCase):
     shell = mock.MagicMock()
     content = """{"hello": "world"}"""
     tmp_file = self.create_tempfile(
-        file_path="dummy.json", content=content, mode="w")
+        file_path="fake.json", content=content, mode="w")
     input_wstl_arg = "file://{}/*".format(path.dirname(tmp_file.full_path))
     locations = _location.parse_location(
         shell, input_wstl_arg, file_ext=_constants.JSON_FILE_EXT)
@@ -215,7 +215,7 @@ class LocationTest(absltest.TestCase):
     shell = mock.MagicMock()
     content = """{"first": "item"}\n{"second": "item"}"""
     tmp_file = self.create_tempfile(
-        file_path="dummy.ndjson", content=content, mode="w")
+        file_path="fake.ndjson", content=content, mode="w")
     input_wstl_arg = "file://{}".format(tmp_file.full_path)
     locations = _location.parse_location(
         shell, input_wstl_arg, file_ext=_constants.JSON_FILE_EXT)
@@ -227,9 +227,9 @@ class LocationTest(absltest.TestCase):
 
   def test_parse_location_file_prefix_textproto_suffix_success(self):
     shell = mock.MagicMock()
-    content = """dummy_field: true"""
+    content = """fake_field: true"""
     tmp_file = self.create_tempfile(
-        file_path="dummy.textproto", content=content, mode="w")
+        file_path="fake.textproto", content=content, mode="w")
     input_wstl_arg = "file://{}".format(tmp_file.full_path)
     locations = _location.parse_location(
         shell,
@@ -242,9 +242,9 @@ class LocationTest(absltest.TestCase):
   def test_parse_location_file_prefix_textproto_suffix_load_content_success(
       self):
     shell = mock.MagicMock()
-    content = """dummy_field: true"""
+    content = """fake_field: true"""
     tmp_file = self.create_tempfile(
-        file_path="dummy.textproto", content=content, mode="w")
+        file_path="fake.textproto", content=content, mode="w")
     input_wstl_arg = "file://{}".format(tmp_file.full_path)
     locations = _location.parse_location(
         shell,
@@ -252,13 +252,13 @@ class LocationTest(absltest.TestCase):
         file_ext=_constants.TEXTPROTO_FILE_EXT,
         load_contents=True)
     self.assertTrue(locations[0].HasField("inline_json"))
-    self.assertEqual(locations[0].inline_json, "dummy_field: true")
+    self.assertEqual(locations[0].inline_json, "fake_field: true")
 
   def test_parse_location_file_prefix_no_load_content_success(self):
     shell = mock.MagicMock()
     content = """{"hello": "world"}"""
     tmp_file = self.create_tempfile(
-        file_path="dummy.json", content=content, mode="w")
+        file_path="fake.json", content=content, mode="w")
     input_wstl_arg = "file://{}/*".format(path.dirname(tmp_file.full_path))
     locations = _location.parse_location(
         shell,

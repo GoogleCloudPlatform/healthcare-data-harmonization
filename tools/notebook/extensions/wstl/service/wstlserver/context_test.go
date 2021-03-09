@@ -49,12 +49,12 @@ func TestContext_EvaluateTransformation(t *testing.T) {
 			name:   "execute stand alone whistle no input",
 			client: &mockStorageClient{},
 			request: &wspb.IncrementalTransformRequest{
-				Wstl: "Output: \"dummy_value\"",
+				Wstl: "Output: \"fake_value\"",
 			},
 			want: []*wspb.TransformedRecords{
 				&wspb.TransformedRecords{
 					Record: &wspb.TransformedRecords_Output{
-						Output: `{"Output":"dummy_value"}`,
+						Output: `{"Output":"fake_value"}`,
 					},
 				},
 			},
@@ -68,7 +68,7 @@ func TestContext_EvaluateTransformation(t *testing.T) {
 				Input: []*wspb.Location{
 					&wspb.Location{
 						Location: &wspb.Location_InlineJson{
-							InlineJson: `{"input_key":"dummy_value"}`,
+							InlineJson: `{"input_key":"fake_value"}`,
 						},
 					},
 				},
@@ -76,7 +76,7 @@ func TestContext_EvaluateTransformation(t *testing.T) {
 			want: []*wspb.TransformedRecords{
 				&wspb.TransformedRecords{
 					Record: &wspb.TransformedRecords_Output{
-						Output: `{"Output":"DUMMY_VALUE"}`,
+						Output: `{"Output":"FAKE_VALUE"}`,
 					},
 				},
 			},
@@ -84,13 +84,13 @@ func TestContext_EvaluateTransformation(t *testing.T) {
 		},
 		{
 			name:   "execute whistle with input on GCS",
-			client: &mockStorageClient{kv: map[string]string{"gs://dummy/config.wstl": `{"input_key":"dummy_value"}`}},
+			client: &mockStorageClient{kv: map[string]string{"gs://fake/config.wstl": `{"input_key":"fake_value"}`}},
 			request: &wspb.IncrementalTransformRequest{
 				Wstl: "Output: $ToUpper($root.input_key)",
 				Input: []*wspb.Location{
 					&wspb.Location{
 						Location: &wspb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/config.wstl",
+							GcsLocation: "gs://fake/config.wstl",
 						},
 					},
 				},
@@ -98,7 +98,7 @@ func TestContext_EvaluateTransformation(t *testing.T) {
 			want: []*wspb.TransformedRecords{
 				&wspb.TransformedRecords{
 					Record: &wspb.TransformedRecords_Output{
-						Output: `{"Output":"DUMMY_VALUE"}`,
+						Output: `{"Output":"FAKE_VALUE"}`,
 					},
 				},
 			},
@@ -112,12 +112,12 @@ func TestContext_EvaluateTransformation(t *testing.T) {
 				Input: []*wspb.Location{
 					&wspb.Location{
 						Location: &wspb.Location_InlineJson{
-							InlineJson: `{"input_key":"dummy_value_1"}`,
+							InlineJson: `{"input_key":"fake_value_1"}`,
 						},
 					},
 					&wspb.Location{
 						Location: &wspb.Location_InlineJson{
-							InlineJson: `{"input_key":"dummy_value_2"}`,
+							InlineJson: `{"input_key":"fake_value_2"}`,
 						},
 					},
 				},
@@ -125,12 +125,12 @@ func TestContext_EvaluateTransformation(t *testing.T) {
 			want: []*wspb.TransformedRecords{
 				&wspb.TransformedRecords{
 					Record: &wspb.TransformedRecords_Output{
-						Output: `{"Output":"DUMMY_VALUE_1"}`,
+						Output: `{"Output":"FAKE_VALUE_1"}`,
 					},
 				},
 				&wspb.TransformedRecords{
 					Record: &wspb.TransformedRecords_Output{
-						Output: `{"Output":"DUMMY_VALUE_2"}`,
+						Output: `{"Output":"FAKE_VALUE_2"}`,
 					},
 				},
 			},
@@ -149,7 +149,7 @@ func TestContext_EvaluateTransformation(t *testing.T) {
 					},
 					&wspb.Location{
 						Location: &wspb.Location_InlineJson{
-							InlineJson: `{"input_key":"dummy_value_2"}`,
+							InlineJson: `{"input_key":"fake_value_2"}`,
 						},
 					},
 				},
@@ -162,7 +162,7 @@ func TestContext_EvaluateTransformation(t *testing.T) {
 				},
 				&wspb.TransformedRecords{
 					Record: &wspb.TransformedRecords_Output{
-						Output: `{"Output":"DUMMY_VALUE_2"}`,
+						Output: `{"Output":"FAKE_VALUE_2"}`,
 					},
 				},
 			},
@@ -192,7 +192,7 @@ func TestContext_EvaluateTransformation(t *testing.T) {
 				Input: []*wspb.Location{
 					&wspb.Location{
 						Location: &wspb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/config.wstl",
+							GcsLocation: "gs://fake/config.wstl",
 						},
 					},
 				},

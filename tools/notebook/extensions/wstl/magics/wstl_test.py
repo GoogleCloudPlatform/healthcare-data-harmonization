@@ -164,7 +164,7 @@ class WstlTest(absltest.TestCase):
       self.assertIsNone(failure)
 
       with mock.patch.multiple(wstl, open=fake_open):
-        tmp_filename = "dummy.txt"
+        tmp_filename = "fake.txt"
         ip.run_line_magic(
             "load_hl7v2_gcs", """--bucket_name=foo
           --source_blob_name=bar --dest_file_name={}""".format(tmp_filename))
@@ -213,7 +213,7 @@ class WstlTest(absltest.TestCase):
   @mock.patch.object(wstlservice_pb2_grpc, "WhistleServiceStub", autospec=True)
   def test_fhir_validate_magic_inline_json(self, mock_stub, mock_channel):
 
-    class DummyChannel:
+    class FakeChannel:
 
       def __init__(self, channel):
         self.channel = channel
@@ -225,7 +225,7 @@ class WstlTest(absltest.TestCase):
         self.channel._close()
         return False
 
-    class DummyService:
+    class FakeService:
 
       def __init__(self, res):
         self.resp = res
@@ -234,7 +234,7 @@ class WstlTest(absltest.TestCase):
         del req
         return self.resp
 
-    mock_channel.return_value = DummyChannel(self._channel)
+    mock_channel.return_value = FakeChannel(self._channel)
     ip = self.shell.get_ipython()
     failure = ip.magics_manager.register(wstl.WSTLMagics)
     self.assertIsNone(failure)
@@ -295,7 +295,7 @@ class WstlTest(absltest.TestCase):
             ])
     ]
     for i in range(len(lines)):
-      mock_service = mock.create_autospec(DummyService)
+      mock_service = mock.create_autospec(FakeService)
       mock_service.FhirValidate.return_value = resps[i]
       mock_stub.return_value = mock_service
       result = ip.run_line_magic("fhir_validate", lines[i])
@@ -327,7 +327,7 @@ class WstlTest(absltest.TestCase):
   @mock.patch.object(wstlservice_pb2_grpc, "WhistleServiceStub", autospec=True)
   def test_fhir_validate_magic_ipython(self, mock_stub, mock_channel):
 
-    class DummyChannel:
+    class FakeChannel:
 
       def __init__(self, channel):
         self.channel = channel
@@ -339,7 +339,7 @@ class WstlTest(absltest.TestCase):
         self.channel._close()
         return False
 
-    class DummyService:
+    class FakeService:
 
       def __init__(self, res):
         self.resp = res
@@ -348,7 +348,7 @@ class WstlTest(absltest.TestCase):
         del req
         return self.resp
 
-    mock_channel.return_value = DummyChannel(self._channel)
+    mock_channel.return_value = FakeChannel(self._channel)
     ip = self.shell.get_ipython()
     failure = ip.magics_manager.register(wstl.WSTLMagics)
     self.assertIsNone(failure)
@@ -416,7 +416,7 @@ class WstlTest(absltest.TestCase):
             ]),
     ]
     for i in range(len(lines)):
-      mock_service = mock.create_autospec(DummyService)
+      mock_service = mock.create_autospec(FakeService)
       mock_service.FhirValidate.return_value = resps[i]
       mock_stub.return_value = mock_service
       result = ip.run_line_magic("fhir_validate", lines[i])
@@ -456,7 +456,7 @@ class WstlTest(absltest.TestCase):
   def test_fhir_validate_magic_gcs(self, mock_bucket, mock_client, mock_stub,
                                    mock_channel):
 
-    class DummyChannel:
+    class FakeChannel:
 
       def __init__(self, channel):
         self.channel = channel
@@ -468,7 +468,7 @@ class WstlTest(absltest.TestCase):
         self.channel._close()
         return False
 
-    class DummyService:
+    class FakeService:
 
       def __init__(self, res):
         self.resp = res
@@ -489,8 +489,8 @@ class WstlTest(absltest.TestCase):
       def __init__(self, bucket_name):
         self.name = bucket_name
 
-    mock_channel.return_value = DummyChannel(self._channel)
-    bucket = FakeBucket("dummy_bucket")
+    mock_channel.return_value = FakeChannel(self._channel)
+    bucket = FakeBucket("fake_bucket")
     items = [Item(bucket, "file.wstl")]
 
     mock_bucket.list_blobs.return_value = items
@@ -498,17 +498,17 @@ class WstlTest(absltest.TestCase):
     ip = self.shell.get_ipython()
     failure = ip.magics_manager.register(wstl.WSTLMagics)
     self.assertIsNone(failure)
-    with mock.patch.object(DummyService, "FhirValidate") as mock_method:
-      mock_stub.return_value = DummyService(None)
+    with mock.patch.object(FakeService, "FhirValidate") as mock_method:
+      mock_stub.return_value = FakeService(None)
       mock_method.side_effect = grpc.RpcError
       result = ip.run_line_magic(
-          "fhir_validate", "--version=stu3 --input=gs://dummy_bucket/file.wstl")
+          "fhir_validate", "--version=stu3 --input=gs://fake_bucket/file.wstl")
       self.assertIsInstance(result, grpc.RpcError)
       req_gs = wstlservice_pb2.ValidationRequest(
           fhir_version=wstlservice_pb2.ValidationRequest.FhirVersion.STU3,
           input=[
               wstlservice_pb2.Location(
-                  gcs_location="gs://dummy_bucket/file.wstl")
+                  gcs_location="gs://fake_bucket/file.wstl")
           ])
       mock_method.assert_called_once_with(req_gs)
 
@@ -519,7 +519,7 @@ class WstlTest(absltest.TestCase):
   def test_fhir_validate_magic_gcs_wildcard(self, mock_bucket, mock_client,
                                             mock_stub, mock_channel):
 
-    class DummyChannel:
+    class FakeChannel:
 
       def __init__(self, channel):
         self.channel = channel
@@ -531,7 +531,7 @@ class WstlTest(absltest.TestCase):
         self.channel._close()
         return False
 
-    class DummyService:
+    class FakeService:
 
       def __init__(self):
         pass
@@ -552,8 +552,8 @@ class WstlTest(absltest.TestCase):
       def __init__(self, bucket_name):
         self.name = bucket_name
 
-    mock_channel.return_value = DummyChannel(self._channel)
-    bucket = FakeBucket("dummy_bucket")
+    mock_channel.return_value = FakeChannel(self._channel)
+    bucket = FakeBucket("fake_bucket")
     items = [
         Item(bucket, "file1.txt"),
         Item(bucket, "lib_folder/file2.wstl"),
@@ -567,26 +567,26 @@ class WstlTest(absltest.TestCase):
     ip = self.shell.get_ipython()
     failure = ip.magics_manager.register(wstl.WSTLMagics)
     self.assertIsNone(failure)
-    with mock.patch.object(DummyService, "FhirValidate") as mock_method:
-      mock_stub.return_value = DummyService()
+    with mock.patch.object(FakeService, "FhirValidate") as mock_method:
+      mock_stub.return_value = FakeService()
       mock_method.side_effect = grpc.RpcError
       result = ip.run_line_magic(
-          "fhir_validate", "--version=stu3 --input=gs://dummy_bucket/*.txt")
+          "fhir_validate", "--version=stu3 --input=gs://fake_bucket/*.txt")
       self.assertIsInstance(result, grpc.RpcError)
       req_gs = wstlservice_pb2.ValidationRequest(
           fhir_version=wstlservice_pb2.ValidationRequest.FhirVersion.STU3,
           input=[
               wstlservice_pb2.Location(
-                  gcs_location="gs://dummy_bucket/file1.txt"),
+                  gcs_location="gs://fake_bucket/file1.txt"),
               wstlservice_pb2.Location(
-                  gcs_location="gs://dummy_bucket/lib_folder/file3.txt")
+                  gcs_location="gs://fake_bucket/lib_folder/file3.txt")
           ])
       mock_method.assert_called_once_with(req_gs)
 
   @mock.patch.object(grpc, "insecure_channel", autospec=True)
   def test_fhir_validate_magic_invalid_input(self, mock_channel):
 
-    class DummyChannel:
+    class FakeChannel:
 
       def __init__(self, channel):
         self.channel = channel
@@ -598,7 +598,7 @@ class WstlTest(absltest.TestCase):
         self.channel._close()
         return False
 
-    mock_channel.return_value = DummyChannel(self._channel)
+    mock_channel.return_value = FakeChannel(self._channel)
     ip = self.shell.get_ipython()
     failure = ip.magics_manager.register(wstl.WSTLMagics)
     self.assertIsNone(failure)
