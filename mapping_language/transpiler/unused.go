@@ -24,14 +24,14 @@ func (t *transpiler) Visit(tree antlr.ParseTree) interface{} {
 }
 
 func (t *transpiler) VisitChildren(node antlr.RuleNode) interface{} {
-	// NOTE: Hitting the below panic may indicate that the transpiler instance being
+	// NOTE: Reaching the below panic may indicate that the transpiler instance being
 	// instantiated is not implementing the visitor interface. To verify, expliclity
 	// declare the type of transpiler instance being intiatiated.
 	panic("unused rule VisitChildren entered by visitor - this should never happen")
 }
 
 func (t *transpiler) VisitTerminal(node antlr.TerminalNode) interface{} {
-	// No-op - this gets hit when enumerating children and some of them are tokens
+	// No-op - reached when enumerating children and some of them are tokens
 	return nil
 }
 

@@ -249,7 +249,7 @@ func TestNewTransformer(t *testing.T) {
 							MappingType: hpb.MappingType_MAPPING_LANGUAGE,
 							MappingConfigPath: &httppb.Location{
 								Location: &httppb.Location_GcsLocation{
-									GcsLocation: "gs://dummy/mapping_config.proto",
+									GcsLocation: "gs://fake/mapping_config.proto",
 								},
 							},
 						},
@@ -270,7 +270,7 @@ func TestNewTransformer(t *testing.T) {
 							MappingType: hpb.MappingType_MAPPING_LANGUAGE,
 							MappingConfigPath: &httppb.Location{
 								Location: &httppb.Location_GcsLocation{
-									GcsLocation: "gs://dummy/mapping_config.proto",
+									GcsLocation: "gs://fake/mapping_config.proto",
 								},
 							},
 						},
@@ -291,7 +291,7 @@ func TestNewTransformer(t *testing.T) {
 							MappingType: hpb.MappingType_RAW_PROTO,
 							MappingConfigPath: &httppb.Location{
 								Location: &httppb.Location_GcsLocation{
-									GcsLocation: "gs://dummy/config.wstl",
+									GcsLocation: "gs://fake/config.wstl",
 								},
 							},
 						},
@@ -473,12 +473,12 @@ func TestTransformer_UserLibraries(t *testing.T) {
 					Type: hpb.MappingType_MAPPING_LANGUAGE,
 					Path: &httppb.Location{
 						Location: &httppb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/config.wstl",
+							GcsLocation: "gs://fake/config.wstl",
 						},
 					},
 				},
 			},
-			gcsFiles:               map[string]string{"gs://dummy/config.wstl": whistleProjector},
+			gcsFiles:               map[string]string{"gs://fake/config.wstl": whistleProjector},
 			expectedUserProjectors: []string{"Patient_PatientWhistler"},
 		},
 		{
@@ -488,12 +488,12 @@ func TestTransformer_UserLibraries(t *testing.T) {
 					Type: hpb.MappingType_RAW_PROTO,
 					Path: &httppb.Location{
 						Location: &httppb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/config.textproto",
+							GcsLocation: "gs://fake/config.textproto",
 						},
 					},
 				},
 			},
-			gcsFiles:               map[string]string{"gs://dummy/config.textproto": mustMarshalConfig(t, protoProjector)},
+			gcsFiles:               map[string]string{"gs://fake/config.textproto": mustMarshalConfig(t, protoProjector)},
 			expectedUserProjectors: []string{"Patient_PatientProto"},
 		},
 		{
@@ -503,7 +503,7 @@ func TestTransformer_UserLibraries(t *testing.T) {
 					Type: hpb.MappingType_RAW_PROTO,
 					Path: &httppb.Location{
 						Location: &httppb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/proto.textproto",
+							GcsLocation: "gs://fake/proto.textproto",
 						},
 					},
 				},
@@ -511,14 +511,14 @@ func TestTransformer_UserLibraries(t *testing.T) {
 					Type: hpb.MappingType_MAPPING_LANGUAGE,
 					Path: &httppb.Location{
 						Location: &httppb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/whistler.wstl",
+							GcsLocation: "gs://fake/whistler.wstl",
 						},
 					},
 				},
 			},
 			gcsFiles: map[string]string{
-				"gs://dummy/proto.textproto": mustMarshalConfig(t, protoProjector),
-				"gs://dummy/whistler.wstl":   whistleProjector,
+				"gs://fake/proto.textproto": mustMarshalConfig(t, protoProjector),
+				"gs://fake/whistler.wstl":   whistleProjector,
 			},
 			expectedUserProjectors: []string{"Patient_PatientWhistler", "Patient_PatientProto"},
 		},
@@ -529,7 +529,7 @@ func TestTransformer_UserLibraries(t *testing.T) {
 					Type: hpb.MappingType_RAW_PROTO,
 					Path: &httppb.Location{
 						Location: &httppb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/proto.textproto",
+							GcsLocation: "gs://fake/proto.textproto",
 						},
 					},
 				},
@@ -537,14 +537,14 @@ func TestTransformer_UserLibraries(t *testing.T) {
 					Type: hpb.MappingType_MAPPING_LANGUAGE,
 					Path: &httppb.Location{
 						Location: &httppb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/whistler.wstl",
+							GcsLocation: "gs://fake/whistler.wstl",
 						},
 					},
 				},
 			},
 			gcsFiles: map[string]string{
-				"gs://dummy/proto.textproto": mustMarshalConfig(t, protoProjector),
-				"gs://dummy/whistler.wstl":   duplicateWhistleProjector,
+				"gs://fake/proto.textproto": mustMarshalConfig(t, protoProjector),
+				"gs://fake/whistler.wstl":   duplicateWhistleProjector,
 			},
 			wantErrors: true,
 		},
@@ -555,12 +555,12 @@ func TestTransformer_UserLibraries(t *testing.T) {
 					Type: hpb.MappingType_MAPPING_LANGUAGE,
 					Path: &httppb.Location{
 						Location: &httppb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/config.textproto",
+							GcsLocation: "gs://fake/config.textproto",
 						},
 					},
 				},
 			},
-			gcsFiles:   map[string]string{"gs://dummy/config.textproto": mustMarshalConfig(t, protoProjector)},
+			gcsFiles:   map[string]string{"gs://fake/config.textproto": mustMarshalConfig(t, protoProjector)},
 			wantErrors: true,
 		},
 		{
@@ -570,12 +570,12 @@ func TestTransformer_UserLibraries(t *testing.T) {
 					Type: hpb.MappingType_RAW_PROTO,
 					Path: &httppb.Location{
 						Location: &httppb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/config.wstl",
+							GcsLocation: "gs://fake/config.wstl",
 						},
 					},
 				},
 			},
-			gcsFiles:   map[string]string{"gs://dummy/config.wstl": whistleProjector},
+			gcsFiles:   map[string]string{"gs://fake/config.wstl": whistleProjector},
 			wantErrors: true,
 		},
 		{
@@ -585,12 +585,12 @@ func TestTransformer_UserLibraries(t *testing.T) {
 					Type: hpb.MappingType_MAPPING_LANGUAGE,
 					Path: &httppb.Location{
 						Location: &httppb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/config.wstl",
+							GcsLocation: "gs://fake/config.wstl",
 						},
 					},
 				},
 			},
-			gcsFiles:   map[string]string{"gs://dummy/config.wstl": duplicateWhistleProjector},
+			gcsFiles:   map[string]string{"gs://fake/config.wstl": duplicateWhistleProjector},
 			wantErrors: true,
 		},
 		{
@@ -600,12 +600,12 @@ func TestTransformer_UserLibraries(t *testing.T) {
 					Type: hpb.MappingType_RAW_PROTO,
 					Path: &httppb.Location{
 						Location: &httppb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/config.textproto",
+							GcsLocation: "gs://fake/config.textproto",
 						},
 					},
 				},
 			},
-			gcsFiles:   map[string]string{"gs://dummy/config.textproto": mustMarshalConfig(t, duplicateProtoProjector)},
+			gcsFiles:   map[string]string{"gs://fake/config.textproto": mustMarshalConfig(t, duplicateProtoProjector)},
 			wantErrors: true,
 		},
 		{
@@ -615,12 +615,12 @@ func TestTransformer_UserLibraries(t *testing.T) {
 					Type: hpb.MappingType_MAPPING_LANGUAGE,
 					Path: &httppb.Location{
 						Location: &httppb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/config.wstl",
+							GcsLocation: "gs://fake/config.wstl",
 						},
 					},
 				},
 			},
-			gcsFiles: map[string]string{"gs://dummy/config.wstl": whistleConfig},
+			gcsFiles: map[string]string{"gs://fake/config.wstl": whistleConfig},
 		},
 		{
 			name: "invalid type",
@@ -629,7 +629,7 @@ func TestTransformer_UserLibraries(t *testing.T) {
 					Type: hpb.MappingType_INVALID,
 					Path: &httppb.Location{
 						Location: &httppb.Location_GcsLocation{
-							GcsLocation: "gs://dummy/config.wstl",
+							GcsLocation: "gs://fake/config.wstl",
 						},
 					},
 				},
