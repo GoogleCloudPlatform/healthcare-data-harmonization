@@ -29,7 +29,7 @@ describe('FieldMetadataViewer', () => {
       name: 'Test1',
       required: false,
       type: 'string',
-      description: 'dummy detailed description',
+      description: 'fake detailed description',
       clickable: false,
     };
     const wrapper = mount(<FieldMetadataViewer fieldMetadata={subEntity} />);

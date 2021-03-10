@@ -20,7 +20,7 @@ import {TopEntityTooltip} from './top_entity_tool_tip';
 describe('TopEntityTooltip', () => {
   it('should render correctly', () => {
     const wrapper = shallow(
-      <TopEntityTooltip name='DummyResource' description='dummy description' />);
+      <TopEntityTooltip name='FakeResource' description='fake description' />);
     expect(wrapper).toMatchSnapshot();
   });
 });

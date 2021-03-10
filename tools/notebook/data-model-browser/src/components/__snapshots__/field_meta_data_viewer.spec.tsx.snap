@@ -5,7 +5,7 @@ exports[`FieldMetadataViewer should render correctly 1`] = `
   fieldMetadata={
     Object {
       "clickable": false,
-      "description": "dummy detailed description",
+      "description": "fake detailed description",
       "name": "Test1",
       "required": false,
       "type": "string",
@@ -21,7 +21,7 @@ exports[`FieldMetadataViewer should render correctly 1`] = `
     fieldMetadata={
       Object {
         "clickable": false,
-        "description": "dummy detailed description",
+        "description": "fake detailed description",
         "name": "Test1",
         "required": false,
         "type": "string",
@@ -417,7 +417,7 @@ exports[`FieldMetadataViewer should render correctly 1`] = `
                             scope="row"
                           >
                             <span>
-                              dummy detailed description
+                              fake detailed description
                             </span>
                           </th>
                         </ForwardRef(TableCell)>

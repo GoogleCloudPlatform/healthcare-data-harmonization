@@ -3,9 +3,9 @@
 exports[`BreadCrumbItem should render correctly 1`] = `
 <WithStyles(ForwardRef(Link))
   color="textSecondary"
-  href="dummy_field"
+  href="fake_field"
   onClick={[Function]}
 >
-  dummy_field
+  fake_field
 </WithStyles(ForwardRef(Link))>
 `;

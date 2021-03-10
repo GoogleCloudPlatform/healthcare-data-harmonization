@@ -21,12 +21,12 @@ import {BreadCrumbItem} from './bread_crumb_item';
 
 describe('BreadCrumbItem', () => {
   const click = jest.fn();
-  const dummyField = 'dummy_field';
-  const path = ['FHIR', 'DummyResource', dummyField];
+  const fakeField = 'fake_field';
+  const path = ['FHIR', 'FakeResource', fakeField];
   const wrapper = shallow(
     <BreadCrumbItem
       path={path}
-      label={dummyField}
+      label={fakeField}
       onClick={click}
     />
   );
@@ -34,7 +34,7 @@ describe('BreadCrumbItem', () => {
   it('should render correctly', () => expect(wrapper).toMatchSnapshot());
 
   it('should render children', () => {
-    expect(wrapper.contains(dummyField)).toBeTruthy();
+    expect(wrapper.contains(fakeField)).toBeTruthy();
   });
 
   it('should call the correct function on click', () => {

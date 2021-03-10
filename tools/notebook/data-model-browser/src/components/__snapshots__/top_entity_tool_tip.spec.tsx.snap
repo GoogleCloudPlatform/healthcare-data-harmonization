@@ -4,14 +4,14 @@ exports[`TopEntityTooltip should render correctly 1`] = `
 <div>
   <div>
     Resource:
-    DummyResource
+    FakeResource
   </div>
   <WithStyles(ForwardRef(Divider)) />
   <div>
     Scope and Usage:
   </div>
   <p>
-    dummy description
+    fake description
   </p>
 </div>
 `;

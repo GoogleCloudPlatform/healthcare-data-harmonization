@@ -21,10 +21,10 @@ describe('SubEntityTooltip', () => {
   it('should render correctly', () => {
     const wrapper = shallow(
       <SubEntityTooltip
-        name='DummyResource'
-        description='dummy description'
+        name='FakeResource'
+        description='fake description'
         required={true}
-        type='dummy type'
+        type='fake type'
         />);
     expect(wrapper).toMatchSnapshot();
   });

@@ -5,7 +5,7 @@ exports[`SubEntityTooltip should render correctly 1`] = `
   <div>
     Field:
     <p>
-      DummyResource
+      FakeResource
     </p>
   </div>
   <WithStyles(ForwardRef(Divider)) />
@@ -18,14 +18,14 @@ exports[`SubEntityTooltip should render correctly 1`] = `
   <div>
     Type:
     <p>
-      dummy type
+      fake type
     </p>
   </div>
   <div>
     Scope and Usage:
   </div>
   <p>
-    dummy description
+    fake description
   </p>
 </Fragment>
 `;
