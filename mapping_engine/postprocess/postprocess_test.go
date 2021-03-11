@@ -154,14 +154,14 @@ func LoadLibraryProjectors(t *testing.T) *types.Registry {
 }
 
 func TestPostProcess(t *testing.T) {
-	dummyPatientEntry, err := jsonutil.UnmarshalJSON(json.RawMessage(`{
+	fakePatientEntry, err := jsonutil.UnmarshalJSON(json.RawMessage(`{
 			"resourceType":"Patient",
 			"id":"a"
     }`))
 	if err != nil {
 		t.Fatalf("test variable for patient entry is invalid, error: %v", err)
 	}
-	dummyEncounterEntry, err := jsonutil.UnmarshalJSON(json.RawMessage(`{
+	fakeEncounterEntry, err := jsonutil.UnmarshalJSON(json.RawMessage(`{
 			"resourceType":"Encounter",
 			"id":"a"
     }`))
@@ -182,8 +182,8 @@ func TestPostProcess(t *testing.T) {
 		{
 			desc: "generate FHIR STU3 bundle",
 			input: map[string][]jsonutil.JSONToken{
-				"Patient":   {dummyPatientEntry},
-				"Encounter": {dummyEncounterEntry},
+				"Patient":   {fakePatientEntry},
+				"Encounter": {fakeEncounterEntry},
 			},
 			config: &mappb.MappingConfig{
 				PostProcess: &mappb.MappingConfig_PostProcessProjectorName{
@@ -220,8 +220,8 @@ func TestPostProcess(t *testing.T) {
 		{
 			desc: "skip bundling",
 			input: map[string][]jsonutil.JSONToken{
-				"Patient":   {dummyPatientEntry},
-				"Encounter": {dummyEncounterEntry},
+				"Patient":   {fakePatientEntry},
+				"Encounter": {fakeEncounterEntry},
 			},
 			config: &mappb.MappingConfig{
 				PostProcess: &mappb.MappingConfig_PostProcessProjectorName{
