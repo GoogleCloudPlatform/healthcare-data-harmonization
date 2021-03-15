@@ -2,7 +2,7 @@
 
 <!--*
 # Document freshness: For more information, see go/fresh-source.
-freshness: { owner: 'dbeaudreau' reviewed: '2020-09-16' }
+freshness: { owner: 'dbeaudreau' reviewed: '2021-03-15' }
 *-->
 
 This folder contains a mapping between a DICOM study as DICOM JSON and a FHIR R4
