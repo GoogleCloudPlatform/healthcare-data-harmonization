@@ -1,7 +1,8 @@
-def Output_Resource(item) {
+def Output_Resource(required item) {
   var Item : item;
   var HashID (if item.identifier) : II_HashIdentifier(item.identifier[0].value);
   var HashID (if ~item.identifier) : II_HashIdentifier(item);
+  var Item.meta.lastUpdated : $CurrentTime("2006-01-02T15:04:05.2112Z", "");
   if (ID_Reconciliation()) {
     var Item.id : $Hash(item);
     if (item.resourceType = "Provenance") {
@@ -42,7 +43,7 @@ def Build_Reference(Resource) {
   }
 }
 
-def Build_BundleEntry(Resource, Verb) {
+def Build_BundleEntry(required Resource, Verb) {
   resource : Resource;
   if (~Resource.id?) {
     resource.id : $Hash(Resource);

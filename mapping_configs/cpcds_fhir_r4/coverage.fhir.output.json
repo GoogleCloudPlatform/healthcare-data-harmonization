@@ -1,140 +1,147 @@
 {
-   "type":"transaction",
-   "entry":[
-      {
-         "resource":{
-            "resourceType":"Coverage",
-            "meta":{
-               "profile":[
-                  "http://hl7.org/fhir/us/carin/StructureDefinition/carin-bb-coverage"
-               ]
-            },
-            "class":[
-               {
-                  "name":"Apollo Dynamics",
-                  "type":{
-                     "coding":[
-                        {
-                           "system":"http://terminology.hl7.org/CodeSystem/coverage-class",
-                           "code":"group"
-                        }
-                     ]
-                  },
-                  "value":"9f506bdc-739e-432e-9656-52d53ed0d9a8"
-               },
-               {
-                  "name":"Silver",
-                  "type":{
-                     "coding":[
-                        {
-                           "code":"plan",
-                           "system":"http://terminology.hl7.org/CodeSystem/coverage-class"
-                        }
-                     ]
-                  },
-                  "value":"2"
-               }
-            ],
-            "identifier":[
-               {
-                  "system":"http://hl7.org/fhir/us/carin-bb/CodeSystem/IdentifierTypeCS",
-                  "value":"65707118-a1f7-408e-935c-d7e441ab8564",
-                  "type":{
-                     "coding":[
-                        {
-                           "display":"Member Number",
-                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
-                           "code":"MB"
-                        }
-                     ]
-                  }
-               }
-            ],
-            "relationship":{
-               "coding":[
-                  {
-                     "system":"http://terminology.hl7.org/CodeSystem/subscriber-relationship",
-                     "code":"self"
-                  }
-               ]
-            },
-            "id":"6b96cb407bdae0149cb56755c0161dd8",
-            "period":{
-               "start":"1999-07-18"
-            },
-            "payor":[
-               {
-                  "reference":"Organization/624f39a4d9f4cb017f45f0703707f10f"
-               },
-               {
-                  "reference":"Organization/624f39a4d9f4cb017f45f0703707f10f"
-               }
-            ],
-            "type":{
-               "coding":[
-                  {
-                     "system":"http://terminology.hl7.org/CodeSystem/v3-ActCode",
-                     "code":"POS"
-                  }
-               ]
-            },
-            "status":"active",
-            "beneficiary":{
-               "reference":"Patient/a916e0dc02d8490fcda48a87aef9993f"
-            },
-            "subscriberId":"19e0aea1-2681-40b0-b849-6ccdf7c57b28"
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Coverage/6b96cb407bdae0149cb56755c0161dd8"
-         }
+  "entry": [
+    {
+      "request": {
+        "method": "PUT",
+        "url": "Coverage/6b96cb407bdae0149cb56755c0161dd8"
       },
-      {
-         "resource":{
-            "resourceType":"Organization",
-            "active":true,
-            "id":"d56dc295815a158a6b4b2f9a4cb88bd6",
-            "name":"Xyz Organization"
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
-         }
-      },
-      {
-         "resource":{
-            "id":"c90f2dcfd337399ccaffbbfda0ca5ff7",
-            "agent":[
-               {
-                  "who":{
-                     "reference":"Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
-                  },
-                  "type":{
-                     "coding":[
-                        {
-                           "code":"transmitter",
-                           "system":"http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type"
-                        }
-                     ]
-                  }
-               }
-            ],
-            "resourceType":"Provenance",
-            "recorded":"2020-01-01T01:01:01.1111Z",
-            "target":[
-               {
-                  "reference":"Coverage/6b96cb407bdae0149cb56755c0161dd8"
-               },
-               {
-                  "reference":"Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
-               }
-            ]
-         },
-         "request":{
-            "method":"PUT",
-            "url":"Provenance/c90f2dcfd337399ccaffbbfda0ca5ff7"
-         }
+      "resource": {
+        "beneficiary": {
+          "reference": "Patient/a916e0dc02d8490fcda48a87aef9993f"
+        },
+        "class": [
+          {
+            "name": "Apollo Dynamics",
+            "type": {
+              "coding": [
+                {
+                  "code": "group",
+                  "system": "http://terminology.hl7.org/CodeSystem/coverage-class"
+                }
+              ]
+            },
+            "value": "9f506bdc-739e-432e-9656-52d53ed0d9a8"
+          },
+          {
+            "name": "Silver",
+            "type": {
+              "coding": [
+                {
+                  "code": "plan",
+                  "system": "http://terminology.hl7.org/CodeSystem/coverage-class"
+                }
+              ]
+            },
+            "value": "2"
+          }
+        ],
+        "id": "6b96cb407bdae0149cb56755c0161dd8",
+        "identifier": [
+          {
+            "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/IdentifierTypeCS",
+            "type": {
+              "coding": [
+                {
+                  "code": "MB",
+                  "display": "Member Number",
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+                }
+              ]
+            },
+            "value": "65707118-a1f7-408e-935c-d7e441ab8564"
+          }
+        ],
+        "meta": {
+          "lastUpdated": "2020-01-01T01:01:01.1111Z",
+          "profile": [
+            "http://hl7.org/fhir/us/carin/StructureDefinition/carin-bb-coverage"
+          ]
+        },
+        "payor": [
+          {
+            "reference": "Organization/624f39a4d9f4cb017f45f0703707f10f"
+          },
+          {
+            "reference": "Organization/624f39a4d9f4cb017f45f0703707f10f"
+          }
+        ],
+        "period": {
+          "start": "1999-07-18"
+        },
+        "relationship": {
+          "coding": [
+            {
+              "code": "self",
+              "system": "http://terminology.hl7.org/CodeSystem/subscriber-relationship"
+            }
+          ]
+        },
+        "resourceType": "Coverage",
+        "status": "active",
+        "subscriberId": "19e0aea1-2681-40b0-b849-6ccdf7c57b28",
+        "type": {
+          "coding": [
+            {
+              "code": "POS",
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+            }
+          ]
+        }
       }
-   ],
-   "resourceType":"Bundle"
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "url": "Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
+      },
+      "resource": {
+        "active": true,
+        "id": "d56dc295815a158a6b4b2f9a4cb88bd6",
+        "meta": {
+          "lastUpdated": "2020-01-01T01:01:01.1111Z"
+        },
+        "name": "Xyz Organization",
+        "resourceType": "Organization"
+      }
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "url": "Provenance/c90f2dcfd337399ccaffbbfda0ca5ff7"
+      },
+      "resource": {
+        "agent": [
+          {
+            "type": {
+              "coding": [
+                {
+                  "code": "transmitter",
+                  "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type"
+                }
+              ]
+            },
+            "who": {
+              "reference": "Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
+            }
+          }
+        ],
+        "id": "c90f2dcfd337399ccaffbbfda0ca5ff7",
+        "meta": {
+          "lastUpdated": "2020-01-01T01:01:01.1111Z"
+        },
+        "recorded": "2020-01-01T01:01:01.1111Z",
+        "resourceType": "Provenance",
+        "target": [
+          {
+            "reference": "Coverage/6b96cb407bdae0149cb56755c0161dd8"
+          },
+          {
+            "reference": "Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
+          }
+        ]
+      }
+    }
+  ],
+  "resourceType": "Bundle",
+  "type": "transaction"
 }
