@@ -112,7 +112,7 @@ def ORG_Organization(ORG) {
 // Output(s):
 //   Organization: https://www.hl7.org/fhir/organization.html
 //
-def Build_Organization(OrgName) {
+def Build_Organization(required OrgName) {
   resourceType : "Organization";
   // Fixed-value to ensure fhirpath-constraint-violation-ContainedResource.ofType(Bundle).entry.resource.ofType(Organization): "(identifier.count() + name.count()) > 0"
   name : OrgName;
