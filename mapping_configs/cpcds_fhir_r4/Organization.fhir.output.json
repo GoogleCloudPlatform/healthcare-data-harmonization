@@ -35,7 +35,7 @@
         "meta": {
           "lastUpdated": "2020-01-01T01:01:01.1111Z",
           "profile": [
-            "http://hl7.org/fhir/us/carin/StructureDefinition/carin-bb-organization"
+            "http://hl7.org/fhir/us/carin-bb/StructureDefinition/C4BB-Organization"
           ]
         },
         "name": "PCP6875",

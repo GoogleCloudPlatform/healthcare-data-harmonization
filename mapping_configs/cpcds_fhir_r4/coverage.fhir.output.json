@@ -54,13 +54,10 @@
         "meta": {
           "lastUpdated": "2020-01-01T01:01:01.1111Z",
           "profile": [
-            "http://hl7.org/fhir/us/carin/StructureDefinition/carin-bb-coverage"
+            "http://hl7.org/fhir/us/carin-bb/StructureDefinition/C4BB-Coverage"
           ]
         },
         "payor": [
-          {
-            "reference": "Organization/624f39a4d9f4cb017f45f0703707f10f"
-          },
           {
             "reference": "Organization/624f39a4d9f4cb017f45f0703707f10f"
           }

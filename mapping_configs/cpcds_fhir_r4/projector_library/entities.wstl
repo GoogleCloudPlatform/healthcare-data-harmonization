@@ -14,7 +14,22 @@ def Build_ReconciledIDExtension(ID) {
 // Description: Converts CPCDS terminology into FHIR R4 terminology
 //
 // Argument(s):
-//   conceptID:  https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedVocabularies/CONCEPT.md
+//   conceptID:
+//   system: System of the source code specified in the concept map (https://build.fhir.org/conceptmap-definitions.html#ConceptMap.group.source).
+//
+// Output(s):
+//   FHIR CodeableConcept datatype: https://www.hl7.org/fhir/stu3/datatypes.html#CodeableConcept
+//
+def Convert_Terminology(conceptID, system){
+  var mapping : $HarmonizeCode("$Local", conceptID, system, "CMS-FHIR-ConceptMap");
+  coding : mapping;
+}
+
+// Description: Converts CPCDS terminology into FHIR R4 terminology
+//
+// Argument(s):
+//   conceptID:
+//   system: System of the source code specified in the concept map (https://build.fhir.org/conceptmap-definitions.html#ConceptMap.group.source).
 //
 // Output(s):
 //   FHIR Code datatype: https://www.hl7.org/fhir/stu3/datatypes.html#code
@@ -57,9 +72,9 @@ def Practitioner_Practitioner(Practitioner) {
 }
 
 def Coverage_Coverage(Coverage) {
-  meta.profile[0] : "http://hl7.org/fhir/us/carin/StructureDefinition/carin-bb-coverage";
+  meta.profile[0] : "http://hl7.org/fhir/us/carin-bb/StructureDefinition/C4BB-Coverage";
   status : Convert_TerminologyCode(Coverage.Coverage_status, "Status");
-  identifier[] : Build_Identifier("MB", "Member Number", "http://hl7.org/fhir/us/carin-bb/CodeSystem/IdentifierTypeCS", Coverage.Coverage_id);
+  identifier[] : Build_Identifier("MB", "Member Number", "http://terminology.hl7.org/CodeSystem/v2-0203", "http://hl7.org/fhir/us/carin-bb/CodeSystem/IdentifierTypeCS", Coverage.Coverage_id);
   type.coding[0].code : Coverage.Coverage_type;
   type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v3-ActCode";   //Need to use ConceptMap
   subscriberId : Coverage.Subscriber_id;
@@ -69,7 +84,8 @@ def Coverage_Coverage(Coverage) {
   period.start : Coverage.Start_date;
   period.end : Coverage.End_date;
   payor[] : Build_ReferenceID("Organization", $Hash(Coverage.Payer_identifier));
-  payor[] : Build_ReferenceID("Organization", $Hash(Coverage.Payer_primary_identifier));
+// TODO(b/161729823): Revisit CMS-FHIR mappings based on community mapping sheet
+// payor[] : Build_ReferenceID("Organization", $Hash(Coverage.Payer_primary_identifier));
   class[] : Build_Class(Coverage.Group_id, Coverage.Group_name, "group");
   class[] : Build_Class(Coverage.Plan_identifier, Coverage.Plan_name, "plan");
   resourceType: "Coverage";
@@ -78,9 +94,9 @@ def Coverage_Coverage(Coverage) {
 def Patient_Patient(Patient) {
   meta.profile[0] : "http://hl7.org/fhir/us/carin/StructureDefinition/carin-bb-patient";
 
-  identifier[] : Build_Identifier("MB", "Member Number", "http://www.bcbs.com/fhir/ns/NamingSystem/patient-mb", Patient.Member_id);
-  identifier[] : Build_Identifier("PT", "Patient External Identifier", "http://www.external-org.com/fhir/NamingSystem/patient-identifier", Patient.Member_id);
-  identifier[] : Build_Identifier("MR", "Medical Record Number", "http://www.bcbs.com/fhir/ns/NamingSystem/patient-mrn", Patient.Member_id);
+  identifier[] : Build_Identifier("MB", "Member Number", "http://terminology.hl7.org/CodeSystem/v2-0203", "http://www.bcbs.com/fhir/ns/NamingSystem/patient-mb", Patient.Member_id);
+  identifier[] : Build_Identifier("PT", "Patient External Identifier", "http://terminology.hl7.org/CodeSystem/v2-0203", "http://www.external-org.com/fhir/NamingSystem/patient-identifier", Patient.Member_id);
+  identifier[] : Build_Identifier("MR", "Medical Record Number", "http://terminology.hl7.org/CodeSystem/v2-0203", "http://www.bcbs.com/fhir/ns/NamingSystem/patient-mrn", Patient.Member_id);
 
   extension[0].url : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race";
   extension[0].extension[0].valueString : Patient.Race_code;
@@ -133,18 +149,18 @@ def Patient_Patient(Patient) {
 //   CARINBBExplanationOfBenefitProfessionalNonClinician: http://hl7.org/fhir/us/carin-bb/2020Feb/StructureDefinition-CARIN-BB-ExplanationOfBenefit-Professional-NonClinician.html
 //
 def Claim_EOB(Claim) {
-  meta.profile[0] : "http://hl7.org/fhir/us/carin/StructureDefinition/carin-bb-explanationofbenefit";
+  meta.profile[0] (if Claim.Claim_type = "inpatient-facility") : "http://hl7.org/fhir/us/carin-bb/StructureDefinition/C4BB-ExplanationOfBenefit-Inpatient-Institutional";
+  meta.profile[0] (if Claim.Claim_type = "outpatient-facility") : "http://hl7.org/fhir/us/carin-bb/StructureDefinition/C4BB-ExplanationOfBenefit-Outpatient-Institutional";
+  meta.profile[0] (if Claim.Claim_type = "pharmacy") : "http://hl7.org/fhir/us/carin-bb/StructureDefinition/C4BB-ExplanationOfBenefit-Pharmacy";
+  meta.profile[0] (if Claim.Claim_type = "professional-nonclinician") : "http://hl7.org/fhir/us/carin-bb/StructureDefinition/C4BB-ExplanationOfBenefit-Professional-NonClinician";
 
-  identifier[0].value : Claim.Claim_unique_identifier;
-  identifier[0].system : "http://www.bcbs.com/fhir/ns/NamingSystem/explanationOfBenefit-identifier";
+  identifier[] : Build_Identifier("uc", "Unique Claim ID", "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBIdentifierType", "http://www.bcbs.com/fhir/ns/NamingSystem/explanationOfBenefit-identifier", Claim.Claim_unique_identifier);
 
-  identifier[1].value : Claim.RX_service_reference_number;
-  identifier[1].system : "http://www.bcbs.com/fhir/ns/NamingSystem/explanationOfBenefit-identifier";
+  identifier[] : Build_Identifier("uc", "Unique Claim ID", "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBIdentifierType", "http://www.bcbs.com/fhir/ns/NamingSystem/explanationOfBenefit-identifier", Claim.RX_service_reference_number);
 
   status: Convert_TerminologyCode(Claim.Claim_processing_status_code, "Status");
 
-  type.coding[0].code: Claim.Claim_type;
-  type.coding[0].system: "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claim-type";
+  type : Convert_Terminology(Claim.Claim_type, "claim-type");
 
   use : "claim";
   billablePeriod.start : Claim.Member_admission_date;
@@ -170,34 +186,40 @@ def Claim_EOB(Claim) {
 // TODO(b/161729823): Revisit CMS-FHIR mappings based on community mapping sheet
 //  facility : Build_ReferenceID("Location", $Hash(Claim.Claim_site_of_service_NPI));
 
-  careTeam[] (if Claim.Claim_attending_provider_NPI and Claim.Claim_site_of_service_NPI): Build_CareTeam(1, $Hash($StrCat(Claim.Claim_attending_provider_NPI, Claim.Claim_site_of_service_NPI)), true, "supervising");
-  careTeam[] (if Claim.Claim_referring_provider_NPI and Claim.Claim_site_of_service_NPI): Build_CareTeam(2, $Hash($StrCat(Claim.Claim_referring_provider_NPI, Claim.Claim_site_of_service_NPI)), "", "referrer");
-  careTeam[] (if Claim.Claim_performing_provider_NPI and Claim.Claim_site_of_service_NPI): Build_CareTeam(3, $Hash($StrCat(Claim.Claim_performing_provider_NPI, Claim.Claim_site_of_service_NPI)), "", "performing");
-  careTeam[] (if Claim.Claim_prescribing_provider_NPI and Claim.Claim_site_of_service_NPI): Build_CareTeam(4, $Hash($StrCat(Claim.Claim_prescribing_provider_NPI, Claim.Claim_site_of_service_NPI)), "", "prescribing");
-  careTeam[] (if Claim.Claim_PCP_NPI and Claim.Claim_site_of_service_NPI): Build_CareTeam(5, $Hash($StrCat(Claim.Claim_PCP_NPI, Claim.Claim_site_of_service_NPI)), "", "pcp");
+  if (Claim.Claim_type ~= "pharmacy") {
+    careTeam[] (if Claim.Claim_referring_provider_NPI and Claim.Claim_site_of_service_NPI): Build_CareTeam(2, $Hash($StrCat(Claim.Claim_referring_provider_NPI, Claim.Claim_site_of_service_NPI)), "", "referring", "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBClaimCareTeamRole");
+    careTeam[] (if Claim.Claim_performing_provider_NPI and Claim.Claim_site_of_service_NPI): Build_CareTeam(3, $Hash($StrCat(Claim.Claim_performing_provider_NPI, Claim.Claim_site_of_service_NPI)), "", "performing", "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBClaimCareTeamRole");
+  }
+  careTeam[] (if Claim.Claim_attending_provider_NPI and Claim.Claim_site_of_service_NPI): Build_CareTeam(1, $Hash($StrCat(Claim.Claim_attending_provider_NPI, Claim.Claim_site_of_service_NPI)), true, "primary", "http://terminology.hl7.org/CodeSystem/claimcareteamrole");
+  careTeam[] (if Claim.Claim_prescribing_provider_NPI and Claim.Claim_site_of_service_NPI): Build_CareTeam(4, $Hash($StrCat(Claim.Claim_prescribing_provider_NPI, Claim.Claim_site_of_service_NPI)), "", "prescribing", "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBClaimCareTeamRole");
+  // TODO(b/161729823): Revisit CMS-FHIR mappings based on community mapping sheet
+  //  careTeam[] (if Claim.Claim_PCP_NPI and Claim.Claim_site_of_service_NPI): Build_CareTeam(5, $Hash($StrCat(Claim.Claim_PCP_NPI, Claim.Claim_site_of_service_NPI)), "", "purchasedservice");
 
-  supportingInfo[] (if Claim.Claim_billing_provider_network_status) : Build_SupportingInfo(1, Claim.Claim_billing_provider_network_status, "billingnetworkcontractingstatus","","");
-  supportingInfo[] (if Claim.Claim_attending_provider_network_status) : Build_SupportingInfo(2, Claim.Claim_attending_provider_network_status, "attendingnetworkcontractingstatus","","");
-  supportingInfo[] (if Claim.Claim_referring_provider_network_status) : Build_SupportingInfo(3, Claim.Claim_referring_provider_network_status, "referringnetworkcontractingstatus","","");
-  supportingInfo[] (if Claim.Type_of_service) : Build_SupportingInfo(4, Claim.Type_of_service, "typeofservice","","");
-  supportingInfo[] (if Claim.Claim_bill_facility_type_code) : Build_SupportingInfo(5, Claim.Claim_bill_facility_type_code, "tob-typeoffacility","","");
-  supportingInfo[] (if Claim.Claim_service_classification_type_code) : Build_SupportingInfo(6, Claim.Claim_service_classification_type_code, "tob-billclassification","","");
-  supportingInfo[] (if Claim.Claim_frequency_code) : Build_SupportingInfo(7, Claim.Claim_frequency_code, "tob-frequency","","");
-  supportingInfo[] (if Claim.Claim_source_inpatient_admission_code) : Build_SupportingInfo(8, Claim.Claim_source_inpatient_admission_code, "admsrc","","");
-  supportingInfo[] (if Claim.Claim_inpatient_admission_type_code) : Build_SupportingInfo(9, Claim.Claim_inpatient_admission_type_code, "admtype","","");
-  supportingInfo[] (if Claim.Patient_discharge_status_code) : Build_SupportingInfo(10, Claim.Patient_discharge_status_code, "discharge-status","","");
-  supportingInfo[] (if Claim.Place_of_service_code) : Build_SupportingInfo(11, Claim.Place_of_service_code, "placeofservice","","");
-  supportingInfo[] (if Claim.Claim_received_date) : Build_SupportingInfo(15, "", "clmrecvddate",Claim.Claim_received_date,"");
+  supportingInfo[] (if Claim.Claim_billing_provider_network_status) : Build_SupportingInfo(1, Claim.Claim_billing_provider_network_status, "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBPayerAdjudicationStatus", "billingnetworkcontractingstatus","","","","");
+  supportingInfo[] (if Claim.Claim_attending_provider_network_status) : Build_SupportingInfo(2, Claim.Claim_attending_provider_network_status, "", "attendingnetworkcontractingstatus","","","","");
+  supportingInfo[] (if Claim.Claim_referring_provider_network_status) : Build_SupportingInfo(3, Claim.Claim_referring_provider_network_status, "", "referringnetworkcontractingstatus","","","","");
+  supportingInfo[] (if Claim.Type_of_service) : Build_SupportingInfo(4, Claim.Type_of_service, "", "typeofservice","","","","");
+  supportingInfo[] (if Claim.Claim_bill_facility_type_code) : Build_SupportingInfo(5, Claim.Claim_bill_facility_type_code, "", "tob-typeoffacility","","","","");
+  supportingInfo[] (if Claim.Claim_service_classification_type_code) : Build_SupportingInfo(6, Claim.Claim_service_classification_type_code, "", "tob-billclassification","","","","");
+  supportingInfo[] (if Claim.Claim_frequency_code) : Build_SupportingInfo(7, Claim.Claim_frequency_code, "", "tob-frequency","","","","");
+  supportingInfo[] (if Claim.Claim_source_inpatient_admission_code) : Build_SupportingInfo(8, Claim.Claim_source_inpatient_admission_code, "", "admsrc","","","","");
+  // TODO(b/161729823): Revisit CMS-FHIR mappings based on community mapping sheet
+  //  supportingInfo[] (if Claim.Claim_inpatient_admission_type_code) : Build_SupportingInfo(9, Claim.Claim_inpatient_admission_type_code, "http://hl7.org/fhir/us/carin-bb/ValueSet/AHANUBCPriorityTypeOfAdmissionOrVisit", "admtype","","","","");
+  //  supportingInfo[] (if Claim.Patient_discharge_status_code) : Build_SupportingInfo(10, Claim.Patient_discharge_status_code, "http://hl7.org/fhir/us/carin-bb/ValueSet/AHANUBCPatientDischargeStatus", "discharge-status","","","","");
+  supportingInfo[] (if Claim.Place_of_service_code) : Build_SupportingInfo(11, Claim.Place_of_service_code, "", "placeofservice","","","","");
+  supportingInfo[] (if Claim.Claim_received_date) : Build_SupportingInfo(15, "", "http://hl7.org/fhir/ValueSet/claim-exception", "clmrecvddate",Claim.Claim_received_date,"","","");
 
-// TODO(b/161729823): Revisit CMS-FHIR mappings based on community mapping sheet
-  supportingInfo[] (if Claim.Claim_site_of_service_network_status) : Build_SupportingInfo(12, Claim.Claim_site_of_service_network_status, "sitenetworkcontractingstatus","","");
-  supportingInfo[] (if Claim.Claim_performing_provider_network_status) : Build_SupportingInfo(13, Claim.Claim_performing_provider_network_status, "performingnetworkcontractingstatus","","");
-//  supportingInfo[] (if Claim.Claim_prescribing_provider_network_status) : Build_SupportingInfo(14, Claim.Claim_prescribing_provider_network_status, "prescribingnetworkcontractingstatus","","");
-  supportingInfo[] (if Claim.Days_supply) : Build_SupportingInfo(16, "", "dayssupply","",Claim.Days_supply);
-  supportingInfo[] (if Claim.DAW_product_selection_code) : Build_SupportingInfo(17, Claim.DAW_product_selection_code, "dawcode","","");
-  supportingInfo[] (if Claim.Refill_number) : Build_SupportingInfo(18, "", "refillnum","", Claim.Refill_number);
-  supportingInfo[] (if Claim.Prescription_origin_code) : Build_SupportingInfo(19, Claim.Prescription_origin_code, "rxorigincode","", "");
-  supportingInfo[] (if Claim.Plan_reported_brand_generic_code) : Build_SupportingInfo(20, Claim.Plan_reported_brand_generic_code, "brandgenericcode","", "");
+  // TODO(b/161729823): Revisit CMS-FHIR mappings based on community mapping sheet
+  supportingInfo[] (if Claim.Claim_site_of_service_network_status) : Build_SupportingInfo(12, Claim.Claim_site_of_service_network_status, "", "sitenetworkcontractingstatus","","","","");
+  supportingInfo[] (if Claim.Claim_performing_provider_network_status) : Build_SupportingInfo(13, Claim.Claim_performing_provider_network_status, "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBPayerAdjudicationStatus", "performingnetworkcontractingstatus","","","","");
+  //  supportingInfo[] (if Claim.Claim_prescribing_provider_network_status) : Build_SupportingInfo(14, Claim.Claim_prescribing_provider_network_status, "", "prescribingnetworkcontractingstatus","","","","");
+  supportingInfo[] (if Claim.Days_supply) : Build_SupportingInfo(16, "", "http://hl7.org/fhir/ValueSet/claim-exception", "dayssupply","",Claim.Days_supply,"","");
+  // Bindings are not defined for supportingInfo:dawcode.code: Claim.DAW_product_selection_code = "unknown"
+  supportingInfo[] (if Claim.DAW_product_selection_code) : Build_SupportingInfo(17, "unknown", "http://terminology.hl7.org/CodeSystem/NCPDP/DispensedAsWrittenOrProductSelectionCode", "dawcode","","","","");
+  supportingInfo[] (if Claim.Refill_number) : Build_SupportingInfo(18, "", "http://terminology.hl7.org/CodeSystem/claim-exception", "refillnum","", Claim.Refill_number,"","");
+  supportingInfo[] (if Claim.Prescription_origin_code) : Build_SupportingInfo(19, Claim.Prescription_origin_code, "http://hl7.org/fhir/us/carin-bb/ValueSet/NCPDPPrescriptionOriginCode", "rxorigincode","", "","","");
+  supportingInfo[] (if Claim.Plan_reported_brand_generic_code) : Build_SupportingInfo(20, Claim.Plan_reported_brand_generic_code, "http://hl7.org/fhir/us/carin-bb/ValueSet/NCPDPBrandGenericCode", "brandgenericcode","", "","","");
+  supportingInfo[] (if Claim.Claim_received_date) : Build_SupportingInfo(21, "", "http://hl7.org/fhir/ValueSet/claim-exception", "admissionperiod","","", Claim.Member_admission_date, Claim.Member_discharge_date);
 
   diagnosis[] : Build_Diagnosis(Claim.Items[]);
   procedure[] : Build_Procedure (Claim.Items[]);
@@ -209,26 +231,28 @@ def Claim_EOB(Claim) {
 
   item[] : Build_Item (Claim.Items[], Claim.Claim_type);
 
-  total[] : Build_Total("submittedamount", Claim.Claim_total_submitted_amount);
-  total[] : Build_Total("allowedamount", Claim.Claim_total_allowed_amount);
-  total[] : Build_Total("patientpayamount", Claim.Amount_paid_by_patient);
-  total[] : Build_Total("paymentamount", Claim.Claim_amount_paid_to_provider);
-  total[] : Build_Total("???", Claim.Member_reimbursement);
-  total[] : Build_Total("paymentamount", Claim.Claim_payment_amount);
-  total[] : Build_Total("???", Claim.Claim_disallowed_amount);
-  total[] : Build_Total("???", Claim.Member_paid_deductible);
-  total[] : Build_Total("???", Claim.Co_insurance_liability_amount);
-  total[] : Build_Total("???", Claim.Copay_amount);
-  total[] : Build_Total("???", Claim.Member_liability);
-  total[] : Build_Total("???", Claim.Claim_primary_payer_paid_amount);
-  total[] : Build_Total("???", Claim.Claim_discount_amount);
+  total[] : Build_Total("submitted", "http://terminology.hl7.org/CodeSystem/adjudication", Claim.Claim_total_submitted_amount);
+  //place-holder to ensure: http://build.fhir.org/ig/HL7/carin-bb/StructureDefinition-C4BB-ExplanationOfBenefit-Pharmacy-definitions.html#ExplanationOfBenefit.total:inoutnetwork.category
+  total[] : Build_Total("other", "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBPayerAdjudicationStatus", Claim.Claim_total_submitted_amount);
+  total[] : Build_Total("allowedamount", "", Claim.Claim_total_allowed_amount);
+  total[] : Build_Total("patientpayamount", "", Claim.Amount_paid_by_patient);
+  total[] : Build_Total("paymentamount", "", Claim.Claim_amount_paid_to_provider);
+  total[] : Build_Total("???", "", Claim.Member_reimbursement);
+  total[] : Build_Total("paymentamount", "", Claim.Claim_payment_amount);
+  total[] : Build_Total("???", "", Claim.Claim_disallowed_amount);
+  total[] : Build_Total("???", "", Claim.Member_paid_deductible);
+  total[] : Build_Total("???", "", Claim.Co_insurance_liability_amount);
+  total[] : Build_Total("???", "", Claim.Copay_amount);
+  total[] : Build_Total("???", "", Claim.Member_liability);
+  total[] : Build_Total("???", "", Claim.Claim_primary_payer_paid_amount);
+  total[] : Build_Total("???", "", Claim.Claim_discount_amount);
 
   payment: Build_Payment(Claim.Claim_payment_status_code, Claim.Claim_payment_denial_code, Claim.Claim_paid_date);
   resourceType: "ExplanationOfBenefit";
 }
 
 def Organization_Organization(Organization) {
-  meta.profile[0] : "http://hl7.org/fhir/us/carin/StructureDefinition/carin-bb-organization";
+  meta.profile[0] : "http://hl7.org/fhir/us/carin-bb/StructureDefinition/C4BB-Organization";
   identifier[0].value : Organization.Id;
   identifier[0].system : "http://hl7.org/fhir/sid/us-npi";
   identifier[0].type.coding[0].code : "NPI";
@@ -274,7 +298,12 @@ def Build_Organization(required OrgName) {
 //
 def Build_Item(Item, ClaimType) {
   sequence : $ParseInt(Item.Line_number);
-  revenue.coding[].code : Item.Revenue_center_code;
+  // Bindings are driven from licensed value-set
+  // Fixed-value to ensure an example binding
+  // revenue.coding[].code : Item.Revenue_center_code;
+  revenue.coding[0].code : "0254";
+  revenue.coding[0].system : "https://www.nubc.org/CodeSystem/RevenueCodes";
+
   if (ClaimType = "pharmacy" and Item.National_drug_code) {
     productOrService.coding[0].code: Item.National_drug_code;
     quantity.value (if Item.Quantity_dispensed) : $ParseFloat(Item.Quantity_dispensed);
@@ -289,40 +318,48 @@ def Build_Item(Item, ClaimType) {
     }
     quantity.value (if Item.Number_of_units) : $ParseFloat(Item.Number_of_units);
   }
-  locationCodeableConcept.coding[0].code : Item.Place_of_service_code;
-  servicedPeriod.start : Item.Claim_service_start_date;
-  servicedPeriod.end : Item.Claim_service_end_date;
+  if (ClaimType ~= "professional-nonclinician") {
+    locationCodeableConcept.coding[0].code : Item.Place_of_service_code;
+  } else {
+  // Bindings are not defined for locationCodeableConcept.coding[0].code: Item.Place_of_service_code = "unknown"
+    locationCodeableConcept.coding[0].code : "unknown";
+  }
+  if (ClaimType ~= "outpatient-facility") {
+    servicedPeriod.start : Item.Claim_service_start_date;
+    servicedPeriod.end : Item.Claim_service_end_date;
+  }
   category.coding[].code : Item.Type_of_service;
-  adjudication[] (if Item.Allowed_number_of_units) : Build_Adjudication ("units-allowed", "", $ParseFloat(Item.Allowed_number_of_units),"");
-  adjudication[] (if Item.Line_benefit_payment_status) : Build_Adjudication ("inoutnetwork", "", "",Item.Line_benefit_payment_status);
-  adjudication[] (if Item.Line_payment_denial_code) : Build_Adjudication ("denialreason", "", "",Item.Line_payment_denial_code);
-  adjudication[] (if Item.Line_disallowed_amount) : Build_Adjudication ("disallowed", $ParseFloat(Item.Line_disallowed_amount), "","");
-  adjudication[] (if Item.Line_member_reimbursement) : Build_Adjudication ("paidtopatient", $ParseFloat(Item.Line_member_reimbursement), "","");
-  adjudication[] (if Item.Line_amount_paid_by_patient) : Build_Adjudication ("paidbypatient", $ParseFloat(Item.Line_amount_paid_by_patient), "","");
-  adjudication[] (if Item.Drug_cost) : Build_Adjudication ("drugcost", $ParseFloat(Item.Drug_cost), "","");
-  adjudication[] (if Item.Line_payment_amount) : Build_Adjudication ("paymet", $ParseFloat(Item.Line_payment_amount), "","");
-  adjudication[] (if Item.Line_amount_paid_to_provider) : Build_Adjudication ("paidtoprovider", $ParseFloat(Item.Line_amount_paid_to_provider), "","");
-  adjudication[] (if Item.Line_patient_deductible) : Build_Adjudication ("deductible", $ParseFloat(Item.Line_patient_deductible), "","");
-  adjudication[] (if Item.Line_primary_payer_paid_amount) : Build_Adjudication ("priorpayerpaid", $ParseFloat(Item.Line_primary_payer_paid_amount), "","");
-  adjudication[] (if Item.Line_coinsurance_amount) : Build_Adjudication ("coins", $ParseFloat(Item.Line_coinsurance_amount), "","");
-  adjudication[] (if Item.Line_submitted_amount) : Build_Adjudication ("submitted", $ParseFloat(Item.Line_submitted_amount), "","");
-  adjudication[] (if Item.Line_allowed_amount) : Build_Adjudication ("allowed", $ParseFloat(Item.Line_allowed_amount), "","");
-  adjudication[] (if Item.Line_member_liability) : Build_Adjudication ("member", $ParseFloat(Item.Line_member_liability), "","");
-  adjudication[] (if Item.Line_copay_amount) : Build_Adjudication ("copay", $ParseFloat(Item.Line_copay_amount), "","");
-  adjudication[] (if Item.Line_discount_amount) : Build_Adjudication ("discount", $ParseFloat(Item.Line_discount_amount), "","");
+  adjudication[] (if Item.Allowed_number_of_units and ClaimType ~= "pharmacy") : Build_Adjudication ("allowedunits", "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudicationDiscriminator", "", $ParseFloat(Item.Allowed_number_of_units),"");
+  adjudication[] (if Item.Line_benefit_payment_status and ClaimType = "professional-nonclinician") : Build_Adjudication ("innetwork", "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBPayerAdjudicationStatus", "", "",Item.Line_benefit_payment_status);
+  adjudication[] (if Item.Line_payment_denial_code) : Build_Adjudication ("denialreason", "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudicationDiscriminator" ,"", "",Item.Line_payment_denial_code);
+// TODO(b/161729823): Revisit CMS-FHIR mappings based on community mapping sheet
+// adjudication[] (if Item.Line_disallowed_amount) : Build_Adjudication ("noncovered", "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication", $ParseFloat(Item.Line_disallowed_amount), "","");
+  adjudication[] (if Item.Line_member_reimbursement) : Build_Adjudication ("paidtopatient", "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication", $ParseFloat(Item.Line_member_reimbursement), "","");
+  adjudication[] (if Item.Line_amount_paid_by_patient) : Build_Adjudication ("paidbypatient", "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication", $ParseFloat(Item.Line_amount_paid_by_patient), "","");
+  adjudication[] (if Item.Drug_cost) : Build_Adjudication ("drugcost", "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication", $ParseFloat(Item.Drug_cost), "","");
+  adjudication[] (if Item.Line_payment_amount) : Build_Adjudication ("benefit", "http://terminology.hl7.org/CodeSystem/adjudication", $ParseFloat(Item.Line_payment_amount), "","");
+  adjudication[] (if Item.Line_amount_paid_to_provider) : Build_Adjudication ("paidtoprovider", "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication", $ParseFloat(Item.Line_amount_paid_to_provider), "","");
+  adjudication[] (if Item.Line_patient_deductible) : Build_Adjudication ("deductible", "http://terminology.hl7.org/CodeSystem/adjudication", $ParseFloat(Item.Line_patient_deductible), "","");
+  adjudication[] (if Item.Line_primary_payer_paid_amount) : Build_Adjudication ("priorpayerpaid", "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication", $ParseFloat(Item.Line_primary_payer_paid_amount), "","");
+  adjudication[] (if Item.Line_coinsurance_amount) : Build_Adjudication ("coinsurance", "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication", $ParseFloat(Item.Line_coinsurance_amount), "","");
+  adjudication[] (if Item.Line_submitted_amount) : Build_Adjudication ("submitted", "http://terminology.hl7.org/CodeSystem/adjudication", $ParseFloat(Item.Line_submitted_amount), "","");
+  adjudication[] (if Item.Line_allowed_amount) : Build_Adjudication ("eligible", "http://terminology.hl7.org/CodeSystem/adjudication", $ParseFloat(Item.Line_allowed_amount), "","");
+  adjudication[] (if Item.Line_member_liability) : Build_Adjudication ("memberliability", "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication", $ParseFloat(Item.Line_member_liability), "","");
+  adjudication[] (if Item.Line_copay_amount) : Build_Adjudication ("copay", "http://terminology.hl7.org/CodeSystem/adjudication", $ParseFloat(Item.Line_copay_amount), "","");
+  adjudication[] (if Item.Line_discount_amount) : Build_Adjudication ("discount", "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication", $ParseFloat(Item.Line_discount_amount), "","");
 }
 
-def Build_Identifier(Code, Display, System, Value){
+def Build_Identifier(required Code, required Display, required TypeSystem, System, required Value) {
   type.coding[0].code : Code;
-  type.coding[0].display : Display
-  type.coding[0].system : "http://terminology.hl7.org/CodeSystem/v2-0203";
+  type.coding[0].display : Display;
+  type.coding[0].system : TypeSystem;
   system : System;
   value : Value;
 }
 
-def Build_Total(Category, required Value) {
+def Build_Total(Category, System, required Value) {
   category.coding[0].code : Category;
-  category.coding[0].system : "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory";
+  category.coding[0].system : System;
   amount.value : $ParseFloat(Value);
 }
 
@@ -332,19 +369,20 @@ def Build_Related(required CIdentifier, Code) {
   relationship.coding[0].system : "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-relatedclaimrelationship";
 }
 
-def Build_Adjudication(Category, Amount, Value, Reason){
+def Build_Adjudication(Category, System, Amount, Value, Reason){
   category.coding[0].code : Category;
-  category.coding[0].system : "http://terminology.hl7.org/CodeSystem/adjudication";
+  category.coding[0].system : System;
   amount.value (if Amount ~= "") : Amount;
   value (if Value ~= "") : Value;
   reason.coding[].code (if Reason ~= "") : Reason;
 }
 
-def Build_CareTeam(Sequence, ProviderRole, Responsible, Role) {
+def Build_CareTeam(Sequence, required ProviderRole, Responsible, Role, System) {
   sequence : Sequence;
-  provider : Build_ReferenceID("PractitionerRole", ProviderRole);
+  provider : Build_ReferenceID("Practitioner", ProviderRole);
   responsible (if Responsible~= ""): Responsible;
-  role.coding[].code : Role;
+  role.coding[0].code : Role;
+  role.coding[0].system : System;
 }
 
 def Build_Class(Value, Name, Type) {
@@ -363,13 +401,16 @@ def Build_Class(Value, Name, Type) {
 // Output(s):
 //   supportingInfo: https://www.hl7.org/fhir/explanationofbenefit-definitions.html#ExplanationOfBenefit.supportingInfo
 //
-def Build_SupportingInfo(Sequence, Code, Category, Date, Quantity) {
-  code.coding[].code : Code;
+def Build_SupportingInfo(Sequence, Code, System, Category, Date, Quantity, PeriodStart, PeriodEnd) {
+  code.coding[0].code (if Code ~= "") : Convert_TerminologyCode(Code, "supportingInfo-code");
+  code.coding[0].system (if System ~= "") : System;
   sequence : Sequence;
   category.coding[0].code : Category;
-  category.coding[0].system : "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory";
+  category.coding[0].system : "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType";
   timingDate (if Date ~= "") : Date;
   valueQuantity.value (if Quantity ~= "") : $ParseFloat(Quantity);
+  timingPeriod.start (if PeriodStart ~= "") : PeriodStart;
+  timingPeriod.end (if PeriodEnd ~= "") : PeriodEnd;
 }
 
 // Description: Constructs a FHIR R4 ExplanationOfBenefit diagnosis datatype
@@ -390,9 +431,9 @@ def Build_Diagnosis(required Item) {
     diagnosisCodeableConcept.coding[].code : Item.Diagnosis_code;
     diagnosisCodeableConcept.coding[].display : Item.Diagnosis_description;
     diagnosisCodeableConcept.coding[].system : Item.Diagnosis_code_type;
-    type[0].coding[0].code : Item.Diagnosis_type;
-    type[0].coding[0].system : "http://hl7.org/fhir/us/carin-bb/CodeSystem/PayerDiagnosisTypeCS";
-    onAdmission.coding[].code : Item.Present_on_admission;
+    type[] : Convert_Terminology(Item.Diagnosis_type, "diagnosis-type");
+    // Bindings are driven from licensed value-set
+    //onAdmission.coding[0].code : Item.Present_on_admission;
   }
 }
 
@@ -456,8 +497,10 @@ def Build_Insurance(required Coverage, pIdentifier, ppIdentifier) {
 //   payment: https://www.hl7.org/fhir/explanationofbenefit-definitions.html#ExplanationOfBenefit.payment
 //
 def Build_Payment(Type, Reason, Date) {
-  type.coding[0].code : Type;
-  type.coding[0].system : "http://terminology.hl7.org/CodeSystem/ex-paymenttype";
+  type : Convert_Terminology(Type, "payment_status");
+// TODO(b/161729823): Revisit CMS-FHIR mappings based on community mapping sheet
+//  type.coding[0].code : Type;
+//  type.coding[0].system : "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBPayerAdjudicationStatus";
   adjustmentReason.coding[].code : Reason;
   date : Date;
 }

@@ -83,6 +83,118 @@
       ],
       "source": "Status",
       "target": "http://hl7.org/fhir/explanationofbenefit-status"
+    },
+    {
+      "element": [
+        {
+          "code": "in",
+          "display": "in",
+          "target": [
+            {
+              "code": "contracted",
+              "display": "Contracted",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "out",
+          "display": "out",
+          "target": [
+            {
+              "code": "noncontracted",
+              "display": "Noncontracted",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "supportingInfo-code",
+      "target": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBPayerAdjudicationStatus"
+    },
+    {
+      "element": [
+        {
+          "code": "inpatient-facility",
+          "display": "inpatient-facility",
+          "target": [
+            {
+              "code": "institutional",
+              "display": "Institutional",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+       {
+          "code": "outpatient-facility",
+          "display": "outpatient-facility",
+          "target": [
+            {
+              "code": "institutional",
+              "display": "Institutional",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "pharmacy",
+          "display": "pharmacy",
+          "target": [
+            {
+              "code": "pharmacy",
+              "display": "Pharmacy",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "professional-nonclinician",
+          "display": "professional",
+          "target": [
+            {
+              "code": "professional",
+              "display": "professional",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "claim-type",
+      "target": "http://terminology.hl7.org/CodeSystem/claim-type"
+    },
+    {
+      "element": [
+        {
+          "code": "complete",
+          "display": "Complete",
+          "target": [
+            {
+              "code": "paid",
+              "display": "Paid",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "payment_status",
+      "target": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBPayerAdjudicationStatus"
+    },
+    {
+      "element": [
+        {
+          "code": "principal",
+          "display": "Principal",
+          "target": [
+            {
+              "code": "principal",
+              "display": "Principal",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "diagnosis-type",
+      "target": "http://terminology.hl7.org/CodeSystem/ex-diagnosistype"
     }
   ],
   "id": "CMS-FHIR-ConceptMap",

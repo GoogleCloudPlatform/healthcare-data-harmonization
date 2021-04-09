@@ -13,26 +13,13 @@
         "careTeam": [
           {
             "provider": {
-              "reference": "PractitionerRole/c633f8fcad6310126981d0d2726ba676"
-            },
-            "responsible": true,
-            "role": {
-              "coding": [
-                {
-                  "code": "supervising"
-                }
-              ]
-            },
-            "sequence": 1
-          },
-          {
-            "provider": {
-              "reference": "PractitionerRole/c633f8fcad6310126981d0d2726ba676"
+              "reference": "Practitioner/c633f8fcad6310126981d0d2726ba676"
             },
             "role": {
               "coding": [
                 {
-                  "code": "referrer"
+                  "code": "referring",
+                  "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBClaimCareTeamRole"
                 }
               ]
             },
@@ -40,12 +27,13 @@
           },
           {
             "provider": {
-              "reference": "PractitionerRole/c633f8fcad6310126981d0d2726ba676"
+              "reference": "Practitioner/c633f8fcad6310126981d0d2726ba676"
             },
             "role": {
               "coding": [
                 {
-                  "code": "performing"
+                  "code": "performing",
+                  "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBClaimCareTeamRole"
                 }
               ]
             },
@@ -53,27 +41,149 @@
           },
           {
             "provider": {
-              "reference": "PractitionerRole/c633f8fcad6310126981d0d2726ba676"
+              "reference": "Practitioner/c633f8fcad6310126981d0d2726ba676"
             },
+            "responsible": true,
             "role": {
               "coding": [
                 {
-                  "code": "pcp"
+                  "code": "primary",
+                  "system": "http://terminology.hl7.org/CodeSystem/claimcareteamrole"
                 }
               ]
             },
-            "sequence": 5
+            "sequence": 1
           }
         ],
         "created": "2016-10-10",
+        "diagnosis": [
+          {
+            "diagnosisCodeableConcept": {
+              "coding": [
+                {
+                  "code": "59621000"
+                },
+                {
+                  "display": "Hypertension"
+                },
+                {
+                  "system": "SNOMED"
+                }
+              ]
+            },
+            "sequence": 1,
+            "type": [
+              {
+                "coding": [
+                  {
+                    "code": "principal",
+                    "display": "Principal",
+                    "system": "http://terminology.hl7.org/CodeSystem/ex-diagnosistype",
+                    "version": "v1"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "diagnosisCodeableConcept": {
+              "coding": [
+                {
+                  "code": "59621000"
+                },
+                {
+                  "display": "Hypertension"
+                },
+                {
+                  "system": "SNOMED"
+                }
+              ]
+            },
+            "sequence": 2,
+            "type": [
+              {
+                "coding": [
+                  {
+                    "code": "principal",
+                    "display": "Principal",
+                    "system": "http://terminology.hl7.org/CodeSystem/ex-diagnosistype",
+                    "version": "v1"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "diagnosisCodeableConcept": {
+              "coding": [
+                {
+                  "code": "59621000"
+                },
+                {
+                  "display": "Hypertension"
+                },
+                {
+                  "system": "SNOMED"
+                }
+              ]
+            },
+            "sequence": 3,
+            "type": [
+              {
+                "coding": [
+                  {
+                    "code": "principal",
+                    "display": "Principal",
+                    "system": "http://terminology.hl7.org/CodeSystem/ex-diagnosistype",
+                    "version": "v1"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "diagnosisCodeableConcept": {
+              "coding": [
+                {
+                  "code": "59621000"
+                },
+                {
+                  "display": "Hypertension"
+                },
+                {
+                  "system": "SNOMED"
+                }
+              ]
+            },
+            "sequence": 4,
+            "type": [
+              {
+                "coding": [
+                  {
+                    "code": "principal",
+                    "display": "Principal",
+                    "system": "http://terminology.hl7.org/CodeSystem/ex-diagnosistype",
+                    "version": "v1"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
         "id": "63a2f7efee69bd4fdab8085a63a0f7e2",
         "identifier": [
           {
             "system": "http://www.bcbs.com/fhir/ns/NamingSystem/explanationOfBenefit-identifier",
+            "type": {
+              "coding": [
+                {
+                  "code": "uc",
+                  "display": "Unique Claim ID",
+                  "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBIdentifierType"
+                }
+              ]
+            },
             "value": "e55234a3-d48d-9601-27d5-722ce18f4d35"
-          },
-          {
-            "system": "http://www.bcbs.com/fhir/ns/NamingSystem/explanationOfBenefit-identifier"
           }
         ],
         "insurance": [
@@ -94,8 +204,8 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "inoutnetwork",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "code": "innetwork",
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBPayerAdjudicationStatus"
                     }
                   ]
                 },
@@ -114,21 +224,8 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "disallowed",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
-                    }
-                  ]
-                }
-              },
-              {
-                "amount": {
-                  "value": 0
-                },
-                "category": {
-                  "coding": [
-                    {
                       "code": "paidtopatient",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -141,7 +238,7 @@
                   "coding": [
                     {
                       "code": "paidbypatient",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -153,7 +250,7 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "paymet",
+                      "code": "benefit",
                       "system": "http://terminology.hl7.org/CodeSystem/adjudication"
                     }
                   ]
@@ -167,7 +264,7 @@
                   "coding": [
                     {
                       "code": "paidtoprovider",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -193,7 +290,7 @@
                   "coding": [
                     {
                       "code": "priorpayerpaid",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -205,8 +302,8 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "coins",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "code": "coinsurance",
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -231,7 +328,7 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "allowed",
+                      "code": "eligible",
                       "system": "http://terminology.hl7.org/CodeSystem/adjudication"
                     }
                   ]
@@ -244,8 +341,8 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "member",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "code": "memberliability",
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -271,7 +368,7 @@
                   "coding": [
                     {
                       "code": "discount",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -280,7 +377,7 @@
             "locationCodeableConcept": {
               "coding": [
                 {
-                  "code": "19"
+                  "code": "unknown"
                 }
               ]
             },
@@ -290,6 +387,14 @@
                   "code": "430193006",
                   "display": "Medication Reconciliation (procedure)",
                   "system": "SNOMED"
+                }
+              ]
+            },
+            "revenue": {
+              "coding": [
+                {
+                  "code": "0254",
+                  "system": "https://www.nubc.org/CodeSystem/RevenueCodes"
                 }
               ]
             },
@@ -305,8 +410,8 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "units-allowed",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "code": "allowedunits",
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudicationDiscriminator"
                     }
                   ]
                 },
@@ -316,8 +421,8 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "inoutnetwork",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "code": "innetwork",
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBPayerAdjudicationStatus"
                     }
                   ]
                 },
@@ -336,21 +441,8 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "disallowed",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
-                    }
-                  ]
-                }
-              },
-              {
-                "amount": {
-                  "value": 0
-                },
-                "category": {
-                  "coding": [
-                    {
                       "code": "paidtopatient",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -363,7 +455,7 @@
                   "coding": [
                     {
                       "code": "paidbypatient",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -376,7 +468,7 @@
                   "coding": [
                     {
                       "code": "drugcost",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -388,7 +480,7 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "paymet",
+                      "code": "benefit",
                       "system": "http://terminology.hl7.org/CodeSystem/adjudication"
                     }
                   ]
@@ -402,7 +494,7 @@
                   "coding": [
                     {
                       "code": "paidtoprovider",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -428,7 +520,7 @@
                   "coding": [
                     {
                       "code": "priorpayerpaid",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -440,8 +532,8 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "coins",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "code": "coinsurance",
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -466,7 +558,7 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "allowed",
+                      "code": "eligible",
                       "system": "http://terminology.hl7.org/CodeSystem/adjudication"
                     }
                   ]
@@ -479,8 +571,8 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "member",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "code": "memberliability",
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -506,7 +598,7 @@
                   "coding": [
                     {
                       "code": "discount",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -515,7 +607,7 @@
             "locationCodeableConcept": {
               "coding": [
                 {
-                  "code": "1"
+                  "code": "unknown"
                 }
               ]
             },
@@ -524,6 +616,14 @@
                 {
                   "code": "394656005",
                   "system": "http://snomed.info/sct"
+                }
+              ]
+            },
+            "revenue": {
+              "coding": [
+                {
+                  "code": "0254",
+                  "system": "https://www.nubc.org/CodeSystem/RevenueCodes"
                 }
               ]
             },
@@ -539,8 +639,8 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "units-allowed",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "code": "allowedunits",
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudicationDiscriminator"
                     }
                   ]
                 },
@@ -550,8 +650,8 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "inoutnetwork",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "code": "innetwork",
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBPayerAdjudicationStatus"
                     }
                   ]
                 },
@@ -570,21 +670,8 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "disallowed",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
-                    }
-                  ]
-                }
-              },
-              {
-                "amount": {
-                  "value": 0
-                },
-                "category": {
-                  "coding": [
-                    {
                       "code": "paidtopatient",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -597,7 +684,7 @@
                   "coding": [
                     {
                       "code": "paidbypatient",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -610,7 +697,7 @@
                   "coding": [
                     {
                       "code": "drugcost",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -622,7 +709,7 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "paymet",
+                      "code": "benefit",
                       "system": "http://terminology.hl7.org/CodeSystem/adjudication"
                     }
                   ]
@@ -636,7 +723,7 @@
                   "coding": [
                     {
                       "code": "paidtoprovider",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -662,7 +749,7 @@
                   "coding": [
                     {
                       "code": "priorpayerpaid",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -674,8 +761,8 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "coins",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "code": "coinsurance",
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -700,7 +787,7 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "allowed",
+                      "code": "eligible",
                       "system": "http://terminology.hl7.org/CodeSystem/adjudication"
                     }
                   ]
@@ -713,8 +800,8 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "member",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "code": "memberliability",
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -740,7 +827,7 @@
                   "coding": [
                     {
                       "code": "discount",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -749,7 +836,7 @@
             "locationCodeableConcept": {
               "coding": [
                 {
-                  "code": "1"
+                  "code": "unknown"
                 }
               ]
             },
@@ -758,6 +845,14 @@
                 {
                   "code": "394656005",
                   "system": "http://snomed.info/sct"
+                }
+              ]
+            },
+            "revenue": {
+              "coding": [
+                {
+                  "code": "0254",
+                  "system": "https://www.nubc.org/CodeSystem/RevenueCodes"
                 }
               ]
             },
@@ -773,8 +868,8 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "units-allowed",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "code": "allowedunits",
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudicationDiscriminator"
                     }
                   ]
                 },
@@ -784,8 +879,8 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "inoutnetwork",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "code": "innetwork",
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBPayerAdjudicationStatus"
                     }
                   ]
                 },
@@ -804,21 +899,8 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "disallowed",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
-                    }
-                  ]
-                }
-              },
-              {
-                "amount": {
-                  "value": 0
-                },
-                "category": {
-                  "coding": [
-                    {
                       "code": "paidtopatient",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -831,7 +913,7 @@
                   "coding": [
                     {
                       "code": "paidbypatient",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -844,7 +926,7 @@
                   "coding": [
                     {
                       "code": "drugcost",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -856,7 +938,7 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "paymet",
+                      "code": "benefit",
                       "system": "http://terminology.hl7.org/CodeSystem/adjudication"
                     }
                   ]
@@ -870,7 +952,7 @@
                   "coding": [
                     {
                       "code": "paidtoprovider",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -896,7 +978,7 @@
                   "coding": [
                     {
                       "code": "priorpayerpaid",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -908,8 +990,8 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "coins",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "code": "coinsurance",
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -934,7 +1016,7 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "allowed",
+                      "code": "eligible",
                       "system": "http://terminology.hl7.org/CodeSystem/adjudication"
                     }
                   ]
@@ -947,8 +1029,8 @@
                 "category": {
                   "coding": [
                     {
-                      "code": "member",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "code": "memberliability",
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -974,7 +1056,7 @@
                   "coding": [
                     {
                       "code": "discount",
-                      "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+                      "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBAdjudication"
                     }
                   ]
                 }
@@ -983,7 +1065,7 @@
             "locationCodeableConcept": {
               "coding": [
                 {
-                  "code": "1"
+                  "code": "unknown"
                 }
               ]
             },
@@ -992,6 +1074,14 @@
                 {
                   "code": "394656005",
                   "system": "http://snomed.info/sct"
+                }
+              ]
+            },
+            "revenue": {
+              "coding": [
+                {
+                  "code": "0254",
+                  "system": "https://www.nubc.org/CodeSystem/RevenueCodes"
                 }
               ]
             },
@@ -1005,7 +1095,7 @@
         "meta": {
           "lastUpdated": "2020-01-01T01:01:01.1111Z",
           "profile": [
-            "http://hl7.org/fhir/us/carin/StructureDefinition/carin-bb-explanationofbenefit"
+            "http://hl7.org/fhir/us/carin-bb/StructureDefinition/C4BB-ExplanationOfBenefit-Professional-NonClinician"
           ]
         },
         "outcome": "complete",
@@ -1029,8 +1119,10 @@
           "type": {
             "coding": [
               {
-                "code": "complete",
-                "system": "http://terminology.hl7.org/CodeSystem/ex-paymenttype"
+                "code": "paid",
+                "display": "Paid",
+                "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBPayerAdjudicationStatus",
+                "version": "v1"
               }
             ]
           }
@@ -1074,14 +1166,15 @@
               "coding": [
                 {
                   "code": "billingnetworkcontractingstatus",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
+                  "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType"
                 }
               ]
             },
             "code": {
               "coding": [
                 {
-                  "code": "out"
+                  "code": "noncontracted",
+                  "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBPayerAdjudicationStatus"
                 }
               ]
             },
@@ -1092,14 +1185,14 @@
               "coding": [
                 {
                   "code": "attendingnetworkcontractingstatus",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
+                  "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType"
                 }
               ]
             },
             "code": {
               "coding": [
                 {
-                  "code": "out"
+                  "code": "noncontracted"
                 }
               ]
             },
@@ -1110,14 +1203,14 @@
               "coding": [
                 {
                   "code": "referringnetworkcontractingstatus",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
+                  "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType"
                 }
               ]
             },
             "code": {
               "coding": [
                 {
-                  "code": "out"
+                  "code": "noncontracted"
                 }
               ]
             },
@@ -1128,7 +1221,7 @@
               "coding": [
                 {
                   "code": "typeofservice",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
+                  "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType"
                 }
               ]
             },
@@ -1146,7 +1239,7 @@
               "coding": [
                 {
                   "code": "tob-typeoffacility",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
+                  "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType"
                 }
               ]
             },
@@ -1164,7 +1257,7 @@
               "coding": [
                 {
                   "code": "tob-billclassification",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
+                  "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType"
                 }
               ]
             },
@@ -1182,7 +1275,7 @@
               "coding": [
                 {
                   "code": "tob-frequency",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
+                  "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType"
                 }
               ]
             },
@@ -1200,7 +1293,7 @@
               "coding": [
                 {
                   "code": "admsrc",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
+                  "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType"
                 }
               ]
             },
@@ -1217,44 +1310,15 @@
             "category": {
               "coding": [
                 {
-                  "code": "admtype",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
-                }
-              ]
-            },
-            "code": {
-              "coding": [
-                {
-                  "code": "other"
-                }
-              ]
-            },
-            "sequence": 9
-          },
-          {
-            "category": {
-              "coding": [
-                {
-                  "code": "discharge-status",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
-                }
-              ]
-            },
-            "code": {
-              "coding": [
-                {
-                  "code": "home"
-                }
-              ]
-            },
-            "sequence": 10
-          },
-          {
-            "category": {
-              "coding": [
-                {
                   "code": "clmrecvddate",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
+                  "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType"
+                }
+              ]
+            },
+            "code": {
+              "coding": [
+                {
+                  "system": "http://hl7.org/fhir/ValueSet/claim-exception"
                 }
               ]
             },
@@ -1266,14 +1330,14 @@
               "coding": [
                 {
                   "code": "sitenetworkcontractingstatus",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
+                  "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType"
                 }
               ]
             },
             "code": {
               "coding": [
                 {
-                  "code": "out"
+                  "code": "noncontracted"
                 }
               ]
             },
@@ -1284,18 +1348,41 @@
               "coding": [
                 {
                   "code": "performingnetworkcontractingstatus",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claiminformationcategory"
+                  "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType"
                 }
               ]
             },
             "code": {
               "coding": [
                 {
-                  "code": "out"
+                  "code": "noncontracted",
+                  "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBPayerAdjudicationStatus"
                 }
               ]
             },
             "sequence": 13
+          },
+          {
+            "category": {
+              "coding": [
+                {
+                  "code": "admissionperiod",
+                  "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType"
+                }
+              ]
+            },
+            "code": {
+              "coding": [
+                {
+                  "system": "http://hl7.org/fhir/ValueSet/claim-exception"
+                }
+              ]
+            },
+            "sequence": 21,
+            "timingPeriod": {
+              "end": "2016-10-10",
+              "start": "2016-10-10"
+            }
           }
         ],
         "total": [
@@ -1306,8 +1393,8 @@
             "category": {
               "coding": [
                 {
-                  "code": "submittedamount",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
+                  "code": "submitted",
+                  "system": "http://terminology.hl7.org/CodeSystem/adjudication"
                 }
               ]
             }
@@ -1319,8 +1406,20 @@
             "category": {
               "coding": [
                 {
-                  "code": "allowedamount",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
+                  "code": "other",
+                  "system": "http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBPayerAdjudicationStatus"
+                }
+              ]
+            }
+          },
+          {
+            "amount": {
+              "value": 949.57
+            },
+            "category": {
+              "coding": [
+                {
+                  "code": "allowedamount"
                 }
               ]
             }
@@ -1332,8 +1431,7 @@
             "category": {
               "coding": [
                 {
-                  "code": "patientpayamount",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
+                  "code": "patientpayamount"
                 }
               ]
             }
@@ -1345,8 +1443,7 @@
             "category": {
               "coding": [
                 {
-                  "code": "paymentamount",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
+                  "code": "paymentamount"
                 }
               ]
             }
@@ -1358,8 +1455,7 @@
             "category": {
               "coding": [
                 {
-                  "code": "???",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
+                  "code": "???"
                 }
               ]
             }
@@ -1371,8 +1467,7 @@
             "category": {
               "coding": [
                 {
-                  "code": "paymentamount",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
+                  "code": "paymentamount"
                 }
               ]
             }
@@ -1384,8 +1479,7 @@
             "category": {
               "coding": [
                 {
-                  "code": "???",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
+                  "code": "???"
                 }
               ]
             }
@@ -1397,8 +1491,7 @@
             "category": {
               "coding": [
                 {
-                  "code": "???",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
+                  "code": "???"
                 }
               ]
             }
@@ -1410,8 +1503,7 @@
             "category": {
               "coding": [
                 {
-                  "code": "???",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
+                  "code": "???"
                 }
               ]
             }
@@ -1423,8 +1515,7 @@
             "category": {
               "coding": [
                 {
-                  "code": "???",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
+                  "code": "???"
                 }
               ]
             }
@@ -1436,8 +1527,7 @@
             "category": {
               "coding": [
                 {
-                  "code": "???",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
+                  "code": "???"
                 }
               ]
             }
@@ -1449,8 +1539,7 @@
             "category": {
               "coding": [
                 {
-                  "code": "???",
-                  "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-adjudicationcategory"
+                  "code": "???"
                 }
               ]
             }
@@ -1459,8 +1548,10 @@
         "type": {
           "coding": [
             {
-              "code": "professional-nonclinician",
-              "system": "http://hl7.org/fhir/us/carin/CodeSystem/carin-bb-claim-type"
+              "code": "professional",
+              "display": "professional",
+              "system": "http://terminology.hl7.org/CodeSystem/claim-type",
+              "version": "v1"
             }
           ]
         },
