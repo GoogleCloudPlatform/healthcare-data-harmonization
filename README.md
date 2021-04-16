@@ -51,6 +51,7 @@ Make sure you have installed and added to PATH
 1.  [Java JDK](https://openjdk.java.net/install/) (>= 8)
 1.  [Protobuf Compiler `protoc`](https://github.com/protocolbuffers/protobuf/releases/tag/v3.11.4)
     (>= 3.11.4)
+1.  [Clang](https://clang.llvm.org/get_started.html) (>= 11.0.1-2)
 
 Then run `build_all.sh`.
 
