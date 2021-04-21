@@ -755,7 +755,8 @@
           "lastUpdated": "2020-01-01T01:01:01.1111Z",
           "profile": [
             "http://hl7.org/fhir/us/carin-bb/StructureDefinition/C4BB-ExplanationOfBenefit-Pharmacy"
-          ]
+          ],
+          "source": "Xyz Organization"
         },
         "outcome": "complete",
         "patient": {
@@ -1230,58 +1231,6 @@
           ]
         },
         "use": "claim"
-      }
-    },
-    {
-      "request": {
-        "method": "PUT",
-        "url": "Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
-      },
-      "resource": {
-        "active": true,
-        "id": "d56dc295815a158a6b4b2f9a4cb88bd6",
-        "meta": {
-          "lastUpdated": "2020-01-01T01:01:01.1111Z"
-        },
-        "name": "Xyz Organization",
-        "resourceType": "Organization"
-      }
-    },
-    {
-      "request": {
-        "method": "PUT",
-        "url": "Provenance/648b60016c3f2242c78df25c27a181f0"
-      },
-      "resource": {
-        "agent": [
-          {
-            "type": {
-              "coding": [
-                {
-                  "code": "transmitter",
-                  "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type"
-                }
-              ]
-            },
-            "who": {
-              "reference": "Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
-            }
-          }
-        ],
-        "id": "648b60016c3f2242c78df25c27a181f0",
-        "meta": {
-          "lastUpdated": "2020-01-01T01:01:01.1111Z"
-        },
-        "recorded": "2020-01-01T01:01:01.1111Z",
-        "resourceType": "Provenance",
-        "target": [
-          {
-            "reference": "ExplanationOfBenefit/511d8cf33d4651625625aa7095ec81d7"
-          },
-          {
-            "reference": "Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
-          }
-        ]
       }
     }
   ],

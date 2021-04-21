@@ -55,7 +55,8 @@
           "lastUpdated": "2020-01-01T01:01:01.1111Z",
           "profile": [
             "http://hl7.org/fhir/us/carin-bb/StructureDefinition/C4BB-Coverage"
-          ]
+          ],
+          "source": "Xyz Organization"
         },
         "payor": [
           {
@@ -84,58 +85,6 @@
             }
           ]
         }
-      }
-    },
-    {
-      "request": {
-        "method": "PUT",
-        "url": "Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
-      },
-      "resource": {
-        "active": true,
-        "id": "d56dc295815a158a6b4b2f9a4cb88bd6",
-        "meta": {
-          "lastUpdated": "2020-01-01T01:01:01.1111Z"
-        },
-        "name": "Xyz Organization",
-        "resourceType": "Organization"
-      }
-    },
-    {
-      "request": {
-        "method": "PUT",
-        "url": "Provenance/c90f2dcfd337399ccaffbbfda0ca5ff7"
-      },
-      "resource": {
-        "agent": [
-          {
-            "type": {
-              "coding": [
-                {
-                  "code": "transmitter",
-                  "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type"
-                }
-              ]
-            },
-            "who": {
-              "reference": "Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
-            }
-          }
-        ],
-        "id": "c90f2dcfd337399ccaffbbfda0ca5ff7",
-        "meta": {
-          "lastUpdated": "2020-01-01T01:01:01.1111Z"
-        },
-        "recorded": "2020-01-01T01:01:01.1111Z",
-        "resourceType": "Provenance",
-        "target": [
-          {
-            "reference": "Coverage/6b96cb407bdae0149cb56755c0161dd8"
-          },
-          {
-            "reference": "Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
-          }
-        ]
       }
     }
   ],

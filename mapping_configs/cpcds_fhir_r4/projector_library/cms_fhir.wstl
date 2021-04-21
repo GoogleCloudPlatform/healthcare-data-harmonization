@@ -15,7 +15,5 @@ def CMS_FHIR(input) {
   out Resources (if input.Organization): Output_Resource(Organization_Organization(input.Organization));
   out Resources (if input.PractitionerRole): Output_Resource(PractitionerRole_PractitionerRole(input.PractitionerRole));
 
-  var Transmitter : Output_Resource(Build_Organization(input.__data_source__));
-  out Resources (if Transmitter): Transmitter;
-  root TransmitterOrganization (if Transmitter): Transmitter;
+  root __data_source__ (if input.__data_source__): input.__data_source__;
 }

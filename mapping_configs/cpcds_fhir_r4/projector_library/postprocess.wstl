@@ -1,22 +1,25 @@
 def Output_Resource(required item) {
   var Item : item;
-  var HashID (if item.identifier) : II_HashIdentifier(item.identifier[0].value);
-  var HashID (if ~item.identifier) : II_HashIdentifier(item);
   var Item.meta.lastUpdated : $CurrentTime("2006-01-02T15:04:05.2112Z", "");
   if (ID_Reconciliation()) {
     var Item.id : $Hash(item);
-    if (item.resourceType = "Provenance") {
-      // Constructs a Reconciled ID as an extension; due to lack of identifier attribute in Provenance Resource: https://www.hl7.org/fhir/provenance.html
-      var Item.extension[] : Build_ReconciledIDExtension($Hash(item));
-    } else {
-      var Item.identifier[] : HashID;
-    }
   } else {
     if (~item.id) {
       var Item.id (if item.identifier) : $Hash(item.identifier[0].value);
       var Item.id (if ~item.identifier) : $Hash(item);
     }
   }
+  $this : Item;
+}
+
+def PostProcess_Resource(required item, DataSource) {
+  var Item : item;
+  var HashID (if item.identifier) : II_HashIdentifier(item.identifier[0].value);
+  var HashID (if ~item.identifier) : II_HashIdentifier(item);
+  if (ID_Reconciliation()) {
+    var Item.identifier[] : HashID;
+  }
+  var Item.meta.source (if DataSource) : DataSource;
   $this : Item;
 }
 
@@ -43,11 +46,8 @@ def Build_Reference(Resource) {
   }
 }
 
-def Build_BundleEntry(required Resource, Verb) {
-  resource : Resource;
-  if (~Resource.id?) {
-    resource.id : $Hash(Resource);
-  }
+def Build_BundleEntry(required Resource, Verb, DataSource) {
+  resource : PostProcess_Resource(Resource, DataSource);
   request.method : Verb;
   request.url : $StrCat(Resource.resourceType, "/", dest resource.id);
 }
@@ -56,16 +56,5 @@ def Output_Transaction(Output) {
   var Resources: $Unique(Output.Resources)
   resourceType : "Bundle";
   type : "transaction";
-  entry[] : Build_BundleEntry(Resources[], "PUT");
-  entry[] : Build_BundleEntry(Output_Resource(Build_Provenance(Resources, Output.TransmitterOrganization)), "PUT");
-}
-
-def Build_Provenance(required Resources, required TransmitterOrganization) {
-  resourceType : "Provenance";
-  recorded : $CurrentTime("2006-01-02T15:04:05.2112Z", "");
-  target[] : Build_Reference(Resources[]);
-  agent[0].type.coding[0].code : "transmitter";
-  agent[0].type.coding[0].system : "http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type";
-  // An Organization resource that represents HPDI Customer Organization
-  agent[0].who : Build_Reference(TransmitterOrganization);
+  entry[] : Build_BundleEntry(Resources[], "PUT", Output.__data_source__);
 }

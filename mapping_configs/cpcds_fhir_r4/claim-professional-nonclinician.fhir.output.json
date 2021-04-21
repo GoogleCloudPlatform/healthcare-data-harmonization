@@ -1096,7 +1096,8 @@
           "lastUpdated": "2020-01-01T01:01:01.1111Z",
           "profile": [
             "http://hl7.org/fhir/us/carin-bb/StructureDefinition/C4BB-ExplanationOfBenefit-Professional-NonClinician"
-          ]
+          ],
+          "source": "Xyz Organization"
         },
         "outcome": "complete",
         "patient": {
@@ -1556,58 +1557,6 @@
           ]
         },
         "use": "claim"
-      }
-    },
-    {
-      "request": {
-        "method": "PUT",
-        "url": "Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
-      },
-      "resource": {
-        "active": true,
-        "id": "d56dc295815a158a6b4b2f9a4cb88bd6",
-        "meta": {
-          "lastUpdated": "2020-01-01T01:01:01.1111Z"
-        },
-        "name": "Xyz Organization",
-        "resourceType": "Organization"
-      }
-    },
-    {
-      "request": {
-        "method": "PUT",
-        "url": "Provenance/c0b6fec9c9422c54d0cc85a0c50fe7fd"
-      },
-      "resource": {
-        "agent": [
-          {
-            "type": {
-              "coding": [
-                {
-                  "code": "transmitter",
-                  "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type"
-                }
-              ]
-            },
-            "who": {
-              "reference": "Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
-            }
-          }
-        ],
-        "id": "c0b6fec9c9422c54d0cc85a0c50fe7fd",
-        "meta": {
-          "lastUpdated": "2020-01-01T01:01:01.1111Z"
-        },
-        "recorded": "2020-01-01T01:01:01.1111Z",
-        "resourceType": "Provenance",
-        "target": [
-          {
-            "reference": "ExplanationOfBenefit/63a2f7efee69bd4fdab8085a63a0f7e2"
-          },
-          {
-            "reference": "Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
-          }
-        ]
       }
     }
   ],

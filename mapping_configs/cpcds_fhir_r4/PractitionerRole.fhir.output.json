@@ -17,7 +17,8 @@
           "lastUpdated": "2020-01-01T01:01:01.1111Z",
           "profile": [
             "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitioner"
-          ]
+          ],
+          "source": "Xyz Organization"
         },
         "name": [
           {
@@ -59,7 +60,8 @@
           "lastUpdated": "2020-01-01T01:01:01.1111Z",
           "profile": [
             "http://hl7.org/fhir/us/carin/StructureDefinition/carin-bb-practitionerrole"
-          ]
+          ],
+          "source": "Xyz Organization"
         },
         "organization": {
           "reference": "Organization/37ce68f1a1ac2e3c6b9ca2bd31e3b5ec"
@@ -77,61 +79,6 @@
                 "system": "http://nucc.org/provider-taxonomy"
               }
             ]
-          }
-        ]
-      }
-    },
-    {
-      "request": {
-        "method": "PUT",
-        "url": "Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
-      },
-      "resource": {
-        "active": true,
-        "id": "d56dc295815a158a6b4b2f9a4cb88bd6",
-        "meta": {
-          "lastUpdated": "2020-01-01T01:01:01.1111Z"
-        },
-        "name": "Xyz Organization",
-        "resourceType": "Organization"
-      }
-    },
-    {
-      "request": {
-        "method": "PUT",
-        "url": "Provenance/e1b9cde5aec8918baf593db6804a03e4"
-      },
-      "resource": {
-        "agent": [
-          {
-            "type": {
-              "coding": [
-                {
-                  "code": "transmitter",
-                  "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type"
-                }
-              ]
-            },
-            "who": {
-              "reference": "Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
-            }
-          }
-        ],
-        "id": "e1b9cde5aec8918baf593db6804a03e4",
-        "meta": {
-          "lastUpdated": "2020-01-01T01:01:01.1111Z"
-        },
-        "recorded": "2020-01-01T01:01:01.1111Z",
-        "resourceType": "Provenance",
-        "target": [
-          {
-            "reference": "Practitioner/d41187ed45024518fb323012695c6b91"
-          },
-          {
-            "reference": "PractitionerRole/0dc611ff817199534dbfa16a6b1437ef"
-          },
-          {
-            "reference": "Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
           }
         ]
       }

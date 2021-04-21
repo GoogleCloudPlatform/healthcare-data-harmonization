@@ -36,7 +36,8 @@
           "lastUpdated": "2020-01-01T01:01:01.1111Z",
           "profile": [
             "http://hl7.org/fhir/us/carin-bb/StructureDefinition/C4BB-Organization"
-          ]
+          ],
+          "source": "Xyz Organization"
         },
         "name": "PCP6875",
         "resourceType": "Organization",
@@ -45,58 +46,6 @@
             "system": "phone",
             "use": "work",
             "value": "818-367-2171"
-          }
-        ]
-      }
-    },
-    {
-      "request": {
-        "method": "PUT",
-        "url": "Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
-      },
-      "resource": {
-        "active": true,
-        "id": "d56dc295815a158a6b4b2f9a4cb88bd6",
-        "meta": {
-          "lastUpdated": "2020-01-01T01:01:01.1111Z"
-        },
-        "name": "Xyz Organization",
-        "resourceType": "Organization"
-      }
-    },
-    {
-      "request": {
-        "method": "PUT",
-        "url": "Provenance/36840d2e786afed43c07c5b90ffcfdb9"
-      },
-      "resource": {
-        "agent": [
-          {
-            "type": {
-              "coding": [
-                {
-                  "code": "transmitter",
-                  "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type"
-                }
-              ]
-            },
-            "who": {
-              "reference": "Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
-            }
-          }
-        ],
-        "id": "36840d2e786afed43c07c5b90ffcfdb9",
-        "meta": {
-          "lastUpdated": "2020-01-01T01:01:01.1111Z"
-        },
-        "recorded": "2020-01-01T01:01:01.1111Z",
-        "resourceType": "Provenance",
-        "target": [
-          {
-            "reference": "Organization/37ce68f1a1ac2e3c6b9ca2bd31e3b5ec"
-          },
-          {
-            "reference": "Organization/d56dc295815a158a6b4b2f9a4cb88bd6"
           }
         ]
       }
