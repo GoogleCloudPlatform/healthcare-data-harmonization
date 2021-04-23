@@ -14,6 +14,7 @@ def Output_Resource(required item) {
 
 def PostProcess_Resource(required item, DataSource) {
   var Item : item;
+  var Item.id (if ~item.id) : $Hash(item);
   var HashID (if item.identifier) : II_HashIdentifier(item.identifier[0].value);
   var HashID (if ~item.identifier) : II_HashIdentifier(item);
   if (ID_Reconciliation()) {

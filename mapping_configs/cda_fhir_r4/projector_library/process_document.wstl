@@ -36,7 +36,6 @@ def Process_Document(required ClinicalDocument) {
   var PatientResource (if Patient): Output_Resource(Patient[0]);
 
   var Custodian : Output_Resource(ORG_CustodianOrganization(ClinicalDocument.custodian.assignedCustodian.representedCustodianOrganization));
-  root CustodianOrganization : Custodian;
 
   root Bundle : ClinicalDocument_Bundle(ClinicalDocument.id, ClinicalDocument.effectiveTime.value);
 

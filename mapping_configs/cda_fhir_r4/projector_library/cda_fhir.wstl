@@ -26,5 +26,5 @@
 def CDA_FHIR(Document) {
   $this : Output_Resource(Process_Document(Document.ClinicalDocument));
 
-  root TransmitterOrganization : Output_Resource(Build_Organization(Document.__data_source__));
+  root __data_source__ (if Document.__data_source__): Document.__data_source__;
 }
