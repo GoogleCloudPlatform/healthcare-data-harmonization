@@ -504,3 +504,16 @@ def II_HashIdentifier(required II) {
   value : $Hash(II);
   system : $StrCat("urn:oid:google/reconciliation-id");
 }
+
+// Description: Constructs a Resource creation timestamp extension to support FHIR reconciliation
+//
+// Argument(s):
+//   Timestamp: https://www.hl7.org/fhir/extensibility.html
+//
+// Output(s):
+//   ReconciledTimestampExtension
+//
+def Build_ReconciledTimestampExtension(TS) {
+  url : "urn:oid:google/reconciliation-create-timestamp";
+  valueInstant : TS;
+}

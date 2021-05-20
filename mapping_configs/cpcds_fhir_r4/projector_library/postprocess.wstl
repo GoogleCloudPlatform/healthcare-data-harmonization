@@ -6,6 +6,7 @@ def Output_Resource(required item) {
   if (ID_Reconciliation()) {
     var Item.id : $Hash(item);
     var Item.identifier[] : HashID;
+    var Item.extension[] : Build_ReconciledTimestampExtension($CurrentTime("2006-01-02T15:04:05.2112Z", ""));
   } else {
     if (~item.id) {
       var Item.id (if item.identifier) : $Hash(item.identifier[0].value);
