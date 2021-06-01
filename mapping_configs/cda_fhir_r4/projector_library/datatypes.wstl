@@ -355,16 +355,17 @@ def Observation_ConditionDataType(required Observation) {
 //
 // Argument(s):
 //   ManufacturedProduct datatype
+//   Timestamp: Resource creation timestamp https://www.hl7.org/fhir/datatypes.html#instant
 //
 // Output(s):
 //   Medication: https://www.hl7.org/fhir/medication.html
 //
-def ManufacturedProduct_Medication(required ManufacturedProduct) {
+def ManufacturedProduct_Medication(required ManufacturedProduct, Timestamp) {
   resourceType: "Medication";
   identifier[] : II_Identifier(ManufacturedProduct.id[]);
   code : CD_CodeableConcept(ManufacturedProduct.manufacturedMaterial.code);
   ingredient[].itemCodeableConcept : CD_CodeableConcept[](ManufacturedProduct.manufacturedMaterial.code.translation[]);
-  manufacturer : Build_Reference(Output_Resource(ORG_Organization(ManufacturedProduct.manufacturerOrganization)));
+  manufacturer : Build_Reference(Output_Resource(ORG_Organization(ManufacturedProduct.manufacturerOrganization), Timestamp));
 }
 
 // Description: Constructs a MedicationDispense resource
@@ -372,20 +373,21 @@ def ManufacturedProduct_Medication(required ManufacturedProduct) {
 // Argument(s):
 //   Supply datatype
 //   Patient Resource already constructed through PatientRole_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Timestamp: Resource creation timestamp https://www.hl7.org/fhir/datatypes.html#instant
 //
 // Output(s):
 //   MedicationDispense: https://www.hl7.org/fhir/medicationdispense.html
 //
-def Supply_MedicationDispense(required Supply, Patient) {
+def Supply_MedicationDispense(required Supply, Patient, Timestamp) {
   resourceType: "MedicationDispense";
   identifier[] : II_Identifier(Supply.id[]);
   status : Convert_TerminologyCode(Supply.statusCode.code, "SupplyStatusCode");
   type : CD_CodeableConcept(Supply.code);
   // templateId = 2.16.840.1.113883.10.20.22.4.23 corresponds to Medication Information
   if (templateIdHasRoot(Supply.product.manufacturedProduct.templateId, "2.16.840.1.113883.10.20.22.4.23")) {
-    medicationReference : Build_Reference(Output_Resource(ManufacturedProduct_Medication(Supply.product.manufacturedProduct)));
+    medicationReference : Build_Reference(Output_Resource(ManufacturedProduct_Medication(Supply.product.manufacturedProduct, Timestamp), Timestamp));
   }
-  performer[].actor : Build_Reference[](Output_Resource[](AssignedEntity_PractitionerRole[](Supply.performer[*].assignedEntity[])));
+  performer[].actor : Build_Reference[](Output_Resource[](AssignedEntity_PractitionerRole[](Supply.performer[*].assignedEntity[], Timestamp), Timestamp));
   quantity : PQ_Quantity(Supply.quantity);
   if (~IsInterval(Supply.effectiveTime[0])) {
     whenPrepared : Convert_DateTime(Supply.effectiveTime[0].value);
@@ -428,14 +430,15 @@ def Build_Attester(required Attester, Mode) {
 // Argument(s):
 //   Section datatype
 //   Resource: already constructed through Process_Document Projector
+//   Timestamp: Resource creation timestamp https://www.hl7.org/fhir/datatypes.html#instant
 //
 // Output(s):
 //   Composition.section: https://www.hl7.org/fhir/composition-definitions.html#Composition.section
 //
-def Build_Section(required Section, required Resource) {
+def Build_Section(required Section, required Resource, Timestamp) {
   title : Section.title;
   code : CD_CodeableConcept(Section.code);
-  entry[] : Build_Reference(Output_Resource[](Resource[]));
+  entry[] : Build_Reference(Output_Resource[](Resource[], Timestamp));
   //TODO:  Add text also ...
 }
 
@@ -492,12 +495,13 @@ def templateIdHasRoot(templateId, value) {
 // Argument(s):
 //   Observation datatype
 //   Patient Resource already constructed through PatientRole_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Timestamp: Resource creation timestamp https://www.hl7.org/fhir/datatypes.html#instant
 //
 // Output(s):
 //   Immunization.reaction: https://www.hl7.org/fhir/immunization-definitions.html#Immunization.reaction
 //
-def Build_ImmunizationReaction(required Observation, Patient) {
-  detail : Build_Reference(Output_Resource(Observation_Observation(Observation, Patient, "laboratory")));
+def Build_ImmunizationReaction(required Observation, Patient, Timestamp) {
+  detail : Build_Reference(Output_Resource(Observation_Observation(Observation, Patient, "laboratory", Timestamp), Timestamp));
   if (IsInterval(Observation.effectiveTime)) {
     date : Convert_DateTime(Observation.effectiveTime.low.value);
   } else {
@@ -583,4 +587,17 @@ def Build_DocumentReference(required URL, Patient) {
   category[0].coding[0].code : "clinical-note";
   category[0].coding[0].system : "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category";
   subject : Build_Reference(Patient);
+}
+
+// Description: Constructs a Resource creation timestamp extension to support FHIR reconciliation
+//
+// Argument(s):
+//   Timestamp: https://www.hl7.org/fhir/extensibility.html
+//
+// Output(s):
+//   ReconciledTimestampExtension
+//
+def Build_ReconciledTimestampExtension(TS) {
+  url : "urn:oid:google/reconciliation-create-timestamp";
+  valueInstant : TS;
 }

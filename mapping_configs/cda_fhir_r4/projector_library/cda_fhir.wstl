@@ -24,7 +24,10 @@
 //   Procedure: https://www.hl7.org/fhir/procedure.html
 //
 def CDA_FHIR(Document) {
-  $this : Output_Resource(Process_Document(Document.ClinicalDocument));
+  var Timestamp : Convert_Instant(Document.ClinicalDocument.effectiveTime.value);
+  var Timestamp (if ~Timestamp) : $CurrentTime("2006-01-02T15:04:05.2112Z", "");
+
+  $this : Output_Resource(Process_Document(Document.ClinicalDocument, Timestamp), Timestamp);
 
   root __data_source__ (if Document.__data_source__): Document.__data_source__;
 }

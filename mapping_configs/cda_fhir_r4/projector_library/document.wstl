@@ -83,16 +83,17 @@ def Convert_TerminologyCode(conceptID, system){
 // Argument(s):
 //   CDA PatientRole datatype: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.1.1-2013-01-31T000000.html
 //   GeneralPractitioner Resource already constructed through AssignedEntity_PractitionerRole Projector: https://www.hl7.org/fhir/practitionerrole.html
+//   Timestamp: Resource creation timestamp https://www.hl7.org/fhir/datatypes.html#instant
 //
 // Output(s):
 //   Patient: https://www.hl7.org/fhir/patient.html
 //   Organization: https://www.hl7.org/fhir/organization.html
 //
-def PatientRole_Patient(required PatientRole, GeneralPractitioner) {
+def PatientRole_Patient(required PatientRole, GeneralPractitioner, Timestamp) {
   identifier[] : II_Identifier(PatientRole.id[]);
   address[] : AD_Address(PatientRole.addr[]);
   telecom[] : TEL_ContactPoint(PatientRole.telecom[]);
-  managingOrganization : Build_Reference(Output_Resource(ORG_Organization(PatientRole.providerOrganization)));
+  managingOrganization : Build_Reference(Output_Resource(ORG_Organization(PatientRole.providerOrganization), Timestamp));
   name[] : PN_HumanName(PatientRole.patient.name[]);
   gender : Convert_TerminologyCode(PatientRole.patient.administrativeGenderCode.code, "2.16.840.1.113883.5.1");
   birthDate : Extract_Date(PatientRole.patient.birthTime.value);
@@ -123,7 +124,7 @@ def PatientRole_Patient(required PatientRole, GeneralPractitioner) {
     extension[3].extension[0].valueAddress : AD_Address(PatientRole.patient.birthplace.place.addr);
     extension[3].extension[0].url : "http://hl7.org/fhir/StructureDefinition/patient-birthPlace";
   }
-  generalPractitioner[] : Build_Reference(Output_Resource[](GeneralPractitioner[]));
+  generalPractitioner[] : Build_Reference(Output_Resource[](GeneralPractitioner[], Timestamp));
   resourceType : "Patient";
 }
 
@@ -131,31 +132,32 @@ def PatientRole_Patient(required PatientRole, GeneralPractitioner) {
 //
 // Argument(s):
 //   CDA AssignedEntity datatype: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.1.1-2013-01-31T000000.html
+//   Timestamp: Resource creation timestamp https://www.hl7.org/fhir/datatypes.html#instant
 //
 // Output(s):
 //   PractitionerRole: https://www.hl7.org/fhir/practitionerrole.html
 //   Practitioner: https://www.hl7.org/fhir/practitioner.html
 //   Organization: https://www.hl7.org/fhir/organization.html
 //
-def AssignedEntity_PractitionerRole(required AssignedEntity) {
+def AssignedEntity_PractitionerRole(required AssignedEntity, Timestamp) {
   identifier[]:  II_Identifier(AssignedEntity.id[]);
   resourceType: "PractitionerRole";
   // Fixed value to ensure US-Core validation http://hl7.org/fhir/us/davinci-pdex-plan-net/STU1/StructureDefinition-plannet-PractitionerRole-definitions.html#PractitionerRole.active
   active : true;
   code[] : CD_CodeableConcept(AssignedEntity.code);
   telecom[]: TEL_ContactPoint(AssignedEntity.telecom[]);
-  location[]: Build_Reference(Output_Resource[](AD_Location[](AssignedEntity.addr[])));
+  location[]: Build_Reference(Output_Resource[](AD_Location[](AssignedEntity.addr[]), Timestamp));
   if (AssignedEntity.assignedPerson) {
-    practitioner : Build_Reference(Output_Resource(Person_Practitioner(AssignedEntity.assignedPerson, AssignedEntity.id)));
+    practitioner : Build_Reference(Output_Resource(Person_Practitioner(AssignedEntity.assignedPerson, AssignedEntity.id), Timestamp));
   } else {
     // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-practitionerrole-definitions.html#PractitionerRole.practitioner
-    practitioner : Build_Reference(Output_Resource(Build_Practitioner()));
+    practitioner : Build_Reference(Output_Resource(Build_Practitioner(), Timestamp));
   }
   if (AssignedEntity.representedOrganization) {
-    organization : Build_Reference(Output_Resource(ORG_Organization(AssignedEntity.representedOrganization)));
+    organization : Build_Reference(Output_Resource(ORG_Organization(AssignedEntity.representedOrganization), Timestamp));
   } else {
     // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-practitionerrole-definitions.html#PractitionerRole.organization
-    organization : Build_Reference(Output_Resource(Build_Organization("unknown")));
+    organization : Build_Reference(Output_Resource(Build_Organization("unknown"), Timestamp));
   }
 }
 
@@ -195,12 +197,13 @@ def FamilyMemberHistorySection_FamilyMemberHistory(required Organizer, required 
 //   Vital Sign Observation Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.4.27-2013-01-31T000000.html
 //   Patient Resource already constructed through PatientRole_Patient Projector: https://www.hl7.org/fhir/patient.html
 //   Category: https://www.hl7.org/fhir/observation-definitions.html#Observation.category
+//   Timestamp: Resource creation timestamp https://www.hl7.org/fhir/datatypes.html#instant
 //
 // Output(s):
 //   Observation: https://www.hl7.org/fhir/observation.html
 //   Device: https://www.hl7.org/fhir/device.html
 //
-def Observation_Observation(required Observation, required Patient, required Category) {
+def Observation_Observation(required Observation, required Patient, required Category, Timestamp) {
   resourceType: "Observation"
   identifier[] : II_Identifier(Observation.id[]);
   if (Observation.code.code) {
@@ -219,8 +222,8 @@ def Observation_Observation(required Observation, required Patient, required Cat
   }
   bodySite : CD_CodeableConcept(Observation.targetSiteCode[0]);
   component[] : Build_Component(Observation.code, Observation.value[]);
-  encounter : Build_Reference(Output_Resource(Encounter_Encounter(Observation.encounter, Patient)));
-  performer[] : Build_Reference(Output_Resource[](AssignedEntity_PractitionerRole[](Observation.author[*].assignedAuthor[])));
+  encounter : Build_Reference(Output_Resource(Encounter_Encounter(Observation.encounter, Patient, Timestamp), Timestamp));
+  performer[] : Build_Reference(Output_Resource[](AssignedEntity_PractitionerRole[](Observation.author[*].assignedAuthor[], Timestamp), Timestamp));
   if (Observation.author[0].time and ~IsInterval(Observation.author[0].time)){
     issued : Convert_Instant(Observation.author[0].time.value);
   } else {
@@ -234,7 +237,7 @@ def Observation_Observation(required Observation, required Patient, required Cat
   var Supply : Observation.entryRelationship[*].supply[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.50")];
   // templateId = 2.16.840.1.113883.10.20.22.4.37 corresponds to a participantRole contributing as device to the given observation
   var ParticipantRole (if Supply) : Supply[*].participant[*].participantRole[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.37")];
-  device (if ParticipantRole): Build_Reference(Output_Resource(ParticipantRole_Device(ParticipantRole[0], Patient)));
+  device (if ParticipantRole): Build_Reference(Output_Resource(ParticipantRole_Device(ParticipantRole[0], Patient), Timestamp));
   subject : Build_Reference(Patient);
 }
 
@@ -258,13 +261,14 @@ def ParticipantRole_Device(required ParticipantRole, required Patient) {
 //
 // Argument(s):
 //   Encounter Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.2.22.1-2013-01-31T000000.html
+//   Timestamp: Resource creation timestamp https://www.hl7.org/fhir/datatypes.html#instant
 //
 // Output(s):
 //   Encounter: https://www.hl7.org/fhir/encounter.html
 //   PractitionerRole: https://www.hl7.org/fhir/practitionerrole.html
 //   Location: https://www.hl7.org/fhir/location.html
 //
-def Encounter_Encounter(required Encounter, Patient) {
+def Encounter_Encounter(required Encounter, Patient, Timestamp) {
   resourceType: "Encounter"
   identifier[] : II_Identifier(Encounter.id[]);
   if (Encounter.code.code) {
@@ -279,9 +283,9 @@ def Encounter_Encounter(required Encounter, Patient) {
     // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-encounter-definitions.html#Encounter.class
     class.code : "unknown";
   }
-  status : Convert_TerminologyCode(Encounter.statusCode.code, "EncounterStatusCode");
+  status : Convert_TerminologyCode(Encounter.statusCode.code, "EncounterStatusCode", Timestamp);
   priority : CD_CodeableConcept(Encounter.priorityCode);
-  participant[].individual : Build_Reference[](Output_Resource[](AssignedEntity_PractitionerRole[](Encounter.performer[*].assignedEntity[])));
+  participant[].individual : Build_Reference[](Output_Resource[](AssignedEntity_PractitionerRole[](Encounter.performer[*].assignedEntity[], Timestamp), Timestamp));
   if (IsInterval(Encounter.effectiveTime)){
     period.start : Convert_DateTime(Encounter.effectiveTime.low.value);
     period.end : Convert_DateTime(Encounter.effectiveTime.high.value);
@@ -289,7 +293,7 @@ def Encounter_Encounter(required Encounter, Patient) {
   var Participant : Encounter.participant[*][where hasCode($.typeCode, "LOC")];
   // templateId = 2.16.840.1.113883.10.20.22.4.32 corresponds to a participantRole contributing as location to the given encounter
   var ParticipantRole : Participant[*].participantRole[where hasCode($.classCode, "SDLOC") or templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.32")];
-  location[].location : Build_Reference[](Output_Resource[](ParticipantRole_Location[](ParticipantRole[])));
+  location[].location : Build_Reference[](Output_Resource[](ParticipantRole_Location[](ParticipantRole[]), Timestamp));
   subject : Build_Reference(Patient);
 }
 
@@ -298,13 +302,14 @@ def Encounter_Encounter(required Encounter, Patient) {
 // Argument(s):
 //   Problem Observation Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.4.4-2013-01-31T000000.html
 //   Patient Resource already constructed through PatientRole_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Timestamp: Resource creation timestamp https://www.hl7.org/fhir/datatypes.html#instant
 //
 // Output(s):
 //   Condition: https://www.hl7.org/fhir/condition.html
 //   PractitionerRole: https://www.hl7.org/fhir/practitionerrole.html
 //   Encounter: https://www.hl7.org/fhir/encounter.html
 //
-def Observation_Condition(required Observation, StatusCode, required Patient) {
+def Observation_Condition(required Observation, StatusCode, required Patient, Timestamp) {
   resourceType: "Condition";
   identifier[] : II_Identifier(Observation.id[]);
   category[] : CD_CodeableConcept(Observation.code);
@@ -332,9 +337,9 @@ def Observation_Condition(required Observation, StatusCode, required Patient) {
       clinicalStatus.coding[0].system : "http://terminology.hl7.org/CodeSystem/condition-clinical";
     }
   }
-  asserter : Build_Reference(Output_Resource(AssignedEntity_PractitionerRole(Observation.author[0].assignedAuthor)));
+  asserter : Build_Reference(Output_Resource(AssignedEntity_PractitionerRole(Observation.author[0].assignedAuthor, Timestamp), Timestamp));
   recordedDate (if ~IsInterval(Observation.author[0].time)) : Convert_DateTime(Observation.author[0].time.value);
-  encounter : Build_Reference(Output_Resource(Encounter_Encounter(Observation.encounter[0], Patient)));
+  encounter : Build_Reference(Output_Resource(Encounter_Encounter(Observation.encounter[0], Patient, Timestamp), Timestamp));
   subject : Build_Reference(Patient);
 }
 
@@ -343,12 +348,13 @@ def Observation_Condition(required Observation, StatusCode, required Patient) {
 // Argument(s):
 //   Procedure Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.2.7.1-2013-01-31T000000.html
 //   Patient Resource already constructed through PatientRole_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Timestamp: Resource creation timestamp https://www.hl7.org/fhir/datatypes.html#instant
 //
 // Output(s):
 //   Procedure: https://www.hl7.org/fhir/procedure.html
 //   PractitionerRole: https://www.hl7.org/fhir/practitionerrole.html
 //
-def Procedure_Procedure(required Procedure, required Patient) {
+def Procedure_Procedure(required Procedure, required Patient, Timestamp) {
   resourceType: "Procedure";
   identifier[] : II_Identifier(Procedure.id[]);
   if (IsInterval(Procedure.effectiveTime)) {
@@ -358,7 +364,7 @@ def Procedure_Procedure(required Procedure, required Patient) {
     performedDateTime (if Procedure.effectiveTime.value): Convert_DateTime(Procedure.effectiveTime.value);
   }
   bodySite[] : CD_CodeableConcept(Procedure.targetSiteCode[]);
-  performer[].actor : Build_Reference[](Output_Resource[](AssignedEntity_PractitionerRole[](Procedure.performer[*].assignedEntity[])));
+  performer[].actor : Build_Reference[](Output_Resource[](AssignedEntity_PractitionerRole[](Procedure.performer[*].assignedEntity[], Timestamp), Timestamp));
   status : Procedure.statusCode.code;
   if (Procedure.code) {
     code : CD_CodeableConcept(Procedure.code);
@@ -374,13 +380,14 @@ def Procedure_Procedure(required Procedure, required Patient) {
 // Argument(s):
 //   Results Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.2.3.1-2013-01-31T000000.html
 //   Patient Resource already constructed through PatientRole_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Timestamp: Resource creation timestamp https://www.hl7.org/fhir/datatypes.html#instant
 //
 // Output(s):
 //   DiagnosticReport: https://www.hl7.org/fhir/diagnosticreport.html
 //   PractitionerRole: https://www.hl7.org/fhir/practitionerrole.html
 //   Observation: https://www.hl7.org/fhir/observation.html
 //
-def ResultSection_DiagnosticReport(required Organizer, required Patient){
+def ResultSection_DiagnosticReport(required Organizer, required Patient, Timestamp){
   resourceType: "DiagnosticReport"
   identifier[] : II_Identifier(Organizer.id[]);
   if (Organizer.statusCode.code) {
@@ -405,9 +412,9 @@ def ResultSection_DiagnosticReport(required Organizer, required Patient){
   }
   // templateId = 2.16.840.1.113883.10.20.22.4.2 corresponds to Result Observation
   var Observation : Organizer.component[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.2")];
-  result[] : Build_Reference(Output_Resource[](Observation_Observation[](Observation[], Patient, "laboratory")));
+  result[] : Build_Reference(Output_Resource[](Observation_Observation[](Observation[], Patient, "laboratory", Timestamp), Timestamp));
   //It is already covered under Observation.performer
-  //performer[] : Build_Reference(Output_Resource[](AssignedEntity_PractitionerRole[](Observation[*].author[*].assignedAuthor[])));
+  //performer[] : Build_Reference(Output_Resource[](AssignedEntity_PractitionerRole[](Observation[*].author[*].assignedAuthor[], Timestamp), Timestamp));
   if (Observation[0].author[0].time and ~IsInterval(Observation[0].author[0].time)){
     issued : Convert_Instant(Observation[0].author[0].time.value);
   } else {
@@ -421,6 +428,7 @@ def ResultSection_DiagnosticReport(required Organizer, required Patient){
 // Argument(s):
 //   Medications Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.2.1.1-2013-01-31T000000.html
 //   Patient Resource already constructed through PatientRole_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Timestamp: Resource creation timestamp https://www.hl7.org/fhir/datatypes.html#instant
 //
 // Output(s):
 //   MedicationStatement: https://www.hl7.org/fhir/medicationstatement.html
@@ -429,14 +437,14 @@ def ResultSection_DiagnosticReport(required Organizer, required Patient){
 //   Condition: https://www.hl7.org/fhir/condition.html
 //   MedicationDispense: https://www.hl7.org/fhir/medicationdispense.html
 //
-def SubstanceAdministration_MedicationStatement(required SubstanceAdministration, required Patient) {
+def SubstanceAdministration_MedicationStatement(required SubstanceAdministration, required Patient, Timestamp) {
   resourceType: "MedicationStatement";
   identifier[] : II_Identifier(SubstanceAdministration.id[]);
-  informationSource : Build_Reference(Output_Resource(AssignedEntity_PractitionerRole(SubstanceAdministration.author[0].assignedAuthor)));
+  informationSource : Build_Reference(Output_Resource(AssignedEntity_PractitionerRole(SubstanceAdministration.author[0].assignedAuthor, Timestamp), Timestamp));
   status : Convert_TerminologyCode(SubstanceAdministration.statusCode.code, "SubstanceAdministrationStatusCode");
   // templateId = 2.16.840.1.113883.10.20.22.4.23 corresponds to Medication Information
   if (templateIdHasRoot(SubstanceAdministration.consumable.manufacturedProduct.templateId, "2.16.840.1.113883.10.20.22.4.23")) {
-    medicationReference : Build_Reference(Output_Resource(ManufacturedProduct_Medication(SubstanceAdministration.consumable.manufacturedProduct)));
+    medicationReference : Build_Reference(Output_Resource(ManufacturedProduct_Medication(SubstanceAdministration.consumable.manufacturedProduct, Timestamp), Timestamp));
   }
   dosage[0].route : CD_CodeableConcept(SubstanceAdministration.routeCode);
   dosage[0].doseAndRate[0].doseQuantity : PQ_Quantity(SubstanceAdministration.doseQuantity);
@@ -445,10 +453,10 @@ def SubstanceAdministration_MedicationStatement(required SubstanceAdministration
   dosage[0].maxDosePerPeriod.denominator : PQ_Quantity(SubstanceAdministration.maxDoseQuantity.denominator);
   // templateId = 2.16.840.1.113883.10.20.22.4.19 corresponds to Indication
   var Observation : SubstanceAdministration.entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.19")];
-  reasonReference[] : Build_Reference(Output_Resource[](Observation_Condition[](Observation[], "", Patient)));
+  reasonReference[] : Build_Reference(Output_Resource[](Observation_Condition[](Observation[], "", Patient, Timestamp), Timestamp));
   // templateId = 2.16.840.1.113883.10.20.22.4.18 corresponds to Medication Dispense
   var Supply : SubstanceAdministration.entryRelationship[*].supply[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.18")];
-  partOf[] : Build_Reference(Output_Resource[](Supply_MedicationDispense[](Supply[], Patient)));
+  partOf[] : Build_Reference(Output_Resource[](Supply_MedicationDispense[](Supply[], Patient, Timestamp), Timestamp));
   subject : Build_Reference(Patient);
 }
 
@@ -457,15 +465,16 @@ def SubstanceAdministration_MedicationStatement(required SubstanceAdministration
 // Argument(s):
 //   Allergies Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.2.6.1-2013-01-31T000000.html
 //   Patient Resource already constructed through PatientRole_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Timestamp: Resource creation timestamp https://www.hl7.org/fhir/datatypes.html#instant
 //
 // Output(s):
 //   AllergyIntolerance: https://www.hl7.org/fhir/allergyintolerance.html
 //   PractitionerRole: https://www.hl7.org/fhir/practitionerrole.html
 //
-def Act_AllergyIntolerance(required Act, required Patient) {
+def Act_AllergyIntolerance(required Act, required Patient, Timestamp) {
   resourceType: "AllergyIntolerance";
   identifier[] : II_Identifier(Act.id[]);
-  recorder : Build_Reference(Output_Resource(AssignedEntity_PractitionerRole(Act.author[0].assignedAuthor)));
+  recorder : Build_Reference(Output_Resource(AssignedEntity_PractitionerRole(Act.author[0].assignedAuthor, Timestamp), Timestamp));
   clinicalStatus.coding[0].code : Act.statusCode.code;
   clinicalStatus.coding[0].system : "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical";
   // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-allergyintolerance-definitions.html#AllergyIntolerance.code
@@ -501,13 +510,14 @@ def Act_AllergyIntolerance(required Act, required Patient) {
 // Argument(s):
 //   Immunizations Section: http://ccda.art-decor.org/ccda-html-20150727T182455/tmp-2.16.840.1.113883.10.20.22.2.2.1-2013-01-31T000000.html
 //   Patient Resource already constructed through PatientRole_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Timestamp: Resource creation timestamp https://www.hl7.org/fhir/datatypes.html#instant
 //
 // Output(s):
 //   Immunization: https://www.hl7.org/fhir/immunization.html
 //   Organization: https://www.hl7.org/fhir/organization.html
 //   Observation: https://www.hl7.org/fhir/observation.html
 //
-def SubstanceAdministration_Immunization(required SubstanceAdministration, required Patient) {
+def SubstanceAdministration_Immunization(required SubstanceAdministration, required Patient, Timestamp) {
   resourceType: "Immunization";
   identifier[] : II_Identifier(SubstanceAdministration.id[]);
   recorded (if ~IsInterval(SubstanceAdministration.effectiveTime[0])): Convert_DateTime(SubstanceAdministration.effectiveTime[0].value);
@@ -523,7 +533,7 @@ def SubstanceAdministration_Immunization(required SubstanceAdministration, requi
   site : CD_CodeableConcept(SubstanceAdministration.approachSiteCode[0]);
   // templateId = 2.16.840.1.113883.10.20.22.4.54 corresponds to Immunization Medication Information
   if (templateIdHasRoot(SubstanceAdministration.consumable.manufacturedProduct.templateId, "2.16.840.1.113883.10.20.22.4.54")) {
-    manufacturer : Build_Reference(Output_Resource(ORG_Organization(SubstanceAdministration.consumable.manufacturedProduct.manufacturerOrganization)));
+    manufacturer : Build_Reference(Output_Resource(ORG_Organization(SubstanceAdministration.consumable.manufacturedProduct.manufacturerOrganization), Timestamp));
   }
   if (SubstanceAdministration.consumable.manufacturedProduct.manufacturedMaterial.code.code) {
     vaccineCode : CD_CodeableConcept(SubstanceAdministration.consumable.manufacturedProduct.manufacturedMaterial.code);
@@ -531,7 +541,7 @@ def SubstanceAdministration_Immunization(required SubstanceAdministration, requi
     vaccineCode.coding[0].code : "unknown";
   }
   lotNumber : SubstanceAdministration.consumable.manufacturedProduct.manufacturedMaterial.lotNumberText;
-  performer[].actor : Build_Reference[](Output_Resource[](AssignedEntity_PractitionerRole[](SubstanceAdministration.performer[*].assignedEntity[])));
+  performer[].actor : Build_Reference[](Output_Resource[](AssignedEntity_PractitionerRole[](SubstanceAdministration.performer[*].assignedEntity[], Timestamp), Timestamp));
   // templateId = 2.16.840.1.113883.10.20.22.4.53 corresponds to Immunization Refusal Reason
   var RefusalReason : SubstanceAdministration.entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.53")];
   statusReason : CD_CodeableConcept(RefusalReason[0].code);
@@ -541,7 +551,7 @@ def SubstanceAdministration_Immunization(required SubstanceAdministration, requi
   reasonCode[] : CD_CodeableConcept(IndicationReasonValue[]);
   // templateId = 2.16.840.1.113883.10.20.22.4.9 corresponds to Reaction Observation
   var ReactionObservation : SubstanceAdministration.entryRelationship[*].observation[where templateIdHasRoot($.templateId, "2.16.840.1.113883.10.20.22.4.9")];
-  reaction[] : Build_ImmunizationReaction(ReactionObservation[], Patient);
+  reaction[] : Build_ImmunizationReaction(ReactionObservation[], Patient, Timestamp);
   patient : Build_Reference(Patient);
   // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-immunization-definitions.html#Immunization.primarySource
   primarySource : true;

@@ -1,4 +1,4 @@
-def Output_Resource(required item) {
+def Output_Resource(required item, required Timestamp) {
   var Item : item;
   var Item.id (if ~item.id) : $Hash(item);
   if (ID_Reconciliation()) {
@@ -16,6 +16,8 @@ def Output_Resource(required item) {
         var Item.identifier[] : II_HashIdentifier(item);
       }
     }
+    // Timestamp: Resource creation timestamp https://www.hl7.org/fhir/datatypes.html#instant
+    var Item.extension[] : Build_ReconciledTimestampExtension(Timestamp);
   }
   out Resources : Item;
   $this : Item;
