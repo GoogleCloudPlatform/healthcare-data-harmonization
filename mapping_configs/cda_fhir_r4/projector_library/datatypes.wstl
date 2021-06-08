@@ -86,7 +86,7 @@ def TEL_ContactPoint(required TEL) {
 def ORG_Organization(ORG) {
   resourceType : "Organization";
   if (ORG.id) {
-    identifier[] :  II_Identifier(ORG.id[]);
+    identifier[] :  II_Identifier(ORG.id[], "Organization");
   } else {
     // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-organization-definitions.html#Organization.identifier
     identifier[0].value : "unkown";
@@ -130,7 +130,7 @@ def Build_Organization(required OrgName) {
 //
 def ORG_CustodianOrganization(required ORG) {
   resourceType : "Organization"
-  identifier[] :  II_Identifier(ORG.id[])
+  identifier[] :  II_Identifier(ORG.id[], "Organization")
   name (if $Type(ORG.name) ~= "container") : ORG.name;
   // Fixed-value to ensure fhirpath-constraint-violation-ContainedResource.ofType(Bundle).entry.resource.ofType(Organization): "(identifier.count() + name.count()) > 0"
   name (if ~ORG.name) : "unknown";
@@ -148,10 +148,14 @@ def ORG_CustodianOrganization(required ORG) {
 // Output(s):
 //   Identifier datatype: https://www.hl7.org/fhir/datatypes.html#Identifier
 //
-def II_Identifier(required II) {
+def II_Identifier(required II, ResourceType) {
   if (II.extension) {
     value : II.extension;
     system (if II.'root'): $StrCat("urn:oid:", II.'root');
+    if (Reconciliation_Match(ResourceType, II.'root') and ID_Reconciliation()) {
+      type.coding[0].code: "match"
+      type.coding[0].system: "urn:oid:google/reconciliation-id";
+    }
   }
 }
 
@@ -265,10 +269,10 @@ def Guardian_Contact(required Guardian) {
 //
 def Person_Practitioner(PR, ID) {
   if (ID){
-    identifier[]: II_Identifier(ID[]);
+    identifier[]: II_Identifier(ID[], "Practitioner");
   } else {
     // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-practitioner-definitions.html#Practitioner.identifier
-    identifier[0].value : "unkown";
+    identifier[0].value : "unknown";
     identifier[0].system : "http://hl7.org/fhir/sid/us-npi";
   }
   resourceType: "Practitioner";
@@ -362,7 +366,7 @@ def Observation_ConditionDataType(required Observation) {
 //
 def ManufacturedProduct_Medication(required ManufacturedProduct, Timestamp) {
   resourceType: "Medication";
-  identifier[] : II_Identifier(ManufacturedProduct.id[]);
+  identifier[] : II_Identifier(ManufacturedProduct.id[], "Medication");
   code : CD_CodeableConcept(ManufacturedProduct.manufacturedMaterial.code);
   ingredient[].itemCodeableConcept : CD_CodeableConcept[](ManufacturedProduct.manufacturedMaterial.code.translation[]);
   manufacturer : Build_Reference(Output_Resource(ORG_Organization(ManufacturedProduct.manufacturerOrganization), Timestamp));
@@ -380,7 +384,7 @@ def ManufacturedProduct_Medication(required ManufacturedProduct, Timestamp) {
 //
 def Supply_MedicationDispense(required Supply, Patient, Timestamp) {
   resourceType: "MedicationDispense";
-  identifier[] : II_Identifier(Supply.id[]);
+  identifier[] : II_Identifier(Supply.id[], "MedicationDispense");
   status : Convert_TerminologyCode(Supply.statusCode.code, "SupplyStatusCode");
   type : CD_CodeableConcept(Supply.code);
   // templateId = 2.16.840.1.113883.10.20.22.4.23 corresponds to Medication Information
@@ -452,7 +456,7 @@ def Build_Section(required Section, required Resource, Timestamp) {
 //
 def ParticipantRole_Location(ParticipantRole) {
   resourceType: "Location";
-  identifier[] : II_Identifier(ParticipantRole.id[]);
+  identifier[] : II_Identifier(ParticipantRole.id[], "Location");
   type[] : CD_CodeableConcept(ParticipantRole.code);
   if (ParticipantRole.playingEntity.name[0]) {
     name : ParticipantRole.playingEntity.name[0];

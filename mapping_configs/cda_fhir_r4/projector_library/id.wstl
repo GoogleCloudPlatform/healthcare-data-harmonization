@@ -2,3 +2,48 @@ def ID_Reconciliation() {
   // Set to true to enable reconciliation.
   $this : false;
 }
+
+// Description: Construct a list of system URIs to augment FHIR resource reconciliation matching based on a resourceType
+//
+// Argument(s):
+//   Resource: FHIR resourceType: https://www.hl7.org/fhir/resource.html
+//   System: A list of URIs that represent particular value-sets
+//
+// Output(s):
+//   Boolean: True or False
+//
+def Reconciliation_Element(Resource, System) {
+  resourceType : Resource;
+  systemList : System;
+}
+
+// Description: Construct a list of system URIs to augment FHIR resource reconciliation matching based on each resourceType
+//
+// Argument(s):
+//
+// Output(s):
+//   List: a list of system URIs based on each resourceType
+//
+def Reconciliation_List() {
+  var OrganizationReconList : Reconciliation_Element("Organization", $ListOf("http://hl7.org/fhir/sid/us-npi"));
+  var PatientReconList : Reconciliation_Element("Patient", $ListOf("2.16.840.1.113883.19.5"));
+  var PractitionerReconList : Reconciliation_Element("Practitioner", $ListOf("2.16.840.1.113883.4.6"));
+  var PractitionerRoleReconList : Reconciliation_Element("PractitionerRole", $ListOf("2.16.840.1.113883.4.6"));
+
+  $this : $ListOf(OrganizationReconList, PatientReconList, PractitionerReconList, PractitionerRoleReconList);
+}
+
+// Description: Match a system against allowed list of system URIs to augment FHIR resource reconciliation matching based on each resourceType
+//
+// Argument(s):
+//   Resource: FHIR resourceType: https://www.hl7.org/fhir/resource.html
+//   System: A URI that represents a particular value-set
+//
+// Output(s):
+//   Boolean: True or False
+//
+def Reconciliation_Match(Resource, System) {
+  var RList: Reconciliation_List();
+  var Reconciliation_Element: RList[where $.resourceType = Resource];
+  $this : $ListLen(Reconciliation_Element[0].systemList[where $ = System]) > 0;
+}

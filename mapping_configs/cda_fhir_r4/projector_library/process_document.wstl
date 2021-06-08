@@ -41,7 +41,7 @@ def Process_Document(required ClinicalDocument, Timestamp) {
   var Custodian : Output_Resource(ORG_CustodianOrganization(ClinicalDocument.custodian.assignedCustodian.representedCustodianOrganization), Timestamp);
 
   resourceType : "Composition";
-  identifier :  II_Identifier(ClinicalDocument.id);
+  identifier :  II_Identifier(ClinicalDocument.id, "Composition");
   date : Extract_Date(ClinicalDocument.effectiveTime.value);
   type :  CD_CodeableConcept(ClinicalDocument.code);
   title : ClinicalDocument.title;

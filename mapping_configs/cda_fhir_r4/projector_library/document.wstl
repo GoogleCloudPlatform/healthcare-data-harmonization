@@ -90,7 +90,7 @@ def Convert_TerminologyCode(conceptID, system){
 //   Organization: https://www.hl7.org/fhir/organization.html
 //
 def PatientRole_Patient(required PatientRole, GeneralPractitioner, Timestamp) {
-  identifier[] : II_Identifier(PatientRole.id[]);
+  identifier[] : II_Identifier(PatientRole.id[], "Patient");
   address[] : AD_Address(PatientRole.addr[]);
   telecom[] : TEL_ContactPoint(PatientRole.telecom[]);
   managingOrganization : Build_Reference(Output_Resource(ORG_Organization(PatientRole.providerOrganization), Timestamp));
@@ -140,7 +140,7 @@ def PatientRole_Patient(required PatientRole, GeneralPractitioner, Timestamp) {
 //   Organization: https://www.hl7.org/fhir/organization.html
 //
 def AssignedEntity_PractitionerRole(required AssignedEntity, Timestamp) {
-  identifier[]:  II_Identifier(AssignedEntity.id[]);
+  identifier[]:  II_Identifier(AssignedEntity.id[], "PractitionerRole");
   resourceType: "PractitionerRole";
   // Fixed value to ensure US-Core validation http://hl7.org/fhir/us/davinci-pdex-plan-net/STU1/StructureDefinition-plannet-PractitionerRole-definitions.html#PractitionerRole.active
   active : true;
@@ -172,7 +172,7 @@ def AssignedEntity_PractitionerRole(required AssignedEntity, Timestamp) {
 //
 def FamilyMemberHistorySection_FamilyMemberHistory(required Organizer, required Patient){
   resourceType: "FamilyMemberHistory"
-  identifier[] : II_Identifier(Organizer.id[]);
+  identifier[] : II_Identifier(Organizer.id[], "FamilyMemberHistory");
   status : Organizer.statusCode.code;
   relationship :  CD_CodeableConcept(Organizer.subject.relatedSubject.code);
   sex : CD_CodeableConcept(Organizer.subject.relatedSubject.subject.administrativeGenderCode);
@@ -205,7 +205,7 @@ def FamilyMemberHistorySection_FamilyMemberHistory(required Organizer, required 
 //
 def Observation_Observation(required Observation, required Patient, required Category, Timestamp) {
   resourceType: "Observation"
-  identifier[] : II_Identifier(Observation.id[]);
+  identifier[] : II_Identifier(Observation.id[], "Observation");
   if (Observation.code.code) {
     code : CD_CodeableConcept(Observation.code);
   } else {
@@ -251,7 +251,7 @@ def Observation_Observation(required Observation, required Patient, required Cat
 //
 def ParticipantRole_Device(required ParticipantRole, required Patient) {
   resourceType: "Device"
-  identifier[] : II_Identifier(ParticipantRole.id[]);
+  identifier[] : II_Identifier(ParticipantRole.id[], "Device");
   type : CD_CodeableConcept(ParticipantRole.playingDevice.code);
   // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-implantable-device-definitions.html#Device.patient
   patient : Build_Reference(Patient);
@@ -270,7 +270,7 @@ def ParticipantRole_Device(required ParticipantRole, required Patient) {
 //
 def Encounter_Encounter(required Encounter, Patient, Timestamp) {
   resourceType: "Encounter"
-  identifier[] : II_Identifier(Encounter.id[]);
+  identifier[] : II_Identifier(Encounter.id[], "Encounter");
   if (Encounter.code.code) {
     type[] : CD_CodeableConcept(Encounter.code);
   } else {
@@ -311,7 +311,7 @@ def Encounter_Encounter(required Encounter, Patient, Timestamp) {
 //
 def Observation_Condition(required Observation, StatusCode, required Patient, Timestamp) {
   resourceType: "Condition";
-  identifier[] : II_Identifier(Observation.id[]);
+  identifier[] : II_Identifier(Observation.id[], "Condition");
   category[] : CD_CodeableConcept(Observation.code);
   if (StatusCode) {
     clinicalStatus.coding[0].code : StatusCode;
@@ -356,7 +356,7 @@ def Observation_Condition(required Observation, StatusCode, required Patient, Ti
 //
 def Procedure_Procedure(required Procedure, required Patient, Timestamp) {
   resourceType: "Procedure";
-  identifier[] : II_Identifier(Procedure.id[]);
+  identifier[] : II_Identifier(Procedure.id[], "Procedure");
   if (IsInterval(Procedure.effectiveTime)) {
     performedPeriod.start : Convert_DateTime(Procedure.effectiveTime.low.value);
     performedPeriod.end : Convert_DateTime(Procedure.effectiveTime.high.value);
@@ -389,7 +389,7 @@ def Procedure_Procedure(required Procedure, required Patient, Timestamp) {
 //
 def ResultSection_DiagnosticReport(required Organizer, required Patient, Timestamp){
   resourceType: "DiagnosticReport"
-  identifier[] : II_Identifier(Organizer.id[]);
+  identifier[] : II_Identifier(Organizer.id[], "DiagnosticReport");
   if (Organizer.statusCode.code) {
     status : Convert_TerminologyCode(Organizer.statusCode.code, "ResultOrganizerStatusCode");
   } else {
@@ -439,7 +439,7 @@ def ResultSection_DiagnosticReport(required Organizer, required Patient, Timesta
 //
 def SubstanceAdministration_MedicationStatement(required SubstanceAdministration, required Patient, Timestamp) {
   resourceType: "MedicationStatement";
-  identifier[] : II_Identifier(SubstanceAdministration.id[]);
+  identifier[] : II_Identifier(SubstanceAdministration.id[], "MedicationStatement");
   informationSource : Build_Reference(Output_Resource(AssignedEntity_PractitionerRole(SubstanceAdministration.author[0].assignedAuthor, Timestamp), Timestamp));
   status : Convert_TerminologyCode(SubstanceAdministration.statusCode.code, "SubstanceAdministrationStatusCode");
   // templateId = 2.16.840.1.113883.10.20.22.4.23 corresponds to Medication Information
@@ -473,7 +473,7 @@ def SubstanceAdministration_MedicationStatement(required SubstanceAdministration
 //
 def Act_AllergyIntolerance(required Act, required Patient, Timestamp) {
   resourceType: "AllergyIntolerance";
-  identifier[] : II_Identifier(Act.id[]);
+  identifier[] : II_Identifier(Act.id[], "AllergyIntolerance");
   recorder : Build_Reference(Output_Resource(AssignedEntity_PractitionerRole(Act.author[0].assignedAuthor, Timestamp), Timestamp));
   clinicalStatus.coding[0].code : Act.statusCode.code;
   clinicalStatus.coding[0].system : "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical";
@@ -519,7 +519,7 @@ def Act_AllergyIntolerance(required Act, required Patient, Timestamp) {
 //
 def SubstanceAdministration_Immunization(required SubstanceAdministration, required Patient, Timestamp) {
   resourceType: "Immunization";
-  identifier[] : II_Identifier(SubstanceAdministration.id[]);
+  identifier[] : II_Identifier(SubstanceAdministration.id[], "Immunization");
   recorded (if ~IsInterval(SubstanceAdministration.effectiveTime[0])): Convert_DateTime(SubstanceAdministration.effectiveTime[0].value);
   if (~IsInterval(SubstanceAdministration.effectiveTime[0]) and SubstanceAdministration.effectiveTime) {
     occurrenceDateTime : Convert_DateTime(SubstanceAdministration.effectiveTime[0].value);
