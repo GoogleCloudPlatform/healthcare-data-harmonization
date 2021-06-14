@@ -1,0 +1,36 @@
+// Description: Define OMOP (v6.0) to FHIR R4 transformation
+//
+// Argument(s): Each of the following OMOP (v6.0) tables
+//   ConditionOccurence: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/CONDITION_OCCURRENCE.md
+//   Drug_Exposure: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/DRUG_EXPOSURE.md
+//   Location: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedHealthSystemDataTables/LOCATION.md
+//   Observation: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/OBSERVATION.md
+//   Person: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/PERSON.md
+//   Provider: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedHealthSystemDataTables/PROVIDER.md
+//   ProcedureOccurence: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/PROCEDURE_OCCURRENCE.md
+//   Specimen: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/SPECIMEN.md
+//   VisitOccurrence: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/VISIT_OCCURRENCE.md
+//
+// Output(s): Each of the following FHIR R4 resources
+//   Condition: https://www.hl7.org/fhir/condition.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   MedicationAdministration: https://www.hl7.org/fhir/MedicationAdministration.html
+//   MedicationDispense: https://www.hl7.org/fhir/medicationdispense.html
+//   MedicationRequest: https://www.hl7.org/fhir/medicationrequest.html
+//   MedicationStatement: https://hl7.org/fhir/medicationstatement.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Procedure: https://www.hl7.org/fhir/procedure.html
+//   Specimen: https://hl7.org/fhir/specimen.html
+//
+def OMOP_FHIR(resource) {
+  $this (if resource.ConditionOccurence?) : Process_ConditionOccurence(resource.ConditionOccurence);
+  $this (if resource.DrugExposure?) : Process_DrugExposure(resource.DrugExposure);
+  $this (if resource.Observation?) : Process_Observation(resource.Observation);
+  $this (if resource.Person? and resource.Location?) : Process_Person(resource.Person, resource.Location);
+  $this (if resource.ProcedureOccurence?) : Process_ProcedureOccurence(resource.ProcedureOccurence);
+  $this (if resource.Provider?) : Process_Provider(resource.Provider);
+  $this (if resource.Specimen?) : Process_Specimen(resource.Specimen);
+  $this (if resource.VisitOccurrence?) : Process_VisitOccurrence(resource.VisitOccurrence);
+}

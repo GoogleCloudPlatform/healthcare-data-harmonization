@@ -1,0 +1,102 @@
+// Description: Process OMOP (v6.0) ConditionOccurence to construct FHIR R4 Condition
+//
+// Argument(s):
+//   ConditionOccurence: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/CONDITION_OCCURRENCE.md
+//
+// Output(s):
+//   Condition: https://www.hl7.org/fhir/condition.html
+//
+def Process_ConditionOccurence(ConditionOccurence) {
+  out Resources : ConditionOccurence_Condition(ConditionOccurence);
+}
+
+// Description: Process OMOP (v6.0) Drug_Exposure to construct FHIR R4 MedicationAdministration, MedicationDispense, MedicationRequest, MedicationStatement
+//
+// Argument(s):
+//   Drug_Exposure: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/DRUG_EXPOSURE.md
+//
+// Output(s):
+//   MedicationAdministration: https://www.hl7.org/fhir/MedicationAdministration.html
+//   MedicationDispense: https://www.hl7.org/fhir/medicationdispense.html
+//   MedicationRequest: https://www.hl7.org/fhir/medicationrequest.html
+//   MedicationStatement: https://hl7.org/fhir/medicationstatement.html
+//
+def Process_DrugExposure(DrugExposure) {
+  out Resources : DrugExposure_MedicationStatement(DrugExposure);
+  out Resources : DrugExposure_MedicationRequest(DrugExposure);
+  out Resources : DrugExposure_MedicationDispense(DrugExposure);
+  out Resources : DrugExposure_MedicationAdministration(DrugExposure);
+}
+
+// Description: Process OMOP (v6.0) Observation to construct FHIR R4 Observation
+//
+// Argument(s):
+//   Observation: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/OBSERVATION.md
+//
+// Output(s):
+//   Observation: https://www.hl7.org/fhir/observation.html
+//
+def Process_Observation(Observation) {
+  out Resources : Observation_Observation(Observation);
+}
+
+// Description: Process OMOP (v6.0) Person, Location to construct FHIR R4 Patient
+//
+// Argument(s):
+//   Person: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/PERSON.md
+//   Location: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedHealthSystemDataTables/LOCATION.md
+//
+// Output(s):
+//   Patient: https://www.hl7.org/fhir/patient.html
+//
+def Process_Person(Person, Location) {
+  out Resources : Person_Patient(Person, Location);
+}
+
+// Description: Process OMOP (v6.0) ProcedureOccurence to construct FHIR R4 Procedure
+//
+// Argument(s):
+//   ProcedureOccurence: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/PROCEDURE_OCCURRENCE.md
+//
+// Output(s):
+//   Procedure: https://www.hl7.org/fhir/procedure.html
+//
+def Process_ProcedureOccurence(ProcedureOccurence) {
+  out Resources : ProcedureOccurence_Procedure(ProcedureOccurence);
+}
+
+// Description: Process OMOP (v6.0) Provider to construct FHIR R4 Practitioner
+//
+// Argument(s):
+//   Provider: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedHealthSystemDataTables/PROVIDER.md
+//
+// Output(s):
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def Process_Provider(Provider) {
+  out Resources : Provider_Practitioner(Provider);
+}
+
+// Description: Process OMOP (v6.0) Specimen to construct FHIR R4 Specimen
+//
+// Argument(s):
+//   Specimen: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/SPECIMEN.md
+//
+// Output(s):
+//   Specimen: https://hl7.org/fhir/specimen.html
+//
+def Process_Specimen(Specimen) {
+  out Resources : Specimen_Specimen(Specimen);
+}
+
+// Description: Process OMOP (v6.0) VisitOccurrence to construct FHIR R4 Encounter
+//
+// Argument(s):
+//   VisitOccurrence: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/VISIT_OCCURRENCE.md
+//
+// Output(s):
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//
+def Process_VisitOccurrence(VisitOccurrence) {
+  out Resources : VisitOccurrence_Encounter(VisitOccurrence);
+}

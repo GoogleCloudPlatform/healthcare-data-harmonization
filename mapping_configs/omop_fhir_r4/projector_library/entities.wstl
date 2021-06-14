@@ -1,0 +1,379 @@
+// Description: Converts OMOP (v6.0) terminology into FHIR R4 terminology
+//
+// Argument(s):
+//   conceptID:  https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedVocabularies/CONCEPT.md
+//   system: System of the source code specified in the concept map (https://build.fhir.org/conceptmap-definitions.html#ConceptMap.group.source).
+//
+// Output(s):
+//   FHIR CodeableConcept datatype: https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def Convert_Terminology(conceptID, system){
+  var mapping : $HarmonizeCode("$Local", NumToStr(conceptID), system, "OMOP-FHIR-ConceptMap");
+  coding : mapping;
+}
+
+// Description: Converts OMOP (v6.0) terminology into FHIR R4 terminology
+//
+// Argument(s):
+//   conceptID:  https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedVocabularies/CONCEPT.md
+//   system: System of the source code specified in the concept map (https://build.fhir.org/conceptmap-definitions.html#ConceptMap.group.source).
+//
+// Output(s):
+//   FHIR Coding datatype: https://www.hl7.org/fhir/datatypes.html#Coding
+//
+def Convert_TerminologyCoding(conceptID, system){
+  var mapping : $HarmonizeCode("$Local", NumToStr(conceptID), system, "OMOP-FHIR-ConceptMap");
+  $this : mapping[0];
+}
+
+// Description: Converts OMOP (v6.0) terminology into FHIR R4 terminology
+//
+// Argument(s):
+//   conceptID:  https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedVocabularies/CONCEPT.md
+//   system: System of the source code specified in the concept map (https://build.fhir.org/conceptmap-definitions.html#ConceptMap.group.source).
+//
+// Output(s):
+//   FHIR Code datatype: https://www.hl7.org/fhir/datatypes.html#code
+//
+def Convert_TerminologyCode(conceptID, system){
+  var mapping : $HarmonizeCode("$Local", NumToStr(conceptID), system, "OMOP-FHIR-ConceptMap");
+  $this : mapping[0].code;
+}
+
+def NumToStr(Obj){
+  $this : $StrFmt("%d", Obj);
+}
+
+// Description: Constructs a FHIR R4 Encounter Resource based on OMOP VisitOccurrence Table (v6.0)
+//
+// Argument(s):
+//   VisitOccurrence: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/VISIT_OCCURRENCE.md
+//
+// Output(s):
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//
+def VisitOccurrence_Encounter(VisitOccurrence) {
+  id : NumToStr(VisitOccurrence.visit_occurrence_id);
+  subject : Build_Reference("Patient", VisitOccurrence.person_id);
+  class : Convert_TerminologyCoding(VisitOccurrence.visit_concept_id, "Visit");
+  period.start : VisitOccurrence.visit_start_datetime;
+  period.end : VisitOccurrence.visit_end_datetime;
+  type[] : Convert_Terminology(VisitOccurrence.visit_type_concept_id, "");
+  serviceProvider : Build_Reference("Organization", VisitOccurrence.care_site_id);
+  participant[0].individual : Build_Reference("Practitioner", VisitOccurrence.provider_id);
+  status : "finished";
+  resourceType : "Encounter";
+}
+
+// Description: Constructs a FHIR R4 Patient Resource based on OMOP Person Table (v6.0)
+//
+// Argument(s):
+//   Person: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/PERSON.md
+//   Location: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedHealthSystemDataTables/LOCATION.md
+//
+// Output(s):
+//   Patient: https://www.hl7.org/fhir/patient.html
+//
+def Person_Patient(Person, Location) {
+  id : NumToStr(Person.person_id);
+  identifier[0].value : Person.person_source_value;
+  identifier[0].system : "unknown";
+  name[0].given[0] : Person.first_name ;
+  name[0].family : Person.last_name;
+  gender : Convert_TerminologyCode(Person.gender_concept_id, "Gender");
+  birthDate : Person.birth_datetime;
+  deceasedDateTime : Person.death_datetime;
+  extension[0].url : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race";
+  var RaceValueCoding : Convert_TerminologyCoding(Person.race_concept_id, "Race");
+  if (RaceValueCoding) {
+    extension[0].extension[0].valueCoding : RaceValueCoding;
+    extension[0].extension[0].url : "ombCategory";
+    extension[0].extension[1].valueString : RaceValueCoding.display;
+    extension[0].extension[1].url : "text";
+  } else {
+    extension[0].extension[0].valueString : Person.race_concept_id;
+    extension[0].extension[0].url : "text";
+  }
+  extension[1].url : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity";
+  var EthnicityValueCoding : Convert_TerminologyCoding(Person.ethnicity_concept_id, "Ethnicity");
+  if (EthnicityValueCoding){
+    extension[1].extension[0].valueCoding : EthnicityValueCoding;
+    extension[1].extension[0].url : "ombCategory";
+    extension[1].extension[1].valueString : EthnicityValueCoding.display;
+    extension[1].extension[1].url : "text";
+  } else {
+    extension[1].extension[0].valueString : Person.ethnicity_concept_id;
+    extension[1].extension[0].url : "text";
+  }
+  generalPractitioner[0] : Build_Reference("Practitioner", Person.provider_id);
+  managingOrganization : Build_Reference("Organization", Person.care_site_id);
+  address[0] : Location_Address(Location);
+  resourceType : "Patient";
+}
+
+// Description: Constructs a FHIR R4 Address Datatype based on OMOP Location Table (v6.0)
+//
+// Argument(s):
+//   Address: http://hl7.org/fhir/datatypes.html#Address
+//
+// Output(s):
+//   Location: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedHealthSystemDataTables/LOCATION.md
+//
+def Location_Address(Location) {
+  line[0] : Location.address_1;
+  line[1] : Location.address_2;
+  city : Location.city;
+  state : Location.state;
+  postalCode : Location.zip;
+  district : Location.county;
+  country : Location.country;
+  text : Location.location_source_value;
+  extension[0].url : "http://hl7.org/fhir/StructureDefinition/geolocation";
+  extension[0].extension[0].url : "latitude";
+  extension[0].extension[0].valueDecimal : Location.latitude;
+  extension[0].extension[1].url : "longitude";
+  extension[0].extension[1].valueDecimal : Location.longitude ;
+}
+
+// Description: Constructs a FHIR R4 Observation Resource based on OMOP Observation Table (v6.0)
+//
+// Argument(s):
+//   Observation: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/OBSERVATION.md
+//
+// Output(s):
+//   Observation: https://www.hl7.org/fhir/observation.html
+//
+def Observation_Observation(Observation) {
+  id: NumToStr(Observation.observation_id);
+  status : "unknown";
+  subject : Build_Reference("Patient", Observation.person_id);
+  code : Convert_Terminology(Observation.observation_concept_id, "LOINC");
+  issued : Observation.observation_datetime;
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-observation-lab-definitions.html#Observation.category:Laboratory
+  category[0].coding[0].code : "laboratory";
+  category[0].coding[0].system : "http://terminology.hl7.org/CodeSystem/observation-category";
+  category[] : Convert_Terminology(Observation.observation_type_concept_id, "LOINC");
+  valueQuantity.value : Observation.value_as_number;
+  valueQuantity.unit : Convert_TerminologyCode(Observation.unit_concept_id, "UCUM");
+  valueString : Observation.value_as_string;
+  valueCodeableConcept : Convert_Terminology(Observation.value_as_concept_id, "LOINC");
+  performer[0] : Build_Reference("Practitioner", Observation.provider_id);
+  encounter : Build_Reference("Encounter", Observation.visit_occurrence_id);
+  category[] (if Observation.qualifier_concept_id?) : Convert_Terminology(Observation.qualifier_concept_id, "LOINC");
+  resourceType : "Observation";
+}
+
+// Description: Constructs a FHIR R4 Practitioner Resource based on OMOP Provider Table (v6.0)
+//
+// Argument(s):
+//   Provider: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedHealthSystemDataTables/PROVIDER.md
+//
+// Output(s):
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def Provider_Practitioner(Provider) {
+  id : NumToStr(Provider.provider_id);
+  name[0].text : Provider.provider_name;
+  // To ensure https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-practitioner-definitions.html#Practitioner.name.family
+  name[0].family : Provider.provider_name;
+  if (Provider.npi) {
+    identifier[0].value : Provider.npi;
+  } else {
+    identifier[0].value : "unknown";
+  }
+  identifier[0].system : "unknown";
+  identifier[1].value : Provider.dea;
+  qualification[].code : Convert_Terminology(Provider.specialty_concept_id, "NUCC");
+  gender : Convert_TerminologyCode(Provider.gender_concept_id, "Gender");
+  birthDate : Provider.year_of_birth;
+  resourceType : "Practitioner";
+}
+
+// Description: Constructs a FHIR R4 Procedure Resource based on OMOP ProcedureOccurence Table (v6.0)
+//
+// Argument(s):
+//   ProcedureOccurence: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/PROCEDURE_OCCURRENCE.md
+//
+// Output(s):
+//   Procedure: https://www.hl7.org/fhir/procedure.html
+//
+def ProcedureOccurence_Procedure(ProcedureOccurence) {
+  id : NumToStr(ProcedureOccurence.procedure_occurrence_id);
+  status : "completed";
+  subject : Build_Reference("Patient", ProcedureOccurence.person_id);
+  code : Convert_Terminology(ProcedureOccurence.procedure_concept_id, "SNOMED");
+  performedDateTime : ProcedureOccurence.procedure_datetime;
+  category : Convert_Terminology(ProcedureOccurence.procedure_type_concept_id, "SNOMED");
+  encounter : Build_Reference("Encounter", ProcedureOccurence.visit_occurrence_id);
+  performer[0].actor : Build_Reference("Practitioner", ProcedureOccurence.provider_id);
+  resourceType : "Procedure";
+}
+
+// Description: Constructs a FHIR R4 Condition Resource based on OMOP ConditionOccurence Table (v6.0)
+//
+// Argument(s):
+//   ConditionOccurence: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/CONDITION_OCCURRENCE.md
+//
+// Output(s):
+//   Condition: https://www.hl7.org/fhir/condition.html
+//
+def ConditionOccurence_Condition(ConditionOccurence) {
+  id : NumToStr(ConditionOccurence.condition_occurrence_id);
+  subject : Build_Reference("Patient", ConditionOccurence.person_id);
+  code : Convert_Terminology(ConditionOccurence.condition_concept_id, "SNOMED");
+  onsetPeriod.start : ConditionOccurence.condition_start_datetime;
+  onsetPeriod.end : ConditionOccurence.condition_end_datetime;
+  category[] : Convert_Terminology(ConditionOccurence.condition_type_concept_id, "SNOMED");
+  abatementString : ConditionOccurence.stop_reason;
+  asserter : Build_Reference("Practitioner", ConditionOccurence.provider_id);
+  encounter : Build_Reference("Encounter", ConditionOccurence.visit_occurrence_id);
+  clinicalStatus : Convert_Terminology(ConditionOccurence.condition_status_concept_id, "SNOMED");
+  resourceType : "Condition";
+}
+
+// Description: Constructs a FHIR R4 MedicationStatement Resource based on OMOP Drug_Exposure Table (v6.0)
+//
+// Argument(s):
+//   Drug_Exposure: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/DRUG_EXPOSURE.md
+//
+// Output(s):
+//   MedicationStatement: https://hl7.org/fhir/medicationstatement.html
+//
+def DrugExposure_MedicationStatement(DrugExposure) {
+  id : NumToStr(DrugExposure.drug_exposure_id);
+  subject : Build_Reference("Patient", DrugExposure.person_id);
+  medicationCodeableConcept : Convert_Terminology(DrugExposure.drug_concept_id, "SNOMED");
+  effectivePeriod.start : DrugExposure.drug_exposure_start_datetime;
+  effectivePeriod.end : DrugExposure.drug_exposure_end_datetime;
+  dosage[0].doseAndRate[0].doseQuantity.value : DrugExposure.effective_drug_dose;
+  category : Convert_Terminology(DrugExposure.drug_type_concept_id, "LOINC");
+  if (DrugExposure.stop_reason?) {
+    statusReason[0].coding[0].display : DrugExposure.stop_reason;
+    status : "stopped";
+  } else {
+    status : "unknown";
+  }
+  dosage[0].doseAndRate[0].doseQuantity.unit : Convert_TerminologyCode(DrugExposure.dose_unit_concept_id, "UCUM");
+  dosage[0].text : DrugExposure.sig;
+  dosage[0].route : Convert_Terminology(DrugExposure.route_concept_id, "SNOMED");
+  informationSource : Build_Reference("Practitioner", DrugExposure.provider_id);
+  context : Build_Reference("Encounter", DrugExposure.visit_occurrence_id);
+  resourceType : "MedicationStatement";
+}
+
+// Description: Constructs a FHIR R4 MedicationRequest Resource based on OMOP Drug_Exposure Table (v6.0)
+//
+// Argument(s):
+//   Drug_Exposure: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/DRUG_EXPOSURE.md
+//
+// Output(s):
+//   MedicationRequest: https://www.hl7.org/fhir/medicationrequest.html
+//
+def DrugExposure_MedicationRequest(DrugExposure) {
+  id : NumToStr(DrugExposure.drug_exposure_id);
+  subject : Build_Reference("Patient", DrugExposure.person_id);
+  medicationCodeableConcept : Convert_Terminology(DrugExposure.drug_concept_id, "SNOMED");
+  dispenseRequest.validityPeriod.start : DrugExposure.drug_exposure_start_datetime;
+  dispenseRequest.validityPeriod.end : DrugExposure.drug_exposure_end_datetime;
+  authoredOn : DrugExposure.drug_exposure_start_datetime;
+  if (DrugExposure.stop_reason?) {
+    statusReason.coding[0].display : DrugExposure.stop_reason;
+    status : "stopped";
+  } else {
+    status : "unknown";
+  }
+  //TODO(b/187312606): Re-test againsts https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-medicationrequest-definitions.html#MedicationRequest.dosageInstruction.doseAndRate
+  dosageInstruction[0].doseAndRate[0].doseQuantity.value : DrugExposure.effective_drug_dose;
+  category[] : Convert_Terminology(DrugExposure.drug_type_concept_id, "LOINC");
+  dosageInstruction[0].doseAndRate[0].doseQuantity.unit : Convert_TerminologyCode(DrugExposure.dose_unit_concept_id, "UCUM");
+  dispenseRequest.numberOfRepeatsAllowed : DrugExposure.refills;
+  dispenseRequest.quantity.value : DrugExposure.quantity;
+  dispenseRequest.expectedSupplyDuration.value : DrugExposure.days_supply;
+  dosageInstruction[0].text : DrugExposure.sig;
+  dosageInstruction[0].route : Convert_Terminology(DrugExposure.route_concept_id, "SNOMED");
+  requester : Build_Reference("Practitioner", DrugExposure.provider_id);
+  encounter : Build_Reference("Encounter", DrugExposure.visit_occurrence_id);
+  intent : "instance-order";
+  resourceType : "MedicationRequest";
+}
+
+// Description: Constructs a FHIR R4 MedicationDispense Resource based on OMOP Drug_Exposure Table (v6.0)
+//
+// Argument(s):
+//   Drug_Exposure: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/DRUG_EXPOSURE.md
+//
+// Output(s):
+//   MedicationDispense: https://www.hl7.org/fhir/medicationdispense.html
+//
+def DrugExposure_MedicationDispense(DrugExposure) {
+  id : NumToStr(DrugExposure.drug_exposure_id);
+  subject : Build_Reference("Patient", DrugExposure.person_id);
+  medicationCodeableConcept : Convert_Terminology(DrugExposure.drug_concept_id, "SNOMED");
+  whenPrepared : DrugExposure.drug_exposure_start_datetime;
+  whenHandedOver : DrugExposure.drug_exposure_start_datetime;
+  dosageInstruction[0].doseAndRate[0].doseQuantity.value : DrugExposure.effective_drug_dose;
+  category : Convert_Terminology(DrugExposure.drug_type_concept_id, "LOINC");
+  if (DrugExposure.stop_reason?) {
+    statusReasonCodeableConcept.coding[0].display : DrugExposure.stop_reason;
+    status : "stopped";
+  } else {
+    status : "unknown";
+  }
+  dosageInstruction[0].doseAndRate[0].doseQuantity.unit : Convert_TerminologyCode(DrugExposure.dose_unit_concept_id, "UCUM");
+  quantity.value : DrugExposure.quantity;
+  daysSupply.value : DrugExposure.days_supply;
+  dosageInstruction[0].text : DrugExposure.sig;
+  dosageInstruction[0].route : Convert_Terminology(DrugExposure.route_concept_id, "SNOMED");
+  performer[0].actor : Build_Reference("Practitioner", DrugExposure.provider_id);
+  context : Build_Reference("Encounter", DrugExposure.visit_occurrence_id);
+  resourceType : "MedicationDispense";
+}
+
+// Description: Constructs a FHIR R4 MedicationAdministration Resource based on OMOP Drug_Exposure Table (v6.0)
+//
+// Argument(s):
+//   Drug_Exposure: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/DRUG_EXPOSURE.md
+//
+// Output(s):
+//   MedicationAdministration: https://www.hl7.org/fhir/MedicationAdministration.html
+//
+def DrugExposure_MedicationAdministration(DrugExposure) {
+  id : NumToStr(DrugExposure.drug_exposure_id);
+  subject : Build_Reference("Patient", DrugExposure.person_id);
+  medicationCodeableConcept : Convert_Terminology(DrugExposure.drug_concept_id, "SNOMED");
+  effectivePeriod.start : DrugExposure.drug_exposure_start_datetime;
+  effectivePeriod.end : DrugExposure.drug_exposure_end_datetime;
+  effectiveDateTime : DrugExposure.drug_exposure_start_datetime;
+  dosage.dose.value : DrugExposure.effective_drug_dose;
+  category : Convert_Terminology(DrugExposure.drug_type_concept_id, "LOINC");
+  if (DrugExposure.stop_reason?) {
+    statusReason[0].coding[0].display : DrugExposure.stop_reason;
+    status : "stopped";
+  } else {
+    status : "unknown";
+  }
+  dosage.text : DrugExposure.sig;
+  dosage.route : Convert_Terminology(DrugExposure.route_concept_id, "SNOMED");
+  performer[0].actor : Build_Reference("Practitioner", DrugExposure.provider_id);
+  context : Build_Reference("Encounter", DrugExposure.visit_occurrence_id);
+  resourceType : "MedicationAdministration";
+}
+
+// Description: Constructs a FHIR R4 Specimen Resource based on OMOP Specimen Table (v6.0)
+//
+// Argument(s):
+//   Specimen: https://github.com/OHDSI/CommonDataModel/blob/v6.0.0/Documentation/CommonDataModel_Wiki_Files/StandardizedClinicalDataTables/SPECIMEN.md
+//
+// Output(s):
+//   Specimen: https://hl7.org/fhir/specimen.html
+//
+def Specimen_Specimen(Specimen) {
+  id : NumToStr(Specimen.specimen_id);
+  subject : Build_Reference("Patient", Specimen.person_id);
+  type : Convert_Terminology(Specimen.specimen_type_concept_id, "SNOMED");
+  collection.collectedDateTime : Specimen.specimen_datetime;
+  collection.quantity.value : Specimen.quantity;
+  collection.quantity.unit : Convert_TerminologyCode(Specimen.unit_concept_id, "UCUM");
+  collection.bodySite : Convert_Terminology(Specimen.anatomic_site_concept_id, "SNOMED");
+  resourceType : "Specimen";
+}

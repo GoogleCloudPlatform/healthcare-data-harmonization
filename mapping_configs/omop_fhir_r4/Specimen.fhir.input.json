@@ -1,0 +1,12 @@
+{
+   "Specimen":{
+      "anatomic_site_concept_id":4.172448e+06,
+      "specimen_id":2.194925762e+09,
+      "person_id":1.085670747e+09,
+      "specimen_type_concept_id":4.045667e+06,
+      "specimen_date":"2011-05-30",
+      "specimen_datetime":"2011-05-30T06:15:00Z",
+      "quantity":6,
+      "unit_concept_id":8587
+   }
+}

@@ -1,0 +1,46 @@
+{
+   "resourceType":"Bundle",
+   "type":"transaction",
+   "entry":[
+      {
+         "resource":{
+            "collection":{
+               "bodySite":{
+                  "coding":[
+                     {
+                        "code":"49852007",
+                        "version":"v1",
+                        "display":"Structure of median cubital vein (body structure)",
+                        "system":"http://snomed.info/sct"
+                     }
+                  ]
+               },
+               "collectedDateTime":"2011-05-30T06:15:00Z",
+               "quantity":{
+                  "unit":"mL",
+                  "value":6
+               }
+            },
+            "resourceType":"Specimen",
+            "id":"2194925762",
+            "subject":{
+               "reference":"Patient/1085670747"
+            },
+            "type":{
+               "coding":[
+                  {
+                     "system":"http://snomed.info/sct",
+                     "code":"122555007",
+                     "version":"v1",
+                     "display":"Venous blood specimen"
+                  }
+               ]
+            }
+         },
+         "request":{
+            "method":"PUT",
+            "url":"Specimen/2194925762"
+         }
+      }
+   ]
+}

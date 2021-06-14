@@ -1,0 +1,12 @@
+{
+   "ProcedureOccurence":{
+      "person_id":1.863768513e+09,
+      "procedure_concept_id":4.273629e+06,
+      "procedure_date":"2009-07-04",
+      "procedure_datetime":"2009-07-04T17:20:00-04:00",
+      "procedure_type_concept_id":4.301351e+06,
+      "visit_occurrence_id":1.813435656e+09,
+      "provider_id":1.863768513e+09,
+      "procedure_occurrence_id":1.863768513e+09
+   }
+}

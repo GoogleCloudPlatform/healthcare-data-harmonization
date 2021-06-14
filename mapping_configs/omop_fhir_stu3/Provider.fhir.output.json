@@ -1,0 +1,36 @@
+{
+   "resourceType":"Bundle",
+   "type":"transaction",
+   "entry":[
+      {
+         "request":{
+            "method":"PUT",
+            "url":"Practitioner/1085670747"
+         },
+         "resource":{
+            "id":"1085670747",
+            "name":[
+               {
+                  "text":"Dr Adam Careful"
+               }
+            ],
+            "qualification":[
+               {
+                  "code":{
+                     "coding":[
+                        {
+                           "display":"Emergency Medical Technician",
+                           "system":"http://hl7.org/fhir/v2/0360/2.7",
+                           "code":"EMT",
+                           "version":"v1"
+                        }
+                     ]
+                  }
+               }
+            ],
+            "gender":"male",
+            "resourceType":"Practitioner"
+         }
+      }
+   ]
+}

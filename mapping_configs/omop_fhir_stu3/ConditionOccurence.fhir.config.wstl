@@ -1,0 +1,4 @@
+$this : OMOP_FHIR($root);
+
+post Output_Transaction
+

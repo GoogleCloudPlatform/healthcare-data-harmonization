@@ -1,0 +1,51 @@
+{
+  "entry": [
+    {
+      "request": {
+        "method": "PUT",
+        "url": "Procedure/1863768513"
+      },
+      "resource": {
+        "category": {
+          "coding": [
+            {
+              "code": "387713003",
+              "display": "Surgical procedure",
+              "system": "http://snomed.info/sct",
+              "version": "v1"
+            }
+          ]
+        },
+        "code": {
+          "coding": [
+            {
+              "code": "367336001",
+              "display": "Chemotherapy",
+              "system": "http://snomed.info/sct",
+              "version": "v1"
+            }
+          ]
+        },
+        "encounter": {
+          "reference": "Encounter/1813435656"
+        },
+        "id": "1863768513",
+        "performedDateTime": "2009-07-04T17:20:00-04:00",
+        "performer": [
+          {
+            "actor": {
+              "reference": "Practitioner/1863768513"
+            }
+          }
+        ],
+        "resourceType": "Procedure",
+        "status": "completed",
+        "subject": {
+          "reference": "Patient/1863768513"
+        }
+      }
+    }
+  ],
+  "resourceType": "Bundle",
+  "type": "transaction"
+}

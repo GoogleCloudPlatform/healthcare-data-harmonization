@@ -1,0 +1,18 @@
+{
+   "ConditionOccurence":{
+      "condition_start_datetime":"2009-07-04T17:20:00-04:00",
+      "condition_source_value":"Fever",
+      "provider_id":1.863768513e+09,
+      "condition_start_date":"2009-07-04",
+      "condition_source_concept_id":437663,
+      "visit_occurrence_id":1.863768513e+09,
+      "condition_end_datetime":"2009-07-04T17:35:00-04:00",
+      "stop_reason":"around April 9, 2013",
+      "condition_status_concept_id":3.7109701e+07,
+      "condition_occurrence_id":1.863768513e+09,
+      "condition_end_date":"2009-07-04",
+      "person_id":1.863768513e+09,
+      "condition_type_concept_id":4206460,
+      "condition_concept_id":437663
+   }
+}
