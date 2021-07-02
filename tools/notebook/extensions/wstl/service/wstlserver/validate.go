@@ -17,6 +17,7 @@ package wstlserver
 import (
 	"context"
 
+	"google3/third_party/fhir/go/fhirversion" /* copybara-comment: fhirversion */
 	"github.com/google/fhir/go/jsonformat" /* copybara-comment: jsonformat */
 	"google.golang.org/grpc/codes" /* copybara-comment: codes */
 	"google.golang.org/grpc/status" /* copybara-comment: status */
@@ -40,14 +41,14 @@ func (v *Validator) Validate(ctx context.Context, req *wspb.ValidationRequest) (
 	if req == nil || len(req.GetInput()) == 0 {
 		return nil, status.Error(codes.InvalidArgument, "no resource provided")
 	}
-	var version jsonformat.Version
+	var version fhirversion.Version
 	switch req.GetFhirVersion() {
 	case wspb.ValidationRequest_FHIR_VERSION_UNSPECIFIED:
-		version = jsonformat.R4
+		version = fhirversion.R4
 	case wspb.ValidationRequest_R4:
-		version = jsonformat.R4
+		version = fhirversion.R4
 	case wspb.ValidationRequest_STU3:
-		version = jsonformat.STU3
+		version = fhirversion.STU3
 	}
 	unMar, err := jsonformat.NewUnmarshaller("UTC", version)
 
