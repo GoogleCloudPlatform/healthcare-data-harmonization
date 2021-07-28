@@ -14,4 +14,6 @@ def HL7v2_FHIR(message) {
   $this (if message.OML_O21?) : OML_O21(message.OML_O21);
   $this (if message.ORU_R01?) : ORU_R01(message.ORU_R01);
   $this (if message.ORM_O01?) : ORM_O01(message.ORM_O01);
+  $this (if message.RDE_O01?) : RDE_O01(message.RDE_O01);
+  $this (if message.RDE_O11?) : RDE_O11(message.RDE_O11);
 }

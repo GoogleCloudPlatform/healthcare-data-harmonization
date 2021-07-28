@@ -1,0 +1,350 @@
+{
+  "RDE_O01":{
+    "MSH":{
+      "0":"MSH",
+      "1":"|",
+      "10":"5339",
+      "11":null,
+      "12":{
+        "1":"2.5"
+      },
+      "13":null,
+      "14":null,
+      "15":null,
+      "16":null,
+      "17":null,
+      "18":null,
+      "19":null,
+      "2":"^~\\&",
+      "20":null,
+      "21":null,
+      "22":null,
+      "23":null,
+      "3":null,
+      "4":null,
+      "5":null,
+      "6":null,
+      "7":"20160405170452",
+      "8":"1",
+      "9":{
+        "1":"RDE",
+        "2":"O01"
+      }
+    },
+    "NTE":null,
+    "ORDER":[
+      {
+        "CTI":null,
+     "OBSERVATION": [
+      {
+       "NTE": null,
+       "OBX": {
+        "0": "OBX",
+        "1": "1",
+        "10": null,
+        "11": "F",
+        "2": "ST",
+        "3": {
+         "1": "99199.Z56",
+         "2": "Specimen Source"
+        },
+        "4": null,
+        "5": [
+         {
+          "1": {
+           "1": "AOE Value"
+          }
+         }
+        ],
+        "6": {
+         "1": "Units"
+        },
+        "7": null,
+        "8": null,
+        "9": null
+       }
+      }
+     ],
+        "ORC":{
+          "0":"ORC",
+          "1":"NW",
+          "10":null,
+          "11":null,
+          "12":null,
+          "13":null,
+          "14":null,
+          "15":null,
+          "16":null,
+          "17":null,
+          "18":null,
+          "19":null,
+          "2":null,
+          "3":{
+            "1":"JLC201606061350"
+          },
+          "4":null,
+          "5":null,
+          "6":null,
+          "7":[
+            {
+              "1":null,
+              "2":null,
+              "3":null,
+              "4":"201601151345",
+              "5":"201701151345",
+              "6":"NORMAL"
+            }
+          ],
+          "8":null,
+          "9":null
+        },
+        "ORDER_DETAIL":null,
+        "RXC":null,
+        "RXE":{
+          "0":"RXE",
+          "1":null,
+          "10":"30",
+          "11":{
+            "1":"Tab"
+          },
+          "12":"2",
+          "13":null,
+          "14":null,
+          "15":null,
+          "16":"1",
+          "17":null,
+          "18":null,
+          "19":null,
+          "2":{
+            "1":"0006-0740-31",
+            "2":"Simvastatin",
+            "3":null,
+            "4":null,
+            "5":null,
+            "6":null,
+            "7":null,
+            "8":null,
+            "9":"simvastatin (ZOCOR) 20 MG PO tablet"
+          },
+          "20":null,
+          "21":null,
+          "22":null,
+          "23":null,
+          "24":null,
+          "25":null,
+          "26":null,
+          "27":null,
+          "28":null,
+          "29":null,
+          "3":"1",
+          "30":null,
+          "31":null,
+          "32":null,
+          "33":null,
+          "34":null,
+          "35":null,
+          "36":null,
+          "37":null,
+          "38":null,
+          "39":null,
+          "4":null,
+          "40":null,
+          "5":{
+            "1":"MG"
+          },
+          "6":null,
+          "7":[
+            {
+              "1":null,
+              "2":"Take ONE tablet by mouth nightly when needed. Take with Water"
+            }
+          ],
+          "8":null,
+          "9":null
+        },
+        "RXR":[
+          {
+            "0":"RXR",
+            "1":{
+              "1":"PO"
+            }
+          }
+        ]
+      }
+    ],
+    "PATIENT":{
+      "AL1": [
+      {
+        "0": "AL1",
+        "1": "0",
+        "2": {
+          "1": "MC"
+        },
+        "3": {
+          "1": "59037007",
+          "2": "Drug intolerance (disorder)",
+          "3": "SNM3"
+        },
+        "4": {
+          "1": "MO"
+        },
+        "5": [
+          "Itchy, red, watering eyes"
+        ],
+        "6": "20191020160103"
+      },
+      {
+        "0": "AL1",
+        "1": "1",
+        "2": {
+          "1": "DA"
+        },
+        "3": {
+          "1": "419199007",
+          "2": "Allergy to substance (disorder)",
+          "3": "SNM3"
+        },
+        "4": {
+          "1": "SV"
+        },
+        "5": [
+          "Swollen lips"
+        ],
+        "6": "20190604160103"
+      },
+      {
+        "0": "AL1",
+        "1": "2",
+        "2": {
+          "1": "DA"
+        },
+        "3": {
+          "1": "235719002",
+          "2": "Food intolerance (disorder)",
+          "3": "SNM3"
+        },
+        "4": {
+          "1": "SV"
+        },
+        "5": [
+          "Cough"
+        ],
+        "6": "20200506160103"
+      }
+    ],
+      "GT1":null,
+      "INSURANCE":null,
+      "NTE":null,
+   "PATIENT_VISIT": {
+    "PV1": {
+     "0": "PV1",
+     "1": "1",
+     "10": null,
+     "11": null,
+     "12": null,
+     "13": null,
+     "14": null,
+     "15": null,
+     "16": null,
+     "17": null,
+     "18": null,
+     "19": null,
+     "2": null,
+     "20": null,
+     "21": null,
+     "22": null,
+     "23": null,
+     "24": null,
+     "25": null,
+     "26": null,
+     "27": null,
+     "28": null,
+     "29": null,
+     "3": {
+      "1": null,
+      "2": null,
+      "3": null,
+      "4": {
+       "1": "DrSmith"
+      },
+      "5": null,
+      "6": null,
+      "7": {
+       "1": "Building1"
+      },
+      "8": null,
+      "9": "Description"
+     },
+     "30": null,
+     "31": null,
+     "32": null,
+     "33": null,
+     "34": null,
+     "35": null,
+     "36": null,
+     "37": null,
+     "38": null,
+     "39": {
+      "1": "654321"
+     },
+     "4": null,
+     "40": null,
+     "5": null,
+     "6": null,
+     "7": null,
+     "8": null,
+     "9": null
+    },
+    "PV2": null
+   },
+      "PD1":null,
+      "PID":{
+        "0":"PID",
+        "1":null,
+        "10":null,
+        "11":null,
+        "12":null,
+        "13":null,
+        "14":null,
+        "15":{
+          "1":"ENGLISH"
+        },
+        "16":null,
+        "17":null,
+        "18":{
+          "1":"10000829306"
+        },
+        "19":null,
+        "2":null,
+        "20":null,
+        "21":null,
+        "3":[
+          {
+            "1":"101105",
+            "2":null,
+            "3":null,
+            "4":{
+              "1":"EPI"
+            },
+            "5":"EPI"
+          }
+        ],
+        "4":null,
+        "5":[
+          {
+            "1":{
+              "1":"JONES"
+            },
+            "2":"ANDREW"
+          }
+        ],
+        "6":null,
+        "7":null,
+        "8":{
+          "1":"M"
+        },
+        "9":null
+      }
+    }
+  }
+}

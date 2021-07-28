@@ -131,11 +131,14 @@ def Convert_DateTime(required str) {
 //   Device: https://www.hl7.org/fhir/device.html
 //
 def MSH_Provenance(required MSH) {
-  agent[] (if MSH.3): Build_Agent("assembler", "http://terminology.hl7.org/CodeSystem/provenance-participant-type", Output_Resource(HD_Device(MSH.3)));
-  agent[] (if MSH.4): Build_Agent("author", "http://terminology.hl7.org/CodeSystem/provenance-participant-type", Output_Resource(HD_Organization(MSH.4)));
-  recorded : Convert_Instant(MSH.7);
-  id : $UUID();
-  resourceType : "Provenance";
+  // Provenance.agent is required https://www.hl7.org/fhir/provenance-definitions.html#Provenance.agent
+  if (MSH.3 or MSH.4) {
+    agent[] (if MSH.3): Build_Agent("assembler", "http://terminology.hl7.org/CodeSystem/provenance-participant-type", Output_Resource(HD_Device(MSH.3)));
+    agent[] (if MSH.4): Build_Agent("author", "http://terminology.hl7.org/CodeSystem/provenance-participant-type", Output_Resource(HD_Organization(MSH.4)));
+    recorded : Convert_Instant(MSH.7);
+    id : $UUID();
+    resourceType : "Provenance";
+  }
 }
 
 // Description: Constructs a Provenance Resource, and the Device Resource being referenced
@@ -1139,7 +1142,7 @@ def OBR_Specimen (required OBR, Patient) {
 // Output(s):
 //   MessageHeader.source : https://www.hl7.org/fhir/messageheader-definitions.html#MessageHeader.source
 //
-def HD_MessageHeaderEndpoint(required HD) {
+def HD_MessageHeaderEndpoint(HD) {
   name : HD.1;
   endpoint (if HD.3 = "ISO"): $StrCat("urn:oid:", HD.2);
   endpoint (if HD.3 = "UUID"): $StrCat("urn:uuid:", HD.2);

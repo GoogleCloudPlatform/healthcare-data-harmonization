@@ -25,7 +25,7 @@ def Output_Transaction(Output) {
   resourceType : "Bundle";
   type : "transaction";
   entry[] : Build_BundleEntry(Resources[], "PUT");
-  entry[] : Build_BundleEntry(Build_Provenance(Resources, Output.Provenance), "PUT");
+  entry[] (if Output.Provenance) : Build_BundleEntry(Build_Provenance(Resources, Output.Provenance), "PUT");
 }
 
 def Build_Provenance(required Resources, Provenance) {
