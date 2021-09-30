@@ -67,7 +67,7 @@ func (t *transpiler) VisitTargetPathHead(ctx *parser.TargetPathHeadContext) inte
 	}
 
 	// ROOT is a special case path segment since it is a keyword and does not get tokenized as a TOKEN
-	// TODO(b/148939976): Remove after sunset.
+	// TODO(): Remove after sunset.
 	if ctx.ROOT() != nil && ctx.ROOT().GetText() != "" {
 		return pathSpec{
 			arg: ctx.ROOT().GetText(),
@@ -140,7 +140,7 @@ func (t *transpiler) VisitSourcePathHead(ctx *parser.SourcePathHeadContext) inte
 	}
 
 	// ROOT is a special case path segment since it is a keyword and does not get tokenized as a TOKEN
-	// TODO(b/148939976): Remove after sunset.
+	// TODO(): Remove after sunset.
 	if ctx.ROOT() != nil && ctx.ROOT().GetText() != "" {
 		return pathSpec{
 			arg: ctx.ROOT().GetText(),

@@ -61,7 +61,7 @@ func makeSourcePositionMeta(ctx antlr.ParserRuleContext, meta *mpb.Meta) *mpb.Me
 	stop := ctx.GetStop()
 
 	if start != nil {
-		// TODO(b/171877982): Create and set some error type when start/end are nil.
+		// TODO(): Create and set some error type when start/end are nil.
 		if anyStart, err := anypb.New(startToSourcePosition(start)); err == nil {
 			meta.Entries[SourcePosStart] = anyStart
 		}

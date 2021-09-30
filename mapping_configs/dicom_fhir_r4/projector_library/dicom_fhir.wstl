@@ -157,7 +157,7 @@ def Build_AccessionNumberIdentifier(required accessionNum, accessionIDSeqItem) {
 def BuildProcedureCoding(seqItem) {
   coding[]: {
     code: seqItem.'00080100'.Value[0]
-    // TODO(b/170235441): consider incorporate coding scheme version every time we access 00080102
+    // TODO(): consider incorporate coding scheme version every time we access 00080102
     system: seqItem.'00080102'.Value[0]
     display: seqItem.'00080104'.Value[0]
   }
@@ -242,7 +242,7 @@ def Build_PersonReference(name, idSequenceItem) {
       value: idValue
     }
   }
-  // TODO(b/170234745): express ideographic and phonetic names here too.
+  // TODO(): express ideographic and phonetic names here too.
   display: name.Alphabetic
 }
 
@@ -526,7 +526,7 @@ def Build_FHIRDateTime(required dicomDA, dicomTM, utcOffset) {
 def Build_BodySite(required bodySite) {
   system: "http://snomed.info/sct"
   code: bodySite
-  // TODO(b/170235276): consider adding a mapping for the display name here.
+  // TODO(): consider adding a mapping for the display name here.
 }
 
 // Description: Builds the series laterality coding.
@@ -666,7 +666,7 @@ def Build_Instance(inst) {
 }
 
 // Description: Helper ternary operator function.
-// TODO(b/166436914): replace this function when this is supported by default.
+// TODO(): replace this function when this is supported by default.
 //
 def Cond(cond, one, two) {
   if cond {

@@ -38,7 +38,7 @@ from wstl.proto import wstlservice_pb2_grpc
 # pylint: disable=invalid-name
 class WstlTest(absltest.TestCase):
 
-  # TODO(b/158375123): look into x86_64-grtev4-linux-gnu-driver_is_not_gcc error
+  # TODO(): look into x86_64-grtev4-linux-gnu-driver_is_not_gcc error
   # when merging with test cases from load_hl7
   def setUp(self):
     super(WstlTest, self).setUp()
@@ -79,7 +79,7 @@ class WstlTest(absltest.TestCase):
       magic = ip.find_line_magic("load_hl7v2_gcs")
       self.assertIsNotNone(magic)
 
-  # TODO (b/156228336): add additional unit tests using mock gRPC server.
+  # TODO (): add additional unit tests using mock gRPC server.
   def test_wstl_magic_invoke_no_connection(self):
     with self.shell.builtin_trap:
       ip = self.shell.get_ipython()
@@ -94,7 +94,7 @@ class WstlTest(absltest.TestCase):
   def test_load_hl7v2_from_datastore_success(self, mocked_client):
     with self.shell.builtin_trap:
       mocked_client.return_value = "some hl7v2 message"
-      # TODO (b/158375123) investigate get_ipython returns null issue
+      # TODO () investigate get_ipython returns null issue
       ip = self.shell.get_ipython()
       failure = ip.magics_manager.register(wstl.LoadHL7Magics)
       self.assertIsNone(failure)

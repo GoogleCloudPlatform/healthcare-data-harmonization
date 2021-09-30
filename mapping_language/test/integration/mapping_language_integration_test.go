@@ -1137,7 +1137,7 @@ func TestTranspile(t *testing.T) {
 			},
 		},
 		{
-			// TODO(b/148939976): Revert after sunset.
+			// TODO(): Revert after sunset.
 			name: "legacy <this> and root",
 			whistle: `def this(arg) {
 									<this>: arg
@@ -1440,7 +1440,7 @@ func TestTranspile(t *testing.T) {
 									 }`,
 			},
 		},
-		// TODO(b/136549738): Add more tests.
+		// TODO(): Add more tests.
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {

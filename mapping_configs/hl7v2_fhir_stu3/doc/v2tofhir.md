@@ -15,7 +15,7 @@ First, conduct a mapping gap analysis between
 (HL7 v2) and [target](https://www.hl7.org/fhir/STU3/) (FHIR STU3). Mapping gap
 analysis is outlined via the following steps:
 
-TODO(b/158834870): Create an example for a concept
+TODO(): Create an example for a concept
 
 *   Find candidate mappings between source and target concepts
 *   Find candidate mappings between source and target attributes

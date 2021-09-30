@@ -43,7 +43,7 @@ func main() {
 	log.Printf("Server is now listening on: %s", hostPort)
 
 	server := grpc.NewServer()
-	// TODO (b/162451704): unify how the server is registered internally and externally.
+	// TODO (): unify how the server is registered internally and externally.
 	wsgrpc.RegisterWhistleServiceServer(server, wstlserver.NewWstlServiceServer())
 
 	if err := server.Serve(listener); err != nil {

@@ -30,7 +30,7 @@ type transpiler struct {
 	projectors     []*mpb.ProjectorDefinition
 	conditionStack []valueStack
 
-	// TODO(b/170415411): Use this during transpilation.
+	// TODO(): Use this during transpilation.
 	includeSourcePositions bool
 }
 

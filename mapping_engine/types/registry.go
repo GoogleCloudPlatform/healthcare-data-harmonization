@@ -54,7 +54,7 @@ func (r *Registry) RegisterProjector(name string, projector Projector) error {
 }
 
 func (r *Registry) validateProjectorName(name string) error {
-	// TODO(b/120480646): Fail if UDF starts with _?
+	// TODO(): Fail if UDF starts with _?
 	if _, ok := r.registry[name]; ok {
 		return fmt.Errorf("projector %s is already defined", name)
 	}

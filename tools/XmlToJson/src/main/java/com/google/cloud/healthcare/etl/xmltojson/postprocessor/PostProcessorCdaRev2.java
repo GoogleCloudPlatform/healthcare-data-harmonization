@@ -26,7 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// TODO(b/174143024): In case more releases need to be supported, we should consider extracting
+// TODO(): In case more releases need to be supported, we should consider extracting
 // common code from this class.
 /**
  * Class in charge of post processing the output of JAXB for a CDA Rev2 XML document. The

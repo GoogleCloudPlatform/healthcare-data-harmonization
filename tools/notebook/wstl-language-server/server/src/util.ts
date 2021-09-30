@@ -70,7 +70,7 @@ export function suggestFor(
  */
 export function getFunctions(
     pathToFunctions: string, pathToServer: string): CompletionItem[] {
-  // TODO(b/169611573): Store the details and documentations of the functions
+  // TODO(): Store the details and documentations of the functions
   // in some format and read them here.
   const joinPath = path.join(__dirname, pathToServer, pathToFunctions);
   let wordString = '';

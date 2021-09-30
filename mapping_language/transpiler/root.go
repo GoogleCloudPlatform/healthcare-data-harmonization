@@ -23,7 +23,7 @@ import (
 const (
 	rootEnvInputName = "$root"
 
-	// TODO(b/148939976): Revert after sunset.
+	// TODO(): Revert after sunset.
 	legacyRootEnvInputName = "root"
 )
 
@@ -38,7 +38,7 @@ func (t *transpiler) VisitRoot(ctx *parser.RootContext) interface{} {
 
 	t.environment = newEnv("", []string{rootEnvInputName}, []string{})
 
-	// TODO(b/148939976): Remove this env and the callsite after sunset.
+	// TODO(): Remove this env and the callsite after sunset.
 	t.environment.args[legacyRootEnvInputName] = t.environment.args[rootEnvInputName]
 
 	for i := range ctx.AllMapping() {

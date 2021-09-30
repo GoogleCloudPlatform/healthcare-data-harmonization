@@ -751,7 +751,7 @@ func Or(args ...jsonutil.JSONToken) (jsonutil.JSONBool, error) {
 
 // MatchesRegex returns true iff the string matches the regex pattern.
 func MatchesRegex(str jsonutil.JSONStr, regex jsonutil.JSONStr) (jsonutil.JSONBool, error) {
-	// TODO(b/155392505): Consider compiling and caching these regexes.
+	// TODO(): Consider compiling and caching these regexes.
 	m, err := regexp.MatchString(string(regex), string(str))
 	return jsonutil.JSONBool(m), err
 }

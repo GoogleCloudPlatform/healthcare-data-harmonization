@@ -150,7 +150,7 @@ def _list_gcs_bucket_blobs(path_name, file_ext=None):
   bucket_name = normalize_path[:bucket_offset]
   blob_name = normalize_path[bucket_offset + 1:]
   prefix = os.path.dirname(blob_name)
-  # TODO (b/156228336): refactor to pass client down client from magic command.
+  # TODO (): refactor to pass client down client from magic command.
   client = storage.Client()
   if not client:
     raise ValueError("Unable to create storage client")

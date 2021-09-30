@@ -36,7 +36,7 @@ export function activate(context: ExtensionContext) {
     }
   };
   const clientOptions: LanguageClientOptions = {
-    // TODO(b/169611573): Configure the document selector to whistle language.
+    // TODO(): Configure the document selector to whistle language.
     // Configure it in package.json and client/package.json as well.
     documentSelector: [{scheme: 'file', language: 'plaintext'}],
     synchronize: {

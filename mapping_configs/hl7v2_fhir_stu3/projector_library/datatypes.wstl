@@ -722,7 +722,7 @@ def CWE_Location(required CWE) {
 //
 def DG1_Encounter (DG1, Condition) {
   condition : Build_Reference(Condition);
-// TODO(b/150794840): Uncomment below
+// TODO(): Uncomment below
 //  use : DG1.6 => CWE_CodeableConcept;   //------ Needs Terminology Mappings: No mappings found in community sheet
 }
 

@@ -35,7 +35,7 @@ import javax.xml.stream.XMLStreamReader;
 import org.eclipse.persistence.jaxb.JAXBContextFactory;
 import org.eclipse.persistence.jaxb.JAXBContextProperties;
 
-// TODO(b/174301100): Consider creating a factory if more than one version of CDA is required.
+// TODO(): Consider creating a factory if more than one version of CDA is required.
 /** Allows converting XML documents compliant with supported schemas to JSON * */
 public class XmlToJsonCDARev2 implements XmlToJson {
   private JAXBContext jc;

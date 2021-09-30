@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Server} from './server';
-// TODO(b/169868513): Keep the function.txt updated with the Whistle built-in
+// TODO(): Keep the function.txt updated with the Whistle built-in
 // functions.
 /**
  * The input functions file is default to server/function.txt. To use another

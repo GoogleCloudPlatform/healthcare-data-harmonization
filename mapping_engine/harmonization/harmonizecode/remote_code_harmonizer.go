@@ -167,7 +167,7 @@ func (h *RemoteCodeHarmonizer) Harmonize(sourceCode, sourceSystem, sourceName st
 }
 
 func rawToCodes(raw *json.RawMessage) ([]HarmonizedCode, error) {
-	// TODO(b/132161794): Add support for multiple FHIR versions.
+	// TODO(): Add support for multiple FHIR versions.
 	parameters, err := unmarshalR3Parameters(*raw)
 	if err != nil {
 		return nil, fmt.Errorf("unmarshalling concept map %v failed with error: %v", string(*raw), err)
