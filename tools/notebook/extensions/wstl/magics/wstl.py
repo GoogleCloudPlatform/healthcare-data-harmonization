@@ -152,7 +152,7 @@ class WSTLMagics(Magics):
       (resp, err) = _get_validation(stub, self.shell, args.version, args.input)
       if err:
         return err
-      return JSON(str(json_format.MessageToDict(resp)))
+      return JSON(json_format.MessageToDict(resp))
 
 
 @magics_class

@@ -19,6 +19,7 @@ from unittest from unittest import mock
 
 from absl.testing import absltest
 from fakefs import fake_filesystem
+from google.cloud import storage
 from googleapiclient.http import HttpError
 import grpc
 import grpc_testing
@@ -27,7 +28,6 @@ from IPython.display import JSON
 from IPython.terminal import interactiveshell
 from IPython.testing import tools
 
-from google.cloud import storage
 from google3.google.rpc import code_pb2
 from google3.google.rpc import status_pb2
 from wstl.magics import wstl
@@ -49,21 +49,32 @@ class WstlTest(absltest.TestCase):
     self._time = grpc_testing.strict_real_time()
     self._channel = grpc_testing.channel(
         wstlservice_pb2.DESCRIPTOR.services_by_name.values(), self._time)
-    self.sample_hl7v2 = json.dumps("""
-    {'ADT_A01': {'ACC': None,
-      'AL1': [{'0': 'AL1',
-        '1': '0',
-        '2': {'1': 'AA'},
-        '3': {'1': 'Z88.0',
-           '2': 'Personal history of allergy to penicillin',
-           '3': 'ZAL'},
-        '4': {'1': 'SEVERE'},
-        '5': ['Shortness of breath'],
-        '6': None}],
-      'ARV_1': None,
-      'ARV_2': None,
-      'DB1': None,
-      'DRG': None}}""")
+    self.sample_hl7v2 = json.dumps({
+        "ADT_A01": {
+            "ACC": None,
+            "AL1": [{
+                "0": "AL1",
+                "1": "0",
+                "2": {
+                    "1": "AA"
+                },
+                "3": {
+                    "1": "Z88.0",
+                    "2": "Personal history of allergy to penicillin",
+                    "3": "ZAL"
+                },
+                "4": {
+                    "1": "SEVERE"
+                },
+                "5": ["Shortness of breath"],
+                "6": None
+            }],
+            "ARV_1": None,
+            "ARV_2": None,
+            "DB1": None,
+            "DRG": None
+        }
+    })
 
   def test_wstl_magic_is_correctly_defined(self):
     with self.shell.builtin_trap:
@@ -93,7 +104,7 @@ class WstlTest(absltest.TestCase):
   @mock.patch.object(wstl, "_get_message_from_hl7v2_store", autospec=True)
   def test_load_hl7v2_from_datastore_success(self, mocked_client):
     with self.shell.builtin_trap:
-      mocked_client.return_value = "some hl7v2 message"
+      mocked_client.return_value = '{"content":"some hl7v2 message"}'
       # TODO () investigate get_ipython returns null issue
       ip = self.shell.get_ipython()
       failure = ip.magics_manager.register(wstl.LoadHL7Magics)
@@ -101,7 +112,7 @@ class WstlTest(absltest.TestCase):
       result = ip.run_line_magic(
           "load_hl7v2_datastore", """--project_id=project --region=us
           --dataset_id=ds --hl7v2_store_id=store""")
-      self.assertEqual(result.data, mocked_client.return_value)
+      self.assertEqual(result.data, json.loads(mocked_client.return_value))
 
   @mock.patch.object(wstl, "_get_message_from_hl7v2_store", autospec=True)
   def test_load_hl7v2_from_datastore_failure(self, mocked_client):
@@ -302,14 +313,31 @@ class WstlTest(absltest.TestCase):
       results.append(result)
       mock_service.FhirValidate.assert_called_once_with(reqs[i])
     wants = [
-        "{'status': [{'message': 'Validation Success'}]}",
-        "{'status': [{'message': 'Validation Success'}]}",
-        "{'status': [{'message': 'Validation Success'}]}",
-        "{'status': [{'code': 3, 'message': 'invalid FHIR resource'}]}"
+        {
+            "status": [{
+                "message": "Validation Success"
+            }]
+        },
+        {
+            "status": [{
+                "message": "Validation Success"
+            }]
+        },
+        {
+            "status": [{
+                "message": "Validation Success"
+            }]
+        },
+        {
+            "status": [{
+                "code": 3,
+                "message": "invalid FHIR resource"
+            }]
+        },
     ]
     for j in range(len(wants)):
       result = results[j]
-      want = JSON(wants[j])
+      want = JSON(json.dumps(wants[j]))
       self.assertEqual(
           result.data,
           want.data,
@@ -424,14 +452,32 @@ class WstlTest(absltest.TestCase):
       mock_service.FhirValidate.assert_called_once_with(reqs[i])
 
     wants = [
-        "{'status': [{'message': 'Validation Success'}]}",
-        "{'status': [{'code': 3, 'message': 'invalid FHIR resource'}]}",
-        "{'status': [{'code': 3, 'message': 'invalid FHIR resource'}]}",
-        "{'status': [{'message': 'Validation Success'}]}",
+        {
+            "status": [{
+                "message": "Validation Success"
+            }]
+        },
+        {
+            "status": [{
+                "code": 3,
+                "message": "invalid FHIR resource"
+            }]
+        },
+        {
+            "status": [{
+                "code": 3,
+                "message": "invalid FHIR resource"
+            }]
+        },
+        {
+            "status": [{
+                "message": "Validation Success"
+            }]
+        },
     ]
     for j in range(len(wants)):
       result = results[j]
-      want = JSON(wants[j])
+      want = JSON(json.dumps(wants[j]))
       self.assertEqual(
           result.data,
           want.data,
