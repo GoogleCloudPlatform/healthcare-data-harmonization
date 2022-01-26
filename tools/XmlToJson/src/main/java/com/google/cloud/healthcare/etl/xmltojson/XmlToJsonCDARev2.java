@@ -21,6 +21,7 @@ import com.google.cloud.healthcare.etl.xmltojson.xjcgen.ccdarev2.org.hl7.v3.POCD
 import java.io.ByteArrayOutputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.Map;
 import javax.xml.bind.JAXBContext;
@@ -92,6 +93,7 @@ public class XmlToJsonCDARev2 implements XmlToJson {
   private void setJAXBMarshallerProperties() throws XmlToJsonException {
     try {
       marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
+      marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_ENCODING, "UTF-8");
       marshaller.setProperty(JAXBContextProperties.MEDIA_TYPE, MEDIA_TYPE);
       marshaller.setProperty(JAXBContextProperties.JSON_INCLUDE_ROOT, true);
     } catch (PropertyException e) {
@@ -141,10 +143,10 @@ public class XmlToJsonCDARev2 implements XmlToJson {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     try {
       marshaller.marshal(jaxbXml, out);
-    } catch (JAXBException e) {
+      return out.toString("UTF-8");
+    } catch (JAXBException | UnsupportedEncodingException e) {
       throw new XmlToJsonException("error marshalling JAXB into JSON string", e);
     }
-    return out.toString();
   }
 
   private JAXBElement<POCDMT000040ClinicalDocument> unmarshallXMLToJAXBElement(String input)
