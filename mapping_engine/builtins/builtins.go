@@ -48,6 +48,7 @@ var BuiltinFunctions = map[string]interface{}{
 	"$ListLen":        ListLen,
 	"$ListOf":         ListOf,
 	"$SortAndTakeTop": SortAndTakeTop,
+	"$Range":          Range,
 	"$UnionBy":        UnionBy,
 	"$Unique":         Unique,
 	"$UnnestArrays":   UnnestArrays,
@@ -291,6 +292,26 @@ func SortAndTakeTop(arr jsonutil.JSONArr, key jsonutil.JSONStr, desc jsonutil.JS
 		return tm[keys[len(keys)-1]], nil
 	}
 	return tm[keys[0]], nil
+}
+
+// Range generates an array of sequentially ordered number from start (inclusive) to end (exclusive) by a step of 1.
+// Example:
+// $Range(2, 5) returns: [2, 3, 4]
+// $Range(5, 2) returns: [5, 4, 3]
+// $Range(-2, 1) returns: [-2, -1, 0]
+func Range(start jsonutil.JSONNum, end jsonutil.JSONNum) (jsonutil.JSONArr, error) {
+	result := make(jsonutil.JSONArr, 0)
+	var increment = (start <= end)
+	var i = start
+	for (increment && i < end) || (!increment && i > end) {
+		result = append(result, jsonutil.JSONNum(i))
+		if increment {
+			i++
+		} else {
+			i--
+		}
+	}
+	return result, nil
 }
 
 // UnionBy unions the items in the given array by the given keys, such that each item

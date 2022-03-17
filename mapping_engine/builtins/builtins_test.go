@@ -1437,6 +1437,63 @@ func TestMergeJSON(t *testing.T) {
 	}
 }
 
+func TestRange(t *testing.T) {
+	tests := []struct {
+		name  string
+		start jsonutil.JSONNum
+		end   jsonutil.JSONNum
+		want  jsonutil.JSONArr
+	}{
+		{
+			name:  "normal case",
+			start: jsonutil.JSONNum(2),
+			end:   jsonutil.JSONNum(5),
+			want:  mustParseArray(json.RawMessage("[2, 3, 4]"), t),
+		},
+		{
+			name:  "start non-integer",
+			start: jsonutil.JSONNum(1.5),
+			end:   jsonutil.JSONNum(5),
+			want:  mustParseArray(json.RawMessage("[1.5, 2.5, 3.5, 4.5]"), t),
+		},
+		{
+			name:  "start bigger than end",
+			start: jsonutil.JSONNum(5),
+			end:   jsonutil.JSONNum(2),
+			want:  mustParseArray(json.RawMessage("[5, 4, 3]"), t),
+		},
+		{
+			name:  "negative range",
+			start: jsonutil.JSONNum(-2),
+			end:   jsonutil.JSONNum(2),
+			want:  mustParseArray(json.RawMessage("[-2, -1, 0, 1]"), t),
+		},
+		{
+			name:  "start bigger than end",
+			start: jsonutil.JSONNum(5),
+			end:   jsonutil.JSONNum(2),
+			want:  mustParseArray(json.RawMessage("[5, 4, 3]"), t),
+		},
+		{
+			name:  "zero start",
+			start: jsonutil.JSONNum(0),
+			end:   jsonutil.JSONNum(5),
+			want:  mustParseArray(json.RawMessage("[0, 1, 2, 3, 4]"), t),
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := Range(test.start, test.end)
+			if err != nil {
+				t.Fatalf("Range(%v, %v) returned unexpected error %v", test.start, test.end, err)
+			}
+			if !cmp.Equal(got, test.want) {
+				t.Errorf("Range(%v, %v) = %v, want %v", test.start, test.end, got, test.want)
+			}
+		})
+	}
+}
+
 func TestSortAndTakeTop(t *testing.T) {
 	tests := []struct {
 		name string
