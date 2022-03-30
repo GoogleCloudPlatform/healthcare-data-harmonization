@@ -820,7 +820,7 @@ func StrFmt(format jsonutil.JSONStr, item jsonutil.JSONToken) (jsonutil.JSONStr,
 	// This cast avoids formatting issues with numbers (since JSONNum is not detected as a number by the formatter)
 	if numItem, ok := item.(jsonutil.JSONNum); ok {
 		fmtSpec := format[strings.Index(string(format), "%")+1]
-		if strings.Contains("bcdoqxXU", string(fmtSpec)) {
+		if strings.Contains("bcdoqxXU0", string(fmtSpec)) {
 			return jsonutil.JSONStr(fmt.Sprintf(string(format), int(numItem))), nil
 		}
 		return jsonutil.JSONStr(fmt.Sprintf(string(format), float64(numItem))), nil
