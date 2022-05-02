@@ -51,9 +51,6 @@
     "rimraf": "^2.6.1",
     "typescript": "~3.7.0"
   },
-  "overrides": {
-    "sanitize-html": "~2.6.0"
-  },
   "sideEffects": [
     "style/*.css"
   ],

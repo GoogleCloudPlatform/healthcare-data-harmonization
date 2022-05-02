@@ -100,9 +100,6 @@
     "react-router-dom": "~5.2.0",
     "react-router": "~5.2.0"
   },
-  "overrides": {
-    "sanitize-html": "~2.6.0"
-  },
   "jupyterlab": {
     "extension": true,
     "discovery": {
