@@ -60,7 +60,6 @@
     "fuse.js": "6.4.0",
     "material-ui-search-bar": "1.0.0-beta.14",
     "minimist": ">=1.2.2",
-    "sanitize-html": "2.0.0-beta",
     "typestyle": "^2.0.4",
     "yaml": "^1.7.2"
   },
@@ -100,6 +99,9 @@
     "react-dom": "~16.8.4",
     "react-router-dom": "~5.2.0",
     "react-router": "~5.2.0"
+  },
+  "overrides": {
+    "sanitize-html": "~2.6.0"
   },
   "jupyterlab": {
     "extension": true,
