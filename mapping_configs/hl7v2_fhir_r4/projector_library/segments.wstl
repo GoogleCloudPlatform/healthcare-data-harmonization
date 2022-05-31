@@ -401,7 +401,6 @@ def Parse_PATIENT_RESULT (required PATIENT_RESULT) {
   $this : PARSE_ORDER_OBSERVATION(PATIENT_RESULT.ORDER_OBSERVATION[], Patient);
 }
 
-
 // Description: Constructs a FHIR R4 Appointment Resource and its related resources
 //
 // Argument(s):
