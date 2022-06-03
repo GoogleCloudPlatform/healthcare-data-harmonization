@@ -402,9 +402,9 @@ var MessageHeader : MSH_MessageHeader(SIU.MSH);
   root Bundle : MSH_Bundle(SIU.MSH.7, SIU.MSH.10);
   root Provenance : MSH_Provenance(SIU.MSH);
 
-  var Patient : PID_PD1_Patient(SIU.PATIENT.PID, SIU.PATIENT.PD1);
+  var Patient : PID_PD1_Patient(SIU.PATIENT[0].PID, SIU.PATIENT[0].PD1);
   var Patient.contact[] (if SIU.NK1) : NK1_Contact(SIU.NK1[]);
-  var Encounter : PV1_DG1_Encounter(SIU.PATIENT.PV1, "", Patient, "");
+  var Encounter : PV1_DG1_Encounter(SIU.PATIENT[0].PV1, "", Patient, "");
   out Resources : Encounter;
 
   var Appointment : Parse_Appointment(SIU.SCH, SIU.RESOURCES[0].SERVICE[0].AIS, SIU.RESOURCES[0].LOCATION_RESOURCE[0].AIL);
@@ -412,7 +412,7 @@ var MessageHeader : MSH_MessageHeader(SIU.MSH);
 
   out Resources : Patient;
   out Resources : Appointment;
-  out Resources : PID_Account(SIU.PATIENT.PID.18, Patient);
+  out Resources : PID_Account(SIU.PATIENT[0].PID.18, Patient);
 }
 
 
