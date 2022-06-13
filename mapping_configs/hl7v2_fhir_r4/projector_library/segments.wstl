@@ -411,13 +411,13 @@ def Parse_PATIENT_RESULT (required PATIENT_RESULT) {
 //
 def Parse_Appointment(required SCH, AIS, AIL) {
 
-  start :  Extract_Date(SCH.11[0].4);
-  reasonCode : CWE_Code(SCH.7);
+  start :  SCH.11[0].4;
+    end :  SCH.11[0].5;
   appointmentType : CWE_Code(SCH.8);
-  status : CWE_Code(SCH.25);
+  status : SCH.25.3;
 
-  serviceType: CWE_Code(AIS.3);
-  participant[] : Build_Participant(AIL.3[], "LOC", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType", "location");
+  //serviceType: AIS.3.2;
+  participant[] : Build_SIU_Participant(SCH.20[]);
 
   id : $UUID();
   resourceType : "Appointment";

@@ -588,6 +588,12 @@ def Build_Participant (required XCN, varCode, varSystem, varDisplay) {
   type[0].coding[0].display : varDisplay;
 }
 
+def Build_SIU_Participant (required XCN) {
+  actor : Build_Reference(Output_Resource(XCN_Practitioner(XCN)));
+   status: "accepted";
+}
+
+
 // Description: Constructs a Practitioner resource
 //
 // Argument(s):
