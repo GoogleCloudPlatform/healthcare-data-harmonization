@@ -7,7 +7,7 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd"
     jaxb:extensionBindingPrefixes="xjc">
   <jaxb:globalBindings generateMixedExtensions="true"/>
-  <jaxb:bindings schemaLocation="../hl7v3xsd/cda_r2_normativewebedition2010/infrastructure/cda/POCD_MT000040_SDTC.xsd">
+  <jaxb:bindings schemaLocation="../hl7v3xsd/cda_r2_normativewebedition2010/infrastructure/cda/POCD_MT000040.xsd">
     <jaxb:bindings node="//xs:complexType[@name='POCD_MT000040.ObservationMedia']/xs:attribute[@name='ID']">
       <jaxb:property name="id2"/>
     </jaxb:bindings>
