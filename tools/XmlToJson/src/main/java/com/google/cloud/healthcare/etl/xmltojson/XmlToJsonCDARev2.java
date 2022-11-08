@@ -18,6 +18,8 @@ import com.google.cloud.healthcare.etl.xmltojson.postprocessor.PostProcessor;
 import com.google.cloud.healthcare.etl.xmltojson.postprocessor.PostProcessorCdaRev2;
 import com.google.cloud.healthcare.etl.xmltojson.postprocessor.PostProcessorException;
 import com.google.cloud.healthcare.etl.xmltojson.xjcgen.ccdarev2.org.hl7.v3.POCDMT000040ClinicalDocument;
+import com.google.cloud.healthcare.etl.xmltojson.xjcgen.ccdarev2.org.hl7.v3.SdtcPatient;
+import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 import java.io.ByteArrayOutputStream;
 import java.io.Reader;
 import java.io.StringReader;
@@ -76,7 +78,8 @@ public class XmlToJsonCDARev2 implements XmlToJson {
     try {
       jc =
           JAXBContextFactory.createContext(
-              new Class[] {POCDMT000040ClinicalDocument.class}, Collections.emptyMap());
+              new Class[] {POCDMT000040ClinicalDocument.class, SdtcPatient.class},
+              Collections.emptyMap());
     } catch (JAXBException e) {
       throw new XmlToJsonException("error creating JAXB context", e);
     }
@@ -96,6 +99,18 @@ public class XmlToJsonCDARev2 implements XmlToJson {
       marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_ENCODING, "UTF-8");
       marshaller.setProperty(JAXBContextProperties.MEDIA_TYPE, MEDIA_TYPE);
       marshaller.setProperty(JAXBContextProperties.JSON_INCLUDE_ROOT, true);
+      // This is needed for handling two namespaces
+      marshaller.setProperty(
+          "com.sun.xml.bind.namespacePrefixMapper",
+          new NamespacePrefixMapper() {
+            @Override
+            public String getPreferredPrefix(String arg0, String arg1, boolean arg2) {
+              if (arg0.equals("urn:hl7-org:sdtc")) {
+                return "sdtc";
+              }
+              return "";
+            }
+          });
     } catch (PropertyException e) {
       throw new XmlToJsonException("error setting JAXB marshaller properties", e);
     }

@@ -46,6 +46,10 @@ public class PostProcessorCdaRev2 implements PostProcessor {
   private static String WIDTH_KEY = "width";
   private static String CENTER_KEY = "center";
   private static String NULLFLAVOR_KEY = "nullFlavor";
+  private static String ADMINISTRATIVE_GENDER_CODE_KEY = "administrativegendercode";
+  private static String RACECODE_KEY = "racecode";
+  private static String ETHINIC_GROUP_CODE_KEY = "ethnicgroupcode";
+  private static String BIRTH_TIME_KEY = "birthtime";
 
   /** Constructor for CCDA Release 2 post processor */
   public PostProcessorCdaRev2() {
@@ -62,6 +66,10 @@ public class PostProcessorCdaRev2 implements PostProcessor {
     keysToSingle.add(LOW_KEY);
     keysToSingle.add(WIDTH_KEY);
     keysToSingle.add(CENTER_KEY);
+    keysToSingle.add(ADMINISTRATIVE_GENDER_CODE_KEY);
+    keysToSingle.add(RACECODE_KEY);
+    keysToSingle.add(ETHINIC_GROUP_CODE_KEY);
+    keysToSingle.add(BIRTH_TIME_KEY);
     transformers.add(new SingleTransformer(keysToSingle));
 
     /**
