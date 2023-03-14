@@ -17,7 +17,6 @@ import json
 from unittest from unittest import mock
 
 from absl.testing import absltest
-from fakefs import fake_filesystem
 from google.cloud import storage
 from googleapiclient.http import HttpError
 import grpc
@@ -26,6 +25,7 @@ from IPython.core import error
 from IPython.display import JSON
 from IPython.terminal import interactiveshell
 from IPython.testing import tools
+from pyfakefs import fake_filesystem
 
 from google3.google.rpc import code_pb2
 from google3.google.rpc import status_pb2
@@ -179,8 +179,8 @@ class WstlTest(absltest.TestCase):
             "load_hl7v2_gcs", """--bucket_name=foo
           --source_blob_name=bar --dest_file_name={}""".format(tmp_filename))
         self.assertEqual(
-            fs.GetObject(tmp_filename).contents.decode("UTF-8"),
-            self.sample_hl7v2)
+            fs.get_object(tmp_filename).contents, self.sample_hl7v2
+        )
 
   @mock.patch.object(storage, "Bucket", autospec=True)
   @mock.patch.object(storage, "Client", autospec=True)
