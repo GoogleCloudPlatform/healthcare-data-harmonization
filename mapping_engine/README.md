@@ -23,6 +23,7 @@ Make sure you have installed and added to PATH
 
 1. [Golang](https://golang.org/dl/) (>= 1.13)
 1. [Protobuf Compiler `protoc`](https://github.com/protocolbuffers/protobuf/releases/tag/v3.11.4) (>= 3.11.4)
+1. [Java](https://openjdk.org/install/) (>=8)
 
 Then run `build.sh`
 
