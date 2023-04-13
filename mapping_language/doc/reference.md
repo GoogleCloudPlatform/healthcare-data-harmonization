@@ -577,7 +577,7 @@ code_lookup: {
 
 #### Remote code harmonization example
 
-> NOTE - are supported currently.
+> NOTE: Only [Google Cloud FHIR Stores]() are supported currently.
 
 <section class="zippy">
 Configuration:
