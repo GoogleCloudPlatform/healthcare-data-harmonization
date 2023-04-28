@@ -400,3 +400,25 @@ def Parse_PATIENT_RESULT (required PATIENT_RESULT) {
 
   $this : PARSE_ORDER_OBSERVATION(PATIENT_RESULT.ORDER_OBSERVATION[], Patient);
 }
+
+// Description: Constructs a FHIR R4 Appointment Resource and its related resources
+//
+// Argument(s):
+//   SCH V2 Segment
+//
+// Output(s):
+//   Patient: https://www.hl7.org/fhir/Appointment
+//
+def Parse_Appointment(required SCH, AIS, AIL) {
+
+  start :  SCH.11[0].4;
+    end :  SCH.11[0].5;
+  appointmentType : CWE_Code(SCH.8);
+  status : SCH.25.3;
+
+  //serviceType: AIS.3.2;
+  participant[] : Build_SIU_Participant(SCH.20[]);
+
+  id : $UUID();
+  resourceType : "Appointment";
+}

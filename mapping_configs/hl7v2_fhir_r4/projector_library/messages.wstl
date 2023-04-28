@@ -394,3 +394,29 @@ def RDE_O01(RDE_O01) {
 def RDE_O11(RDE_O11) {
   $this : Transform_RDE(RDE_O11);
 }
+
+def Transform_SIU(required SIU) {
+var MessageHeader : MSH_MessageHeader(SIU.MSH);
+  out Resources : MessageHeader;
+  out Resources : HD_Provenance(SIU.MSH.3, SIU.MSH.7, MessageHeader);
+  root Bundle : MSH_Bundle(SIU.MSH.7, SIU.MSH.10);
+  root Provenance : MSH_Provenance(SIU.MSH);
+
+  var Patient : PID_PD1_Patient(SIU.PATIENT[0].PID, SIU.PATIENT[0].PD1);
+  var Patient.contact[] (if SIU.NK1) : NK1_Contact(SIU.NK1[]);
+  var Encounter : PV1_DG1_Encounter(SIU.PATIENT[0].PV1, "", Patient, "");
+  out Resources : Encounter;
+
+  var Appointment : Parse_Appointment(SIU.SCH, SIU.RESOURCES[0].SERVICE[0].AIS, SIU.RESOURCES[0].LOCATION_RESOURCE[0].AIL);
+  var Appointment.period.start : Convert_DateTime(SIU.RESOURCES[0].PERSONNEL_RESOURCE[0].AIP.6);
+
+  out Resources : Patient;
+  out Resources : Appointment;
+  out Resources : PID_Account(SIU.PATIENT[0].PID.18, Patient);
+}
+
+
+
+def SIU_S12(SIU_S12) {
+$this : Transform_SIU(SIU_S12);
+}
