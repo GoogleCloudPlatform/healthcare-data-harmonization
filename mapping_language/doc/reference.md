@@ -1,4 +1,4 @@
-# Whistle Data Transformation Language language reference
+# Whistle Data Transformation Language reference
 
 ## Background
 
