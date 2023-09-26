@@ -65,7 +65,7 @@
       "glob": "^7.1.6",
       "jasmine": "^3.6.1",
       "jasmine-spec-reporter": "^6.0.0",
-      "nodemon": "^2.0.4",
+      "nodemon": "^2.0.22",
       "nyc": "^15.1.0",
       "prompt-sync": "^4.2.0",
       "rimraf": "^3.0.0",
