@@ -1,7 +1,5 @@
 # Whistle Data Transformation Language
 
-[TOC]
-
 # Introduction
 
 Whistle is a mapping language used for converting complex, nested data from one
@@ -13,6 +11,13 @@ healthcare data, but is applicable to any domain.
 In addition to the built-in functionality, the engine can be extended with
 plugins which can provide native transformations, extra features, integration
 with external services, and otherwise extend the engine functionality.
+
+# Prerequisites
+
+1. [JDK 11.x](https://www.azul.com/downloads/?version=java-11-lts&package=jdk#zulu)
+1. [Gradle 7.x](https://gradle.org/next-steps/?version=7.6&format=bin)
+
+> NOTE Consider using [sdkman](https://sdkman.io/): `sdk install java 11.0.20-zulu; sdk install gradle 7.6`
 
 # Getting Started
 
