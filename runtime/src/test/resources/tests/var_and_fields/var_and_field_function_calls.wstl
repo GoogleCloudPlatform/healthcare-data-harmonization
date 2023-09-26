@@ -1,0 +1,11 @@
+package innerContext
+option "experiment/unique_vars_and_fields"
+
+f1: 1
+var f2: 2
+
+def func(){
+    f2: 3
+}
+
+func()

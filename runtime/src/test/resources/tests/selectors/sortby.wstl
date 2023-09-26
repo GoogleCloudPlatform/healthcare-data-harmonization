@@ -1,0 +1,5 @@
+var simple: [3, 4, 1, 2]
+var objects: [{ k: "b"; }, { k: "a"; }, { k: "d"; }, { k: "c"; }]
+
+sorted: simple[sortBy $]
+reverse: objects[sortByDescending $.k][*].k

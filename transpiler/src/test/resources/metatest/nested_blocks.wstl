@@ -1,0 +1,6 @@
+block1:{
+var x: 3
+block2 : {
+  var x: 4
+  }
+}

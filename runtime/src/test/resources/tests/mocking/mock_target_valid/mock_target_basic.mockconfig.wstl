@@ -1,0 +1,8 @@
+package mock_config
+
+def mockBufferTarget(arg, val) {
+  root output.arg: arg;
+  side output.val: val;
+}
+
+mocking::mockTarget("bufferTargetPlugin::bufferTarget", "mock_config::mockBufferTarget");

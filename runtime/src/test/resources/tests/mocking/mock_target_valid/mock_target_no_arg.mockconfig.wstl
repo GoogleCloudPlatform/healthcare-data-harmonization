@@ -1,0 +1,7 @@
+package mock_config
+
+def mockTarget(valToWrite) {
+  side output: valToWrite;
+}
+
+mocking::mockTarget("bufferTargetPlugin::bufferTarget", "mock_config::mockTarget");

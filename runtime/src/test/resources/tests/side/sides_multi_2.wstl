@@ -1,0 +1,5 @@
+package sides2
+
+def func2(num) {
+  side array[]: num;
+}

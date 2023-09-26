@@ -1,0 +1,15 @@
+package mock_config
+
+def mockTarget(x, y , z, valToWrite) {
+  side arg[]: x
+  side arg[]: y
+  side arg[]: z
+  side output: valToWrite
+}
+
+def selector(x, y, z) {
+  x == "arg1" and y == "arg2"
+}
+
+mocking::mockTarget("bufferTargetPlugin::bufferTarget", "mock_config::mockTarget", "mock_config::selector");
+

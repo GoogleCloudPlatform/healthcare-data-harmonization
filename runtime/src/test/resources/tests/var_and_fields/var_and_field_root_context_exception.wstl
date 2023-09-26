@@ -1,0 +1,9 @@
+package rootCtx
+option "experiment/unique_vars_and_fields"
+
+f1.pathVal: 1
+var f1: 2
+def func(){
+    f1: 3
+    var f2: 4
+}

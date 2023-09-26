@@ -1,0 +1,17 @@
+option "experiment/merge_modes"
+
+var baseReplace: loadJson("./data.json").shallowcontainer1
+replace var baseReplace: loadJson("./data.json").shallowcontainer2
+
+replace: baseReplace
+
+var baseMerge: loadJson("./data.json").shallowcontainer1
+merge var baseMerge: loadJson("./data.json").shallowcontainer2
+
+merge: baseMerge
+
+var baseExtend: loadJson("./data.json").shallowcontainer1
+extend var baseExtend: loadJson("./data.json").shallowcontainer2
+
+extend: baseExtend
+

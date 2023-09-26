@@ -1,0 +1,4 @@
+import "class://com.google.cloud.verticals.foundations.dataharmonization.integration.mocking.MockingTestPlugin"
+
+
+test::mockFunc()

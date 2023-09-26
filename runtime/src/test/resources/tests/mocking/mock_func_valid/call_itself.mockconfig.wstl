@@ -1,0 +1,8 @@
+package mock_config
+
+def mockFoo() {
+  output[]: "mockFoo"
+  main::foo()
+}
+
+mocking::mock("main::foo", "mock_config::mockFoo");

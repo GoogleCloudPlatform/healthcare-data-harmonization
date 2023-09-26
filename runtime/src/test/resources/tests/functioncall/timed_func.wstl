@@ -1,0 +1,17 @@
+package func
+
+def add(x, y) {
+  x + y
+}
+
+def timedAdd(x, y) {
+  funcOutput: timed(add(x, y), handler($time))
+}
+
+def handler(time) {
+  if time? then {
+    root handlerOutput: "logged time"
+  }
+}
+
+timedAdd(1, 2)

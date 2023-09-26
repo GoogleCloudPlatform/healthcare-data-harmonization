@@ -1,0 +1,16 @@
+import "./util.wstl"
+
+result: level1()
+
+def level1() withError({
+  level2()
+}, onError($error, "this message shouldn't be seen"))
+
+def level2() rethrowError({
+  util::fail()
+}, onError($error, "this message should be seen"))
+
+def onError(error, meta) {
+  side errors[]: error
+  handled: meta
+}

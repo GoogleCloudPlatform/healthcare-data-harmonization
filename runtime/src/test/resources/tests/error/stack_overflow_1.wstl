@@ -1,0 +1,7 @@
+package stack_overflow
+
+result: f(10000000)
+
+def f(value) {
+  if value == 0 then 0 else f(value - 1)
+}

@@ -1,0 +1,30 @@
+import "./util.wstl"
+
+result: level1("hello")
+
+def level1(item) level2(item + "1", "C")
+
+def level2(item, c) withError({
+  level3(item + "2" + c)
+}, onError($error, "this handler handles another error"))
+
+def level3(item) withError({
+  final: item + "3"
+  err: integration_test_loader_plugin::nestedError("Oops red", "Oops blue")
+}, onErrorButBad($error, "this handler makes an error"))
+
+def onError(error, meta) {
+  side errors[]: {
+    err: error
+    meta: meta
+  }
+  handled: meta
+}
+
+def onErrorButBad(error, meta) {
+  side errors[]: {
+    err: error
+    meta: meta
+  }
+  util::fail()
+}

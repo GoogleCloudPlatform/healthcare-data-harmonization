@@ -1,0 +1,11 @@
+package mock_config
+
+def mockFoo(x) {
+  "mockFoo"
+}
+
+def incompatibleSelector(x, y) {
+  "bad selector"
+}
+
+mocking::mock("main::foo", "mock_config::mockFoo", "mock_config::incompatibleSelector");

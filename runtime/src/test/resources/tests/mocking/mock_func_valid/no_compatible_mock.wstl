@@ -1,0 +1,7 @@
+package main
+
+def foo(x) {
+  x
+}
+
+output: foo(1);

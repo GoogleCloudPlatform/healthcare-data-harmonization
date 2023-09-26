@@ -1,0 +1,7 @@
+package errors
+
+ones();
+
+def one() {
+  "one";
+}

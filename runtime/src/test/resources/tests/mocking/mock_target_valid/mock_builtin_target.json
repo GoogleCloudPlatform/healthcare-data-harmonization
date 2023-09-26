@@ -1,0 +1,7 @@
+{
+  "mockedFoo": {
+    "aux": "additional info",
+    "val": "I will be mocked"
+    },
+  "bar": "I won't"
+}

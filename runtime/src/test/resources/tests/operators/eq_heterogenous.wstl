@@ -1,0 +1,3 @@
+str_con: eq("string1",{})
+str_arr: eq("string1",[])
+arr_con: eq({},[])

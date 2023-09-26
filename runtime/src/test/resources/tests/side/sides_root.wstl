@@ -1,0 +1,8 @@
+package sides1
+
+import "./sides_multi_1.wstl"
+import "./sides_multi_2.wstl"
+
+var num: 1337;
+output: sides1::func1(num);
+sides2::func2(num + 100);

@@ -1,0 +1,9 @@
+package main
+
+side firstTernary: if (0 > 1) then {
+   "firstTrue"
+   side nestedTernaryTrueBranch: if (1 < 10) then "11" else "10"
+} else {
+   "firstFalse"
+   side nestedTernaryFalseBranch: if (1 > 10) then "01" else "00"
+}

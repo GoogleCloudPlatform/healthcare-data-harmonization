@@ -1,0 +1,29 @@
+package set
+
+var keyOne: "one"
+var keyTwo: "two"
+var innerKeyOne: "innerOne"
+var innerInnerKeyOne: "innerInnerOne"
+var container: {
+  a: 1
+}
+
+var container: {
+  b: 2
+}
+owContainer: container
+singleEntryContainer: {
+  set(keyOne): "oneValue";
+}
+multiEntryContainer: {
+  set(keyOne): "oneValue";
+  set(keyTwo): "twoValue";
+}
+nestedEntryContainer: {
+  set(keyOne): {
+    set(innerKeyOne): {
+      set(innerInnerKeyOne): "innerInnerOneValue";
+    }
+  }
+  set(keyTwo): "twoValue";
+}

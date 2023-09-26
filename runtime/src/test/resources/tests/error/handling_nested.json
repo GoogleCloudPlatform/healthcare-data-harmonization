@@ -1,0 +1,128 @@
+{
+  "errors": [
+    {
+      "err": {
+        "cause": "IllegalArgumentException: Oops red\nUnsupportedOperationException: Oops blue",
+        "stack": [
+          {
+            "file": "Native",
+            "function": "nestedError",
+            "line": -1,
+            "package": "com.google.cloud.verticals.foundations.dataharmonization.integration.plugin.TestPluginFunctions"
+          },
+          {
+            "file": "Native",
+            "function": "withError",
+            "line": 13,
+            "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.error.Errors"
+          },
+          {
+            "file": "res:///tests/error/handling_nested.wstl",
+            "function": "level3",
+            "line": 11,
+            "package": "handling_nested"
+          },
+          {
+            "file": "Native",
+            "function": "withError",
+            "line": 8,
+            "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.error.Errors"
+          },
+          {
+            "file": "res:///tests/error/handling_nested.wstl",
+            "function": "level2",
+            "line": 7,
+            "package": "handling_nested"
+          },
+          {
+            "file": "res:///tests/error/handling_nested.wstl",
+            "function": "level1",
+            "line": 5,
+            "package": "handling_nested"
+          },
+          {
+            "file": "res:///tests/error/handling_nested.wstl",
+            "function": "handling_nested_root_function",
+            "line": 3,
+            "package": "handling_nested"
+          }
+        ],
+        "vars": {
+          "item": "hello12C",
+          "withError.$this": {
+            "final": "hello12C3"
+          }
+        }
+      },
+      "meta": "this handler makes an error"
+    },
+    {
+      "err": {
+        "cause": "UnsupportedOperationException: Attempted to key into non-container Array/DefaultArray with field oops",
+        "stack": [
+          {
+            "file": "Native",
+            "function": "get",
+            "line": -1,
+            "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.Core"
+          },
+          {
+            "file": "res:///tests/error/util.wstl",
+            "function": "fail",
+            "line": 3,
+            "package": "util"
+          },
+          {
+            "file": "res:///tests/error/handling_nested.wstl",
+            "function": "onErrorButBad",
+            "line": 29,
+            "package": "handling_nested"
+          },
+          {
+            "file": "Native",
+            "function": "withError",
+            "line": 14,
+            "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.error.Errors"
+          },
+          {
+            "file": "res:///tests/error/handling_nested.wstl",
+            "function": "level3",
+            "line": 11,
+            "package": "handling_nested"
+          },
+          {
+            "file": "Native",
+            "function": "withError",
+            "line": 8,
+            "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.error.Errors"
+          },
+          {
+            "file": "res:///tests/error/handling_nested.wstl",
+            "function": "level2",
+            "line": 7,
+            "package": "handling_nested"
+          },
+          {
+            "file": "res:///tests/error/handling_nested.wstl",
+            "function": "level1",
+            "line": 5,
+            "package": "handling_nested"
+          },
+          {
+            "file": "res:///tests/error/handling_nested.wstl",
+            "function": "handling_nested_root_function",
+            "line": 3,
+            "package": "handling_nested"
+          }
+        ],
+        "vars": {
+          "array": [1, 2, 3]
+        }
+      },
+      "meta": "this handler handles another error"
+    }
+  ],
+  "result": {
+    "handled": "this handler handles another error"
+  }
+}

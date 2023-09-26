@@ -1,0 +1,3 @@
+package test
+
+this line throws a transpileException

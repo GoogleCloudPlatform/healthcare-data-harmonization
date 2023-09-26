@@ -1,0 +1,7 @@
+package main
+
+def foo(x) {
+  output[]: x
+}
+
+foo(5);

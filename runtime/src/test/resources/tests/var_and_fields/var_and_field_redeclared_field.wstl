@@ -1,0 +1,11 @@
+package rootCtx
+option "experiment/unique_vars_and_fields"
+
+f1: 2
+f1: 3
+f1: 4
+
+var f1: 1
+
+
+

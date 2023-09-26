@@ -1,0 +1,8 @@
+var x: 4
+block1:{
+  var x: 4
+  var x: 9
+  y : x
+}
+var x: 8
+y: x

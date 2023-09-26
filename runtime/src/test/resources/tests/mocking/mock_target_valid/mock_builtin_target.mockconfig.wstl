@@ -1,0 +1,14 @@
+package mock_config
+
+def mockSet(arg, valueToWrite) {
+  side mockedFoo: {
+    aux: "additional info";
+    val: valueToWrite;
+    }
+}
+
+def selector(arg) arg == "foo"
+
+def selector(v, arg) selector(arg)
+
+mocking::mockTarget("builtins::set", "mock_config::mockSet", "mock_config::selector");

@@ -1,0 +1,38 @@
+{
+  "abool": "IllegalArgumentException: Cannot append to Primitive. Was it meant to be an array?",
+  "anum": "IllegalArgumentException: Cannot append to Primitive. Was it meant to be an array?",
+  "astr": "IllegalArgumentException: Cannot append to Primitive. Was it meant to be an array?",
+  "avbool": "IllegalArgumentException: Cannot append to Primitive. Was it meant to be an array?",
+  "avnum": "IllegalArgumentException: Cannot append to Primitive. Was it meant to be an array?",
+  "avstr": "IllegalArgumentException: Cannot append to Primitive. Was it meant to be an array?",
+  "ebool": "IllegalArgumentException: 'extend' is not applicable to Primitive. Was it meant to be an array or container?",
+  "enum": "IllegalArgumentException: 'extend' is not applicable to Primitive. Was it meant to be an array or container?",
+  "estr": "IllegalArgumentException: 'extend' is not applicable to Primitive. Was it meant to be an array or container?",
+  "evbool": "IllegalArgumentException: 'extend' is not applicable to Primitive. Was it meant to be an array or container?",
+  "evnum": "IllegalArgumentException: 'extend' is not applicable to Primitive. Was it meant to be an array or container?",
+  "evstr": "IllegalArgumentException: 'extend' is not applicable to Primitive. Was it meant to be an array or container?",
+  "mbool": {
+    "bool": false,
+    "vbool": false
+  },
+  "mnum": {
+    "num": 2,
+    "vnum": 2
+  },
+  "mstr": {
+    "str": "two",
+    "vstr": "two"
+  },
+  "rbool": {
+    "bool": false,
+    "vbool": false
+  },
+  "rnum": {
+    "num": 2,
+    "vnum": 2
+  },
+  "rstr": {
+    "str": "two",
+    "vstr": "two"
+  }
+}

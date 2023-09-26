@@ -1,0 +1,5 @@
+package importer
+option "experiment/unique_vars_and_fields"
+import "./var_and_field_no_exception_option_disabled.wstl";
+
+rootCtx::func()

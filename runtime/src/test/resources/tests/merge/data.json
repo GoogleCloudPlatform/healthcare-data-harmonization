@@ -1,0 +1,118 @@
+{
+  "shallowarray1": [
+    1,
+    "a",
+    true,
+    [
+      1,
+      "a",
+      true
+    ],
+    {
+      "a": 1,
+      "bool": true,
+      "num": 1,
+      "str": "a"
+    }
+  ],
+  "shallowarray2": [
+    2,
+    "b",
+    false,
+    [
+      2,
+      "b",
+      false
+    ],
+    {
+      "b": 2,
+      "bool": false,
+      "num": 2,
+      "str": "b"
+    }
+  ],
+  "shallowcontainer1": {
+    "a": {
+      "array": [
+        1,
+        "a",
+        true,
+        [
+          1,
+          "a",
+          true
+        ]
+      ],
+      "bool": true,
+      "container": {
+        "a": 1,
+        "bool": true,
+        "num": 1,
+        "str": "a"
+      },
+      "num": 1,
+      "str": "a"
+    },
+    "array": [
+      1,
+      "a",
+      true,
+      [
+        1,
+        "a",
+        true
+      ]
+    ],
+    "bool": true,
+    "container": {
+      "a": 1,
+      "bool": true,
+      "num": 1,
+      "str": "a"
+    },
+    "num": 1,
+    "str": "a"
+  },
+  "shallowcontainer2": {
+    "array": [
+      2,
+      "b",
+      false,
+      [
+        2,
+        "b",
+        false
+      ]
+    ],
+    "b": {
+      "array": [
+        2,
+        "b",
+        false,
+        [
+          2,
+          "b",
+          false
+        ]
+      ],
+      "bool": false,
+      "container": {
+        "b": 2,
+        "bool": false,
+        "num": 2,
+        "str": "b"
+      },
+      "num": 2,
+      "str": "b"
+    },
+    "bool": false,
+    "container": {
+      "b": 2,
+      "bool": false,
+      "num": 2,
+      "str": "b"
+    },
+    "num": 2,
+    "str": "b"
+  }
+}

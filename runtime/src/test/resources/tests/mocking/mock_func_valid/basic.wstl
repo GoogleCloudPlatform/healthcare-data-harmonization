@@ -1,0 +1,7 @@
+package main
+
+def foo() {
+  hello: "foo"
+}
+
+foo()

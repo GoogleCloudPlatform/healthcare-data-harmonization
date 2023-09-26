@@ -1,0 +1,5 @@
+{
+  "firstTernary": "foo",
+  "nestedTernaryFalseBranch": "foo",
+  "nestedTernaryTrueBranch": "foo"
+}

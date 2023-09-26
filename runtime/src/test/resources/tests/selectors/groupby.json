@@ -1,0 +1,35 @@
+{
+  "groupByResult": [
+    {
+      "key": "biggerThan2",
+      "elements": [
+        {
+          "num": 3,
+          "word": "three"
+        },
+        {
+          "num": 4,
+          "word": "four"
+        }
+      ]
+    },
+    {
+      "key": 3,
+      "elements": [
+        {
+          "num": 1,
+          "word": "one"
+        }
+      ]
+    },
+    {
+      "key": 4,
+      "elements": [
+        {
+          "num": 2,
+          "word": "two"
+        }
+      ]
+    }
+  ]
+}

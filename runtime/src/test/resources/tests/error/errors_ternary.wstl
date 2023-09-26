@@ -1,0 +1,22 @@
+package errors
+
+one();
+
+def two(x) {
+  three(x);
+}
+
+def three(x) {
+  // Force an error by keying into an array
+  var arr: [1, 2, 3]
+  arr.myfield
+}
+
+def one() {
+  if 2 * 2 == 4 then {
+      result: {
+        var lst: [1, 2, 3];
+        two(lst[where $ == 2][]);
+      }
+  } else {}
+}

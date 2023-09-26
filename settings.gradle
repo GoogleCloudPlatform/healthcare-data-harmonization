@@ -1,0 +1,26 @@
+rootProject.name = 'whistle_core'
+
+def docgenPath = java.nio.file.Path.of(rootDir.getAbsolutePath(), "docgen")
+def docgenExists = docgenPath.toFile().exists()
+gradle.ext.set("docgenExists", docgenExists)
+if (docgenExists) {
+    includeBuild(docgenPath)
+}
+
+def annotationProcessorPath = java.nio.file.Path.of(rootDir.getAbsolutePath(), "annotation_processor")
+def annotationProcessorExists = annotationProcessorPath.toFile().exists()
+gradle.ext.set("annotationProcessorExists", annotationProcessorExists)
+if(annotationProcessorExists){
+    includeBuild(annotationProcessorPath)
+}
+
+include 'proto'
+include 'runtime'
+include 'transpiler'
+include 'testutil'
+
+buildCache {
+    local {
+        directory = new File(rootDir, 'build_cache')
+    }
+}

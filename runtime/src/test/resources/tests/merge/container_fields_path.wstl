@@ -1,0 +1,10 @@
+option "experiment/merge_modes"
+
+thicccField.replace: loadJson("./data.json").shallowcontainer1
+replace thicccField.replace: loadJson("./data.json").shallowcontainer2
+
+thicccField.merge: loadJson("./data.json").shallowcontainer1
+merge thicccField.merge: loadJson("./data.json").shallowcontainer2
+
+thicccField.extend: loadJson("./data.json").shallowcontainer1
+extend thicccField.extend: loadJson("./data.json").shallowcontainer2

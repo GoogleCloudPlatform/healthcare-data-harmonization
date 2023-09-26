@@ -1,0 +1,6 @@
+package test
+
+import "./constants.wstl";
+import "{func()}";
+
+next::test_output();

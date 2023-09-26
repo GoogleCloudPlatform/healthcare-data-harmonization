@@ -1,0 +1,4 @@
+package main
+
+output[]: uuid();
+output[]: uuid();

@@ -1,0 +1,115 @@
+option "experiment/merge_modes"
+
+mnum: {
+  num: 1
+  merge num: 2
+
+  var num: 1
+  merge var num: 2
+  vnum: num
+}
+
+rnum: {
+  num: 1
+  replace num: 2
+
+  var num: 1
+  replace var num: 2
+  vnum: num
+}
+
+enum: withError({
+  num: 1
+  extend num: 2
+}, $error.cause)
+
+evnum: withError({
+  var num: 1
+  extend var num: 2
+}, $error.cause)
+
+anum: withError({
+  num: 1
+  append num: 2
+}, $error.cause)
+
+avnum: withError({
+  var num: 1
+  append var num: 2
+}, $error.cause)
+
+mstr: {
+  str: "one"
+  merge str: "two"
+
+  var str: "one"
+  merge var str: "two"
+  vstr: str
+}
+
+rstr: {
+  str: "one"
+  replace str: "two"
+
+  var str: "one"
+  replace var str: "two"
+  vstr: str
+}
+
+estr: withError({
+  str: "one"
+  extend str: "two"
+}, $error.cause)
+
+evstr: withError({
+  var str: "one"
+  extend var str: "two"
+}, $error.cause)
+
+astr: withError({
+  str: "one"
+  append str: "two"
+}, $error.cause)
+
+avstr: withError({
+  var str: "one"
+  append var str: "two"
+}, $error.cause)
+
+mbool: {
+  bool: true
+  merge bool: false
+
+  var bool: true
+  merge var bool: false
+  vbool: bool
+}
+
+rbool: {
+  bool: true
+  replace bool: false
+
+  var bool: true
+  replace var bool: false
+  vbool: bool
+}
+
+ebool: withError({
+  bool: true
+  extend bool: false
+}, $error.cause)
+
+evbool: withError({
+  var bool: true
+  extend var bool: false
+}, $error.cause)
+
+abool: withError({
+  bool: true
+  append bool: false
+}, $error.cause)
+
+avbool: withError({
+  var bool: true
+  append var bool: false
+}, $error.cause)

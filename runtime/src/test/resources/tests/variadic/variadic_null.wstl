@@ -1,0 +1,10 @@
+import "./func.wstl";
+
+var null: {}
+
+mul: mul(5, null)
+array: arrayOf(null)
+str: "got {null}"
+// callPackageFn has variadic params, verify that null is correctly passed to
+// the target function.
+call: callPackageFn("func", "f", null)

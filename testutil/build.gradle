@@ -1,0 +1,19 @@
+plugins {
+    id 'java-library'
+    id 'idea'
+}
+
+group 'com.google.cloud.verticals.foundations.dataharmonization'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api project(":proto")
+    api project(":runtime")
+    implementation group: 'com.google.guava', name: 'guava', version: "${guavaVersion}"
+    implementation group: 'junit', name: 'junit', version: '4.12'
+    implementation group: 'org.mockito', name: 'mockito-core', version: '3.2.0'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
+}

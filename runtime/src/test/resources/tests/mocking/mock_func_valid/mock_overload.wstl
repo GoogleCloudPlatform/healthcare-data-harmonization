@@ -1,0 +1,8 @@
+package main
+
+one_arg: X(2)
+two_args: X(2, 3)
+
+def X(a) a * 10
+
+def X(a, b) a * b

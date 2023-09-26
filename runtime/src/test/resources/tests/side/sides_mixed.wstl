@@ -1,0 +1,17 @@
+package sides
+
+var num: 1337;
+output: withSides(func1(num));
+func2(num + 100);
+
+def func1(num) {
+  main: num;
+  side field: num + 1;
+  f2: func2(num + 1000);
+  side array[]: num + 2;
+  side array[]: num + 3;
+}
+
+def func2(num) {
+  side array[]: num;
+}

@@ -1,0 +1,15 @@
+package parentvars
+
+var v: 1
+start_value_of_v: v;
+block1: {
+  start_value_of_v: v;
+  var v: v + 1;
+  block2: if true then {
+    start_value_of_v: v;
+    var v: v + 1;
+    end_value_of_v: v;
+  } else false;
+  end_value_of_v: v;
+}
+end_value_of_v: v;

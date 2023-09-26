@@ -1,0 +1,4 @@
+package main
+
+set("foo"): "I will be mocked";
+set("bar"): "I won't";

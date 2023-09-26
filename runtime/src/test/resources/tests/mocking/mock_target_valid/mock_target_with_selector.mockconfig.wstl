@@ -1,0 +1,12 @@
+package mock_config
+
+def mockBufferTarget(arg, valToWrite) {
+  side output[]: {
+    arg: arg;
+    val: valToWrite;
+  }
+}
+
+def selector(arg) arg == "foo"
+
+mocking::mockTarget("bufferTargetPlugin::bufferTarget", "mock_config::mockBufferTarget", "mock_config::selector");

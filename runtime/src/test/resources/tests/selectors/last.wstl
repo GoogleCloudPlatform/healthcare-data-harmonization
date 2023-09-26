@@ -1,0 +1,8 @@
+var array_a: ["a", "bc", "d", "efg"]
+var array_b: [2,3,4,6,9]
+var array_c: []
+
+
+out_non_empty_a: array_a[last];
+out_non_empty_b: array_b[last];
+out_empty_c: array_c[last];

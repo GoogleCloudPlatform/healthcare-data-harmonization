@@ -1,0 +1,9 @@
+package iteration
+
+var empty: {}
+shouldNotBeThere: foo($root.lasjdlasjdlaksj[]);
+shouldNotBeThere2: foo($root.lasjdlasjdlaksj[], empty[]);
+shouldBeThere: "hello";
+
+def foo(value) "this should never appear"
+def foo(value, value2) "this should never appear"

@@ -1,0 +1,4 @@
+package mock_config
+import "class://com.google.cloud.verticals.foundations.dataharmonization.integration.mocking.MockingTestPlugin"
+
+mocking::mock("main::func", "test::mockFunc");

@@ -1,0 +1,30 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.13'
+
+        if (gradle.ext.docgenExists) {
+            classpath 'com.google.cloud.verticals.foundations.dataharmonization:docgen'
+        }
+    }
+}
+
+allprojects {
+
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+}
+
+ext {
+    grpcVersion = "1.43.2"
+    guavaVersion = "31.0.1-jre"
+}

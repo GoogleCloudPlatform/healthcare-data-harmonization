@@ -1,0 +1,4 @@
+var array1: [1, 2, 3]
+var array2: [100, 200, 300]
+result: iterate($1 + $2, array1, array2)
+result2: iterate($ + 100, array1)

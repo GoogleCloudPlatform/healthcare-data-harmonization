@@ -1,0 +1,210 @@
+{
+  "errors": [
+    {
+      "cause": "UnsupportedOperationException: Attempted to key into non-container Array/DefaultArray with field oops",
+      "stack": [
+        {
+          "file": "Native",
+          "function": "get",
+          "line": -1,
+          "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.Core"
+        },
+        {
+          "file": "res:///tests/error/util.wstl",
+          "function": "fail",
+          "line": 3,
+          "package": "util"
+        },
+        {
+          "file": "res:///tests/error/handling_iteration.wstl",
+          "function": "process",
+          "line": 7,
+          "package": "handling_iteration"
+        },
+        {
+          "file": "Native",
+          "function": "iterate",
+          "line": -1,
+          "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.Iteration"
+        },
+        {
+          "file": "Native",
+          "function": "withError",
+          "line": 4,
+          "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.error.Errors"
+        },
+        {
+          "file": "res:///tests/error/handling_iteration.wstl",
+          "function": "handling_iteration_root_function",
+          "line": 4,
+          "package": "handling_iteration"
+        }
+      ],
+      "vars": {
+        "array": [
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "cause": "UnsupportedOperationException: Attempted to key into non-container Array/DefaultArray with field oops",
+      "stack": [
+        {
+          "file": "Native",
+          "function": "get",
+          "line": -1,
+          "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.Core"
+        },
+        {
+          "file": "res:///tests/error/util.wstl",
+          "function": "fail",
+          "line": 3,
+          "package": "util"
+        },
+        {
+          "file": "Native",
+          "function": "withError",
+          "line": 10,
+          "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.error.Errors"
+        },
+        {
+          "file": "res:///tests/error/handling_iteration.wstl",
+          "function": "processWithHandler",
+          "line": 9,
+          "package": "handling_iteration"
+        },
+        {
+          "file": "Native",
+          "function": "iterate",
+          "line": -1,
+          "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.Iteration"
+        },
+        {
+          "file": "res:///tests/error/handling_iteration.wstl",
+          "function": "handling_iteration_root_function",
+          "line": 5,
+          "package": "handling_iteration"
+        }
+      ],
+      "vars": {
+        "array": [
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "cause": "UnsupportedOperationException: Attempted to key into non-container Array/DefaultArray with field oops",
+      "stack": [
+        {
+          "file": "Native",
+          "function": "get",
+          "line": -1,
+          "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.Core"
+        },
+        {
+          "file": "res:///tests/error/util.wstl",
+          "function": "fail",
+          "line": 3,
+          "package": "util"
+        },
+        {
+          "file": "Native",
+          "function": "withError",
+          "line": 10,
+          "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.error.Errors"
+        },
+        {
+          "file": "res:///tests/error/handling_iteration.wstl",
+          "function": "processWithHandler",
+          "line": 9,
+          "package": "handling_iteration"
+        },
+        {
+          "file": "Native",
+          "function": "iterate",
+          "line": -1,
+          "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.Iteration"
+        },
+        {
+          "file": "res:///tests/error/handling_iteration.wstl",
+          "function": "handling_iteration_root_function",
+          "line": 5,
+          "package": "handling_iteration"
+        }
+      ],
+      "vars": {
+        "array": [
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "cause": "UnsupportedOperationException: Attempted to key into non-container Array/DefaultArray with field oops",
+      "stack": [
+        {
+          "file": "Native",
+          "function": "get",
+          "line": -1,
+          "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.Core"
+        },
+        {
+          "file": "res:///tests/error/util.wstl",
+          "function": "fail",
+          "line": 3,
+          "package": "util"
+        },
+        {
+          "file": "Native",
+          "function": "withError",
+          "line": 10,
+          "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.error.Errors"
+        },
+        {
+          "file": "res:///tests/error/handling_iteration.wstl",
+          "function": "processWithHandler",
+          "line": 9,
+          "package": "handling_iteration"
+        },
+        {
+          "file": "Native",
+          "function": "iterate",
+          "line": -1,
+          "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.Iteration"
+        },
+        {
+          "file": "res:///tests/error/handling_iteration.wstl",
+          "function": "handling_iteration_root_function",
+          "line": 5,
+          "package": "handling_iteration"
+        }
+      ],
+      "vars": {
+        "array": [
+          1,
+          2,
+          3
+        ]
+      }
+    }
+  ],
+  "result": {
+    "original": "invalid"
+  },
+  "resultWithHandler": [
+    {
+      "original": 1
+    },
+    {
+      "original": 2
+    },
+    {
+      "original": 3
+    }
+  ]
+}

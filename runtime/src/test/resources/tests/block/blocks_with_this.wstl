@@ -1,0 +1,8 @@
+package blocks_with_this
+
+def fnWithThis() {
+  "30";
+  parseNum($this);
+}
+
+output: fnWithThis();

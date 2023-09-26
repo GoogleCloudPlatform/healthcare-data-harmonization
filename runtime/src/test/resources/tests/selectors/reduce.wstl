@@ -1,0 +1,5 @@
+var array: ["a", "bc", "d", "efg"]
+
+out: array[reduce $acc + $cur]
+out2: reduce(array, "seed", $acc + $cur)
+out3: reduce(array, $acc + $cur)

@@ -1,0 +1,16 @@
+import "./util.wstl"
+
+var array: [1, 2, 3]
+result: withError(process(array[]), onError($error, "invalid"))
+resultWithHandler: processWithHandler(array[])
+
+def process(item) util::fail()
+
+def processWithHandler(item) withError({
+  util::fail()
+}, onError($error, item))
+
+def onError(error, item) {
+  side errors[]: error
+  original: item
+}

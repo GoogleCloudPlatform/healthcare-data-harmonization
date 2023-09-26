@@ -1,0 +1,5 @@
+package func
+
+def abc(x, y) {
+  x + y
+}

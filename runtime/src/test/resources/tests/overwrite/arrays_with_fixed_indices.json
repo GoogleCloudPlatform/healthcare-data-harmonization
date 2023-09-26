@@ -1,0 +1,21 @@
+{
+  "a": [
+    {
+      "bodySite": {
+        "code": "code"
+      },
+      "uid": "I am unique!"
+    }
+  ],
+  "b": [
+    {
+      "bodySite": {
+        "code": "code"
+      }
+    },
+    null,
+    {
+      "uid": "I am unique!"
+    }
+  ]
+}

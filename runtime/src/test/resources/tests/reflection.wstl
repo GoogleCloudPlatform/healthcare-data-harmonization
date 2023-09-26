@@ -1,0 +1,15 @@
+package reflection
+
+def packageFn() {
+  30;
+}
+
+def samePackageFn() {
+  40;
+}
+
+out_core: callFn("parseNum", "20");
+out_package: callPackageFn("reflection", "packageFn");
+out_same_package: callFn("samePackageFn");
+// TODO(): Once package import works for test add a test
+// for non package functions.

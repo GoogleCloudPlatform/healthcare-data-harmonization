@@ -1,0 +1,7 @@
+package mock_config
+
+def mockUUID() {
+  "12345";
+}
+
+mocking::mock("builtins::uuid", "mock_config::mockUUID");

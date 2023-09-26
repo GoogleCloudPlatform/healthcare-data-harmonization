@@ -1,0 +1,11 @@
+package func
+
+def f(param) {
+  if param == explicitEmptyString() then {
+    "got empty string"
+  } else if !param? then {
+    "got null or empty array"
+  } else {
+    "got {param}"
+  }
+}

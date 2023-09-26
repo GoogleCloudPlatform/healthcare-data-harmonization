@@ -1,0 +1,23 @@
+package noException
+option "experiment/unique_vars_and_fields"
+
+f1: 1
+var f2: 2
+
+def func(){
+    f1: 3
+    var f2: 4
+}
+
+def func2(){
+    f1: 5
+    var f2: 6
+}
+
+def func3(){
+    f1: 7
+    var f2: 8
+}
+
+f3.res: 9
+var f4: 10

@@ -1,0 +1,8 @@
+package rootCtx
+
+f1: 1
+var f1: 2
+def func(){
+    f1: 3
+    var f1: 4
+}

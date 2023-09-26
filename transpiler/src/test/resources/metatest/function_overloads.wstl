@@ -1,0 +1,8 @@
+def func(a) {
+  var x: 3
+  y: x
+}
+def func(a,b) {
+  var x: 4
+  y: x
+}

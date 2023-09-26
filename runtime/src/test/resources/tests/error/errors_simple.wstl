@@ -1,0 +1,18 @@
+package errors
+
+one();
+
+def one() {
+  var lst: [1, 2, 3];
+  two(lst[]);
+}
+
+def two(x) {
+  three(x);
+}
+
+def three(x) {
+  // Force an exception by keying into an array
+  var arr: [1, 2, 3]
+  arr.myfield
+}

@@ -1,0 +1,23 @@
+package stack_overflow
+
+result: loop()
+
+def loop() {
+  a()
+}
+
+def a() {
+  b()
+}
+
+def b() {
+  c()
+}
+
+def c() {
+  d()
+}
+
+def d() {
+  a()
+}

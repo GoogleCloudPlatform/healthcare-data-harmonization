@@ -1,0 +1,12 @@
+import "./util.wstl"
+
+withError({
+  result: level1("hello")
+}, $error)
+
+def level1(item) level2(item + "1", "C")
+
+def level2(item, c) {
+  // Call on primitive which will fail.
+  unique(c)
+}

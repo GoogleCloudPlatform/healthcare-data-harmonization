@@ -1,0 +1,8 @@
+package mock_config
+
+def noOpMockTarget(arg, valToWrite) {
+   'you won\'t see this': arg;
+   'and this': valToWrite
+}
+
+mocking::mockTarget("bufferTargetPlugin::bufferTarget", "mock_config::noOpMockTarget");

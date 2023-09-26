@@ -1,0 +1,57 @@
+{
+  "errors": [
+    {
+      "cause": "UnsupportedOperationException: Attempted to key into non-container Array/DefaultArray with field oops",
+      "stack": [
+        {
+          "file": "Native",
+          "function": "get",
+          "line": -1,
+          "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.Core"
+        },
+        {
+          "file": "res:///tests/error/util.wstl",
+          "function": "fail",
+          "line": 3,
+          "package": "util"
+        },
+        {
+          "file": "Native",
+          "function": "rethrowError",
+          "line": 10,
+          "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.error.Errors"
+        },
+        {
+          "file": "res:///tests/error/handling_rethrowError.wstl",
+          "function": "level2",
+          "line": 9,
+          "package": "handling_rethrowError"
+        },
+        {
+          "file": "Native",
+          "function": "withError",
+          "line": 6,
+          "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.error.Errors"
+        },
+        {
+          "file": "res:///tests/error/handling_rethrowError.wstl",
+          "function": "level1",
+          "line": 5,
+          "package": "handling_rethrowError"
+        },
+        {
+          "file": "res:///tests/error/handling_rethrowError.wstl",
+          "function": "handling_rethrowError_root_function",
+          "line": 3,
+          "package": "handling_rethrowError"
+        }
+      ],
+      "vars": {
+        "array": [1, 2, 3]
+      }
+    }
+  ],
+  "result": {
+    "handled": "this message should be seen"
+  }
+}

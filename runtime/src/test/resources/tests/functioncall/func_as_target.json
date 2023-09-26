@@ -1,0 +1,11 @@
+{
+  "custom": {
+    "path": "/home",
+    "something": 123,
+    "value": "I will be passed as 'value'"
+  },
+  "custom2": {
+    "path": "/overload",
+    "value": "I am being passed to overload"
+  }
+}

@@ -1,0 +1,9 @@
+package main
+
+def foo(x) {
+  x
+}
+
+output[]: foo(1)
+output[]: foo(2)
+output[]: foo(3)

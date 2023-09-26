@@ -1,0 +1,5 @@
+package mock
+
+def mockX(a) a * 100
+
+mocking::mock("main::X", "mock::mockX") // No selector

@@ -1,0 +1,12 @@
+package mock_config
+
+def mockFoo(x, y, z) {
+  "mockFoo"
+}
+
+def mockFoo1(x, y, z) {
+  "mockFoo1"
+}
+
+mocking::mock("main::foo", "mock_config::mockFoo")
+mocking::mock("main::foo", "mock_config::mockFoo1")

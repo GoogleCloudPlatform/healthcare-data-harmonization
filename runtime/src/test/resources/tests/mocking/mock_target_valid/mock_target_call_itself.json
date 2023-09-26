@@ -1,0 +1,12 @@
+{
+  "output": [
+    {
+      "arg": "foo",
+      "val": "fooVal"
+    },
+    {
+      "arg": "bar",
+      "val": "barVal"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+iAmATarget("/home", 123): "I will be passed as 'value'"
+iAmATarget("/overload"): "I am being passed to overload"
+
+def iAmATarget(path, something, value) {
+  side custom: {
+    path: path
+    something: something
+    value: value
+  }
+  this_will_not_show_up_anywhere: "HELLO!"
+}
+
+
+def iAmATarget(path, value) {
+  side custom2: {
+    path: path
+    value: value
+  }
+  this_will_not_show_up_anywhere2: "HELLO!"
+}

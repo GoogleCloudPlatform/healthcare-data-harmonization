@@ -1,0 +1,4 @@
+option "experiment/single_null_array"
+
+var null: {}
+array: [null]

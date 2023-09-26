@@ -1,0 +1,9 @@
+package mock_config
+
+
+
+def mockBar() {
+  "mockBar"
+}
+
+mocking::mock("main::bar", "mock_config::mockBar")

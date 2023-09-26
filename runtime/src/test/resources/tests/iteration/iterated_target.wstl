@@ -1,0 +1,24 @@
+
+var array: [1, 2, 3]
+var container: {
+  a: "av"
+  b: "bv"
+  c: "cv"
+}
+
+array_target("c1"): array[]
+container_target("c2"): container[]
+
+def array_target(const, value) {
+   side array_output[]: {
+      const: const
+      value: value
+   }
+}
+
+def container_target(const, value) {
+   side container_output[]: {
+      const: const
+      value: value
+   }
+}

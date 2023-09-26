@@ -1,0 +1,15 @@
+package sides1
+
+import "./sides_multi_2.wstl"
+
+var num: 1337;
+output: withSides(func1(num));
+withSides(sides2::func2(num + 100));
+
+def func1(num) {
+  main: num;
+  side field: num + 1;
+  f2: sides2::func2(num + 1000);
+  side array[]: num + 2;
+  side array[]: num + 3;
+}

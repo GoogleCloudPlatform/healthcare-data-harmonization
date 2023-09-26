@@ -1,0 +1,8 @@
+{
+  "output": [
+    {
+      "arg": "foo",
+      "val": "fooVal"
+    }
+  ]
+}

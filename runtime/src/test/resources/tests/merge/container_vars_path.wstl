@@ -1,0 +1,12 @@
+option "experiment/merge_modes"
+
+var thicccVar.replace: loadJson("./data.json").shallowcontainer1
+replace var thicccVar.replace: loadJson("./data.json").shallowcontainer2
+
+var thicccVar.merge: loadJson("./data.json").shallowcontainer1
+merge var thicccVar.merge: loadJson("./data.json").shallowcontainer2
+
+var thicccVar.extend: loadJson("./data.json").shallowcontainer1
+extend var thicccVar.extend: loadJson("./data.json").shallowcontainer2
+
+thicccVar: thicccVar

@@ -1,0 +1,15 @@
+package mock_config
+
+def mockFoo(x) {
+  x + 1
+}
+
+def selector(x) {
+  x > 2
+}
+
+def mockTextIO(x) {
+  foo: "bar"
+}
+mocking::mock("main::foo", "mock_config::mockFoo", "mock_config::selector");
+mocking::mock("dataflow::TextIO", "mock_config::mockTextIO");

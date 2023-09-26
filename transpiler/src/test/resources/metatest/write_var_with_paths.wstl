@@ -1,0 +1,6 @@
+var x.a: 1
+var x.b: 2
+y : x
+var y: [3]
+var y.d: 4
+var y.e: 5

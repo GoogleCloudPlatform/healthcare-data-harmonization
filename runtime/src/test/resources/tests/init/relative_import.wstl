@@ -1,0 +1,4 @@
+package test
+import "./standalone.wstl"
+
+"relative_import";

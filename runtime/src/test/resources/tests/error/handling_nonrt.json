@@ -1,0 +1,33 @@
+{
+  "cause": "NoMatchingOverloadsException: Function unique(Array) does not match given argument types Primitive/DefaultPrimitive",
+  "stack": [
+    {
+      "file": "res:///tests/error/handling_nonrt.wstl",
+      "function": "level2",
+      "line": 11,
+      "package": "handling_nonrt"
+    },
+    {
+      "file": "res:///tests/error/handling_nonrt.wstl",
+      "function": "level1",
+      "line": 7,
+      "package": "handling_nonrt"
+    },
+    {
+      "file": "Native",
+      "function": "withError",
+      "line": 4,
+      "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.error.Errors"
+    },
+    {
+      "file": "res:///tests/error/handling_nonrt.wstl",
+      "function": "handling_nonrt_root_function",
+      "line": 3,
+      "package": "handling_nonrt"
+    }
+  ],
+  "vars": {
+    "c": "C",
+    "item": "hello1"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "infix": [
+    "const 1",
+    "const 2",
+    "const 3"
+  ],
+  "infix_interp": [
+    "one 1",
+    "two 2",
+    "three 3"
+  ],
+  "infix_zip": [
+    "one1",
+    "two2",
+    "three3"
+  ],
+  "prefix": [
+    false,
+    true
+  ],
+  "postfix": [
+    false,
+    false,
+    false,
+    false,
+    true
+  ]
+}

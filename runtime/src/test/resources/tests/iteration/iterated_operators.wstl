@@ -1,0 +1,12 @@
+var nums: [1, 2, 3]
+var words: ["one", "two", "three"]
+
+infix: "const " + nums[]
+infix_zip: words[] + nums[]
+infix_interp: "{words[]} {nums[]}"
+
+var bools: [true, false]
+prefix: !bools[]
+
+var maybeNulls[4]: "not null"
+postfix: maybeNulls[]?

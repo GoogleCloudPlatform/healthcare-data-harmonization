@@ -1,0 +1,9 @@
+a[0].uid: "I am unique!"
+if true then {
+    a[0].bodySite.code : "code"
+}
+
+b[2].uid: "I am unique!"
+if true then {
+    b[0].bodySite.code : "code"
+}

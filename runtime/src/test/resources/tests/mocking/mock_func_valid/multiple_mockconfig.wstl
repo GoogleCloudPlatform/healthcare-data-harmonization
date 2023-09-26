@@ -1,0 +1,12 @@
+package main
+
+def foo() {
+  "foo"
+}
+
+def bar() {
+  "bar"
+}
+
+output[]: foo()
+output[]: bar()

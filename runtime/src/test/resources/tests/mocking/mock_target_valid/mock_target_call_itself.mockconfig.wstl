@@ -1,0 +1,17 @@
+package mock_config
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.integration.mocking.BufferTargetPlugin"
+
+def mockBufferTarget(arg, valueToWrite) {
+  side output[]: {
+    arg: arg;
+    val: valueToWrite;
+  }
+
+  // calls original only
+  bufferTargetPlugin::bufferTarget(arg): valueToWrite + " from mock";
+  // calls mock function & original function
+  bufferTargetPlugin::bufferTarget("differentArg"): valueToWrite;
+}
+
+mocking::mockTarget("bufferTargetPlugin::bufferTarget", "mock_config::mockBufferTarget")

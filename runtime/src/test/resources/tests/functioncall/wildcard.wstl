@@ -1,0 +1,9 @@
+package test
+import "./func.wstl";
+
+def abc(x) {
+  x + 1
+}
+
+outputA: *::abc(1, 2)
+outputB: *::abc(10)

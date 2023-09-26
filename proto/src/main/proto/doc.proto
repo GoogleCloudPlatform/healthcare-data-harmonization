@@ -1,0 +1,77 @@
+/*
+ * Copyright 2021 Google LLC.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+syntax = "proto3";
+
+package cloud.verticals.foundations.dataharmonization.documentation.proto;
+
+option java_package = "com.google.cloud.verticals.foundations.dataharmonization.proto";
+
+// Contains Documentation for Whistle Packages.
+message Documentation {
+  // Mapping of package name to package documentation.
+  map<string, Package> packages = 1;
+}
+
+// Documentation about a specific Whistle Package.
+message Package {
+  // Name of the package.
+  string name = 1;
+
+  // Import string (including a scheme if applicable) to import this package.
+  // For example,
+  // "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.dataflow.DataflowPlugin"
+  string import_spec = 2;
+
+  // Documentation about all the functions in this package.
+  repeated Function functions = 3;
+}
+
+// Documentation about a specific Function.
+message Function {
+  // The name of the function.
+  string name = 1;
+
+  // A description of the function.
+  string description = 2;
+
+  // Documentation about all the arguments to the function.
+  repeated Argument args = 3;
+
+  // Documentation about the Return value of the function.
+  Return returns = 4;
+}
+
+// Documentation about a specific argument to a function.
+message Argument {
+  // The name of the argument.
+  string name = 1;
+
+  // The type of the argument.
+  string type = 2;
+
+  // A description of what the argument represents.
+  string description = 3;
+}
+
+// Documentation about a return value of a function.
+message Return {
+  // The type of the return value.
+  string type = 1;
+
+  // A description of the return value.
+  string description = 2;
+}

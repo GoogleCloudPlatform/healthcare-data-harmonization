@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'idea'
+    id 'antlr'
+}
+
+group 'com.google.cloud.verticals.foundations.dataharmonization'
+mainClassName = 'com.google.cloud.verticals.foundations.dataharmonization.transpiler.Main'
+
+dependencies {
+    implementation project(":proto")
+    antlr group: 'org.antlr', name: 'antlr4', version: '4.7'
+    implementation group: 'org.antlr', name: 'antlr4-runtime', version: '4.7'
+    implementation group: 'com.google.guava', name: 'guava', version: "${guavaVersion}", force: true
+    implementation group: 'com.google.truth', name: 'truth', version: '1.0.1'
+    implementation 'com.google.flogger:google-extensions:0.7.1'
+
+    testImplementation project(":testutil")
+    testImplementation group: 'junit', name: 'junit', version: '4.13'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.2.0'
+    testImplementation group: 'com.google.truth.extensions', name: 'truth-proto-extension', version: '1.0.1'
+}
+
+generateGrammarSource {
+    maxHeapSize = "64m"
+    arguments += ['-package', 'com.google.cloud.verticals.foundations.dataharmonization.transpiler']
+    arguments += ['-visitor']
+}
+compileJava.dependsOn generateGrammarSource

@@ -1,0 +1,16 @@
+var x: {
+  one: {
+    hello: "world"
+  }
+  two: {
+    hello: "world"
+  }
+  bad: {
+    something: "nope"
+  }
+  nope: {
+    something: "remove"
+  }
+}
+
+x[where $.field != "bad" and $.value.something != "remove"]

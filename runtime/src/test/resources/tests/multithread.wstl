@@ -1,0 +1,12 @@
+package test
+
+def plus_four(x) {
+  x + 4
+}
+
+def power_two(x) {
+  if x == 0 then 1 else 2 * power_two(x - 1)
+}
+
+var rootVar: $root.number
+rootField: power_two(plus_four(rootVar))

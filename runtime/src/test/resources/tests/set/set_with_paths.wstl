@@ -1,0 +1,42 @@
+package set_with_paths
+
+var arr: ["two", "three"]
+var objectWithKeys: {
+  pathSegmentOne: {
+    pathSegmentTwo: {
+      key: "one";
+    }
+  }
+  pathSegmentThree: {
+    arraySegmentOne: [
+      {
+        entryOne: 1;
+      },
+      {
+        pathSegmentFour: {
+          arraySegmentTwo: [
+            {
+              entryTwo: "three";
+            },
+            {
+              entryThree: 2;
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+
+pathKeyedContainer: {
+  set(arr[0]): "twoValue";
+  set(objectWithKeys.pathSegmentThree.arraySegmentOne[1].pathSegmentFour.arraySegmentTwo[0].entryTwo): "threeValue";
+}
+set("pathKeyedContainer[{objectWithKeys.pathSegmentOne.pathSegmentTwo.key}]"): "oneValue";
+
+var indexOne: 1;
+var fifteen: 15.0;
+var fiveAndABit: 5.000000000000001;
+set("pathKeyedArray[{indexOne}]"): "second";
+set("pathKeyedArray[{objectWithKeys.pathSegmentThree.arraySegmentOne[1].pathSegmentFour.arraySegmentTwo[1].entryThree}]"): "third";
+set("pathKeyedArray[{fifteen / fiveAndABit}]"): "fourth";

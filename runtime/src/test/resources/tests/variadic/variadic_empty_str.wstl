@@ -1,0 +1,9 @@
+import "./func.wstl";
+
+var empty: ""
+
+array: arrayOf(empty)
+str: "got {empty}"
+// callPackageFn has variadic params, verify that empty string is correctly
+// passed to the target function.
+call: callPackageFn("func", "f", empty)

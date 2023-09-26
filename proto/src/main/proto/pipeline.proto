@@ -1,0 +1,235 @@
+/*
+ * Copyright 2020 Google LLC.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+syntax = "proto3";
+
+package cloud.verticals.foundations.dataharmonization.proto;
+
+import "google/protobuf/any.proto";
+
+option go_package = "github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_platform/proto";
+option java_package = "com.google.cloud.verticals.foundations.dataharmonization.proto";
+
+message Meta {
+  // Entry type to meta data map.
+  map<string, google.protobuf.Any> entries = 1;
+}
+
+message PipelineConfig {
+  Meta meta = 1;
+
+  message Import {
+    Meta meta = 1;
+
+    // A path to a file or plugin to import. Can start with a scheme like gs://,
+    // or be a relative path like ./xyz or xyz.
+    // TODO(): Link to doc.
+    ValueSource value = 2;
+  }
+
+  message Option {
+    Meta meta = 1;
+
+    // The name of the option to enable.
+    string name = 2;
+  }
+
+  // Name to use when imported by other Whistle files.
+  string package_name = 2;
+
+  // Other files to import and merge. Can be whistle files, protos, plugins,
+  // etc.
+  repeated Import imports = 3;
+
+  // Mappings to execute upon executing this file. These mappings will NOT be
+  // executed if this file is imported.
+  FunctionDefinition root_block = 4;
+
+  // All functions defined (including lambda functions).
+  repeated FunctionDefinition functions = 5;
+
+  // Options enabled for this file.
+  repeated Option options = 6;
+}
+
+// Represents a value derived from input or constants.
+message ValueSource {
+  Meta meta = 1;
+
+  oneof source {
+    // A variable/argument name in the current environment.
+    string from_local = 2;
+
+    // A value preprocessed with a function.
+    FunctionCall function_call = 3;
+
+    // A hard-coded string value.
+    string const_string = 4;
+
+    // A hard-coded integer value.
+    int32 const_int = 5;
+
+    // A hard-coded floating point value.
+    double const_float = 6;
+
+    // A hard-coded boolean value.
+    bool const_bool = 7;
+
+    // The name of an argument to be bound at runtime.
+    string free_parameter = 8;
+  }
+
+  // Flag indicating that this value is a collection that should be iterated,
+  // i.e. passed one element at a time to the function it is being passed to.
+  // This flag is used only internally by the transpiler and will be removed.
+  // TODO(): Remove this from transpiler and then from here.
+  bool iterate = 9 [deprecated = true];
+}
+
+message FunctionCall {
+  message FunctionReference {
+    string package = 1;
+    string name = 2;
+  }
+
+  Meta meta = 1;
+
+  // Reference info of the function to call.
+  FunctionReference reference = 2;
+
+  // Arguments for the function to call.
+  repeated ValueSource args = 3;
+
+  // This function call should be evaluated as the construction of a closure,
+  // rather than executed to yield a value immediately.
+  bool build_closure = 4;
+}
+
+message FieldMapping {
+  // Contains information on writing to a field on some output value.
+  message FieldTarget {
+    enum FieldType {
+      LOCAL = 0;
+      SIDE = 1;
+    }
+
+    // The type of the field (side or local output).
+    FieldType type = 1;
+
+    // The field/path to write.
+    string path = 2;
+  }
+
+  // Contains information on writing to a local variable.
+  message VariableTarget {
+    // The name of the variable.
+    string name = 1;
+
+    // Optionally, the JSON field/path on the variable's value to write.
+    string path = 2;
+  }
+
+  Meta meta = 1;
+
+  // The value to write.
+  ValueSource value = 2;
+
+  // The target to write.
+  oneof target {
+    FieldTarget field = 3;
+
+    VariableTarget var = 4;
+
+    // A FunctionCall that configures a custom sink for writing. The output of
+    // the function is a configured sink ready to accept data.
+    FunctionCall custom_sink = 5;
+  }
+
+  // Field-level modifiers, for example, error handling.
+  repeated Modifier modifiers = 6;
+
+  // Should the source be iterated into the target? I.e. if the source is an
+  // array, it should be given to the target one item at a time.
+  bool iterate_source = 7;
+}
+
+// A function converts one or more input elements into
+// one output element. A function is collection of FieldMappings where each
+// writes to a common output value for this functions (or some other global
+// target or a variable).
+message FunctionDefinition {
+  message Argument {
+    string name = 1;
+    string modifier = 2;
+    Meta meta = 3;
+  }
+
+  Meta meta = 1;
+
+  // The name of the function, as referred to by the FunctionCall.
+  string name = 2;
+
+  // The arguments of this function and their properties.
+  repeated Argument args = 3;
+
+  // A list of mappings for this function. For example,
+  // [
+  //    {
+  //      value: {
+  //        const_int: 123
+  //      }
+  //      var: {
+  //        name: "myVar"
+  //        path: "field.array[1].subfield"
+  //      }
+  //    },
+  //    {
+  //      value: {
+  //        from_input: {
+  //          name: "myVar"
+  //          path: "field"
+  //        }
+  //      }
+  //      field: {
+  //        type: LOCAL
+  //        path: "field_out"
+  //      }
+  //    }
+  // ]
+  // Would make the output of the function
+  // {field_out: {array: [null, {subfield: 123}]}}
+  repeated FieldMapping mapping = 4;
+
+  // Modifiers in order of application, for example error handlers.
+  repeated Modifier modifiers = 5;
+
+  // Flag indicating that this function have access to the parent functions'
+  // variables. Blocks in if conditions, and anonymous blocks should share
+  // set this to true. New variables declared in these blocks are scoped to just
+  // them, but variables declared in parents should be modified in those
+  // parents' variable storage.
+  bool inherit_parent_vars = 6;
+}
+
+message Modifier {
+  Meta meta = 1;
+
+  // The name of the modifier.
+  string name = 2;
+
+  // Parameters to the modifier.
+  repeated ValueSource arguments = 3;
+}

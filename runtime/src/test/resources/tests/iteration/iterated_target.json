@@ -1,0 +1,30 @@
+{
+  "array_output": [
+    {
+      "const": "c1",
+      "value": 1
+    },
+    {
+      "const": "c1",
+      "value": 2
+    },
+    {
+      "const": "c1",
+      "value": 3
+    }
+  ],
+  "container_output": [
+    {
+      "const": "c2",
+      "value": "av"
+    },
+    {
+      "const": "c2",
+      "value": "bv"
+    },
+    {
+      "const": "c2",
+      "value": "cv"
+    }
+  ]
+}

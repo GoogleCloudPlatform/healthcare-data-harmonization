@@ -1,0 +1,7 @@
+func(0)
+test::shouldNeverBeCalled()
+
+def func(i) if i < 10 then {
+  test::record(i)
+  func(i+1)
+} else test::cancel()

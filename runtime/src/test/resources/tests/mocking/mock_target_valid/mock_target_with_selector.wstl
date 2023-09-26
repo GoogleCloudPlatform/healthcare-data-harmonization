@@ -1,0 +1,6 @@
+package main
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.integration.mocking.BufferTargetPlugin"
+
+bufferTargetPlugin::bufferTarget("foo"): "fooVal"
+bufferTargetPlugin::bufferTarget("bar"): "barVal"

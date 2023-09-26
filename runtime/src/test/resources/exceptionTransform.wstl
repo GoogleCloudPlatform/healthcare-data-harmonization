@@ -1,0 +1,5 @@
+package test
+
+$root.name;
+var c: "a";
+a: 5.2 + c;

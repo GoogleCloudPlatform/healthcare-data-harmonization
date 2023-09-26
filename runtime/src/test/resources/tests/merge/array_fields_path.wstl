@@ -1,0 +1,13 @@
+option "experiment/merge_modes"
+
+thicccField.replace: loadJson("./data.json").shallowarray1
+replace thicccField.replace: loadJson("./data.json").shallowarray2
+
+thicccField.merge: loadJson("./data.json").shallowarray1
+merge thicccField.merge: loadJson("./data.json").shallowarray2
+
+thicccField.extend: loadJson("./data.json").shallowarray1
+extend thicccField.extend: loadJson("./data.json").shallowarray2
+
+thicccField.append: loadJson("./data.json").shallowarray1
+append thicccField.append: loadJson("./data.json").shallowarray2

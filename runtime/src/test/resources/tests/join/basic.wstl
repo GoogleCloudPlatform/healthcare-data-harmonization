@@ -1,0 +1,22 @@
+var array1: [{
+ id: 1
+ val: "1aaa"
+}, {
+ id: 2
+ val: "1bbb"
+}, {
+    id: 1
+    val: "1aaa"
+}]
+var array2: [{
+ id: 1
+ val: "2aaa"
+}, {
+ id: 3
+ val: "2ccc"
+}, {
+    id: 3
+    val: "2ccc"
+}]
+
+join(array1, array2, $left.id == $right.id)
