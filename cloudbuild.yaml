@@ -1,0 +1,4 @@
+steps:
+  - name: gradle:7.6-jdk11
+    entrypoint: gradle
+    args: ['test']
