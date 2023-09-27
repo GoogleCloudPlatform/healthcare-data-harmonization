@@ -28,6 +28,7 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,6 +50,9 @@ public class TimeFns implements Serializable {
   // thus not captured)
   private static final Pattern FORMAT_SPLITTER =
       Pattern.compile("^[\\w]+?(?=[^\\w]|$)|'[^']*'|(?:(?<=')|[^\\w])[\\w]+?(?=[^\\w]|'|$)");
+
+  private static final Locale LOCALE = Locale.US;
+
   // TODO(): Determine if you want to re-examine the method for initializing the time
   // scale map. More details on options in bug description.
   static {
@@ -73,6 +77,7 @@ public class TimeFns implements Serializable {
   private static double convertIso8601DatetimeToMillis(String iso8601DateTime) {
     try {
       return ISODateTimeFormat.dateTimeParser()
+          .withLocale(LOCALE)
           .withZoneUTC()
           .parseDateTime(iso8601DateTime)
           .getMillis();
@@ -102,7 +107,7 @@ public class TimeFns implements Serializable {
   @PluginFunction
   public Primitive currentTime(RuntimeContext ctx, String format) {
     java.time.format.DateTimeFormatter formatter =
-        java.time.format.DateTimeFormatter.ofPattern(format);
+        java.time.format.DateTimeFormatter.ofPattern(format).withLocale(LOCALE);
     return ctx.getDataTypeImplementation().primitiveOf(ZonedDateTime.now(clock).format(formatter));
   }
 
@@ -135,8 +140,8 @@ public class TimeFns implements Serializable {
 
     return reformatDateTime(
         ctx,
-        builder.toFormatter().withZoneUTC(),
-        ISODateTimeFormat.dateTime().withZoneUTC(),
+        builder.toFormatter().withLocale(LOCALE).withZoneUTC(),
+        ISODateTimeFormat.dateTime().withLocale(LOCALE).withZoneUTC(),
         datetime);
   }
 
@@ -156,8 +161,8 @@ public class TimeFns implements Serializable {
       RuntimeContext ctx, String format, String iso8601DateTime) {
     return reformatDateTime(
         ctx,
-        ISODateTimeFormat.dateTimeParser().withZoneUTC(),
-        DateTimeFormat.forPattern(format).withZoneUTC(),
+        ISODateTimeFormat.dateTimeParser().withLocale(LOCALE).withZoneUTC(),
+        DateTimeFormat.forPattern(format).withLocale(LOCALE).withZoneUTC(),
         iso8601DateTime);
   }
 
@@ -179,8 +184,8 @@ public class TimeFns implements Serializable {
       RuntimeContext ctx, String format, String timezone, String iso8601DateTime) {
     return reformatDateTime(
         ctx,
-        ISODateTimeFormat.dateTimeParser().withZoneUTC(),
-        DateTimeFormat.forPattern(format).withZone(DateTimeZone.forID(timezone)),
+        ISODateTimeFormat.dateTimeParser().withLocale(LOCALE).withZoneUTC(),
+        DateTimeFormat.forPattern(format).withLocale(LOCALE).withZone(DateTimeZone.forID(timezone)),
         iso8601DateTime);
   }
 
@@ -212,6 +217,7 @@ public class TimeFns implements Serializable {
           .primitiveOf(
               (double)
                   ISODateTimeFormat.dateTimeParser()
+                      .withLocale(LOCALE)
                       .withZoneUTC()
                       .parseDateTime(iso8601DateTime)
                       .getMillis());
