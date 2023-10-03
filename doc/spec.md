@@ -1,7 +1,5 @@
 # Language Spec and User Manual
 
-[TOC]
-
 ## Ethos {#ethos}
 
 The Whistle language is purpose-designed and built for transforming and
