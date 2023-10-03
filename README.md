@@ -65,4 +65,3 @@ Whistle.
 The original version of Whistle is still available in the `wstl1` directory of
 this repository for legacy purposes, however is not actively maintained, and we
 encourage all users to migrate to Whistle 2.
--->
