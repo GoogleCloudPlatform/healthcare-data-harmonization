@@ -14,7 +14,7 @@ The input to the mapping must be a DICOM study encoded in DICOM JSON. The DICOM
 study can be retrieved from the Cloud Healthcare API by a call to
 RetrieveMetadata:
 
-https://cloud.google.com/healthcare/docs/how-tos/dicomweb#retrieving_metadata
+https://cloud.google.com/healthcare/docs/how-tos/dicomweb#retrieve-metadata
 
 The metadata must contain all instances from the study. This means that the
 command to retrieve the study must follow the format below.
