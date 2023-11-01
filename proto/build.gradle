@@ -4,8 +4,6 @@ apply plugin: 'idea'
 
 group 'com.google.cloud.verticals.foundations.dataharmonization'
 
-sourceCompatibility = 1.8
-
 protobuf {
     protoc {
         artifact = 'com.google.protobuf:protoc:3.18.1'
