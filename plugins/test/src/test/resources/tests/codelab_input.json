@@ -1,0 +1,18 @@
+{
+  "Planets": [
+    {
+      "name": "Earth"
+    },
+    {
+      "name": "Mars"
+    },
+    {
+      "name": "Jupiter"
+    }
+  ],
+  "Moons": [
+    {
+      "name": "Luna"
+    }
+  ]
+}

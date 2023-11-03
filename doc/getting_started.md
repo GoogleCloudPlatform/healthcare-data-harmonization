@@ -37,7 +37,6 @@ configuration language.
     $HOME/wstl_codelab/codelab.wstl -i $HOME/wstl_codelab/codelab.json"`
 *   View the output in your terminal.
 
-<!-- LINT.IfChange -->
 ## Create a simple mapping
 
 Start with a simple mapping example (put the config below in `codelab.wstl` from
@@ -397,11 +396,10 @@ def BodyInfo_Predicate(currentArrayElement, bodyType) {
 }
 ```
 
-> `$this` is a special [variable](#variables)
-> representing the result of the current function (-- yes the root mapping is
-> implicitly a whistle function). Because previously, we wrote both Planet and
-> Moon arrays into the `All` field of the current result, i.e. `$this`, we
-> reference it by `$this.All`.
+> `$this` is a special [variable](#variables) representing the result of the
+> current function (-- yes the root mapping is implicitly a whistle function).
+> Because previously, we wrote both Planet and Moon arrays into the `All` field
+> of the current result, i.e. `$this`, we reference it by `$this.All`.
 
 In the aboved example, when `where` executes, it will replace all `$` in the
 closure argument with each element of the array at runtime. Note that the
@@ -617,8 +615,8 @@ In the output:
 
     The `SetColor1(color)` and `SetColor2(color)` functions take a value and
     insert it into the `colors` array at index 1 (`colors[1]`), replacing the
-    previous value at that index. For example, when calling
-    `Merged: MergeColors("red", "blue")`, `"blue"` replaces `"red"`.
+    previous value at that index. For example, when calling `Merged:
+    MergeColors("red", "blue")`, `"blue"` replaces `"red"`.
 
     These functions also insert a hard-coded value into the colors array. The
     lines `colors[]: "yellow";` and `colors[]: "green";` demonstrate this
@@ -1981,10 +1979,10 @@ def Nested_Example(one, two) {
 }
 ```
 
-### Using `out` In a Function
+### Using `side` In a Function
 
-The `out` keyword may be used inside a function in order to send data to the
-root of the output. For example:
+The `side` keyword may be used inside a function in order to send data to the up
+the stack (sequence of functions leading to this point). For example:
 
 ```
 package my_codelab
@@ -1995,13 +1993,17 @@ Complex: Hello_World_HelloWorldObject("Hi", "Planet");
 def Hello_World_HelloWorldObject(hello, world) {
     hello: hello;
     world: world;
-    out Red[]: world;
-    out Complex.boo: "boo!";
+    side Red[]: world;
+    side Complex.boo: "boo!";
 }
 ```
 
 Run the above mapping (see [Before you begin](#before-you-begin) for
 instructions).
+
+See also [withSides](./builtins.md#withSides) and in the
+[spec](./spec.md#side-outputs) for a description and examples of how to "catch"
+these outputs.
 
 <details><summary>**Output**</summary>
 
@@ -2021,4 +2023,3 @@ instructions).
 </pre>
 
 </details>
-<!-- LINT.ThenChange(//depot/google3/googledata/devsite/site-cloud/en/healthcare-data-engine/docs/understand-whistle.md) -->

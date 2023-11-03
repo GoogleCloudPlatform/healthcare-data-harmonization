@@ -1,0 +1,8 @@
+
+def doesNotStartWithTest() {
+    var want: loadJson("./codelab_want.json")
+    var input: loadJson("./codelab_input.json")
+
+    var got: codelab::Codelab(input)
+    test::assertEquals(want, got)
+}

@@ -191,7 +191,7 @@ Run the above mapping (see [Before you begin](#before-you-begin) for instruction
 
 Generalize our functions by making the celstial body's `type` an input. We will
 also make use of a builtin function:
-[`$ToUpper`](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/builtins.md?cl=head#toupper):
+[`$ToUpper`](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/builtins.md#toupper):
 
 ``` {highlight="content:\$ToUpper content:,\sbodyType"}
 Planet[0]: BodyName_BodyType_BodyInfo("Earth", "Planet")
@@ -258,7 +258,7 @@ Your output should be:
 </pre>
 
 Use the
-[`$ListOf`](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/builtins.md?cl=head#listof)
+[`$ListOf`](http://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/builtins.md#listof)
 builtin, which puts all given inputs into an array, to make an array of the
 planets `"Mercury", "Venus", "Earth"`.
 

@@ -1,0 +1,31 @@
+{
+  "Moon": [
+    {
+      "name": "Luna",
+      "type": "Moon"
+    }
+  ],
+  "Planet": [
+    {
+      "extraInfo": {
+        "fullName": "Planet Earth"
+      },
+      "name": "Earth",
+      "type": "Planet"
+    },
+    {
+      "extraInfo": {
+        "fullName": "Planet Mars"
+      },
+      "name": "Mars",
+      "type": "Planet"
+    },
+    {
+      "extraInfo": {
+        "fullName": "Planet Jupiter"
+      },
+      "name": "Jupiter",
+      "type": "Planet"
+    }
+  ]
+}

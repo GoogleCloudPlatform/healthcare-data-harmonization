@@ -1,0 +1,19 @@
+if $root.fail then fail("You asked for this")
+
+Codelab($root)
+
+def Codelab(input) {
+  Planet: ExtendBodyInfo(BodyInfo(input.Planets[], "Planet")[]);
+  Moon: BodyInfo(input.Moons[], "Moon");
+}
+
+def BodyInfo(body, bodyType) {
+  name: body.name;
+  type: bodyType;
+}
+
+def ExtendBodyInfo(info) {
+  // Merge the normal info in first
+  info;
+  extraInfo.fullName: info.type + " " + info.name;
+}

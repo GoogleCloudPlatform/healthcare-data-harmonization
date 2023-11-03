@@ -241,7 +241,7 @@ public class Engine implements AutoCloseable {
      * mock configs if provided. However, runtime context and engine are not created.
      *
      * <p>Note there is a global static int variable increment within ANTLR.
-     * (https://source.corp.google.com/piper///depot/google3/third_party/antlr/v4/java/org/antlr/v4/runtime/atn/PredictionContext.java;l=40;bpv=1;bpt=0;rcl=425960845)
+     * (https://google3/third_party/antlr/v4/java/org/antlr/v4/runtime/atn/PredictionContext.java;l=40;bpv=1;bpt=0;rcl=425960845)
      * For thread safety, engines should be initialized one at a time.
      *
      * @param metaData {@link MetaData} to carry forward.
@@ -296,7 +296,7 @@ public class Engine implements AutoCloseable {
      * created {@link DefaultMetaData}.
      *
      * <p>Note there is a global static int variable increment within ANTLR.
-     * (https://source.corp.google.com/piper///depot/google3/third_party/antlr/v4/java/org/antlr/v4/runtime/atn/PredictionContext.java;l=40;bpv=1;bpt=0;rcl=425960845)
+     * (https://google3/third_party/antlr/v4/java/org/antlr/v4/runtime/atn/PredictionContext.java;l=40;bpv=1;bpt=0;rcl=425960845)
      * For thread safety, engines should be initialized one at a time.
      */
     public InitializedBuilder initialize() throws IOException {

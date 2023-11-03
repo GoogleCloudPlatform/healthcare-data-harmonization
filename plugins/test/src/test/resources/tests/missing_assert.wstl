@@ -1,0 +1,7 @@
+
+def test_codelab_missingAssertion() {
+   var want: loadJson("./codelab_want.json")
+   var input: loadJson("./codelab_input.json")
+
+   // Woops - no assertion!
+}

@@ -1,0 +1,33 @@
+{
+  "output": {
+    "Moon": [
+      {
+        "name": "Luna",
+        "type": "Moon"
+      }
+    ],
+    "Planet": [
+      {
+        "extraInfo": {
+          "fullName": "MOCKED: Planet Earth"
+        },
+        "name": "Earth",
+        "type": "Planet"
+      },
+      {
+        "extraInfo": {
+          "fullName": "MOCKED: Planet Mars"
+        },
+        "name": "Mars",
+        "type": "Planet"
+      },
+      {
+        "extraInfo": {
+          "fullName": "MOCKED: Planet Jupiter"
+        },
+        "name": "Jupiter",
+        "type": "Planet"
+      }
+    ]
+  }
+}

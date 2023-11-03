@@ -43,6 +43,10 @@ with external services, and otherwise extend the engine functionality.
     *   `proto` - Intermediate representation
     *   `transpiler` - Syntax to `proto` transpilation
     *   `testutil` - Unit testing helper functions
+    *   `plugins` - First-Party plugins
+        *   `example` - Example Plugin showcasing the plugin APIs
+        *   `logging` - Simple logging functions implementation
+        *   `test` - Unit Testing Plugin enabling writing unit tests in Whistle
 
 ## Coming Soon to this repository
 
@@ -51,9 +55,7 @@ In no particular order:
 *   Visual Studio Code Extension
     *   Language Server
     *   Formatter
-*   Example Plugin
 *   HL7v2 to FHIR mappings
-*   Unit testing plugin
 *   Documentation generator
 
 ## Where is Whistle 1?

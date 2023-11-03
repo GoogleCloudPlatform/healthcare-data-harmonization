@@ -1,0 +1,9 @@
+package codelab_mocks
+
+mocking::mock("codelab::ExtendBodyInfo", "codelab_mocks::MockExtendBodyInfo");
+
+def MockExtendBodyInfo(info) {
+  // Merge the normal info in first
+  info;
+  extraInfo.fullName: "MOCKED: " + info.type + " " + info.name;
+}

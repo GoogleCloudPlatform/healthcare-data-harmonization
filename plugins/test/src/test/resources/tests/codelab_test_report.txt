@@ -1,0 +1,18 @@
+Summary: 2 failed, 1 passed
+Failed:
+  TEST test_codelab_error ERROR
+  java.lang.UnsupportedOperationException: Attempted to key into non-container Array/DefaultArray with field woops
+    at com.google.cloud.verticals.foundations.dataharmonization.builtins.Core.get(Native)
+    at codelab_test.test_codelab_error(res:///tests/codelab_test.wstl:27)
+    at com.google.cloud.verticals.foundations.dataharmonization.plugins.test.functions.RunnerFns.runAll(Native)
+    at codelab_test.codelab_test_root_function(res:///tests/codelab_test.wstl:4)
+
+  TEST test_codelab_fail FAIL
+  com.google.common.base.VerifyException: -want, +got
+   .Moon[0].type -"Moon" +"WOOPS"
+    at com.google.cloud.verticals.foundations.dataharmonization.plugins.test.functions.AssertFns.assertEquals(Native)
+    at codelab_test.test_codelab_fail(res:///tests/codelab_test.wstl:21)
+    at com.google.cloud.verticals.foundations.dataharmonization.plugins.test.functions.RunnerFns.runAll(Native)
+    at codelab_test.codelab_test_root_function(res:///tests/codelab_test.wstl:4)
+Passed:
+  TEST test_codelab_pass PASS

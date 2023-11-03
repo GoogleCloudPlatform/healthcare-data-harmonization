@@ -1,0 +1,28 @@
+import "./codelab.wstl"
+import "test"
+
+if $root.returnReportAsData then test::reportAll() else test::runAll()
+
+def test_codelab_pass() {
+  var want: loadJson("./codelab_want.json")
+  var input: loadJson("./codelab_input.json")
+
+  var got: codelab::Codelab(input)
+  test::assertEquals(want, got)
+}
+
+def test_codelab_fail() {
+    var want: loadJson("./codelab_want.json")
+    var input: loadJson("./codelab_input.json")
+
+    var got: codelab::Codelab(input)
+    var got.Moon[0].type: "WOOPS"
+
+    test::assertEquals(want, got)
+}
+
+def test_codelab_error() {
+    var array: [1, 2, 3]
+
+    array.woops
+}

@@ -1,0 +1,3 @@
+import "test"
+
+output: test::execPaths("./codelab.wstl", ["./codelab.mockconfig.wstl"], $root.input)

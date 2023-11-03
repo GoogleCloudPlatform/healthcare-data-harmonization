@@ -1,0 +1,163 @@
+{
+  "numFailed": 2,
+  "numPassed": 1,
+  "numRun": 3,
+  "tests": [
+    {
+      "error": {
+        "cause": "UnsupportedOperationException: Attempted to key into non-container Array/DefaultArray with field woops",
+        "stack": [
+          {
+            "file": "Native",
+            "function": "get",
+            "line": -1,
+            "package": "com.google.cloud.verticals.foundations.dataharmonization.builtins.Core"
+          },
+          {
+            "file": "res:///tests/codelab_test.wstl",
+            "function": "test_codelab_error",
+            "line": 27,
+            "package": "codelab_test"
+          },
+          {
+            "file": "Native",
+            "function": "reportAll",
+            "line": -1,
+            "package": "com.google.cloud.verticals.foundations.dataharmonization.plugins.test.functions.RunnerFns"
+          },
+          {
+            "file": "res:///tests/codelab_test.wstl",
+            "function": "codelab_test_root_function",
+            "line": 4,
+            "package": "codelab_test"
+          }
+        ],
+        "vars": {
+          "array": [
+            1,
+            2,
+            3
+          ]
+        }
+      },
+      "name": "test_codelab_error"
+    },
+    {
+      "failure": {
+        "cause": "VerifyException: -want, +got\n .Moon[0].type -\"Moon\" +\"WOOPS\"",
+        "stack": [
+          {
+            "file": "Native",
+            "function": "assertEquals",
+            "line": -1,
+            "package": "com.google.cloud.verticals.foundations.dataharmonization.plugins.test.functions.AssertFns"
+          },
+          {
+            "file": "res:///tests/codelab_test.wstl",
+            "function": "test_codelab_fail",
+            "line": 21,
+            "package": "codelab_test"
+          },
+          {
+            "file": "Native",
+            "function": "reportAll",
+            "line": -1,
+            "package": "com.google.cloud.verticals.foundations.dataharmonization.plugins.test.functions.RunnerFns"
+          },
+          {
+            "file": "res:///tests/codelab_test.wstl",
+            "function": "codelab_test_root_function",
+            "line": 4,
+            "package": "codelab_test"
+          }
+        ],
+        "vars": {
+          "got": {
+            "Moon": [
+              {
+                "name": "Luna",
+                "type": "WOOPS"
+              }
+            ],
+            "Planet": [
+              {
+                "extraInfo": {
+                  "fullName": "Planet Earth"
+                },
+                "name": "Earth",
+                "type": "Planet"
+              },
+              {
+                "extraInfo": {
+                  "fullName": "Planet Mars"
+                },
+                "name": "Mars",
+                "type": "Planet"
+              },
+              {
+                "extraInfo": {
+                  "fullName": "Planet Jupiter"
+                },
+                "name": "Jupiter",
+                "type": "Planet"
+              }
+            ]
+          },
+          "input": {
+            "Moons": [
+              {
+                "name": "Luna"
+              }
+            ],
+            "Planets": [
+              {
+                "name": "Earth"
+              },
+              {
+                "name": "Mars"
+              },
+              {
+                "name": "Jupiter"
+              }
+            ]
+          },
+          "want": {
+            "Moon": [
+              {
+                "name": "Luna",
+                "type": "Moon"
+              }
+            ],
+            "Planet": [
+              {
+                "extraInfo": {
+                  "fullName": "Planet Earth"
+                },
+                "name": "Earth",
+                "type": "Planet"
+              },
+              {
+                "extraInfo": {
+                  "fullName": "Planet Mars"
+                },
+                "name": "Mars",
+                "type": "Planet"
+              },
+              {
+                "extraInfo": {
+                  "fullName": "Planet Jupiter"
+                },
+                "name": "Jupiter",
+                "type": "Planet"
+              }
+            ]
+          }
+        }
+      },
+      "name": "test_codelab_fail"
+    },
+    {
+      "name": "test_codelab_pass"
+    }
+  ]
+}

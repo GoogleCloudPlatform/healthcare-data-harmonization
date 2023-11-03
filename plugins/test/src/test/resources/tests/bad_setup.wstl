@@ -1,0 +1,7 @@
+import "test"
+import "./missing_assert.wstl"
+import "./extra_param.wstl"
+import "./no_funcs.wstl"
+
+// Run all tests in the input package.
+test::runAll($root)
