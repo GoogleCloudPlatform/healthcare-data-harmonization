@@ -1,0 +1,203 @@
+{
+  "contact": [
+    {
+      "name": "System Administrator",
+      "telecom": [
+        {
+          "system": "email",
+          "value": "wile@acme.org"
+        }
+      ]
+    }
+  ],
+  "copyright": "Copyright © Acme Healthcare and GoodCorp EHR Systems",
+  "date": "2012-01-04",
+  "description": "This is the FHIR capability statement for the main EHR at ACME for the private interface - it does not describe the public interface",
+  "document": [
+    {
+      "documentation": "Basic rules for all documents in the EHR system",
+      "mode": "consumer",
+      "profile": "http://fhir.hl7.org/base/Profilebc054d23-75e1-4dc6-aca5-838b6b1ac81d/_history/b5fdd9fc-b021-4ea1-911a-721a60663796"
+    }
+  ],
+  "experimental": true,
+  "fhirVersion": "4.0.1",
+  "format": [
+    "xml",
+    "json"
+  ],
+  "id": "example",
+  "implementation": {
+    "description": "main EHR at ACME",
+    "url": "http://10.2.3.4/fhir"
+  },
+  "implementationGuide": [
+    "http://hl7.org/fhir/us/lab"
+  ],
+  "instantiates": [
+    "http://ihe.org/fhir/CapabilityStatement/pixm-client"
+  ],
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "code": "US",
+          "display": "United States of America (the)",
+          "system": "urn:iso:std:iso:3166"
+        }
+      ]
+    }
+  ],
+  "kind": "instance",
+  "messaging": [
+    {
+      "documentation": "ADT A08 equivalent for external system notifications",
+      "endpoint": [
+        {
+          "address": "mllp:10.1.1.10:9234",
+          "protocol": {
+            "code": "mllp",
+            "system": "http://terminology.hl7.org/CodeSystem/message-transport"
+          }
+        }
+      ],
+      "reliableCache": 30,
+      "supportedMessage": [
+        {
+          "definition": "MessageDefinition/example",
+          "mode": "receiver"
+        }
+      ]
+    }
+  ],
+  "name": "ACME-EHR",
+  "patchFormat": [
+    "application/xml-patch+xml",
+    "application/json-patch+json"
+  ],
+  "profile": [
+    {
+      "type": "http://registry.fhir.org/r4/StructureDefinition/00ab9e7a-06c7-4f77-9234-4154ca1e3347"
+    }
+  ],
+  "publisher": "ACME Corporation",
+  "purpose": "Main EHR capability statement, published for contracting and operational support",
+  "resourceType": "CapabilityStatement",
+  "rest": [
+    {
+      "compartment": [
+        "http://hl7.org/fhir/CompartmentDefinition/patient"
+      ],
+      "documentation": "Main FHIR endpoint for acem health",
+      "interaction": [
+        {
+          "code": "transaction"
+        },
+        {
+          "code": "history-system"
+        }
+      ],
+      "mode": "server",
+      "resource": [
+        {
+          "conditionalCreate": true,
+          "conditionalDelete": "not-supported",
+          "conditionalRead": "full-support",
+          "conditionalUpdate": false,
+          "documentation": "This server does not let the clients create identities.",
+          "interaction": [
+            {
+              "code": "read"
+            },
+            {
+              "code": "vread",
+              "documentation": "Only supported for patient records since 12-Dec 2012"
+            },
+            {
+              "code": "update"
+            },
+            {
+              "code": "history-instance"
+            },
+            {
+              "code": "create"
+            },
+            {
+              "code": "history-type"
+            }
+          ],
+          "profile": "http://registry.fhir.org/r4/StructureDefinition/7896271d-57f6-4231-89dc-dcc91eab2416",
+          "readHistory": true,
+          "searchInclude": [
+            "Organization"
+          ],
+          "searchParam": [
+            {
+              "definition": "http://hl7.org/fhir/SearchParameter/Patient-identifier",
+              "documentation": "Only supports search by institution MRN",
+              "name": "identifier",
+              "type": "token"
+            },
+            {
+              "definition": "http://hl7.org/fhir/SearchParameter/Patient-general-practitioner",
+              "name": "general-practitioner",
+              "type": "reference"
+            }
+          ],
+          "searchRevInclude": [
+            "Person"
+          ],
+          "supportedProfile": [
+            "http://registry.fhir.org/r4/StructureDefinition/00ab9e7a-06c7-4f77-9234-4154ca1e3347"
+          ],
+          "type": "Patient",
+          "updateCreate": false,
+          "versioning": "versioned-update"
+        }
+      ],
+      "security": {
+        "cors": true,
+        "description": "See Smart on FHIR documentation",
+        "service": [
+          {
+            "coding": [
+              {
+                "code": "SMART-on-FHIR",
+                "system": "http://terminology.hl7.org/CodeSystem/restful-security-service"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "software": {
+    "name": "EHR",
+    "releaseDate": "2012-01-04",
+    "version": "0.00.020.2134"
+  },
+  "status": "draft",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\n\t\t\t\u003cp\u003eThe EHR Server supports the following transactions for the resource Person: read, vread, \n        update, history, search(name,gender), create and updates.\u003c/p\u003e\n\t\t\t\u003cp\u003eThe EHR System supports the following message: admin-notify::Person.\u003c/p\u003e\n\t\t\t\u003cp\u003eThe EHR Application has a \n        \u003ca href=\"http://fhir.hl7.org/base/Profilebc054d23-75e1-4dc6-aca5-838b6b1ac81d/_history/b5fdd9fc-b021-4ea1-911a-721a60663796\"\u003egeneral document profile\u003c/a\u003e.\n      \u003c/p\u003e\n\t\t\u003c/div\u003e",
+    "status": "generated"
+  },
+  "title": "ACME EHR capability statement",
+  "url": "urn:uuid:68D043B5-9ECF-4559-A57A-396E0D452311",
+  "useContext": [
+    {
+      "code": {
+        "code": "focus",
+        "system": "http://terminology.hl7.org/CodeSystem/usage-context-type"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "positive",
+            "system": "http://terminology.hl7.org/CodeSystem/variant-state"
+          }
+        ]
+      }
+    }
+  ],
+  "version": "20130510"
+}

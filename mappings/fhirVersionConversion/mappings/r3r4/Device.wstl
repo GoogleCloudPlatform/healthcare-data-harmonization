@@ -1,0 +1,165 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   device : FHIR Device resource
+//
+// Output(s):
+//   FHIR Device Resource
+//
+def DeviceBase(device) {
+  resourcebase::ResourceBase(device)
+  identifier: device.identifier
+  manufacturer: device.manufacturer
+  manufactureDate: device.manufactureDate
+  expirationDate: device.expirationDate
+  lotNumber: device.lotNumber
+  type: device.type
+  contact: device.contact
+  url: device.url
+  note: device.note
+  safety: device.safety
+}
+
+// Description: Converts a FHIR STU3 Device resource to FHIR R4 Device resource.
+//
+// Argument(s):
+//   device : FHIR STU3 Device resource https://www.hl7.org/fhir/stu3/device.html
+//
+// Output(s):
+//   FHIR R4 Device Resource https://www.hl7.org/fhir/r4/device.html
+//
+def R3DeviceToR4(device) {
+  DeviceBase(device)
+  contained: datatypes::R3ResourceToR4(device.contained[])
+  patient: datatypes::R3ReferenceToR4(device.patient)
+  owner: datatypes::R3ReferenceToR4(device.owner)
+  location: datatypes::R3ReferenceToR4(device.location)
+  definition: extension::fetchReference("https://www.hl7.org/fhir/R4/device-definitions.html#Device.definition", device.extension)
+  udiCarrier[]: R3Device_udiCarrierToR4(device.udi)
+  status: device.status
+  statusReason: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/device-definitions.html#Device.statusReason", device.extension)
+  distinctIdentifier: extension::fetchString("https://www.hl7.org/fhir/R4/device-definitions.html#Device.distinctIdentifier", device.extension)
+  serialNumber: extension::fetchString("https://www.hl7.org/fhir/R4/device-definitions.html#Device.serialNumber", device.extension)
+  deviceName: BuildR4_Device_DeviceName(device.extension)
+  modelNumber: device.model
+  partNumber: extension::fetchString("https://www.hl7.org/fhir/R4/device-definitions.html#Device.partNumber", device.extension)
+  specialization: BuildR4_Device_Specialization(device.extension)
+  version[]: R3Device_VersionToR4(device.version, device.extension)
+  property: BuildR4_Device_Property(device.extension)
+  parent: extension::fetchReference("https://www.hl7.org/fhir/R4/device-definitions.html#Device.parent", device.extension)
+}
+
+// Description: Converts a FHIR R4 Device resource to FHIR STU3 Device resource.
+//
+// Argument(s):
+//   device : FHIR R4 Device resource https://www.hl7.org/fhir/r4/device.html
+//
+// Output(s):
+//   FHIR STU3 Device Resource https://www.hl7.org/fhir/stu3/device.html
+//
+def R4DeviceToR3(device) {
+  DeviceBase(device)
+  contained: datatypes::R4ResourceToR3(device.contained[])
+  patient: datatypes::R4ReferenceToR3(device.patient)
+  owner: datatypes::R4ReferenceToR3(device.owner)
+  location: datatypes::R4ReferenceToR3(device.location)
+  udi: device.udiCarrier[0]
+  status: device.status
+  model: device.modelNumber
+  version: R4Device_VersionToR3(device.version)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/device-definitions.html#Device.definition", device.definition)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/device-definitions.html#Device.statusReason", device.statusReason[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/device-definitions.html#Device.distinctIdentifier", device.distinctIdentifier)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/device-definitions.html#Device.serialNumber", device.serialNumber)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/device-definitions.html#Device.partNumber", device.partNumber)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/device-definitions.html#Device.parent", device.parent)
+}
+
+// Description: Converts a FHIR STU3 Device.Version to FHIR R4 Device.Version.
+//
+// Argument(s):
+//   data : FHIR STU3 Device.Version http://hl7.org/fhir/STU3/device-definitions.html#Device.version
+//   Extension : FHIR STU3 Device.extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 Device.Version http://hl7.org/fhir/R4/device-definitions.html#Device.version
+//
+def R3Device_VersionToR4(required data, Extension) {
+  value: data
+  type: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/device-definitions.html#Device.version.type", Extension)
+  component: extension::fetchIdentifier("https://www.hl7.org/fhir/R4/device-definitions.html#Device.version.component", Extension)
+}
+
+// Description: Converts a FHIR R4 Device.Version to FHIR STU3 Device.Version.
+//
+// Argument(s):
+//   data : FHIR R4 Device.Version http://hl7.org/fhir/R4/device-definitions.html#Device.version
+//
+// Output(s):
+//   FHIR STU3 Device.Version http://hl7.org/fhir/STU3/device-definitions.html#Device.version
+//
+def R4Device_VersionToR3(data) {
+  data[0].value
+}
+
+// Description: Converts a FHIR STU3 Device.Udi to FHIR R4 Device.UdiCarrier.
+//
+// Argument(s):
+//   data : FHIR STU3 Device.Udi http://hl7.org/fhir/STU3/device-definitions.html#Device.udi
+//
+// Output(s):
+//   FHIR R4 Device.UdiCarrier http://hl7.org/fhir/R4/device-definitions.html#Device.udiCarrier
+//
+def R3Device_udiCarrierToR4(data) {
+  deviceIdentifier: data.deviceIdentifier
+  issuer: data.issuer
+  jurisdiction: data.jurisdiction
+  carrierHRF: data.carrierHRF
+  carrierAIDC: data.carrierAIDC
+  entryType: data.entryType
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/device-definitions.html#Device.udiCarrier.name", data.name)
+}
+
+// Description: Constructs a FHIR R4 Device.DeviceName
+//
+// Argument(s):
+//   Extension : FHIR STU3 Device.extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 Device.DeviceName https://www.hl7.org/fhir/stu3/device-definitions.html#Device.deviceName
+//
+def BuildR4_Device_DeviceName(Extension) {
+  name: extension::fetchString("https://www.hl7.org/fhir/R4/device-definitions.html#Device.deviceName.name", Extension)
+  type: extension::fetchCode("https://www.hl7.org/fhir/R4/device-definitions.html#Device.deviceName.type", Extension)
+}
+
+// Description: Constructs a FHIR R4 Device.Specialization
+//
+// Argument(s):
+//   Extension : FHIR STU3 Device.extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 Device.Specialization https://www.hl7.org/fhir/stu3/device-definitions.html#Device.specialization
+//
+def BuildR4_Device_Specialization(Extension) {
+  systemType: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/device-definitions.html#Device.specialization.systemType", Extension)
+  version: extension::fetchString("https://www.hl7.org/fhir/R4/device-definitions.html#Device.specialization.version", Extension)
+}
+
+// Description: Constructs a FHIR R4 Device.Property
+//
+// Argument(s):
+//   Extension : FHIR STU3 Device.extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 Device.Property https://www.hl7.org/fhir/r4/device-definitions.html#Device.property
+//
+def BuildR4_Device_Property(Extension) {
+  type: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/device-definitions.html#Device.property.type", Extension)
+  valueQuantity: extension::fetchQuantityArray("https://www.hl7.org/fhir/R4/device-definitions.html#Device.property.valueQuantity", Extension)
+  valueCode: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/device-definitions.html#Device.property.valueCode", Extension)
+}

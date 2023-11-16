@@ -1,0 +1,161 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   graphDefinition : FHIR GraphDefinition resource
+//
+// Output(s):
+//   FHIR GraphDefinition Resource
+//
+def GraphDefinitionBase(graphDefinition) {
+  resourcebase::ResourceBase(graphDefinition)
+  url: graphDefinition.url
+  version: graphDefinition.version
+  name: graphDefinition.name
+  date: graphDefinition.date
+  publisher: graphDefinition.publisher
+  contact: graphDefinition.contact
+  description: graphDefinition.description
+  useContext: graphDefinition.useContext
+  jurisdiction: graphDefinition.jurisdiction
+  purpose: graphDefinition.purpose
+}
+
+// Description: Converts a FHIR STU3 GraphDefinition resource to FHIR R4 GraphDefinition resource.
+//
+// Argument(s):
+//   graphDefinition : FHIR STU3 GraphDefinition resource https://www.hl7.org/fhir/stu3/graphdefinition.html
+//
+// Output(s):
+//   FHIR R4 GraphDefinition Resource https://www.hl7.org/fhir/r4/graphdefinition.html
+//
+def R3GraphDefinitionToR4(graphDefinition) {
+  GraphDefinitionBase(graphDefinition)
+  contained: datatypes::R3ResourceToR4(graphDefinition.contained[])
+  status: graphDefinition.status
+  experimental: graphDefinition.experimental
+  start: utilities::Convert_TerminologyCode(graphDefinition.start, "http://hl7.org/fhir/resource-types", "ResourceTypes_r3r4")
+  profile: graphDefinition.profile
+  link: R3GraphDefinition_LinkToR4(graphDefinition.link[])
+}
+
+// Description: Converts a FHIR R4 GraphDefinition resource to FHIR STU3 GraphDefinition resource.
+//
+// Argument(s):
+//   graphDefinition : FHIR R4 GraphDefinition resource https://www.hl7.org/fhir/r4/graphdefinition.html
+//
+// Output(s):
+//   FHIR STU3 GraphDefinition Resource https://www.hl7.org/fhir/stu3/graphdefinition.html
+//
+def R4GraphDefinitionToR3(graphDefinition) {
+  GraphDefinitionBase(graphDefinition)
+  contained: datatypes::R4ResourceToR3(graphDefinition.contained[])
+  status: graphDefinition.status
+  experimental: graphDefinition.experimental
+  start: graphDefinition.start
+  profile: graphDefinition.profile
+  link: R4GraphDefinition_LinkToR3(graphDefinition.link[])
+}
+
+// Description: Converts a FHIR STU3 GraphDefinition.Link to FHIR R4 GraphDefinition.Link.
+//
+// Argument(s):
+//   data : FHIR STU3 GraphDefinition.Link http://hl7.org/fhir/STU3/graphdefinition-definitions.html#GraphDefinition.link
+//
+// Output(s):
+//   FHIR R4 GraphDefinition.Link http://hl7.org/fhir/R4/graphdefinition-definitions.html#GraphDefinition.link
+//
+def R3GraphDefinition_LinkToR4(data) {
+  path: data.path
+  sliceName: data.sliceName
+  min: data.min
+  max: data.max
+  description: data.description
+  target: R3GraphDefinition_Link_TargetToR4(data.target[])
+}
+
+// Description: Converts a FHIR R4 GraphDefinition.Link to FHIR STU3 GraphDefinition.Link.
+//
+// Argument(s):
+//   data : FHIR R4 GraphDefinition.Link http://hl7.org/fhir/R4/graphdefinition-definitions.html#GraphDefinition.link
+//
+// Output(s):
+//   FHIR STU3 GraphDefinition.Link http://hl7.org/fhir/STU3/graphdefinition-definitions.html#GraphDefinition.link
+//
+def R4GraphDefinition_LinkToR3(data) {
+  path: data.path
+  sliceName: data.sliceName
+  min: data.min
+  max: data.max
+  description: data.description
+  target: R4GraphDefinition_Link_TargetToR3(data.target[])
+}
+
+// Description: Converts a FHIR STU3 GraphDefinition.Link.Target to FHIR R4 GraphDefinition.Link.Target.
+//
+// Argument(s):
+//   data : FHIR STU3 GraphDefinition.Link.Target http://hl7.org/fhir/STU3/graphdefinition-definitions.html#GraphDefinition.link.target
+//
+// Output(s):
+//   FHIR R4 GraphDefinition.Link.Target http://hl7.org/fhir/R4/graphdefinition-definitions.html#GraphDefinition.link.target
+//
+def R3GraphDefinition_Link_TargetToR4(data) {
+  type: utilities::Convert_TerminologyCode(data.type, "http://hl7.org/fhir/resource-types", "ResourceTypes_r3r4")
+  params: extension::fetchString("https://www.hl7.org/fhir/R4/graphdefinition-definitions.html#GraphDefinition.link.target.params", data.extension)
+  profile: data.profile
+  compartment: R3GraphDefinition_Link_Target_CompartmentToR4(data.compartment[])
+  link: R3GraphDefinition_LinkToR4(data.link[])
+}
+
+// Description: Converts a FHIR R4 GraphDefinition.Link.Target to FHIR STU3 GraphDefinition.Link.Target.
+//
+// Argument(s):
+//   data : FHIR R4 GraphDefinition.Link.Target http://hl7.org/fhir/R4/graphdefinition-definitions.html#GraphDefinition.link.target
+//
+// Output(s):
+//   FHIR STU3 GraphDefinition.Link.Target http://hl7.org/fhir/STU3/graphdefinition-definitions.html#GraphDefinition.link.target
+//
+def R4GraphDefinition_Link_TargetToR3(data) {
+  type: data.type
+  params: data.params
+  profile: data.profile
+  compartment: R4GraphDefinition_Link_Target_CompartmentToR3(data.compartment[])
+  link: R4GraphDefinition_LinkToR3(data.link[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/graphdefinition-definitions.html#GraphDefinition.link.target.params", data.params)
+}
+
+// Description: Converts a FHIR STU3 GraphDefinition.Link.Target.Compartment to FHIR R4 GraphDefinition.Link.Target.Compartment.
+//
+// Argument(s):
+//   data : FHIR STU3 GraphDefinition.Link.Target.Compartment http://hl7.org/fhir/STU3/graphdefinition-definitions.html#GraphDefinition.link.target.compartment
+//
+// Output(s):
+//   FHIR R4 GraphDefinition.Link.Target.Compartment http://hl7.org/fhir/R4/graphdefinition-definitions.html#GraphDefinition.link.target.compartment
+//
+def R3GraphDefinition_Link_Target_CompartmentToR4(data) {
+  use: extension::fetchCode("https://www.hl7.org/fhir/R4/graphdefinition-definitions.html#GraphDefinition.link.target.compartment.use", data.extension)
+  use: utilities::defaultIfNull($this.use, "condition")
+  code: data.code
+  rule: data.rule
+  expression: data.expression
+  description: data.description
+}
+
+// Description: Converts a FHIR R4 GraphDefinition.Link.Target.Compartment to FHIR STU3 GraphDefinition.Link.Target.Compartment.
+//
+// Argument(s):
+//   data : FHIR R4 GraphDefinition.Link.Target.Compartment http://hl7.org/fhir/R4/graphdefinition-definitions.html#GraphDefinition.link.target.compartment
+//
+// Output(s):
+//   FHIR STU3 GraphDefinition.Link.Target.Compartment http://hl7.org/fhir/STU3/graphdefinition-definitions.html#GraphDefinition.link.target.compartment
+//
+def R4GraphDefinition_Link_Target_CompartmentToR3(data) {
+  code: data.code
+  rule: data.rule
+  expression: data.expression
+  description: data.description
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/graphdefinition-definitions.html#GraphDefinition.link.target.compartment.use", data.use)
+}

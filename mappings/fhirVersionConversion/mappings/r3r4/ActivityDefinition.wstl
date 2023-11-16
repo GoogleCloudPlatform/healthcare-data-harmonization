@@ -1,0 +1,212 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   activityDefinition : FHIR ActivityDefinition resource
+//
+// Output(s):
+//   FHIR ActivityDefinition Resource
+//
+def ActivityDefinitionBase(activityDefinition) {
+  resourcebase::ResourceBase(activityDefinition)
+  url: activityDefinition.url
+  identifier: activityDefinition.identifier
+  version: activityDefinition.version
+  name: activityDefinition.name
+  title: activityDefinition.title
+  date: activityDefinition.date
+  publisher: activityDefinition.publisher
+  description: activityDefinition.description
+  purpose: activityDefinition.purpose
+  usage: activityDefinition.usage
+  approvalDate: activityDefinition.approvalDate
+  lastReviewDate: activityDefinition.lastReviewDate
+  effectivePeriod: activityDefinition.effectivePeriod
+  useContext: activityDefinition.useContext
+  jurisdiction: activityDefinition.jurisdiction
+  topic: activityDefinition.topic
+  contact: activityDefinition.contact
+  copyright: activityDefinition.copyright
+  code: activityDefinition.code
+  productCodeableConcept: activityDefinition.productCodeableConcept
+  quantity: activityDefinition.quantity
+  bodySite: activityDefinition.bodySite
+}
+
+// Description: Converts a FHIR STU3 ActivityDefinition resource to FHIR R4 ActivityDefinition resource.
+//
+// Argument(s):
+//   ActivityDefinition : FHIR STU3 ActivityDefinition resource https://www.hl7.org/fhir/stu3/activityDefinition.html
+//
+// Output(s):
+//   FHIR R4 ActivityDefinition Resource https://www.hl7.org/fhir/r4/activityDefinition.html
+//
+def R3ActivityDefinitionToR4(activityDefinition) {
+  ActivityDefinitionBase(activityDefinition)
+  contained: datatypes::R3ResourceToR4(activityDefinition.contained[])
+  location: datatypes::R3ReferenceToR4(activityDefinition.location)
+  productReference: datatypes::R3ReferenceToR4(activityDefinition.productReference)
+  subtitle: extension::fetchString("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.subtitle", activityDefinition.extension)
+  status: activityDefinition.status
+  experimental: activityDefinition.experimental
+  dosage: datatypes::R3DosageToR4(activityDefinition.dosage[])
+  subjectCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.subjectCodeableConcept", activityDefinition.extension)
+  subjectReference: extension::fetchReference("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.subjectReference", activityDefinition.extension)
+  author: R3ContributorToR4("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.author", activityDefinition.extension, activityDefinition.contributor, "author")
+  editor: R3ContributorToR4("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.editor", activityDefinition.extension, activityDefinition.contributor, "editor")
+  reviewer: R3ContributorToR4("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.reviewer", activityDefinition.extension, activityDefinition.contributor, "reviewer")
+  endorser: R3ContributorToR4("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.endorser", activityDefinition.extension, activityDefinition.contributor, "endorser")
+  library: datatypes::ReferenceToCanonical(activityDefinition.library[])
+  kind: utilities::Convert_TerminologyCode(activityDefinition.kind, "http://hl7.org/fhir/resource-types", "ActivityDefinition")
+  profile: extension::fetchCanonical("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.profile", activityDefinition.extension)
+  intent: extension::fetchCode("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.intent", activityDefinition.extension)
+  priority: extension::fetchCode("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.priority", activityDefinition.extension)
+  doNotPerform: extension::fetchBoolean("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.doNotPerform", activityDefinition.extension)
+  timingTiming: activityDefinition.timingTiming
+  timingDateTime: activityDefinition.timingDateTime
+  timingAge: extension::fetchAge("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.timingAge", activityDefinition.extension)
+  timingPeriod: activityDefinition.timingPeriod
+  timingRange: activityDefinition.timingRange
+  timingDuration: extension::fetchAge("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.timingDuration", activityDefinition.extension)
+  participant: R3ActivityDefinition_ParticipantToR4(activityDefinition.participant[])
+  specimenRequirement: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.specimenRequirement", activityDefinition.extension)
+  observationRequirement: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.observationRequirement", activityDefinition.extension)
+  observationResultRequirement: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.observationResultRequirement", activityDefinition.extension)
+  transform: datatypes::ReferenceToCanonical(activityDefinition.transform)
+  dynamicValue: R3ActivityDefinition_DynamicValueToR4(activityDefinition.dynamicValue[])
+  relatedArtifact: datatypes::R3RelatedArtifactToR4(activityDefinition.relatedArtifact[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/activitydefinition-definitions.html#ActivityDefinition.library", activityDefinition.library[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/activitydefinition-definitions.html#ActivityDefinition.transform", activityDefinition.transform)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/activitydefinition-definitions.html#ActivityDefinition.kind", activityDefinition.kind)
+}
+
+// Description: Converts a FHIR R4 ActivityDefinition resource to FHIR STU3 ActivityDefinition resource.
+//
+// Argument(s):
+//   activityDefinition : FHIR R4 ActivityDefinition resource https://www.hl7.org/fhir/r4/activityDefinition.html
+//
+// Output(s):
+//   FHIR STU3 ActivityDefinition Resource https://www.hl7.org/fhir/stu3/activityDefinition.html
+//
+def R4ActivityDefinitionToR3(activityDefinition) {
+  ActivityDefinitionBase(activityDefinition)
+  contained: datatypes::R4ResourceToR3(activityDefinition.contained[])
+  location: datatypes::R4ReferenceToR3(activityDefinition.location)
+  productReference: datatypes::R4ReferenceToR3(activityDefinition.productReference)
+  status: activityDefinition.status
+  experimental: activityDefinition.experimental
+  contributor: extension::fetchContributor("https://www.hl7.org/fhir/STU3/activitydefinition-definitions.html#ActivityDefinition.contributor", activityDefinition.extension)
+  library: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/activitydefinition-definitions.html#ActivityDefinition.library", activityDefinition.extension)
+  kind: extension::fetchCode("https://www.hl7.org/fhir/STU3/activitydefinition-definitions.html#ActivityDefinition.kind", activityDefinition.extension)
+  timingTiming: activityDefinition.timingTiming
+  timingDateTime: activityDefinition.timingDateTime
+  timingPeriod: activityDefinition.timingPeriod
+  timingRange: activityDefinition.timingRange
+  participant: R4ActivityDefinition_ParticipantToR3(activityDefinition.participant[])
+  transform: extension::fetchReference("https://www.hl7.org/fhir/STU3/activitydefinition-definitions.html#ActivityDefinition.transform", activityDefinition.extension)
+  dynamicValue: R4ActivityDefinition_DynamicValueToR3(activityDefinition.dynamicValue[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.subtitle", activityDefinition.subtitle, false)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.subjectCodeableConcept", activityDefinition.subjectCodeableConcept)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.subjectReference", activityDefinition.subjectReference)
+  extension[]: extension::BuildContactDetailExtension("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.author", activityDefinition.author[])
+  extension[]: extension::BuildContactDetailExtension("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.editor", activityDefinition.editor[])
+  extension[]: extension::BuildContactDetailExtension("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.reviewer", activityDefinition.reviewer[])
+  extension[]: extension::BuildContactDetailExtension("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.endorser", activityDefinition.endorser[])
+  extension[]: extension::BuildCanonicalExtension("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.library", activityDefinition.library[])
+  extension[]: extension::BuildCanonicalExtension("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.profile", activityDefinition.profile)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.intent", activityDefinition.intent)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.priority", activityDefinition.priority)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.doNotPerform", activityDefinition.doNotPerform)
+  extension[]: extension::BuildAgeExtension("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.timingAge", activityDefinition.timingAge)
+  extension[]: extension::BuildAgeExtension("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.timingDuration", activityDefinition.timingDuration)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.specimenRequirement", activityDefinition.specimenRequirement[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.observationRequirement", activityDefinition.observationRequirement[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.observationResultRequirement", activityDefinition.observationResultRequirement[])
+  extension[]: extension::BuildCanonicalExtension("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.transform", activityDefinition.transform)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.kind", activityDefinition.kind)
+}
+
+// Description: Converts a FHIR STU3 ActivityDefinition.contributor to FHIR R4 ContactDetail datatypes (ActivityDefinition.author, ActivityDefinition.editor,
+// ActivityDefinition.reviewer, ActivityDefinition.endorser).
+//
+// Argument(s):
+//   data : FHIR STU3 ActivityDefinition.contributor http://hl7.org/fhir/STU3/activitydefinition-definitions.html#ActivityDefinition.contributor
+//   type : FHIR STU3 ActivityDefinition.contributor http://hl7.org/fhir/STU3/metadatatypes-definitions.html#Contributor.type
+//   url : FHIR STU3 Extension.url http://hl7.org/fhir/STU3/extensibility-definitions.html#Extension.url
+//   extension : FHIR STU3 DomainResource.Extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 ContactDetail http://hl7.org/fhir/R4/metadatatypes.html#ContactDetail
+//
+def R3ContributorToR4(url, extension, data, type) {
+  var contact: extension::fetchContactDetailArray(url, extension)
+  if contact then {
+    contact
+  } else {
+    var contributorList: data[where $.type == type]
+    contributorList[0].contact
+  }
+}
+
+// Description: Converts a FHIR STU3 ActivityDefinition.DynamicValue to FHIR R4 ActivityDefinition.DynamicValue.
+//
+// Argument(s):
+//   data : FHIR STU3 ActivityDefinition.DynamicValue http://hl7.org/fhir/STU3/activitydefinition-definitions.html#ActivityDefinition.dynamicValue
+//
+// Output(s):
+//   FHIR R4 ActivityDefinition.DynamicValue http://hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.dynamicValue
+//
+def R3ActivityDefinition_DynamicValueToR4(required data) {
+  path: data.path
+  path: utilities::defaultIfNull($this.path, "ActivityDefinition")
+  expression.description: data.description
+  expression.language: data.language
+  expression.language: utilities::defaultIfNull($this.expression.language, "text/fhirpath")
+  expression.expression: data.expression
+}
+
+// Description: Converts a FHIR R4 ActivityDefinition.DynamicValue to FHIR STU3 ActivityDefinition.DynamicValue.
+//
+// Argument(s):
+//   data : FHIR R4 ActivityDefinition.DynamicValue http://hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.dynamicValue
+//
+// Output(s):
+//   FHIR STU3 ActivityDefinition.DynamicValue http://hl7.org/fhir/STU3/activitydefinition-definitions.html#ActivityDefinition.dynamicValue
+//
+def R4ActivityDefinition_DynamicValueToR3(data) {
+  path: data.path
+  description: data.expression.description
+  language: data.expression.language
+  expression: data.expression.expression
+}
+
+// Description: Converts a FHIR STU3 ActivityDefinition.participant to FHIR R4 ActivityDefinition.participant.
+//
+// Argument(s):
+//   data : FHIR STU3 ActivityDefinition.participant http://hl7.org/fhir/STU3/activitydefinition-definitions.html#ActivityDefinition.participant
+//
+// Output(s):
+//   FHIR R4 ActivityDefinition.participant http://hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.participant
+//
+def R3ActivityDefinition_ParticipantToR4(required data) {
+  type: data.type
+  role: data.role
+}
+
+// Description: Converts a FHIR R4 ActivityDefinition.participant to FHIR STU3 ActivityDefinition.participant.
+//
+// Argument(s):
+//   data : FHIR R4 ActivityDefinition.participant http://hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.participant
+//
+// Output(s):
+//   FHIR STU3 ActivityDefinition.participant http://hl7.org/fhir/STU3/activitydefinition-definitions.html#ActivityDefinition.participant
+//
+def R4ActivityDefinition_ParticipantToR3(data) {
+  type: extension::fetchCode("https://www.hl7.org/fhir/STU3/activitydefinition-definitions.html#ActivityDefinition.participant.type", data.extension)
+  role: data.role
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.participant.type", data.type)
+}
+

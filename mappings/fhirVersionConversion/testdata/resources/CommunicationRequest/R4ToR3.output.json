@@ -1,0 +1,110 @@
+{
+  "authoredOn": "2016-06-10T11:01:10-08:00",
+  "basedOn": [
+    {
+      "display": "EligibilityRequest"
+    }
+  ],
+  "category": [
+    {
+      "coding": [
+        {
+          "code": "SolicitedAttachmentRequest",
+          "system": "http://acme.org/messagetypes"
+        }
+      ]
+    }
+  ],
+  "contained": [
+    {
+      "id": "provider",
+      "identifier": [
+        {
+          "system": "http://www.jurisdiction.com/provideroffices",
+          "value": "3456"
+        }
+      ],
+      "resourceType": "Organization"
+    },
+    {
+      "id": "payor",
+      "identifier": [
+        {
+          "system": "http://www.jurisdiction.com/insurer",
+          "value": "123456"
+        }
+      ],
+      "resourceType": "Organization"
+    },
+    {
+      "id": "requester",
+      "identifier": [
+        {
+          "value": "6789"
+        }
+      ],
+      "resourceType": "Practitioner"
+    }
+  ],
+  "context": {
+    "reference": "Encounter/example"
+  },
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/R4/communicationrequest-definitions.html#CommunicationRequest.status",
+      "valueCode": "active"
+    }
+  ],
+  "groupIdentifier": {
+    "value": "12345"
+  },
+  "id": "fm-solicit",
+  "identifier": [
+    {
+      "system": "http://www.jurisdiction.com/insurer/123456",
+      "value": "ABC123"
+    }
+  ],
+  "medium": [
+    {
+      "coding": [
+        {
+          "code": "WRITTEN",
+          "display": "written",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationMode"
+        }
+      ],
+      "text": "written"
+    }
+  ],
+  "occurrenceDateTime": "2016-06-10T11:01:10-08:00",
+  "payload": [
+    {
+      "contentString": "Please provide the accident report and any associated pictures to support your Claim# DEF5647."
+    }
+  ],
+  "priority": "routine",
+  "recipient": [
+    {
+      "reference": "#provider"
+    }
+  ],
+  "replaces": [
+    {
+      "display": "prior CommunicationRequest"
+    }
+  ],
+  "requester": {
+    "agent": {
+      "reference": "#requester"
+    }
+  },
+  "resourceType": "CommunicationRequest",
+  "sender": {
+    "reference": "#payor"
+  },
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003eRequest for Accident Report\u003c/div\u003e",
+    "status": "generated"
+  }
+}

@@ -1,0 +1,5 @@
+// store to extension
+extension[]: addCanonical("test_url", $root.data[])
+
+// fetch from extension
+data: fetchCanonicalArray("test_url", $root.extension)

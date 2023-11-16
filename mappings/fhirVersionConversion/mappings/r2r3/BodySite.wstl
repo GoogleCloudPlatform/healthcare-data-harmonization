@@ -1,0 +1,27 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def BodySiteBase(bodySite) {
+  resourcebase::ResourceBase(bodySite)
+  identifier: bodySite.identifier
+  code: bodySite.code
+  description: bodySite.description
+  image: bodySite.image
+}
+
+def R2BodySiteToR3(bodySite) {
+  BodySiteBase(bodySite)
+  contained: datatypes::R2ResourceToR3(bodySite.contained[])
+  patient: datatypes::R2ReferenceToR3(bodySite.patient)
+  active: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/bodysite-definitions.html#BodySite.active", bodySite.extension)
+  qualifier: bodySite.modifier
+}
+
+def R3BodySiteToR2(bodySite) {
+  BodySiteBase(bodySite)
+  contained: datatypes::R3ResourceToR2(bodySite.contained[])
+  patient: datatypes::R3ReferenceToR2(bodySite.patient)
+  modifier: bodySite.qualifier
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/bodysite-definitions.html#BodySite.active", bodySite.active)
+}

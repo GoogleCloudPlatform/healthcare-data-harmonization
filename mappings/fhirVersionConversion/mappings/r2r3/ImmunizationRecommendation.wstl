@@ -1,0 +1,60 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def ImmunizationRecommendationBase(immunizationRecommendation) {
+  resourcebase::ResourceBase(immunizationRecommendation)
+  identifier: immunizationRecommendation.identifier
+}
+
+def R2ImmunizationRecommendationToR3(immunizationRecommendation) {
+  ImmunizationRecommendationBase(immunizationRecommendation)
+  contained: datatypes::R2ResourceToR3(immunizationRecommendation.contained[])
+  patient: datatypes::R2ReferenceToR3(immunizationRecommendation.patient)
+  recommendation: R2ImmunizationRecommendation_RecommendationToR3(immunizationRecommendation.recommendation[])
+}
+
+def R3ImmunizationRecommendationToR2(immunizationRecommendation) {
+  ImmunizationRecommendationBase(immunizationRecommendation)
+  contained: datatypes::R3ResourceToR2(immunizationRecommendation.contained[])
+  patient: datatypes::R3ReferenceToR2(immunizationRecommendation.patient)
+  recommendation: R3ImmunizationRecommendation_RecommendationToR2(immunizationRecommendation.recommendation[])
+}
+
+def R2ImmunizationRecommendation_RecommendationToR3(data) {
+  date: data.date
+  vaccineCode: data.vaccineCode
+  targetDisease: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation.targetDisease", data.extension)
+  doseNumber: data.doseNumber
+  forecastStatus: data.forecastStatus
+  dateCriterion: data.dateCriterion
+  protocol: R2ImmunizationRecommendation_Recommendation_ProtocolToR3(data.protocol)
+  supportingImmunization: datatypes::R2ReferenceToR3(data.supportingImmunization[])
+  supportingPatientInformation: datatypes::R2ReferenceToR3(data.supportingPatientInformation[])
+}
+
+def R3ImmunizationRecommendation_RecommendationToR2(data) {
+  date: data.date
+  vaccineCode: data.vaccineCode
+  doseNumber: data.doseNumber
+  forecastStatus: data.forecastStatus
+  dateCriterion: data.dateCriterion
+  protocol: R3ImmunizationRecommendation_Recommendation_ProtocolToR2(data.protocol)
+  supportingImmunization: datatypes::R3ReferenceToR2(data.supportingImmunization[])
+  supportingPatientInformation: datatypes::R3ReferenceToR2(data.supportingPatientInformation[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation.targetDisease", data.targetDisease)
+}
+
+def R2ImmunizationRecommendation_Recommendation_ProtocolToR3(data) {
+  doseSequence: data.doseSequence
+  description: data.description
+  authority: datatypes::R2ReferenceToR3(data.authority)
+  series: data.series
+}
+
+def R3ImmunizationRecommendation_Recommendation_ProtocolToR2(data) {
+  doseSequence: data.doseSequence
+  description: data.description
+  authority: datatypes::R3ReferenceToR2(data.authority)
+  series: data.series
+}

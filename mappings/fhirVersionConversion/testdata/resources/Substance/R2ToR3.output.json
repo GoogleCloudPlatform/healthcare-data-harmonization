@@ -1,0 +1,35 @@
+{
+  "category": [
+    {
+      "coding": [
+        {
+          "code": "allergen",
+          "display": "Allergen",
+          "system": "http://hl7.org.fhir/substance-category"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "text": "apitoxin (Honey Bee Venom)"
+  },
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/substance-definitions.html#Substance.status",
+      "valueCode": "active"
+    }
+  ],
+  "id": "example",
+  "identifier": [
+    {
+      "system": "http://acme.org/identifiers/substances",
+      "value": "1463"
+    }
+  ],
+  "resourceType": "Substance",
+  "status": "active",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\u003cp\u003e\u003cb\u003eGenerated Narrative with Details\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eid\u003c/b\u003e: example\u003c/p\u003e\u003cp\u003e\u003cb\u003eidentifier\u003c/b\u003e: 1463\u003c/p\u003e\u003cp\u003e\u003cb\u003estatus\u003c/b\u003e: active\u003c/p\u003e\u003cp\u003e\u003cb\u003ecategory\u003c/b\u003e: Allergen \u003cspan\u003e(Details : {http://hl7.org.fhir/substance-category code 'allergen' = 'allergen', given as 'Allergen'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003ecode\u003c/b\u003e: apitoxin (Honey Bee Venom) \u003cspan\u003e(Details )\u003c/span\u003e\u003c/p\u003e\u003c/div\u003e",
+    "status": "generated"
+  }
+}

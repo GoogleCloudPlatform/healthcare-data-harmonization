@@ -1,0 +1,11 @@
+// R3 QuestionnaireResponse To R4
+$this: R3QuestionnaireResponseToR4($root)
+
+// R4 QuestionnaireResponse To R3
+$this: R4QuestionnaireResponseToR3($root)
+
+// R2 QuestionnaireResponse To R3
+$this: R2QuestionnaireResponseToR3($root)
+
+// R3 QuestionnaireResponse To R2
+$this: R3QuestionnaireResponseToR2($root)

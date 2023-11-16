@@ -1,0 +1,99 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def ParametersBase(parameters) {
+  resourceType: parameters.resourceType
+  id: parameters.id
+  meta: parameters.meta
+  implicitRules: parameters.implicitRules
+  language: parameters.language
+}
+
+def R3ParametersToR4(parameters) {
+  ParametersBase(parameters)
+  parameter: R3Parameters_ParameterToR4(parameters.parameter[])
+}
+
+def R4ParametersToR3(parameters) {
+  ParametersBase(parameters)
+  parameter: R4Parameters_ParameterToR3(parameters.parameter[])
+}
+
+def R3Parameters_ParameterToR4(data) {
+  name: data.name
+  valueBoolean: data.valueBoolean
+  valueDecimal: data.valueDecimal
+  valueInteger: data.valueInteger
+  valueDate: data.valueDate
+  valueDateTime: data.valueDateTime
+  valueTime: data.valueTime
+  valueString: data.valueString
+  valueUri: data.valueUri
+  valueAttachment: data.valueAttachment
+  valueCoding: data.valueCoding
+  valueQuantity: data.valueQuantity
+  valueBase64Binary: data.valueBase64Binary
+  valueCodeableConcept: data.valueCodeableConcept
+  valueCode: data.valueCode
+  valueInstant: data.valueInstant
+  valueOid: data.valueOid
+  valueId: data.valueId
+  valueUnsignedInt: data.valueUnsignedInt
+  valuePositiveInt: data.valuePositiveInt
+  valueMarkdown: data.valueMarkdown
+  valueAnnotation: data.valueAnnotation
+  valueIdentifier: data.valueIdentifier
+  valueRange: data.valueRange
+  valuePeriod: data.valuePeriod
+  valueRatio: data.valueRatio
+  valueSampledData: data.valueSampledData
+  valueSignature: data.valueSignature
+  valueHumanName: data.valueHumanName
+  valueAddress: data.valueAddress
+  valueContactPoint: data.valueContactPoint
+  valueTiming: data.valueTiming
+  valueMeta: data.valueMeta
+  valueReference: datatypes::R3ReferenceToR4(data.valueReference)
+  resource: datatypes::R3ResourceToR4(data.resource)
+  part: data.part
+}
+
+def R4Parameters_ParameterToR3(data) {
+  name: data.name
+  valueBoolean: data.valueBoolean
+  valueDecimal: data.valueDecimal
+  valueInteger: data.valueInteger
+  valueDate: data.valueDate
+  valueDateTime: data.valueDateTime
+  valueTime: data.valueTime
+  valueString: data.valueString
+  valueUri: data.valueUri
+  valueAttachment: data.valueAttachment
+  valueCoding: data.valueCoding
+  valueQuantity: data.valueQuantity
+  valueBase64Binary: data.valueBase64Binary
+  valueCodeableConcept: data.valueCodeableConcept
+  valueCode: data.valueCode
+  valueInstant: data.valueInstant
+  valueOid: data.valueOid
+  valueId: data.valueId
+  valueUnsignedInt: data.valueUnsignedInt
+  valuePositiveInt: data.valuePositiveInt
+  valueMarkdown: data.valueMarkdown
+  valueAnnotation: data.valueAnnotation
+  valueIdentifier: data.valueIdentifier
+  valueRange: data.valueRange
+  valuePeriod: data.valuePeriod
+  valueRatio: data.valueRatio
+  valueSampledData: data.valueSampledData
+  valueSignature: data.valueSignature
+  valueHumanName: data.valueHumanName
+  valueAddress: data.valueAddress
+  valueContactPoint: data.valueContactPoint
+  valueTiming: data.valueTiming
+  valueMeta: data.valueMeta
+  valueReference: datatypes::R4ReferenceToR3(data.valueReference)
+  resource: datatypes::R4ResourceToR3(data.resource)
+  part: data.part
+}

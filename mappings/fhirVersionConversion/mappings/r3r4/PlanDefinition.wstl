@@ -1,0 +1,189 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def PlanDefinitionBase(planDefinition) {
+  resourcebase::ResourceBase(planDefinition)
+  url: planDefinition.url
+  identifier: planDefinition.identifier
+  version: planDefinition.version
+  name: planDefinition.name
+  title: planDefinition.title
+  date: planDefinition.date
+  publisher: planDefinition.publisher
+  contact: planDefinition.contact
+  description: planDefinition.description
+  useContext: planDefinition.useContext
+  jurisdiction: planDefinition.jurisdiction
+  purpose: planDefinition.purpose
+  usage: planDefinition.usage
+  copyright: planDefinition.copyright
+  approvalDate: planDefinition.approvalDate
+  lastReviewDate: planDefinition.lastReviewDate
+  effectivePeriod: planDefinition.effectivePeriod
+  topic: planDefinition.topic
+  relatedArtifact: planDefinition.relatedArtifact
+  goal: planDefinition.goal
+}
+
+def R3PlanDefinitionToR4(planDefinition) {
+  PlanDefinitionBase(planDefinition)
+  contained: datatypes::R3ResourceToR4(planDefinition.contained[])
+  subtitle: extension::fetchString("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.subtitle", planDefinition.extension)
+  type: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.type", planDefinition.extension)
+  status: planDefinition.status
+  experimental: planDefinition.experimental
+  subjectCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.subjectCodeableConcept", planDefinition.extension)
+  subjectReference: extension::fetchReference("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.subjectReference", planDefinition.extension)
+  author: R3PlanDefinition_ContributorToR4("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.author", planDefinition.extension, planDefinition.contributor, "author")
+  editor: R3PlanDefinition_ContributorToR4("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.editor", planDefinition.extension, planDefinition.contributor, "editor")
+  reviewer: R3PlanDefinition_ContributorToR4("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.reviewer", planDefinition.extension, planDefinition.contributor, "reviewer")
+  endorser: R3PlanDefinition_ContributorToR4("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.endorser", planDefinition.extension, planDefinition.contributor, "endorser")
+  library: datatypes::ReferenceToCanonical(planDefinition.library[])
+  action: R3PlanDefinition_ActionToR4(planDefinition.action[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/plandefinition-definitions.html#PlanDefinition.type", planDefinition.type)
+}
+
+def R4PlanDefinitionToR3(planDefinition) {
+  PlanDefinitionBase(planDefinition)
+  contained: datatypes::R4ResourceToR3(planDefinition.contained[])
+  type: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/plandefinition-definitions.html#PlanDefinition.type", planDefinition.extension)
+  status: planDefinition.status
+  experimental: planDefinition.experimental
+  library: datatypes::CanonicalToReference(planDefinition.library[])
+  action: R4PlanDefinition_ActionToR3(planDefinition.action[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.subtitle", planDefinition.subtitle)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.subjectCodeableConcept", planDefinition.subjectCodeableConcept)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.subjectReference", planDefinition.subjectReference)
+  extension[]: extension::BuildContactDetailExtension("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.author", planDefinition.author[])
+  extension[]: extension::BuildContactDetailExtension("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.editor", planDefinition.editor[])
+  extension[]: extension::BuildContactDetailExtension("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.reviewer", planDefinition.reviewer[])
+  extension[]: extension::BuildContactDetailExtension("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.endorser", planDefinition.endorser[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.type", planDefinition.type)
+}
+
+def R3PlanDefinition_ContributorToR4(url, extension, data, type) {
+  var contact: extension::fetchContactDetailArray(url, extension)
+  if contact then {
+    contact
+  } else {
+    var contributorList: data[where $.type == type]
+    contributorList[0].contact
+  }
+}
+
+def R3PlanDefinition_ActionToR4(data) {
+  prefix: data.label
+  title: data.title
+  description: data.description
+  textEquivalent: data.textEquivalent
+  priority: extension::fetchCode("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.action.priority", data.extension)
+  code: data.code
+  reason: data.reason
+  documentation: data.documentation
+  goalId: data.goalId
+  subjectCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.action.subjectCodeableConcept", data.extension)
+  subjectReference: extension::fetchReference("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.action.subjectReference", data.extension)
+  trigger: data.triggerDefinition
+  condition: R3PlanDefinition_Action_ConditionToR4(data.condition[])
+  input: data.input
+  output: data.output
+  relatedAction: data.relatedAction
+  timingDateTime: data.timingDateTime
+  timingAge: extension::fetchAge("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.action.timingAge", data.extension)
+  timingPeriod: data.timingPeriod
+  timingDuration: data.timingDuration
+  timingRange: data.timingRange
+  timingTiming: data.timingTiming
+  participant: R3PlanDefinition_Action_ParticipantToR4(data.participant[])
+  type: datatypes::CodingToCodeableConcept(data.type)
+  groupingBehavior: data.groupingBehavior
+  selectionBehavior: data.selectionBehavior
+  requiredBehavior: data.requiredBehavior
+  precheckBehavior: data.precheckBehavior
+  cardinalityBehavior: data.cardinalityBehavior
+  definitionCanonical: extension::fetchCanonical("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.action.priority", data.definitionCanonical)
+  definitionUri: extension::fetchUri("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.action.priority", data.definitionUri)
+  transform: datatypes::ReferenceToCanonical(data.transform)
+  dynamicValue: R3PlanDefinition_Action_DynamicValueToR4(data.dynamicValue[])
+  action: R3PlanDefinition_ActionToR4(data.action[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/plandefinition-definitions.html#PlanDefinition.action.definition", data.definition)
+}
+
+def R4PlanDefinition_ActionToR3(data) {
+  label: data.prefix
+  title: data.title
+  description: data.description
+  textEquivalent: data.textEquivalent
+  code: data.code
+  reason: data.reason
+  documentation: data.documentation
+  goalId: data.goalId
+  triggerDefinition: data.trigger
+  condition: R4PlanDefinition_Action_ConditionToR3(data.condition[])
+  input: data.input
+  output: data.output
+  relatedAction: data.relatedAction
+  timingDateTime: data.timingDateTime
+  timingPeriod: data.timingPeriod
+  timingDuration: data.timingDuration
+  timingRange: data.timingRange
+  timingTiming: data.timingTiming
+  participant: R4PlanDefinition_Action_ParticipantToR3(data.participant[])
+  type: datatypes::CodeableConceptToCoding(data.type)
+  groupingBehavior: data.groupingBehavior
+  selectionBehavior: data.selectionBehavior
+  requiredBehavior: data.requiredBehavior
+  precheckBehavior: data.precheckBehavior
+  cardinalityBehavior: data.cardinalityBehavior
+  definition: extension::fetchReference("https://www.hl7.org/fhir/STU3/plandefinition-definitions.html#PlanDefinition.action.definition", data.extension)
+  transform: datatypes::CanonicalToReference(data.transform)
+  dynamicValue: R4PlanDefinition_Action_DynamicValueToR3(data.dynamicValue[])
+  action: R4PlanDefinition_ActionToR3(data.action[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.action.priority", data.priority)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.action.subjectCodeableConcept", data.subjectCodeableConcept)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.action.subjectReference", data.subjectReference)
+  extension[]: extension::BuildAgeExtension("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.action.timingAge", data.timingAge)
+  extension[]: extension::BuildCanonicalExtension("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.action.definitionCanonical", data.definitionCanonical)
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.action.definitionUri", data.definitionUri)
+}
+
+def R3PlanDefinition_Action_ConditionToR4(data) {
+  kind: data.kind
+  expression.expression: data.expression
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/plandefinition-definitions.html#PlanDefinition.action.condition.description", data.description)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/plandefinition-definitions.html#PlanDefinition.action.condition.language", data.language)
+}
+
+def R4PlanDefinition_Action_ConditionToR3(data) {
+  kind: data.kind
+  description: extension::fetchString("https://www.hl7.org/fhir/STU3/plandefinition-definitions.html#PlanDefinition.action.condition.description", data.extension)
+  language: extension::fetchString("https://www.hl7.org/fhir/STU3/plandefinition-definitions.html#PlanDefinition.action.condition.language", data.extension)
+  expression: data.expression.expression
+}
+
+def R3PlanDefinition_Action_DynamicValueToR4(data) {
+  description: data.description
+  expression.expression: data.expression
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/plandefinition-definitions.html#PlanDefinition.action.dynamicValue.path", data.path)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/plandefinition-definitions.html#PlanDefinition.action.dynamicValue.language", data.language)
+}
+
+def R4PlanDefinition_Action_DynamicValueToR3(data) {
+  description: data.description
+  path: extension::fetchString("https://www.hl7.org/fhir/STU3/plandefinition-definitions.html#PlanDefinition.action.dynamicValue.path", data.extension)
+  language: extension::fetchString("https://www.hl7.org/fhir/STU3/plandefinition-definitions.html#PlanDefinition.action.dynamicValue.language", data.extension)
+  expression: data.expression.expression
+}
+
+def R3PlanDefinition_Action_ParticipantToR4(data) {
+  type: extension::fetchCode("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.action.participant.type", data.extension)
+  role: data.role
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/plandefinition-definitions.html#PlanDefinition.action.participant.type", data.type)
+}
+
+def R4PlanDefinition_Action_ParticipantToR3(data) {
+  type: extension::fetchCode("https://www.hl7.org/fhir/STU3/plandefinition-definitions.html#PlanDefinition.action.participant.type", data.extension)
+  role: data.role
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/plandefinition-definitions.html#PlanDefinition.action.participant.type", data.type)
+}

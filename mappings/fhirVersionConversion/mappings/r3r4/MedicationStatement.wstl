@@ -1,0 +1,54 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def MedicationStatementBase(medicationStatement) {
+  resourcebase::ResourceBase(medicationStatement)
+  identifier: medicationStatement.identifier
+  category: medicationStatement.category
+  medicationCodeableConcept: medicationStatement.medicationCodeableConcept
+  effectiveDateTime: medicationStatement.effectiveDateTime
+  effectivePeriod: medicationStatement.effectivePeriod
+  dateAsserted: medicationStatement.dateAsserted
+  reasonCode: medicationStatement.reasonCode
+  note: medicationStatement.note
+  dosage: medicationStatement.dosage
+}
+
+def R3MedicationStatementToR4(medicationStatement) {
+  MedicationStatementBase(medicationStatement)
+  contained: datatypes::R3ResourceToR4(medicationStatement.contained[])
+  derivedFrom: datatypes::R3ReferenceToR4(medicationStatement.derivedFrom[])
+  subject: datatypes::R3ReferenceToR4(medicationStatement.subject)
+  context: datatypes::R3ReferenceToR4(medicationStatement.context)
+  medicationReference: datatypes::R3ReferenceToR4(medicationStatement.medicationReference)
+  basedOn: datatypes::R3ReferenceToR4(medicationStatement.basedOn[])
+  partOf: datatypes::R3ReferenceToR4(medicationStatement.partOf[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/R4/medicationstatement-definitions.html#MedicationStatement.status", medicationStatement.extension)
+  status: if status? then status else medicationStatement.status
+  statusReason: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/medicationstatement-definitions.html#MedicationStatement.statusReason", medicationStatement.extension)
+  informationSource: datatypes::R3ReferenceToR4(medicationStatement.informationSource)
+  reasonReference: datatypes::R3ReferenceToR4(medicationStatement.reasonReference[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.taken", medicationStatement.taken)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.reasonNotTaken", medicationStatement.reasonNotTaken[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.status", medicationStatement.status)
+}
+
+def R4MedicationStatementToR3(medicationStatement) {
+  MedicationStatementBase(medicationStatement)
+  contained: datatypes::R4ResourceToR3(medicationStatement.contained[])
+  derivedFrom: datatypes::R4ReferenceToR3(medicationStatement.derivedFrom[])
+  subject: datatypes::R4ReferenceToR3(medicationStatement.subject)
+  context: datatypes::R4ReferenceToR3(medicationStatement.context)
+  medicationReference: datatypes::R4ReferenceToR3(medicationStatement.medicationReference)
+  basedOn: datatypes::R4ReferenceToR3(medicationStatement.basedOn[])
+  partOf: datatypes::R4ReferenceToR3(medicationStatement.partOf[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.status", medicationStatement.extension)
+  status: if status? then status else medicationStatement.status
+  informationSource: datatypes::R3ReferenceToR4(medicationStatement.informationSource)
+  taken: extension::fetchCode("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.taken", medicationStatement.extension)
+  reasonNotTaken: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.reasonNotTaken", medicationStatement.extension)
+  reasonReference: datatypes::R4ReferenceToR3(medicationStatement.reasonReference[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/medicationstatement-definitions.html#MedicationStatement.statusReason", medicationStatement.statusReason[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/medicationstatement-definitions.html#MedicationStatement.status", medicationStatement.status)
+}

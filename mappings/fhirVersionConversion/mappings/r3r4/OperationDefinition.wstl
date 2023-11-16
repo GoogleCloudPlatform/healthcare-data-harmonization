@@ -1,0 +1,97 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def OperationDefinitionBase(operationDefinition) {
+  resourcebase::ResourceBase(operationDefinition)
+  url: operationDefinition.url
+  version: operationDefinition.version
+  name: operationDefinition.name
+  date: operationDefinition.date
+  publisher: operationDefinition.publisher
+  contact: operationDefinition.contact
+  description: operationDefinition.description
+  useContext: operationDefinition.useContext
+  jurisdiction: operationDefinition.jurisdiction
+  purpose: operationDefinition.purpose
+  code: operationDefinition.code
+  system: operationDefinition.system
+  type: operationDefinition.type
+  instance: operationDefinition.instance
+  overload: operationDefinition.overload
+}
+
+def R3OperationDefinitionToR4(operationDefinition) {
+  OperationDefinitionBase(operationDefinition)
+  contained: datatypes::R3ResourceToR4(operationDefinition.contained[])
+  title: extension::fetchString("https://www.hl7.org/fhir/R4/operationdefinition-definitions.html#OperationDefinition.title", operationDefinition.extension)
+  status: operationDefinition.status
+  kind: operationDefinition.kind
+  experimental: operationDefinition.experimental
+  affectsState: operationDefinition.idempotent
+  comment: operationDefinition.comment
+  base: datatypes::ReferenceToCanonical(operationDefinition.base)
+  resource: operationDefinition.resource
+  inputProfile: extension::fetchCanonical("https://www.hl7.org/fhir/R4/operationdefinition-definitions.html#OperationDefinition.inputProfile", operationDefinition.extension)
+  outputProfile: extension::fetchCanonical("https://www.hl7.org/fhir/R4/operationdefinition-definitions.html#OperationDefinition.outputProfile", operationDefinition.extension)
+  parameter: R3OperationDefinition_ParameterToR4(operationDefinition.parameter[])
+}
+
+def R4OperationDefinitionToR3(operationDefinition) {
+  OperationDefinitionBase(operationDefinition)
+  contained: datatypes::R4ResourceToR3(operationDefinition.contained[])
+  status: operationDefinition.status
+  kind: operationDefinition.kind
+  experimental: operationDefinition.experimental
+  idempotent: operationDefinition.affectsState
+  comment: operationDefinition.comment
+  base: datatypes::CanonicalToReference(operationDefinition.base)
+  resource: operationDefinition.resource
+  parameter: R4OperationDefinition_ParameterToR3(operationDefinition.parameter[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/operationdefinition-definitions.html#OperationDefinition.title", operationDefinition.title)
+  extension[]: extension::BuildCanonicalExtension("https://www.hl7.org/fhir/R4/operationdefinition-definitions.html#OperationDefinition.inputProfile", operationDefinition.inputProfile)
+  extension[]: extension::BuildCanonicalExtension("https://www.hl7.org/fhir/R4/operationdefinition-definitions.html#OperationDefinition.outputProfile", operationDefinition.outputProfile)
+}
+
+def R3OperationDefinition_ParameterToR4(data) {
+  name: data.name
+  use: data.use
+  min: data.min
+  max: data.max
+  documentation: data.documentation
+  type: utilities::Convert_TerminologyCode(data.type, "http://hl7.org/fhir/ValueSet/all-types", "FhirTypes_r3r4")
+  targetProfile: R3OperationDefinition_Parameter_ProfileToR4("https://www.hl7.org/fhir/R4/operationdefinition-definitions.html#OperationDefinition.parameter.targetProfile", data.extension, data.profile)
+  searchType: extension::fetchCode("https://www.hl7.org/fhir/R4/operationdefinition-definitions.html#OperationDefinition.parameter.binding.searchType", data.extension)
+  binding.strength: data.binding.strength
+  binding.valueSet: data.binding.valueSetUri
+  part: data.part
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/operationdefinition-definitions.html#OperationDefinition.parameter.binding.valueSetReference", data.binding.valueSetReference)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/operationdefinition-definitions.html#OperationDefinition.parameter.binding.searchType", data.searchType)
+}
+
+def R4OperationDefinition_ParameterToR3(data) {
+  name: data.name
+  use: data.use
+  min: data.min
+  max: data.max
+  documentation: data.documentation
+  type: data.type
+  profile: data.targetProfile[0]
+  searchType: extension::fetchCode("https://www.hl7.org/fhir/STU3/operationdefinition-definitions.html#OperationDefinition.parameter.binding.searchType", data.extension)
+  binding.strength: data.binding.strength
+  binding.valueSetUri: data.binding.valueSet
+  binding.valueSetReference: extension::fetchReference("https://www.hl7.org/fhir/STU3/operationdefinition-definitions.html#OperationDefinition.parameter.binding.valueSetReference", data.extension)
+  referencedFrom: data.referencedFrom
+  part: data.part
+  extension[]: extension::BuildCanonicalExtension("https://www.hl7.org/fhir/R4/operationdefinition-definitions.html#OperationDefinition.parameter.targetProfile", data.targetProfile[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/operationdefinition-definitions.html#OperationDefinition.parameter.binding.searchType", data.searchType)
+}
+
+def R3OperationDefinition_Parameter_ProfileToR4(url, extension, data) {
+  var targetProfile: extension::fetchCanonicalArray(url, extension)
+  if targetProfile then {
+    targetProfile
+  } else {
+    arrayOf(data)
+  }
+}

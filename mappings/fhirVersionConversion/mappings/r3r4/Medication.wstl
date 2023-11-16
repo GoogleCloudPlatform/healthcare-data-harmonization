@@ -1,0 +1,51 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def MedicationBase(medication) {
+  resourcebase::ResourceBase(medication)
+  code: medication.code
+  form: medication.form
+}
+
+def R3MedicationToR4(medication) {
+  MedicationBase(medication)
+  contained: datatypes::R3ResourceToR4(medication.contained[])
+  manufacturer: datatypes::R3ReferenceToR4(medication.manufacturer)
+  identifier: extension::fetchIdentifierArray("https://www.hl7.org/fhir/R4/medication-definitions.html#Medication.identifier", medication.extension)
+  status: medication.status
+  amount: extension::fetchRatio("https://www.hl7.org/fhir/R4/medication-definitions.html#Medication.amount", medication.extension)
+  ingredient: R3Medication_IngredientToR4(medication.ingredient[])
+  batch: medication.'package'.batch[0]
+  extension[]: extension::BuildAttachmentExtension("https://www.hl7.org/fhir/STU3/medication-definitions.html#Medication.image", medication.image[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/medication-definitions.html#Medication.package.container", medication.'package'.container)
+}
+
+def R4MedicationToR3(medication) {
+  MedicationBase(medication)
+  contained: datatypes::R4ResourceToR3(medication.contained[])
+  manufacturer: datatypes::R4ReferenceToR3(medication.manufacturer)
+  status: medication.status
+  isBrand: medication.isBrand
+  isOverTheCounter: medication.isOverTheCounter
+  ingredient: R4Medication_IngredientToR3(medication.ingredient[])
+  'package'.batch[]: medication.batch
+  'package'.container: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/medication-definitions.html#Medication.package.container", medication.extension)
+  image: extension::fetchAttachmentArray("https://www.hl7.org/fhir/STU3/medication-definitions.html#Medication.image", medication.extension)
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/R4/medication-definitions.html#Medication.identifier", medication.identifier[])
+  extension[]: extension::BuildRatioExtension("https://www.hl7.org/fhir/R4/medication-definitions.html#Medication.amount", medication.amount)
+}
+
+def R3Medication_IngredientToR4(data) {
+  itemCodeableConcept: data.itemCodeableConcept
+  itemReference: datatypes::R3ReferenceToR4(data.itemReference)
+  isActive: data.isActive
+  strength: data.amount
+}
+
+def R4Medication_IngredientToR3(data) {
+  itemCodeableConcept: data.itemCodeableConcept
+  itemReference: datatypes::R4ReferenceToR3(data.itemReference)
+  isActive: data.isActive
+  amount: data.strength
+}

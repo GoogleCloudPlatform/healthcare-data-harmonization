@@ -1,0 +1,124 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def CarePlanBase(carePlan) {
+  resourcebase::ResourceBase(carePlan)
+  identifier: carePlan.identifier
+  status: carePlan.status
+  category: carePlan.category
+  description: carePlan.description
+  period: carePlan.period
+}
+
+def R2CarePlanToR3(carePlan) {
+  CarePlanBase(carePlan)
+  contained: datatypes::R2ResourceToR3(carePlan.contained[])
+  goal: datatypes::R2ReferenceToR3(carePlan.goal[])
+  addresses: datatypes::R2ReferenceToR3(carePlan.addresses[])
+  context: datatypes::R2ReferenceToR3(carePlan.context)
+  definition: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.definition", carePlan.extension)
+  basedOn: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.basedOn", carePlan.extension)
+  replaces: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.replaces", carePlan.extension)
+  partOf: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.partOf", carePlan.extension)
+  intent: extension::fetchCode("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.intent", carePlan.extension)
+  title: extension::fetchString("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.title", carePlan.extension)
+  subject: datatypes::R2ReferenceToR3(carePlan.subject)
+  author: datatypes::R2ReferenceToR3(carePlan.author[])
+  careTeam: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.careTeam", carePlan.extension)
+  supportingInfo: datatypes::R2ReferenceToR3(carePlan.support[])
+  activity: R2CarePlan_ActivityToR3(carePlan.activity[])
+  note: R2CarePlan_NoteToR3("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.note", carePlan.extension, carePlan.note)
+  extension[]: extension::BuildDateTimeExtension("https://www.hl7.org/fhir/DSTU2/careplan-definitions.html#CarePlan.modified", carePlan.modified)
+}
+
+def R3CarePlanToR2(carePlan) {
+  CarePlanBase(carePlan)
+  contained: datatypes::R3ResourceToR2(carePlan.contained[])
+  goal: datatypes::R3ReferenceToR2(carePlan.goal[])
+  addresses: datatypes::R3ReferenceToR2(carePlan.addresses[])
+  context: datatypes::R3ReferenceToR2(carePlan.context)
+  subject: datatypes::R3ReferenceToR2(carePlan.subject)
+  author: datatypes::R3ReferenceToR2(carePlan.author[])
+  support: datatypes::R3ReferenceToR2(carePlan.supportingInfo[])
+  activity: R3CarePlan_ActivityToR2(carePlan.activity[])
+  note: carePlan.note[0]
+  modified: extension::fetchDateTime("https://www.hl7.org/fhir/DSTU2/careplan-definitions.html#CarePlan.modified", carePlan.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.definition", carePlan.definition[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.basedOn", carePlan.basedOn[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.replaces", carePlan.replaces[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.partOf", carePlan.partOf[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.intent", carePlan.intent)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.title", carePlan.title)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.careTeam", carePlan.careTeam[])
+  extension[]: extension::BuildAnnotationExtension("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.note", carePlan.note[])
+}
+
+def R2CarePlan_ActivityToR3(data) {
+  outcomeCodeableConcept: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.activity.outcomeCodeableConcept", data.extension)
+  outcomeReference: datatypes::R2ReferenceToR3(data.actionResulting[])
+  progress: data.progress
+  reference: datatypes::R2ReferenceToR3(data.reference)
+  detail: R2CarePlan_Activity_DetailToR3(data.detail)
+}
+
+def R3CarePlan_ActivityToR2(data) {
+  actionResulting: datatypes::R3ReferenceToR2(data.outcomeReference[])
+  progress: data.progress
+  reference: datatypes::R3ReferenceToR2(data.reference)
+  detail: R3CarePlan_Activity_DetailToR2(data.detail)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.activity.outcomeCodeableConcept", data.outcomeCodeableConcept[])
+}
+
+def R2CarePlan_Activity_DetailToR3(data) {
+  category: data.category
+  definition: extension::fetchReference("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.activity.detail.definition", data.extension)
+  code: data.code
+  reasonCode: data.reasonCode
+  reasonReference: datatypes::R2ReferenceToR3(data.reasonReference[])
+  goal: datatypes::R2ReferenceToR3(data.goal[])
+  status: data.status
+  statusReason: datatypes::CodeableConceptToString(data.statusReason)
+  prohibited: data.prohibited
+  scheduledTiming: data.scheduledTiming
+  scheduledPeriod: data.scheduledPeriod
+  scheduledString: data.scheduledString
+  location: datatypes::R2ReferenceToR3(data.location)
+  performer: datatypes::R2ReferenceToR3(data.performer[])
+  productCodeableConcept: data.productCodeableConcept
+  productReference: datatypes::R2ReferenceToR3(data.productReference)
+  dailyAmount: data.dailyAmount
+  quantity: data.quantity
+  description: data.description
+}
+
+def R3CarePlan_Activity_DetailToR2(data) {
+  category: data.category
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.activity.detail.definition", data.definition)
+  code: data.code
+  reasonCode: data.reasonCode
+  reasonReference: datatypes::R3ReferenceToR2(data.reasonReference[])
+  goal: datatypes::R3ReferenceToR2(data.goal[])
+  status: data.status
+  statusReason: datatypes::StringToCodeableConcept(data.statusReason)
+  prohibited: data.prohibited
+  scheduledTiming: data.scheduledTiming
+  scheduledPeriod: data.scheduledPeriod
+  scheduledString: data.scheduledString
+  location: datatypes::R3ReferenceToR2(data.location)
+  performer: datatypes::R3ReferenceToR2(data.performer[])
+  productCodeableConcept: data.productCodeableConcept
+  productReference: datatypes::R3ReferenceToR2(data.productReference)
+  dailyAmount: data.dailyAmount
+  quantity: data.quantity
+  description: data.description
+}
+
+def R2CarePlan_NoteToR3(url, extension, data) {
+  var note: extension::fetchAnnotationArray(url, extension)
+  if note then {
+    note
+  } else {
+    arrayOf(data)
+  }
+}

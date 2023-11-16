@@ -1,0 +1,21 @@
+package resourcebase
+
+// Description: Creates the base resource with elements defined in ancestors
+// that are common for every resource type.
+//
+// Argument(s):
+//   resource:  Any FHIR resource
+//
+// Output(s):
+//   FHIR resource with base fields
+//
+def ResourceBase(resource) {
+  resourceType: resource.resourceType
+  id: resource.id
+  meta: resource.meta
+  implicitRules: resource.implicitRules
+  language: resource.language
+  text: resource.text
+  extension: datatypes::Convert_Extension(resource.extension[])
+  modifierExtension: datatypes::Convert_Extension(resource.modifierExtension[])
+}

@@ -1,0 +1,131 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def RequestGroupBase(requestGroup) {
+  resourcebase::ResourceBase(requestGroup)
+  identifier: requestGroup.identifier
+  groupIdentifier: requestGroup.groupIdentifier
+  authoredOn: requestGroup.authoredOn
+  note: requestGroup.note
+}
+
+def R3RequestGroupToR4(requestGroup) {
+  RequestGroupBase(requestGroup)
+  contained: datatypes::R3ResourceToR4(requestGroup.contained[])
+  subject: datatypes::R3ReferenceToR4(requestGroup.subject)
+  basedOn: datatypes::R3ReferenceToR4(requestGroup.basedOn[])
+  replaces: datatypes::R3ReferenceToR4(requestGroup.replaces[])
+  instantiatesCanonical: datatypes::ReferenceToCanonical(requestGroup.definition[])
+  instantiatesUri: extension::fetchUriArray("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.instantiatesUri", requestGroup.extension)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.status", requestGroup.extension)
+  status: if status? then status else requestGroup.status
+  var intent: extension::fetchCode("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.intent", requestGroup.extension)
+  intent: if intent? then intent else requestGroup.intent
+  priority: requestGroup.priority
+  code: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.code", requestGroup.extension)
+  encounter: datatypes::R3ReferenceToR4(requestGroup.context)
+  author: datatypes::R3ReferenceToR4(requestGroup.author)
+  reasonCode: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.reasonCode", requestGroup.extension)
+  reasonReference: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.reasonReference", requestGroup.extension)
+  action: R3RequestGroup_ActionToR4(requestGroup.action[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.reasonCodeableConcept", requestGroup.reasonCodeableConcept)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.reasonReference", requestGroup.reasonReference)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.status", requestGroup.status)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.intent", requestGroup.intent)
+}
+
+def R4RequestGroupToR3(requestGroup) {
+  RequestGroupBase(requestGroup)
+  contained: datatypes::R4ResourceToR3(requestGroup.contained[])
+  subject: datatypes::R4ReferenceToR3(requestGroup.subject)
+  basedOn: datatypes::R4ReferenceToR3(requestGroup.basedOn[])
+  replaces: datatypes::R4ReferenceToR3(requestGroup.replaces[])
+  definition: datatypes::CanonicalToReference(requestGroup.instantiatesCanonical[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.status", requestGroup.extension)
+  status: if status? then status else requestGroup.status
+  var intent: extension::fetchCode("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.intent", requestGroup.extension)
+  intent: if intent? then intent else requestGroup.intent
+  priority: requestGroup.priority
+  context: datatypes::R4ReferenceToR3(requestGroup.encounter)
+  author: datatypes::R4ReferenceToR3(requestGroup.author)
+  reasonCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.reasonCodeableConcept", requestGroup.extension)
+  reasonReference: extension::fetchReference("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.reasonReference", requestGroup.extension)
+  action: R4RequestGroup_ActionToR3(requestGroup.action[])
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.instantiatesUri", requestGroup.instantiatesUri[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.code", requestGroup.code)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.reasonCode", requestGroup.reasonCode[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.reasonReference", requestGroup.reasonReference[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.status", requestGroup.status)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.intent", requestGroup.intent)
+}
+
+def R3RequestGroup_ActionToR4(data) {
+  prefix: extension::fetchString("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.action.prefix", data.extension)
+  title: data.title
+  description: data.description
+  textEquivalent: data.textEquivalent
+  priority: extension::fetchCode("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.action.priority", data.extension)
+  code: data.code
+  documentation: data.documentation
+  condition: R3RequestGroup_Action_CondtionToR4(data.condition[])
+  relatedAction: data.relatedAction
+  timingDateTime: data.timingDateTime
+  timingAge: extension::fetchAge("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.action.timingAge", data.extension)
+  timingPeriod: data.timingPeriod
+  timingDuration: data.timingDuration
+  timingRange: data.timingRange
+  timingTiming: data.timingTiming
+  participant: datatypes::R3ReferenceToR4(data.participant[])
+  type: datatypes::CodingToCodeableConcept(data.type)
+  groupingBehavior: data.groupingBehavior
+  selectionBehavior: data.selectionBehavior
+  requiredBehavior: data.requiredBehavior
+  precheckBehavior: data.precheckBehavior
+  cardinalityBehavior: data.cardinalityBehavior
+  resource: datatypes::R3ReferenceToR4(data.resource)
+  action: data.action
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.action.label", data.label)
+}
+
+def R4RequestGroup_ActionToR3(data) {
+  label: extension::fetchString("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.action.label", data.extension)
+  title: data.title
+  description: data.description
+  textEquivalent: data.textEquivalent
+  code: data.code
+  documentation: data.documentation
+  condition: R4RequestGroup_Action_CondtionToR3(data.condition[])
+  relatedAction: data.relatedAction
+  timingDateTime: data.timingDateTime
+  timingPeriod: data.timingPeriod
+  timingDuration: data.timingDuration
+  timingRange: data.timingRange
+  timingTiming: data.timingTiming
+  participant: datatypes::R4ReferenceToR3(data.participant[])
+  type: datatypes::CodeableConceptToCoding(data.type)
+  groupingBehavior: data.groupingBehavior
+  selectionBehavior: data.selectionBehavior
+  requiredBehavior: data.requiredBehavior
+  precheckBehavior: data.precheckBehavior
+  cardinalityBehavior: data.cardinalityBehavior
+  resource: datatypes::R4ReferenceToR3(data.resource)
+  action: data.action
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.action.prefix", data.prefix)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.action.priority", data.priority)
+  extension[]: extension::BuildAgeExtension("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.action.timingAge", data.timingAge)
+}
+
+def R3RequestGroup_Action_CondtionToR4(data) {
+  kind: data.kind
+  expression.expression: data.expression
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.action.condition.description", data.description)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.action.condition.language", data.language)
+}
+
+def R4RequestGroup_Action_CondtionToR3(data) {
+  kind: data.kind
+  expression: data.expression.expression
+  description: extension::fetchString("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.action.condition.description", data.extension)
+  language: extension::fetchString("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.action.condition.language", data.extension)
+}

@@ -1,0 +1,5 @@
+// store to extension
+extension[]: addAge("test_url", $root.age)
+
+// fetch from extension
+age: fetchAge("test_url", $root.extension)

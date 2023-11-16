@@ -1,0 +1,95 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def ConditionBase(condition) {
+  resourcebase::ResourceBase(condition)
+  identifier: condition.identifier
+  severity: condition.severity
+  bodySite: condition.bodySite
+  verificationStatus: condition.verificationStatus
+  onsetDateTime: condition.onsetDateTime
+  onsetPeriod: condition.onsetPeriod
+  onsetRange: condition.onsetRange
+  onsetString: condition.onsetString
+  abatementDateTime: condition.abatementDateTime
+  abatementBoolean: condition.abatementBoolean
+  abatementPeriod: condition.abatementPeriod
+  abatementRange: condition.abatementRange
+  abatementString: condition.abatementString
+}
+
+def R2ConditionToR3(condition) {
+  ConditionBase(condition)
+  contained: datatypes::R2ResourceToR3(condition.contained[])
+  stage: R2Condition_StageToR3(condition.stage[])
+  clinicalStatus: extension::fetchCode("https://www.hl7.org/fhir/STU3/condition-definitions.html#Condition.clinicalStatus", condition.extension)
+  category: R2Condition_CategoryToR3("https://www.hl7.org/fhir/STU3/condition-definitions.html#Condition.category", condition.extension, condition.category)
+  code: condition.code
+  subject: datatypes::R2ReferenceToR3(condition.patient)
+  context: datatypes::R2ReferenceToR3(condition.encounter)
+  onsetAge: extension::fetchAge("https://www.hl7.org/fhir/STU3/condition-definitions.html#Condition.onsetAge", condition.extension)
+  abatementAge: extension::fetchAge("https://www.hl7.org/fhir/STU3/condition-definitions.html#Condition.abatementAge", condition.extension)
+  assertedDate: extension::fetchDateTime("https://www.hl7.org/fhir/STU3/condition-definitions.html#Condition.assertedDate", condition.extension)
+  asserter: datatypes::R2ReferenceToR3(condition.asserter)
+  evidence: R2Condition_EvidenceToR3(condition.evidence[])
+  note: extension::fetchAnnotationArray("https://www.hl7.org/fhir/STU3/condition-definitions.html#Condition.note", condition.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/condition-definitions.html#Condition.clinicalStatus", condition.clinicalStatus)
+  extension[]: extension::BuildQuantityExtension("https://www.hl7.org/fhir/DSTU2/condition-definitions.html#Condition.onsetQuantity", condition.onsetQuantity)
+  extension[]: extension::BuildQuantityExtension("https://www.hl7.org/fhir/DSTU2/condition-definitions.html#Condition.abatementQuantity", condition.abatementQuantity)
+  extension[]: extension::BuildDateExtension("https://www.hl7.org/fhir/DSTU2/condition-definitions.html#Condition.dateRecorded", condition.dateRecorded)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/DSTU2/condition-definitions.html#Condition.notes", condition.notes)
+}
+
+def R3ConditionToR2(condition) {
+  ConditionBase(condition)
+  contained: datatypes::R3ResourceToR2(condition.contained[])
+  stage: R3Condition_StageToR2(condition.stage[])
+  clinicalStatus: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/condition-definitions.html#Condition.clinicalStatus", condition.extension)
+  category: condition.category[0]
+  code: condition.code
+  patient: datatypes::R3ReferenceToR2(condition.subject)
+  encounter: datatypes::R3ReferenceToR2(condition.context)
+  onsetQuantity: extension::fetchQuantity("https://www.hl7.org/fhir/DSTU2/condition-definitions.html#Condition.onsetQuantity", condition.extension)
+  abatementQuantity: extension::fetchQuantity("https://www.hl7.org/fhir/DSTU2/condition-definitions.html#Condition.abatementQuantity", condition.extension)
+  dateRecorded: extension::fetchDate("https://www.hl7.org/fhir/DSTU2/condition-definitions.html#Condition.dateRecorded", condition.extension)
+  asserter: datatypes::R3ReferenceToR2(condition.asserter)
+  evidence: R3Condition_EvidenceToR2(condition.evidence[])
+  notes: extension::fetchString("https://www.hl7.org/fhir/DSTU2/condition-definitions.html#Condition.notes", condition.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/condition-definitions.html#Condition.clinicalStatus", condition.clinicalStatus)
+  extension[]: extension::BuildAgeExtension("https://www.hl7.org/fhir/STU3/condition-definitions.html#Condition.onsetAge", condition.onsetAge)
+  extension[]: extension::BuildAgeExtension("https://www.hl7.org/fhir/STU3/condition-definitions.html#Condition.abatementAge", condition.abatementAge)
+  extension[]: extension::BuildDateTimeExtension("https://www.hl7.org/fhir/STU3/condition-definitions.html#Condition.assertedDate", condition.assertedDate)
+  extension[]: extension::BuildAnnotationExtension("https://www.hl7.org/fhir/STU3/condition-definitions.html#Condition.note", condition.note[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/condition-definitions.html#Condition.category", condition.category[])
+}
+
+def R2Condition_CategoryToR3(url, extension, data) {
+  var category: extension::fetchCodeableConceptArray(url, extension)
+  if category then {
+    category
+  } else {
+    arrayOf(data)
+  }
+}
+
+def R2Condition_EvidenceToR3(data) {
+  code: R2Condition_CategoryToR3("https://www.hl7.org/fhir/DSTU2/condition-definitions.html#Condition.evidence.code", data.extension, data.code)
+  detail: datatypes::R2ReferenceToR3(data.detail[])
+}
+
+def R3Condition_EvidenceToR2(data) {
+  code: data.code[0]
+  detail: datatypes::R3ReferenceToR2(data.detail[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/condition-definitions.html#Condition.evidence.code", data.code)
+}
+
+def R2Condition_StageToR3(data) {
+  summary: data.summary
+  assessment: datatypes::R2ReferenceToR3(data.assessment[])
+}
+
+def R3Condition_StageToR2(data) {
+  summary: data.summary
+  assessment: datatypes::R3ReferenceToR2(data.assessment[])
+}

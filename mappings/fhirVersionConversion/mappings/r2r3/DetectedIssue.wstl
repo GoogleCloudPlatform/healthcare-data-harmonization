@@ -1,0 +1,46 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def DetectedIssueBase(detectedIssue) {
+  resourcebase::ResourceBase(detectedIssue)
+  identifier: detectedIssue.identifier
+  category: detectedIssue.category
+  severity: detectedIssue.severity
+  date: detectedIssue.date
+  detail: detectedIssue.detail
+  reference: detectedIssue.reference
+}
+
+def R2DetectedIssueToR3(detectedIssue) {
+  DetectedIssueBase(detectedIssue)
+  contained: datatypes::R2ResourceToR3(detectedIssue.contained[])
+  mitigation: R2DetectedIssue_MitigationToR3(detectedIssue.mitigation[])
+  implicated: datatypes::R2ReferenceToR3(detectedIssue.implicated[])
+  author: datatypes::R2ReferenceToR3(detectedIssue.author)
+  patient: datatypes::R2ReferenceToR3(detectedIssue.patient)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/detectedissue-definitions.html#DetectedIssue.status", detectedIssue.extension)
+  status: if status? then status else detectedIssue.status
+}
+
+def R3DetectedIssueToR2(detectedIssue) {
+  DetectedIssueBase(detectedIssue)
+  contained: datatypes::R3ResourceToR2(detectedIssue.contained[])
+  mitigation: R3DetectedIssue_MitigationToR2(detectedIssue.mitigation[])
+  implicated: datatypes::R3ReferenceToR2(detectedIssue.implicated[])
+  author: datatypes::R3ReferenceToR2(detectedIssue.author)
+  patient: datatypes::R3ReferenceToR2(detectedIssue.patient)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/detectedissue-definitions.html#DetectedIssue.status", detectedIssue.status)
+}
+
+def R2DetectedIssue_MitigationToR3(data) {
+  action: data.action
+  date: data.date
+  author: datatypes::R2ReferenceToR3(data.author)
+}
+
+def R3DetectedIssue_MitigationToR2(data) {
+  action: data.action
+  date: data.date
+  author: datatypes::R3ReferenceToR2(data.author)
+}

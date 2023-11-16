@@ -1,0 +1,119 @@
+{
+  "dateWritten": "2015-01-15",
+  "dispenseRequest": {
+    "expectedSupplyDuration": {
+      "code": "d",
+      "system": "http://unitsofmeasure.org",
+      "unit": "days",
+      "value": 30
+    },
+    "numberOfRepeatsAllowed": 3,
+    "quantity": {
+      "code": "ml",
+      "system": "http://unitsofmeasure.org",
+      "unit": "ml",
+      "value": 10
+    },
+    "validityPeriod": {
+      "end": "2016-01-15",
+      "start": "2015-01-15"
+    }
+  },
+  "dosageInstruction": [
+    {
+      "doseQuantity": {
+        "code": "U",
+        "system": "http://unitsofmeasure.org",
+        "unit": "U",
+        "value": 10
+      },
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/STU3/medicationrequest-definitions.html#MedicationRequest.dosageInstruction.sequence",
+          "valueInteger": 2
+        }
+      ],
+      "text": "inject 10 units subcut 10 minutes before breakfast",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "offset": 10,
+          "period": 1,
+          "periodUnit": "d",
+          "when": [
+            "ACM"
+          ]
+        }
+      }
+    },
+    {
+      "additionalInstruction": {
+        "text": "Before Lunch"
+      },
+      "doseQuantity": {
+        "code": "U",
+        "system": "http://unitsofmeasure.org",
+        "unit": "U",
+        "value": 15
+      },
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/STU3/medicationrequest-definitions.html#MedicationRequest.dosageInstruction.sequence",
+          "valueInteger": 2
+        }
+      ],
+      "text": "15 units before lunch",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      }
+    },
+    {
+      "additionalInstruction": {
+        "text": "Before Dinner"
+      },
+      "doseQuantity": {
+        "code": "U",
+        "system": "http://unitsofmeasure.org",
+        "unit": "U",
+        "value": 20
+      },
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/STU3/medicationrequest-definitions.html#MedicationRequest.dosageInstruction.sequence",
+          "valueInteger": 1
+        }
+      ],
+      "text": "20 units before dinner",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      }
+    }
+  ],
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/medicationrequest-definitions.html#MedicationRequest.status",
+      "valueCode": "active"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/medicationrequest-definitions.html#MedicationRequest.intent",
+      "valueCode": "order"
+    }
+  ],
+  "medicationReference": {
+    "display": "Novolog 100u/ml",
+    "reference": "#med0307"
+  },
+  "patient": {
+    "display": "Donald Duck",
+    "reference": "Patient/pat1"
+  },
+  "resourceType": "MedicationRequest"
+}

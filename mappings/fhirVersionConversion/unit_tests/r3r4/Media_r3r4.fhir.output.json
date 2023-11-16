@@ -1,0 +1,90 @@
+{
+  "content": {
+    "contentType": "application/dicom",
+    "url": "http://imaging.acme.com/wado/server?requestType=WADO&contentType=application%2Fdicom&studyUid=1.2.840.113619.2.21.848.34082.0.538976288.3&seriesUid=1.2.840.113619.2.21.3408.700.0.757923840.3.0&objectUid=1.2.840.11361907579238403408700.3.0.14.19970327150033"
+  },
+  "device": {
+    "display": "G.E. Medical Systems"
+  },
+  "encounter": {
+    "reference": "Encounter/example"
+  },
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/R4/media-definitions.html#Media.status",
+      "valueCode": "completed"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/R4/media-definitions.html#Media.issued",
+      "valueInstant": "2017-12-17T14:56:18Z"
+    }
+  ],
+  "height": 480,
+  "id": "1.2.840.11361907579238403408700.3.0.14.19970327150033",
+  "identifier": [
+    {
+      "system": "urn:ietf:rfc:3986",
+      "type": {
+        "text": "InstanceUID"
+      },
+      "use": "official",
+      "value": "urn:oid:1.2.840.11361907579238403408700.3.0.14.19970327150033"
+    },
+    {
+      "system": "http://acme-imaging.com/accession/2012",
+      "type": {
+        "text": "accessionNo"
+      },
+      "value": "1234567"
+    },
+    {
+      "system": "urn:ietf:rfc:3986",
+      "type": {
+        "text": "studyId"
+      },
+      "value": "urn:oid:1.2.840.113619.2.21.848.34082.0.538976288.3"
+    },
+    {
+      "system": "urn:ietf:rfc:3986",
+      "type": {
+        "text": "seriesId"
+      },
+      "value": "urn:oid:1.2.840.113619.2.21.3408.700.0.757923840.3.0"
+    }
+  ],
+  "issued": "2017-12-17T14:56:18Z",
+  "modality": {
+    "coding": [
+      {
+        "code": "US",
+        "system": "http://dicom.nema.org/resources/ontology/DCM"
+      }
+    ]
+  },
+  "resourceType": "Media",
+  "status": "completed",
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      Ultrasound Image on patient &quot;James Chalmers&quot;:<br/>\n      <img src=\"http://imaging.acme.com/wado/server?requestType=WADO&amp;contentType=application%2Fdicom&amp;studyUid=1.2.840.113619.2.21.848.34082.0.538976288.3&amp;seriesUid=1.2.840.113619.2.21.3408.700.0.757923840.3.0&amp;objectUid=1.2.840.11361907579238403408700.3.0.14.19970327150033\" alt=\"WADO reference to image\"/>\n        \n    </div>",
+    "status": "generated"
+  },
+  "type": {
+    "coding": [
+      {
+        "code": "photo"
+      }
+    ]
+  },
+  "view": {
+    "coding": [
+      {
+        "code": "399067008",
+        "display": "Lateral projection",
+        "system": "http://snomed.info/sct"
+      }
+    ]
+  },
+  "width": 640
+}

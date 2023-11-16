@@ -1,0 +1,99 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def ProcedureBase(procedure) {
+  resourcebase::ResourceBase(procedure)
+  identifier: procedure.identifier
+  category: procedure.category
+  code: procedure.code
+  reasonCode: procedure.reasonCode
+  bodySite: procedure.bodySite
+  outcome: procedure.outcome
+  complication: procedure.complication
+  followUp: procedure.followUp
+  note: procedure.note
+  usedCode: procedure.usedCode
+  performedDateTime: procedure.performedDateTime
+  performedPeriod: procedure.performedPeriod
+}
+
+def R3ProcedureToR4(procedure) {
+  ProcedureBase(procedure)
+  contained: datatypes::R3ResourceToR4(procedure.contained[])
+  usedReference: datatypes::R3ReferenceToR4(procedure.usedReference[])
+  focalDevice: R3Procedure_FocalDeviceToR4(procedure.focalDevice[])
+  complicationDetail: datatypes::R3ReferenceToR4(procedure.complicationDetail[])
+  location: datatypes::R3ReferenceToR4(procedure.location)
+  subject: datatypes::R3ReferenceToR4(procedure.subject)
+  partOf: datatypes::R3ReferenceToR4(procedure.partOf[])
+  instantiatesCanonical: extension::fetchCanonicalArray("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.instantiatesCanonical", procedure.extension)
+  instantiatesUri: extension::fetchUriArray("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.instantiatesUri", procedure.extension)
+  basedOn: datatypes::R3ReferenceToR4(procedure.basedOn[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.status", procedure.extension)
+  status: if status? then status else procedure.status
+  statusReason: procedure.notDoneReason
+  encounter: datatypes::R3ReferenceToR4(procedure.context)
+  performedString: extension::fetchString("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.performedString", procedure.extension)
+  performedAge: extension::fetchAge("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.performedAge", procedure.extension)
+  performedRange: extension::fetchRange("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.performedRange", procedure.extension)
+  recorder: extension::fetchReference("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.recorder", procedure.extension)
+  asserter: extension::fetchReference("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.asserter", procedure.extension)
+  performer: R3Procedure_PerformerToR4(procedure.performer[])
+  reasonReference: datatypes::R3ReferenceToR4(procedure.reasonReference[])
+  report: datatypes::R3ReferenceToR4(procedure.report[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.definition", procedure.definition[])
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.notDone", procedure.notDone)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.status", procedure.status)
+}
+
+def R4ProcedureToR3(procedure) {
+  ProcedureBase(procedure)
+  contained: datatypes::R4ResourceToR3(procedure.contained[])
+  usedReference: datatypes::R4ReferenceToR3(procedure.usedReference[])
+  focalDevice: R4Procedure_FocalDeviceToR3(procedure.focalDevice[])
+  complicationDetail: datatypes::R4ReferenceToR3(procedure.complicationDetail[])
+  location: datatypes::R4ReferenceToR3(procedure.location)
+  subject: datatypes::R4ReferenceToR3(procedure.subject)
+  partOf: datatypes::R4ReferenceToR3(procedure.partOf[])
+  definition: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.definition", procedure.extension)
+  basedOn: datatypes::R4ReferenceToR3(procedure.basedOn[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.status", procedure.extension)
+  status: if status? then status else procedure.status
+  notDone: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.notDone", procedure.extension)
+  notDoneReason: procedure.statusReason
+  context: datatypes::R4ReferenceToR3(procedure.encounter)
+  performer: R4Procedure_PerformerToR3(procedure.performer[])
+  reasonReference: datatypes::R4ReferenceToR3(procedure.reasonReference[])
+  report: datatypes::R4ReferenceToR3(procedure.report[])
+  extension[]: extension::BuildCanonicalExtension("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.instantiatesCanonical", procedure.instantiatesCanonical[])
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.instantiatesUri", procedure.instantiatesUri[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.performedString", procedure.performedString)
+  extension[]: extension::BuildAgeExtension("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.performedAge", procedure.performedAge)
+  extension[]: extension::BuildRangeExtension("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.performedRange", procedure.performedRange)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.recorder", procedure.recorder)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.asserter", procedure.asserter)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.status", procedure.status)
+}
+
+def R3Procedure_PerformerToR4(data) {
+  function: data.role
+  actor: datatypes::R3ReferenceToR4(data.actor)
+  onBehalfOf: datatypes::R3ReferenceToR4(data.onBehalfOf)
+}
+
+def R4Procedure_PerformerToR3(data) {
+  role: data.function
+  actor: datatypes::R4ReferenceToR3(data.actor)
+  onBehalfOf: datatypes::R4ReferenceToR3(data.onBehalfOf)
+}
+
+def R3Procedure_FocalDeviceToR4(data) {
+  action: data.action
+  manipulated: datatypes::R3ReferenceToR4(data.manipulated)
+}
+
+def R4Procedure_FocalDeviceToR3(data) {
+  action: data.action
+  manipulated: datatypes::R4ReferenceToR3(data.manipulated)
+}

@@ -1,0 +1,135 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   guidanceResponse : FHIR GuidanceResponse resource
+//
+// Output(s):
+//   FHIR GuidanceResponse Resource
+//
+def GuidanceResponseBase(guidanceResponse) {
+  resourcebase::ResourceBase(guidanceResponse)
+  occurrenceDateTime: guidanceResponse.occurrenceDateTime
+  note: guidanceResponse.note
+}
+
+// Description: Converts a FHIR STU3 GuidanceResponse resource to FHIR R4 GuidanceResponse resource.
+//
+// Argument(s):
+//   guidanceResponse : FHIR STU3 GuidanceResponse resource https://www.hl7.org/fhir/stu3/guidanceresponse.html
+//
+// Output(s):
+//   FHIR R4 GuidanceResponse Resource https://www.hl7.org/fhir/r4/guidanceresponse.html
+//
+def R3GuidanceResponseToR4(guidanceResponse) {
+  GuidanceResponseBase(guidanceResponse)
+  contained: datatypes::R3ResourceToR4(guidanceResponse.contained[])
+  result: datatypes::R3ReferenceToR4(guidanceResponse.result)
+  evaluationMessage: datatypes::R3ReferenceToR4(guidanceResponse.evaluationMessage[])
+  outputParameters: datatypes::R3ReferenceToR4(guidanceResponse.outputParameters)
+  performer: datatypes::R3ReferenceToR4(guidanceResponse.performer)
+  subject: datatypes::R3ReferenceToR4(guidanceResponse.subject)
+  requestIdentifier.id: guidanceResponse.requestId
+  identifier: R3GuidanceResponse_IdentifierToR4("https://www.hl7.org/fhir/R4/guidanceresponse-definitions.html#GuidanceResponse.identifier", guidanceResponse.extension, guidanceResponse.identifier)
+  moduleUri: extension::fetchUri("https://www.hl7.org/fhir/R4/guidanceresponse-definitions.html#GuidanceResponse.moduleUri", guidanceResponse.extension)
+  moduleCanonical: datatypes::ReferenceToCanonical(guidanceResponse.module)
+  moduleCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/guidanceresponse-definitions.html#GuidanceResponse.moduleCodeableConcept", guidanceResponse.extension)
+  status: guidanceResponse.status
+  encounter: if matchesRegex(guidanceResponse.context.reference, "^Encounter.*") then datatypes::R3ReferenceToR4(guidanceResponse.context)
+  reasonCode: R3GuidanceResponse_ReasonCodeableConceptToR4("https://www.hl7.org/fhir/R4/guidanceresponse-definitions.html#GuidanceResponse.reasonCode", guidanceResponse.extension, guidanceResponse.reasonCodeableConcept)
+  var reasonReference: if matchesRegex(guidanceResponse.reasonReference.reference, "^Condition.*|^Observation.*|^DiagnosticReport.*|^DocumentReference.*") then datatypes::R3ReferenceToR4(guidanceResponse.reasonReference)
+  reasonReference: R3GuidanceResponse_ReasonReferenceToR4("https://www.hl7.org/fhir/R4/guidanceresponse-definitions.html#GuidanceResponse.reasonReference", guidanceResponse.extension, reasonReference)
+  dataRequirement: datatypes::R3DataRequirementToR4(guidanceResponse.dataRequirement[])
+  extension[]: if !$this.encounter then extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/guidanceresponse-definitions.html#GuidanceResponse.context", guidanceResponse.context)
+  extension[]: if !reasonReference then extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/guidanceresponse-definitions.html#GuidanceResponse.reasonReference", guidanceResponse.reasonReference)
+}
+
+// Description: Converts a FHIR R4 GuidanceResponse resource to FHIR STU3 GuidanceResponse resource.
+//
+// Argument(s):
+//   guidanceResponse : FHIR R4 GuidanceResponse resource https://www.hl7.org/fhir/r4/guidanceresponse.html
+//
+// Output(s):
+//   FHIR STU3 GuidanceResponse Resource https://www.hl7.org/fhir/stu3/guidanceresponse.html
+//
+def R4GuidanceResponseToR3(guidanceResponse) {
+  GuidanceResponseBase(guidanceResponse)
+  contained: datatypes::R4ResourceToR3(guidanceResponse.contained[])
+  result: datatypes::R4ReferenceToR3(guidanceResponse.result)
+  evaluationMessage: datatypes::R4ReferenceToR3(guidanceResponse.evaluationMessage[])
+  outputParameters: datatypes::R4ReferenceToR3(guidanceResponse.outputParameters)
+  performer: datatypes::R4ReferenceToR3(guidanceResponse.performer)
+  subject: datatypes::R4ReferenceToR3(guidanceResponse.subject)
+  requestId: guidanceResponse.requestIdentifier
+  identifier: guidanceResponse.identifier[0]
+  module: datatypes::CanonicalToReference(guidanceResponse.moduleCanonical)
+  status: guidanceResponse.status
+  context: datatypes::R4ReferenceToR3(guidanceResponse.encounter)
+  reasonCodeableConcept: guidanceResponse.reasonCode[0]
+  reasonReference: datatypes::R4ReferenceToR3(guidanceResponse.reasonReference[0])
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/R4/guidanceresponse-definitions.html#GuidanceResponse.identifier", guidanceResponse.identifier[])
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/R4/guidanceresponse-definitions.html#GuidanceResponse.moduleUri", guidanceResponse.moduleUri)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/guidanceresponse-definitions.html#GuidanceResponse.moduleCodeableConcept", guidanceResponse.moduleCodeableConcept)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/guidanceresponse-definitions.html#GuidanceResponse.reasonCode", guidanceResponse.reasonCode[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/guidanceresponse-definitions.html#GuidanceResponse.reasonReference", guidanceResponse.reasonReference[])
+}
+
+// Description: Converts a FHIR STU3 GuidanceResponse.Identifier to FHIR R4 GuidanceResponse.Identifier.
+//
+// Argument(s):
+//   data : FHIR STU3 GuidanceResponse.Identifier http://hl7.org/fhir/STU3/guidanceresponse-definitions.html#GuidanceResponse.identifier
+//   url : FHIR STU3 Extension.url http://hl7.org/fhir/STU3/extensibility-definitions.html#Extension.url
+//   extension : FHIR STU3 DomainResource.Extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 GuidanceResponse.Identifier http://hl7.org/fhir/R4/guidanceresponse-definitions.html#GuidanceResponse.identifier
+//
+def R3GuidanceResponse_IdentifierToR4(url, extension, data) {
+  var identifier: extension::fetchIdentifierArray(url, extension)
+  if identifier then {
+    identifier
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 GuidanceResponse.ReasonCodeableConcept to FHIR R4 GuidanceResponse.ReasonCodeableConcept.
+//
+// Argument(s):
+//   data : FHIR STU3 GuidanceResponse.ReasonCodeableConcept http://hl7.org/fhir/STU3/guidanceresponse-definitions.html#GuidanceResponse.reasonCodeableConcept
+//   url : FHIR STU3 Extension.url http://hl7.org/fhir/STU3/extensibility-definitions.html#Extension.url
+//   extension : FHIR STU3 DomainResource.Extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 GuidanceResponse.ReasonCodeableConcept http://hl7.org/fhir/R4/guidanceresponse-definitions.html#GuidanceResponse.reasonCodeableConcept
+//
+def R3GuidanceResponse_ReasonCodeableConceptToR4(url, extension, data) {
+  var reasonCodeableConcept: extension::fetchCodeableConceptArray(url, extension)
+  if reasonCodeableConcept then {
+    reasonCodeableConcept
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 GuidanceResponse.ReasonReference to FHIR R4 GuidanceResponse.ReasonReference.
+//
+// Argument(s):
+//   data : FHIR STU3 GuidanceResponse.ReasonReference http://hl7.org/fhir/STU3/guidanceresponse-definitions.html#GuidanceResponse.reasonReference
+//   url : FHIR STU3 Extension.url http://hl7.org/fhir/STU3/extensibility-definitions.html#Extension.url
+//   extension : FHIR STU3 DomainResource.Extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 GuidanceResponse.ReasonReference http://hl7.org/fhir/R4/guidanceresponse-definitions.html#GuidanceResponse.reasonReference
+//
+def R3GuidanceResponse_ReasonReferenceToR4(url, extension, data) {
+  var reasonReference: extension::fetchReferenceArray(url, extension)
+  if reasonReference then {
+    reasonReference
+  } else {
+    arrayOf(data)
+  }
+}

@@ -1,0 +1,212 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   sequence : FHIR Sequence resource
+//
+// Output(s):
+//   FHIR MolecularSequence Resource
+//
+def MolecularSequenceBase(molecularSequence) {
+  id: molecularSequence.id
+  meta: molecularSequence.meta
+  implicitRules: molecularSequence.implicitRules
+  language: molecularSequence.language
+  text: molecularSequence.text
+  contained: molecularSequence.contained
+  extension: molecularSequence.extension
+  modifierExtension: molecularSequence.modifierExtension
+  identifier: molecularSequence.identifier
+  type: molecularSequence.type
+  coordinateSystem: molecularSequence.coordinateSystem
+  quantity: molecularSequence.quantity
+  observedSeq: molecularSequence.observedSeq
+  quality: molecularSequence.quality
+  readCoverage: molecularSequence.readCoverage
+  repository: molecularSequence.repository
+}
+
+// Description: Converts a FHIR STU3 Sequence resource to FHIR R4 MolecularSequence resource.
+//
+// Argument(s):
+//   sequence : FHIR STU3 Sequence resource https://www.hl7.org/fhir/stu3/sequence.html
+//
+// Output(s):
+//   FHIR R4 MolecularSequence Resource https://www.hl7.org/fhir/r4/molecularsequence.html
+//
+def R3SequenceToR4(sequence) {
+  resourceType: "MolecularSequence"
+  MolecularSequenceBase(sequence)
+  contained: datatypes::R3ResourceToR4(sequence.contained[])
+  variant: R3Sequence_VariantToR4(sequence.variant[])
+  patient: datatypes::R3ReferenceToR4(sequence.patient)
+  specimen: datatypes::R3ReferenceToR4(sequence.specimen)
+  device: datatypes::R3ReferenceToR4(sequence.device)
+  performer: datatypes::R3ReferenceToR4(sequence.performer)
+  referenceSeq: R3Sequence_ReferenceSeqToR4(sequence.referenceSeq)
+  quality: R3Sequence_QualityToR4(sequence.quality[])
+}
+
+// Description: Converts a FHIR R4 MolecularSequence resource to FHIR STU3 Sequence resource.
+//
+// Argument(s):
+//   molecularSequence : FHIR R4 MolecularSequence resource https://www.hl7.org/fhir/r4/molecularsequence.html
+//
+// Output(s):
+//   FHIR STU3 Sequence Resource https://www.hl7.org/fhir/stu3/sequence.html
+//
+def R4MolecularSequenceToR3(molecularSequence) {
+  resourceType: "Sequence"
+  MolecularSequenceBase(molecularSequence)
+  contained: datatypes::R4ResourceToR3(molecularSequence.contained[])
+  variant: R4MolecularSequence_VariantToR3(molecularSequence.variant[])
+  pointer: datatypes::R4ReferenceToR3(molecularSequence.pointer[])
+  patient: datatypes::R4ReferenceToR3(molecularSequence.patient)
+  specimen: datatypes::R4ReferenceToR3(molecularSequence.specimen)
+  device: datatypes::R4ReferenceToR3(molecularSequence.device)
+  performer: datatypes::R4ReferenceToR3(molecularSequence.performer)
+  referenceSeq: R4MolecularSequence_ReferenceSeqToR3(molecularSequence.referenceSeq)
+  quality: R4MolecularSequence_QualityToR3(molecularSequence.quality[])
+}
+
+// Description: Converts a FHIR STU3 Sequence.Variant to FHIR R4 MolecularSequence.Variant.
+//
+// Argument(s):
+//   data : FHIR STU3 Sequence.Variant http://hl7.org/fhir/STU3/sequence-definitions.html#Sequence.variant
+//
+// Output(s):
+//   FHIR R4 MolecularSequence.Variant http://hl7.org/fhir/R4/molecularSequence-definitions.html#MolecularSequence.variant
+//
+def R3Sequence_VariantToR4(data) {
+  start: data.start
+  end: data.end
+  observedAllele: data.observedAllele
+  referenceAllele: data.referenceAllele
+  cigar: data.cigar
+  variantPointer: datatypes::R3ReferenceToR4(data.variantPointer)
+}
+
+// Description: Converts a FHIR R4 MolecularSequence.Variant to FHIR STU3 Sequence.Variant.
+//
+// Argument(s):
+//   data : FHIR R4 MolecularSequence.Variant http://hl7.org/fhir/R4/molecularSequence-definitions.html#MolecularSequence.variant
+//
+// Output(s):
+//   FHIR STU3 Sequence.Variant http://hl7.org/fhir/STU3/sequence-definitions.html#Sequence.variant
+//
+def R4MolecularSequence_VariantToR3(data) {
+  start: data.start
+  end: data.end
+  observedAllele: data.observedAllele
+  referenceAllele: data.referenceAllele
+  cigar: data.cigar
+  variantPointer: datatypes::R4ReferenceToR3(data.variantPointer)
+}
+
+// Description: Converts a FHIR STU3 Sequence.ReferenceSeq to FHIR R4 MolecularSequence.ReferenceSeq.
+//
+// Argument(s):
+//   data : FHIR STU3 Sequence.ReferenceSeq http://hl7.org/fhir/STU3/sequence-definitions.html#Sequence.referenceSeq
+//
+// Output(s):
+//   FHIR R4 MolecularSequence.ReferenceSeq http://hl7.org/fhir/R4/molecularSequence-definitions.html#MolecularSequence.referenceSeq
+//
+def R3Sequence_ReferenceSeqToR4(data) {
+  chromosome: data.chromosome
+  genomeBuild: data.genomeBuild
+  orientation: extension::fetchCode("https://www.hl7.org/fhir/R4/molecularsequence-definitions.html#MolecularSequence.referenceSeq.orientation", data.extension)
+  referenceSeqId: data.referenceSeqId
+  referenceSeqString: data.referenceSeqString
+  strand: extension::fetchCode("https://www.hl7.org/fhir/R4/molecularsequence-definitions.html#MolecularSequence.referenceSeq.strand", data.extension)
+  windowStart: data.windowStart
+  windowEnd: data.windowEnd
+  extension[]: extension::BuildIntegerExtension("https://www.hl7.org/fhir/STU3/sequence-definitions.html#Sequence.referenceSeq.strand", data.strand)
+}
+
+// Description: Converts a FHIR R4 MolecularSequence.ReferenceSeq to FHIR STU3 Sequence.ReferenceSeq.
+//
+// Argument(s):
+//   data : FHIR R4 MolecularSequence.ReferenceSeq http://hl7.org/fhir/R4/molecularSequence-definitions.html#MolecularSequence.referenceSeq
+//
+// Output(s):
+//   FHIR STU3 Sequence.ReferenceSeq http://hl7.org/fhir/STU3/sequence-definitions.html#Sequence.referenceSeq
+//
+def R4MolecularSequence_ReferenceSeqToR3(data) {
+  chromosome: data.chromosome
+  genomeBuild: data.genomeBuild
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/molecularsequence-definitions.html#MolecularSequence.referenceSeq.orientation", data.orientation)
+  referenceSeqId: data.referenceSeqId
+  referenceSeqPointer: datatypes::R4ReferenceToR3(data.referenceSeqPointer)
+  referenceSeqString: data.referenceSeqString
+  strand: extension::fetchCode("https://www.hl7.org/fhir/STU3/molecularsequence-definitions.html#MolecularSequence.referenceSeq.strand", data.extension)
+  windowStart: data.windowStart
+  windowEnd: data.windowEnd
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/molecularsequence-definitions.html#MolecularSequence.referenceSeq.strand", data.strand)
+}
+
+// Description: Converts a FHIR STU3 Sequence.Quality to FHIR R4 MolecularSequence.Quality.
+//
+// Argument(s):
+//   data : FHIR STU3 Sequence.Quality http://hl7.org/fhir/STU3/sequence-definitions.html#Sequence.quality
+//
+// Output(s):
+//   FHIR R4 MolecularSequence.Quality http://hl7.org/fhir/R4/molecularSequence-definitions.html#MolecularSequence.quality
+//
+def R3Sequence_QualityToR4(data) {
+  type: data.type
+  standardSequence: data.standardSequence
+  start: data.start
+  end: data.end
+  score: data.score
+  method: data.method
+  truthTP: data.truthTP
+  queryTP: data.queryTP
+  truthFN: data.truthFN
+  queryFP: data.queryFP
+  gtFP: data.gtFP
+  precision: data.precision
+  recall: data.recall
+  fScore: data.fScore
+  roc.score: extension::fetchIntegerArray("https://www.hl7.org/fhir/R4/molecularsequence-definitions.html#MolecularSequence.quality.roc.score", data.extension)
+  roc.numTP: extension::fetchIntegerArray("https://www.hl7.org/fhir/R4/molecularsequence-definitions.html#MolecularSequence.quality.roc.numTP", data.extension)
+  roc.numFP: extension::fetchIntegerArray("https://www.hl7.org/fhir/R4/molecularsequence-definitions.html#MolecularSequence.quality.roc.numFP", data.extension)
+  roc.numFN: extension::fetchIntegerArray("https://www.hl7.org/fhir/R4/molecularsequence-definitions.html#MolecularSequence.quality.roc.numFN", data.extension)
+  roc.precision: extension::fetchDecimalArray("https://www.hl7.org/fhir/R4/molecularsequence-definitions.html#MolecularSequence.quality.roc.precision", data.extension)
+  roc.sensitivity: extension::fetchDecimalArray("https://www.hl7.org/fhir/R4/molecularsequence-definitions.html#MolecularSequence.quality.roc.sensitivity", data.extension)
+  roc.fMeasure: extension::fetchDecimalArray("https://www.hl7.org/fhir/R4/molecularsequence-definitions.html#MolecularSequence.quality.roc.fMeasure", data.extension)
+}
+
+// Description: Converts a FHIR R4 MolecularSequence.Quality to FHIR STU3 Sequence.Quality.
+//
+// Argument(s):
+//   data : FHIR R4 MolecularSequence.Quality http://hl7.org/fhir/R4/molecularSequence-definitions.html#MolecularSequence.quality
+//
+// Output(s):
+//   FHIR STU3 Sequence.Quality http://hl7.org/fhir/STU3/sequence-definitions.html#Sequence.quality
+//
+def R4MolecularSequence_QualityToR3(data) {
+  type: data.type
+  standardSequence: data.standardSequence
+  start: data.start
+  end: data.end
+  score: data.score
+  method: data.method
+  truthTP: data.truthTP
+  queryTP: data.queryTP
+  truthFN: data.truthFN
+  queryFP: data.queryFP
+  gtFP: data.gtFP
+  precision: data.precision
+  recall: data.recall
+  fScore: data.fScore
+  extension[]: extension::BuildIntegerExtension("https://www.hl7.org/fhir/R4/molecularsequence-definitions.html#MolecularSequence.quality.roc.score", data.roc.score)
+  extension[]: extension::BuildIntegerExtension("https://www.hl7.org/fhir/R4/molecularsequence-definitions.html#MolecularSequence.quality.roc.numTP", data.roc.numTP)
+  extension[]: extension::BuildIntegerExtension("https://www.hl7.org/fhir/R4/molecularsequence-definitions.html#MolecularSequence.quality.roc.numFP", data.roc.numFP)
+  extension[]: extension::BuildIntegerExtension("https://www.hl7.org/fhir/R4/molecularsequence-definitions.html#MolecularSequence.quality.roc.numFN", data.roc.numFN)
+  extension[]: extension::BuildDecimalExtension("https://www.hl7.org/fhir/R4/molecularsequence-definitions.html#MolecularSequence.quality.roc.precision", data.roc.precision)
+  extension[]: extension::BuildDecimalExtension("https://www.hl7.org/fhir/R4/molecularsequence-definitions.html#MolecularSequence.quality.roc.sensitivity", data.roc.sensitivity)
+  extension[]: extension::BuildDecimalExtension("https://www.hl7.org/fhir/R4/molecularsequence-definitions.html#MolecularSequence.quality.roc.fMeasure", data.roc.fMeasure)
+}

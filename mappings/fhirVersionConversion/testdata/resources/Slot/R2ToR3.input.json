@@ -1,0 +1,51 @@
+{
+  "comment": "Assessments should be performed before requesting appointments in this slot.",
+  "end": "2013-12-25T09:30:00Z",
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/slot-definitions.html#Slot.serviceCategory",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "17",
+            "display": "General Practice"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/slot-definitions.html#Slot.appointmentType",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "WALKIN",
+            "display": "A previously unscheduled walk-in visit",
+            "system": "http://hl7.org/fhir/v2/0276"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/slot-definitions.html#Slot.status",
+      "valueCode": "free"
+    }
+  ],
+  "id": "example",
+  "resourceType": "Slot",
+  "schedule": {
+    "reference": "Schedule/example"
+  },
+  "start": "2013-12-25T09:15:00Z",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\n\t\t\t25 Dec 2013 9:15am - 9:30am: \u003cb\u003eBusy\u003c/b\u003e Physiotherapy\n\t\t\u003c/div\u003e",
+    "status": "generated"
+  },
+  "type": {
+    "coding": [
+      {
+        "code": "57",
+        "display": "Immunization"
+      }
+    ]
+  }
+}

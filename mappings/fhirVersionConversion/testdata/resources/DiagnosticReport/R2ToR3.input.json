@@ -1,0 +1,125 @@
+{
+  "category": {
+    "coding": [
+      {
+        "code": "252275004",
+        "display": "Haematology test",
+        "system": "http://snomed.info/sct"
+      },
+      {
+        "code": "HM",
+        "system": "http://hl7.org/fhir/v2/0074"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "code": "58410-2",
+        "display": "Complete blood count (hemogram) panel - Blood by Automated count",
+        "system": "http://loinc.org"
+      }
+    ]
+  },
+  "conclusion": "Core lab",
+  "contained": [
+    {
+      "code": {
+        "coding": [
+          {
+            "code": "58410-2",
+            "display": "Complete blood count (hemogram) panel - Blood by Automated count",
+            "system": "http://loinc.org"
+          }
+        ]
+      },
+      "context": {
+        "reference": "Encounter/f001"
+      },
+      "extension": [
+        {
+          "url": "http://example.org/bodysitecode",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "14975008",
+                "display": "Forearm structure",
+                "system": "http://snomed.info/sct"
+              }
+            ]
+          }
+        }
+      ],
+      "id": "req",
+      "identifier": [
+        {
+          "system": "http://www.bmc.nl/zorgportal/identifiers/labresults",
+          "value": "L2381"
+        }
+      ],
+      "intent": "original-order",
+      "note": [
+        {
+          "text": "patient almost fainted during procedure"
+        }
+      ],
+      "requester": {
+        "agent": {
+          "display": "E.van den Broek",
+          "reference": "Practitioner/f001"
+        }
+      },
+      "resourceType": "ProcedureRequest",
+      "status": "active",
+      "subject": {
+        "display": "P. van den Heuvel",
+        "reference": "Patient/f001"
+      }
+    }
+  ],
+  "id": "f001",
+  "identifier": [
+    {
+      "system": "http://www.bmc.nl/zorgportal/identifiers/reports",
+      "use": "official",
+      "value": "nr1239044"
+    }
+  ],
+  "issued": "2013-05-15T19:32:52+01:00",
+  "performer": {
+    "display": "Burgers University Medical Centre",
+    "reference": "Organization/f001"
+  },
+  "request": [
+    {
+      "reference": "#req"
+    }
+  ],
+  "resourceType": "DiagnosticReport",
+  "result": [
+    {
+      "reference": "Observation/f001"
+    },
+    {
+      "reference": "Observation/f002"
+    },
+    {
+      "reference": "Observation/f003"
+    },
+    {
+      "reference": "Observation/f004"
+    },
+    {
+      "reference": "Observation/f005"
+    }
+  ],
+  "status": "final",
+  "subject": {
+    "display": "P. van den Heuvel",
+    "reference": "Patient/f001"
+  },
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\u003cp\u003e\u003cb\u003eGenerated Narrative with Details\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eid\u003c/b\u003e: f001\u003c/p\u003e\u003cp\u003e\u003cb\u003econtained\u003c/b\u003e: \u003c/p\u003e\u003cp\u003e\u003cb\u003eidentifier\u003c/b\u003e: nr1239044 (OFFICIAL)\u003c/p\u003e\u003cp\u003e\u003cb\u003ebasedOn\u003c/b\u003e: id: req; L2381; status: active; intent: original-order; Complete blood count (hemogram) panel - Blood by Automated count \u003cspan\u003e(Details : {LOINC code '58410-2' = 'Complete blood count (hemogram) panel - Blood by Automated count', given as 'Complete blood count (hemogram) panel - Blood by Automated count'})\u003c/span\u003e; P. van den Heuvel; ????; Annotation: patient almost fainted during procedure\u003c/p\u003e\u003cp\u003e\u003cb\u003estatus\u003c/b\u003e: final\u003c/p\u003e\u003cp\u003e\u003cb\u003ecategory\u003c/b\u003e: Haematology test \u003cspan\u003e(Details : {SNOMED CT code '252275004' = 'Haematology test', given as 'Haematology test'}; {http://hl7.org/fhir/v2/0074 code 'HM' = 'Hematology)\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003ecode\u003c/b\u003e: Complete blood count (hemogram) panel - Blood by Automated count \u003cspan\u003e(Details : {LOINC code '58410-2' = 'Complete blood count (hemogram) panel - Blood by Automated count', given as 'Complete blood count (hemogram) panel - Blood by Automated count'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003esubject\u003c/b\u003e: \u003ca\u003eP. van den Heuvel\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eissued\u003c/b\u003e: 15/05/2013 7:32:52 PM\u003c/p\u003e\u003ch3\u003ePerformers\u003c/h3\u003e\u003ctable\u003e\u003ctr\u003e\u003ctd\u003e-\u003c/td\u003e\u003ctd\u003e\u003cb\u003eActor\u003c/b\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e*\u003c/td\u003e\u003ctd\u003e\u003ca\u003eBurgers University Medical Centre\u003c/a\u003e\u003c/td\u003e\u003c/tr\u003e\u003c/table\u003e\u003cp\u003e\u003cb\u003eresult\u003c/b\u003e: \u003c/p\u003e\u003cul\u003e\u003cli\u003e\u003ca\u003eObservation/f001\u003c/a\u003e\u003c/li\u003e\u003cli\u003e\u003ca\u003eObservation/f002\u003c/a\u003e\u003c/li\u003e\u003cli\u003e\u003ca\u003eObservation/f003\u003c/a\u003e\u003c/li\u003e\u003cli\u003e\u003ca\u003eObservation/f004\u003c/a\u003e\u003c/li\u003e\u003cli\u003e\u003ca\u003eObservation/f005\u003c/a\u003e\u003c/li\u003e\u003c/ul\u003e\u003cp\u003e\u003cb\u003econclusion\u003c/b\u003e: Core lab\u003c/p\u003e\u003c/div\u003e",
+    "status": "generated"
+  }
+}

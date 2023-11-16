@@ -1,0 +1,198 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   auditEvent : FHIR AuditEvent resource
+//
+// Output(s):
+//   FHIR AuditEvent Resource
+//
+def AuditEventBase(auditEvent) {
+  resourcebase::ResourceBase(auditEvent)
+  type: auditEvent.type
+  subtype: auditEvent.subtype
+  recorded: auditEvent.recorded
+  outcomeDesc: auditEvent.outcomeDesc
+  purposeOfEvent: auditEvent.purposeOfEvent
+}
+
+// Description: Converts a FHIR STU3 AuditEvent resource to FHIR R4 AuditEvent resource.
+//
+// Argument(s):
+//   auditEvent : FHIR STU3 AuditEvent resource https://www.hl7.org/fhir/stu3/auditEvent.html
+//
+// Output(s):
+//   FHIR R4 AuditEvent Resource https://www.hl7.org/fhir/r4/auditEvent.html
+//
+def R3AuditEventToR4(auditEvent) {
+  AuditEventBase(auditEvent)
+  contained: datatypes::R3ResourceToR4(auditEvent.contained[])
+  action: auditEvent.action
+  period: extension::fetchPeriod("https://www.hl7.org/fhir/R4/auditevent-definitions.html#AuditEvent.period", auditEvent.extension)
+  outcome: auditEvent.outcome
+  agent: R3AuditEvent_AgentToR4(auditEvent.agent[])
+  source: R3AuditEvent_SourceToR4(auditEvent.source)
+  entity: R3AuditEvent_EntityToR4(auditEvent.entity[])
+}
+
+// Description: Converts a FHIR R4 AuditEvent resource to FHIR STU3 AuditEvent resource.
+//
+// Argument(s):
+//   auditEvent : FHIR R4 AuditEvent resource https://www.hl7.org/fhir/r4/auditEvent.html
+//
+// Output(s):
+//   FHIR STU3 AuditEvent Resource https://www.hl7.org/fhir/stu3/auditEvent.html
+//
+def R4AuditEventToR3(auditEvent) {
+  AuditEventBase(auditEvent)
+  contained: datatypes::R4ResourceToR3(auditEvent.contained[])
+  action: auditEvent.action
+  outcome: auditEvent.outcome
+  agent: R4AuditEvent_AgentToR3(auditEvent.agent[])
+  source: R4AuditEvent_SourceToR3(auditEvent.source)
+  entity: R4AuditEvent_EntityToR3(auditEvent.entity[])
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/R4/auditevent-definitions.html#AuditEvent.period", auditEvent.period)
+}
+
+// Description: Converts a FHIR STU3 AuditEvent.Agent resource to FHIR R4 AuditEvent.Agent.
+//
+// Argument(s):
+//   data : FHIR STU3 AuditEvent.Agent http://hl7.org/fhir/STU3/auditEvent-definitions.html#AuditEvent.agent
+//
+// Output(s):
+//   FHIR R4 AuditEvent.Agent http://hl7.org/fhir/R4/auditEvent-definitions.html#AuditEvent.agent
+//
+def R3AuditEvent_AgentToR4(data) {
+  type: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/auditevent-definitions.html#AuditEvent.agent.type", data.extension)
+  role: data.role
+  who: datatypes::R3ReferenceToR4(data.reference)
+  altId: data.altId
+  name: data.name
+  requestor: data.requestor
+  location: datatypes::R3ReferenceToR4(data.location)
+  policy: data.policy
+  media: data.media
+  network: data.network
+  purposeOfUse: data.purposeOfUse
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/STU3/auditevent-definitions.html#AuditEvent.agent.userId", data.userId)
+}
+
+// Description: Converts a FHIR R4 AuditEvent.Agent resource to FHIR STU3 AuditEvent.Agent.
+//
+// Argument(s):
+//   data : FHIR R4 AuditEvent.Agent http://hl7.org/fhir/R4/auditEvent-definitions.html#AuditEvent.agent
+//
+// Output(s):
+//   FHIR STU3 AuditEvent.Agent http://hl7.org/fhir/STU3/auditEvent-definitions.html#AuditEvent.agent
+//
+def R4AuditEvent_AgentToR3(data) {
+  userId: extension::fetchIdentifier("https://www.hl7.org/fhir/STU3/auditevent-definitions.html#AuditEvent.agent.userId", data.extension)
+  role: data.role
+  reference: datatypes::R4ReferenceToR3(data.who)
+  altId: data.altId
+  name: data.name
+  requestor: data.requestor
+  location: datatypes::R4ReferenceToR3(data.location)
+  policy: data.policy
+  media: data.media
+  network: data.network
+  purposeOfUse: data.purposeOfUse
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/auditevent-definitions.html#AuditEvent.agent.type", data.type)
+}
+
+// Description: Converts a FHIR STU3 AuditEvent.Source resource to FHIR R4 AuditEvent.Source.
+//
+// Argument(s):
+//   data : FHIR STU3 AuditEvent.Source http://hl7.org/fhir/STU3/auditEvent-definitions.html#AuditEvent.source
+//
+// Output(s):
+//   FHIR R4 AuditEvent.Source http://hl7.org/fhir/R4/auditEvent-definitions.html#AuditEvent.source
+//
+def R3AuditEvent_SourceToR4(data) {
+  site: data.site
+  observer: datatypes::IdentifierToReference(data.identifier)
+  type: data.type
+}
+
+// Description: Converts a FHIR R4 AuditEvent.Source resource to FHIR STU3 AuditEvent.Source.
+//
+// Argument(s):
+//   data : FHIR R4 AuditEvent.Source http://hl7.org/fhir/R4/auditEvent-definitions.html#AuditEvent.source
+//
+// Output(s):
+//   FHIR STU3 AuditEvent.Source http://hl7.org/fhir/STU3/auditEvent-definitions.html#AuditEvent.source
+//
+def R4AuditEvent_SourceToR3(data) {
+  site: data.site
+  observer: datatypes::ReferenceToIdentifier(data.observer)
+  type: data.type
+}
+
+// Description: Converts a FHIR STU3 AuditEvent.Entity resource to FHIR R4 AuditEvent.Entity resource.
+//
+// Argument(s):
+//   data : FHIR STU3 AuditEvent.Entity http://hl7.org/fhir/STU3/auditEvent-definitions.html#AuditEvent.entity
+//
+// Output(s):
+//   FHIR R4 AuditEvent.Entity http://hl7.org/fhir/R4/auditEvent-definitions.html#AuditEvent.entity
+//
+def R3AuditEvent_EntityToR4(data) {
+  what: datatypes::R3ReferenceToR4(data.reference)
+  type: data.type
+  role: data.role
+  lifecycle: data.lifecycle
+  securityLabel: data.securityLabel
+  name: data.name
+  description: data.description
+  query: data.query
+  detail: R3AuditEvent_Entity_DetailToR4(data.detail[])
+}
+
+// Description: Converts a FHIR R4 AuditEvent.Entity resource to FHIR STU3 AuditEvent.Entity.
+//
+// Argument(s):
+//   data : FHIR R4 AuditEvent.Entity http://hl7.org/fhir/R4/auditEvent-definitions.html#AuditEvent.entity
+//
+// Output(s):
+//   FHIR STU3 AuditEvent.Entity http://hl7.org/fhir/STU3/auditEvent-definitions.html#AuditEvent.entity
+//
+def R4AuditEvent_EntityToR3(data) {
+  reference: datatypes::R4ReferenceToR3(data.what)
+  type: data.type
+  role: data.role
+  lifecycle: data.lifecycle
+  securityLabel: data.securityLabel
+  name: data.name
+  description: data.description
+  query: data.query
+  detail: R4AuditEvent_Entity_DetailToR3(data.detail[])
+}
+
+// Description: Converts a FHIR STU3 AuditEvent.Entity.Detail resource to FHIR R4 AuditEvent.Entity.Detail.
+//
+// Argument(s):
+//   data : FHIR STU3 AuditEvent.Entity.Detail http://hl7.org/fhir/STU3/auditEvent-definitions.html#AuditEvent.entity.detail
+//
+// Output(s):
+//   FHIR R4 AuditEvent.Entity.Detail http://hl7.org/fhir/R4/auditEvent-definitions.html#AuditEvent.entity.detail
+//
+def R3AuditEvent_Entity_DetailToR4(data) {
+  type: data.type
+  valueBase64Binary: data.value
+}
+
+// Description: Converts a FHIR R4 AuditEvent.Entity.Detail resource to FHIR STU3 AuditEvent.Entity.Detail.
+//
+// Argument(s):
+//   data : FHIR R4 AuditEvent.Entity.Detail http://hl7.org/fhir/R4/auditEvent-definitions.html#AuditEvent.entity.detail
+//
+// Output(s):
+//   FHIR STU3 AuditEvent.Entity.Detail http://hl7.org/fhir/STU3/auditEvent-definitions.html#AuditEvent.entity.detail
+//
+def R4AuditEvent_Entity_DetailToR3(data) {
+  type: data.type
+  value: data.valueBase64Binary
+}

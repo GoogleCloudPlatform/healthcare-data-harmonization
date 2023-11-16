@@ -1,0 +1,11 @@
+// R3 ImmunizationRecommendation To R4
+$this: R3ImmunizationRecommendationToR4($root)
+
+// R4 ImmunizationRecommendation To R3
+$this: R4ImmunizationRecommendationToR3($root)
+
+// R2 ImmunizationRecommendation To R3
+$this: R2ImmunizationRecommendationToR3($root)
+
+// R3 ImmunizationRecommendation To R2
+$this: R3ImmunizationRecommendationToR2($root)

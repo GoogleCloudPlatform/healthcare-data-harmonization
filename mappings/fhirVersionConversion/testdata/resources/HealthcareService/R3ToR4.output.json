@@ -1,0 +1,219 @@
+{
+  "active": true,
+  "appointmentRequired": false,
+  "availabilityExceptions": "Reduced capacity is available during the Christmas period",
+  "availableTime": [
+    {
+      "allDay": true,
+      "daysOfWeek": [
+        "wed"
+      ]
+    },
+    {
+      "availableEndTime": "05:30:00",
+      "availableStartTime": "08:30:00",
+      "daysOfWeek": [
+        "mon",
+        "tue",
+        "thu",
+        "fri"
+      ]
+    },
+    {
+      "availableEndTime": "04:30:00",
+      "availableStartTime": "09:30:00",
+      "daysOfWeek": [
+        "sat",
+        "fri"
+      ]
+    }
+  ],
+  "category": [
+    {
+      "coding": [
+        {
+          "code": "8",
+          "display": "Counselling",
+          "system": "http://terminology.hl7.org/CodeSystem/service-category"
+        }
+      ],
+      "text": "Counselling"
+    }
+  ],
+  "characteristic": [
+    {
+      "coding": [
+        {
+          "display": "Wheelchair access"
+        }
+      ]
+    }
+  ],
+  "comment": "Providing Specialist psychology services to the greater Den Burg area, many years of experience dealing with PTSD issues",
+  "contained": [
+    {
+      "description": "Greater Denburg area",
+      "id": "DenBurg",
+      "mode": "instance",
+      "physicalType": {
+        "coding": [
+          {
+            "code": "area",
+            "display": "Area"
+          }
+        ]
+      },
+      "resourceType": "Location"
+    }
+  ],
+  "coverageArea": [
+    {
+      "display": "Greater Denburg area",
+      "reference": "#DenBurg"
+    }
+  ],
+  "eligibility": [
+    {
+      "code": {
+        "coding": [
+          {
+            "display": "DVA Required"
+          }
+        ]
+      },
+      "comment": "Evidence of application for DVA status may be sufficient for commencing assessment"
+    }
+  ],
+  "endpoint": [
+    {
+      "reference": "Endpoint/example"
+    }
+  ],
+  "extraDetails": "Several assessments are required for these specialist services, and the waiting times can be greater than 3 months at times. Existing patients are prioritized when requesting appointments on the schedule.",
+  "id": "example",
+  "identifier": [
+    {
+      "system": "http://example.org/shared-ids",
+      "value": "HS-12"
+    }
+  ],
+  "location": [
+    {
+      "reference": "Location/1"
+    }
+  ],
+  "name": "Consulting psychologists and/or psychology services",
+  "notAvailable": [
+    {
+      "description": "Christmas/Boxing Day",
+      "during": {
+        "end": "2015-12-26",
+        "start": "2015-12-25"
+      }
+    },
+    {
+      "description": "New Years Day",
+      "during": {
+        "end": "2016-01-01",
+        "start": "2016-01-01"
+      }
+    }
+  ],
+  "providedBy": {
+    "display": "Burgers University Medical Center",
+    "reference": "Organization/f001"
+  },
+  "referralMethod": [
+    {
+      "coding": [
+        {
+          "code": "phone",
+          "display": "Phone"
+        }
+      ]
+    },
+    {
+      "coding": [
+        {
+          "code": "fax",
+          "display": "Fax"
+        }
+      ]
+    },
+    {
+      "coding": [
+        {
+          "code": "elec",
+          "display": "Secure Messaging"
+        }
+      ]
+    },
+    {
+      "coding": [
+        {
+          "code": "semail",
+          "display": "Secure Email"
+        }
+      ]
+    }
+  ],
+  "resourceType": "HealthcareService",
+  "serviceProvisionCode": [
+    {
+      "coding": [
+        {
+          "code": "cost",
+          "display": "Fees apply",
+          "system": "http://terminology.hl7.org/CodeSystem/service-provision-conditions"
+        }
+      ]
+    }
+  ],
+  "specialty": [
+    {
+      "coding": [
+        {
+          "code": "47505003",
+          "display": "Posttraumatic stress disorder",
+          "system": "http://snomed.info/sct"
+        }
+      ]
+    }
+  ],
+  "telecom": [
+    {
+      "system": "phone",
+      "use": "work",
+      "value": "(555) silent"
+    },
+    {
+      "system": "email",
+      "use": "work",
+      "value": "directaddress@example.com"
+    }
+  ],
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\n\t\t\t25 Dec 2013 9:15am - 9:30am: \u003cb\u003eBusy\u003c/b\u003e Physiotherapy\n\t\t\u003c/div\u003e",
+    "status": "generated"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "code": "394913002",
+          "display": "Psychotherapy",
+          "system": "http://snomed.info/sct"
+        }
+      ]
+    },
+    {
+      "coding": [
+        {
+          "code": "394587001",
+          "display": "Psychiatry",
+          "system": "http://snomed.info/sct"
+        }
+      ]
+    }
+  ]
+}

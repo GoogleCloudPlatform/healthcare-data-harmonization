@@ -1,0 +1,27 @@
+{
+  "device": {
+    "reference": "Device/example"
+  },
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/deviceusestatement-definitions.html#DeviceUseStatement.status",
+      "valueCode": "active"
+    }
+  ],
+  "id": "example",
+  "identifier": [
+    {
+      "system": "http:goodhealth.org/identifiers",
+      "value": "51ebb7a9-4e3a-4360-9a05-0cc2d869086f"
+    }
+  ],
+  "resourceType": "DeviceUseStatement",
+  "status": "active",
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\u003cp\u003e\u003cb\u003eGenerated Narrative with Details\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eid\u003c/b\u003e: example\u003c/p\u003e\u003cp\u003e\u003cb\u003eidentifier\u003c/b\u003e: 51ebb7a9-4e3a-4360-9a05-0cc2d869086f\u003c/p\u003e\u003cp\u003e\u003cb\u003estatus\u003c/b\u003e: active\u003c/p\u003e\u003cp\u003e\u003cb\u003esubject\u003c/b\u003e: \u003ca\u003ePatient/example\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003edevice\u003c/b\u003e: \u003ca\u003eDevice/example\u003c/a\u003e\u003c/p\u003e\u003c/div\u003e",
+    "status": "generated"
+  }
+}

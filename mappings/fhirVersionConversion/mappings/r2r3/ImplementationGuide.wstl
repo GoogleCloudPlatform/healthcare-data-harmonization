@@ -1,0 +1,115 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def ImplementationGuideBase(implementationGuide) {
+  resourcebase::ResourceBase(implementationGuide)
+  url: implementationGuide.url
+  version: implementationGuide.version
+  name: implementationGuide.name
+  date: implementationGuide.date
+  publisher: implementationGuide.publisher
+  fhirVersion: implementationGuide.fhirVersion
+  dependency: implementationGuide.dependency
+  binary: implementationGuide.binary
+}
+
+def R2ImplementationGuideToR3(implementationGuide) {
+  ImplementationGuideBase(implementationGuide)
+  contained: datatypes::R2ResourceToR3(implementationGuide.contained[])
+  'global': R2ImplementationGuide_GlobalToR3(implementationGuide.'global'[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.status", implementationGuide.extension)
+  status: if status? then status else implementationGuide.status
+  experimental: implementationGuide.experimental
+  contact: extension::fetchContactDetailArray("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.contact", implementationGuide.extension)
+  description: implementationGuide.description
+  useContext: extension::fetchUsageContextArray("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.useContext", implementationGuide.extension)
+  jurisdiction: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.jurisdiction", implementationGuide.extension)
+  copyright: implementationGuide.copyright
+  'package': R2ImplementationGuide_PackageToR3(implementationGuide.'package'[])
+  page: R2ImplementationGuide_PageToR3(implementationGuide.page)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/implementationguide-definitions.html#ImplementationGuide.status", implementationGuide.status)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/implementationguide-definitions.html#ImplementationGuide.useContext", implementationGuide.useContext[])
+}
+
+def R3ImplementationGuideToR2(implementationGuide) {
+  ImplementationGuideBase(implementationGuide)
+  contained: datatypes::R3ResourceToR2(implementationGuide.contained[])
+  'global': R3ImplementationGuide_GlobalToR2(implementationGuide.'global'[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/implementationguide-definitions.html#ImplementationGuide.status", implementationGuide.extension)
+  status: if status? then status else implementationGuide.status
+  experimental: implementationGuide.experimental
+  description: implementationGuide.description
+  useContext: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/DSTU2/implementationguide-definitions.html#ImplementationGuide.useContext", implementationGuide.extension)
+  copyright: implementationGuide.copyright
+  'package': R3ImplementationGuide_PackageToR2(implementationGuide.'package'[])
+  page: R3ImplementationGuide_PageToR2(implementationGuide.page)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.status", implementationGuide.status)
+  extension[]: extension::BuildContactDetail("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.contact", implementationGuide.contact[])
+  extension[]: extension::BuildBase64BinaryExtension("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.useContext", implementationGuide.useContext[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.jurisdiction", implementationGuide.jurisdiction[])
+}
+
+def R2ImplementationGuide_PackageToR3(data) {
+  name: data.name
+  description: data.description
+  resource: R2ImplementationGuide_Package_ResourceToR3(data.resource[])
+}
+
+def R3ImplementationGuide_PackageToR2(data) {
+  name: data.name
+  description: data.description
+  resource: R3ImplementationGuide_Package_ResourceToR2(data.resource[])
+}
+
+def R2ImplementationGuide_Package_ResourceToR3(data) {
+  example: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.package.resource.example", data.extension)
+  name: data.name
+  description: data.description
+  acronym: data.acronym
+  sourceUri: data.sourceUri
+  sourceReference: datatypes::R2ReferenceToR3(data.sourceReference)
+  exampleFor: datatypes::R2ReferenceToR3(data.exampleFor)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/implementationguide-definitions.html#ImplementationGuide.package.resource.purpose", data.purpose)
+}
+
+def R3ImplementationGuide_Package_ResourceToR2(data) {
+  purpose: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/implementationguide-definitions.html#ImplementationGuide.package.resource.purpose", data.extension)
+  name: data.name
+  description: data.description
+  acronym: data.acronym
+  sourceUri: data.sourceUri
+  sourceReference: datatypes::R3ReferenceToR2(data.sourceReference)
+  exampleFor: datatypes::R3ReferenceToR2(data.exampleFor)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.package.resource.example", data.example)
+}
+
+def R2ImplementationGuide_PageToR3(data) {
+  source: data.source
+  title: data.name
+  kind: data.kind
+  type: data.type
+  'package': data.'package'
+  format: data.format
+  page: data.page
+}
+
+def R3ImplementationGuide_PageToR2(data) {
+  source: data.source
+  title: data.name
+  kind: data.kind
+  type: data.type
+  'package': data.'package'
+  format: data.format
+  page: data.page
+}
+
+def R2ImplementationGuide_GlobalToR3(data) {
+  type: data.type
+  profile: datatypes::R2ReferenceToR3(data.profile)
+}
+
+def R3ImplementationGuide_GlobalToR2(data) {
+  type: data.type
+  profile: datatypes::R3ReferenceToR2(data.profile)
+}

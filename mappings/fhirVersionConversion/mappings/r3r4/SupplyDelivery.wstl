@@ -1,0 +1,110 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   supplyDelivery : FHIR SupplyDelivery resource
+//
+// Output(s):
+//   FHIR SupplyDelivery Resource
+//
+def SupplyDeliveryBase(supplyDelivery) {
+  resourcebase::ResourceBase(supplyDelivery)
+  occurrenceDateTime: supplyDelivery.occurrenceDateTime
+  occurrencePeriod: supplyDelivery.occurrencePeriod
+  occurrenceTiming: supplyDelivery.occurrenceTiming
+}
+
+// Description: Converts a FHIR STU3 SupplyDelivery resource to FHIR R4 SupplyDelivery resource.
+//
+// Argument(s):
+//   supplyDelivery : FHIR STU3 SupplyDelivery resource https://www.hl7.org/fhir/stu3/supplydelivery.html
+//
+// Output(s):
+//   FHIR R4 SupplyDelivery Resource https://www.hl7.org/fhir/r4/supplydelivery.html
+//
+def R3SupplyDeliveryToR4(supplyDelivery) {
+  SupplyDeliveryBase(supplyDelivery)
+  contained: datatypes::R3ResourceToR4(supplyDelivery.contained[])
+  destination: datatypes::R3ReferenceToR4(supplyDelivery.destination)
+  suppliedItem: R3SupplyDelivery_SuppliedItemToR4(supplyDelivery.suppliedItem)
+  patient: datatypes::R3ReferenceToR4(supplyDelivery.patient)
+  partOf: datatypes::R3ReferenceToR4(supplyDelivery.partOf[])
+  basedOn: datatypes::R3ReferenceToR4(supplyDelivery.basedOn[])
+  identifier: R3SupplyDelivery_IdentifierToR4("https://www.hl7.org/fhir/R4/supplydelivery-definitions.html#SupplyDelivery.identifier", supplyDelivery.extension, supplyDelivery.identifier)
+  status: supplyDelivery.status
+  type: supplyDelivery.type
+  supplier: datatypes::R3ReferenceToR4(supplyDelivery.supplier)
+  receiver: datatypes::R3ReferenceToR4(supplyDelivery.receiver[])
+}
+
+// Description: Converts a FHIR R4 SupplyDelivery resource to FHIR STU3 SupplyDelivery resource.
+//
+// Argument(s):
+//   supplyDelivery : FHIR R4 SupplyDelivery resource https://www.hl7.org/fhir/r4/supplydelivery.html
+//
+// Output(s):
+//   FHIR STU3 SupplyDelivery Resource https://www.hl7.org/fhir/stu3/supplydelivery.html
+//
+def R4SupplyDeliveryToR3(supplyDelivery) {
+  SupplyDeliveryBase(supplyDelivery)
+  contained: datatypes::R4ResourceToR3(supplyDelivery.contained[])
+  destination: datatypes::R4ReferenceToR3(supplyDelivery.destination)
+  suppliedItem: R4SupplyDelivery_SuppliedItemToR3(supplyDelivery.suppliedItem)
+  patient: datatypes::R4ReferenceToR3(supplyDelivery.patient)
+  partOf: datatypes::R4ReferenceToR3(supplyDelivery.partOf[])
+  basedOn: datatypes::R4ReferenceToR3(supplyDelivery.basedOn[])
+  identifier: supplyDelivery.identifier[0]
+  status: supplyDelivery.status
+  type: supplyDelivery.type
+  supplier: datatypes::R4ReferenceToR3(supplyDelivery.supplier)
+  receiver: datatypes::R4ReferenceToR3(supplyDelivery.receiver[])
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/R4/supplydelivery-definitions.html#SupplyDelivery.identifier", supplyDelivery.identifier[])
+}
+
+// Description: Converts a FHIR STU3 SupplyDelivery.identifier to FHIR R4 SupplyDelivery.identifier.
+//
+// Argument(s):
+//   data : FHIR STU3 SupplyDelivery.identifier https://www.hl7.org/fhir/stu3/supplydelivery-definitions.html#SupplyDelivery.identifier
+//
+// Output(s):
+//   FHIR R4 SupplyDelivery.identifier https://www.hl7.org/fhir/r4/supplydelivery-definitions.html#SupplyDelivery.identifier
+//
+def R3SupplyDelivery_IdentifierToR4(url, extension, data) {
+  var identifier: extension::fetchIdentifierArray(url, extension)
+  if identifier then {
+    identifier
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 SupplyDelivery.SuppliedItem to FHIR R4 SupplyDelivery.SuppliedItem.
+//
+// Argument(s):
+//   data : FHIR STU3 SupplyDelivery.SuppliedItem https://www.hl7.org/fhir/stu3/supplydelivery-definitions.html#SupplyDelivery.suppliedItem
+//
+// Output(s):
+//   FHIR R4 SupplyDelivery.SuppliedItem https://www.hl7.org/fhir/r4/supplydelivery-definitions.html#SupplyDelivery.suppliedItem
+//
+def R3SupplyDelivery_SuppliedItemToR4(data) {
+  quantity: data.quantity
+  itemCodeableConcept: data.itemCodeableConcept
+  itemReference: datatypes::R3ReferenceToR4(data.itemReference)
+}
+
+// Description: Converts a FHIR R4 SupplyDelivery.SuppliedItem to FHIR STU3 SupplyDelivery.SuppliedItem.
+//
+// Argument(s):
+//   data : FHIR R4 SupplyDelivery.SuppliedItem https://www.hl7.org/fhir/r4/supplydelivery-definitions.html#SupplyDelivery.suppliedItem
+//
+// Output(s):
+//   FHIR STU3 SupplyDelivery.SuppliedItem https://www.hl7.org/fhir/stu3/supplydelivery-definitions.html#SupplyDelivery.suppliedItem
+//
+def R4SupplyDelivery_SuppliedItemToR3(data) {
+  quantity: data.quantity
+  itemCodeableConcept: data.itemCodeableConcept
+  itemReference: datatypes::R4ReferenceToR3(data.itemReference)
+}

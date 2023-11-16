@@ -1,0 +1,116 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   familyMemberHistory : FHIR FamilyMemberHistory resource
+//
+// Output(s):
+//   FHIR FamilyMemberHistory Resource
+//
+def FamilyMemberHistoryBase(familyMemberHistory) {
+  resourcebase::ResourceBase(familyMemberHistory)
+  identifier: familyMemberHistory.identifier
+  date: familyMemberHistory.date
+  name: familyMemberHistory.name
+  relationship: familyMemberHistory.relationship
+  bornPeriod: familyMemberHistory.bornPeriod
+  bornDate: familyMemberHistory.bornDate
+  bornString: familyMemberHistory.bornString
+  ageAge: familyMemberHistory.ageAge
+  ageRange: familyMemberHistory.ageRange
+  ageString: familyMemberHistory.ageString
+  deceasedBoolean: familyMemberHistory.deceasedBoolean
+  deceasedAge: familyMemberHistory.deceasedAge
+  deceasedRange: familyMemberHistory.deceasedRange
+  deceasedDate: familyMemberHistory.deceasedDate
+  deceasedString: familyMemberHistory.deceasedString
+  reasonCode: familyMemberHistory.reasonCode
+  note: familyMemberHistory.note
+}
+
+// Description: Converts a FHIR STU3 FamilyMemberHistory resource to FHIR R4 FamilyMemberHistory resource.
+//
+// Argument(s):
+//   familyMemberHistory : FHIR STU3 FamilyMemberHistory resource https://www.hl7.org/fhir/stu3/familymemberhistory.html
+//
+// Output(s):
+//   FHIR R4 FamilyMemberHistory Resource https://www.hl7.org/fhir/r4/familymemberhistory.html
+//
+def R3FamilyMemberHistoryToR4(familyMemberHistory) {
+  FamilyMemberHistoryBase(familyMemberHistory)
+  contained: datatypes::R3ResourceToR4(familyMemberHistory.contained[])
+  patient: datatypes::R3ReferenceToR4(familyMemberHistory.patient)
+  instantiatesCanonical: datatypes::ReferenceToCanonical(familyMemberHistory.definition[])
+  instantiatesUri: extension::fetchUriArray("https://www.hl7.org/fhir/R4/familymemberhistory-definitions.html#FamilyMemberHistory.instantiatesUri", familyMemberHistory.extension)
+  status: familyMemberHistory.status
+  dataAbsentReason: familyMemberHistory.notDoneReason
+  sex: datatypes::CodeToCodeableConcept(familyMemberHistory.gender)
+  estimatedAge: familyMemberHistory.estimatedAge
+  reasonReference: datatypes::R3ReferenceToR4(familyMemberHistory.reasonReference[])
+  condition: R3FamilyMemberHistory_ConditionToR4(familyMemberHistory.condition[])
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.notDone", familyMemberHistory.notDone)
+}
+
+// Description: Converts a FHIR R4 FamilyMemberHistory resource to FHIR STU3 FamilyMemberHistory resource.
+//
+// Argument(s):
+//   familyMemberHistory : FHIR R4 FamilyMemberHistory resource https://www.hl7.org/fhir/r4/familymemberhistory.html
+//
+// Output(s):
+//   FHIR STU3 FamilyMemberHistory Resource https://www.hl7.org/fhir/stu3/familymemberhistory.html
+//
+def R4FamilyMemberHistoryToR3(familyMemberHistory) {
+  FamilyMemberHistoryBase(familyMemberHistory)
+  contained: datatypes::R4ResourceToR3(familyMemberHistory.contained[])
+  patient: datatypes::R4ReferenceToR3(familyMemberHistory.patient)
+  definition: datatypes::CanonicalToReference(familyMemberHistory.instantiatesCanonical[])
+  status: familyMemberHistory.status
+  notDone: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.notDone", familyMemberHistory.extension)
+  notDoneReason: familyMemberHistory.dataAbsentReason
+  gender: datatypes::CodeableConceptToCode(familyMemberHistory.sex)
+  estimatedAge: familyMemberHistory.estimatedAge
+  reasonReference: datatypes::R4ReferenceToR3(familyMemberHistory.reasonReference[])
+  condition: R4FamilyMemberHistory_ConditionToR3(familyMemberHistory.condition[])
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/R4/familymemberhistory-definitions.html#FamilyMemberHistory.instantiatesUri", familyMemberHistory.instantiatesUri[])
+}
+
+// Description: Converts a FHIR STU3 FamilyMemberHistory.Condition to FHIR R4 FamilyMemberHistory.Condition.
+//
+// Argument(s):
+//   data : FHIR STU3 FamilyMemberHistory.Condition http://hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.condition
+//
+// Output(s):
+//   FHIR R4 FamilyMemberHistory.Condition http://hl7.org/fhir/R4/familymemberhistory-definitions.html#FamilyMemberHistory.condition
+//
+def R3FamilyMemberHistory_ConditionToR4(data) {
+  code: data.code
+  outcome: data.outcome
+  contributedToDeath: extension::fetchBoolean("https://www.hl7.org/fhir/R4/familymemberhistory-definitions.html#FamilyMemberHistory.condition.contributedToDeath", data.extension)
+  onsetAge: data.onsetAge
+  onsetRange: data.onsetRange
+  onsetPeriod: data.onsetPeriod
+  onsetString: data.onsetString
+  note: data.note
+}
+
+// Description: Converts a FHIR R4 FamilyMemberHistory.Condition to FHIR STU3 FamilyMemberHistory.Condition.
+//
+// Argument(s):
+//   data : FHIR R4 FamilyMemberHistory.Condition http://hl7.org/fhir/R4/familymemberhistory-definitions.html#FamilyMemberHistory.condition
+//
+// Output(s):
+//   FHIR STU3 FamilyMemberHistory.Condition http://hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.condition
+//
+def R4FamilyMemberHistory_ConditionToR3(data) {
+  code: data.code
+  outcome: data.outcome
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/R4/familymemberhistory-definitions.html#FamilyMemberHistory.condition.contributedToDeath", data.contributedToDeath)
+  onsetAge: data.onsetAge
+  onsetRange: data.onsetRange
+  onsetPeriod: data.onsetPeriod
+  onsetString: data.onsetString
+  note: data.note
+}

@@ -1,0 +1,81 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   media : FHIR Media resource
+//
+// Output(s):
+//   FHIR Media Resource
+//
+def MediaBase(media) {
+  resourcebase::ResourceBase(media)
+  identifier: media.identifier
+  view: media.view
+  reasonCode: media.reasonCode
+  bodySite: media.bodySite
+  height: media.height
+  width: media.width
+  content: media.content
+  note: media.note
+}
+
+// Description: Converts a FHIR STU3 Media resource to FHIR R4 Media resource.
+//
+// Argument(s):
+//   media : FHIR STU3 Media resource https://www.hl7.org/fhir/stu3/media.html
+//
+// Output(s):
+//   FHIR R4 Media Resource https://www.hl7.org/fhir/r4/media.html
+//
+def R3MediaToR4(media) {
+  MediaBase(media)
+  contained: datatypes::R3ResourceToR4(media.contained[])
+  device: datatypes::R3ReferenceToR4(media.device)
+  basedOn: datatypes::R3ReferenceToR4(media.basedOn[where !matchesRegex($.reference, "^ProcedureRequest.*")][])
+  partOf: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/media-definitions.html#Media.partOf", media.extension)
+  status: extension::fetchCode("https://www.hl7.org/fhir/R4/media-definitions.html#Media.status", media.extension)
+  status: utilities::defaultIfNull($this.status, "unknown")
+  type: datatypes::CodeToCodeableConcept(media.type)
+  modality: media.subtype
+  subject: datatypes::R3ReferenceToR4(media.subject)
+  encounter: if matchesRegex(media.context.reference, "^Encounter.*") then datatypes::R3ReferenceToR4(media.context)
+  createdDateTime: media.occurrenceDateTime
+  createdPeriod: media.occurrencePeriod
+  issued: extension::fetchInstant("https://www.hl7.org/fhir/R4/media-definitions.html#Media.issued", media.extension)
+  operator: datatypes::R3ReferenceToR4(media.operator)
+  deviceName: extension::fetchString("https://www.hl7.org/fhir/R4/media-definitions.html#Media.deviceName", media.extension)
+  frames: media.frames
+  duration: media.duration
+  extension[]: if !$this.encounter then extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/media-definitions.html#Media.context", media.context)
+}
+
+// Description: Converts a FHIR R4 Media resource to FHIR STU3 Media resource.
+//
+// Argument(s):
+//   media : FHIR R4 Media resource https://www.hl7.org/fhir/r4/media.html
+//
+// Output(s):
+//   FHIR STU3 Media Resource https://www.hl7.org/fhir/stu3/media.html
+//
+def R4MediaToR3(media) {
+  MediaBase(media)
+  contained: datatypes::R4ResourceToR3(media.contained[])
+  device: datatypes::R4ReferenceToR3(media.device)
+  basedOn: datatypes::R4ReferenceToR3(media.basedOn[])
+  type: datatypes::CodeableConceptToCode(media.type)
+  subtype: media.modality
+  subject: datatypes::R4ReferenceToR3(media.subject)
+  context: datatypes::R4ReferenceToR3(media.encounter)
+  occurrenceDateTime: media.createdDateTime
+  occurrencePeriod: media.createdPeriod
+  operator: datatypes::R4ReferenceToR3(media.operator)
+  frames: media.frames
+  duration: media.duration
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/media-definitions.html#Media.partOf", media.partOf[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/media-definitions.html#Media.status", media.status)
+  extension[]: extension::BuildInstantExtension("https://www.hl7.org/fhir/R4/media-definitions.html#Media.issued", media.issued)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/media-definitions.html#Media.deviceName", media.deviceName)
+}

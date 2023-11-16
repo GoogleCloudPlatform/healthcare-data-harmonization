@@ -1,0 +1,45 @@
+package utilities
+
+// Description: Converts HL7 v2 terminology into FHIR terminology
+//
+// Argument(s):
+//   HL7 v2 Code:  https://hl7-definition.caristix.com/v2/HL7v2.7/Tables
+//   System: System of the source code specified in the concept map (https://build.fhir.org/conceptmap-definitions.html#ConceptMap.group.source).
+//   ConceptMapID: https://www.hl7.org/fhir/conceptmap.html
+//
+// Output(s):
+//   FHIR Code datatype: https://www.hl7.org/fhir/datatypes.html#code
+//
+def Convert_TerminologyCode(required Code, System, ConceptMapID) {
+  var mapping: harmonization::harmonize("$Local", Code, System, ConceptMapID)
+  $this: mapping[0].code
+}
+
+// Description: Converts HL7 v2 terminology into FHIR terminology
+//
+// Argument(s):
+//   HL7 v2 Code:  https://hl7-definition.caristix.com/v2/HL7v2.7/Tables
+//   System: System of the source code specified in the concept map (https://build.fhir.org/conceptmap-definitions.html#ConceptMap.group.source).
+//   ConceptMapID: https://www.hl7.org/fhir/conceptmap.html
+//
+// Output(s):
+//   FHIR Coding datatype: https://www.hl7.org/fhir/datatypes.html#Coding
+//
+def Convert_TerminologyCoding(required Code, System, ConceptMapID) {
+  var mapping: harmonization::harmonize("$Local", Code, System, ConceptMapID)
+  $this: mapping[0]
+}
+
+// Description: Converts HL7 v2 terminology into FHIR terminology
+//
+// Argument(s):
+//   HL7 v2 Code:  https://hl7-definition.caristix.com/v2/HL7v2.7/Tables
+//   System: System of the source code specified in the concept map (https://build.fhir.org/conceptmap-definitions.html#ConceptMap.group.source).
+//   ConceptMapID: https://www.hl7.org/fhir/conceptmap.html
+//
+// Output(s):
+//   FHIR CodeableConcept datatype: https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def Convert_Terminology(required Code, System, ConceptMapID) {
+  coding: harmonization::harmonize("$Local", Code, System, ConceptMapID)
+}

@@ -1,0 +1,84 @@
+package utilities
+
+// Description: Extracts a date in FHIR format from a HL7v2 DateTime datatype
+//
+// Argument(s):
+//   str:  HL7v2 DateTime datatype
+//
+// Output(s):
+//   FHIR Date datatype: https://www.hl7.org/fhir/datatypes.html#date
+//
+def Extract_Date(required str) {
+  var input: multiFormatParseTime(str)
+  formatDateTime("yyyy-MM-dd", input)
+}
+
+// Description: Converts a HL7v2 DateTime datatype to a FHIR Instant datatype
+//
+// Argument(s):
+//   str:  HL7v2 DateTime datatype
+//
+// Output(s):
+//   FHIR Instant datatype: https://www.hl7.org/fhir/datatypes.html#instant
+//
+def Convert_Instant(required str) {
+  var input: multiFormatParseTime(str)
+  formatDateTime("yyyy-MM-dd'T'HH:mm:ss.SSSZZ", input)
+}
+
+// Description: Converts HL7v2 DateTime to FHIR DateTime format
+//
+// Argument(s):
+//   str:  HL7v2 DateTime datatype
+//
+// Output(s):
+//   FHIR DateTime datatype: https://www.hl7.org/fhir/datatypes.html#dateTime
+//
+def Convert_DateTime(required str) {
+  var input: multiFormatParseTime(str)
+  formatDateTime("yyyy-MM-dd'T'HH:mm:ssZZ", input)
+}
+
+// Description: Converts HL7v2 DateTime to FHIR DateTime format
+//
+// Argument(s):
+//   str:  HL7v2 DateTime datatype
+//
+// Output(s): Unix timestamp as a string: https://www.unixtimestamp.com/
+//
+def Convert_EpochUnixTimestamp(required str) {
+  var input: multiFormatParseTime(str)
+  strFmt("%s", floor(getEpochMillis(input) / 1000))
+}
+
+// Description: Parses the given timestamp string into ISO format using one of
+// the five allowed formats. Returns input timestamp if not in allowed format.
+//
+// Argument(s):
+//   datetime: input string of the timestamp to be parsed
+//
+// Output(s):
+//   string: parsed timestamp in ISO format when input is in one of the
+//           supported formats, otherwise returns input timestamp string
+def multiFormatParseTime(datetime) {
+  // allowed timestamp formats
+  var dateTimeWithZoneOffsetFmt: "yyyyMMddHHmmssZ"
+  var dateTimeWithFractionalSecondsFmt: "yyyyMMddHHmmss.SSSSSS"
+  var dateTimeWithSecondsFmt: "yyyyMMddHHmmss"
+  var dateTimeFmt: "yyyyMMddHHmm"
+  var dateFmt: "yyyyMMdd"
+  // attempt parsing with each of the five allowed formats
+  if parseDateTime(dateTimeWithZoneOffsetFmt, datetime)? then {
+    parseDateTime(dateTimeWithZoneOffsetFmt, datetime)
+  } else if parseDateTime(dateTimeWithFractionalSecondsFmt, datetime)? then {
+    parseDateTime(dateTimeWithFractionalSecondsFmt, datetime)
+  } else if parseDateTime(dateTimeWithSecondsFmt, datetime)? then {
+    parseDateTime(dateTimeWithSecondsFmt, datetime)
+  } else if parseDateTime(dateTimeFmt, datetime)? then {
+    parseDateTime(dateTimeFmt, datetime)
+  } else if parseDateTime(dateFmt, datetime)? then {
+    parseDateTime(dateFmt, datetime)
+  } else {
+    datetime
+  }
+}

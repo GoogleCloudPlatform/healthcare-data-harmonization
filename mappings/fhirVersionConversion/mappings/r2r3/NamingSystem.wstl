@@ -1,0 +1,60 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def NamingSystemBase(namingSystem) {
+  resourcebase::ResourceBase(namingSystem)
+  name: namingSystem.name
+  kind: namingSystem.kind
+  date: namingSystem.date
+  publisher: namingSystem.publisher
+  responsible: namingSystem.responsible
+  type: namingSystem.type
+  usage: namingSystem.usage
+}
+
+def R2NamingSystemToR3(namingSystem) {
+  NamingSystemBase(namingSystem)
+  contained: datatypes::R2ResourceToR3(namingSystem.contained[])
+  replacedBy: datatypes::R2ReferenceToR3(namingSystem.replacedBy)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/namingsystem-definitions.html#NamingSystem.status", namingSystem.extension)
+  status: if status? then status else namingSystem.status
+  contact: extension::fetchContactDetailArray("https://www.hl7.org/fhir/STU3/namingsystem-definitions.html#NamingSystem.contact", namingSystem.extension)
+  description: namingSystem.description
+  useContext: extension::fetchUsageContextArray("https://www.hl7.org/fhir/STU3/namingsystem-definitions.html#NamingSystem.useContext", namingSystem.extension)
+  jurisdiction: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/namingsystem-definitions.html#NamingSystem.jurisdiction", namingSystem.extension)
+  uniqueId: R2NamingSystem_UniqueIdToR3(namingSystem.uniqueId[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/namingsystem-definitions.html#NamingSystem.status", namingSystem.status)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/namingsystem-definitions.html#NamingSystem.useContext", namingSystem.useContext[])
+}
+
+def R3NamingSystemToR2(namingSystem) {
+  NamingSystemBase(namingSystem)
+  contained: datatypes::R3ResourceToR2(namingSystem.contained[])
+  replacedBy: datatypes::R3ReferenceToR2(namingSystem.replacedBy)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/namingsystem-definitions.html#NamingSystem.status", namingSystem.extension)
+  status: if status? then status else namingSystem.status
+  description: namingSystem.description
+  useContext: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/DSTU2/namingsystem-definitions.html#NamingSystem.useContext", namingSystem.extension)
+  uniqueId: R3NamingSystem_UniqueIdToR2(namingSystem.uniqueId[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/namingsystem-definitions.html#NamingSystem.status", namingSystem.status)
+  extension[]: extension::BuildContactDetailExtension("https://www.hl7.org/fhir/STU3/namingsystem-definitions.html#NamingSystem.contact", namingSystem.contact[])
+  extension[]: extension::BuildBase64BinaryExtensionExtension("https://www.hl7.org/fhir/STU3/namingsystem-definitions.html#NamingSystem.useContext", namingSystem.useContext[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/namingsystem-definitions.html#NamingSystem.jurisdiction", namingSystem.jurisdiction[])
+}
+
+def R2NamingSystem_UniqueIdToR3(data) {
+  type: data.type
+  value: data.value
+  preferred: data.preferred
+  period: data.period
+  comment: extension::fetchString("https://www.hl7.org/fhir/STU3/namingsystem-definitions.html#NamingSystem.uniqueId.comment", data.extension)
+}
+
+def R3NamingSystem_UniqueIdToR2(data) {
+  type: data.type
+  value: data.value
+  preferred: data.preferred
+  period: data.period
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/namingsystem-definitions.html#NamingSystem.uniqueId.comment", data.comment)
+}

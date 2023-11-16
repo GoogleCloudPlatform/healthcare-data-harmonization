@@ -1,0 +1,54 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def EligibilityRequestBase(eligibilityRequest) {
+  resourcebase::ResourceBase(eligibilityRequest)
+  identifier: eligibilityRequest.identifier
+  created: eligibilityRequest.created
+}
+
+def R2EligibilityRequestToR3(eligibilityRequest) {
+  EligibilityRequestBase(eligibilityRequest)
+  contained: datatypes::R2ResourceToR3(eligibilityRequest.contained[])
+  organization: datatypes::R2ReferenceToR3(eligibilityRequest.organization)
+  provider: datatypes::R2ReferenceToR3(eligibilityRequest.provider)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.status", eligibilityRequest.extension)
+  status: if status? then status else eligibilityRequest.status
+  priority: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.priority", eligibilityRequest.extension)
+  patient: extension::fetchReference("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.patient", eligibilityRequest.extension)
+  servicedDate: extension::fetchDate("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.servicedDate", eligibilityRequest.extension)
+  servicedPeriod: extension::fetchPeriod("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.servicedPeriod", eligibilityRequest.extension)
+  enterer: extension::fetchReference("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.enterer", eligibilityRequest.extension)
+  insurer: extension::fetchReference("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.insurer", eligibilityRequest.extension)
+  facility: extension::fetchReference("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.facility", eligibilityRequest.extension)
+  coverage: extension::fetchReference("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.coverage", eligibilityRequest.extension)
+  businessArrangement: extension::fetchString("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.businessArrangement", eligibilityRequest.extension)
+  benefitCategory: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.benefitCategory", eligibilityRequest.extension)
+  benefitSubCategory: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.benefitSubCategory", eligibilityRequest.extension)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/eligibilityrequest-definitions.html#EligibilityRequest.ruleset", eligibilityRequest.ruleset)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/eligibilityrequest-definitions.html#EligibilityRequest.originalRuleset", eligibilityRequest.originalRuleset)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/eligibilityrequest-definitions.html#EligibilityRequest.target", eligibilityRequest.target)
+}
+
+def R3EligibilityRequestToR2(eligibilityRequest) {
+  EligibilityRequestBase(eligibilityRequest)
+  contained: datatypes::R3ResourceToR2(eligibilityRequest.contained[])
+  organization: datatypes::R3ReferenceToR2(eligibilityRequest.organization)
+  provider: datatypes::R3ReferenceToR2(eligibilityRequest.provider)
+  ruleset: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/eligibilityrequest-definitions.html#EligibilityRequest.ruleset", eligibilityRequest.extension)
+  originalRuleset: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/eligibilityrequest-definitions.html#EligibilityRequest.originalRuleset", eligibilityRequest.extension)
+  target: extension::fetchReference("https://www.hl7.org/fhir/DSTU2/eligibilityrequest-definitions.html#EligibilityRequest.target", eligibilityRequest.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.status", eligibilityRequest.status)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.priority", eligibilityRequest.priority)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.patient", eligibilityRequest.patient)
+  extension[]: extension::BuildDateTimeExtension("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.servicedDate", eligibilityRequest.servicedDate)
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.servicedPeriod", eligibilityRequest.servicedPeriod)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.enterer", eligibilityRequest.enterer)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.insurer", eligibilityRequest.insurer)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.facility", eligibilityRequest.facility)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.coverage", eligibilityRequest.coverage)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.businessArrangement", eligibilityRequest.businessArrangement)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.benefitCategory", eligibilityRequest.benefitCategory)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.benefitSubCategory", eligibilityRequest.benefitSubCategory)
+}

@@ -1,0 +1,40 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def GroupBase(group) {
+  resourcebase::ResourceBase(group)
+  identifier: group.identifier
+  type: group.type
+  actual: group.actual
+  code: group.code
+  name: group.name
+  quantity: group.quantity
+  characteristic: group.characteristic
+}
+
+def R2GroupToR3(group) {
+  GroupBase(group)
+  contained: datatypes::R2ResourceToR3(group.contained[])
+  member: R2Group_MemberToR3(group.member[])
+  active: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/group-definitions.html#Group.active", group.extension)
+}
+
+def R3GroupToR2(group) {
+  GroupBase(group)
+  contained: datatypes::R3ResourceToR2(group.contained[])
+  member: R3Group_MemberToR2(group.member[])
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/group-definitions.html#Group.active", group.active)
+}
+
+def R2Group_MemberToR3(data) {
+  entity: datatypes::R2ReferenceToR3(data.entity)
+  period: data.period
+  inactive: data.inactive
+}
+
+def R3Group_MemberToR2(data) {
+  entity: datatypes::R3ReferenceToR2(data.entity)
+  period: data.period
+  inactive: data.inactive
+}

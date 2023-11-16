@@ -1,0 +1,251 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   measure : FHIR Measure resource
+//
+// Output(s):
+//   FHIR Measure Resource
+//
+def MeasureBase(measure) {
+  resourcebase::ResourceBase(measure)
+  url: measure.url
+  identifier: measure.identifier
+  version: measure.version
+  name: measure.name
+  title: measure.title
+  date: measure.date
+  publisher: measure.publisher
+  contact: measure.contact
+  description: measure.description
+  useContext: measure.useContext
+  jurisdiction: measure.jurisdiction
+  purpose: measure.purpose
+  usage: measure.usage
+  copyright: measure.copyright
+  approvalDate: measure.approvalDate
+  lastReviewDate: measure.lastReviewDate
+  effectivePeriod: measure.effectivePeriod
+  topic: measure.topic
+  disclaimer: measure.disclaimer
+  riskAdjustment: measure.riskAdjustment
+  rateAggregation: measure.rateAggregation
+  rationale: measure.rationale
+  clinicalRecommendationStatement: measure.clinicalRecommendationStatement
+  definition: measure.definition
+  guidance: measure.guidance
+}
+
+// Description: Converts a FHIR STU3 Measure resource to FHIR R4 Measure resource.
+//
+// Argument(s):
+//   measure : FHIR STU3 Measure resource https://www.hl7.org/fhir/stu3/measure.html
+//
+// Output(s):
+//   FHIR R4 Measure Resource https://www.hl7.org/fhir/r4/measure.html
+//
+def R3MeasureToR4(measure) {
+  MeasureBase(measure)
+  contained: datatypes::R3ResourceToR4(measure.contained[])
+  subtitle: extension::fetchString("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.subtitle", measure.extension)
+  status: measure.status
+  experimental: measure.experimental
+  subjectCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.subjectCodeableConcept", measure.extension)
+  subjectReference: extension::fetchReference("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.subjectReference", measure.extension)
+  author: R3Measure_ContributorToR4("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.author", measure.extension, measure.contributor, "author")
+  editor: R3Measure_ContributorToR4("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.editor", measure.extension, measure.contributor, "editor")
+  reviewer: R3Measure_ContributorToR4("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.reviewer", measure.extension, measure.contributor, "reviewer")
+  endorser: R3Measure_ContributorToR4("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.endorser", measure.extension, measure.contributor, "endorser")
+  library: datatypes::ReferenceToCanonical(measure.library[])
+  scoring: measure.scoring
+  compositeScoring: measure.compositeScoring
+  type: measure.type
+  improvementNotation: datatypes::StringToCodeableConcept(measure.improvementNotation)
+  group: R3Measure_GroupToR4(measure.group[])
+  supplementalData: R3Measure_SupplementalDataToR4(measure.supplementalData[])
+  relatedArtifact: datatypes::R3RelatedArtifactToR4(measure.relatedArtifact[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/measure-definitions.html#Measure.set", measure.set)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/measure-definitions.html#Measure.contributor.name", measure.contributor[*].name[])
+}
+
+// Description: Converts a FHIR R4 Measure resource to FHIR STU3 Measure resource.
+//
+// Argument(s):
+//   measure : FHIR R4 Measure resource https://www.hl7.org/fhir/r4/measure.html
+//
+// Output(s):
+//   FHIR STU3 Measure Resource https://www.hl7.org/fhir/stu3/measure.html
+//
+def R4MeasureToR3(measure) {
+  MeasureBase(measure)
+  contained: datatypes::R4ResourceToR3(measure.contained[])
+  status: measure.status
+  experimental: measure.experimental
+  library: datatypes::CanonicalToReference(measure.library[])
+  scoring: measure.scoring
+  compositeScoring: measure.compositeScoring
+  type: measure.type
+  improvementNotation: datatypes::CodeableConceptToString(measure.improvementNotation)
+  set: extension::fetchString("https://www.hl7.org/fhir/STU3/measure-definitions.html#Measure.set", measure.extension)
+  group: R4Measure_GroupToR3(measure.group[])
+  supplementalData: R4Measure_SupplementalDataToR3(measure.supplementalData[])
+  relatedArtifact: measure.relatedArtifact
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.subtitle", measure.subtitle)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.subjectCodeableConcept", measure.subjectCodeableConcept)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.subjectReference", measure.subjectReference)
+  extension[]: extension::BuildContactDetailExtension("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.author", measure.author[])
+  extension[]: extension::BuildContactDetailExtension("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.editor", measure.editor[])
+  extension[]: extension::BuildContactDetailExtension("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.reviewer", measure.reviewer[])
+  extension[]: extension::BuildContactDetailExtension("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.endorser", measure.endorser[])
+}
+
+// Description: Converts a FHIR STU3 Measure.Contributor to FHIR R4 Contributor datatypes (Measure.author, Measure.editor,
+// Measure.reviewer, Measure.endorser).
+//
+// Argument(s):
+//   data : FHIR STU3 Measure.Contributor http://hl7.org/fhir/STU3/measure-definitions.html#Measure.contributor
+//   type : FHIR STU3 Measure.Contributor http://hl7.org/fhir/STU3/metadatatypes-definitions.html#Contributor.type
+//   url : FHIR STU3 Extension.url http://hl7.org/fhir/STU3/extensibility-definitions.html#Extension.url
+//   extension : FHIR STU3 DomainResource.Extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 ContactDetail http://hl7.org/fhir/R4/metadatatypes.html#ContactDetail
+//
+def R3Measure_ContributorToR4(url, extension, data, type) {
+  var contact: extension::fetchContactDetailArray(url, extension)
+  if contact then {
+    contact
+  } else {
+    var contributorList: data[where $.type == type]
+    contributorList[*].contact
+  }
+}
+
+// Description: Converts a FHIR STU3 Measure.Group to FHIR R4 Measure.Group.
+//
+// Argument(s):
+//   data : FHIR STU3 Measure.Group http://hl7.org/fhir/STU3/measure-definitions.html#Measure.group
+//
+// Output(s):
+//   FHIR R4 Measure.Group http://hl7.org/fhir/R4/measure-definitions.html#Measure.group
+//
+def R3Measure_GroupToR4(data) {
+  code: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.group.code", data.extension)
+  description: data.description
+  population: R3Measure_Group_PopulationToR4(data.population[])
+  stratifier: R3Measure_Group_StratifierToR4(data.stratifier[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/measure-definitions.html#Measure.group.name", data.name)
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/STU3/measure-definitions.html#Measure.group.identifier", data.identifier)
+}
+
+// Description: Converts a FHIR R4 Measure.Group to FHIR STU3 Measure.Group.
+//
+// Argument(s):
+//   data : FHIR R4 Measure.Group http://hl7.org/fhir/R4/measure-definitions.html#Measure.group
+//
+// Output(s):
+//   FHIR STU3 Measure.Group http://hl7.org/fhir/STU3/measure-definitions.html#Measure.group
+//
+def R4Measure_GroupToR3(data) {
+  name: extension::fetchString("https://www.hl7.org/fhir/STU3/measure-definitions.html#Measure.group.name", data.extension)
+  description: data.description
+  population: R4Measure_Group_PopulationToR3(data.population[])
+  stratifier: R4Measure_Group_StratifierToR3(data.stratifier[])
+}
+
+// Description: Converts a FHIR STU3 Measure.Group.Population to FHIR R4 Measure.Group.Population.
+//
+// Argument(s):
+//   data : FHIR STU3 Measure.Group.Population http://hl7.org/fhir/STU3/measure-definitions.html#Measure.group.population
+//
+// Output(s):
+//   FHIR R4 Measure.Group.Population http://hl7.org/fhir/R4/measure-definitions.html#Measure.group.population
+//
+def R3Measure_Group_PopulationToR4(data) {
+  description: data.description
+  code: data.code
+  criteria: datatypes::StringToExpression(data.criteria)
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/STU3/measure-definitions.html#Measure.group.population.identifier", data.identifier)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/measure-definitions.html#Measure.group.population.name", data.name)
+}
+
+// Description: Converts a FHIR R4 Measure.Group.Population to FHIR STU3 Measure.Group.Population.
+//
+// Argument(s):
+//   data : FHIR R4 Measure.Group.Population http://hl7.org/fhir/R4/measure-definitions.html#Measure.group.population
+//
+// Output(s):
+//   FHIR STU3 Measure.Group.Population http://hl7.org/fhir/STU3/measure-definitions.html#Measure.group.population
+//
+def R4Measure_Group_PopulationToR3(data) {
+  identifier: extension::fetchIdentifier("https://www.hl7.org/fhir/STU3/measure-definitions.html#Measure.group.population.identifier", data.extension)
+  name: extension::fetchString("https://www.hl7.org/fhir/STU3/measure-definitions.html#Measure.group.population.name", data.extension)
+  description: data.description
+  code: data.code
+  criteria: data.criteria
+}
+
+// Description: Converts a FHIR STU3 Measure.Group.Stratifier to FHIR R4 Measure.Group.Stratifier.
+//
+// Argument(s):
+//   data : FHIR STU3 Measure.Group.Stratifier http://hl7.org/fhir/STU3/measure-definitions.html#Measure.group.stratifier
+//
+// Output(s):
+//   FHIR R4 Measure.Group.Stratifier http://hl7.org/fhir/R4/measure-definitions.html#Measure.group.stratifier
+//
+def R3Measure_Group_StratifierToR4(data) {
+  description: extension::fetchString("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.group.stratifier.descriptionå", data.extension)
+  code: extension::fetchCode("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.group.stratifier.code", data.extension)
+  criteria: datatypes::StringToExpression(data.criteria)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/measure-definitions.html#Measure.group.stratifier.path", data.path)
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/STU3/measure-definitions.html#Measure.group.stratifier.identifier", data.identifier)
+}
+
+// Description: Converts a FHIR R4 Measure.Group.Stratifier to FHIR STU3 Measure.Group.Stratifier.
+//
+// Argument(s):
+//   data : FHIR R4 Measure.Group.Stratifier http://hl7.org/fhir/R4/measure-definitions.html#Measure.group.stratifier
+//
+// Output(s):
+//   FHIR STU3 Measure.Group.Stratifier http://hl7.org/fhir/STU3/measure-definitions.html#Measure.group.stratifier
+//
+def R4Measure_Group_StratifierToR3(data) {
+  criteria: data.criteria.expression
+  path: extension::fetchString("https://www.hl7.org/fhir/STU3/measure-definitions.html#Measure.group.stratifier.path", data.extension)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.group.stratifier.description", data.description)
+}
+
+// Description: Converts a FHIR STU3 Measure.SupplementalData to FHIR R4 Measure.SupplementalData.
+//
+// Argument(s):
+//   data : FHIR STU3 Measure.SupplementalData http://hl7.org/fhir/STU3/measure-definitions.html#Measure.supplementalData
+//
+// Output(s):
+//   FHIR R4 Measure.SupplementalData http://hl7.org/fhir/R4/measure-definitions.html#Measure.supplementalData
+//
+def R3Measure_SupplementalDataToR4(data) {
+  usage: data.usage
+  description: extension::fetchString("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.supplementalData.description", data.extension)
+  code: extension::fetchString("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.supplementalData.code", data.extension)
+  criteria: datatypes::StringToExpression(data.criteria)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/measure-definitions.html#Measure.supplementalData.path", data.path)
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/STU3/measure-definitions.html#Measure.supplementalData.identifier", data.identifier)
+}
+
+// Description: Converts a FHIR R4 Measure.SupplementalData to FHIR STU3 Measure.SupplementalData.
+//
+// Argument(s):
+//   data : FHIR R4 Measure.SupplementalData http://hl7.org/fhir/R4/measure-definitions.html#Measure.supplementalData
+//
+// Output(s):
+//   FHIR STU3 Measure.SupplementalData http://hl7.org/fhir/STU3/measure-definitions.html#Measure.supplementalData
+//
+def R4Measure_SupplementalDataToR3(data) {
+  usage: data.usage
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/measure-definitions.html#Measure.supplementalData.description", data.description)
+  criteria: data.criteria.expression
+  path: extension::fetchString("https://www.hl7.org/fhir/STU3/measure-definitions.html#Measure.supplementalData.path", data.extension)
+}

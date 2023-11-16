@@ -1,0 +1,102 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def AllergyIntoleranceBase(allergyIntolerance) {
+  resourcebase::ResourceBase(allergyIntolerance)
+  identifier: allergyIntolerance.identifier
+  type: allergyIntolerance.type
+  criticality: allergyIntolerance.criticality
+}
+
+def R2AllergyIntoleranceToR3(allergyIntolerance) {
+  AllergyIntoleranceBase(allergyIntolerance)
+  contained: datatypes::R2ResourceToR3(allergyIntolerance.contained[])
+  recorder: datatypes::R2ReferenceToR3(allergyIntolerance.recorder)
+  patient: datatypes::R2ReferenceToR3(allergyIntolerance.patient)
+  var status: allergyIntolerance.status
+  var clinicalStatus: extension::fetchCode("https://www.hl7.org/fhir/STU3/allergyintolerance-definitions.html#AllergyIntolerance.clinicalStatus", allergyIntolerance.extension)
+  if clinicalStatus? then {
+    clinicalStatus: clinicalStatus
+  } else if status == "active" or status == "inactive" or status == "resolved" then {
+    clinicalStatus: status
+  }
+  var verificationStatus: extension::fetchCode("https://www.hl7.org/fhir/STU3/allergyintolerance-definitions.html#AllergyIntolerance.verificationStatus", allergyIntolerance.extension)
+  if verificationStatus? then {
+    verificationStatus: verificationStatus
+  } else if status == "unconfirmed" or status == "confirmed" or status == "refuted" or status == "entered-in-error" then {
+    verificationStatus: status
+  } else {
+    // Set the verification status to be "error" if status is invalid.
+    verificationStatus: "entered-in-error"
+  }
+  category: extension::fetchCodeArray("https://www.hl7.org/fhir/STU3/allergyintolerance-definitions.html#AllergyIntolerance.category", allergyIntolerance.extension)
+  code: allergyIntolerance.substance
+  onsetDateTime: allergyIntolerance.onset
+  onsetAge: extension::fetchAge("https://www.hl7.org/fhir/STU3/allergyintolerance-definitions.html#AllergyIntolerance.onsetAge", allergyIntolerance.extension)
+  onsetPeriod: extension::fetchPeriod("https://www.hl7.org/fhir/STU3/allergyintolerance-definitions.html#AllergyIntolerance.onsetPeriod", allergyIntolerance.extension)
+  onsetRange: extension::fetchRange("https://www.hl7.org/fhir/STU3/allergyintolerance-definitions.html#AllergyIntolerance.onsetRange", allergyIntolerance.extension)
+  onsetString: extension::fetchString("https://www.hl7.org/fhir/STU3/allergyintolerance-definitions.html#AllergyIntolerance.onsetString", allergyIntolerance.extension)
+  assertedDate: allergyIntolerance.recordedDate
+  asserter: datatypes::R2ReferenceToR3(allergyIntolerance.reporter)
+  lastOccurrence: allergyIntolerance.lastOccurence
+  note: R2AllergyIntolerance_NoteToR3("https://www.hl7.org/fhir/STU3/allergyintolerance-definitions.html#AllergyIntolerance.note", allergyIntolerance.extension, allergyIntolerance.note)
+  reaction: R2AllergyIntolerance_ReactionToR3(allergyIntolerance.reaction[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/allergyintolerance-definitions.html#AllergyIntolerance.category", allergyIntolerance.category)
+}
+
+def R3AllergyIntoleranceToR2(allergyIntolerance) {
+  AllergyIntoleranceBase(allergyIntolerance)
+  contained: datatypes::R3ResourceToR2(allergyIntolerance.contained[])
+  recorder: datatypes::R3ReferenceToR2(allergyIntolerance.recorder)
+  patient: datatypes::R3ReferenceToR2(allergyIntolerance.patient)
+  status: if allergyIntolerance.verificationStatus? then allergyIntolerance.verificationStatus else allergyIntolerance.clinicalStatus
+  category: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/allergyintolerance-definitions.html#AllergyIntolerance.category", allergyIntolerance.extension)
+  substance: allergyIntolerance.code
+  onset: allergyIntolerance.onsetDateTime
+  recordedDate: allergyIntolerance.assertedDate
+  reporter: datatypes::R3ReferenceToR2(allergyIntolerance.asserter)
+  lastOccurence: allergyIntolerance.lastOccurrence
+  note: allergyIntolerance.note[0]
+  reaction: R3AllergyIntolerance_ReactionToR2(allergyIntolerance.reaction[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/allergyintolerance-definitions.html#AllergyIntolerance.category", allergyIntolerance.category[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/allergyintolerance-definitions.html#AllergyIntolerance.clinicalStatus", allergyIntolerance.clinicalStatus)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/allergyintolerance-definitions.html#AllergyIntolerance.verificationStatus", allergyIntolerance.verificationStatus)
+  extension[]: extension::BuildAgeExtension("https://www.hl7.org/fhir/STU3/allergyintolerance-definitions.html#AllergyIntolerance.onsetAge", allergyIntolerance.onsetAge)
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/STU3/allergyintolerance-definitions.html#AllergyIntolerance.onsetPeriod", allergyIntolerance.onsetPeriod)
+  extension[]: extension::BuildRangeExtension("https://www.hl7.org/fhir/STU3/allergyintolerance-definitions.html#AllergyIntolerance.onsetRange", allergyIntolerance.onsetRange)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/allergyintolerance-definitions.html#AllergyIntolerance.onsetString", allergyIntolerance.onsetString)
+  extension[]: extension::BuildAnnotationExtension("https://www.hl7.org/fhir/STU3/allergyintolerance-definitions.html#AllergyIntolerance.note", allergyIntolerance.note[])
+}
+
+def R2AllergyIntolerance_NoteToR3(url, extension, data) {
+  var note: extension::fetchAnnotationArray(url, extension)
+  if note then {
+    note
+  } else {
+    arrayOf(data)
+  }
+}
+
+def R2AllergyIntolerance_ReactionToR3(data) {
+  substance: data.substance
+  manifestation: data.manifestation
+  description: data.description
+  onset: data.onset
+  severity: data.severity
+  exposureRoute: data.exposureRoute
+  note: R2AllergyIntolerance_NoteToR3("https://www.hl7.org/fhir/STU3/allergyintolerance-definitions.html#AllergyIntolerance.reaction.note", data.extension, data.note)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/allergyintolerance-definitions.html#AllergyIntolerance.reaction.certainty", data.certainty)
+}
+
+def R3AllergyIntolerance_ReactionToR2(data) {
+  substance: data.substance
+  manifestation: data.manifestation
+  description: data.description
+  onset: data.onset
+  severity: data.severity
+  exposureRoute: data.exposureRoute
+  note: data.note[0]
+  certainty: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/allergyintolerance-definitions.html#AllergyIntolerance.reaction.certainty", data.extension)
+  extension[]: extension::BuildAnnotationExtension("https://www.hl7.org/fhir/STU3/allergyintolerance-definitions.html#AllergyIntolerance.reaction.note", data.note[])
+}

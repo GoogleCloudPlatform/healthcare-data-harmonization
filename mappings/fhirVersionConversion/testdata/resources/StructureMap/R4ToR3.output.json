@@ -1,0 +1,192 @@
+{
+  "group": [
+    {
+      "input": [
+        {
+          "mode": "source",
+          "name": "source",
+          "type": "ActivityDefinition"
+        },
+        {
+          "mode": "target",
+          "name": "target",
+          "type": "SupplyRequest"
+        }
+      ],
+      "name": "main",
+      "rule": [
+        {
+          "name": "status",
+          "source": [
+            {
+              "context": "source",
+              "element": "id",
+              "variable": "a"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "parameter": [
+                {
+                  "valueString": "'draft'"
+                }
+              ],
+              "transform": "evaluate"
+            }
+          ]
+        },
+        {
+          "name": "category",
+          "source": [
+            {
+              "context": "source",
+              "element": "id",
+              "variable": "a"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "parameter": [
+                {
+                  "valueString": "'non-stock'"
+                }
+              ],
+              "transform": "evaluate"
+            }
+          ]
+        },
+        {
+          "name": "priority",
+          "source": [
+            {
+              "context": "source",
+              "element": "id",
+              "variable": "a"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "priority",
+              "parameter": [
+                {
+                  "valueString": "'routine'"
+                }
+              ],
+              "transform": "evaluate"
+            }
+          ]
+        },
+        {
+          "name": "quantity",
+          "source": [
+            {
+              "context": "source",
+              "element": "quantity",
+              "variable": "a"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "transform": "copy"
+            }
+          ]
+        },
+        {
+          "name": "item",
+          "source": [
+            {
+              "context": "source",
+              "element": "code",
+              "variable": "a"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "orderedItem.itemCodeableConcept",
+              "transform": "copy"
+            }
+          ]
+        },
+        {
+          "name": "when",
+          "source": [
+            {
+              "context": "source",
+              "element": "id",
+              "variable": "a"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "occurrenceDateTime",
+              "parameter": [
+                {
+                  "valueString": "now()"
+                }
+              ],
+              "transform": "evaluate"
+            }
+          ]
+        },
+        {
+          "name": "authoredOn",
+          "source": [
+            {
+              "context": "source",
+              "element": "id",
+              "variable": "a"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "authoredOn",
+              "parameter": [
+                {
+                  "valueString": "now()"
+                }
+              ],
+              "transform": "evaluate"
+            }
+          ]
+        }
+      ],
+      "typeMode": "none"
+    }
+  ],
+  "id": "supplyrequest-transform",
+  "name": "Transform from an ActivityDefinition to a SupplyRequest",
+  "resourceType": "StructureMap",
+  "status": "draft",
+  "structure": [
+    {
+      "mode": "source",
+      "url": "http://hl7.org/fhir/StructureDefinition/activitydefinition"
+    },
+    {
+      "mode": "target",
+      "url": "http://hl7.org/fhir/StructureDefinition/supplyrequest"
+    }
+  ],
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\nmap \u0026quot;http://hl7.org/fhir/StructureMap/supplyrequest-transform\u0026quot; = supplyRequestTransform\n\nuses \u0026quot;http://hl7.org/fhir/StructureDefinition/ActivityDefinition\u0026quot; as source\nuses \u0026quot;http://hl7.org/fhir/StructureDefinition/SupplyRequest\u0026quot; as target\n\ngroup main\n  input \u0026quot;source\u0026quot;: ActivityDefinition as source\n  input \u0026quot;target\u0026quot;: SupplyRequest as target\n\n  \u0026quot;status\u0026quot;: for source.id make target.status = 'draft'\n  \u0026quot;category\u0026quot;: for source.id make target.category = 'non-stock'\n  \u0026quot;priority\u0026quot;: for source.id make target.priority = 'routine'\n  \u0026quot;quantity\u0026quot;: for source.quantity make target.orderedItem.quantity\n  \u0026quot;item\u0026quot;: for source.code make target.orderedItem.itemCodeableConcept\n  \u0026quot;when\u0026quot;: for source.id make target.occurrenceDateTime = Now()\n  \u0026quot;authoredOn\u0026quot;: for source.id make target.authoredOn = Now()\n    \u003c/div\u003e",
+    "status": "generated"
+  },
+  "url": "http://hl7.org/fhir/StructureMap/supplyrequest-transform"
+}

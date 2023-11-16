@@ -1,0 +1,13 @@
+package datatypes
+
+// Description: Converts a Identifier datatype to Reference datatype
+//
+// Argument(s):
+//   identifier: FHIR Identifier datatype https://www.hl7.org/fhir/datatypes.html#Identifier
+//
+// Output(s):
+//   FHIR Reference datatype https://www.hl7.org/fhir/references.html#Reference
+//
+def IdentifierToReference(identifier) {
+  identifier: identifier
+}

@@ -1,0 +1,192 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   conceptMap : FHIR ConceptMap resource
+//
+// Output(s):
+//   FHIR ConceptMap Resource
+//
+def ConceptMapBase(conceptMap) {
+  resourcebase::ResourceBase(conceptMap)
+  url: conceptMap.url
+  identifier: conceptMap.identifier
+  version: conceptMap.version
+  name: conceptMap.name
+  title: conceptMap.title
+  date: conceptMap.date
+  publisher: conceptMap.publisher
+  contact: conceptMap.contact
+  description: conceptMap.description
+  useContext: conceptMap.useContext
+  jurisdiction: conceptMap.jurisdiction
+  purpose: conceptMap.purpose
+  copyright: conceptMap.copyright
+  sourceUri: conceptMap.sourceUri
+  targetUri: conceptMap.targetUri
+}
+
+// Description: Converts a FHIR STU3 ConceptMap resource to FHIR R4 ConceptMap resource.
+//
+// Argument(s):
+//   conceptMap : FHIR STU3 ConceptMap resource https://www.hl7.org/fhir/stu3/conceptMap.html
+//
+// Output(s):
+//   FHIR R4 ConceptMap Resource https://www.hl7.org/fhir/r4/conceptMap.html
+//
+def R3ConceptMapToR4(conceptMap) {
+  ConceptMapBase(conceptMap)
+  contained: datatypes::R3ResourceToR4(conceptMap.contained[])
+  status: conceptMap.status
+  experimental: conceptMap.experimental
+  sourceCanonical: datatypes::ReferenceToCanonical(conceptMap.sourceReference)
+  targetCanonical: datatypes::ReferenceToCanonical(conceptMap.targetReference)
+  group: R3ConceptMap_GroupToR4(conceptMap.group[])
+}
+
+// Description: Converts a FHIR R4 ConceptMap resource to FHIR STU3 ConceptMap resource.
+//
+// Argument(s):
+//   conceptMap : FHIR R4 ConceptMap resource https://www.hl7.org/fhir/r4/conceptMap.html
+//
+// Output(s):
+//   FHIR STU3 ConceptMap Resource https://www.hl7.org/fhir/stu3/conceptMap.html
+//
+def R4ConceptMapToR3(conceptMap) {
+  ConceptMapBase(conceptMap)
+  contained: datatypes::R4ResourceToR3(conceptMap.contained[])
+  status: conceptMap.status
+  experimental: conceptMap.experimental
+  sourceReference: datatypes::CanonicalToReference(conceptMap.sourceCanonical)
+  targetReference: datatypes::CanonicalToReference(conceptMap.targetCanonical)
+  group: R4ConceptMap_GroupToR3(conceptMap.group[])
+}
+
+// Description: Converts a FHIR STU3 ConceptMap.Group to FHIR R4 ConceptMap.Group.
+//
+// Argument(s):
+//   data : FHIR STU3 ConceptMap.Group http://hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.group
+//
+// Output(s):
+//   FHIR R4 ConceptMap.Group http://hl7.org/fhir/R4/conceptmap-definitions.html#ConceptMap.group
+//
+def R3ConceptMap_GroupToR4(data) {
+  source: data.source
+  sourceVersion: data.sourceVersion
+  target: data.target
+  targetVersion: data.targetVersion
+  element: R3ConceptMap_Group_ElementToR4(data.element[])
+  unmapped: data.unmapped
+}
+
+// Description: Converts a FHIR R4 ConceptMap.Group to FHIR STU3 ConceptMap.Group.
+//
+// Argument(s):
+//   data : FHIR R4 ConceptMap.Group http://hl7.org/fhir/R4/conceptmap-definitions.html#ConceptMap.group
+//
+// Output(s):
+//   FHIR STU3 ConceptMap.Group http://hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.group
+//
+def R4ConceptMap_GroupToR3(data) {
+  source: data.source
+  sourceVersion: data.sourceVersion
+  target: data.target
+  targetVersion: data.targetVersion
+  element: R4ConceptMap_Group_ElementToR3(data.element[])
+  unmapped: data.unmapped
+}
+
+// Description: Converts a FHIR STU3 ConceptMap.Group.Element to FHIR R4 ConceptMap.Group.Element.
+//
+// Argument(s):
+//   data : FHIR STU3 ConceptMap.Group.Element http://hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.group.element
+//
+// Output(s):
+//   FHIR R4 ConceptMap.Group.Element http://hl7.org/fhir/R4/conceptmap-definitions.html#ConceptMap.group.element
+//
+def R3ConceptMap_Group_ElementToR4(data) {
+  code: data.code
+  display: data.display
+  target: R3ConceptMap_Group_Element_TargetToR4(data.target[])
+}
+
+// Description: Converts a FHIR R4 ConceptMap.Group.Element to FHIR STU3 ConceptMap.Group.Element.
+//
+// Argument(s):
+//   data : FHIR R4 ConceptMap.Group.Element http://hl7.org/fhir/R4/conceptmap-definitions.html#ConceptMap.group.element
+//
+// Output(s):
+//   FHIR STU3 ConceptMap.Group.Element http://hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.group.element
+//
+def R4ConceptMap_Group_ElementToR3(data) {
+  code: data.code
+  display: data.display
+  target: R4ConceptMap_Group_Element_TargetToR3(data.target[])
+}
+
+// Description: Converts a FHIR STU3 ConceptMap.Group.Element.Target to FHIR R4 ConceptMap.Group.Element.Target.
+//
+// Argument(s):
+//   data : FHIR STU3 ConceptMap.Group.Element.Target http://hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.group.element.target
+//
+// Output(s):
+//   FHIR R4 ConceptMap.Group.Element.Target http://hl7.org/fhir/R4/conceptmap-definitions.html#ConceptMap.group.element.target
+//
+def R3ConceptMap_Group_Element_TargetToR4(data) {
+  code: data.code
+  display: data.display
+  equivalence: data.equivalence
+  comment: data.comment
+  dependsOn: R3ConceptMap_Group_Element_Target_DependsOnToR4(data.dependsOn[])
+  product: R3ConceptMap_Group_Element_Target_DependsOnToR4(data.product[])
+}
+
+// Description: Converts a FHIR R4 ConceptMap.Group.Element.Target to FHIR STU3 ConceptMap.Group.Element.Target.
+//
+// Argument(s):
+//   data : FHIR R4 ConceptMap.Group.Element.Target http://hl7.org/fhir/R4/conceptmap-definitions.html#ConceptMap.group.element.target
+//
+// Output(s):
+//   FHIR STU3 ConceptMap.Group.Element.Target http://hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.group.element.target
+//
+def R4ConceptMap_Group_Element_TargetToR3(data) {
+  code: data.code
+  display: data.display
+  equivalence: data.equivalence
+  comment: data.comment
+  dependsOn: R4ConceptMap_Group_Element_Target_DependsOnToR3(data.dependsOn[])
+  product: data.product
+}
+
+// Description: Converts a FHIR STU3 ConceptMap.Group.Element.Target.DependsOn to FHIR R4 ConceptMap.Group.Element.Target.DependsOn.
+//
+// Argument(s):
+//   data : FHIR STU3 ConceptMap.Group.Element.Target.DependsOn http://hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.group.element.target.dependsOn
+//
+// Output(s):
+//   FHIR R4 ConceptMap.Group.Element.Target.DependsOn http://hl7.org/fhir/R4/conceptmap-definitions.html#ConceptMap.group.element.target.dependsOn
+//
+def R3ConceptMap_Group_Element_Target_DependsOnToR4(data) {
+  property: data.property
+  system: data.system
+  value: data.code
+  display: data.display
+}
+
+// Description: Converts a FHIR R4 ConceptMap.Group.Element.Target.DependsOn to FHIR STU3 ConceptMap.Group.Element.Target.DependsOn.
+//
+// Argument(s):
+//   data : FHIR R4 ConceptMap.Group.Element.Target.DependsOn http://hl7.org/fhir/R4/conceptmap-definitions.html#ConceptMap.group.element.target.dependsOn
+//
+// Output(s):
+//   FHIR STU3 ConceptMap.Group.Element.Target.DependsOn http://hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.group.element.target.dependsOn
+//
+def R4ConceptMap_Group_Element_Target_DependsOnToR3(data) {
+  property: data.property
+  system: data.system
+  code: data.value
+  display: data.display
+}

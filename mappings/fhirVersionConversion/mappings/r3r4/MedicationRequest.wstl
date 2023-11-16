@@ -1,0 +1,195 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   medicationRequest : FHIR AuditEvent resource
+//
+// Output(s):
+//   FHIR MedicationRequest Resource
+//
+def MedicationRequestBase(medicationRequest) {
+  resourcebase::ResourceBase(medicationRequest)
+  identifier: medicationRequest.identifier
+  medicationCodeableConcept: medicationRequest.medicationCodeableConcept
+  authoredOn: medicationRequest.authoredOn
+  reasonCode: medicationRequest.reasonCode
+  groupIdentifier: medicationRequest.groupIdentifier
+  note: medicationRequest.note
+}
+
+// Description: Converts a FHIR STU3 MedicationRequest resource to FHIR R4 MedicationRequest resource.
+//
+// Argument(s):
+//   medicationRequest : FHIR STU3 MedicationRequest resource https://www.hl7.org/fhir/stu3/medicationRequest.html
+//
+// Output(s):
+//   FHIR R4 MedicationRequest Resource https://www.hl7.org/fhir/r4/medicationRequest.html
+//
+def R3MedicationRequestToR4(medicationRequest) {
+  MedicationRequestBase(medicationRequest)
+  contained: datatypes::R3ResourceToR4(medicationRequest.contained[])
+  priorPrescription: datatypes::R3ReferenceToR4(medicationRequest.priorPrescription)
+  detectedIssue: datatypes::R3ReferenceToR4(medicationRequest.detectedIssue[])
+  eventHistory: datatypes::R3ReferenceToR4(medicationRequest.eventHistory[])
+  reasonReference: datatypes::R3ReferenceToR4(medicationRequest.reasonReference[])
+  supportingInformation: datatypes::R3ReferenceToR4(medicationRequest.supportingInformation[])
+  subject: datatypes::R3ReferenceToR4(medicationRequest.subject)
+  medicationReference: datatypes::R3ReferenceToR4(medicationRequest.medicationReference)
+  status: medicationRequest.status
+  status: utilities::defaultIfNull($this.status, "unknown")
+  statusReason: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.statusReason", medicationRequest.extension)
+  var intent: extension::fetchCode("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.intent", medicationRequest.extension)
+  intent: if intent? then intent else medicationRequest.intent
+  category: R3MedicationRequest_CategoryToR4("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.category", medicationRequest.extension, medicationRequest.category)
+  priority: medicationRequest.priority
+  doNotPerform: extension::fetchBoolean("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.doNotPerform", medicationRequest.extension)
+  reportedBoolean: extension::fetchBoolean("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.reportedBoolean", medicationRequest.extension)
+  reportedReference: extension::fetchReference("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.reportedReference", medicationRequest.extension)
+  encounter: if matchesRegex(medicationRequest.context.reference, "^Encounter.*") then datatypes::R3ReferenceToR4(medicationRequest.context)
+  requester: datatypes::R3ReferenceToR4(medicationRequest.requester.agent)
+  performer: extension::fetchReference("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.performer", medicationRequest.extension)
+  performerType: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.performerType", medicationRequest.extension)
+  recorder: datatypes::R3ReferenceToR4(medicationRequest.recorder)
+  instantiatesCanonical: datatypes::ReferenceToCanonical(medicationRequest.definition[])
+  instantiatesUri: extension::fetchUriArray("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.instantiatesUri", medicationRequest.extension)
+  basedOn: datatypes::R3ReferenceToR4(medicationRequest.basedOn[where !matchesRegex($.reference, "^ProcedureRequest.*|^ReferralRequest.*")][])
+  courseOfTherapyType: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.courseOfTherapyType", medicationRequest.extension)
+  insurance: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.insurance", medicationRequest.extension)
+  dispenseRequest: R3MedicationRequest_DispenseRequestToR4(medicationRequest.dispenseRequest)
+  substitution: R3MedicationRequest_SubstitutionToR4(medicationRequest.substitution)
+  dosageInstruction: datatypes::R3DosageToR4(medicationRequest.dosageInstruction[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/medicationrequest-definitions.html#MedicationRequest.requester.onBehalfOf", medicationRequest.requester.onBehalfOf)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/medicationrequest-definitions.html#MedicationRequest.intent", medicationRequest.intent)
+  extension[]: if !$this.encounter then extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/medicationrequest-definitions.html#MedicationRequest.reference", medicationRequest.context)
+}
+
+// Description: Converts a FHIR R4 MedicationRequest resource to FHIR STU3 MedicationRequest resource.
+//
+// Argument(s):
+//   medicationRequest : FHIR R4 MedicationRequest resource https://www.hl7.org/fhir/r4/medicationRequest.html
+//
+// Output(s):
+//   FHIR STU3 MedicationRequest Resource https://www.hl7.org/fhir/stu3/medicationRequest.html
+//
+def R4MedicationRequestToR3(medicationRequest) {
+  MedicationRequestBase(medicationRequest)
+  contained: datatypes::R4ResourceToR3(medicationRequest.contained[])
+  priorPrescription: datatypes::R4ReferenceToR3(medicationRequest.priorPrescription)
+  detectedIssue: datatypes::R4ReferenceToR3(medicationRequest.detectedIssue[])
+  eventHistory: datatypes::R4ReferenceToR3(medicationRequest.eventHistory[])
+  reasonReference: datatypes::R4ReferenceToR3(medicationRequest.reasonReference[])
+  supportingInformation: datatypes::R4ReferenceToR3(medicationRequest.supportingInformation[])
+  subject: datatypes::R4ReferenceToR3(medicationRequest.subject)
+  medicationReference: datatypes::R4ReferenceToR3(medicationRequest.medicationReference)
+  context: medicationRequest.encounter
+  definition: datatypes::CanonicalToReference(medicationRequest.instantiatesCanonical[])
+  basedOn: datatypes::R4ReferenceToR3(medicationRequest.basedOn[])
+  status: medicationRequest.status
+  var intent: extension::fetchCode("https://www.hl7.org/fhir/STU3/medicationrequest-definitions.html#MedicationRequest.intent", medicationRequest.extension)
+  intent: if intent? then intent else medicationRequest.intent
+  category: medicationRequest.category[0]
+  priority: medicationRequest.priority
+  context: datatypes::R4ReferenceToR3(medicationRequest.context)
+  requester.agent: datatypes::R4ReferenceToR3(medicationRequest.requester)
+  requester.onBehalfOf: extension::fetchReference("https://www.hl7.org/fhir/STU3/medicationrequest-definitions.html#MedicationRequest.requester.onBehalfOf", medicationRequest.extension)
+  recorder: datatypes::R4ReferenceToR3(medicationRequest.recorder)
+  dispenseRequest: R4MedicationRequest_DispenseRequestToR3(medicationRequest.dispenseRequest)
+  substitution: R4MedicationRequest_SubstitutionToR3(medicationRequest.substitution)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.statusReason", medicationRequest.statusReason)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.category", medicationRequest.category[])
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.doNotPerform", medicationRequest.doNotPerform)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.reportedBoolean", medicationRequest.reportedBoolean)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.reportedReference", medicationRequest.reportedReference)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.performer", medicationRequest.performer)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.performerType", medicationRequest.performerType)
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.instantiatesUri", medicationRequest.instantiatesUri[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.courseOfTherapyType", medicationRequest.courseOfTherapyType)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.insurance", medicationRequest.insurance[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.intent", medicationRequest.intent)
+}
+
+// Description: Converts a FHIR STU3 MedicationRequest.Category to FHIR R4 MedicationRequest.Category.
+//
+// Argument(s):
+//   data : FHIR STU3 MedicationRequest.Category http://hl7.org/fhir/STU3/medicationRequest-definitions.html#MedicationRequest.category
+//
+// Output(s):
+//   FHIR R4 MedicationRequest.Category http://hl7.org/fhir/R4/medicationRequest-definitions.html#MedicationRequest.category
+//
+def R3MedicationRequest_CategoryToR4(url, extension, data) {
+  var category: extension::fetchCodeableConceptArray(url, extension)
+  if category then {
+    category
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 MedicationRequest.DispenseRequest to FHIR R4 MedicationRequest.DispenseRequest.
+//
+// Argument(s):
+//   data : FHIR STU3 MedicationRequest.DispenseRequest http://hl7.org/fhir/STU3/medicationRequest-definitions.html#MedicationRequest.dispenseRequest
+//
+// Output(s):
+//   FHIR R4 MedicationRequest.DispenseRequest http://hl7.org/fhir/R4/medicationRequest-definitions.html#MedicationRequest.dispenseRequest
+//
+def R3MedicationRequest_DispenseRequestToR4(data) {
+  initialFill.quantity: extension::fetchQuantity("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.dispenseRequest.initialFill.quantity", data.extension)
+  initialFill.duration: extension::fetchAge("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.dispenseRequest.initialFill.duration", data.extension)
+  dispenseInterval: extension::fetchAge("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.dispenseRequest.dispenseInterval", data.extension)
+  validityPeriod: data.validityPeriod
+  numberOfRepeatsAllowed: data.numberOfRepeatsAllowed
+  quantity: data.quantity
+  expectedSupplyDuration: data.expectedSupplyDuration
+  performer: datatypes::R3ReferenceToR4(data.performer)
+}
+
+// Description: Converts a FHIR R4 MedicationRequest.DispenseRequest to FHIR STU3 MedicationRequest.DispenseRequest.
+//
+// Argument(s):
+//   data : FHIR R4 MedicationRequest.DispenseRequest http://hl7.org/fhir/R4/medicationRequest-definitions.html#MedicationRequest.dispenseRequest
+//
+// Output(s):
+//   FHIR STU3 MedicationRequest.DispenseRequest http://hl7.org/fhir/STU3/medicationRequest-definitions.html#MedicationRequest.dispenseRequest
+//
+def R4MedicationRequest_DispenseRequestToR3(data) {
+  validityPeriod: data.validityPeriod
+  numberOfRepeatsAllowed: data.numberOfRepeatsAllowed
+  quantity: data.quantity
+  expectedSupplyDuration: data.expectedSupplyDuration
+  performer: datatypes::R4ReferenceToR3(data.performer)
+  extension[]: extension::BuildQuantityExtension("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.dispenseRequest.initialFill.quantity", data.extension)
+  extension[]: extension::BuildAgeExtension("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.dispenseRequest.initialFill.duration", data.extension)
+  extension[]: extension::BuildAgeExtension("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.dispenseRequest.dispenseInterval", data.extension)
+}
+
+// Description: Converts a FHIR STU3 MedicationRequest.Substitution to FHIR R4 MedicationRequest.Substitution.
+//
+// Argument(s):
+//   data : FHIR STU3 MedicationRequest.Substitution http://hl7.org/fhir/STU3/medicationRequest-definitions.html#MedicationRequest.substitution
+//
+// Output(s):
+//   FHIR R4 MedicationRequest.Substitution http://hl7.org/fhir/R4/medicationRequest-definitions.html#MedicationRequest.substitution
+//
+def R3MedicationRequest_SubstitutionToR4(data) {
+  allowedBoolean: data.allowed
+  allowedCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.substitution.allowedCodeableConcept", data.extension)
+  reason: data.reason
+}
+
+// Description: Converts a FHIR R4 MedicationRequest.Substitution to FHIR STU3 MedicationRequest.Substitution.
+//
+// Argument(s):
+//   data : FHIR R4 MedicationRequest.Substitution http://hl7.org/fhir/R4/medicationRequest-definitions.html#MedicationRequest.substitution
+//
+// Output(s):
+//   FHIR STU3 MedicationRequest.Substitution http://hl7.org/fhir/STU3/medicationRequest-definitions.html#MedicationRequest.substitution
+//
+def R4MedicationRequest_SubstitutionToR3(data) {
+  allowed: data.allowedBoolean
+  extension: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.substitution.allowedCodeableConcept", data.allowedCodeableConcept)
+  reason: data.reason
+}

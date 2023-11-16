@@ -1,0 +1,89 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def ImmunizationBase(immunization) {
+  resourcebase::ResourceBase(immunization)
+  identifier: immunization.identifier
+  vaccineCode: immunization.vaccineCode
+  date: immunization.date
+  lotNumber: immunization.lotNumber
+  expirationDate: immunization.expirationDate
+  site: immunization.site
+  route: immunization.route
+  doseQuantity: immunization.doseQuantity
+  note: immunization.note
+  explanation: immunization.explanation
+}
+
+def R2ImmunizationToR3(immunization) {
+  ImmunizationBase(immunization)
+  contained: datatypes::R2ResourceToR3(immunization.contained[])
+  reaction: R2Immunization_ReactionToR3(immunization.reaction[])
+  manufacturer: datatypes::R2ReferenceToR3(immunization.manufacturer)
+  location: datatypes::R2ReferenceToR3(immunization.location)
+  encounter: datatypes::R2ReferenceToR3(immunization.encounter)
+  patient: datatypes::R2ReferenceToR3(immunization.patient)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/immunization-definitions.html#Immunization.status", immunization.extension)
+  status: if status? then status else immunization.status
+  notGiven: immunization.wasNotGiven
+  primarySource: immunization.reported
+  reportOrigin: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/immunization-definitions.html#Immunization.reportOrigin", immunization.extension)
+  vaccinationProtocol: R2Immunization_VaccinationProtocolToR3(immunization.vaccinationProtocol[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/immunization-definitions.html#Immunization.status", immunization.status)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/immunization-definitions.html#Immunization.performer", immunization.performer)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/immunization-definitions.html#Immunization.requester", immunization.requester)
+}
+
+def R3ImmunizationToR2(immunization) {
+  ImmunizationBase(immunization)
+  contained: datatypes::R3ResourceToR2(immunization.contained[])
+  reaction: R3Immunization_ReactionToR2(immunization.reaction[])
+  manufacturer: datatypes::R3ReferenceToR2(immunization.manufacturer)
+  location: datatypes::R3ReferenceToR2(immunization.location)
+  encounter: datatypes::R3ReferenceToR2(immunization.encounter)
+  patient: datatypes::R3ReferenceToR2(immunization.patient)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/immunization-definitions.html#Immunization.status", immunization.extension)
+  status: if status? then status else immunization.status
+  wasNotGiven: immunization.notGiven
+  vaccinationProtocol: R3Immunization_VaccinationProtocolToR2(immunization.vaccinationProtocol[])
+  reported: immunization.primarySource
+  performer: extension::fetchReference("https://www.hl7.org/fhir/DSTU2/immunization-definitions.html#Immunization.performer", immunization.extension)
+  requester: extension::fetchReference("https://www.hl7.org/fhir/DSTU2/immunization-definitions.html#Immunization.requester", immunization.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/immunization-definitions.html#Immunization.status", immunization.status)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/immunization-definitions.html#Immunization.reportOrigin", immunization.reportOrigin)
+}
+
+def R2Immunization_ReactionToR3(data) {
+  date: data.date
+  detail: datatypes::R2ReferenceToR3(data.detail)
+  reported: data.reported
+}
+
+def R3Immunization_ReactionToR2(data) {
+  date: data.date
+  detail: datatypes::R3ReferenceToR2(data.detail)
+  reported: data.reported
+}
+
+def R2Immunization_VaccinationProtocolToR3(data) {
+  doseSequence: data.doseSequence
+  description: data.description
+  authority: datatypes::R2ReferenceToR3(data.authority)
+  series: data.series
+  seriesDoses: data.seriesDoses
+  targetDisease: data.targetDisease
+  doseStatus: data.doseStatus
+  doseStatusReason: data.doseStatusReason
+}
+
+def R3Immunization_VaccinationProtocolToR2(data) {
+  doseSequence: data.doseSequence
+  description: data.description
+  authority: datatypes::R3ReferenceToR2(data.authority)
+  series: data.series
+  seriesDoses: data.seriesDoses
+  targetDisease: data.targetDisease
+  doseStatus: data.doseStatus
+  doseStatusReason: data.doseStatusReason
+}

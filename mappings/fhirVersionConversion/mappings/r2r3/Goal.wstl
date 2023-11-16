@@ -1,0 +1,50 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def GoalBase(goal) {
+  resourcebase::ResourceBase(goal)
+  identifier: goal.identifier
+  status: goal.status
+  category: goal.category
+  priority: goal.priority
+  startDate: goal.startDate
+  startCodeableConcept: goal.startCodeableConcept
+  statusDate: goal.statusDate
+  note: goal.note
+}
+
+def R2GoalToR3(goal) {
+  GoalBase(goal)
+  contained: datatypes::R2ResourceToR3(goal.contained[])
+  addresses: datatypes::R2ReferenceToR3(goal.addresses[])
+  subject: datatypes::R2ReferenceToR3(goal.subject)
+  description: datatypes::StringToCodeableConcept(goal.description)
+  target.measure: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/goal-definitions.html#Goal.target.measure", goal.extension)
+  target.detailQuantity: extension::fetchQuantity("https://www.hl7.org/fhir/STU3/goal-definitions.html#Goal.target.detailQuantity", goal.extension)
+  target.detailRange: extension::fetchRange("https://www.hl7.org/fhir/STU3/goal-definitions.html#Goal.target.detailRange", goal.extension)
+  target.detailCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/goal-definitions.html#Goal.target.detailCodeableConcept", goal.extension)
+  target.dueDate: goal.targetDate
+  target.dueDuration: extension::fetchAge("https://www.hl7.org/fhir/STU3/goal-definitions.html#Goal.dueDuration", goal.extension)
+  statusReason: datatypes::CodeableConceptToString(goal.statusReason)
+  expressedBy: datatypes::R2ReferenceToR3(goal.author)
+  outcomeCode: goal.outcome[*].resultCodeableConcept
+  outcomeReference: goal.outcome[*].resultReference
+}
+
+def R3GoalToR2(goal) {
+  GoalBase(goal)
+  contained: datatypes::R3ResourceToR2(goal.contained[])
+  addresses: datatypes::R3ReferenceToR2(goal.addresses[])
+  subject: datatypes::R3ReferenceToR2(goal.subject)
+  description: datatypes::CodeableConceptToString(goal.description)
+  targetQuantity: goal.target.detailQuantity
+  targetDate: goal.target.dueDate
+  statusReason: datatypes::StringToCodeableConcept(goal.statusReason)
+  author: datatypes::R3ReferenceToR2(goal.expressedBy)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/goal-definitions.html#Goal.target.measure", goal.target.measure)
+  extension[]: extension::BuildQuantityExtension("https://www.hl7.org/fhir/STU3/goal-definitions.html#Goal.target.detailQuantity", goal.target.detailQuantity)
+  extension[]: extension::BuildRangeExtension("https://www.hl7.org/fhir/STU3/goal-definitions.html#Goal.target.detailRange", goal.target.detailRange)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/goal-definitions.html#Goal.target.detailCodeableConcept", goal.target.detailCodeableConcept)
+  extension[]: extension::BuildAgeExtension("https://www.hl7.org/fhir/STU3/goal-definitions.html#Goal.target.dueDuration", goal.target.dueDuration)
+}

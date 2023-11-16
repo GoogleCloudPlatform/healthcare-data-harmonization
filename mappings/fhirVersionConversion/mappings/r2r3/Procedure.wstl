@@ -1,0 +1,115 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def ProcedureBase(procedure) {
+  resourcebase::ResourceBase(procedure)
+  identifier: procedure.identifier
+  category: procedure.category
+  performedDateTime: procedure.performedDateTime
+  performedPeriod: procedure.performedPeriod
+  bodySite: procedure.bodySite
+  outcome: procedure.outcome
+  complication: procedure.complication
+  followUp: procedure.followUp
+}
+
+def R2ProcedureToR3(procedure) {
+  ProcedureBase(procedure)
+  contained: datatypes::R2ResourceToR3(procedure.contained[])
+  report: datatypes::R2ReferenceToR3(procedure.report[])
+  location: datatypes::R2ReferenceToR3(procedure.location)
+  subject: datatypes::R2ReferenceToR3(procedure.subject)
+  definition: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.definition", procedure.extension)
+  basedOn: R2Procedure_BasedOnToR3("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.basedOn", procedure.extension, datatypes::R2ReferenceToR3(procedure.request))
+  partOf: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.partOf", procedure.extension)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.status", procedure.extension)
+  status: if status? then status else procedure.status
+  notDone: procedure.notPerformed
+  notDoneReason: procedure.reasonNotPerformed[0]
+  code: procedure.code
+  context: datatypes::R2ReferenceToR3(procedure.encounter)
+  performer: R2Procedure_PerformerToR3(procedure.performer[])
+  reasonCode: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.reasonCode", procedure.extension)
+  reasonReference: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.reasonReference", procedure.extension)
+  complicationDetail: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.complicationDetail", procedure.extension)
+  note: procedure.notes
+  focalDevice: R2Procedure_FocalDeviceToR3(procedure.focalDevice[])
+  usedReference: datatypes::R2ReferenceToR3(procedure.used[])
+  usedCode: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.usedCode", procedure.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/procedure-definitions.html#Procedure.code", procedure.code)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/procedure-definitions.html#Procedure.reasonCodeableConcept", procedure.reasonCodeableConcept)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/procedure-definitions.html#Procedure.reasonReference", procedure.reasonReference)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/procedure-definitions.html#Procedure.reasonNotPerformed", procedure.reasonNotPerformed[])
+}
+
+def R3ProcedureToR2(procedure) {
+  ProcedureBase(procedure)
+  contained: datatypes::R3ResourceToR2(procedure.contained[])
+  report: datatypes::R3ReferenceToR2(procedure.report[])
+  location: datatypes::R3ReferenceToR2(procedure.location)
+  subject: datatypes::R3ReferenceToR2(procedure.subject)
+  request: datatypes::R3ReferenceToR2(procedure.basedOn[0])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/procedure-definitions.html#Procedure.code", procedure.extension)
+  status: if status? then status else procedure.status
+  notPerformed: procedure.notDone
+  reasonNotPerformed: R3Procedure_ReasonNotPerformedToR2("https://www.hl7.org/fhir/DSTU2/procedure-definitions.html#Procedure.reasonNotPerformed", procedure.extension, procedure.notDoneReason)
+  code: procedure.code
+  encounter: datatypes::R3ReferenceToR2(procedure.context)
+  performer: R3Procedure_PerformerToR2(procedure.performer[])
+  notes: procedure.note
+  focalDevice: R3Procedure_FocalDeviceToR2(procedure.focalDevice[])
+  used: datatypes::R3ReferenceToR2(procedure.usedReference[])
+  reasonCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/DSTU2/procedure-definitions.html#Procedure.reasonCodeableConcept", procedure.extension)
+  reasonReference: extension::fetchReference("https://www.hl7.org/fhir/DSTU2/procedure-definitions.html#Procedure.reasonReference", procedure.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.definition", procedure.definition[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.partOf", procedure.partOf[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.status", procedure.status)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.reasonCode", procedure.reasonCode[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.reasonReference", procedure.reasonReference[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.complicationDetail", procedure.complicationDetail[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.usedCode", procedure.usedCode[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.basedOn", procedure.basedOn[])
+}
+
+def R2Procedure_BasedOnToR3(url, extension, data) {
+  var basedOn: extension::fetchReferenceArray(url, extension)
+  if basedOn then {
+    basedOn
+  } else {
+    arrayOf(data)
+  }
+}
+
+def R3Procedure_ReasonNotPerformedToR2(url, extension, data) {
+  var reasonNotPerformed: extension::fetchCodeableConceptArray(url, extension)
+  if reasonNotPerformed then {
+    reasonNotPerformed
+  } else {
+    arrayOf(data)
+  }
+}
+
+def R2Procedure_PerformerToR3(data) {
+  role: data.role
+  actor: datatypes::R2ReferenceToR3(data.actor)
+  onBehalfOf: extension::fetchReference("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.performer.onBehalfOf", data.extension)
+}
+
+def R3Procedure_PerformerToR2(data) {
+  role: data.role
+  actor: datatypes::R3ReferenceToR2(data.actor)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.performer.onBehalfOf", data.onBehalfOf)
+}
+
+def R2Procedure_FocalDeviceToR3(data) {
+  action: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.focalDevice.action", data.extension)
+  manipulated: datatypes::R2ReferenceToR3(data.manipulated)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/procedure-definitions.html#Procedure.focalDevice.action", data.action)
+}
+
+def R3Procedure_FocalDeviceToR2(data) {
+  action: extension::fetchCodeableConcept("https://www.hl7.org/fhir/DSTU2/procedure-definitions.html#Procedure.focalDevice.action", data.extension)
+  manipulated: datatypes::R3ReferenceToR2(data.manipulated)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.focalDevice.action", data.action)
+}

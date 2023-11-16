@@ -1,0 +1,2373 @@
+package extension
+
+// Description: Constructs a extension with base64Binary value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   base64Binary: FHIR base64Binary datatype https://www.hl7.org/fhir/r4/datatypes.html#base64Binary
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildBase64BinaryExtension(url, required base64Binary) {
+  url: url
+  valueBase64Binary: base64Binary
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchBase64Binary(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueBase64Binary
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchBase64BinaryArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueBase64Binary
+}
+
+// Description: Constructs a extension with boolean value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   boolean: FHIR boolean datatype https://www.hl7.org/fhir/r4/datatypes.html#boolean
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildBooleanExtension(url, required boolean) {
+  url: url
+  valueBoolean: boolean
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchBoolean(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueBoolean
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchBooleanArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueBoolean
+}
+
+// Description: Constructs a extension with canonical value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   canonical: FHIR canonical datatype https://www.hl7.org/fhir/r4/datatypes.html#canonical
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildCanonicalExtension(url, required canonical) {
+  url: url
+  valueString: canonical
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchCanonical(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueString
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchCanonicalArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueString
+}
+
+// Description: Constructs a extension with code value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   code: FHIR code datatype https://www.hl7.org/fhir/r4/datatypes.html#code
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildCodeExtension(url, required code) {
+  url: url
+  valueCode: code
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchCode(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueCode
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchCodeArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueCode
+}
+
+// Description: Constructs a extension with date value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   date: FHIR date datatype https://www.hl7.org/fhir/r4/datatypes.html#date
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildDateExtension(url, required date) {
+  url: url
+  valueDate: date
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchDate(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueDate
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchDateArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueDate
+}
+
+// Description: Constructs a extension with dateTime value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   dateTime: FHIR dateTime datatype https://www.hl7.org/fhir/r4/datatypes.html#dateTime
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildDateTimeExtension(url, required dateTime) {
+  url: url
+  valueDateTime: dateTime
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchDateTime(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueDateTime
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchDateTimeArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueDateTime
+}
+
+// Description: Constructs a extension with decimal value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   decimal: FHIR decimal datatype https://www.hl7.org/fhir/r4/datatypes.html#decimal
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildDecimalExtension(url, required decimal) {
+  url: url
+  valueDecimal: decimal
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchDecimal(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueDecimal
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchDecimalArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueDecimal
+}
+
+// Description: Constructs a extension with id value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   id: FHIR id datatype https://www.hl7.org/fhir/r4/datatypes.html#id
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildIdExtension(url, required id) {
+  url: url
+  valueId: id
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchId(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueId
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchIdArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueId
+}
+
+// Description: Constructs a extension with instant value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   instant: FHIR instant datatype https://www.hl7.org/fhir/r4/datatypes.html#instant
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildInstantExtension(url, required instant) {
+  url: url
+  valueInstant: instant
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchInstant(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueInstant
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchInstantArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueInstant
+}
+
+// Description: Constructs a extension with integer value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   integer: FHIR integer datatype https://www.hl7.org/fhir/r4/datatypes.html#integer
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildIntegerExtension(url, required integer) {
+  url: url
+  valueInteger: integer
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchInteger(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueInteger
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchIntegerArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueInteger
+}
+
+// Description: Constructs a extension with markdown value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   markdown: FHIR markdown datatype https://www.hl7.org/fhir/r4/datatypes.html#markdown
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildMarkdownExtension(url, required markdown) {
+  url: url
+  valueString: markdown
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchMarkdown(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueString
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchMarkdownArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueString
+}
+
+// Description: Constructs a extension with oid value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   oid: FHIR oid datatype https://www.hl7.org/fhir/r4/datatypes.html#oid
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildOidExtension(url, required oid) {
+  url: url
+  valueOid: oid
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchOid(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueOid
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchOidArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueOid
+}
+
+// Description: Constructs a extension with positiveInt value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   positiveInt: FHIR positiveInt datatype https://www.hl7.org/fhir/r4/datatypes.html#positiveInt
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildPositiveIntExtension(url, required positiveInt) {
+  url: url
+  valueInteger: positiveInt
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchPositiveInt(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueInteger
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchPositiveIntArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueInteger
+}
+
+// Description: Constructs a extension with string value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   string: FHIR string datatype https://www.hl7.org/fhir/r4/datatypes.html#string
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildStringExtension(url, required string) {
+  url: url
+  valueString: string
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchString(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueString
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchStringArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueString
+}
+
+// Description: Constructs a extension with time value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   time: FHIR time datatype https://www.hl7.org/fhir/r4/datatypes.html#time
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildTimeExtension(url, required time) {
+  url: url
+  valueTime: time
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchTime(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueTime
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchTimeArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueTime
+}
+
+// Description: Constructs a extension with unsignedInt value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   unsignedInt: FHIR unsignedInt datatype https://www.hl7.org/fhir/r4/datatypes.html#unsignedInt
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildUnsignedIntExtension(url, required unsignedInt) {
+  url: url
+  valueUnsignedInt: unsignedInt
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchUnsignedInt(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueUnsignedInt
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchUnsignedIntArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueUnsignedInt
+}
+
+// Description: Constructs a extension with uri value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   uri: FHIR uri datatype https://www.hl7.org/fhir/r4/datatypes.html#uri
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildUriExtension(url, required uri) {
+  url: url
+  valueUri: uri
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchUri(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueUri
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchUriArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueUri
+}
+
+// Description: Constructs a extension with url value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   url: FHIR url datatype https://www.hl7.org/fhir/r4/datatypes.htmlExtension(url
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildUrlExtension(url, required url) {
+  url: url
+  valueString: url
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchUrl(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueString
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchUrlArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueString
+}
+
+// Description: Constructs a extension with uuid value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   uuid: FHIR uuid datatype https://www.hl7.org/fhir/r4/datatypes.html#uuid
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildUuidExtension(url, required uuid) {
+  url: url
+  valueString: uuid
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchUuid(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueString
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchUuidArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueString
+}
+
+// Description: Constructs a extension with address value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   address: FHIR address datatype https://www.hl7.org/fhir/r4/datatypes.html#address
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildAddressExtension(url, required address) {
+  url: url
+  valueAddress: address
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchAddressExtension(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueAddress
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchAddressArrayExtension(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueAddress
+}
+
+// Description: Constructs a extension with Age.Id value
+//
+// Argument(s):
+//   string: FHIR Age.Id datatype https://www.hl7.org/fhir/r4/datatypes.html#string
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def Age_IdToExtension(required string) {
+  url: "https://www.hl7.org/fhir/datatypes-definitions.html#Age.id"
+  valueString: string
+}
+
+// Description: Constructs a extension with Age.Value value
+//
+// Argument(s):
+//   value: FHIR Age.Value datatype https://www.hl7.org/fhir/r4/datatypes.html#decimal
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def Age_ValueToExtension(required value) {
+  url: "https://www.hl7.org/fhir/datatypes-definitions.html#Age.value"
+  valueDecimal: value
+}
+
+// Description: Constructs a extension with Age.Comparator value
+//
+// Argument(s):
+//   comparator: FHIR Age.Comparator datatype https://www.hl7.org/fhir/r4/datatypes.html#code
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def Age_ComparatorToExtension(required comparator) {
+  url: "https://www.hl7.org/fhir/datatypes-definitions.html#Age.comparator"
+  valueCode: comparator
+}
+
+// Description: Constructs a extension with Age.Unit value
+//
+// Argument(s):
+//   unit: FHIR Age.Unit datatype https://www.hl7.org/fhir/r4/datatypes.html#string
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def Age_UnitToExtension(required unit) {
+  url: "https://www.hl7.org/fhir/datatypes-definitions.html#Age.unit"
+  valueString: unit
+}
+
+// Description: Constructs a extension with Age.System value
+//
+// Argument(s):
+//   system: FHIR Age.System datatype https://www.hl7.org/fhir/r4/datatypes.html#uri
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def Age_SystemToExtension(required system) {
+  url: "https://www.hl7.org/fhir/datatypes-definitions.html#Age.system"
+  valueUri: system
+}
+
+// Description: Constructs a extension with Age.Code value
+//
+// Argument(s):
+//   code: FHIR Age.Code datatype https://www.hl7.org/fhir/r4/datatypes.html#code
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def Age_CodeToExtension(required code) {
+  url: "https://www.hl7.org/fhir/datatypes-definitions.html#Age.code"
+  valueCode: code
+}
+
+// Description: fetches a Age from Extension
+//
+// Argument(s):
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR Age: https://www.hl7.org/fhir/r4/datatypes.html#Age
+//
+def ExtensionToAge(extension) {
+  id: fetchString("https://www.hl7.org/fhir/datatypes-definitions.html#Age.id", extension)
+  value: fetchDecimal("https://www.hl7.org/fhir/datatypes-definitions.html#Age.value", extension)
+  comparator: fetchCode("https://www.hl7.org/fhir/datatypes-definitions.html#Age.comparator", extension)
+  unit: fetchString("https://www.hl7.org/fhir/datatypes-definitions.html#Age.unit", extension)
+  system: fetchUri("https://www.hl7.org/fhir/datatypes-definitions.html#Age.system", extension)
+  code: fetchCode("https://www.hl7.org/fhir/datatypes-definitions.html#Age.code", extension)
+}
+
+// Description: Constructs a extension with Age value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   age: FHIR Age datatype https://www.hl7.org/fhir/r4/datatypes.html#Age
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildAgeExtension(url, required age) {
+  url: url
+  extension[]: Age_IdToExtension(age.id)
+  extension[]: Age_ValueToExtension(age.value)
+  extension[]: Age_ComparatorToExtension(age.comparator)
+  extension[]: Age_UnitToExtension(age.unit)
+  extension[]: Age_SystemToExtension(age.system)
+  extension[]: Age_CodeToExtension(age.code)
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchAge(url, extension) {
+  var result: extension[where $.url == url]
+  ExtensionToAge(result[0].extension)
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchAgeArray(url, extension) {
+  var result: extension[where $.url == url]
+  ExtensionToAge(result[*].extension[])
+}
+
+// Description: Constructs a extension with annotation value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   annotation: FHIR annotation datatype https://www.hl7.org/fhir/r4/datatypes.html#annotation
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildAnnotationExtension(url, required annotation) {
+  url: url
+  valueAnnotation: annotation
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchAnnotation(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueAnnotation
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchAnnotationArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueAnnotation
+}
+
+// Description: Constructs a extension with attachment value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   attachment: FHIR attachment datatype https://www.hl7.org/fhir/r4/datatypes.html#attachment
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildAttachmentExtension(url, required attachment) {
+  url: url
+  valueAttachment: attachment
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchAttachment(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueAttachment
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchAttachmentArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueAttachment
+}
+
+// Description: Constructs a extension with CodeableConcept value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   codeableConcept: FHIR CodeableConcept datatype https://www.hl7.org/fhir/r4/datatypes.html#codeableconcept
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildCodeableConceptExtension(url, required codeableConcept) {
+  url: url
+  valueCodeableConcept: codeableConcept
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchCodeableConcept(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueCodeableConcept
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchCodeableConceptArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueCodeableConcept
+}
+
+// Description: Constructs a extension with coding value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   coding: FHIR coding datatype https://www.hl7.org/fhir/r4/datatypes.html#coding
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildCodingExtension(url, required coding) {
+  url: url
+  valueCoding: coding
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchCoding(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueCoding
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchCodingArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueCoding
+}
+
+// Description: Constructs a extension with ContactDetail.Name value
+//
+// Argument(s):
+//   name: FHIR ContactDetail.Name datatype https://www.hl7.org/fhir/stu3/metadatatypes-definitions.html#ContactDetail.name
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def ContactDetail_NameToExtension(required name) {
+  url: "https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#ContactDetail.name"
+  valueString: name
+}
+
+// Description: Constructs a extension with ContactDetail.Telecom value
+//
+// Argument(s):
+//   telecom: FHIR ContactDetail.Telecom datatype https://www.hl7.org/fhir/stu3/metadatatypes-definitions.html#ContactDetail.telecom
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def ContactDetail_TelecomToExtension(required telecom) {
+  url: "https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#ContactDetail.telecom"
+  valueContactPoint: telecom
+}
+
+// Description: fetches a ContactDetail from array of extensions
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR ContactDetail: https://www.hl7.org/fhir/stu3/metadatatypes.html#ContactDetail
+//
+def ExtensionToContactDetail(extension) {
+  name: fetchString("https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#ContactDetail.name", extension)
+  telecom: fetchContactPointArray("https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#ContactDetail.telecom", extension)
+}
+
+// Description: Constructs a extension with ContactDetail value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   contactDetail: FHIR ContactDetail datatype https://www.hl7.org/fhir/stu3/metadatatypes.html#ContactDetail
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildContactDetailExtension(url, required contactDetail) {
+  url: url
+  extension[]: ContactDetail_NameToExtension(contactDetail.name)
+  extension[]: ContactDetail_TelecomToExtension(contactDetail.telecom[])
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchContactDetail(url, extension) {
+  var result: extension[where $.url == url]
+  ExtensionToContactDetail(result[0].extension)
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchContactDetailArray(url, extension) {
+  var result: extension[where $.url == url]
+  ExtensionToContactDetail(result[*].extension[])
+}
+
+// Description: Constructs a extension with contactPoint value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   contactPoint: FHIR contactPoint datatype https://www.hl7.org/fhir/r4/datatypes.html#contactpoint
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildContactPointExtension(url, required contactPoint) {
+  url: url
+  valueContactPoint: contactPoint
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchContactPoint(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueContactPoint
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchContactPointArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueContactPoint
+}
+
+// Description: Constructs a extension with count value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   count: FHIR count datatype https://www.hl7.org/fhir/r4/datatypes.html#Count
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildCountExtension(url, required count) {
+  url: url
+  valueCount: count
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchCount(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueCount
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchCountArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueCount
+}
+
+// Description: Constructs a extension with distance value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   distance: FHIR distance datatype https://www.hl7.org/fhir/r4/datatypes.html#Distance
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildDistanceExtension(url, required distance) {
+  url: url
+  valueDistance: distance
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchDistance(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueDistance
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchDistanceArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueDistance
+}
+
+// Description: Constructs a extension with duration value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   duration: FHIR duration datatype https://www.hl7.org/fhir/r4/datatypes.html#Duration
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildDurationExtension(url, required duration) {
+  url: url
+  valueDuration: duration
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchDuration(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueDuration
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchDurationArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueDuration
+}
+
+// Description: Constructs a extension with humanName value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   humanName: FHIR humanName datatype https://www.hl7.org/fhir/r4/datatypes.html#HumanName
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildHumanNameExtension(url, required humanName) {
+  url: url
+  valueHumanName: humanName
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchHumanName(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueHumanName
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchHumanNameArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueHumanName
+}
+
+// Description: Constructs a extension with identifier value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   identifier: FHIR identifier datatype https://www.hl7.org/fhir/r4/datatypes.html#Identifier
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildIdentifierExtension(url, required identifier) {
+  url: url
+  valueIdentifier: identifier
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchIdentifier(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueIdentifier
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchIdentifierArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueIdentifier
+}
+
+// Description: Constructs a extension with Money.Value value
+//
+// Argument(s):
+//   value: FHIR Money.Value datatype https://www.hl7.org/fhir/r4/datatypes-definitions.html#Money.value
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def Money_valueToExtension(required value) {
+  url: "https://www.hl7.org/fhir/datatypes-definitions.html#Money.value"
+  valueDecimal: value
+}
+
+// Description: Constructs a extension with Money.Currency value
+//
+// Argument(s):
+//   currency: FHIR Money.Currency datatype https://www.hl7.org/fhir/r4/datatypes-definitions.html#Money.currency
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def Money_CurrencyToExtension(required currency) {
+  url: "https://www.hl7.org/fhir/datatypes-definitions.html#Money.currency"
+  valueCode: currency
+}
+
+// Description: fetches a Money from extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR Money: https://www.hl7.org/fhir/r4/datatypes.html#Money
+//
+def ExtensionToMoney(extension) {
+  value: fetchDecimal("https://www.hl7.org/fhir/datatypes-definitions.html#Money.value", extension)
+  currency: fetchCode("https://www.hl7.org/fhir/datatypes-definitions.html#Money.currency", extension)
+}
+
+// Description: Constructs a extension with money value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   money: FHIR money datatype https://www.hl7.org/fhir/r4/datatypes.html#Money
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildMoneyExtension(url, required money) {
+  url: url
+  extension[]: Money_valueToExtension(money.value)
+  extension[]: Money_CurrencyToExtension(money.currency)
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchMoney(url, extension) {
+  var result: extension[where $.url == url]
+  ExtensionToMoney(result[0].extension)
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchMoneyArray(url, extension) {
+  var result: extension[where $.url == url]
+  ExtensionToMoney(result[*].extension[])
+}
+
+// Description: Constructs a extension with period value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   period: FHIR period datatype https://www.hl7.org/fhir/r4/datatypes.html#Period
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildPeriodExtension(url, required period) {
+  url: url
+  valuePeriod: period
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchPeriod(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valuePeriod
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchPeriodArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valuePeriod
+}
+
+// Description: Constructs a extension with quantity value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   quantity: FHIR quantity datatype https://www.hl7.org/fhir/r4/datatypes.html#Quantity
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildQuantityExtension(url, required quantity) {
+  url: url
+  valueQuantity: quantity
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchQuantity(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueQuantity
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchQuantityArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueQuantity
+}
+
+// Description: Constructs a extension with range value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   range: FHIR range datatype https://www.hl7.org/fhir/r4/datatypes.html#Range
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildRangeExtension(url, required range) {
+  url: url
+  valueRange: range
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchRange(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueRange
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchRangeArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueRange
+}
+
+// Description: Constructs a extension with ratio value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   ratio: FHIR ratio datatype https://www.hl7.org/fhir/r4/datatypes.html#Ratio
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildRatioExtension(url, required ratio) {
+  url: url
+  valueRatio: ratio
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchRatio(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueRatio
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchRatioArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueRatio
+}
+
+// Description: Constructs a extension with reference value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   reference: FHIR reference datatype https://www.hl7.org/fhir/r4/references.html#Reference
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildReferenceExtension(url, required reference) {
+  url: url
+  valueReference.reference: reference.reference
+  valueReference.display: reference.display
+  valueReference.extension[]: BuildUriExtension("https://www.hl7.org/fhir/references-definitions.html#Reference.type", reference.type)
+  valueReference.extension[]: BuildIdentifierExtension("https://www.hl7.org/fhir/STU3/references-definitions.html#Reference.identifier", reference.identifier)
+}
+
+// Description: Converts the reference datatype
+//
+// Argument(s):
+//   reference: FHIR reference datatype https://www.hl7.org/fhir/stu3/references.html#Reference
+//
+// Output(s):
+//   FHIR reference: https://www.hl7.org/fhir/r4/references.html#Reference
+//
+def convertReference(required reference) {
+  reference: reference.reference
+  display: reference.display
+  identifier: fetchIdentifier("https://www.hl7.org/fhir/STU3/references-definitions.html#Reference.identifier", reference.extension)
+  type: fetchUri("https://www.hl7.org/fhir/references-definitions.html#Reference.type", reference.extension)
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchReference(url, extension) {
+  var result: extension[where $.url == url]
+  convertReference(result[0].valueReference)
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchReferenceArray(url, extension) {
+  var result: extension[where $.url == url]
+  convertReference(result[*].valueReference[])
+}
+
+// Description: Constructs a extension with sampledData value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   sampledData: FHIR sampledData datatype https://www.hl7.org/fhir/r4/datatypes.html#sampleddata
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildSampledDataExtension(url, required sampledData) {
+  url: url
+  valueSampledData: sampledData
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchSampledData(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueSampledData
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchSampledDataArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueSampledData
+}
+
+// Description: Constructs a extension with signature value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   signature: FHIR signature datatype https://www.hl7.org/fhir/r4/datatypes.html#Signature
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildSignatureExtension(url, required signature) {
+  url: url
+  valueSignature: signature
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchSignature(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueSignature
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchSignatureArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueSignature
+}
+
+// Description: Constructs a extension with timing value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   timing: FHIR timing datatype https://www.hl7.org/fhir/r4/datatypes.html#Timing
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildTimingExtension(url, required timing) {
+  url: url
+  valueTiming: timing
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchTiming(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueTiming
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchTimingArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueTiming
+}
+
+// Description: Constructs a extension with contributor value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   contributor: FHIR contributor datatype https://www.hl7.org/fhir/r4/metadatatypes.html#Contributor
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildContributorExtension(url, required contributor) {
+  url: url
+  valueContributor: contributor
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchContributor(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueContributor
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchContributorArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueContributor
+}
+
+// Description: Constructs a extension with dataRequirement value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   dataRequirement: FHIR dataRequirement datatype https://www.hl7.org/fhir/r4/metadatatypes.html#DataRequirement
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildDataRequirementExtension(url, required dataRequirement) {
+  url: url
+  valueDataRequirement: dataRequirement
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchDataRequirement(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueDataRequirement
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchDataRequirementArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueDataRequirement
+}
+
+// Description: Constructs a extension with Expression value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   expression: FHIR Expression datatype https://www.hl7.org/fhir/r4/metadatatypes.html#Expression
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildExpressionExtension(url, required expression) {
+  url: url
+  valueExpression: expression
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchExpression(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueExpression
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchExpressionArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueExpression
+}
+
+// Description: Constructs a extension with ParameterDefinition value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   parameterDefinition: FHIR ParameterDefinition datatype https://www.hl7.org/fhir/r4/metadatatypes.html#ParameterDefinition
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildParameterDefinitionExtension(url, required parameterDefinition) {
+  url: url
+  valueParameterDefinition: parameterDefinition
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchParameterDefinition(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueParameterDefinition
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchParameterDefinitionArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueParameterDefinition
+}
+
+// Description: Constructs a extension with RelatedArtifact value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   relatedArtifact: FHIR RelatedArtifact datatype https://www.hl7.org/fhir/r4/metadatatypes.html#RelatedArtifact
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildRelatedArtifactExtension(url, required relatedArtifact) {
+  url: url
+  valueRelatedArtifact: relatedArtifact
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchRelatedArtifact(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueRelatedArtifact
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchRelatedArtifactArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueRelatedArtifact
+}
+
+// Description: Constructs a extension with TriggerDefinition value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   triggerDefinition: FHIR TriggerDefinition datatype https://www.hl7.org/fhir/r4/metadatatypes.html#TriggerDefinition
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildTriggerDefinitionExtension(url, required triggerDefinition) {
+  url: url
+  valueTriggerDefinition: triggerDefinition
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchTriggerDefinition(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueTriggerDefinition
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchTriggerDefinitionArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueTriggerDefinition
+}
+
+// Description: Constructs a extension with UsageContext.Code value
+//
+// Argument(s):
+//   code: FHIR Coding datatype https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#UsageContext.code
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def UsageContext_CodeToExtension(required code) {
+  url: "https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#UsageContext.code"
+  valueCoding: code
+}
+
+// Description: Constructs a extension with UsageContext.ValueCodeableConcept value
+//
+// Argument(s):
+//   codeableConcept: FHIR CodeableConcept datatype https://www.hl7.org/fhir/r4/datatypes.html#codeableConcept
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def UsageContext_ValueCodeableConceptToExtension(required codeableConcept) {
+  url: "https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#UsageContext.valueCodeableConcept"
+  valueCodeableConcept: codeableConcept
+}
+
+// Description: Constructs a extension with UsageContext.ValueQuantity value
+//
+// Argument(s):
+//   quantity: FHIR Quantity datatype https://www.hl7.org/fhir/r4/datatypes.html#Quantity
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def UsageContext_ValueQuantityToExtension(required quantity) {
+  url: "https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#UsageContext.valueQuantity"
+  valueQuantity: quantity
+}
+
+// Description: Constructs a extension with UsageContext.ValueRange value
+//
+// Argument(s):
+//   range: FHIR Range datatype https://www.hl7.org/fhir/r4/datatypes.html#Range
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def UsageContext_ValueRangeToExtension(required range) {
+  url: "https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#UsageContext.valueRange"
+  valueRange: range
+}
+
+// Description: fetches a UsageContext from extension with given url from the extension array
+//
+// Argument(s):
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/r4/metadatatypes.html#UsageContext
+//
+def ExtensionToUsageContext(extension) {
+  name: fetchString("https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#UsageContext.code", extension)
+  valueCodeableConcept: fetchCodeableConcept("https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#UsageContext.valueCodeableConcept", extension)
+  valueQuantity: fetchQuantity("https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#UsageContext.valueQuantity", extension)
+  valueRange: fetchRange("https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#UsageContext.valueRange", extension)
+}
+
+// Description: Constructs a extension with UsageContext value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   usageContext: FHIR UsageContext datatype https://www.hl7.org/fhir/r4/metadatatypes.html#UsageContext
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildUsageContextExtension(url, required usageContext) {
+  url: url
+  extension[]: UsageContext_CodeToExtension(usageContext.code)
+  extension[]: UsageContext_ValueCodeableConceptToExtension(usageContext.valueCodeableConcept)
+  extension[]: UsageContext_ValueQuantityToExtension(usageContext.valueQuantity)
+  extension[]: UsageContext_ValueRangeToExtension(usageContext.valueRange)
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchUsageContext(url, extension) {
+  var result: extension[where $.url == url]
+  ExtensionToUsageContext(result[0].extension)
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchUsageContextArray(url, extension) {
+  var result: extension[where $.url == url]
+  ExtensionToUsageContext(result[*].extension[])
+}
+
+// Description: Constructs a extension with Dosage value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   dosage: FHIR Dosage datatype https://www.hl7.org/fhir/r4/dosage.html#Dosage
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildDosageExtension(url, required dosage) {
+  url: url
+  valueDosage: dosage
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchDosage(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueDosage
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchDosageArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueDosage
+}
+
+// Description: Constructs a extension with Meta value
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   meta: FHIR Meta datatype https://www.hl7.org/fhir/r4/resource.html#Meta
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def BuildMetaExtension(url, required meta) {
+  if meta then {
+    url: url
+    valueMeta: meta
+  }
+}
+
+// Description: fetches a extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchMeta(url, extension) {
+  var result: extension[where $.url == url]
+  result[0].valueMeta
+}
+
+// Description: fetches an array of extension with given url from the extension array
+//
+// Argument(s):
+//   url:  FHIR url datatype
+//   extension: array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR extension array: https://www.hl7.org/fhir/extensibility.html#extension
+//
+def fetchMetaArray(url, extension) {
+  var result: extension[where $.url == url]
+  result[*].valueMeta
+}

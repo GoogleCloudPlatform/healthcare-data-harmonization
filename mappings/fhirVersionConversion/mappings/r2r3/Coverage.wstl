@@ -1,0 +1,74 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def CoverageBase(coverage) {
+  resourcebase::ResourceBase(coverage)
+  identifier: coverage.identifier
+  period: coverage.period
+}
+
+def R2CoverageToR3(coverage) {
+  CoverageBase(coverage)
+  contained: datatypes::R2ResourceToR3(coverage.contained[])
+  contract: datatypes::R2ReferenceToR3(coverage.contract[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.status", coverage.extension)
+  status: if status? then status else coverage.status
+  type: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.type", coverage.extension)
+  policyHolder: extension::fetchReference("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.policyHolder", coverage.extension)
+  subscriber: extension::fetchReference("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.subscriber", coverage.extension)
+  subscriberId: extension::fetchString("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.subscriberId", coverage.extension)
+  beneficiary: extension::fetchReference("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.beneficiary", coverage.extension)
+  relationship: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.relationship", coverage.extension)
+  payor: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.payor", coverage.extension)
+  grouping.group: coverage.group
+  grouping.plan: coverage.plan
+  grouping.subPlan: coverage.subPlan
+  grouping.groupDisplay: extension::fetchString("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.grouping.groupDisplay", coverage.extension)
+  grouping.subGroup: extension::fetchString("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.grouping.subGroup", coverage.extension)
+  grouping.subGroupDisplay: extension::fetchString("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.grouping.subGroupDisplay", coverage.extension)
+  grouping.planDisplay: extension::fetchString("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.grouping.planDisplay", coverage.extension)
+  grouping.class: extension::fetchString("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.grouping.class", coverage.extension)
+  grouping.subPlanDisplay: extension::fetchString("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.grouping.subPlanDisplay", coverage.extension)
+  grouping.classDisplay: extension::fetchString("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.grouping.classDisplay", coverage.extension)
+  grouping.subClass: extension::fetchString("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.grouping.subClass", coverage.extension)
+  grouping.subClassDisplay: extension::fetchString("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.grouping.subClassDisplay", coverage.extension)
+  dependent: extension::fetchString("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.dependent", coverage.extension)
+  sequence: extension::fetchString("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.sequence", coverage.extension)
+  order: extension::fetchPositiveInt("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.order", coverage.extension)
+  network: extension::fetchString("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.network", coverage.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/coverage-definitions.html#Coverage.issuer", coverage.issuer)
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/DSTU2/coverage-definitions.html#Coverage.bin", coverage.bin)
+}
+
+def R3CoverageToR2(coverage) {
+  CoverageBase(coverage)
+  contained: datatypes::R3ResourceToR2(coverage.contained[])
+  contract: datatypes::R3ReferenceToR2(coverage.contract[])
+  issuer: extension::fetchReference("https://www.hl7.org/fhir/DSTU2/coverage-definitions.html#Coverage.issuer", coverage.extension)
+  bin: extension::fetchIdentifier("https://www.hl7.org/fhir/DSTU2/coverage-definitions.html#Coverage.bin", coverage.extension)
+  group: coverage.grouping.group
+  plan: coverage.grouping.plan
+  subPlan: coverage.grouping.subPlan
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.status", coverage.status)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.type", coverage.type)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.policyHolder", coverage.policyHolder)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.subscriber", coverage.subscriber)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.subscriberId", coverage.subscriberId)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.beneficiary", coverage.beneficiary)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.relationship", coverage.relationship)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.payor", coverage.payor[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.dependent", coverage.dependent)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.sequence", coverage.sequence)
+  extension[]: extension::BuildPositiveIntExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.order", coverage.order)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.network", coverage.network)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.grouping.groupDisplay", coverage.grouping.groupDisplay)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.grouping.subGroup", coverage.grouping.subGroup)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.grouping.subGroupDisplay", coverage.grouping.subGroupDisplay)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.grouping.planDisplay", coverage.grouping.planDisplay)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.grouping.class", coverage.grouping.class)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.grouping.subPlanDisplay", coverage.grouping.subPlanDisplay)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.grouping.classDisplay", coverage.grouping.classDisplay)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.grouping.subClass", coverage.grouping.subClass)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.grouping.subClassDisplay", coverage.grouping.subClassDisplay)
+}

@@ -1,0 +1,162 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   codeSystem : FHIR CodeSystem resource
+//
+// Output(s):
+//   FHIR CodeSystem Resource
+//
+def CodeSystemBase(codeSystem) {
+  resourcebase::ResourceBase(codeSystem)
+  url: codeSystem.url
+  version: codeSystem.version
+  name: codeSystem.name
+  title: codeSystem.title
+  date: codeSystem.date
+  publisher: codeSystem.publisher
+  contact: codeSystem.contact
+  description: codeSystem.description
+  useContext: codeSystem.useContext
+  jurisdiction: codeSystem.jurisdiction
+  purpose: codeSystem.purpose
+  copyright: codeSystem.copyright
+  caseSensitive: codeSystem.caseSensitive
+  compositional: codeSystem.compositional
+  versionNeeded: codeSystem.versionNeeded
+  count: codeSystem.count
+}
+
+// Description: Converts a FHIR STU3 CodeSystem resource to FHIR R4 CodeSystem resource.
+//
+// Argument(s):
+//   codeSystem : FHIR STU3 CodeSystem resource https://www.hl7.org/fhir/stu3/codeSystem.html
+//
+// Output(s):
+//   FHIR R4 CodeSystem Resource https://www.hl7.org/fhir/r4/codeSystem.html
+//
+def R3CodeSystemToR4(codeSystem) {
+  CodeSystemBase(codeSystem)
+  contained: datatypes::R3ResourceToR4(codeSystem.contained[])
+  identifier: R3CodeSystem_IdentifierToR4("https://www.hl7.org/fhir/R4/codesystem-definitions.html#CodeSystem.identifier", codeSystem.extension, codeSystem.identifier)
+  status: codeSystem.status
+  experimental: codeSystem.experimental
+  valueSet: codeSystem.valueSet
+  hierarchyMeaning: codeSystem.hierarchyMeaning
+  content: codeSystem.content
+  supplements: extension::fetchCanonical("https://www.hl7.org/fhir/R4/codesystem-definitions.html#CodeSystem.supplements", codeSystem.extension)
+  filter: codeSystem.filter
+  property: R3CodeSystem_PropertyToR4(codeSystem.property[])
+  concept: R3CodeSystem_ConceptToR4(codeSystem.concept[])
+}
+
+// Description: Converts a FHIR R4 CodeSystem resource to FHIR STU3 CodeSystem resource.
+//
+// Argument(s):
+//   codeSystem : FHIR R4 CodeSystem resource https://www.hl7.org/fhir/r4/codeSystem.html
+//
+// Output(s):
+//   FHIR STU3 CodeSystem Resource https://www.hl7.org/fhir/stu3/codeSystem.html
+//
+def R4CodeSystemToR3(codeSystem) {
+  CodeSystemBase(codeSystem)
+  contained: datatypes::R4ResourceToR3(codeSystem.contained[])
+  identifier: codeSystem.identifier[0]
+  status: codeSystem.status
+  experimental: codeSystem.experimental
+  valueSet: codeSystem.valueSet
+  hierarchyMeaning: codeSystem.hierarchyMeaning
+  content: extension::fetchCode("https://www.hl7.org/fhir/STU3/codesystem-definitions.html#CodeSystem.content", codeSystem.extension)
+  filter: codeSystem.filter
+  property: R4CodeSystem_PropertyToR3(codeSystem.property[])
+  concept: codeSystem.concept
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/R4/codesystem-definitions.html#CodeSystem.identifier", codeSystem.identifier)
+  extension[]: extension::BuildCanonicalExtension("https://www.hl7.org/fhir/R4/codesystem-definitions.html#CodeSystem.supplements", codeSystem.supplements)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/codesystem-definitions.html#CodeSystem.content", codeSystem.content)
+}
+
+// Description: Converts a FHIR STU3 CodeSystem.Identifier to FHIR R4 CodeSystem.Identifier.
+//
+// Argument(s):
+//   data : FHIR STU3 CodeSystem.Identifier http://hl7.org/fhir/STU3/codesystem-definitions.html#CodeSystem.identifier
+//
+// Output(s):
+//   FHIR R4 CodeSystem.Identifier Resource http://hl7.org/fhir/R4/codesystem-definitions.html#CodeSystem.identifier
+//
+def R3CodeSystem_IdentifierToR4(url, extension, data) {
+  var identifier: extension::fetchIdentifierArray(url, extension)
+  if identifier then {
+    identifier
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 CodeSystem.Property to FHIR R4 CodeSystem.Property.
+//
+// Argument(s):
+//   data : FHIR STU3 CodeSystem.Property http://hl7.org/fhir/STU3/codesystem-definitions.html#CodeSystem.propoerty
+//
+// Output(s):
+//   FHIR R4 CodeSystem.Property Resource http://hl7.org/fhir/R4/codesystem-definitions.html#CodeSystem.propoerty
+//
+def R3CodeSystem_PropertyToR4(data) {
+  code: data.code
+  uri: data.uri
+  description: data.description
+  type: data.type
+}
+
+// Description: Converts a FHIR R4 CodeSystem.Property to FHIR STU3 CodeSystem.Property.
+//
+// Argument(s):
+//   data : FHIR R4 CodeSystem.Property http://hl7.org/fhir/R4/codesystem-definitions.html#CodeSystem.property
+//
+// Output(s):
+//   FHIR STU3 CodeSystem.Property Resource http://hl7.org/fhir/STU3/codesystem-definitions.html#CodeSystem.property
+//
+def R4CodeSystem_PropertyToR3(data) {
+  code: data.code
+  uri: data.uri
+  description: data.description
+  type: extension::fetchCode("https://www.hl7.org/fhir/STU3/codesystem-definitions.html#CodeSystem.property.type", data.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/codesystem-definitions.html#CodeSystem.property.type", data.type)
+}
+
+// Description: Converts a FHIR STU3 CodeSystem.Concept to FHIR R4 CodeSystem.Concept.
+//
+// Argument(s):
+//   data : FHIR STU3 CodeSystem.Concept http://hl7.org/fhir/STU3/codesystem-definitions.html#CodeSystem.concept
+//
+// Output(s):
+//   FHIR R4 CodeSystem.Concept Resource http://hl7.org/fhir/R4/codesystem-definitions.html#CodeSystem.concept
+//
+def R3CodeSystem_ConceptToR4(data) {
+  code: data.code
+  display: data.display
+  definition: data.definition
+  designation: data.designation
+  property: R3CodeSystem_Concept_PropertyToR4(data.property[])
+}
+
+// Description: Converts a FHIR STU3 CodeSystem.Concept.Property to FHIR R4 CodeSystem.Concept.Property.
+//
+// Argument(s):
+//   data : FHIR STU3 CodeSystem.Concept.Property http://hl7.org/fhir/STU3/codesystem-definitions.html#CodeSystem.concept.property
+//
+// Output(s):
+//   FHIR R4 CodeSystem.Concept.Property Resource http://hl7.org/fhir/R4/codesystem-definitions.html#CodeSystem.concept.property
+//
+def R3CodeSystem_Concept_PropertyToR4(data) {
+  code: data.code
+  valueCode: data.valueCode
+  valueCoding: data.valueCoding
+  valueString: data.valueString
+  valueInteger: data.valueInteger
+  valueBoolean: data.valueBoolean
+  valueDateTime: data.valueDateTime
+  valueDecimal: extension::fetchDecimal("https://www.hl7.org/fhir/STU3/codesystem-definitions.html#CodeSystem.concept.property.valueDecimal", data.extension)
+}

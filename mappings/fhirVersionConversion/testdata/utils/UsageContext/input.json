@@ -1,0 +1,34 @@
+{
+  "useContext": [
+    {
+      "code": {
+        "system": "http://hl7.org/fhir/usage-context-type",
+        "code": "species"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "337915000",
+            "display": "Homo sapiens"
+          }
+        ]
+      }
+    },
+    {
+      "code": {
+        "system": "http://hl7.org/fhir/usage-context-type",
+        "code": "species2"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "337915000",
+            "display": "Homo sapiens2"
+          }
+        ]
+      }
+    }
+  ]
+}

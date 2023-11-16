@@ -1,0 +1,128 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   supplyRequest : FHIR SupplyRequest resource
+//
+// Output(s):
+//   FHIR SupplyRequest Resource
+//
+def SupplyRequestBase(supplyRequest) {
+  resourcebase::ResourceBase(supplyRequest)
+  category: supplyRequest.category
+  occurrenceDateTime: supplyRequest.occurrenceDateTime
+  occurrencePeriod: supplyRequest.occurrencePeriod
+  occurrenceTiming: supplyRequest.occurrenceTiming
+  authoredOn: supplyRequest.authoredOn
+}
+
+// Description: Converts a FHIR STU3 SupplyRequest resource to FHIR R4 SupplyRequest resource.
+//
+// Argument(s):
+//   supplyRequest : FHIR STU3 SupplyRequest resource https://www.hl7.org/fhir/stu3/supplyrequest.html
+//
+// Output(s):
+//   FHIR R4 SupplyRequest Resource https://www.hl7.org/fhir/r4/supplyrequest.html
+//
+def R3SupplyRequestToR4(supplyRequest) {
+  SupplyRequestBase(supplyRequest)
+  contained: datatypes::R3ResourceToR4(supplyRequest.contained[])
+  deliverFrom: datatypes::R3ReferenceToR4(supplyRequest.deliverFrom)
+  deliverTo: datatypes::R3ReferenceToR4(supplyRequest.deliverTo)
+  identifier: R3SupplyRequest_IdentifierToR4("https://www.hl7.org/fhir/R4/supplyrequest-definitions.html#SupplyRequest.identifier", supplyRequest.extension, supplyRequest.identifier)
+  status: supplyRequest.status
+  priority: supplyRequest.priority
+  if supplyRequest.orderedItem.itemCodeableConcept or supplyRequest.orderedItem.itemReference then {
+    itemCodeableConcept: supplyRequest.orderedItem.itemCodeableConcept
+    itemReference: datatypes::R3ReferenceToR4(supplyRequest.orderedItem.itemReference)
+  } else {
+    // place-holder for 1..1 cardinality
+    itemCodeableConcept.text: "unknown";
+  }
+  quantity: supplyRequest.orderedItem.quantity
+  quantity.value: utilities::defaultIfNull($this.quantity, 0)
+  requester: datatypes::R3ReferenceToR4(supplyRequest.requester.agent)
+  supplier: datatypes::R3ReferenceToR4(supplyRequest.supplier[])
+  reasonCode: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/supplyrequest-definitions.html#SupplyRequest.reasonCode", supplyRequest.extension)
+  reasonReference: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/supplyrequest-definitions.html#SupplyRequest.reasonReference", supplyRequest.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/supplyrequest-definitions.html#SupplyRequest.requester.onBehalfOf", supplyRequest.requester.onBehalfOf)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/supplyrequest-definitions.html#SupplyRequest.reasonCodeableConcept", supplyRequest.reasonCodeableConcept)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/supplyrequest-definitions.html#SupplyRequest.reasonReference", supplyRequest.reasonReference)
+}
+
+// Description: Converts a FHIR R4 SupplyRequest resource to FHIR STU3 SupplyRequest resource.
+//
+// Argument(s):
+//   supplyRequest : FHIR R4 SupplyRequest resource https://www.hl7.org/fhir/r4/supplyrequest.html
+//
+// Output(s):
+//   FHIR STU3 SupplyRequest Resource https://www.hl7.org/fhir/stu3/supplyrequest.html
+//
+def R4SupplyRequestToR3(supplyRequest) {
+  SupplyRequestBase(supplyRequest)
+  contained: datatypes::R4ResourceToR3(supplyRequest.contained[])
+  deliverFrom: datatypes::R4ReferenceToR3(supplyRequest.deliverFrom)
+  deliverTo: datatypes::R4ReferenceToR3(supplyRequest.deliverTo)
+  identifier: supplyRequest.identifier[0]
+  status: supplyRequest.status
+  priority: supplyRequest.priority
+  orderedItem: R4SupplyRequest_OrderedItemToR3(supplyRequest.quantity, supplyRequest.itemReference, supplyRequest.itemCodeableConcept)
+  requester: R4SupplyRequest_RequesterToR3("https://www.hl7.org/fhir/STU3/supplyrequest-definitions.html#SupplyRequest.requester.onBehalfOf", supplyRequest.extension, supplyRequest.requester)
+  supplier: datatypes::R4ReferenceToR3(supplyRequest.supplier[])
+  reasonCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/supplyrequest-definitions.html#SupplyRequest.reasonCodeableConcept", supplyRequest.extension)
+  reasonReference: extension::fetchReference("https://www.hl7.org/fhir/STU3/supplyrequest-definitions.html#SupplyRequest.reasonReference", supplyRequest.extension)
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/R4/supplyrequest-definitions.html#SupplyRequest.identifier", supplyRequest.identifier[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/supplyrequest-definitions.html#SupplyRequest.reasonCode", supplyRequest.reasonCode[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/supplyrequest-definitions.html#SupplyRequest.reasonReference", supplyRequest.reasonReference[])
+}
+
+// Description: Converts a FHIR STU3 SupplyRequest.identifier to FHIR R4 SupplyRequest.identifier.
+//
+// Argument(s):
+//   data : FHIR STU3 SupplyRequest.identifier https://www.hl7.org/fhir/stu3/supplyrequest-definitions.html#SupplyRequest.identifier
+//
+// Output(s):
+//   FHIR R4 SupplyRequest.identifier https://www.hl7.org/fhir/r4/supplyrequest-definitions.html#SupplyRequest.identifier
+//
+def R3SupplyRequest_IdentifierToR4(url, extension, data) {
+  var identifier: extension::fetchIdentifierArray(url, extension)
+  if identifier then {
+    identifier
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Constructs a FHIR STU3 SupplyRequest.orderedItem
+//
+// Argument(s):
+//   quantity : FHIR R4 SupplyRequest.quantity https://www.hl7.org/fhir/r4/supplyrequest-definitions.html#SupplyRequest.quantity
+//   itemReference : FHIR R4 SupplyRequest.itemReference https://www.hl7.org/fhir/r4/supplyrequest-definitions.html#SupplyRequest.itemReference
+//   itemCodeableConcept : FHIR R4 SupplyRequest.quantity itemCodeableConcept://www.hl7.org/fhir/r4/supplyrequest-definitions.html#SupplyRequest.itemCodeableConcept
+//
+// Output(s):
+//   FHIR STU3 SupplyRequest.orderedItem https://www.hl7.org/fhir/stu3/supplyrequest-definitions.html#SupplyRequest.orderedItem
+//
+def R4SupplyRequest_OrderedItemToR3(quantity, itemReference, itemCodeableConcept) {
+  quantity: quantity
+  itemReference: datatypes::R4ReferenceToR3(itemReference)
+  itemCodeableConcept: itemCodeableConcept
+}
+
+// Description: Constructs a FHIR STU3 SupplyRequest.requester
+//
+// Argument(s):
+//   url : url datatype https://www.hl7.org/fhir/r4/datatypes.html#url
+//   extension : FHIR extension https://www.hl7.org/fhir/extensibility.html#extension
+//   data : FHIR R4 SupplyRequest.requester https://www.hl7.org/fhir/r4/supplyrequest-definitions.html#SupplyRequest.itemReference
+//
+// Output(s):
+//   FHIR STU3 SupplyRequest.requester https://www.hl7.org/fhir/stu3/supplyrequest-definitions.html#SupplyRequest.requester
+//
+def R4SupplyRequest_RequesterToR3(url, extension, data) {
+  agent: datatypes::R4ReferenceToR3(data)
+  onBehalfOf: extension::fetchReference(url, extension)
+}

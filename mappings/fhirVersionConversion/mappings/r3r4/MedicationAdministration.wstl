@@ -1,0 +1,111 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   medicationAdministration : FHIR MedicationAdministration resource
+//
+// Output(s):
+//   FHIR MedicationAdministration Resource
+//
+def MedicationAdministrationBase(medicationAdministration) {
+  resourcebase::ResourceBase(medicationAdministration)
+  identifier: medicationAdministration.identifier
+  category: medicationAdministration.category
+  medicationCodeableConcept: medicationAdministration.medicationCodeableConcept
+  effectiveDateTime: medicationAdministration.effectiveDateTime
+  effectivePeriod: medicationAdministration.effectivePeriod
+  reasonCode: medicationAdministration.reasonCode
+  note: medicationAdministration.note
+}
+
+// Description: Converts a FHIR STU3 MedicationAdministration resource to FHIR R4 MedicationAdministration resource.
+//
+// Argument(s):
+//   medicationAdministration : FHIR STU3 MedicationAdministration resource https://www.hl7.org/fhir/stu3/medicationadministration.html
+//
+// Output(s):
+//   FHIR R4 MedicationAdministration Resource https://www.hl7.org/fhir/r4/medicationadministration.html
+//
+def R3MedicationAdministrationToR4(medicationAdministration) {
+  MedicationAdministrationBase(medicationAdministration)
+  contained: datatypes::R3ResourceToR4(medicationAdministration.contained[])
+  eventHistory: datatypes::R3ReferenceToR4(medicationAdministration.eventHistory[])
+  device: datatypes::R3ReferenceToR4(medicationAdministration.device[])
+  supportingInformation: datatypes::R3ReferenceToR4(medicationAdministration.supportingInformation[])
+  subject: datatypes::R3ReferenceToR4(medicationAdministration.subject)
+  context: datatypes::R3ReferenceToR4(medicationAdministration.context)
+  medicationReference: datatypes::R3ReferenceToR4(medicationAdministration.medicationReference)
+  partOf: datatypes::R3ReferenceToR4(medicationAdministration.partOf[])
+  instantiates: datatypes::ReferenceToCanonical(medicationAdministration.definition[])
+  status: medicationAdministration.status
+  statusReason: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/medicationadministration-definitions.html#MedicationAdministration.statusReason", medicationAdministration.extension)
+  performer: R3MedicationAdministration_PerformerToR4(medicationAdministration.performer[])
+  reasonReference: datatypes::R3ReferenceToR4(medicationAdministration.reasonReference[])
+  request: datatypes::R3ReferenceToR4(medicationAdministration.prescription)
+  dosage: medicationAdministration.dosage
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.notGiven", medicationAdministration.notGiven)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.reasonNotGiven", medicationAdministration.reasonNotGiven[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.reasonReference", medicationAdministration.reasonReference[])
+}
+
+// Description: Converts a FHIR R4 MedicationAdministration resource to FHIR STU3 MedicationAdministration resource.
+//
+// Argument(s):
+//   medicationAdministration : FHIR R4 MedicationAdministration resource https://www.hl7.org/fhir/r4/medicationadministration.html
+//
+// Output(s):
+//   FHIR STU3 MedicationAdministration Resource https://www.hl7.org/fhir/stu3/medicationadministration.html
+//
+def R4MedicationAdministrationToR3(medicationAdministration) {
+  MedicationAdministrationBase(medicationAdministration)
+  contained: datatypes::R4ResourceToR3(medicationAdministration.contained[])
+  eventHistory: datatypes::R4ReferenceToR3(medicationAdministration.eventHistory[])
+  device: datatypes::R4ReferenceToR3(medicationAdministration.device[])
+  supportingInformation: datatypes::R4ReferenceToR3(medicationAdministration.supportingInformation[])
+  subject: datatypes::R4ReferenceToR3(medicationAdministration.subject)
+  context: datatypes::R4ReferenceToR3(medicationAdministration.context)
+  medicationReference: datatypes::R4ReferenceToR3(medicationAdministration.medicationReference)
+  partOf: datatypes::R4ReferenceToR3(medicationAdministration.partOf[])
+  definition: datatypes::CanonicalToReference(medicationAdministration.instantiates)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.status", medicationAdministration.extension)
+  status: if status? then status else medicationAdministration.status
+  performer: R4MedicationAdministration_PerformerToR3(medicationAdministration.performer[])
+  notGiven: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.notGiven", medicationAdministration.extension)
+  reasonNotGiven: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.reasonNotGiven", medicationAdministration.extension)
+  reasonReference: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.reasonReference", medicationAdministration.extension)
+  prescription: datatypes::R4ReferenceToR3(medicationAdministration.request)
+  dosage: medicationAdministration.dosage
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/medicationadministration-definitions.html#MedicationAdministration.statusReason", medicationAdministration.statusReason[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/medicationadministration-definitions.html#MedicationAdministration.status", medicationAdministration.status)
+}
+
+// Description: Converts a FHIR STU3 MedicationAdministration.Performer to FHIR R4 MedicationAdministration.Performer.
+//
+// Argument(s):
+//   data : FHIR STU3 MedicationAdministration.Performer http://hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.performer
+//
+// Output(s):
+//   FHIR R4 MedicationAdministration.Performer http://hl7.org/fhir/R4/medicationadministration-definitions.html#MedicationAdministration.performer
+//
+def R3MedicationAdministration_PerformerToR4(data) {
+  function: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/medicationadministration-definitions.html#MedicationAdministration.performer.function", data.extension)
+  actor: datatypes::R3ReferenceToR4(data.actor)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/R4/medicationadministration-definitions.html#MedicationAdministration.performer.onBehalfOf", data.onBehalfOf)
+}
+
+// Description: Converts a FHIR R4 MedicationAdministration.Performer to FHIR STU3 MedicationAdministration.Performer.
+//
+// Argument(s):
+//   data : FHIR R4 MedicationAdministration.Performer http://hl7.org/fhir/R4/medicationadministration-definitions.html#MedicationAdministration.performer
+//
+// Output(s):
+//   FHIR STU3 MedicationAdministration.Performer http://hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.performer
+//
+def R4MedicationAdministration_PerformerToR3(data) {
+  actor: datatypes::R4ReferenceToR3(data.actor)
+  onBehalfOf: extension::fetchReference("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.performer.onBehalfOf", data.extension)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/medicationadministration-definitions.html#MedicationAdministration.performer.function", data.function)
+}

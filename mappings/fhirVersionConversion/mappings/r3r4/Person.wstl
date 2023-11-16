@@ -1,0 +1,80 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   person : FHIR Person resource
+//
+// Output(s):
+//   FHIR Person Resource
+//
+def PersonBase(person) {
+  resourcebase::ResourceBase(person)
+  identifier: person.identifier
+  name: person.name
+  telecom: person.telecom
+  birthDate: person.birthDate
+  address: person.address
+  photo: person.photo
+  active: person.active
+}
+
+// Description: Converts a FHIR STU3 Person resource to FHIR R4 Person resource.
+//
+// Argument(s):
+//   person : FHIR STU3 Person resource https://www.hl7.org/fhir/stu3/person.html
+//
+// Output(s):
+//   FHIR R4 Person Resource https://www.hl7.org/fhir/r4/person.html
+//
+def R3PersonToR4(person) {
+  PersonBase(person)
+  contained: datatypes::R3ResourceToR4(person.contained[])
+  managingOrganization: datatypes::R3ReferenceToR4(person.managingOrganization)
+  gender: person.gender
+  link: R3Person_LinkToR4(person.link[])
+}
+
+// Description: Converts a FHIR R4 Person resource to FHIR STU3 Person resource.
+//
+// Argument(s):
+//   person : FHIR R4 Person resource https://www.hl7.org/fhir/r4/person.html
+//
+// Output(s):
+//   FHIR STU3 Person Resource https://www.hl7.org/fhir/stu3/person.html
+//
+def R4PersonToR3(person) {
+  PersonBase(person)
+  contained: datatypes::R4ResourceToR3(person.contained[])
+  managingOrganization: datatypes::R4ReferenceToR3(person.managingOrganization)
+  gender: person.gender
+  link: R4Person_LinkToR3(person.link[])
+}
+
+// Description: Converts a FHIR STU3 Person.Link to FHIR R4 Person.Link.
+//
+// Argument(s):
+//   data : FHIR STU3 Person.Link http://hl7.org/fhir/STU3/person-definitions.html#Person.link
+//
+// Output(s):
+//   FHIR R4 Person.Link http://hl7.org/fhir/R4/person-definitions.html#Person.link
+//
+def R3Person_LinkToR4(data) {
+  target: datatypes::R3ReferenceToR4(data.target)
+  assurance: data.assurance
+}
+
+// Description: Converts a FHIR R4 Person.Link to FHIR STU3 Person.Link.
+//
+// Argument(s):
+//   data : FHIR R4 Person.Link http://hl7.org/fhir/R4/person-definitions.html#Person.link
+//
+// Output(s):
+//   FHIR STU3 Person.Link http://hl7.org/fhir/STU3/person-definitions.html#Person.link
+//
+def R4Person_LinkToR3(data) {
+  target: datatypes::R4ReferenceToR3(data.target)
+  assurance: data.assurance
+}

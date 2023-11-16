@@ -1,0 +1,38 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def EnrollmentRequestBase(enrollmentRequest) {
+  resourcebase::ResourceBase(enrollmentRequest)
+  identifier: enrollmentRequest.identifier
+  created: enrollmentRequest.created
+}
+
+def R2EnrollmentRequestToR3(enrollmentRequest) {
+  EnrollmentRequestBase(enrollmentRequest)
+  contained: datatypes::R2ResourceToR3(enrollmentRequest.contained[])
+  organization: datatypes::R2ReferenceToR3(enrollmentRequest.organization)
+  provider: datatypes::R2ReferenceToR3(enrollmentRequest.provider)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/enrollmentrequest-definitions.html#EnrollmentRequest.status", enrollmentRequest.extension)
+  status: if status? then status else enrollmentRequest.status
+  insurer: datatypes::R2ReferenceToR3(enrollmentRequest.target)
+  subject: datatypes::R2ReferenceToR3(enrollmentRequest.subject)
+  coverage: datatypes::R2ReferenceToR3(enrollmentRequest.coverage)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/enrollmentrequest-definitions.html#EnrollmentRequest.ruleset", enrollmentRequest.ruleset)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/enrollmentrequest-definitions.html#EnrollmentRequest.originalRuleset", enrollmentRequest.originalRuleset)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/enrollmentrequest-definitions.html#EnrollmentRequest.relationship", enrollmentRequest.relationship)
+}
+
+def R3EnrollmentRequestToR2(enrollmentRequest) {
+  EnrollmentRequestBase(enrollmentRequest)
+  contained: datatypes::R3ResourceToR2(enrollmentRequest.contained[])
+  organization: datatypes::R3ReferenceToR2(enrollmentRequest.organization)
+  provider: datatypes::R3ReferenceToR2(enrollmentRequest.provider)
+  subject: datatypes::R3ReferenceToR2(enrollmentRequest.subject)
+  coverage: datatypes::R3ReferenceToR2(enrollmentRequest.coverage)
+  ruleset: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/enrollmentrequest-definitions.html#EnrollmentRequest.ruleset", enrollmentRequest.extension)
+  originalRuleset: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/enrollmentrequest-definitions.html#EnrollmentRequest.originalRuleset", enrollmentRequest.extension)
+  target: datatypes::R3ReferenceToR2(enrollmentRequest.insurer)
+  relationship: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/enrollmentrequest-definitions.html#EnrollmentRequest.relationship", enrollmentRequest.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/enrollmentrequest-definitions.html#EnrollmentRequest.status", enrollmentRequest.status)
+}

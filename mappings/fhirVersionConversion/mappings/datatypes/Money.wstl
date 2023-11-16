@@ -1,0 +1,40 @@
+package datatypes
+
+// Description: Converts a FHIR STU3 Money datatype to FHIR R4 Money.
+//
+// Argument(s):
+//   money : FHIR STU3 Money http://hl7.org/fhir/STU3/datatypes.html#Money
+//
+// Output(s):
+//   FHIR R4 Money http://hl7.org/fhir/R4/datatypes.html#Money
+//
+def R3MoneyToR4(required money) {
+  value: money.value
+  currency: money.code
+}
+
+// Description: Converts a FHIR R4 Money datatype to FHIR STU3 Money.
+//
+// Argument(s):
+//   money : FHIR R4 Money http://hl7.org/fhir/R4/datatypes.html#Money
+//
+// Output(s):
+//   FHIR STU3 Money http://hl7.org/fhir/STU3/datatypes.html#Money
+//
+def R4MoneyToR3(required money) {
+  value: money.value
+  code: money.currency
+  system: "urn:iso:std:iso:4217"
+}
+
+// Description: Converts a Money datatype to Quantity datatype
+//
+// Argument(s):
+//   money: FHIR Money datatype https://www.hl7.org/fhir/datatypes.html#Money
+//
+// Output(s):
+//   FHIR Quantity datatype https://www.hl7.org/fhir/datatypes.html#Quantity
+//
+def MoneyToQuantity(required money) {
+  money.low
+}

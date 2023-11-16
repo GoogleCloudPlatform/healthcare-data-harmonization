@@ -1,0 +1,5 @@
+// store to extension
+extension[]: addMarkdown("test_url", $root.data)
+
+// fetch from extension
+data: fetchMarkdown("test_url", $root.extension)

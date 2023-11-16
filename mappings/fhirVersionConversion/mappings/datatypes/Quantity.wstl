@@ -1,0 +1,14 @@
+package datatypes
+
+// Description: Converts a Quantity datatype to Money datatype
+//
+// Argument(s):
+//   quantity: FHIR Quantity datatype https://www.hl7.org/fhir/datatypes.html#Quantity
+//
+// Output(s):
+//   FHIR Money datatype https://www.hl7.org/fhir/datatypes.html#Money
+//
+def QuantityToMoney(low, high) {
+  low: low
+  high: high
+}

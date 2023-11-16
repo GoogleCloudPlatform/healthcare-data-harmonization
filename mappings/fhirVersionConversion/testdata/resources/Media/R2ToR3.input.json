@@ -1,0 +1,78 @@
+{
+  "content": {
+    "contentType": "application/dicom",
+    "url": "http://imaging.acme.com/wado/server?requestType=WADO\u0026contentType=application%2Fdicom\u0026studyUid=1.2.840.113619.2.21.848.34082.0.538976288.3\u0026seriesUid=1.2.840.113619.2.21.3408.700.0.757923840.3.0\u0026objectUid=1.2.840.11361907579238403408700.3.0.14.19970327150033"
+  },
+  "extension": [
+    {
+      "url": "http://nema.org/fhir/extensions#0002-0010",
+      "valueUri": "urn:oid:1.2.840.10008.1.2.1"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/media-definitions.html#Media.device",
+      "valueReference": {
+        "display": "G.E. Medical Systems"
+      }
+    }
+  ],
+  "height": 480,
+  "id": "1.2.840.11361907579238403408700.3.0.14.19970327150033",
+  "identifier": [
+    {
+      "system": "urn:ietf:rfc:3986",
+      "type": {
+        "text": "InstanceUID"
+      },
+      "use": "official",
+      "value": "urn:oid:1.2.840.11361907579238403408700.3.0.14.19970327150033"
+    },
+    {
+      "system": "http://acme-imaging.com/accession/2012",
+      "type": {
+        "text": "accessionNo"
+      },
+      "value": "1234567"
+    },
+    {
+      "system": "urn:ietf:rfc:3986",
+      "type": {
+        "text": "studyId"
+      },
+      "value": "urn:oid:1.2.840.113619.2.21.848.34082.0.538976288.3"
+    },
+    {
+      "system": "urn:ietf:rfc:3986",
+      "type": {
+        "text": "seriesId"
+      },
+      "value": "urn:oid:1.2.840.113619.2.21.3408.700.0.757923840.3.0"
+    }
+  ],
+  "resourceType": "Media",
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "subtype": {
+    "coding": [
+      {
+        "code": "US",
+        "system": "http://dicom.nema.org/resources/ontology/DCM"
+      }
+    ]
+  },
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\n      Ultrasound Image on patient \u0026quot;James Chalmers\u0026quot;:\u003cbr/\u003e\n      \u003cimg src=\"http://imaging.acme.com/wado/server?requestType=WADO\u0026amp;contentType=application%2Fdicom\u0026amp;studyUid=1.2.840.113619.2.21.848.34082.0.538976288.3\u0026amp;seriesUid=1.2.840.113619.2.21.3408.700.0.757923840.3.0\u0026amp;objectUid=1.2.840.11361907579238403408700.3.0.14.19970327150033\" alt=\"WADO reference to image\"/\u003e\n        \n    \u003c/div\u003e",
+    "status": "generated"
+  },
+  "type": "photo",
+  "view": {
+    "coding": [
+      {
+        "code": "399067008",
+        "display": "Lateral projection",
+        "system": "http://snomed.info/sct"
+      }
+    ]
+  },
+  "width": 640
+}

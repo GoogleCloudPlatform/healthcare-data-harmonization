@@ -1,0 +1,131 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   goal : FHIR Goal resource
+//
+// Output(s):
+//   FHIR Goal Resource
+//
+def GoalBase(goal) {
+  resourcebase::ResourceBase(goal)
+  identifier: goal.identifier
+  category: goal.category
+  priority: goal.priority
+  description: goal.description
+  startDate: goal.startDate
+  startCodeableConcept: goal.startCodeableConcept
+  statusDate: goal.statusDate
+  statusReason: goal.statusReason
+  note: goal.note
+  outcomeCode: goal.outcomeCode
+}
+
+// Description: Converts a FHIR STU3 Goal resource to FHIR R4 Goal resource.
+//
+// Argument(s):
+//   goal : FHIR STU3 Goal resource https://www.hl7.org/fhir/stu3/goal.html
+//
+// Output(s):
+//   FHIR R4 Goal Resource https://www.hl7.org/fhir/r4/goal.html
+//
+def R3GoalToR4(goal) {
+  GoalBase(goal)
+  contained: datatypes::R3ResourceToR4(goal.contained[])
+  outcomeReference: datatypes::R3ReferenceToR4(goal.outcomeReference[])
+  lifecycleStatus: utilities::Convert_TerminologyCode(goal.status, "http://hl7.org/fhir/goal-status", "Goal_LifeCycleStatus")
+  achievementStatus: BuildR4_Goal_AchievementStatus("https://www.hl7.org/fhir/R4/goal-definitions.html#Goal.achievementStatus", goal.extension, goal.status)
+  subject: datatypes::R3ReferenceToR4(goal.subject)
+  subject.display: utilities::defaultIfNull($this.subject, "Unknown")
+  target[]: R3Goal_TargetToR4(goal.target)
+  expressedBy: datatypes::R3ReferenceToR4(goal.expressedBy)
+  addresses: datatypes::R3ReferenceToR4(goal.addresses[where !matchesRegex($.reference, "^ProcedureRequest.*")][])
+}
+
+// Description: Converts a FHIR R4 Goal resource to FHIR STU3 Goal resource.
+//
+// Argument(s):
+//   goal : FHIR R4 Goal resource https://www.hl7.org/fhir/r4/goal.html
+//
+// Output(s):
+//   FHIR STU3 Goal Resource https://www.hl7.org/fhir/stu3/goal.html
+//
+def R4GoalToR3(goal) {
+  GoalBase(goal)
+  contained: datatypes::R4ResourceToR3(goal.contained[])
+  outcomeReference: datatypes::R4ReferenceToR3(goal.outcomeReference[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/goal-definitions.html#Goal.status", goal.extension)
+  status: if status? then status else goal.status
+  subject: datatypes::R4ReferenceToR3(goal.subject)
+  target: R4Goal_TargetToR3(goal.target)
+  expressedBy: datatypes::R4ReferenceToR3(goal.expressedBy)
+  addresses: datatypes::R4ReferenceToR3(goal.addresses[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/goal-definitions.html#Goal.achievementStatus", goal.achievementStatus)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/goal-definitions.html#Goal.lifecycleStatus", goal.lifecycleStatus)
+}
+
+// Description: Converts a FHIR STU3 Goal.Target to FHIR R4 Goal.Target.
+//
+// Argument(s):
+//   data : FHIR STU3 Goal.Target http://hl7.org/fhir/STU3/goal-definitions.html#Goal.target
+//
+// Output(s):
+//   FHIR R4 Goal.Target http://hl7.org/fhir/R4/goal-definitions.html#Goal.target
+//
+def R3Goal_TargetToR4(data) {
+  measure: data.measure
+  detailQuantity: data.detailQuantity
+  detailRange: data.detailRange
+  detailCodeableConcept: data.detailCodeableConcept
+  detailString: extension::fetchString("https://www.hl7.org/fhir/R4/goal-definitions.html#Goal.target.detailString", data.extension)
+  detailBoolean: extension::fetchBoolean("https://www.hl7.org/fhir/R4/goal-definitions.html#Goal.target.detailBoolean", data.extension)
+  detailInteger: extension::fetchInteger("https://www.hl7.org/fhir/R4/goal-definitions.html#Goal.target.detailInteger", data.extension)
+  detailRatio: extension::fetchRatio("https://www.hl7.org/fhir/R4/goal-definitions.html#Goal.target.detailRatio", data.extension)
+  dueDate: data.dueDate
+  dueDuration: data.dueDuration
+}
+
+// Description: Converts a FHIR R4 Goal.Target to FHIR STU3 Goal.Target.
+//
+// Argument(s):
+//   data : FHIR R4 Goal.Target http://hl7.org/fhir/R4/goal-definitions.html#Goal.target
+//
+// Output(s):
+//   FHIR STU3 Goal.Target http://hl7.org/fhir/STU3/goal-definitions.html#Goal.target
+//
+def R4Goal_TargetToR3(data) {
+  measure: data[0].measure
+  detailQuantity: data[0].detailQuantity
+  detailRange: data[0].detailRange
+  detailCodeableConcept: data[0].detailCodeableConcept
+  dueDate: data[0].dueDate
+  dueDuration: data[0].dueDuration
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/goal-definitions.html#Goal.target.detailString", data[0].detailString)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/R4/goal-definitions.html#Goal.target.detailBoolean", data[0].detailBoolean)
+  extension[]: extension::BuildIntegerExtension("https://www.hl7.org/fhir/R4/goal-definitions.html#Goal.target.detailInteger", data[0].detailInteger)
+  extension[]: extension::BuildRatioExtension("https://www.hl7.org/fhir/R4/goal-definitions.html#Goal.target.detailRatio", data[0].detailRatio)
+}
+
+// Description: Converts a FHIR STU3 Goal.Status to FHIR R4 Goal.AchievementStatus.
+//
+// Argument(s):
+//   data : FHIR STU3 Goal.Status http://hl7.org/fhir/STU3/goal-definitions.html#Goal.status
+//   url : FHIR STU3 Extension.url http://hl7.org/fhir/STU3/extensibility-definitions.html#Extension.url
+//   extension : FHIR STU3 DomainResource.Extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 Goal.AchievementStatus http://hl7.org/fhir/R4/goal-definitions.html#Goal.achievementStatus
+//
+def BuildR4_Goal_AchievementStatus(url, extension, status) {
+  var achievementStatus: extension::fetchCodeableConcept(url, extension)
+  var status: utilities::Convert_TerminologyCode(status, "http://hl7.org/fhir/goal-status", "Goal_AchievementStatus")
+  if achievementStatus then {
+    achievementStatus
+  } else if status != "no-change" then {
+    coding[0].code: status
+    coding[0].system: "http://terminology.hl7.org/CodeSystem/goal-achievement"
+  }
+}

@@ -1,0 +1,202 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   carePlan : FHIR CarePlan resource
+//
+// Output(s):
+//   FHIR CarePlan Resource
+//
+def CarePlanBase(carePlan) {
+  resourcebase::ResourceBase(carePlan)
+  identifier: carePlan.identifier
+  category: carePlan.category
+  title: carePlan.title
+  description: carePlan.description
+  period: carePlan.period
+  note: carePlan.note
+}
+
+// Description: Converts a FHIR STU3 CarePlan resource to FHIR R4 CarePlan resource.
+//
+// Argument(s):
+//   carePlan : FHIR STU3 CarePlan resource https://www.hl7.org/fhir/stu3/carePlan.html
+//
+// Output(s):
+//   FHIR R4 CarePlan Resource https://www.hl7.org/fhir/r4/carePlan.html
+//
+def R3CarePlanToR4(carePlan) {
+  CarePlanBase(carePlan)
+  contained: datatypes::R3ResourceToR4(carePlan.contained[])
+  basedOn: datatypes::R3ReferenceToR4(carePlan.basedOn[])
+  replaces: datatypes::R3ReferenceToR4(carePlan.replaces[])
+  partOf: datatypes::R3ReferenceToR4(carePlan.partOf[])
+  subject: datatypes::R3ReferenceToR4(carePlan.subject)
+  careTeam: datatypes::R3ReferenceToR4(carePlan.careTeam[])
+  addresses: datatypes::R3ReferenceToR4(carePlan.addresses[])
+  supportingInfo: datatypes::R3ReferenceToR4(carePlan.supportingInfo[])
+  goal: datatypes::R3ReferenceToR4(carePlan.goal[])
+  instantiatesCanonical: datatypes::ReferenceToCanonical(carePlan.definition[])
+  instantiatesUri: extension::fetchUriArray("https://www.hl7.org/fhir/R4/careplan-definitions.html#CarePlan.instantiatesUri", carePlan.extension)
+  status: utilities::Convert_TerminologyCode(carePlan.status, "http://hl7.org/fhir/care-plan-status", "Request_Status_r3r4")
+  intent: carePlan.intent
+  encounter: if matchesRegex(carePlan.context.reference, "^Encounter.*") then datatypes::R3ReferenceToR4(carePlan.context)
+  created: extension::fetchDateTime("https://www.hl7.org/fhir/R4/careplan-definitions.html#CarePlan.created", carePlan.extension)
+  author: datatypes::R3ReferenceToR4(carePlan.author[0])
+  contributor: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/careplan-definitions.html#CarePlan.contributor", carePlan.extension)
+  activity: R3CarePlan_ActivityToR4(carePlan.activity[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.author", carePlan.author[])
+  extension[]: if !$this.encounter then extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.context", carePlan.context)
+}
+
+// Description: Converts a FHIR R4 CarePlan resource to FHIR STU3 CarePlan resource.
+//
+// Argument(s):
+//   carePlan : FHIR R4 CarePlan resource https://www.hl7.org/fhir/r4/carePlan.html
+//
+// Output(s):
+//   FHIR STU3 CarePlan Resource https://www.hl7.org/fhir/stu3/carePlan.html
+//
+def R4CarePlanToR3(carePlan) {
+  CarePlanBase(carePlan)
+  contained: datatypes::R4ResourceToR3(carePlan.contained[])
+  basedOn: datatypes::R4ReferenceToR3(carePlan.basedOn[])
+  replaces: datatypes::R4ReferenceToR3(carePlan.replaces[])
+  partOf: datatypes::R4ReferenceToR3(carePlan.partOf[])
+  subject: datatypes::R4ReferenceToR3(carePlan.subject)
+  careTeam: datatypes::R4ReferenceToR3(carePlan.careTeam[])
+  addresses: datatypes::R4ReferenceToR3(carePlan.addresses[])
+  supportingInfo: datatypes::R4ReferenceToR3(carePlan.supportingInfo[])
+  goal: datatypes::R4ReferenceToR3(carePlan.goal[])
+  definition: datatypes::CanonicalToReference(carePlan.instantiatesCanonical[])
+  status: carePlan.status
+  intent: carePlan.intent
+  context: datatypes::R4ReferenceToR3(carePlan.encounter)
+  author: R4CarePlan_AuthorToR3("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.author", carePlan.extension, datatypes::R4ReferenceToR3(carePlan.author))
+  activity: R4CarePlan_ActivityToR3(carePlan.activity[])
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/R4/careplan-definitions.html#CarePlan.instantiatesUri", carePlan.instantiatesUri[])
+  extension[]: extension::BuildDateTimeExtension("https://www.hl7.org/fhir/R4/careplan-definitions.html#CarePlan.created", carePlan.created)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/careplan-definitions.html#CarePlan.contributor", carePlan.contributor[])
+}
+
+// Description: Converts a FHIR STU3 CarePlan.Activity to FHIR R4 CarePlan.Activity.
+//
+// Argument(s):
+//   data : FHIR STU3 CarePlan.Activity http://hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.activity
+//
+// Output(s):
+//   FHIR R4 CarePlan.Activity http://hl7.org/fhir/R4/careplan-definitions.html#CarePlan.activity
+//
+def R3CarePlan_ActivityToR4(data) {
+  outcomeCodeableConcept: data.outcomeCodeableConcept
+  outcomeReference: datatypes::R3ReferenceToR4(data.outcomeReference[])
+  progress: data.progress
+  reference: datatypes::R3ReferenceToR4(data.reference[where !matchesRegex($.value, "^ProcedureRequest.*|^ReferralRequest.*")])
+  detail: R3CarePlan_Activity_DetailToR4(data.detail)
+}
+
+// Description: Converts a FHIR R4 CarePlan.Activity to FHIR STU3 CarePlan.Activity.
+//
+// Argument(s):
+//   data : FHIR R4 CarePlan.Activity http://hl7.org/fhir/R4/careplan-definitions.html#CarePlan.activity
+//
+// Output(s):
+//   FHIR STU3 CarePlan.Activity http://hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.activity
+//
+def R4CarePlan_ActivityToR3(data) {
+  outcomeCodeableConcept: data.outcomeCodeableConcept
+  outcomeReference: datatypes::R4ReferenceToR3(data.outcomeReference[])
+  progress: data.progress
+  reference: datatypes::R4ReferenceToR3(data.reference)
+  detail: R4CarePlan_Activity_DetailToR3(data.detail)
+}
+
+// Description: Converts a FHIR STU3 CarePlan.Activity.Detail to FHIR R4 CarePlan.Activity.Detail.
+//
+// Argument(s):
+//   data : FHIR STU3 CarePlan.Activity.Detail http://hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.activity.detail
+//
+// Output(s):
+//   FHIR R4 CarePlan.Activity.Detail http://hl7.org/fhir/R4/careplan-definitions.html#CarePlan.activity.detail
+//
+def R3CarePlan_Activity_DetailToR4(data) {
+  kind: extension::fetchCode("https://www.hl7.org/fhir/R4/careplan-definitions.html#CarePlan.activity.detail.kind", data.extension)
+  instantiatesCanonical: extension::fetchCanonicalArray("https://www.hl7.org/fhir/R4/careplan-definitions.html#CarePlan.activity.detail.instantiatesCanonical", data.extension)
+  instantiatesUri: extension::fetchUriArray("https://www.hl7.org/fhir/R4/careplan-definitions.html#CarePlan.activity.detail.instantiatesUri", data.extension)
+  code: data.code
+  reasonCode: data.reasonCode
+  reasonReference: datatypes::R3ReferenceToR4(data.reasonReference[])
+  goal: datatypes::R3ReferenceToR4(data.goal[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/R4/careplan-definitions.html#CarePlan.activity.detail.status", data.extension)
+  status: if status? then status else data.status
+  statusReason: datatypes::StringToCodeableConcept(data.statusReason)
+  doNotPerform: data.prohibited
+  scheduledTiming: data.scheduledTiming
+  scheduledPeriod: data.scheduledPeriod
+  scheduledString: data.scheduledString
+  location: datatypes::R3ReferenceToR4(data.location)
+  performer: datatypes::R3ReferenceToR4(data.performer[])
+  productCodeableConcept: data.productCodeableConcept
+  productReference: datatypes::R3ReferenceToR4(data.productReference)
+  dailyAmount: data.dailyAmount
+  quantity: data.quantity
+  description: data.description
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.activity.detail.definition", data.definition)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.activity.detail.kind", data.kind)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.activity.detail.status", data.status)
+}
+
+// Description: Converts a FHIR R4 CarePlan.Activity.Detail to FHIR STU3 CarePlan.Activity.Detail.
+//
+// Argument(s):
+//   data : FHIR R4 CarePlan.Activity.Detail http://hl7.org/fhir/R4/careplan-definitions.html#CarePlan.activity.detail
+//
+// Output(s):
+//   FHIR STU3 CarePlan.Activity.Detail http://hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.activity.detail
+//
+def R4CarePlan_Activity_DetailToR3(data) {
+  kind: extension::fetchCode("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.activity.detail.kind", data.extension)
+  definition: extension::fetchReference("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.activity.detail.definition", data.extension)
+  code: data.code
+  reasonCode: data.reasonCode
+  reasonReference: datatypes::R4ReferenceToR3(data.reasonReference[])
+  goal: datatypes::R4ReferenceToR3(data.goal[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.activity.detail.status", data.extension)
+  status: if status? then status else data.status
+  statusReason: datatypes::CodeableConceptToString(data.statusReason)
+  prohibited: data.doNotPerform
+  scheduledTiming: data.scheduledTiming
+  scheduledPeriod: data.scheduledPeriod
+  scheduledString: data.scheduledString
+  location: datatypes::R4ReferenceToR3(data.location)
+  performer: datatypes::R4ReferenceToR3(data.performer[])
+  productCodeableConcept: data.productCodeableConcept
+  productReference: datatypes::R4ReferenceToR3(data.productReference)
+  dailyAmount: data.dailyAmount
+  quantity: data.quantity
+  description: data.description
+  extension[]: extension::BuildCanonicalExtension("https://www.hl7.org/fhir/R4/careplan-definitions.html#CarePlan.activity.detail.instantiatesCanonical", data.instantiatesCanonical[])
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/R4/careplan-definitions.html#CarePlan.activity.detail.instantiatesUri", data.instantiatesUri[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/careplan-definitions.html#CarePlan.activity.detail.kind", data.kind)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/careplan-definitions.html#CarePlan.activity.detail.status", data.status)
+}
+
+// Description: Converts a FHIR R4 CarePlan.Author to FHIR STU3 CarePlan.Author.
+//
+// Argument(s):
+//   data : FHIR R4 CarePlan.Author http://hl7.org/fhir/R4/careplan-definitions.html#CarePlan.author
+//
+// Output(s):
+//   FHIR STU3 CarePlan.Author http://hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.author
+//
+def R4CarePlan_AuthorToR3(url, extension, data) {
+  var author: extension::fetchReferenceArray(url, extension)
+  if author then {
+    author
+  } else {
+    arrayOf(data)
+  }
+}

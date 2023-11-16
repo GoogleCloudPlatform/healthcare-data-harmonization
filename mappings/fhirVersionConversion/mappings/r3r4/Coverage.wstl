@@ -1,0 +1,178 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   coverage : FHIR Coverage resource
+//
+// Output(s):
+//   FHIR Coverage Resource
+//
+def CoverageBase(coverage) {
+  resourcebase::ResourceBase(coverage)
+  identifier: coverage.identifier
+  type: coverage.type
+  subscriberId: coverage.subscriberId
+  dependent: coverage.dependent
+  period: coverage.period
+  order: coverage.order
+  network: coverage.network
+}
+
+// Description: Converts a FHIR STU3 Coverage resource to FHIR R4 Coverage resource.
+//
+// Argument(s):
+//   coverage : FHIR STU3 Coverage resource https://www.hl7.org/fhir/stu3/coverage.html
+//
+// Output(s):
+//   FHIR R4 Coverage Resource https://www.hl7.org/fhir/r4/coverage.html
+//
+def R3CoverageToR4(coverage) {
+  CoverageBase(coverage)
+  contained: datatypes::R3ResourceToR4(coverage.contained[])
+  contract: datatypes::R3ReferenceToR4(coverage.contract[])
+  policyHolder: datatypes::R3ReferenceToR4(coverage.policyHolder)
+  subscriber: datatypes::R3ReferenceToR4(coverage.subscriber)
+  status: coverage.status
+  status: utilities::defaultIfNull($this.status, "entered-in-error")
+  beneficiary: datatypes::R3ReferenceToR4(coverage.beneficiary)
+  beneficiary.display: utilities::defaultIfNull($this.beneficiary, "Patient")
+  relationship: coverage.relationship
+  payor: datatypes::R3ReferenceToR4(coverage.payor[])
+  payor[0].display: utilities::defaultIfNull($this.payor, "Organization")
+  class[]: R3Coverage_GroupingToR4(coverage.grouping)
+  costToBeneficiary: BuildR4_Coverage_CostToBeneficiary(coverage.extension)
+  subrogation: extension::fetchBoolean("https://www.hl7.org/fhir/R4/coverage-definitions.html#Coverage.subrogation", coverage.extension)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.sequence", coverage.sequence)
+}
+
+// Description: Converts a FHIR R4 Coverage resource to FHIR STU3 Coverage resource.
+//
+// Argument(s):
+//   coverage : FHIR R4 Coverage resource https://www.hl7.org/fhir/r4/coverage.html
+//
+// Output(s):
+//   FHIR STU3 Coverage Resource https://www.hl7.org/fhir/stu3/coverage.html
+//
+def R4CoverageToR3(coverage) {
+  CoverageBase(coverage)
+  contained: datatypes::R4ResourceToR3(coverage.contained[])
+  contract: datatypes::R4ReferenceToR3(coverage.contract[])
+  policyHolder: datatypes::R4ReferenceToR3(coverage.policyHolder)
+  subscriber: datatypes::R4ReferenceToR3(coverage.subscriber)
+  status: coverage.status
+  beneficiary: datatypes::R4ReferenceToR3(coverage.beneficiary)
+  relationship: coverage.relationship
+  payor: datatypes::R4ReferenceToR3(coverage.payor[])
+  grouping: R4Coverage_GroupingToR3(coverage.class[0])
+  sequence: extension::fetchString("https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.sequence", coverage.extension)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/R4/coverage-definitions.html#Coverage.subrogation", coverage.subrogation)
+}
+
+// Description: Converts a FHIR STU3 Coverage.Grouping to FHIR R4 Coverage.Grouping.
+//
+// Argument(s):
+//   data : FHIR STU3 Coverage.Grouping http://hl7.org/fhir/STU3/coverage-definitions.html#Coverage.grouping
+//
+// Output(s):
+//   FHIR R4 Coverage.Grouping http://hl7.org/fhir/R4/coverage-definitions.html#Coverage.grouping
+//
+def R3Coverage_GroupingToR4(data) {
+  var class[]: if data.group then {
+    type: datatypes::CodeToCodeableConcept("group")
+    value: data.group
+    name: data.groupDisplay
+  }
+  var class[]: if data.subGroup then {
+    type: datatypes::CodeToCodeableConcept("subGroup")
+    value: data.subGroup
+    name: data.subGroupDisplay
+  }
+  var class[]: if data.plan then {
+    type: datatypes::CodeToCodeableConcept("plan")
+    value: data.plan
+    name: data.planDisplay
+  }
+  var class[]: if data.subPlan then {
+    type: datatypes::CodeToCodeableConcept("subPlan")
+    value: data.subPlan
+    name: data.subPlanDisplay
+  }
+  var class[]: if data.class then {
+    type: datatypes::CodeToCodeableConcept("class")
+    value: data.class
+    name: data.classDisplay
+  }
+  var class[]: if data.subClass then {
+    type: datatypes::CodeToCodeableConcept("subClass")
+    value: data.subClass
+    name: data.subClassDisplay
+  }
+  class
+}
+
+// Description: Converts a FHIR R4 Coverage.Grouping to FHIR STU3 Coverage.Grouping.
+//
+// Argument(s):
+//   data : FHIR R4 Coverage.Grouping http://hl7.org/fhir/R4/coverage-definitions.html#Coverage.grouping
+//
+// Output(s):
+//   FHIR STU3 Coverage.Grouping http://hl7.org/fhir/STU3/coverage-definitions.html#Coverage.grouping
+//
+def R4Coverage_GroupingToR3(data) {
+  var code: data.type.code
+  if code == "group" then {
+    group: data.value
+    groupDisplay: data.name
+  }
+  if code == "subGroup" then {
+    subGroup: data.value
+    subGroupDisplay: data.name
+  }
+  if code == "plan" then {
+    plan: data.value
+    planDisplay: data.name
+  }
+  if code == "subPlan" then {
+    subPlan: data.value
+    subPlanDisplay: data.name
+  }
+  if code == "class" then {
+    class: data.value
+    classDisplay: data.name
+  }
+  if code == "subClass" then {
+    subClass: data.value
+    subClassDisplay: data.name
+  }
+}
+
+// Description: Constructs a FHIR R4 Coverage.CostToBeneficiary
+//
+// Argument(s):
+//   Extension : FHIR STU3 Covergae.extension http://hl7.org/fhir/STU3/element-definitions.html#Element.extension
+//
+// Output(s):
+//   FHIR R4 Coverage.CostToBeneficiary https://www.hl7.org/fhir/r4/contract-definitions.html#Coverage.costToBeneficiary
+//
+def BuildR4_Coverage_CostToBeneficiary(Extension) {
+  type: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/coverage-definitions.html#Coverage.costToBeneficiary.type", Extension)
+  valueQuantity: extension::fetchQuantity("https://www.hl7.org/fhir/R4/coverage-definitions.html#Coverage.costToBeneficiary.valueQuantity", Extension)
+  valueMoney: extension::fetchMoney("https://www.hl7.org/fhir/R4/coverage-definitions.html#Coverage.costToBeneficiary.valueMoney", Extension)
+  exception: BuildR4_Coverage_CostToBeneficiary_Exception(Extension.extension)
+}
+
+// Description: Constructs a FHIR R4 Coverage.CostToBeneficiary.Exception
+//
+// Argument(s):
+//   Extension : FHIR STU3 Covergae.CostToBeneficiary.extension http://hl7.org/fhir/STU3/element-definitions.html#Element.extension
+//
+// Output(s):
+//   FHIR R4 Coverage.CostToBeneficiary.Exception https://www.hl7.org/fhir/r4/contract-definitions.html#Coverage.costToBeneficiary.exception
+//
+def BuildR4_Coverage_CostToBeneficiary_Exception(Extension) {
+  type: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/coverage-definitions.html#Coverage.costToBeneficiary.exception.type", Extension)
+  period: extension::fetchPeriod("https://www.hl7.org/fhir/R4/coverage-definitions.html#Coverage.costToBeneficiary.exception.period", Extension)
+}

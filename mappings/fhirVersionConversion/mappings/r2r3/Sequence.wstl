@@ -1,0 +1,3 @@
+package fhir_r2r3
+
+// Sequence (https://www.hl7.org/fhir/sequence.html) is a newly created resource type in FHIR R3, which does not exist in R2.

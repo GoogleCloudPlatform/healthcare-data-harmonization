@@ -1,0 +1,39 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def PersonBase(person) {
+  resourcebase::ResourceBase(person)
+  identifier: person.identifier
+  name: person.name
+  telecom: person.telecom
+  gender: person.gender
+  birthDate: person.birthDate
+  address: person.address
+  photo: person.photo
+  active: person.active
+}
+
+def R2PersonToR3(person) {
+  PersonBase(person)
+  contained: datatypes::R2ResourceToR3(person.contained[])
+  managingOrganization: datatypes::R2ReferenceToR3(person.managingOrganization)
+  link: R2Person_LinkToR3(person.link[])
+}
+
+def R3PersonToR2(person) {
+  PersonBase(person)
+  contained: datatypes::R3ResourceToR2(person.contained[])
+  managingOrganization: datatypes::R3ReferenceToR2(person.managingOrganization)
+  link: R3Person_LinkToR2(person.link[])
+}
+
+def R2Person_LinkToR3(data) {
+  target: datatypes::R2ReferenceToR3(data.target)
+  assurance: data.assurance
+}
+
+def R3Person_LinkToR2(data) {
+  target: datatypes::R2ReferenceToR3(data.target)
+  assurance: data.assurance
+}

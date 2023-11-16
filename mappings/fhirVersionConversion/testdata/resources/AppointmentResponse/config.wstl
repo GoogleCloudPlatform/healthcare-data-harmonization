@@ -1,0 +1,11 @@
+// R3 AppointmentResponse To R4
+$this: R3AppointmentResponseToR4($root)
+
+// R4 AppointmentResponse To R3
+$this: R4AppointmentResponseToR3($root)
+
+// R2 AppointmentResponse To R3
+$this: R2AppointmentResponseToR3($root)
+
+// R3 AppointmentResponse To R2
+$this: R3AppointmentResponseToR2($root)

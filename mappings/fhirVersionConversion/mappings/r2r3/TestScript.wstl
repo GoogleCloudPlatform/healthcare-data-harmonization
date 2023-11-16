@@ -1,0 +1,247 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def TestScriptBase(testScript) {
+  resourcebase::ResourceBase(testScript)
+  url: testScript.url
+  identifier: testScript.identifier
+  version: testScript.version
+  name: testScript.name
+  date: testScript.date
+  publisher: testScript.publisher
+}
+
+def R2TestScriptToR3(testScript) {
+  TestScriptBase(testScript)
+  contained: datatypes::R2ResourceToR3(testScript.contained[])
+  profile: datatypes::R2ReferenceToR3(testScript.profile[])
+  title: extension::fetchString("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.title", testScript.extension)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.status", testScript.extension)
+  status: if status? then status else testScript.status
+  experimental: testScript.experimental
+  contact: extension::fetchContactDetailArray("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.contact", testScript.extension)
+  description: testScript.description
+  useContext: extension::fetchUsageContextArray("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.useContext", testScript.extension)
+  jurisdiction: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.jurisdiction", testScript.extension)
+  purpose: extension::fetchMarkdown("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.purpose", testScript.extension)
+  copyright: testScript.copyright
+  metadata: R2TestScript_MetadataToR3(testScript.metadata)
+  fixture: testScript.fixture
+  variable: R2TestScript_VariableToR3(testScript.variable[])
+  setup: R2TestScript_SetupToR3(testScript.setup)
+  test: R2TestScript_TestToR3(testScript.test[])
+  teardown: testScript.teardown
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/testscript-definitions.html#TestScript.status", testScript.status)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/testscript-definitions.html#TestScript.useContext", testScript.useContext[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/DSTU2/testscript-definitions.html#TestScript.requirements", testScript.requirements)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/DSTU2/testscript-definitions.html#TestScript.multiserver", testScript.multiserver)
+}
+
+def R3TestScriptToR2(testScript) {
+  TestScriptBase(testScript)
+  contained: datatypes::R3ResourceToR2(testScript.contained[])
+  profile: datatypes::R3ReferenceToR2(testScript.profile[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/testscript-definitions.html#TestScript.status", testScript.extension)
+  status: if status? then status else testScript.status
+  experimental: testScript.experimental
+  description: testScript.description
+  useContext: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/DSTU2/testscript-definitions.html#TestScript.useContext", testScript.extension)
+  copyright: testScript.copyright
+  metadata: R3TestScript_MetadataToR2(testScript.metadata)
+  fixture: testScript.fixture
+  variable: R3TestScript_VariableToR2(testScript.variable[])
+  setup: R3TestScript_SetupToR2(testScript.setup)
+  test: R3TestScript_TestToR2(testScript.test[])
+  teardown: testScript.teardown
+  requirements: extension::fetchString("https://www.hl7.org/fhir/DSTU2/testscript-definitions.html#TestScript.requirements", testScript.extension)
+  multiserver: extension::fetchBoolean("https://www.hl7.org/fhir/DSTU2/testscript-definitions.html#TestScript.multiserver", testScript.extension)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.title", testScript.title)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.status", testScript.status)
+  extension[]: extension::BuildContactDetail("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.contact", testScript.contact[])
+  extension[]: extension::BuildBase64BinaryExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.useContext", testScript.useContext[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.jurisdiction", testScript.jurisdiction[])
+  extension[]: extension::BuildMarkdownExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.purpose", testScript.purpose)
+}
+
+def R2TestScript_MetadataToR3(data) {
+  link: data.link
+  capability: R2TestScript_Metadata_CapabilityToR3(data.capability[])
+}
+
+def R3TestScript_MetadataToR2(data) {
+  link: data.link
+  capability: R3TestScript_Metadata_CapabilityToR2(data.capability[])
+}
+
+def R2TestScript_Metadata_CapabilityToR3(data) {
+  'required': data.'required'
+  validated: data.validated
+  description: data.description
+  origin: extension::fetchIntegerArray("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.metadata.capability.origin", data.extension)
+  destination: data.destination
+  link: data.link
+  capabilities: extension::fetchReference("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.metadata.capability.capabilities", data.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/testscript-definitions.html#TestScript.metadata.capability.conformance", data.conformance)
+}
+
+def R3TestScript_Metadata_CapabilityToR2(data) {
+  'required': data.'required'
+  validated: data.validated
+  description: data.description
+  extension[]: extension::BuildIntegerExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.metadata.capability.origin", data.origin[])
+  destination: data.destination
+  link: data.link
+  conformance: extension::fetchReference("https://www.hl7.org/fhir/DSTU2/testscript-definitions.html#TestScript.metadata.capability.conformance", data.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.metadata.capability.capabilities", data.capabilities)
+}
+
+def R2TestScript_VariableToR3(data) {
+  name: data.name
+  defaultValue: extension::fetchString("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.variable.defaultValue", data.extension)
+  description: extension::fetchString("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.variable.description", data.extension)
+  expression: extension::fetchString("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.variable.expression", data.extension)
+  headerField: data.headerField
+  hint: extension::fetchString("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.variable.hint", data.extension)
+  path: data.path
+  sourceId: data.sourceId
+}
+
+def R3TestScript_VariableToR2(data) {
+  name: data.name
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.variable.defaultValue", data.defaultValue)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.variable.description", data.description)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.variable.expression", data.expression)
+  headerField: data.headerField
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.variable.hint", data.hint)
+  path: data.path
+  sourceId: data.sourceId
+}
+
+def R2TestScript_TestToR3(data) {
+  name: data.name
+  description: data.description
+  action: data.action
+}
+
+def R3TestScript_TestToR2(data) {
+  name: data.name
+  description: data.description
+  action: data.action
+}
+
+def R2TestScript_SetupToR3(data) {
+  action: R2TestScript_Setup_ActionToR3(data.action[])
+}
+
+def R3TestScript_SetupToR2(data) {
+  action: R3TestScript_Setup_ActionToR2(data.action[])
+}
+
+def R2TestScript_Setup_ActionToR3(data) {
+  operation: R2TestScript_Setup_Action_OperationToR3(data.operation)
+  assert: R2TestScript_Setup_Action_AssertToR3(data.assert)
+}
+
+def R3TestScript_Setup_ActionToR2(data) {
+  operation: R3TestScript_Setup_Action_OperationToR2(data.operation)
+  assert: R3TestScript_Setup_Action_AssertToR2(data.assert)
+}
+
+def R2TestScript_Setup_Action_OperationToR3(data) {
+  type: data.type
+  resource: extension::fetchCode("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.operation.resource", data.extension)
+  label: data.label
+  description: data.description
+  accept: extension::fetchCode("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.operation.accept", data.extension)
+  contentType: extension::fetchCode("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.operation.contentType", data.extension)
+  destination: data.destination
+  encodeRequestUrl: data.encodeRequestUrl
+  origin: extension::fetchInteger("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.operation.origin", data.extension)
+  params: data.params
+  requestHeader: data.requestHeader
+  requestId: extension::fetchId("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.operation.requestId", data.extension)
+  responseId: data.responseId
+  sourceId: data.sourceId
+  targetId: data.targetId
+  url: data.url
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/testscript-definitions.html#TestScript.setup.action.operation.resource", data.resource)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/testscript-definitions.html#TestScript.setup.action.operation.accept", data.accept)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/testscript-definitions.html#TestScript.setup.action.operation.contentType", data.contentType)
+}
+
+def R3TestScript_Setup_Action_OperationToR2(data) {
+  type: data.type
+  resource: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/testscript-definitions.html#TestScript.setup.action.operation.resource", data.extension)
+  label: data.label
+  description: data.description
+  accept: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/testscript-definitions.html#TestScript.setup.action.operation.accept", data.extension)
+  contentType: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/testscript-definitions.html#TestScript.setup.action.operation.contentType", data.extension)
+  destination: data.destination
+  encodeRequestUrl: data.encodeRequestUrl
+  extension[]: extension::BuildIntegerExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.operation.origin", data.origin)
+  params: data.params
+  requestHeader: data.requestHeader
+  extension[]: extension::BuildIdExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.operation.requestId", data.requestId)
+  responseId: data.responseId
+  sourceId: data.sourceId
+  targetId: data.targetId
+  url: data.url
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.operation.resource", data.resource)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.operation.accept", data.accept)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.operation.contentType", data.contentType)
+}
+
+def R2TestScript_Setup_Action_AssertToR3(data) {
+  label: data.label
+  description: data.description
+  direction: data.direction
+  compareToSourceId: data.compareToSourceId
+  compareToSourceExpression: extension::fetchString("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.assert.compareToSourceExpression", data.extension)
+  compareToSourcePath: data.compareToSourcePath
+  contentType: extension::fetchCode("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.assert.contentType", data.extension)
+  expression: extension::fetchString("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.assert.expression", data.extension)
+  headerField: data.headerField
+  minimumId: data.minimumId
+  navigationLinks: data.navigationLinks
+  operator: extension::fetchCode("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.assert.operator", data.extension)
+  path: data.path
+  requestMethod: extension::fetchCode("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.assert.requestMethod", data.extension)
+  requestURL: extension::fetchString("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.assert.requestURL", data.extension)
+  resource: data.resource
+  response: data.response
+  responseCode: data.responseCode
+  sourceId: data.sourceId
+  validateProfileId: data.validateProfileId
+  value: data.value
+  warningOnly: data.warningOnly
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/testscript-definitions.html#TestScript.setup.action.assert.contentType", data.contentType)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/testscript-definitions.html#TestScript.setup.action.assert.operator", data.operator)
+}
+
+def R3TestScript_Setup_Action_AssertToR2(data) {
+  label: data.label
+  description: data.description
+  direction: data.direction
+  compareToSourceId: data.compareToSourceId
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.assert.compareToSourceExpression", data.compareToSourceExpression)
+  compareToSourcePath: data.compareToSourcePath
+  contentType: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/testscript-definitions.html#TestScript.setup.action.assert.contentType", data.extension)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.assert.expression", data.expression)
+  headerField: data.headerField
+  minimumId: data.minimumId
+  navigationLinks: data.navigationLinks
+  operator: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/testscript-definitions.html#TestScript.setup.action.assert.operator", data.extension)
+  path: data.path
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.assert.requestMethod", data.requestMethod)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.assert.requestURL", data.requestURL)
+  resource: data.resource
+  response: data.response
+  responseCode: data.responseCode
+  sourceId: data.sourceId
+  validateProfileId: data.validateProfileId
+  value: data.value
+  warningOnly: data.warningOnly
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.assert.contentType", data.contentType)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/testscript-definitions.html#TestScript.setup.action.assert.operator", data.operator)
+}

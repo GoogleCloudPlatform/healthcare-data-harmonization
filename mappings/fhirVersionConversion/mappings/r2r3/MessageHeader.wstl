@@ -1,0 +1,62 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def MessageHeaderBase(messageHeader) {
+  resourcebase::ResourceBase(messageHeader)
+  timestamp: messageHeader.timestamp
+  source: messageHeader.source
+  reason: messageHeader.reason
+}
+
+def R2MessageHeaderToR3(messageHeader) {
+  MessageHeaderBase(messageHeader)
+  contained: datatypes::R2ResourceToR3(messageHeader.contained[])
+  responsible: datatypes::R2ReferenceToR3(messageHeader.responsible)
+  enterer: datatypes::R2ReferenceToR3(messageHeader.enterer)
+  author: datatypes::R2ReferenceToR3(messageHeader.author)
+  receiver: datatypes::R2ReferenceToR3(messageHeader.receiver)
+  destination: R2MessageHeader_DestinationToR3(messageHeader.destination[])
+  event: messageHeader.event
+  sender: extension::fetchReference("https://www.hl7.org/fhir/STU3/messageheader-definitions.html#MessageHeader.sender", messageHeader.extension)
+  response: R2MessageHeader_ResponseToR3(messageHeader.response)
+  focus: datatypes::R2ReferenceToR3(messageHeader.data[])
+}
+
+def R3MessageHeaderToR2(messageHeader) {
+  MessageHeaderBase(messageHeader)
+  contained: datatypes::R3ResourceToR2(messageHeader.contained[])
+  responsible: datatypes::R3ReferenceToR2(messageHeader.responsible)
+  enterer: datatypes::R3ReferenceToR2(messageHeader.enterer)
+  author: datatypes::R3ReferenceToR2(messageHeader.author)
+  receiver: datatypes::R3ReferenceToR2(messageHeader.receiver)
+  destination: R3MessageHeader_DestinationToR2(messageHeader.destination[])
+  event: messageHeader.event
+  response: R3MessageHeader_ResponseToR2(messageHeader.response)
+  data: datatypes::R3ReferenceToR2(messageHeader.focus[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/messageheader-definitions.html#MessageHeader.sender", messageHeader.sender)
+}
+
+def R2MessageHeader_DestinationToR3(data) {
+  name: data.name
+  target: datatypes::R2ReferenceToR3(data.target)
+  endpoint: data.endpoint
+}
+
+def R3MessageHeader_DestinationToR2(data) {
+  name: data.name
+  target: datatypes::R2ReferenceToR3(data.target)
+  endpoint: data.endpoint
+}
+
+def R2MessageHeader_ResponseToR3(data) {
+  identifier: data.identifier
+  code: data.code
+  details: datatypes::R2ReferenceToR3(data.details)
+}
+
+def R3MessageHeader_ResponseToR2(data) {
+  identifier: data.identifier
+  code: data.code
+  details: datatypes::R3ReferenceToR2(data.details)
+}

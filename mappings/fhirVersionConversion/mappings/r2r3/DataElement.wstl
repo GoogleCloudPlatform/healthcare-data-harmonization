@@ -1,0 +1,61 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def DataElementBase(dataElement) {
+  resourcebase::ResourceBase(dataElement)
+  url: dataElement.url
+  identifier: dataElement.identifier
+  version: dataElement.version
+  date: dataElement.date
+  publisher: dataElement.publisher
+  name: dataElement.name
+  stringency: dataElement.stringency
+  element: dataElement.element
+}
+
+def R2DataElementToR3(dataElement) {
+  DataElementBase(dataElement)
+  contained: datatypes::R2ResourceToR3(dataElement.contained[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/dataelement-definitions.html#DataElement.status", dataElement.extension)
+  status: if status? then status else dataElement.status
+  experimental: dataElement.experimental
+  title: extension::fetchString("https://www.hl7.org/fhir/STU3/dataelement-definitions.html#DataElement.title", dataElement.extension)
+  contact: extension::fetchContactDetailArray("https://www.hl7.org/fhir/STU3/dataelement-definitions.html#DataElement.contact", dataElement.extension)
+  useContext: extension::fetchUsageContextArray("https://www.hl7.org/fhir/STU3/dataelement-definitions.html#DataElement.useContext", dataElement.extension)
+  jurisdiction: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/dataelement-definitions.html#DataElement.jurisdiction", dataElement.extension)
+  copyright: dataElement.copyright
+  mapping: R2DataElement_MappingToR3(dataElement.mapping[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/dataelement-definitions.html#DataElement.status", dataElement.status)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/dataelement-definitions.html#DataElement.useContext", dataElement.useContext[])
+}
+
+def R3DataElementToR2(dataElement) {
+  DataElementBase(dataElement)
+  contained: datatypes::R3ResourceToR2(dataElement.contained[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/dataelement-definitions.html#DataElement.status", dataElement.extension)
+  status: if status? then status else dataElement.status
+  experimental: dataElement.experimental
+  useContext: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/DSTU2/dataelement-definitions.html#DataElement.useContext", dataElement.extension)
+  copyright: dataElement.copyright
+  mapping: R3DataElement_MappingToR2(dataElement.mapping[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/dataelement-definitions.html#DataElement.status", dataElement.status)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/dataelement-definitions.html#DataElement.title", dataElement.title)
+  extension[]: extension::BuildContactDetail("https://www.hl7.org/fhir/STU3/dataelement-definitions.html#DataElement.contact", dataElement.contact[])
+  extension[]: extension::BuildBase64BinaryExtension("https://www.hl7.org/fhir/STU3/dataelement-definitions.html#DataElement.useContext", dataElement.useContext[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/dataelement-definitions.html#DataElement.jurisdiction", dataElement.jurisdiction[])
+}
+
+def R2DataElement_MappingToR3(data) {
+  identity: data.identity
+  uri: data.uri
+  name: data.name
+  comment: data.comments
+}
+
+def R3DataElement_MappingToR2(data) {
+  identity: data.identity
+  uri: data.uri
+  name: data.name
+  comments: data.comment
+}

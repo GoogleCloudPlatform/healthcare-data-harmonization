@@ -1,0 +1,219 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   composition : FHIR Composition resource
+//
+// Output(s):
+//   FHIR Composition Resource
+//
+def CompositionBase(composition) {
+  resourceType: composition.resourceType
+  id: composition.id
+  meta: composition.meta
+  implicitRules: composition.implicitRules
+  language: composition.language
+  text: composition.text
+  contained: composition.contained
+  extension: composition.extension
+  modifierExtension: composition.modifierExtension
+  identifier: composition.identifier
+  type: composition.type
+  date: composition.date
+  title: composition.title
+  custodian: composition.custodian
+}
+
+// Description: Converts a FHIR STU3 Composition resource to FHIR R4 Composition resource.
+//
+// Argument(s):
+//   composition : FHIR STU3 Composition resource https://www.hl7.org/fhir/stu3/composition.html
+//
+// Output(s):
+//   FHIR R4 Composition Resource https://www.hl7.org/fhir/r4/composition.html
+//
+def R3CompositionToR4(composition) {
+  CompositionBase(composition)
+  contained: datatypes::R3ResourceToR4(composition.contained[])
+  event: R3Composition_EventToR4(composition.event[])
+  encounter: datatypes::R3ReferenceToR4(composition.encounter)
+  status: composition.status
+  category: R3Composition_ClassToR4("https://www.hl7.org/fhir/R4/composition-definitions.html#Composition.category", composition.extension, composition.class)
+  subject: datatypes::R3ReferenceToR4(composition.subject)
+  author: datatypes::R3ReferenceToR4(composition.author[])
+  confidentiality: composition.confidentiality
+  attester: R3Composition_AttesterToR4(composition.attester[])
+  relatesTo: R3Composition_RelatesToToR4(composition.relatesTo[])
+  section: R3Composition_SectionToR4(composition.section[])
+}
+
+// Description: Converts a FHIR R4 Composition resource to FHIR STU3 Composition resource.
+//
+// Argument(s):
+//   composition : FHIR R4 Composition resource https://www.hl7.org/fhir/r4/composition.html
+//
+// Output(s):
+//   FHIR STU3 Composition Resource https://www.hl7.org/fhir/stu3/composition.html
+//
+def R4CompositionToR3(composition) {
+  CompositionBase(composition)
+  contained: datatypes::R4ResourceToR3(composition.contained[])
+  event: R4Composition_EventToR3(composition.event[])
+  encounter: datatypes::R4ReferenceToR3(composition.encounter)
+  status: composition.status
+  class: composition.category[0]
+  subject: datatypes::R4ReferenceToR3(composition.subject)
+  author: datatypes::R4ReferenceToR3(composition.author[])
+  confidentiality: composition.confidentiality
+  attester: R4Composition_AttesterToR3(composition.attester[])
+  relatesTo: R4Composition_RelatesToToR3(composition.relatesTo[])
+  section: R4Composition_SectionToR3(composition.section[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/composition-definitions.html#Composition.category", composition.category[])
+}
+
+// Description: Converts a FHIR STU3 Composition.Event to FHIR R4 Composition.Event.
+//
+// Argument(s):
+//   data : FHIR STU3 Composition.Event http://hl7.org/fhir/STU3/composition-definitions.html#Composition.event
+//
+// Output(s):
+//   FHIR R4 Composition.Event http://hl7.org/fhir/R4/composition-definitions.html#Composition.event
+//
+def R3Composition_EventToR4(data) {
+  code: data.code
+  period: data.period
+  detail: datatypes::R3ReferenceToR4(data.detail[])
+}
+
+// Description: Converts a FHIR R4 Composition.Event to FHIR STU3 Composition.Event.
+//
+// Argument(s):
+//   data : FHIR R4 Composition.Event http://hl7.org/fhir/R4/composition-definitions.html#Composition.event
+//
+// Output(s):
+//   FHIR STU3 Composition.Event http://hl7.org/fhir/STU3/composition-definitions.html#Composition.event
+//
+def R4Composition_EventToR3(data) {
+  code: data.code
+  period: data.period
+  detail: datatypes::R4ReferenceToR3(data.detail[])
+}
+
+// Description: Converts a FHIR STU3 Composition.Attester to FHIR R4 Composition.Attester.
+//
+// Argument(s):
+//   data : FHIR STU3 Composition.Attester http://hl7.org/fhir/STU3/composition-definitions.html#Composition.attester
+//
+// Output(s):
+//   FHIR R4 Composition.Attester http://hl7.org/fhir/R4/composition-definitions.html#Composition.attester
+//
+def R3Composition_AttesterToR4(data) {
+  mode: data.mode[0]
+  time: data.time
+  party: datatypes::R3ReferenceToR4(data.party)
+  extension[]: if listLen(data.mode) > 1 then extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/composition-definitions.html#Composition.attester.mode", data.mode[])
+}
+
+// Description: Converts a FHIR R4 Composition.Attester to FHIR STU3 Composition.Attester.
+//
+// Argument(s):
+//   data : FHIR R4 Composition.Attester http://hl7.org/fhir/R4/composition-definitions.html#Composition.attester
+//
+// Output(s):
+//   FHIR STU3 Composition.Attester http://hl7.org/fhir/STU3/composition-definitions.html#Composition.attester
+//
+def R4Composition_AttesterToR3(data) {
+  mode: data.mode
+  time: data.time
+  party: datatypes::R4ReferenceToR3(data.party)
+}
+
+// Description: Converts a FHIR STU3 Composition.RelatesTo to FHIR R4 Composition.RelatesTo.
+//
+// Argument(s):
+//   data : FHIR STU3 Composition.RelatesTo http://hl7.org/fhir/STU3/composition-definitions.html#Composition.relatesTo
+//
+// Output(s):
+//   FHIR R4 Composition.RelatesTo http://hl7.org/fhir/R4/composition-definitions.html#Composition.relatesTo
+//
+def R3Composition_RelatesToToR4(data) {
+  code: data.code
+  targetIdentifier: data.targetIdentifier
+  targetReference: datatypes::R3ReferenceToR4(data.targetReference)
+}
+
+// Description: Converts a FHIR R4 Composition.RelatesTo to FHIR STU3 Composition.RelatesTo.
+//
+// Argument(s):
+//   data : FHIR R4 Composition.RelatesTo http://hl7.org/fhir/R4/composition-definitions.html#Composition.relatesTo
+//
+// Output(s):
+//   FHIR STU3 Composition.RelatesTo http://hl7.org/fhir/STU3/composition-definitions.html#Composition.relatesTo
+//
+def R4Composition_RelatesToToR3(data) {
+  code: data.code
+  targetIdentifier: data.targetIdentifier
+  targetReference: datatypes::R4ReferenceToR3(data.targetReference)
+}
+
+// Description: Converts a FHIR STU3 Composition.Class to FHIR R4 Composition.Class.
+//
+// Argument(s):
+//   data : FHIR STU3 Composition.Class http://hl7.org/fhir/STU3/composition-definitions.html#Composition.class
+//
+// Output(s):
+//   FHIR R4 Composition.Class http://hl7.org/fhir/R4/composition-definitions.html#Composition.class
+//
+def R3Composition_ClassToR4(url, extension, data) {
+  var category: extension::fetchCodeableConceptArray(url, extension)
+  if category then {
+    category
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 Composition.Section to FHIR R4 Composition.Section.
+//
+// Argument(s):
+//   data : FHIR STU3 Composition.Section http://hl7.org/fhir/STU3/composition-definitions.html#Composition.section
+//
+// Output(s):
+//   FHIR R4 Composition.Section http://hl7.org/fhir/R4/composition-definitions.html#Composition.section
+//
+def R3Composition_SectionToR4(data) {
+  title: data.title
+  code: data.code
+  author: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/composition-definitions.html#Composition.section.author", data.extension)
+  focus: extension::fetchReference("https://www.hl7.org/fhir/R4/composition-definitions.html#Composition.section.focus", data.extension)
+  text: data.text
+  mode: data.mode
+  orderedBy: data.orderedBy
+  entry: datatypes::R3ReferenceToR4(data.entry[])
+  emptyReason: data.emptyReason
+  section: data.section
+}
+
+// Description: Converts a FHIR R4 Composition.Section to FHIR STU3 Composition.Section.
+//
+// Argument(s):
+//   data : FHIR R4 Composition.Section http://hl7.org/fhir/R4/composition-definitions.html#Composition.section
+//
+// Output(s):
+//   FHIR STU3 Composition.Section http://hl7.org/fhir/STU3/composition-definitions.html#Composition.section
+//
+def R4Composition_SectionToR3(data) {
+  title: data.title
+  code: data.code
+  text: data.text
+  mode: data.mode
+  orderedBy: data.orderedBy
+  entry: datatypes::R4ReferenceToR3(data.entry[])
+  emptyReason: data.emptyReason
+  section: data.section
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/composition-definitions.html#Composition.section.author", data.author[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/composition-definitions.html#Composition.section.focus", data.focus[])
+}

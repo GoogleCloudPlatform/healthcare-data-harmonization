@@ -1,0 +1,15 @@
+{
+  "id": "f001",
+  "identifier": [
+    {
+      "system": "http:/goodhealthhospital/identifier/devices",
+      "value": "12345"
+    }
+  ],
+  "resourceType": "Device",
+  "status": "active",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\u003cp\u003e\u003cb\u003eGenerated Narrative with Details\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eid\u003c/b\u003e: f001\u003c/p\u003e\u003cp\u003e\u003cb\u003eidentifier\u003c/b\u003e: 12345\u003c/p\u003e\u003cp\u003e\u003cb\u003estatus\u003c/b\u003e: active\u003c/p\u003e\u003c/div\u003e",
+    "status": "generated"
+  }
+}

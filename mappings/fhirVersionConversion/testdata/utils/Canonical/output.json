@@ -1,0 +1,12 @@
+{
+  "extension": [
+    {
+      "url": "test_url",
+      "valueString": "test_canonical1"
+    },
+    {
+      "url": "test_url",
+      "valueString": "test_canonical2"
+    }
+  ]
+}

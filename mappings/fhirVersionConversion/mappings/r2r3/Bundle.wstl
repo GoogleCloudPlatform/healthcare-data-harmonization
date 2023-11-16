@@ -1,0 +1,57 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def BundleBase(bundle) {
+  resourceType: bundle.resourceType
+  id: bundle.id
+  meta: bundle.meta
+  implicitRules: bundle.implicitRules
+  language: bundle.language
+  type: bundle.type
+  total: bundle.total
+  link: bundle.link
+  signature: bundle.signature
+}
+
+def R2BundleToR3(bundle) {
+  BundleBase(bundle)
+  entry: R2Bundle_EntryToR3(bundle.entry[])
+}
+
+def R3BundleToR2(bundle) {
+  BundleBase(bundle)
+  entry: R3Bundle_EntryToR2(bundle.entry[])
+}
+
+def R2Bundle_EntryToR3(data) {
+  link: data.link
+  fullUrl: data.fullUrl
+  resource: data.resource
+  search: data.search
+  request: data.request
+  response: R2Bundle_Entry_ResponseToR3(data.response)
+}
+
+def R3Bundle_EntryToR2(data) {
+  link: data.link
+  fullUrl: data.fullUrl
+  resource: data.resource
+  search: data.search
+  request: data.request
+  response: R3Bundle_Entry_ResponseToR2(data.response)
+}
+
+def R2Bundle_Entry_ResponseToR3(data) {
+  status: data.status
+  location: data.location
+  etag: data.etag
+  lastModified: data.lastModified
+}
+
+def R3Bundle_Entry_ResponseToR2(data) {
+  status: data.status
+  location: data.location
+  etag: data.etag
+  lastModified: data.lastModified
+}

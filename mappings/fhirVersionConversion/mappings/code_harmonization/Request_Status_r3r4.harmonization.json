@@ -1,0 +1,183 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "draft",
+          "display": "Pending",
+          "target": [
+            {
+              "code": "draft",
+              "display": "Draft",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "active",
+          "display": "Active",
+          "target": [
+            {
+              "code": "active",
+              "display": "Active",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "suspended",
+          "display": "Suspended",
+          "target": [
+            {
+              "code": "on-hold",
+              "display": "On Hold",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "completed",
+          "display": "Completed",
+          "target": [
+            {
+              "code": "completed",
+              "display": "Completed",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "entered-in-error",
+          "display": "Entered In Error",
+          "target": [
+            {
+              "code": "entered-in-error",
+              "display": "Entered In Error",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "cancelled",
+          "display": "Cancelled",
+          "target": [
+            {
+              "code": "revoked",
+              "display": "Revoked",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "unknown",
+          "display": "Unknown",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "Unknown",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/care-plan-status",
+      "target": "http://hl7.org/fhir/request-status",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "unknown",
+        "display": "Unknown"
+      }
+    },
+    {
+      "element": [
+        {
+          "code": "draft",
+          "display": "Draft",
+          "target": [
+            {
+              "code": "draft",
+              "display": "Draft",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "active",
+          "display": "Active",
+          "target": [
+            {
+              "code": "active",
+              "display": "Active",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "suspended",
+          "display": "Suspended",
+          "target": [
+            {
+              "code": "on-hold",
+              "display": "On Hold",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "completed",
+          "display": "Completed",
+          "target": [
+            {
+              "code": "completed",
+              "display": "Completed",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "entered-in-error",
+          "display": "Entered In Error",
+          "target": [
+            {
+              "code": "entered-in-error",
+              "display": "Entered In Error",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "cancelled",
+          "display": "Cancelled",
+          "target": [
+            {
+              "code": "revoked",
+              "display": "Revoked",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "unknown",
+          "display": "Unknown",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "Unknown",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/request-status",
+      "target": "http://hl7.org/fhir/request-status",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "unknown",
+        "display": "Unknown"
+      }
+    }
+  ],
+  "id": "Request_Status_r3r4",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

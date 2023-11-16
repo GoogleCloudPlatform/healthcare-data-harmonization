@@ -1,0 +1,71 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def VisionPrescriptionBase(visionPrescription) {
+  resourcebase::ResourceBase(visionPrescription)
+  identifier: visionPrescription.identifier
+  dateWritten: visionPrescription.dateWritten
+  reasonCodeableConcept: visionPrescription.reasonCodeableConcept
+}
+
+def R2VisionPrescriptionToR3(visionPrescription) {
+  VisionPrescriptionBase(visionPrescription)
+  contained: datatypes::R2ResourceToR3(visionPrescription.contained[])
+  reasonReference: datatypes::R2ReferenceToR3(visionPrescription.reasonReference)
+  prescriber: datatypes::R2ReferenceToR3(visionPrescription.prescriber)
+  patient: datatypes::R2ReferenceToR3(visionPrescription.patient)
+  encounter: datatypes::R2ReferenceToR3(visionPrescription.encounter)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/visionprescription-definitions.html#VisionPrescription.status", visionPrescription.extension)
+  status: if status? then status else visionPrescription.status
+  dispense: R2VisionPrescription_DispenseToR3(visionPrescription.dispense[])
+}
+
+def R3VisionPrescriptionToR2(visionPrescription) {
+  VisionPrescriptionBase(visionPrescription)
+  contained: datatypes::R3ResourceToR2(visionPrescription.contained[])
+  reasonReference: datatypes::R3ReferenceToR2(visionPrescription.reasonReference)
+  prescriber: datatypes::R3ReferenceToR2(visionPrescription.prescriber)
+  patient: datatypes::R3ReferenceToR2(visionPrescription.patient)
+  encounter: datatypes::R3ReferenceToR2(visionPrescription.encounter)
+  dispense: R3VisionPrescription_DispenseToR2(visionPrescription.dispense[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/visionprescription-definitions.html#VisionPrescription.status", visionPrescription.status)
+}
+
+def R2VisionPrescription_DispenseToR3(data) {
+  product: datatypes::CodingToCodeableConcept(data.product)
+  eye: data.eye
+  sphere: data.sphere
+  cylinder: data.cylinder
+  axis: data.axis
+  prism: data.prism
+  base: data.base
+  add: data.add
+  power: data.power
+  backCurve: data.backCurve
+  diameter: data.diameter
+  duration: data.duration
+  color: data.color
+  brand: data.brand
+  note: extension::fetchAnnotationArray("https://www.hl7.org/fhir/STU3/visionprescription-definitions.html#VisionPrescription.dispense.note", data.extension)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/DSTU2/visionprescription-definitions.html#VisionPrescription.dispense.notes", data.notes)
+}
+
+def R3VisionPrescription_DispenseToR2(data) {
+  product: datatypes::CodeableConceptToCoding(data.product)
+  eye: data.eye
+  sphere: data.sphere
+  cylinder: data.cylinder
+  axis: data.axis
+  prism: data.prism
+  base: data.base
+  add: data.add
+  power: data.power
+  backCurve: data.backCurve
+  diameter: data.diameter
+  duration: data.duration
+  color: data.color
+  brand: data.brand
+  notes: extension::fetchString("https://www.hl7.org/fhir/DSTU2/visionprescription-definitions.html#VisionPrescription.dispense.notes", data.extension)
+  extension[]: extension::BuildAnnotationExtension("https://www.hl7.org/fhir/STU3/visionprescription-definitions.html#VisionPrescription.dispense.note", data.note[])
+}

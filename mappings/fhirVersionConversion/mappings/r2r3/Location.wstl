@@ -1,0 +1,37 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def LocationBase(location) {
+  resourcebase::ResourceBase(location)
+  identifier: location.identifier
+  status: location.status
+  name: location.name
+  description: location.description
+  mode: location.mode
+  type: location.type
+  telecom: location.telecom
+  address: location.address
+  physicalType: location.physicalType
+  position: location.position
+}
+
+def R2LocationToR3(location) {
+  LocationBase(location)
+  contained: datatypes::R2ResourceToR3(location.contained[])
+  partOf: datatypes::R2ReferenceToR3(location.partOf)
+  managingOrganization: datatypes::R2ReferenceToR3(location.managingOrganization)
+  operationalStatus: extension::fetchCoding("https://www.hl7.org/fhir/STU3/location-definitions.html#Location.operationalStatus", location.extension)
+  alias: extension::fetchStringArray("https://www.hl7.org/fhir/STU3/location-definitions.html#Location.alias", location.extension)
+  endpoint: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/location-definitions.html#Location.endpoint", location.extension)
+}
+
+def R3LocationToR2(location) {
+  LocationBase(location)
+  contained: datatypes::R3ResourceToR2(location.contained[])
+  partOf: datatypes::R3ReferenceToR2(location.partOf)
+  managingOrganization: datatypes::R3ReferenceToR2(location.managingOrganization)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/STU3/location-definitions.html#Location.operationalStatus", location.operationalStatus)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/location-definitions.html#Location.alias", location.alias[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/location-definitions.html#Location.endpoint", location.endpoint[])
+}

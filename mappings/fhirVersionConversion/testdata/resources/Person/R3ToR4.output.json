@@ -1,0 +1,88 @@
+{
+  "active": true,
+  "address": [
+    {
+      "city": "PleasantVille",
+      "line": [
+        "534 Erewhon St"
+      ],
+      "postalCode": "3999",
+      "state": "Vic",
+      "use": "home"
+    }
+  ],
+  "birthDate": "1974-12-25",
+  "gender": "male",
+  "id": "example",
+  "identifier": [
+    {
+      "assigner": {
+        "display": "Acme Healthcare"
+      },
+      "period": {
+        "start": "2001-05-06"
+      },
+      "system": "urn:oid:1.2.36.146.595.217.0.1",
+      "type": {
+        "coding": [
+          {
+            "code": "MR",
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+          }
+        ]
+      },
+      "use": "usual",
+      "value": "12345"
+    }
+  ],
+  "link": [
+    {
+      "target": {
+        "display": "Peter Chalmers",
+        "reference": "RelatedPerson/peter"
+      }
+    },
+    {
+      "target": {
+        "display": "Peter Chalmers",
+        "reference": "Patient/example"
+      }
+    }
+  ],
+  "name": [
+    {
+      "family": "Chalmers",
+      "given": [
+        "Peter",
+        "James"
+      ],
+      "use": "official"
+    },
+    {
+      "given": [
+        "Jim"
+      ],
+      "use": "usual"
+    }
+  ],
+  "resourceType": "Person",
+  "telecom": [
+    {
+      "use": "home"
+    },
+    {
+      "system": "phone",
+      "use": "work",
+      "value": "(03) 5555 6473"
+    },
+    {
+      "system": "email",
+      "use": "home",
+      "value": "Jim@example.org"
+    }
+  ],
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\n      \u003ctable\u003e\n        \u003ctbody\u003e\n          \u003ctr\u003e\n            \u003ctd\u003eName\u003c/td\u003e\n            \u003ctd\u003ePeter James \u003cb\u003eChalmers\u003c/b\u003e (\u0026quot;Jim\u0026quot;)\u003c/td\u003e\n          \u003c/tr\u003e\n          \u003ctr\u003e\n            \u003ctd\u003eAddress\u003c/td\u003e\n            \u003ctd\u003e534 Erewhon, Pleasantville, Vic, 3999\u003c/td\u003e\n          \u003c/tr\u003e\n          \u003ctr\u003e\n            \u003ctd\u003eContacts\u003c/td\u003e\n            \u003ctd\u003eHome: unknown. Work: (03) 5555 6473\u003c/td\u003e\n          \u003c/tr\u003e\n          \u003ctr\u003e\n            \u003ctd\u003eId\u003c/td\u003e\n            \u003ctd\u003eMRN: 12345 (Acme Healthcare)\u003c/td\u003e\n          \u003c/tr\u003e\n        \u003c/tbody\u003e\n      \u003c/table\u003e\n    \u003c/div\u003e",
+    "status": "generated"
+  }
+}

@@ -1,0 +1,83 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def StructureDefinitionBase(structureDefinition) {
+  resourcebase::ResourceBase(structureDefinition)
+  url: structureDefinition.url
+  identifier: structureDefinition.identifier
+  version: structureDefinition.version
+  name: structureDefinition.name
+  date: structureDefinition.date
+  publisher: structureDefinition.publisher
+  fhirVersion: structureDefinition.fhirVersion
+  abstract: structureDefinition.abstract
+  contextType: structureDefinition.contextType
+  context: structureDefinition.context
+  snapshot: structureDefinition.snapshot
+  differential: structureDefinition.differential
+}
+
+def R2StructureDefinitionToR3(structureDefinition) {
+  StructureDefinitionBase(structureDefinition)
+  contained: datatypes::R2ResourceToR3(structureDefinition.contained[])
+  title: structureDefinition.display
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.status", structureDefinition.extension)
+  status: if status? then status else structureDefinition.status
+  kind: extension::fetchCode("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.kind", structureDefinition.extension)
+  experimental: structureDefinition.experimental
+  contact: extension::fetchContactDetailArray("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.contact", structureDefinition.extension)
+  description: structureDefinition.description
+  useContext: extension::fetchUsageContextArray("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.useContext", structureDefinition.extension)
+  jurisdiction: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.jurisdiction", structureDefinition.extension)
+  purpose: structureDefinition.requirements
+  copyright: structureDefinition.copyright
+  keyword: structureDefinition.code
+  mapping: R2StructureDefinition_MappingToR3(structureDefinition.mapping[])
+  contextInvariant: extension::fetchStringArray("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.contextInvariant", structureDefinition.extension)
+  type: structureDefinition.constrainedType
+  baseDefinition: structureDefinition.base
+  derivation: extension::fetchCode("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.derivation", structureDefinition.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/structuredefinition-definitions.html#StructureDefinition.status", structureDefinition.status)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/structuredefinition-definitions.html#StructureDefinition.kind", structureDefinition.kind)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/structuredefinition-definitions.html#StructureDefinition.useContext", structureDefinition.useContext[])
+}
+
+def R3StructureDefinitionToR2(structureDefinition) {
+  StructureDefinitionBase(structureDefinition)
+  contained: datatypes::R3ResourceToR2(structureDefinition.contained[])
+  display: structureDefinition.title
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/structuredefinition-definitions.html#StructureDefinition.status", structureDefinition.extension)
+  status: if status? then status else structureDefinition.status
+  kind: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/structuredefinition-definitions.html#StructureDefinition.kind", structureDefinition.extension)
+  experimental: structureDefinition.experimental
+  description: structureDefinition.description
+  useContext: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/DSTU2/structuredefinition-definitions.html#StructureDefinition.useContext", structureDefinition.extension)
+  requirements: structureDefinition.purpose
+  copyright: structureDefinition.copyright
+  code: structureDefinition.keyword
+  mapping: R3StructureDefinition_MappingToR2(structureDefinition.mapping[])
+  constrainedType: structureDefinition.type
+  base: structureDefinition.baseDefinition
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.status", structureDefinition.status)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.kind", structureDefinition.kind)
+  extension[]: extension::BuildContactDetail("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.contact", structureDefinition.contact[])
+  extension[]: extension::BuildBase64BinaryExtension("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.useContext", structureDefinition.useContext[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.jurisdiction", structureDefinition.jurisdiction[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.contextInvariant", structureDefinition.contextInvariant[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.derivation", structureDefinition.derivation)
+}
+
+def R2StructureDefinition_MappingToR3(data) {
+  identity: data.identity
+  uri: data.uri
+  name: data.name
+  comment: data.comments
+}
+
+def R3StructureDefinition_MappingToR2(data) {
+  identity: data.identity
+  uri: data.uri
+  name: data.name
+  comments: data.comment
+}

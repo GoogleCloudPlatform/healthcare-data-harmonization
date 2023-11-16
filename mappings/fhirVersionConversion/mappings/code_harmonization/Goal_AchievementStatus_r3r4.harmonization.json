@@ -1,0 +1,84 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "in-progress",
+          "display": "In Progress",
+          "target": [
+            {
+              "code": "in-progress",
+              "display": "In Progress",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "sustaining",
+          "display": "Sustaining",
+          "target": [
+            {
+              "code": "sustaining",
+              "display": "Sustaining",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "on-target",
+          "display": "On Target",
+          "target": [
+            {
+              "code": "sustaining",
+              "display": "Sustaining",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ahead-of-target",
+          "display": "Ahead of Target",
+          "target": [
+            {
+              "code": "improving",
+              "display": "Improving",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "behind-target",
+          "display": "Behind Target",
+          "target": [
+            {
+              "code": "worsening",
+              "display": "Worsening",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "achieved",
+          "display": "Achieved",
+          "target": [
+            {
+              "code": "achieved",
+              "display": "Achieved",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/goal-status",
+      "target": "http://terminology.hl7.org/CodeSystem/goal-achievement",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "no-change",
+        "display": "No Change"
+      }
+    }
+  ],
+  "id": "Goal_AchievementStatus",
+  "resourceType": "ConceptMap",
+  "version": "v2"
+}

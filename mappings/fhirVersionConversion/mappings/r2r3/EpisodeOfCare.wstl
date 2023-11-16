@@ -1,0 +1,37 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def EpisodeOfCareBase(episodeOfCare) {
+  resourcebase::ResourceBase(episodeOfCare)
+  identifier: episodeOfCare.identifier
+  status: episodeOfCare.status
+  statusHistory: episodeOfCare.statusHistory
+  type: episodeOfCare.type
+  period: episodeOfCare.period
+}
+
+def R2EpisodeOfCareToR3(episodeOfCare) {
+  EpisodeOfCareBase(episodeOfCare)
+  contained: datatypes::R2ResourceToR3(episodeOfCare.contained[])
+  referralRequest: datatypes::R2ReferenceToR3(episodeOfCare.referralRequest[])
+  careManager: datatypes::R2ReferenceToR3(episodeOfCare.careManager)
+  managingOrganization: datatypes::R2ReferenceToR3(episodeOfCare.managingOrganization)
+  patient: datatypes::R2ReferenceToR3(episodeOfCare.patient)
+  team: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/episodeofcare-definitions.html#EpisodeOfCare.team", episodeOfCare.extension)
+  account: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/episodeofcare-definitions.html#EpisodeOfCare.account", episodeOfCare.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/episodeofcare-definitions.html#EpisodeOfCare.condition", episodeOfCare.condition[])
+}
+
+def R3EpisodeOfCareToR2(episodeOfCare) {
+  EpisodeOfCareBase(episodeOfCare)
+  contained: datatypes::R3ResourceToR2(episodeOfCare.contained[])
+  referralRequest: datatypes::R3ReferenceToR2(episodeOfCare.referralRequest[])
+  careManager: datatypes::R3ReferenceToR2(episodeOfCare.careManager)
+  managingOrganization: datatypes::R3ReferenceToR2(episodeOfCare.managingOrganization)
+  patient: datatypes::R3ReferenceToR2(episodeOfCare.patient)
+  condition: extension::fetchReferenceArray("https://www.hl7.org/fhir/DSTU2/episodeofcare-definitions.html#EpisodeOfCare.condition", episodeOfCare.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/episodeofcare-definitions.html#EpisodeOfCare.team", episodeOfCare.team[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/episodeofcare-definitions.html#EpisodeOfCare.account", episodeOfCare.account[])
+
+}

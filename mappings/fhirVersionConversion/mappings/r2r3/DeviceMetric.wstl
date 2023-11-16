@@ -1,0 +1,29 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def DeviceMetricBase(deviceMetric) {
+  resourcebase::ResourceBase(deviceMetric)
+  identifier: deviceMetric.identifier
+  type: deviceMetric.type
+  unit: deviceMetric.unit
+  operationalStatus: deviceMetric.operationalStatus
+  color: deviceMetric.color
+  category: deviceMetric.category
+  measurementPeriod: deviceMetric.measurementPeriod
+  calibration: deviceMetric.calibration
+}
+
+def R2DeviceMetricToR3(deviceMetric) {
+  DeviceMetricBase(deviceMetric)
+  contained: datatypes::R2ResourceToR3(deviceMetric.contained[])
+  source: datatypes::R2ReferenceToR3(deviceMetric.source)
+  parent: datatypes::R2ReferenceToR3(deviceMetric.parent)
+}
+
+def R3DeviceMetricToR2(deviceMetric) {
+  DeviceMetricBase(deviceMetric)
+  contained: datatypes::R3ResourceToR2(deviceMetric.contained[])
+  source: datatypes::R3ReferenceToR2(deviceMetric.source)
+  parent: datatypes::R3ReferenceToR2(deviceMetric.parent)
+}

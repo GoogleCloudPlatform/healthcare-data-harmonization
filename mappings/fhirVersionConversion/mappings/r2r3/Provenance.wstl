@@ -1,0 +1,80 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def ProvenanceBase(provenance) {
+  resourcebase::ResourceBase(provenance)
+  period: provenance.period
+  recorded: provenance.recorded
+  policy: provenance.policy
+  signature: provenance.signature
+}
+
+def R2ProvenanceToR3(provenance) {
+  ProvenanceBase(provenance)
+  contained: datatypes::R2ResourceToR3(provenance.contained[])
+  location: datatypes::R2ReferenceToR3(provenance.location)
+  target: datatypes::R2ReferenceToR3(provenance.target[])
+  reason: datatypes::CodeableConceptToCoding(provenance.reason[])
+  activity: extension::fetchCoding("https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.activity", provenance.extension)
+  agent: R2Provenance_AgentToR3(provenance.agent[])
+  entity: R2Provenance_EntityToR3(provenance.entity[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/provenance-definitions.html#Provenance.activity", provenance.activity)
+}
+
+def R3ProvenanceToR2(provenance) {
+  ProvenanceBase(provenance)
+  contained: datatypes::R3ResourceToR2(provenance.contained[])
+  location: datatypes::R3ReferenceToR2(provenance.location)
+  target: datatypes::R3ReferenceToR2(provenance.target[])
+  reason: datatypes::CodingToCodeableConcept(provenance.reason[])
+  activity: extension::fetchCodeableConcept("https://www.hl7.org/fhir/DSTU2/provenance-definitions.html#Provenance.activity", provenance.extension)
+  agent: R3Provenance_AgentToR2(provenance.agent[])
+  entity: R3Provenance_EntityToR2(provenance.entity[])
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.activity", provenance.activity)
+}
+
+def R2Provenance_AgentToR3(data) {
+  role: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.agent.role", data.extension)
+  whoUri: extension::fetchUri("https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.agent.whoUri", data.extension)
+  whoReference: datatypes::R2ReferenceToR3(data.actor)
+  onBehalfOfUri: extension::fetchUri("https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.agent.onBehalfOfUri", data.extension)
+  onBehalfOfReference: extension::fetchReference("https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.agent.onBehalfOfReference", data.extension)
+  relatedAgentType: data.relatedAgent[0].type
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/provenance-definitions.html#Provenance.agent.role", data.role)
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/DSTU2/provenance-definitions.html#Provenance.agent.userId", data.userId)
+}
+
+def R3Provenance_AgentToR2(data) {
+  role: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/provenance-definitions.html#Provenance.agent.role", data.extension)
+  actor: datatypes::R3ReferenceToR2(data.whoReference)
+  userId: extension::fetchIdentifier("https://www.hl7.org/fhir/DSTU2/provenance-definitions.html#Provenance.agent.userId", data.extension)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.agent.role", data.role[])
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.agent.whoUri", data.whoUri)
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.agent.onBehalfOfUri", data.onBehalfOfUri)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.agent.onBehalfOfReference", data.onBehalfOfReference)
+}
+
+def R2Provenance_EntityToR3(data) {
+  role: extension::fetchCode("https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.entity.role", data.extension)
+  whatUri: extension::fetchUri("https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.entity.whatUri", data.extension)
+  whatReference: extension::fetchReference("https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.entity.whatReference", data.extension)
+  whatIdentifier: extension::fetchIdentifier("https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.entity.whatIdentifier", data.extension)
+  agent[]: R2Provenance_AgentToR3(data.agent)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/provenance-definitions.html#Provenance.entity.role", data.role)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/provenance-definitions.html#Provenance.entity.type", data.type)
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/DSTU2/provenance-definitions.html#Provenance.entity.reference", data.reference)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/DSTU2/provenance-definitions.html#Provenance.entity.display", data.display)
+}
+
+def R3Provenance_EntityToR2(data) {
+  role: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/provenance-definitions.html#Provenance.entity.role", data.extension)
+  type: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/provenance-definitions.html#Provenance.entity.type", data.extension)
+  reference: extension::fetchUri("https://www.hl7.org/fhir/DSTU2/provenance-definitions.html#Provenance.entity.reference", data.extension)
+  display: extension::fetchString("https://www.hl7.org/fhir/DSTU2/provenance-definitions.html#Provenance.entity.display", data.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.entity.role", data.role)
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.entity.whatUri", data.whatUri)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.entity.whatReference", data.whatReference)
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.entity.whatIdentifier", data.whatIdentifier)
+  agent: R3Provenance_AgentToR2(data.agent[0])
+}

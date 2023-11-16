@@ -1,0 +1,55 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   organization : FHIR Organization resource
+//
+// Output(s):
+//   FHIR Organization Resource
+//
+def OrganizationBase(organization) {
+  resourcebase::ResourceBase(organization)
+  identifier: organization.identifier
+  type: organization.type
+  name: organization.name
+  alias: organization.alias
+  telecom: organization.telecom
+  address: organization.address
+}
+
+// Description: Converts a FHIR STU3 Organization resource to FHIR R4 Organization resource.
+//
+// Argument(s):
+//   organization : FHIR STU3 Organization resource https://www.hl7.org/fhir/stu3/organization.html
+//
+// Output(s):
+//   FHIR R4 Organization Resource https://www.hl7.org/fhir/r4/organization.html
+//
+def R3OrganizationToR4(organization) {
+  OrganizationBase(organization)
+  contained: datatypes::R3ResourceToR4(organization.contained[])
+  endpoint: datatypes::R3ReferenceToR4(organization.endpoint[])
+  partOf: datatypes::R3ReferenceToR4(organization.partOf)
+  active: organization.active
+  contact: organization.contact
+}
+
+// Description: Converts a FHIR R4 Organization resource to FHIR STU3 Organization resource.
+//
+// Argument(s):
+//   organization : FHIR R4 Organization resource https://www.hl7.org/fhir/r4/organization.html
+//
+// Output(s):
+//   FHIR STU3 Organization Resource https://www.hl7.org/fhir/stu3/organization.html
+//
+def R4OrganizationToR3(organization) {
+  OrganizationBase(organization)
+  contained: datatypes::R4ResourceToR3(organization.contained[])
+  endpoint: datatypes::R4ReferenceToR3(organization.endpoint[])
+  partOf: datatypes::R4ReferenceToR3(organization.partOf)
+  active: organization.active
+  contact: organization.contact
+}

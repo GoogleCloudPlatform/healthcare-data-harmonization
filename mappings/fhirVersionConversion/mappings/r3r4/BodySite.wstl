@@ -1,0 +1,61 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   bodyStructure : FHIR BodyStructure resource
+//
+// Output(s):
+//   FHIR BodyStructure Resource
+//
+def BodyStructureBase(bodyStructure) {
+  id: bodyStructure.id
+  meta: bodyStructure.meta
+  implicitRules: bodyStructure.implicitRules
+  language: bodyStructure.language
+  text: bodyStructure.text
+  contained: bodyStructure.contained
+  extension: bodyStructure.extension
+  modifierExtension: bodyStructure.modifierExtension
+  identifier: bodyStructure.identifier
+  active: bodyStructure.active
+  description: bodyStructure.description
+  image: bodyStructure.image
+}
+
+// Description: Converts a FHIR STU3 BodySite resource to FHIR R4 BodyStructure resource.
+//
+// Argument(s):
+//   bodySite : FHIR STU3 BodySite resource https://www.hl7.org/fhir/stu3/bodySite.html
+//
+// Output(s):
+//   FHIR R4 BodyStructure Resource https://www.hl7.org/fhir/r4/bodyStructure.html
+//
+def R3BodySiteToR4(bodySite) {
+  BodyStructureBase(bodySite)
+  contained: datatypes::R3ResourceToR4(bodySite.contained[])
+  patient: datatypes::R3ReferenceToR4(bodySite.patient)
+  resourceType: "BodyStructure"
+  location: bodySite.code
+  locationQualifier: bodySite.qualifier
+  morphology: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/bodystructure-definitions.html#BodyStructure.morphology", bodySite.extension)
+}
+
+// Description: Converts a FHIR FHIR R4 BodyStructure resource to STU3 BodySite resource.
+//
+// Argument(s):
+//   bodyStructure : FHIR R4 BodySite resource https://www.hl7.org/fhir/r4/bodyStructure.html
+//
+// Output(s):
+//   FHIR R4 BodySite Resource https://www.hl7.org/fhir/stu3/bodySite.html
+//
+def R4BodyStructureToR3(bodyStructure) {
+  BodyStructureBase(bodyStructure)
+  contained: datatypes::R4ResourceToR3(bodyStructure.contained[])
+  patient: datatypes::R4ReferenceToR3(bodyStructure.patient)
+  resourceType: "BodySite"
+  code: bodyStructure.location
+  qualifier: bodyStructure.locationQualifier
+}

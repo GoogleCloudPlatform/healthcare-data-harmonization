@@ -1,0 +1,56 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def PractitionerBase(practitioner) {
+  resourcebase::ResourceBase(practitioner)
+  identifier: practitioner.identifier
+  active: practitioner.active
+  telecom: practitioner.telecom
+  address: practitioner.address
+  gender: practitioner.gender
+  birthDate: practitioner.birthDate
+  photo: practitioner.photo
+}
+
+def R2PractitionerToR3(practitioner) {
+  PractitionerBase(practitioner)
+  contained: datatypes::R2ResourceToR3(practitioner.contained[])
+  qualification: R2Practitioner_QualificationToR3(practitioner.qualification[])
+  name: R2Practitioner_NameToR3("https://www.hl7.org/fhir/STU3/practitioner-definitions.html#Practitioner.name", practitioner.extension, practitioner.name)
+  communication: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/practitioner-definitions.html#Practitioner.communication", practitioner.extension)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/practitioner-definitions.html#Practitioner.communication", practitioner.communication[])
+}
+
+def R3PractitionerToR2(practitioner) {
+  PractitionerBase(practitioner)
+  contained: datatypes::R3ResourceToR2(practitioner.contained[])
+  qualification: R3Practitioner_QualificationToR2(practitioner.qualification[])
+  name: practitioner.name[0]
+  communication: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/DSTU2/practitioner-definitions.html#Practitioner.communication", practitioner.extension)
+  extension[]: extension::BuildHumanNameExtension("https://www.hl7.org/fhir/STU3/practitioner-definitions.html#Practitioner.name", practitioner.name[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/practitioner-definitions.html#Practitioner.communication", practitioner.communication[])
+}
+
+def R2Practitioner_NameToR3(url, extension, data) {
+  var name: extension::fetchHumanNameArray(url, extension)
+  if name then {
+    name
+  } else {
+    arrayOf(data)
+  }
+}
+
+def R2Practitioner_QualificationToR3(data) {
+  identifier: data.identifier
+  code: data.code
+  period: data.period
+  issuer: datatypes::R2ReferenceToR3(data.issuer)
+}
+
+def R3Practitioner_QualificationToR2(data) {
+  identifier: data.identifier
+  code: data.code
+  period: data.period
+  issuer: datatypes::R3ReferenceToR2(data.issuer)
+}

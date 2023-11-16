@@ -1,0 +1,98 @@
+{
+  "actor": [
+    {
+      "entity": {
+        "display": "VA Ann Arbor Healthcare System",
+        "reference": "Organization/f001"
+      },
+      "role": [
+        {
+          "coding": [
+            {
+              "code": "IR",
+              "display": "Recipient",
+              "system": "http://org.mdhhs.fhir.consent-actor-type"
+            }
+          ],
+          "text": "Recipient of restricted health information"
+        }
+      ]
+    },
+    {
+      "entity": {
+        "display": "Community Mental Health Clinic",
+        "reference": "Organization/2"
+      },
+      "role": [
+        {
+          "coding": [
+            {
+              "code": "IS",
+              "display": "Sender",
+              "system": "http://org.mdhhs.fhir.consent-actor-type"
+            }
+          ],
+          "text": "Sender of restricted health information"
+        }
+      ]
+    }
+  ],
+  "id": "C-2121",
+  "issued": "2031-11-01T21:18:27-04:00",
+  "legal": [
+    {
+      "contentAttachment": {
+        "contentType": "application/pdf",
+        "language": "en-US",
+        "title": "MDHHS-5515 Consent To Share Your Health Information",
+        "url": "http://org.mihin.ecms/ConsentDirective-2121"
+      }
+    }
+  ],
+  "meta": {
+    "lastUpdated": "2016-07-19T18:18:42.108-04:00",
+    "versionId": "1"
+  },
+  "resourceType": "Contract",
+  "signer": [
+    {
+      "party": {
+        "display": "Alice Recruit",
+        "reference": "Patient/f201"
+      },
+      "type": {
+        "code": "SELF",
+        "system": "http://org.mdhhs.fhir.consent-signer-type"
+      }
+    }
+  ],
+  "subType": [
+    {
+      "coding": [
+        {
+          "code": "MDHHS-5515",
+          "display": "Michigan MDHHS-5515 Consent to Share Behavioral Health Information for Care Coordination Purposes",
+          "system": "http://hl7.org/fhir/consentcategorycodes"
+        }
+      ]
+    }
+  ],
+  "subject": [
+    {
+      "reference": "Patient/f201"
+    }
+  ],
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\u003cp\u003e\u003cb\u003eGenerated Narrative with Details\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eid\u003c/b\u003e: C-2121\u003c/p\u003e\u003cp\u003e\u003cb\u003emeta\u003c/b\u003e: \u003c/p\u003e\u003cp\u003e\u003cb\u003eissued\u003c/b\u003e: 01/11/2031 9:18:27 PM\u003c/p\u003e\u003cp\u003e\u003cb\u003esubject\u003c/b\u003e: \u003ca\u003ePatient/f201\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003etype\u003c/b\u003e: Opt-in consent directive \u003cspan\u003e(Details : {http://org.mdhhs.fhir.consentdirective-type code 'OPTIN' = 'OPTIN)\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003esubType\u003c/b\u003e: Michigan MDHHS-5515 Consent to Share Behavioral Health Information for Care Coordination Purposes \u003cspan\u003e(Details : {http://hl7.org/fhir/consentcategorycodes code 'MDHHS-5515' = 'Michigan MDHHS-5515 Consent to Share Behavioral Health Information for Care Coordination Purposes', given as 'Michigan MDHHS-5515 Consent to Share Behavioral Health Information for Care Coordination Purposes'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003esecurityLabel\u003c/b\u003e: Restricted (Details: http://hl7.org/fhir/v3/Confidentiality code R = 'restricted', stated as 'Restricted'), substance abuse information sensitivity (Details: http://hl7.org/fhir/v3/ActCode code ETH = 'substance abuse information sensitivity', stated as 'substance abuse information sensitivity'), 42 CFR Part2 (Details: http://hl7.org/fhir/v3/ActCode code 42CFRPart2 = '42 CFR Part2', stated as 'null'), treatment (Details: http://hl7.org/fhir/v3/ActReason code TREAT = 'treatment', stated as 'treatment'), healthcare payment (Details: http://hl7.org/fhir/v3/ActReason code HPAYMT = 'healthcare payment', stated as 'healthcare payment'), healthcare operations (Details: http://hl7.org/fhir/v3/ActReason code HOPERAT = 'healthcare operations', stated as 'healthcare operations'), persist security label (Details: http://hl7.org/fhir/v3/ActCode code PERSISTLABEL = 'persist security label', stated as 'persist security label'), privacy mark (Details: http://hl7.org/fhir/v3/ActCode code PRIVMARK = 'privacy mark', stated as 'privacy mark'), no redisclosure without consent directive (Details: http://hl7.org/fhir/v3/ActCode code NORDSCLCD = 'no redisclosure without consent directive', stated as 'no redisclosure without consent directive')\u003c/p\u003e\u003cblockquote\u003e\u003cp\u003e\u003cb\u003eagent\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eactor\u003c/b\u003e: \u003ca\u003eVA Ann Arbor Healthcare System\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003erole\u003c/b\u003e: Recipient of restricted health information \u003cspan\u003e(Details : {http://org.mdhhs.fhir.consent-actor-type code 'IR' = 'IR', given as 'Recipient'})\u003c/span\u003e\u003c/p\u003e\u003c/blockquote\u003e\u003cblockquote\u003e\u003cp\u003e\u003cb\u003eagent\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eactor\u003c/b\u003e: \u003ca\u003eCommunity Mental Health Clinic\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003erole\u003c/b\u003e: Sender of restricted health information \u003cspan\u003e(Details : {http://org.mdhhs.fhir.consent-actor-type code 'IS' = 'IS', given as 'Sender'})\u003c/span\u003e\u003c/p\u003e\u003c/blockquote\u003e\u003ch3\u003eSigners\u003c/h3\u003e\u003ctable\u003e\u003ctr\u003e\u003ctd\u003e-\u003c/td\u003e\u003ctd\u003e\u003cb\u003eType\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eParty\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eSignature\u003c/b\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e*\u003c/td\u003e\u003ctd\u003eSELF (Details: http://org.mdhhs.fhir.consent-signer-type code SELF = 'SELF', stated as 'null')\u003c/td\u003e\u003ctd\u003e\u003ca\u003eAlice Recruit\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003c/tr\u003e\u003c/table\u003e\u003ch3\u003eLegals\u003c/h3\u003e\u003ctable\u003e\u003ctr\u003e\u003ctd\u003e-\u003c/td\u003e\u003ctd\u003e\u003cb\u003eContent[x]\u003c/b\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e*\u003c/td\u003e\u003ctd/\u003e\u003c/tr\u003e\u003c/table\u003e\u003c/div\u003e",
+    "status": "generated"
+  },
+  "type": {
+    "coding": [
+      {
+        "code": "OPTIN",
+        "system": "http://org.mdhhs.fhir.consentdirective-type"
+      }
+    ],
+    "text": "Opt-in consent directive"
+  }
+}

@@ -1,0 +1,296 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   testScript : FHIR TestScript resource
+//
+// Output(s):
+//   FHIR TestScript Resource
+//
+def TestScriptBase(testScript) {
+  resourcebase::ResourceBase(testScript)
+  url: testScript.url
+  identifier: testScript.identifier
+  version: testScript.version
+  name: testScript.name
+  title: testScript.title
+  date: testScript.date
+  publisher: testScript.publisher
+  contact: testScript.contact
+  description: testScript.description
+  useContext: testScript.useContext
+  jurisdiction: testScript.jurisdiction
+  purpose: testScript.purpose
+  copyright: testScript.copyright
+  profile: testScript.profile
+  variable: testScript.variable
+  test: testScript.test
+  teardown: testScript.teardown
+}
+
+// Description: Converts a FHIR STU3 TestScript resource to FHIR R4 TestScript resource.
+//
+// Argument(s):
+//   testScript : FHIR STU3 TestScript resource https://www.hl7.org/fhir/stu3/testscript.html
+//
+// Output(s):
+//   FHIR R4 TestScript Resource https://www.hl7.org/fhir/r4/testscript.html
+//
+def R3TestScriptToR4(testScript) {
+  TestScriptBase(testScript)
+  contained: datatypes::R3ResourceToR4(testScript.contained[])
+  status: testScript.status
+  experimental: testScript.experimental
+  origin: testScript.origin
+  destination: testScript.destination
+  metadata: R3TestScript_MetadataToR4(testScript.metadata)
+  fixture: R3TestScript_FixtureToR4(testScript.fixture[])
+  setup: R3TestScript_SetupToR4(testScript.setup)
+}
+
+// Description: Converts a FHIR R4 TestScript resource to FHIR STU3 TestScript resource.
+//
+// Argument(s):
+//   testScript : FHIR R4 TestScript resource https://www.hl7.org/fhir/r4/testscript.html
+//
+// Output(s):
+//   FHIR STU3 TestScript Resource https://www.hl7.org/fhir/stu3/testscript.html
+//
+def R4TestScriptToR3(testScript) {
+  TestScriptBase(testScript)
+  contained: datatypes::R4ResourceToR3(testScript.contained[])
+  status: testScript.status
+  experimental: testScript.experimental
+  origin: testScript.origin
+  destination: testScript.destination
+  metadata: testScript.metadata
+  fixture: testScript.fixture
+  setup: R4TestScript_SetupToR3(testScript.setup)
+}
+
+// Description: Converts a FHIR STU3 TestScript.setup to FHIR R4 TestScript.setup.
+//
+// Argument(s):
+//   data : FHIR STU3 TestScript.setup https://www.hl7.org/fhir/stu3/testscript-definitions.html#TestScript.setup
+//
+// Output(s):
+//   FHIR R4 TestScript.setup https://www.hl7.org/fhir/r4/testscript-definitions.html#TestScript.setup
+//
+def R3TestScript_SetupToR4(required data) {
+  action: R3TestScript_Setup_ActionToR4(data.action[])
+}
+
+// Description: Converts a FHIR R4 TestScript.setup to FHIR STU3 TestScript.setup.
+//
+// Argument(s):
+//   data : FHIR R4 TestScript.setup https://www.hl7.org/fhir/r4/testscript-definitions.html#TestScript.setup
+//
+// Output(s):
+//   FHIR STU3 TestScript.setup https://www.hl7.org/fhir/stu3/testscript-definitions.html#TestScript.setup
+//
+def R4TestScript_SetupToR3(data) {
+  action: R4TestScript_Setup_ActionToR3(data.action[])
+}
+
+// Description: Converts a FHIR STU3 TestScript.setup.action to FHIR R4 TestScript.setup.action.
+//
+// Argument(s):
+//   data : FHIR STU3 TestScript.setup.action https://www.hl7.org/fhir/stu3/testscript-definitions.html#TestScript.setup.action
+//
+// Output(s):
+//   FHIR R4 TestScript.setup.action https://www.hl7.org/fhir/r4/testscript-definitions.html#TestScript.setup.action
+//
+def R3TestScript_Setup_ActionToR4(required data) {
+  operation: R3TestScript_Setup_Action_OperationToR4(data.operation)
+  assert: R3TestScript_Setup_Action_AssertToR4(data.assert)
+}
+
+// Description: Converts a FHIR R4 TestScript.setup.action to FHIR STU3 TestScript.setup.action.
+//
+// Argument(s):
+//   data : FHIR R4 TestScript.setup.action https://www.hl7.org/fhir/r4/testscript-definitions.html#TestScript.setup.action
+//
+// Output(s):
+//   FHIR STU3 TestScript.setup.action https://www.hl7.org/fhir/stu3/testscript-definitions.html#TestScript.setup.action
+//
+def R4TestScript_Setup_ActionToR3(data) {
+  operation: R4TestScript_Setup_Action_OperationToR3(data.operation)
+  assert: R4TestScript_Setup_Action_AssertToR3(data.assert)
+}
+
+// Description: Converts a FHIR STU3 TestScript.setup.action.operation to FHIR R4 TestScript.setup.action.operation.
+//
+// Argument(s):
+//   data : FHIR STU3 TestScript.setup.action.operation https://www.hl7.org/fhir/stu3/testscript-definitions.html#TestScript.setup.action.operation
+//
+// Output(s):
+//   FHIR R4 TestScript.setup.action.operation https://www.hl7.org/fhir/r4/testscript-definitions.html#TestScript.setup.action.operation
+//
+def R3TestScript_Setup_Action_OperationToR4(required data) {
+  type: data.type
+  resource: data.resource
+  label: data.label
+  description: data.description
+  accept: data.accept
+  contentType: data.contentType
+  destination: data.destination
+  encodeRequestUrl: data.encodeRequestUrl
+  encodeRequestUrl: utilities::defaultIfNull($this.encodeRequestUrl, false)
+  method: extension::fetchCode("https://www.hl7.org/fhir/R4/testscript-definitions.html#TestScript.setup.action.operation.method", data.extension)
+  origin: data.origin
+  params: data.params
+  requestHeader: data.requestHeader
+  requestId: data.requestId
+  responseId: data.responseId
+  sourceId: data.sourceId
+  targetId: data.targetId
+  url: data.url
+}
+
+// Description: Converts a FHIR R4 TestScript.setup.action.operation to FHIR STU3 TestScript.setup.action.operation.
+//
+// Argument(s):
+//   data : FHIR R4 TestScript.setup.action.operation https://www.hl7.org/fhir/r4/testscript-definitions.html#TestScript.setup.action.operation
+//
+// Output(s):
+//   FHIR STU3 TestScript.setup.action.operation https://www.hl7.org/fhir/stu3/testscript-definitions.html#TestScript.setup.action.operation
+//
+def R4TestScript_Setup_Action_OperationToR3(data) {
+  type: data.type
+  resource: data.resource
+  label: data.label
+  description: data.description
+  accept: data.accept
+  contentType: data.contentType
+  destination: data.destination
+  encodeRequestUrl: data.encodeRequestUrl
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/testscript-definitions.html#TestScript.setup.action.operation.method", data.method)
+  origin: data.origin
+  params: data.params
+  requestHeader: data.requestHeader
+  requestId: data.requestId
+  responseId: data.responseId
+  sourceId: data.sourceId
+  targetId: data.targetId
+  url: data.url
+}
+
+// Description: Converts a FHIR STU3 TestScript.setup.action.assert to FHIR R4 TestScript.setup.action.assert.
+//
+// Argument(s):
+//   data : FHIR STU3 TestScript.setup.action.assert https://www.hl7.org/fhir/stu3/testscript-definitions.html#TestScript.setup.action.assert
+//
+// Output(s):
+//   FHIR R4 TestScript.setup.action.assert https://www.hl7.org/fhir/r4/testscript-definitions.html#TestScript.setup.action.assert
+//
+def R3TestScript_Setup_Action_AssertToR4(required data) {
+  label: data.label
+  description: data.description
+  direction: data.direction
+  compareToSourceId: data.compareToSourceId
+  compareToSourceExpression: data.compareToSourceExpression
+  compareToSourcePath: data.compareToSourcePath
+  contentType: data.contentType
+  expression: data.expression
+  headerField: data.headerField
+  minimumId: data.minimumId
+  navigationLinks: data.navigationLinks
+  operator: data.operator
+  path: data.path
+  requestMethod: data.requestMethod
+  requestURL: data.requestURL
+  resource: data.resource
+  response: data.response
+  responseCode: data.responseCode
+  sourceId: data.sourceId
+  validateProfileId: data.validateProfileId
+  value: data.value
+  warningOnly: data.warningOnly
+  warningOnly: utilities::defaultIfNull($this.warningOnly, false)
+}
+
+// Description: Converts a FHIR R4 TestScript.setup.action.assert to FHIR STU3 TestScript.setup.action.assert.
+//
+// Argument(s):
+//   data : FHIR R4 TestScript.setup.action.assert https://www.hl7.org/fhir/r4/testscript-definitions.html#TestScript.setup.action.assert
+//
+// Output(s):
+//   FHIR STU3 TestScript.setup.action.assert https://www.hl7.org/fhir/stu3/testscript-definitions.html#TestScript.setup.action.assert
+//
+def R4TestScript_Setup_Action_AssertToR3(data) {
+  label: data.label
+  description: data.description
+  direction: data.direction
+  compareToSourceId: data.compareToSourceId
+  compareToSourceExpression: data.compareToSourceExpression
+  compareToSourcePath: data.compareToSourcePath
+  contentType: data.contentType
+  expression: data.expression
+  headerField: data.headerField
+  minimumId: data.minimumId
+  navigationLinks: data.navigationLinks
+  operator: data.operator
+  path: data.path
+  requestMethod: data.requestMethod
+  requestURL: data.requestURL
+  resource: data.resource
+  response: data.response
+  responseCode: data.responseCode
+  sourceId: data.sourceId
+  validateProfileId: data.validateProfileId
+  value: data.value
+  warningOnly: data.warningOnly
+}
+
+// Description: Converts a FHIR STU3 TestScript.metadata to FHIR R4 TestScript.metadata.
+//
+// Argument(s):
+//   data : FHIR STU3 TestScript.metadata https://www.hl7.org/fhir/stu3/testscript-definitions.html#TestScript.metadata
+//
+// Output(s):
+//   FHIR R4 TestScript.metadata https://www.hl7.org/fhir/r4/testscript-definitions.html#TestScript.metadata
+//
+def R3TestScript_MetadataToR4(required data) {
+  link: data.link
+  capability: R3TestScript_Metadata_CapabilityToR4(data.capability[])
+}
+
+// Description: Converts a FHIR STU3 TestScript.metadata.capability to FHIR R4 TestScript.metadata.capability.
+//
+// Argument(s):
+//   data : FHIR STU3 TestScript.metadata.capability https://www.hl7.org/fhir/stu3/testscript-definitions.html#TestScript.metadata.capability
+//
+// Output(s):
+//   FHIR R4 TestScript.metadata.capability https://www.hl7.org/fhir/r4/testscript-definitions.html#TestScript.metadata.capability
+//
+def R3TestScript_Metadata_CapabilityToR4(required data) {
+  'required': data.'required'
+  'required': utilities::defaultIfNull($this.'required', false)
+  validated: data.validated
+  validated: utilities::defaultIfNull($this.validated, false)
+  description: data.description
+  origin: data.origin
+  destination: data.destination
+  link: data.link
+  capabilities: data.capabilities.reference
+}
+
+// Description: Converts a FHIR STU3 TestScript.fixture to FHIR R4 TestScript.fixture.
+//
+// Argument(s):
+//   data : FHIR STU3 TestScript.fixture https://www.hl7.org/fhir/stu3/testscript-definitions.html#TestScript.fixture
+//
+// Output(s):
+//   FHIR R4 TestScript.fixture https://www.hl7.org/fhir/r4/testscript-definitions.html#TestScript.fixture
+//
+def R3TestScript_FixtureToR4(required data) {
+  id: data.id
+  autocreate: data.autocreate
+  autocreate: utilities::defaultIfNull($this.autocreate, false)
+  autodelete: data.autodelete
+  autodelete: utilities::defaultIfNull($this.autodelete, false)
+  resource: datatypes::R3ReferenceToR4(data.resource)
+}

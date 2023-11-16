@@ -1,0 +1,32 @@
+{
+  "expirationDate": "2020-08-08",
+  "id": "f001",
+  "identifier": [
+    {
+      "system": "http:/goodhealthhospital/identifier/devices",
+      "value": "12345"
+    }
+  ],
+  "location": {
+    "display": "Central Supply"
+  },
+  "manufactureDate": "2015-08-08",
+  "owner": {
+    "reference": "Organization/2.16.840.1.113883.19.5"
+  },
+  "resourceType": "Device",
+  "status": "active",
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f001</p><p><b>identifier</b>: 12345</p><p><b>status</b>: active</p></div>",
+    "status": "generated"
+  },
+  "type": {
+    "coding": [
+      {
+        "code": "25062003",
+        "display": "Feeding tube, device",
+        "system": "http://snomed.info/sct"
+      }
+    ]
+  }
+}

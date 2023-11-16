@@ -1,0 +1,12 @@
+{
+  "extension": [
+    {
+      "url": "test_url",
+      "valueCode": "test1"
+    },
+    {
+      "url": "test_url",
+      "valueCode": "test2"
+    }
+  ]
+}

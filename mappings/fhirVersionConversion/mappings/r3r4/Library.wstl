@@ -1,0 +1,103 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   library : FHIR Library resource
+//
+// Output(s):
+//   FHIR Library Resource
+//
+def LibraryBase(library) {
+  resourcebase::ResourceBase(library)
+  url: library.url
+  identifier: library.identifier
+  version: library.version
+  name: library.name
+  title: library.title
+  date: library.date
+  publisher: library.publisher
+  contact: library.contact
+  description: library.description
+  useContext: library.useContext
+  jurisdiction: library.jurisdiction
+  purpose: library.purpose
+  usage: library.usage
+  copyright: library.copyright
+  approvalDate: library.approvalDate
+  lastReviewDate: library.lastReviewDate
+  effectivePeriod: library.effectivePeriod
+  topic: library.topic
+  content: library.content
+}
+
+// Description: Converts a FHIR STU3 Library resource to FHIR R4 Library resource.
+//
+// Argument(s):
+//   library : FHIR STU3 Library resource https://www.hl7.org/fhir/stu3/library.html
+//
+// Output(s):
+//   FHIR R4 Library Resource https://www.hl7.org/fhir/r4/library.html
+//
+def R3LibraryToR4(library) {
+  LibraryBase(library)
+  contained: datatypes::R3ResourceToR4(library.contained[])
+  subtitle: extension::fetchString("https://www.hl7.org/fhir/R4/library-definitions.html#Library.subtitle", library.extension)
+  status: library.status
+  experimental: library.experimental
+  type: library.type
+  subjectCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/library-definitions.html#Library.subjectCodeableConcept", library.extension)
+  subjectReference: extension::fetchReference("https://www.hl7.org/fhir/R4/library-definitions.html#Library.subjectReference", library.extension)
+  author: R3Library_ContributorToR4("https://www.hl7.org/fhir/R4/library-definitions.html#Library.author", library.extension, library.contributor, "author")
+  editor: R3Library_ContributorToR4("https://www.hl7.org/fhir/R4/library-definitions.html#Library.editor", library.extension, library.contributor, "editor")
+  reviewer: R3Library_ContributorToR4("https://www.hl7.org/fhir/R4/library-definitions.html#Library.reviewer", library.extension, library.contributor, "reviewer")
+  endorser: R3Library_ContributorToR4("https://www.hl7.org/fhir/R4/library-definitions.html#Library.endorser", library.extension, library.contributor, "endorser")
+  relatedArtifact: datatypes::R3RelatedArtifactToR4(library.relatedArtifact[])
+  dataRequirement: datatypes::R3DataRequirementToR4(library.dataRequirement[])
+  parameter: datatypes::R3ParameterDefinitionToR4(library.parameter[])
+}
+
+// Description: Converts a FHIR R4 Library resource to FHIR STU3 Library resource.
+//
+// Argument(s):
+//   library : FHIR R4 Library resource https://www.hl7.org/fhir/r4/library.html
+//
+// Output(s):
+//   FHIR STU3 Library Resource https://www.hl7.org/fhir/stu3/library.html
+//
+def R4LibraryToR3(library) {
+  LibraryBase(library)
+  contained: datatypes::R4ResourceToR3(library.contained[])
+  status: library.status
+  experimental: library.experimental
+  type: library.type
+  extension[]: extension::BuildContactDetailExtension("https://www.hl7.org/fhir/R4/library-definitions.html#Library.author", library.author[])
+  extension[]: extension::BuildContactDetailExtension("https://www.hl7.org/fhir/R4/library-definitions.html#Library.editor", library.editor[])
+  extension[]: extension::BuildContactDetailExtension("https://www.hl7.org/fhir/R4/library-definitions.html#Library.reviewer", library.reviewer[])
+  extension[]: extension::BuildContactDetailExtension("https://www.hl7.org/fhir/R4/library-definitions.html#Library.endorser", library.endorser[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/library-definitions.html#Library.subjectCodeableConcept", library.subjectCodeableConcept)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/library-definitions.html#Library.subjectReference", library.subjectReference)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/library-definitions.html#Library.subtitle", library.subtitle)
+}
+
+// Description: Converts a FHIR STU3 Library.Contributor to FHIR R4 Library.Contributor.
+//
+// Argument(s):
+//   data : FHIR STU3 Library.Contributor http://hl7.org/fhir/STU3/library-definitions.html#Library.contributor
+//   url : FHIR STU3 Extension.url http://hl7.org/fhir/STU3/extensibility-definitions.html#Extension.url
+//   extension : FHIR STU3 DomainResource.Extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 Library.Contributor http://hl7.org/fhir/R4/library-definitions.html#Library.contributor
+//
+def R3Library_ContributorToR4(url, extension, data, type) {
+  var contact: extension::fetchContactDetailArray(url, extension)
+  if contact then {
+    contact
+  } else {
+    var contributorList: data[where $.type == type]
+    contributorList[*].contact
+  }
+}

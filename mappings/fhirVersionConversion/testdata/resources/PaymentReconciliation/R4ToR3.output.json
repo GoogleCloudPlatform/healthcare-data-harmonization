@@ -1,0 +1,166 @@
+{
+  "created": "2014-08-16",
+  "detail": [
+    {
+      "amount": {
+        "currency": "USD",
+        "value": 3500
+      },
+      "date": "2014-08-16",
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/R4/paymentreconciliation-definitions.html#PaymentReconciliation.detail.identifier",
+          "valueIdentifier": {
+            "system": "http://www.BenefitsInc.com/payment/2018/detail",
+            "value": "10-12345-001"
+          }
+        }
+      ],
+      "payee": {
+        "reference": "Organization/1"
+      },
+      "request": {
+        "identifier": {
+          "system": "http://happyvalleyclinic.com/claim",
+          "value": "AB12345"
+        }
+      },
+      "response": {
+        "identifier": {
+          "system": "http://www.BenefitsInc.com/fhir/claimresponse",
+          "value": "CR20140815-AB12345"
+        }
+      },
+      "submitter": {
+        "reference": "Organization/1"
+      },
+      "type": {
+        "coding": [
+          {
+            "code": "payment",
+            "system": "http://terminology.hl7.org/CodeSystem/payment-type"
+          }
+        ]
+      }
+    },
+    {
+      "amount": {
+        "currency": "USD",
+        "value": 4000
+      },
+      "date": "2014-08-12",
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/R4/paymentreconciliation-definitions.html#PaymentReconciliation.detail.identifier",
+          "valueIdentifier": {
+            "system": "http://www.BenefitsInc.com/payment/2018/detail",
+            "value": "10-12345-002"
+          }
+        }
+      ],
+      "request": {
+        "reference": "http://www.BenefitsInc.com/fhir/oralhealthclaim/225476332699"
+      },
+      "type": {
+        "coding": [
+          {
+            "code": "payment",
+            "system": "http://terminology.hl7.org/CodeSystem/payment-type"
+          }
+        ]
+      }
+    },
+    {
+      "amount": {
+        "currency": "USD",
+        "value": -1500
+      },
+      "date": "2014-08-16",
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/R4/paymentreconciliation-definitions.html#PaymentReconciliation.detail.identifier",
+          "valueIdentifier": {
+            "system": "http://www.BenefitsInc.com/payment/2018/detail",
+            "value": "10-12345-003"
+          }
+        }
+      ],
+      "type": {
+        "coding": [
+          {
+            "code": "advance",
+            "system": "http://terminology.hl7.org/CodeSystem/payment-type"
+          }
+        ]
+      }
+    }
+  ],
+  "disposition": "2014 August mid-month settlement.",
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/R4/paymentreconciliation-definitions.html#PaymentReconciliation.paymentDate",
+      "valueDate": "2014-08-01"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/R4/paymentreconciliation-definitions.html#PaymentReconciliation.paymentIdentifier",
+      "valueIdentifier": {
+        "system": "http://www.BenefitsInc.com/payment/2018",
+        "value": "10-12345"
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/R4/paymentreconciliation-definitions.html#PaymentReconciliation.outcome",
+      "valueCode": "complete"
+    }
+  ],
+  "form": {
+    "coding": [
+      {
+        "code": "PAYREC/2016/01B",
+        "system": "http://ncforms.org/formid"
+      }
+    ]
+  },
+  "id": "ER2500",
+  "identifier": [
+    {
+      "system": "http://www.BenefitsInc.com/fhir/enrollmentresponse",
+      "value": "781234"
+    }
+  ],
+  "organization": {
+    "reference": "Organization/2"
+  },
+  "period": {
+    "end": "2014-08-31",
+    "start": "2014-08-16"
+  },
+  "processNote": [
+    {
+      "text": "Due to the year end holiday the cutoff for submissions for December will be the 28th.",
+      "type": {
+        "coding": [
+          {
+            "code": "display"
+          }
+        ]
+      }
+    }
+  ],
+  "request": {
+    "reference": "http://www.BenefitsInc.com/fhir/eligibility/225476332402"
+  },
+  "requestProvider": {
+    "reference": "Organization/1"
+  },
+  "resourceType": "PaymentReconciliation",
+  "status": "active",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003eA human-readable rendering of the PaymentReconciliation\u003c/div\u003e",
+    "status": "generated"
+  },
+  "total": {
+    "currency": "USD",
+    "value": 7000
+  }
+}

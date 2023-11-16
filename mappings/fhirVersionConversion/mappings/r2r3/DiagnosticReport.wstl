@@ -1,0 +1,56 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def DiagnosticReportBase(diagnosticReport) {
+  resourcebase::ResourceBase(diagnosticReport)
+  identifier: diagnosticReport.identifier
+  status: diagnosticReport.status
+  category: diagnosticReport.category
+  code: diagnosticReport.code
+  conclusion: diagnosticReport.conclusion
+  codedDiagnosis: diagnosticReport.codedDiagnosis
+  presentedForm: diagnosticReport.presentedForm
+}
+
+def R2DiagnosticReportToR3(diagnosticReport) {
+  DiagnosticReportBase(diagnosticReport)
+  contained: datatypes::R2ResourceToR3(diagnosticReport.contained[])
+  image: R2DiagnosticReport_ImageToR3(diagnosticReport.image[])
+  result: datatypes::R2ReferenceToR3(diagnosticReport.result[])
+  specimen: datatypes::R2ReferenceToR3(diagnosticReport.specimen[])
+  basedOn: datatypes::R2ReferenceToR3(diagnosticReport.request[])
+  subject: datatypes::R2ReferenceToR3(diagnosticReport.subject)
+  context: datatypes::R2ReferenceToR3(diagnosticReport.encounter)
+  effectiveDateTime: diagnosticReport.effectiveDateTime
+  effectivePeriod: diagnosticReport.effectivePeriod
+  issued: diagnosticReport.issued
+  performer[].actor: datatypes::R2ReferenceToR3(diagnosticReport.performer)
+  imagingStudy: datatypes::R2ReferenceToR3(diagnosticReport.imagingStudy[])
+}
+
+def R3DiagnosticReportToR2(diagnosticReport) {
+  DiagnosticReportBase(diagnosticReport)
+  contained: datatypes::R3ResourceToR2(diagnosticReport.contained[])
+  image: R3DiagnosticReport_ImageToR2(diagnosticReport.image[])
+  result: datatypes::R3ReferenceToR2(diagnosticReport.result[])
+  specimen: datatypes::R3ReferenceToR2(diagnosticReport.specimen[])
+  request: datatypes::R3ReferenceToR2(diagnosticReport.basedOn[])
+  subject: datatypes::R3ReferenceToR2(diagnosticReport.subject)
+  encounter: datatypes::R3ReferenceToR2(diagnosticReport.context)
+  effectiveDateTime: diagnosticReport.effectiveDateTime
+  effectivePeriod: diagnosticReport.effectivePeriod
+  issued: diagnosticReport.issued
+  performer: datatypes::R3ReferenceToR2(diagnosticReport.performer[0].actor)
+  imagingStudy: datatypes::R3ReferenceToR2(diagnosticReport.imagingStudy[])
+}
+
+def R2DiagnosticReport_ImageToR3(data) {
+  comment: data.comment
+  link: datatypes::R2ReferenceToR3(data.link)
+}
+
+def R3DiagnosticReport_ImageToR2(data) {
+  comment: data.comment
+  link: datatypes::R2ReferenceToR3(data.link)
+}

@@ -1,0 +1,94 @@
+{
+  "active": true,
+  "address": [
+    {
+      "city": "Paris",
+      "country": "FRA",
+      "line": [
+        "43, Place du Marché Sainte Catherine"
+      ],
+      "postalCode": "75004"
+    }
+  ],
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/relatedperson-definitions.html#RelatedPerson.active",
+      "valueBoolean": true
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/relatedperson-definitions.html#RelatedPerson.relationship",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "N",
+            "system": "http://hl7.org/fhir/v2/0131"
+          },
+          {
+            "code": "WIFE",
+            "system": "http://hl7.org/fhir/v3/RoleCode"
+          }
+        ]
+      }
+    }
+  ],
+  "gender": "female",
+  "id": "benedicte",
+  "identifier": [
+    {
+      "system": "urn:oid:1.2.250.1.61",
+      "type": {
+        "text": "INSEE"
+      },
+      "use": "usual",
+      "value": "272117510400399"
+    }
+  ],
+  "name": [
+    {
+      "_family": {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/humanname-own-prefix",
+            "valueString": "VV"
+          }
+        ]
+      },
+      "family": "du Marché",
+      "given": [
+        "Bénédicte"
+      ]
+    }
+  ],
+  "patient": {
+    "reference": "Patient/example"
+  },
+  "photo": [
+    {
+      "contentType": "image/jpeg",
+      "url": "Binary/f016"
+    }
+  ],
+  "relationship": {
+    "coding": [
+      {
+        "code": "N",
+        "system": "http://hl7.org/fhir/v2/0131"
+      },
+      {
+        "code": "WIFE",
+        "system": "http://hl7.org/fhir/v3/RoleCode"
+      }
+    ]
+  },
+  "resourceType": "RelatedPerson",
+  "telecom": [
+    {
+      "system": "phone",
+      "value": "+33 (237) 998327"
+    }
+  ],
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\n      \u003ctable\u003e\n        \u003ctbody\u003e\n          \u003ctr\u003e\n            \u003ctd\u003eName\u003c/td\u003e\n            \u003ctd\u003eBénédicte du Marché\u003c/td\u003e\n          \u003c/tr\u003e\n          \u003ctr\u003e\n            \u003ctd\u003eAddress\u003c/td\u003e\n            \u003ctd\u003e43, Place du Marché Sainte Catherine, 75004 Paris, France\u003c/td\u003e\n          \u003c/tr\u003e\n          \u003ctr\u003e\n            \u003ctd\u003eContacts\u003c/td\u003e\n            \u003ctd\u003ePhone: +33 (237) 998327\u003c/td\u003e\n          \u003c/tr\u003e\n        \u003c/tbody\u003e\n      \u003c/table\u003e\n    \u003c/div\u003e",
+    "status": "generated"
+  }
+}

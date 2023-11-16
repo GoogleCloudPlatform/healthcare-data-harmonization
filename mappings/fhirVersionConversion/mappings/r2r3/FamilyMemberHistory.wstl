@@ -1,0 +1,91 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def FamilyMemberHistoryBase(familyMemberHistory) {
+  resourcebase::ResourceBase(familyMemberHistory)
+  identifier: familyMemberHistory.identifier
+  status: familyMemberHistory.status
+  date: familyMemberHistory.date
+  name: familyMemberHistory.name
+  relationship: familyMemberHistory.relationship
+  gender: familyMemberHistory.gender
+  bornPeriod: familyMemberHistory.bornPeriod
+  bornDate: familyMemberHistory.bornDate
+  bornString: familyMemberHistory.bornString
+  ageRange: familyMemberHistory.ageRange
+  ageString: familyMemberHistory.ageString
+  deceasedBoolean: familyMemberHistory.deceasedBoolean
+  deceasedRange: familyMemberHistory.deceasedRange
+  deceasedDate: familyMemberHistory.deceasedDate
+  deceasedString: familyMemberHistory.deceasedString
+}
+
+def R2FamilyMemberHistoryToR3(familyMemberHistory) {
+  FamilyMemberHistoryBase(familyMemberHistory)
+  contained: datatypes::R2ResourceToR3(familyMemberHistory.contained[])
+  patient: datatypes::R2ReferenceToR3(familyMemberHistory.patient)
+  definition: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.definition", familyMemberHistory.extension)
+  notDone: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.notDone", familyMemberHistory.extension)
+  notDoneReason: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.notDoneReason", familyMemberHistory.extension)
+  ageAge: extension::fetchAge("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.ageAge", familyMemberHistory.extension)
+  estimatedAge: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.estimatedAge", familyMemberHistory.extension)
+  deceasedAge: extension::fetchAge("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.deceasedAge", familyMemberHistory.extension)
+  reasonCode: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.reasonCode", familyMemberHistory.extension)
+  reasonReference: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.reasonReference", familyMemberHistory.extension)
+  note: R2FamilyMemberHistory_NoteToR3("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.note", familyMemberHistory.extension, familyMemberHistory.note)
+  condition: R2FamilyMemberHistory_ConditionToR3(familyMemberHistory.condition[])
+  extension[]: extension::BuildQuantityExtension("https://www.hl7.org/fhir/DSTU2/familymemberhistory-definitions.html#FamilyMemberHistory.ageQuantity", familyMemberHistory.ageQuantity)
+  extension[]: extension::BuildQuantityExtension("https://www.hl7.org/fhir/DSTU2/familymemberhistory-definitions.html#FamilyMemberHistory.deceasedQuantity", familyMemberHistory.deceasedQuantity)
+}
+
+def R3FamilyMemberHistoryToR2(familyMemberHistory) {
+  FamilyMemberHistoryBase(familyMemberHistory)
+  contained: datatypes::R3ResourceToR2(familyMemberHistory.contained[])
+  patient: datatypes::R3ReferenceToR2(familyMemberHistory.patient)
+  ageQuantity: extension::fetchQuantity("https://www.hl7.org/fhir/DSTU2/familymemberhistory-definitions.html#FamilyMemberHistory.ageQuantity", familyMemberHistory.extension)
+  deceasedQuantity: extension::fetchQuantity("https://www.hl7.org/fhir/DSTU2/familymemberhistory-definitions.html#FamilyMemberHistory.deceasedQuantity", familyMemberHistory.extension)
+  note: familyMemberHistory.note[0]
+  condition: R3FamilyMemberHistory_ConditionToR2(familyMemberHistory.condition[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.definition", familyMemberHistory.definition[])
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.notDone", familyMemberHistory.notDone)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.notDoneReason", familyMemberHistory.notDoneReason)
+  extension[]: extension::BuildAgeExtension("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.ageAge", familyMemberHistory.ageAge)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.estimatedAge", familyMemberHistory.estimatedAge)
+  extension[]: extension::BuildAgeExtension("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.deceasedAge", familyMemberHistory.deceasedAge)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.reasonCode", familyMemberHistory.reasonCode[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.reasonReference", familyMemberHistory.reasonReference[])
+  extension[]: extension::BuildAnnotationExtension("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.note", familyMemberHistory.note[])
+}
+
+def R2FamilyMemberHistory_NoteToR3(url, extension, data) {
+  var note: extension::fetchAnnotationArray(url, extension)
+  if note then {
+    note
+  } else {
+    arrayOf(data)
+  }
+}
+
+def R2FamilyMemberHistory_ConditionToR3(data) {
+  code: data.code
+  outcome: data.outcome
+  onsetAge: extension::fetchAge("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.condition.onsetAge", data.extension)
+  onsetRange: data.onsetRange
+  onsetPeriod: data.onsetPeriod
+  onsetString: data.onsetString
+  note: R2FamilyMemberHistory_NoteToR3("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.condition.note", data.extension, data.note)
+  extension[]: extension::BuildQuantityExtension("https://www.hl7.org/fhir/DSTU2/familymemberhistory-definitions.html#FamilyMemberHistory.condition.onsetQuantity", data.onsetQuantity)
+}
+
+def R3FamilyMemberHistory_ConditionToR2(data) {
+  code: data.code
+  outcome: data.outcome
+  onsetQuantity: extension::fetchQuantity("https://www.hl7.org/fhir/DSTU2/familymemberhistory-definitions.html#FamilyMemberHistory.condition.onsetQuantity", data.extension)
+  onsetRange: data.onsetRange
+  onsetPeriod: data.onsetPeriod
+  onsetString: data.onsetString
+  note: data.note[0]
+  extension[]: extension::BuildAgeExtension("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.condition.onsetAge", data.onsetAge)
+  extension[]: extension::BuildAnnotationExtension("https://www.hl7.org/fhir/STU3/familymemberhistory-definitions.html#FamilyMemberHistory.condition.note", data.note[])
+}

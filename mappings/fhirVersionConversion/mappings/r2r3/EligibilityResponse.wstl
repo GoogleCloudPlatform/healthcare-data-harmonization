@@ -1,0 +1,43 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def EligibilityResponseBase(eligibilityResponse) {
+  resourcebase::ResourceBase(eligibilityResponse)
+  identifier: eligibilityResponse.identifier
+  created: eligibilityResponse.created
+  disposition: eligibilityResponse.disposition
+}
+
+def R2EligibilityResponseToR3(eligibilityResponse) {
+  EligibilityResponseBase(eligibilityResponse)
+  contained: datatypes::R2ResourceToR3(eligibilityResponse.contained[])
+  request: datatypes::R2ReferenceToR3(eligibilityResponse.request)
+  requestProvider: datatypes::R2ReferenceToR3(eligibilityResponse.requestProvider)
+  requestOrganization: datatypes::R2ReferenceToR3(eligibilityResponse.requestOrganization)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.status", eligibilityResponse.extension)
+  status: if status? then status else eligibilityResponse.status
+  outcome: datatypes::CodeToCodeableConcept(eligibilityResponse.outcome)
+  insurer: extension::fetchReference("https://www.hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.insurer", eligibilityResponse.extension)
+  inforce: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.inforce", eligibilityResponse.extension)
+  form: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.form", eligibilityResponse.extension)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/eligibilityresponse-definitions.html#EligibilityResponse.ruleset", eligibilityResponse.ruleset)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/eligibilityresponse-definitions.html#EligibilityResponse.originalRuleset", eligibilityResponse.originalRuleset)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/eligibilityresponse-definitions.html#EligibilityResponse.organization", eligibilityResponse.organization)
+}
+
+def R3EligibilityResponseToR2(eligibilityResponse) {
+  EligibilityResponseBase(eligibilityResponse)
+  contained: datatypes::R3ResourceToR2(eligibilityResponse.contained[])
+  request: datatypes::R3ReferenceToR2(eligibilityResponse.request)
+  requestProvider: datatypes::R3ReferenceToR2(eligibilityResponse.requestProvider)
+  requestOrganization: datatypes::R3ReferenceToR2(eligibilityResponse.requestOrganization)
+  outcome: datatypes::CodeableConceptToCode(eligibilityResponse.outcome)
+  ruleset: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/eligibilityresponse-definitions.html#EligibilityResponse.ruleset", eligibilityResponse.extension)
+  originalRuleset: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/eligibilityresponse-definitions.html#EligibilityResponse.originalRuleset", eligibilityResponse.extension)
+  organization: extension::fetchReference("https://www.hl7.org/fhir/DSTU2/eligibilityresponse-definitions.html#EligibilityResponse.organization", eligibilityResponse.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.status", eligibilityResponse.status)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.insurer", eligibilityResponse.insurer)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.inforce", eligibilityResponse.inforce)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.form", eligibilityResponse.form)
+}

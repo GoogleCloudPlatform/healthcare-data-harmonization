@@ -1,0 +1,70 @@
+{
+  "agent": [
+    {
+      "actor": {
+        "reference": "Practitioner/xcda-author"
+      },
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.agent.onBehalfOfUri",
+          "valueUri": "#a1"
+        }
+      ]
+    },
+    {
+      "actor": {
+        "reference": "Device/software"
+      }
+    }
+  ],
+  "entity": [
+    {
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.entity.role",
+          "valueCode": "source"
+        },
+        {
+          "url": "https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.entity.whatReference",
+          "valueReference": {
+            "display": "CDA Document in XDS repository",
+            "reference": "DocumentReference/example"
+          }
+        }
+      ]
+    }
+  ],
+  "id": "example",
+  "location": {
+    "reference": "Location/1"
+  },
+  "period": {
+    "end": "2015-06-28",
+    "start": "2015-06-27"
+  },
+  "policy": [
+    "http://acme.com/fhir/Consent/25"
+  ],
+  "reason": [
+    {
+      "coding": [
+        {
+          "code": "3457005",
+          "display": "Referral",
+          "system": "http://snomed.info/sct"
+        }
+      ]
+    }
+  ],
+  "recorded": "2015-06-27T08:39:24+10:00",
+  "resourceType": "Provenance",
+  "target": [
+    {
+      "reference": "Procedure/example/_history/1"
+    }
+  ],
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003eprocedure record authored on 27-June 2015 by Harold Hippocrates, MD Content extracted from XDS managed CDA Referral received 26-June\u003c/div\u003e",
+    "status": "generated"
+  }
+}

@@ -1,0 +1,128 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   appointment : FHIR Appointment resource
+//
+// Output(s):
+//   FHIR Appointment Resource
+//
+def AppointmentBase(appointment) {
+  resourcebase::ResourceBase(appointment)
+  identifier: appointment.identifier
+  serviceType: appointment.serviceType
+  specialty: appointment.specialty
+  appointmentType: appointment.appointmentType
+  priority: appointment.priority
+  description: appointment.description
+  start: appointment.start
+  end: appointment.end
+  minutesDuration: appointment.minutesDuration
+  created: appointment.created
+  comment: appointment.comment
+  requestedPeriod: appointment.requestedPeriod
+}
+
+// Description: Converts a FHIR STU3 Appointment resource to FHIR R4 Appointment resource.
+//
+// Argument(s):
+//   appointment : FHIR STU3 Appointment resource https://www.hl7.org/fhir/stu3/appointment.html
+//
+// Output(s):
+//   FHIR R4 Appointment Resource https://www.hl7.org/fhir/r4/appointment.html
+//
+def R3AppointmentToR4(appointment) {
+  AppointmentBase(appointment)
+  contained: datatypes::R3ResourceToR4(appointment.contained[])
+  supportingInformation: datatypes::R3ReferenceToR4(appointment.supportingInformation[])
+  slot: datatypes::R3ReferenceToR4(appointment.slot[])
+  status: appointment.status
+  cancelationReason: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/appointment-definitions.html#Appointment.cancelationReason", appointment.extension)
+  serviceCategory: R3Appointment_ServiceCategoryToR4("https://www.hl7.org/fhir/R4/appointment-definitions.html#Appointment.serviceCategory", appointment.extension, appointment.serviceCategory)
+  reasonCode: appointment.reason
+  reasonReference: datatypes::R3ReferenceToR4(appointment.indication[])
+  patientInstruction: extension::fetchString("https://www.hl7.org/fhir/R4/appointment-definitions.html#Appointment.patientInstruction", appointment.extension)
+  basedOn: datatypes::R3ReferenceToR4(appointment.incomingReferral[])
+  participant: R3Appointment_ParticipantToR4(appointment.participant[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.serviceCategory", appointment.serviceCategory)
+}
+
+// Description: Converts a FHIR R4 Appointment resource to FHIR STU3 Appointment resource.
+//
+// Argument(s):
+//   appointment : FHIR R4 Appointment resource https://www.hl7.org/fhir/r4/appointment.html
+//
+// Output(s):
+//   FHIR STU3 Appointment Resource https://www.hl7.org/fhir/stu3/appointment.html
+//
+def R4AppointmentToR3(appointment) {
+  AppointmentBase(appointment)
+  contained: datatypes::R4ResourceToR3(appointment.contained[])
+  supportingInformation: datatypes::R4ReferenceToR3(appointment.supportingInformation[])
+  slot: datatypes::R4ReferenceToR3(appointment.slot[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.status", appointment.extension)
+  status: if status? then status else appointment.status
+  serviceCategory: appointment.serviceCategory[0]
+  reason: appointment.reasonCode
+  indication: datatypes::R4ReferenceToR3(appointment.reasonReference[])
+  incomingReferral: datatypes::R4ReferenceToR3(appointment.basedOn[])
+  participant: R4Appointment_ParticipantToR3(appointment.participant[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/appointment-definitions.html#Appointment.cancelationReason", appointment.cancelationReason)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/appointment-definitions.html#Appointment.serviceCategory", appointment.serviceCategory)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/appointment-definitions.html#Appointment.patientInstruction", appointment.patientInstruction)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/appointment-definitions.html#Appointment.status", appointment.status)
+}
+
+// Description: Converts a FHIR STU3 Appointment.ServiceCategory to FHIR R4 Appointment.ServiceCategory
+//
+// Argument(s):
+//   data : FHIR STU3 Appointment.ServiceCategory http://hl7.org/fhir/STU3/appointment-definitions.html#Appointment.serviceCategory
+//   url : FHIR STU3 Extension.url http://hl7.org/fhir/STU3/extensibility-definitions.html#Extension.url
+//   extension : FHIR STU3 DomainResource.Extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 Appointment.ServiceCategory http://hl7.org/fhir/R4/appointment-definitions.html#Appointment.serviceCategory
+//
+def R3Appointment_ServiceCategoryToR4(url, extension, data) {
+  var serviceCategory: extension::fetchReferenceArray(url, extension)
+  if serviceCategory then {
+    serviceCategory
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 Appointment.Participant to FHIR R4 Appointment.Participant
+//
+// Argument(s):
+//   data : FHIR STU3 Appointment.Participant http://hl7.org/fhir/STU3/appointment-definitions.html#Appointment.participant
+//
+// Output(s):
+//   FHIR R4 Appointment.Participant http://hl7.org/fhir/R4/appointment-definitions.html#Appointment.participant
+//
+def R3Appointment_ParticipantToR4(data) {
+  period: extension::fetchPeriod("https://www.hl7.org/fhir/R4/appointment-definitions.html#Appointment.participant.period", data.extension)
+  type: data.type
+  actor: datatypes::R3ReferenceToR4(data.actor)
+  'required': data.'required'
+  status: data.status
+}
+
+// Description: Converts a FHIR R4 Appointment.Participant to FHIR STU3 Appointment.Participant
+//
+// Argument(s):
+//   data : FHIR R4 Appointment.Participant http://hl7.org/fhir/R4/appointment-definitions.html#Appointment.participant
+//
+// Output(s):
+//   FHIR STU3 Appointment.Participant http://hl7.org/fhir/STU3/appointment-definitions.html#Appointment.participant
+//
+def R4Appointment_ParticipantToR3(data) {
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/R4/appointment-definitions.html#Appointment.participant.period", data.period)
+  type: data.type
+  actor: datatypes::R4ReferenceToR3(data.actor)
+  'required': data.'required'
+  status: data.status
+}

@@ -1,0 +1,86 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def QuestionnaireResponseBase(questionnaireResponse) {
+  resourcebase::ResourceBase(questionnaireResponse)
+  identifier: questionnaireResponse.identifier
+  status: questionnaireResponse.status
+  authored: questionnaireResponse.authored
+}
+
+def R2QuestionnaireResponseToR3(questionnaireResponse) {
+  QuestionnaireResponseBase(questionnaireResponse)
+  contained: datatypes::R2ResourceToR3(questionnaireResponse.contained[])
+  author: datatypes::R2ReferenceToR3(questionnaireResponse.author)
+  source: datatypes::R2ReferenceToR3(questionnaireResponse.source)
+  subject: datatypes::R2ReferenceToR3(questionnaireResponse.subject)
+  questionnaire: datatypes::R2ReferenceToR3(questionnaireResponse.questionnaire)
+  basedOn: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/questionnaireresponse-definitions.html#QuestionnaireResponse.basedOn", questionnaireResponse.extension)
+  parent: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/questionnaireresponse-definitions.html#QuestionnaireResponse.parent", questionnaireResponse.extension)
+  context: datatypes::R2ReferenceToR3(questionnaireResponse.encounter)
+  item[]: R2QuestionnaireResponse_ItemToR3(questionnaireResponse.group)
+}
+
+def R3QuestionnaireResponseToR2(questionnaireResponse) {
+  QuestionnaireResponseBase(questionnaireResponse)
+  contained: datatypes::R3ResourceToR2(questionnaireResponse.contained[])
+  author: datatypes::R3ReferenceToR2(questionnaireResponse.author)
+  source: datatypes::R3ReferenceToR2(questionnaireResponse.source)
+  subject: datatypes::R3ReferenceToR2(questionnaireResponse.subject)
+  questionnaire: datatypes::R3ReferenceToR2(questionnaireResponse.questionnaire)
+  encounter: datatypes::R3ReferenceToR2(questionnaireResponse.context)
+  item: questionnaireResponse.item
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/questionnaireresponse-definitions.html#QuestionnaireResponse.basedOn", questionnaireResponse.basedOn[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/questionnaireresponse-definitions.html#QuestionnaireResponse.parent", questionnaireResponse.parent[])
+}
+
+def R2QuestionnaireResponse_ItemToR3(data) {
+  linkId: data.linkId
+  definition: extension::fetchUri("https://www.hl7.org/fhir/STU3/questionnaireresponse-definitions.html#QuestionnaireResponse.item.definition", data.extension)
+  text: data.text
+  subject: data.subject
+  answer: R2QuestionnaireResponse_Item_AnwserToR3(data.question[0].answer[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/DSTU2/questionnaireresponse-definitions.html#QuestionnaireResponse.group.title", data.title)
+}
+
+def R3QuestionnaireResponse_ItemToR2(data) {
+  linkId: data.linkId
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/STU3/questionnaireresponse-definitions.html#QuestionnaireResponse.item.definition", data.definition)
+  title: extension::fetchString("https://www.hl7.org/fhir/DSTU2/questionnaireresponse-definitions.html#QuestionnaireResponse.group.title", data.extension)
+  text: data.text
+  subject: data.subject
+  question[].answer: R3QuestionnaireResponse_Item_AnwserToR2(data.answer[])
+}
+
+def R2QuestionnaireResponse_Item_AnwserToR3(data) {
+  valueBoolean: data.valueBoolean
+  valueDecimal: data.valueDecimal
+  valueInteger: data.valueInteger
+  valueDate: data.valueDate
+  valueDateTime: data.valueDateTime
+  valueTime: data.valueTime
+  valueString: data.valueString
+  valueUri: data.valueUri
+  valueAttachment: data.valueAttachment
+  valueCoding: data.valueCoding
+  valueQuantity: data.valueQuantity
+  valueReference: datatypes::R2ReferenceToR3(data.valueReference)
+  extension[]: extension::BuildInstantExtension("https://www.hl7.org/fhir/DSTU2/questionnaireresponse-definitions.html#QuestionnaireResponse.group.question.answer.valueInstant", data.valueInstant)
+}
+
+def R3QuestionnaireResponse_Item_AnwserToR2(data) {
+  valueBoolean: data.valueBoolean
+  valueDecimal: data.valueDecimal
+  valueInteger: data.valueInteger
+  valueDate: data.valueDate
+  valueDateTime: data.valueDateTime
+  valueTime: data.valueTime
+  valueString: data.valueString
+  valueUri: data.valueUri
+  valueAttachment: data.valueAttachment
+  valueCoding: data.valueCoding
+  valueQuantity: data.valueQuantity
+  valueReference: datatypes::R3ReferenceToR2(data.valueReference)
+  valueInstant: extension::fetchInstant("https://www.hl7.org/fhir/DSTU2/questionnaireresponse-definitions.html#QuestionnaireResponse.group.question.answer.valueInstant", data.extension)
+}

@@ -1,0 +1,39 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def SubstanceBase(substance) {
+  resourcebase::ResourceBase(substance)
+  identifier: substance.identifier
+  category: substance.category
+  code: substance.code
+  description: substance.description
+  instance: substance.instance
+}
+
+def R2SubstanceToR3(substance) {
+  SubstanceBase(substance)
+  contained: datatypes::R2ResourceToR3(substance.contained[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/substance-definitions.html#Substance.status", substance.extension)
+  status: if status? then status else substance.status
+  ingredient: R2Substance_IngredientToR3(substance.ingredient[])
+}
+
+def R3SubstanceToR2(substance) {
+  SubstanceBase(substance)
+  contained: datatypes::R3ResourceToR2(substance.contained[])
+  ingredient: R3Substance_IngredientToR2(substance.ingredient[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/substance-definitions.html#Substance.status", substance.status)
+}
+
+def R2Substance_IngredientToR3(data) {
+  quantity: data.quantity
+  substanceCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/substance-definitions.html#Substance.ingredient.substanceCodeableConcept", data.extension)
+  substanceReference: datatypes::R2ReferenceToR3(data.substance)
+}
+
+def R3Substance_IngredientToR2(data) {
+  quantity: data.quantity
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/substance-definitions.html#Substance.ingredient.substanceCodeableConcept", data.substanceCodeableConcept)
+  substance: datatypes::R3ReferenceToR2(data.substanceReference)
+}

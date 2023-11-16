@@ -1,0 +1,28 @@
+{
+  "code": {
+    "coding": [
+      {
+        "code": "83418008",
+        "display": "Entire fetus (body structure)",
+        "system": "http://snomed.info/sct"
+      }
+    ],
+    "text": "Fetus"
+  },
+  "description": "EDD 1/1/2017 confirmation by LMP",
+  "id": "fetus",
+  "identifier": [
+    {
+      "system": "http://goodhealth.org/bodysite/identifiers",
+      "value": "12345"
+    }
+  ],
+  "patient": {
+    "reference": "Patient/example"
+  },
+  "resourceType": "BodySite",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\u003cp\u003e\u003cb\u003eGenerated Narrative with Details\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eid\u003c/b\u003e: fetus\u003c/p\u003e\u003cp\u003e\u003cb\u003eidentifier\u003c/b\u003e: 12345\u003c/p\u003e\u003cp\u003e\u003cb\u003ecode\u003c/b\u003e: Fetus \u003cspan\u003e(Details : {SNOMED CT code '83418008' = 'Fetus', given as 'Entire fetus (body structure)'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003edescription\u003c/b\u003e: EDD 1/1/2017 confirmation by LMP\u003c/p\u003e\u003cp\u003e\u003cb\u003epatient\u003c/b\u003e: \u003ca\u003ePatient/example\u003c/a\u003e\u003c/p\u003e\u003c/div\u003e",
+    "status": "generated"
+  }
+}

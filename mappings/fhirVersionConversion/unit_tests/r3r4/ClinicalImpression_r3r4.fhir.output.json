@@ -1,0 +1,68 @@
+{
+  "assessor": {
+    "reference": "Practitioner/example"
+  },
+  "date": "2014-12-06T22:33:00+11:00",
+  "description": "This 26 yo male patient is brought into ER by ambulance after being involved in a motor vehicle accident",
+  "effectivePeriod": {
+    "end": "2014-12-06T22:33:00+11:00",
+    "start": "2014-12-06T20:00:00+11:00"
+  },
+  "encounter": {
+    "reference": "Encounter/example"
+  },
+  "finding": [
+    {
+      "itemCodeableConcept": {
+        "coding": [
+          {
+            "code": "850.0",
+            "system": "http://hl7.org/fhir/sid/icd-9"
+          }
+        ]
+      }
+    }
+  ],
+  "id": "example",
+  "identifier": [
+    {
+      "value": "12345"
+    }
+  ],
+  "investigation": [
+    {
+      "code": {
+        "text": "Initial Examination"
+      },
+      "item": [
+        {
+          "display": "deep laceration of the scalp (left temporo-occipital)"
+        },
+        {
+          "display": "decreased level of consciousness"
+        },
+        {
+          "display": "disoriented to time and place"
+        },
+        {
+          "display": "restless"
+        }
+      ]
+    }
+  ],
+  "problem": [
+    {
+      "display": "MVA"
+    }
+  ],
+  "resourceType": "ClinicalImpression",
+  "status": "completed",
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "summary": "provisional diagnoses of laceration of head and traumatic brain injury (TBI)",
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>identifier</b>: 12345</p><p><b>status</b>: completed</p><p><b>description</b>: This 26 yo male patient is brought into ER by ambulance after being involved in a motor vehicle accident</p><p><b>subject</b>: <a>Patient/example</a></p><p><b>context</b>: <a>Encounter/example</a></p><p><b>effective</b>: 06/12/2014 8:00:00 PM --&gt; 06/12/2014 10:33:00 PM</p><p><b>date</b>: 06/12/2014 10:33:00 PM</p><p><b>assessor</b>: <a>Practitioner/example</a></p><p><b>problem</b>: MVA</p><h3>Investigations</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Item</b></td></tr><tr><td>*</td><td>Initial Examination <span>(Details )</span></td><td>deep laceration of the scalp (left temporo-occipital)</td></tr></table><p><b>summary</b>: provisional diagnoses of laceration of head and traumatic brain injury (TBI)</p><h3>Findings</h3><table><tr><td>-</td><td><b>Item[x]</b></td></tr><tr><td>*</td><td>850.0 <span>(Details : {ICD-9 code '850.0' = '850.0)</span></td></tr></table></div>",
+    "status": "generated"
+  }
+}

@@ -1,0 +1,61 @@
+package utilities
+
+import "./dateTimeFns.wstl"
+import "./terminologyFns.wstl"
+
+// Description: Matches the given string is a Number or not
+//
+// Argument(s):
+//   str:  input string
+//
+// Output(s):
+//   Boolean: return true when str is a Number; otherwise false
+//
+def IsNumber(required str) {
+  $this: matchesRegex(str, "^\\d*\\.?\\d+$")
+}
+
+// Description: Constructs Extension datatype
+//
+// Argument(s):
+//   value: value of the extension
+//   valueType: value datatype
+//   url: uri for the extension
+// Output(s):
+//   Extension datatype : http://hl7.org/fhir/R4/extensibility.html#extension
+//
+def Build_Extension(required value, required valueType, required url) {
+  url: url
+  if valueType != "extension" and valueType != "Extension" then {
+    set("value{valueType}"): value
+  } else {
+    extension[]: value
+  }
+}
+
+// Description: Constructs coding.system attribute
+//
+// Argument(s):
+//   system : coding.system attribute
+//
+// Output(s):
+//   Coding[0].system attribute : https://www.hl7.org/fhir/datatypes.html#uri
+//
+def Build_System(required System) {
+  if !matchesRegex(System, ".*\\s.*") then {
+    System
+  } else {
+    toLower(strJoin("-", split(System, " ")))
+  }
+}
+
+// Description: If the mapped value is not present then set the default placeholder value
+//
+// Argument(s):
+//   value: FHIR R4 datatype
+//   default: FHIR R4 datatype
+//
+// Output(s):
+//   default : FHIR R4 datatype
+//
+def defaultIfNull(value, required default) if !value then default

@@ -1,0 +1,37 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def OperationOutcomeBase(operationOutcome) {
+  resourcebase::ResourceBase(operationOutcome)
+}
+
+def R2OperationOutcomeToR3(operationOutcome) {
+  OperationOutcomeBase(operationOutcome)
+  contained: datatypes::R2ResourceToR3(operationOutcome.contained[])
+  issue: R2OperationOutcome_IssueToR3(operationOutcome.issue[])
+}
+
+def R3OperationOutcomeToR2(operationOutcome) {
+  OperationOutcomeBase(operationOutcome)
+  contained: datatypes::R3ResourceToR2(operationOutcome.contained[])
+  issue: R3OperationOutcome_IssueToR2(operationOutcome.issue[])
+}
+
+def R2OperationOutcome_IssueToR3(data) {
+  severity: data.severity
+  code: data.code
+  details: data.details
+  diagnostics: data.diagnostics
+  location: data.location
+  expression: extension::fetchStringArray("https://www.hl7.org/fhir/STU3/operationoutcome-definitions.html#OperationOutcome.issue.expression", data.extension)
+}
+
+def R3OperationOutcome_IssueToR2(data) {
+  severity: data.severity
+  code: data.code
+  details: data.details
+  diagnostics: data.diagnostics
+  location: data.location
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/operationoutcome-definitions.html#OperationOutcome.issue.expression", data.expression[])
+}

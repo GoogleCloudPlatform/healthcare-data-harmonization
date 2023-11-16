@@ -1,0 +1,124 @@
+{
+  "beneficiary": {
+    "reference": "Patient/4"
+  },
+  "class": [
+    {
+      "name": "Corporate Baker's Inc. Local #35",
+      "type": {
+        "coding": [
+          {
+            "code": "group"
+          }
+        ]
+      },
+      "value": "CBI35"
+    },
+    {
+      "name": "Trainee Part-time Benefits",
+      "type": {
+        "coding": [
+          {
+            "code": "subGroup"
+          }
+        ]
+      },
+      "value": "123"
+    },
+    {
+      "name": "Full Coverage: Medical, Dental, Pharmacy, Vision, EHC",
+      "type": {
+        "coding": [
+          {
+            "code": "plan"
+          }
+        ]
+      },
+      "value": "B37FC"
+    },
+    {
+      "name": "Includes afterlife benefits",
+      "type": {
+        "coding": [
+          {
+            "code": "subPlan"
+          }
+        ]
+      },
+      "value": "P7"
+    },
+    {
+      "name": "Silver: Family Plan spouse only",
+      "type": {
+        "coding": [
+          {
+            "code": "class"
+          }
+        ]
+      },
+      "value": "SILVER"
+    },
+    {
+      "name": "Low deductable, max $20 copay",
+      "type": {
+        "coding": [
+          {
+            "code": "subClass"
+          }
+        ]
+      },
+      "value": "Tier2"
+    }
+  ],
+  "dependent": "0",
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.sequence",
+      "valueString": "9"
+    }
+  ],
+  "id": "9876B1",
+  "identifier": [
+    {
+      "system": "http://benefitsinc.com/certificate",
+      "value": "12345"
+    }
+  ],
+  "payor": [
+    {
+      "reference": "Organization/2"
+    }
+  ],
+  "period": {
+    "end": "2012-05-23",
+    "start": "2011-05-23"
+  },
+  "policyHolder": {
+    "reference": "http://benefitsinc.com/FHIR/Organization/CBI35"
+  },
+  "relationship": {
+    "coding": [
+      {
+        "code": "self"
+      }
+    ]
+  },
+  "resourceType": "Coverage",
+  "status": "active",
+  "subscriber": {
+    "reference": "Patient/4"
+  },
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the coverage</div>",
+    "status": "generated"
+  },
+  "type": {
+    "coding": [
+      {
+        "code": "EHCPOL",
+        "display": "extended healthcare",
+        "system": "http://hl7.org/fhir/v3/ActCode"
+      }
+    ]
+  }
+}

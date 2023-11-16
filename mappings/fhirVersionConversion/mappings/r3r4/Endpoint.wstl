@@ -1,0 +1,56 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   Endpoint : FHIR EndPoint resource
+//
+// Output(s):
+//   FHIR EndPoint Resource
+//
+def EndpointBase(endpoint) {
+  resourcebase::ResourceBase(endpoint)
+  identifier: endpoint.identifier
+  name: endpoint.name
+  contact: endpoint.contact
+  period: endpoint.period
+  payloadType: endpoint.payloadType
+  header: endpoint.header
+}
+
+// Description: Converts a FHIR STU3 EndPoint resource to FHIR R4 EndPoint resource.
+//
+// Argument(s):
+//   endpoint : FHIR STU3 EndPoint resource https://www.hl7.org/fhir/stu3/endpoint.html
+//
+// Output(s):
+//   FHIR R4 EndPoint Resource https://www.hl7.org/fhir/r4/endpoint.html
+//
+def R3EndpointToR4(endpoint) {
+  EndpointBase(endpoint)
+  contained: datatypes::R3ResourceToR4(endpoint.contained[])
+  managingOrganization: datatypes::R3ReferenceToR4(endpoint.managingOrganization)
+  status: endpoint.status
+  connectionType: endpoint.connectionType
+  payloadMimeType: endpoint.payloadMimeType
+  address: endpoint.address
+}
+
+// Description: Converts a FHIR R4 EndPoint resource to FHIR STU3 EndPoint resource.
+//
+// Argument(s):
+//   endpoint : FHIR R4 EndPoint resource https://www.hl7.org/fhir/r4/endpoint.html
+//
+// Output(s):
+//   FHIR STU3 EndPoint Resource https://www.hl7.org/fhir/stu3/endpoint.html
+//
+def R4EndpointToR3(endpoint) {
+  EndPointBase(endpoint)
+  contained: datatypes::R4ResourceToR3(endpoint.contained[])
+  status: endpoint.status
+  connectionType: endpoint.connectionType
+  payloadMimeType: endpoint.payloadMimeType
+  address: endpoint.address
+}

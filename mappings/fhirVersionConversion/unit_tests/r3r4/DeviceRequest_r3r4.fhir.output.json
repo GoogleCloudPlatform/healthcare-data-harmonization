@@ -1,0 +1,108 @@
+{
+  "authoredOn": "2013-05-08T09:33:27+07:00",
+  "basedOn": [
+    {
+      "display": "Homecare - DM follow-up"
+    }
+  ],
+  "codeCodeableConcept": {
+    "coding": [
+      {
+        "code": "43148-6",
+        "system": "http://loinc.org"
+      }
+    ],
+    "text": "Insulin delivery device panel"
+  },
+  "encounter": {
+    "display": "Encounter 1",
+    "reference": "Encounter/123"
+  },
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/devicerequest-definitions.html#DeviceRequest.requester.onBehalfOf",
+      "valueReference": {
+        "reference": "Organization/2.16.840.1.113883.19.5"
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/devicerequest-definitions.html#DeviceRequest.intent",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "instance-order"
+          }
+        ]
+      }
+    }
+  ],
+  "groupIdentifier": {
+    "value": "ip_request1"
+  },
+  "id": "insulinpump",
+  "identifier": [
+    {
+      "value": "ip_request1.1"
+    }
+  ],
+  "instantiatesCanonical": [
+    "DM-ambulatory-protocol-II"
+  ],
+  "intent": "instance-order",
+  "note": [
+    {
+      "text": "this is the right device brand and model"
+    }
+  ],
+  "occurrenceDateTime": "2013-05-08T09:33:27+07:00",
+  "performer": {
+    "display": "Nurse Rossignol"
+  },
+  "performerType": {
+    "coding": [
+      {
+        "display": "Qualified nurse"
+      }
+    ],
+    "text": "Nurse"
+  },
+  "priorRequest": [
+    {
+      "display": "CGM ambulatory"
+    }
+  ],
+  "priority": "routine",
+  "reasonCode": [
+    {
+      "text": "gastroparesis"
+    }
+  ],
+  "reasonReference": [
+    {
+      "display": "Gastroparesis"
+    }
+  ],
+  "relevantHistory": [
+    {
+      "display": "Request for unspecified device"
+    }
+  ],
+  "requester": {
+    "display": "Dr. Adam Careful",
+    "reference": "Practitioner/example"
+  },
+  "resourceType": "DeviceRequest",
+  "status": "active",
+  "subject": {
+    "reference": "Patient/dicom"
+  },
+  "supportingInfo": [
+    {
+      "display": "Previous results"
+    }
+  ],
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: insulinpump</p><p><b>identifier</b>: ip_request1.1</p><p><b>definition</b>: DM ambulatory protocol II</p><p><b>basedOn</b>: Homecare - DM follow-up</p><p><b>priorRequest</b>: CGM ambulatory</p><p><b>groupIdentifier</b>: ip_request1</p><p><b>status</b>: active</p><p><b>intent</b>: instance-order <span>(Details )</span></p><p><b>priority</b>: routine</p><p><b>code</b>: Insulin delivery device panel <span>(Details : {LOINC code '43148-6' = 'Insulin delivery device panel)</span></p><p><b>subject</b>: <a>Patient/dicom</a></p><p><b>context</b>: Encounter 1</p><p><b>occurrence</b>: 08/05/2013 9:33:27 AM</p><p><b>authoredOn</b>: 08/05/2013 9:33:27 AM</p><h3>Requesters</h3><table><tr><td>-</td><td><b>Agent</b></td><td><b>OnBehalfOf</b></td></tr><tr><td>*</td><td><a>Dr. Adam Careful</a></td><td><a>Organization/2.16.840.1.113883.19.5</a></td></tr></table><p><b>performerType</b>: Nurse <span>(Details : {[not stated] code 'null' = 'null', given as 'Qualified nurse'})</span></p><p><b>performer</b>: Nurse Rossignol</p><p><b>reasonCode</b>: gastroparesis <span>(Details )</span></p><p><b>reasonReference</b>: Gastroparesis</p><p><b>supportingInfo</b>: Previous results</p><p><b>note</b>: this is the right device brand and model</p><p><b>relevantHistory</b>: Request for unspecified device</p></div>",
+    "status": "generated"
+  }
+}

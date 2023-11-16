@@ -1,0 +1,248 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   measureReport : FHIR MeasureReport resource
+//
+// Output(s):
+//   FHIR MeasureReport Resource
+//
+def MeasureReportBase(measureReport) {
+  resourcebase::ResourceBase(measureReport)
+  date: measureReport.date
+  period: measureReport.period
+}
+
+// Description: Converts a FHIR STU3 MeasureReport resource to FHIR R4 MeasureReport resource.
+//
+// Argument(s):
+//   measureReport : FHIR STU3 MeasureReport resource https://www.hl7.org/fhir/stu3/measurereport.html
+//
+// Output(s):
+//   FHIR R4 MeasureReport Resource https://www.hl7.org/fhir/r4/measurereport.html
+//
+def R3MeasureReportToR4(measureReport) {
+  MeasureReportBase(measureReport)
+  contained: datatypes::R3ResourceToR4(measureReport.contained[])
+  identifier: R3MeasureReport_IdentifierToR4("https://www.hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.identifier", measureReport.extension, measureReport.identifier)
+  status: measureReport.status
+  type: if measureReport.type != "patient-list" then measureReport.type else "subject-list"
+  measure: datatypes::ReferenceToCanonical(measureReport.measure)
+  subject: datatypes::R3ReferenceToR4(measureReport.patient)
+  reporter: datatypes::R3ReferenceToR4(measureReport.reportingOrganization)
+  improvementNotation: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.improvementNotation", measureReport.extension)
+  group: R3MeasureReport_GroupToR4(measureReport.group[])
+  evaluatedResource: R3MeasureReport_EvaluatedResourcesToR4("https://www.hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.evaluatedResource", measureReport.extension, datatypes::R3ReferenceToR4(measureReport.evaluatedResources))
+}
+
+// Description: Converts a FHIR R4 MeasureReport resource to FHIR STU3 MeasureReport resource.
+//
+// Argument(s):
+//   measureReport : FHIR R4 MeasureReport resource https://www.hl7.org/fhir/r4/measurereport.html
+//
+// Output(s):
+//   FHIR STU3 MeasureReport Resource https://www.hl7.org/fhir/stu3/measurereport.html
+//
+def R4MeasureReportToR3(measureReport) {
+  MeasureReportBase(measureReport)
+  contained: datatypes::R4ResourceToR3(measureReport.contained[])
+  identifier: measureReport.identifier[0]
+  status: measureReport.status
+  type: extension::fetchCode("https://www.hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.type", measureReport.extension)
+  measure: datatypes::CanonicalToReference(measureReport.measure)
+  patient: datatypes::R4ReferenceToR3(measureReport.subject)
+  reportingOrganization: datatypes::R4ReferenceToR3(measureReport.reporter)
+  group: R4MeasureReport_GroupToR3(measureReport.group[])
+  evaluatedResources: datatypes::R4ReferenceToR3(measureReport.evaluatedResource[0])
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.identifier", measureReport.identifier[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.improvementNotation", measureReport.improvementNotation)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.evaluatedResource", measureReport.evaluatedResource[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.type", measureReport.type)
+}
+
+// Description: Converts a FHIR STU3 MeasureReport.Identifier to FHIR R4 MeasureReport.Identifier.
+//
+// Argument(s):
+//   data : FHIR STU3 MeasureReport.Identifier http://hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.identifier
+//   url : FHIR STU3 Extension.url http://hl7.org/fhir/STU3/extensibility-definitions.html#Extension.url
+//   extension : FHIR STU3 DomainResource.Extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 MeasureReport.Identifier http://hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.identifier
+//
+def R3MeasureReport_IdentifierToR4(url, extension, data) {
+  var identifier: extension::fetchIdentifierArray(url, extension)
+  if identifier then {
+    identifier
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 MeasureReport.EvaluatedResources to FHIR R4 MeasureReport.EvaluatedResource.
+//
+// Argument(s):
+//   data : FHIR STU3 MeasureReport.EvaluatedResources http://hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.evaluatedResources
+//   url : FHIR STU3 Extension.url http://hl7.org/fhir/STU3/extensibility-definitions.html#Extension.url
+//   extension : FHIR STU3 DomainResource.Extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 MeasureReport.EvaluatedResource http://hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.evaluatedResource
+//
+def R3MeasureReport_EvaluatedResourcesToR4(url, extension, data) {
+  var evaluatedResource: extension::fetchReferenceArray(url, extension)
+  if evaluatedResource then {
+    evaluatedResource
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 MeasureReport.Group to FHIR R4 MeasureReport.Group.
+//
+// Argument(s):
+//   data : FHIR STU3 MeasureReport.Group http://hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.group
+//
+// Output(s):
+//   FHIR R4 MeasureReport.Group http://hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.group
+//
+def R3MeasureReport_GroupToR4(data) {
+  code: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.group.code", data.extension)
+  population: R3MeasureReport_Group_PopulationToR4(data.population[])
+  measureScore.value: data.measureScore
+  stratifier: R3MeasureReport_Group_StratifierToR4(data.stratifier[])
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.group.identifier", data.identifier)
+}
+
+// Description: Converts a FHIR R4 MeasureReport.Group to FHIR STU3 MeasureReport.Group.
+//
+// Argument(s):
+//   data : FHIR R4 MeasureReport.Group http://hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.group
+//
+// Output(s):
+//   FHIR STU3 MeasureReport.Group http://hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.group
+//
+def R4MeasureReport_GroupToR3(data) {
+  population: R4MeasureReport_Group_PopulationToR3(data.population[])
+  measureScore: data.measureScore.value
+  stratifier: R4MeasureReport_Group_StratifierToR3(data.stratifier[])
+}
+
+// Description: Converts a FHIR STU3 MeasureReport.Group.Population to FHIR R4 MeasureReport.Group.Population.
+//
+// Argument(s):
+//   data : FHIR STU3 MeasureReport.Group.Population http://hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.group.population
+//
+// Output(s):
+//   FHIR R4 MeasureReport.Group.Population http://hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.group.population
+//
+def R3MeasureReport_Group_PopulationToR4(data) {
+  code: data.code
+  count: data.count
+  subjectResults: datatypes::R3ReferenceToR4(data.patients)
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.group.population.identifier", data.identifier)
+}
+
+// Description: Converts a FHIR R4 MeasureReport.Group.Population to FHIR STU3 MeasureReport.Group.Population.
+//
+// Argument(s):
+//   data : FHIR R4 MeasureReport.Group.Population http://hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.group.population
+//
+// Output(s):
+//   FHIR STU3 MeasureReport.Group.Population http://hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.group.population
+//
+def R4MeasureReport_Group_PopulationToR3(data) {
+  code: extension::fetchCode("https://www.hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.group.population.code", data.extension)
+  count: data.count
+  patients: datatypes::R4ReferenceToR3(data.subjectResults)
+  identifier: extension::fetchIdentifier("https://www.hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.group.population.identifier", data.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.group.population.code", data.code)
+}
+
+// Description: Converts a FHIR STU3 MeasureReport.Group.Stratifier to FHIR R4 MeasureReport.Group.Stratifier.
+//
+// Argument(s):
+//   data : FHIR STU3 MeasureReport.Group.Stratifier http://hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.group.stratifier
+//
+// Output(s):
+//   FHIR R4 MeasureReport.Group.Stratifier http://hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.group.stratifier
+//
+def R3MeasureReport_Group_StratifierToR4(data) {
+  code: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.group.stratifier.code", data.extension)
+  stratum: R3MeasureReport_Group_Stratifier_StratumToR4(data.stratum[])
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.group.stratifier.identifier", data.identifier)
+}
+
+// Description: Converts a FHIR R4 MeasureReport.Group.Stratifier to FHIR STU3 MeasureReport.Group.Stratifier.
+//
+// Argument(s):
+//   data : FHIR R4 MeasureReport.Group.Stratifier http://hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.group.stratifier
+//
+// Output(s):
+//   FHIR STU3 MeasureReport.Group.Stratifier http://hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.group.stratifier
+//
+def R4MeasureReport_Group_StratifierToR3(data) {
+  stratum: R4MeasureReport_Group_Stratifier_StratumToR3(data.stratum[])
+}
+
+// Description: Converts a FHIR STU3 MeasureReport.Group.Stratifier.Stratum to FHIR R4 MeasureReport.Group.Stratifier.Stratum.
+//
+// Argument(s):
+//   data : FHIR STU3 MeasureReport.Group.Stratifier.Stratum http://hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.group.stratifier.stratum
+//
+// Output(s):
+//   FHIR R4 MeasureReport.Group.Stratifier.Stratum http://hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.group.stratifier.stratum
+//
+def R3MeasureReport_Group_Stratifier_StratumToR4(data) {
+  value: datatypes::StringToCodeableConcept(data.value)
+  population: R3MeasureReport_Group_Stratifier_Stratum_PopulationToR4(data.population[])
+  measureScore.value: data.measureScore
+}
+
+// Description: Converts a FHIR R4 MeasureReport.Group.Stratifier.Stratum to FHIR STU3 MeasureReport.Group.Stratifier.Stratum.
+//
+// Argument(s):
+//   data : FHIR R4 MeasureReport.Group.Stratifier.Stratum http://hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.group.stratifier.stratum
+//
+// Output(s):
+//   FHIR STU3 MeasureReport.Group.Stratifier.Stratum http://hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.group.stratifier.stratum
+//
+def R4MeasureReport_Group_Stratifier_StratumToR3(data) {
+  value: datatypes::CodeableConceptToString(data.value)
+  population: R4MeasureReport_Group_Stratifier_Stratum_PopulationToR3(data.population[])
+  measureScore: data.measureScore.value
+}
+
+// Description: Converts a FHIR STU3 MeasureReport.Group.Stratifier.Stratum.Population to FHIR R4 MeasureReport.Group.Stratifier.Stratum.Population.
+//
+// Argument(s):
+//   data : FHIR STU3 MeasureReport.Group.Stratifier.Stratum.Population http://hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.group.stratifier.stratum.population
+//
+// Output(s):
+//   FHIR R4 MeasureReport.Group.Stratifier.Stratum.Population http://hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.group.stratifier.stratum.population
+//
+def R3MeasureReport_Group_Stratifier_Stratum_PopulationToR4(data) {
+  code: data.code
+  count: data.count
+  subjectResults: datatypes::R3ReferenceToR4(data.patients)
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.group.stratifier.stratum.population.identifier", data.identifier)
+}
+
+// Description: Converts a FHIR R4 MeasureReport.Group.Stratifier.Stratum.Population to FHIR STU3 MeasureReport.Group.Stratifier.Stratum.Population.
+//
+// Argument(s):
+//   data : FHIR R4 MeasureReport.Group.Stratifier.Stratum.Population http://hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.group.stratifier.stratum.population
+//
+// Output(s):
+//   FHIR STU3 MeasureReport.Group.Stratifier.Stratum.Population http://hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.group.stratifier.stratum.population
+//
+def R4MeasureReport_Group_Stratifier_Stratum_PopulationToR3(data) {
+  code: extension::fetchCode("https://www.hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.group.stratifier.stratum.population.code", data.extension)
+  count: data.count
+  patients: datatypes::R4ReferenceToR3(data.subjectResults)
+  identifier: extension::fetchIdentifier("https://www.hl7.org/fhir/STU3/measurereport-definitions.html#MeasureReport.group.stratifier.stratum.population.identifier", data.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/measurereport-definitions.html#MeasureReport.group.stratifier.stratum.population.code", data.code)
+}

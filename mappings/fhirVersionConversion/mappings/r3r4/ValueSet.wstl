@@ -1,0 +1,65 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   valueSet : FHIR valueSet resource
+//
+// Output(s):
+//   FHIR valueSet Resource
+//
+def ValueSetBase(valueSet) {
+  resourcebase::ResourceBase(valueSet)
+  url: valueSet.url
+  identifier: valueSet.identifier
+  version: valueSet.version
+  name: valueSet.name
+  title: valueSet.title
+  date: valueSet.date
+  publisher: valueSet.publisher
+  contact: valueSet.contact
+  description: valueSet.description
+  useContext: valueSet.useContext
+  jurisdiction: valueSet.jurisdiction
+  immutable: valueSet.immutable
+  purpose: valueSet.purpose
+  copyright: valueSet.copyright
+}
+
+// Description: Converts a FHIR STU3 ValueSet resource to FHIR R4 ValueSet resource.
+//
+// Argument(s):
+//   valueSet : FHIR STU3 ValueSet resource https://www.hl7.org/fhir/stu3/valueset.html
+//
+// Output(s):
+//   FHIR R4 ValueSet Resource https://www.hl7.org/fhir/r4/valueset.html
+//
+def R3ValueSetToR4(valueSet) {
+  ValueSetBase(valueSet)
+  contained: datatypes::R3ResourceToR4(valueSet.contained[])
+  status: valueSet.status
+  experimental: valueSet.experimental
+  compose: valueSet.compose
+  expansion: valueSet.expansion
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.extensible", valueSet.extensible)
+}
+
+// Description: Converts a FHIR R4 ValueSet resource to FHIR STU3 ValueSet resource.
+//
+// Argument(s):
+//   valueSet : FHIR R4 ValueSet resource https://www.hl7.org/fhir/r4/valueset.html
+//
+// Output(s):
+//   FHIR STU3 ValueSet Resource https://www.hl7.org/fhir/stu3/valueset.html
+//
+def R4ValueSetToR3(valueSet) {
+  ValueSetBase(valueSet)
+  contained: datatypes::R4ResourceToR3(valueSet.contained[])
+  status: valueSet.status
+  experimental: valueSet.experimental
+  extensible: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.extensible", valueSet.extension)
+  compose: valueSet.compose
+  expansion: valueSet.expansion
+}

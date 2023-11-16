@@ -1,0 +1,53 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   appointmentResponse : FHIR AppointmentResponse resource
+//
+// Output(s):
+//   FHIR AppointmentResponse Resource
+//
+def AppointmentResponseBase(appointmentResponse) {
+  resourcebase::ResourceBase(appointmentResponse)
+  identifier: appointmentResponse.identifier
+  start: appointmentResponse.start
+  end: appointmentResponse.end
+  participantType: appointmentResponse.participantType
+  comment: appointmentResponse.comment
+}
+
+// Description: Converts a FHIR STU3 AppointmentResponse resource to FHIR R4 AppointmentResponse resource.
+//
+// Argument(s):
+//   appointmentResponse : FHIR STU3 AppointmentResponse resource https://www.hl7.org/fhir/stu3/appointmentResponse.html
+//
+// Output(s):
+//   FHIR R4 AppointmentResponse Resource https://www.hl7.org/fhir/r4/appointmentResponse.html
+//
+def R3AppointmentResponseToR4(appointmentResponse) {
+  AppointmentResponseBase(appointmentResponse)
+  contained: datatypes::R3ResourceToR4(appointmentResponse.contained[])
+  appointment: datatypes::R3ReferenceToR4(appointmentResponse.appointment)
+  actor: datatypes::R3ReferenceToR4(appointmentResponse.actor)
+  participantStatus: utilities::Convert_TerminologyCode(appointmentResponse.participantStatus, "http://hl7.org/fhir/participationstatus", "Appointment_Response_Status_r3r4")
+  extension[]: if $this.participantStatus != appointmentResponse.participantStatus then extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/appointmentresponse-definitions.html#AppointmentResponse.participantStatus", appointmentResponse.participantStatus)
+}
+
+// Description: Converts a FHIR R4 AppointmentResponse resource to FHIR STU3 AppointmentResponse resource.
+//
+// Argument(s):
+//   appointmentResponse : FHIR R4 AppointmentResponse resource https://www.hl7.org/fhir/r4/appointmentResponse.html
+//
+// Output(s):
+//   FHIR STU3 AppointmentResponse Resource https://www.hl7.org/fhir/stu3/appointmentResponse.html
+//
+def R4AppointmentResponseToR3(appointmentResponse) {
+  AppointmentResponseBase(appointmentResponse)
+  contained: datatypes::R4ResourceToR3(appointmentResponse.contained[])
+  appointment: datatypes::R4ReferenceToR3(appointmentResponse.appointment)
+  actor: datatypes::R4ReferenceToR3(appointmentResponse.actor)
+  participantStatus: appointmentResponse.participantStatus
+}

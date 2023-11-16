@@ -1,0 +1,5 @@
+// store to extension
+extension[]: addString("test_url", $root.data)
+
+// fetch from extension
+data: fetchString("test_url", $root.extension)

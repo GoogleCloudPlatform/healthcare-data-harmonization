@@ -1,0 +1,112 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def ImagingStudyBase(imagingStudy) {
+  resourcebase::ResourceBase(imagingStudy)
+  uid: imagingStudy.uid
+  accession: imagingStudy.accession
+  identifier: imagingStudy.identifier
+  availability: imagingStudy.availability
+  modalityList: imagingStudy.modalityList
+  started: imagingStudy.started
+  description: imagingStudy.description
+}
+
+def R2ImagingStudyToR3(imagingStudy) {
+  ImagingStudyBase(imagingStudy)
+  contained: datatypes::R2ResourceToR3(imagingStudy.contained[])
+  referrer: datatypes::R2ReferenceToR3(imagingStudy.referrer)
+  patient: datatypes::R2ReferenceToR3(imagingStudy.patient)
+  context: datatypes::R2ReferenceToR3(imagingStudy.order[0])
+  basedOn: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.basedOn", imagingStudy.extension)
+  interpreter: R3ImagingStudy_OrderToR2("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.interpreter", imagingStudy.extension, datatypes::R2ReferenceToR3(imagingStudy.interpreter))
+  endpoint: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.endpoint", imagingStudy.extension)
+  numberOfSeries: imagingStudy.numberOfSeries
+  numberOfInstances: imagingStudy.numberOfInstances
+  procedureReference: datatypes::R2ReferenceToR3(imagingStudy.procedure[])
+  procedureCode: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.procedureCode", imagingStudy.extension)
+  reason: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.reason", imagingStudy.extension)
+  series: R2ImagingStudy_SeriesToR3(imagingStudy.series[])
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/DSTU2/imagingstudy-definitions.html#ImagingStudy.url", imagingStudy.url)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/imagingstudy-definitions.html#ImagingStudy.order", imagingStudy.order[])
+}
+
+def R3ImagingStudyToR2(imagingStudy) {
+  ImagingStudyBase(imagingStudy)
+  contained: datatypes::R3ResourceToR2(imagingStudy.contained[])
+  referrer: datatypes::R3ReferenceToR2(imagingStudy.referrer)
+  patient: datatypes::R3ReferenceToR2(imagingStudy.patient)
+  order: R3ImagingStudy_OrderToR2("https://www.hl7.org/fhir/DSTU2/imagingstudy-definitions.html#ImagingStudy.order", imagingStudy.extension, datatypes::R3ReferenceToR2(imagingStudy.context))
+  interpreter: datatypes::R3ReferenceToR2(imagingStudy.interpreter[0])
+  numberOfSeries: imagingStudy.numberOfSeries
+  numberOfInstances: imagingStudy.numberOfInstances
+  procedure: datatypes::R3ReferenceToR2(imagingStudy.procedureReference[])
+  series: R3ImagingStudy_SeriesToR2(imagingStudy.series[])
+  url: extension::fetchUri("https://www.hl7.org/fhir/DSTU2/imagingstudy-definitions.html#ImagingStudy.url", imagingStudy.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.basedOn", imagingStudy.basedOn[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.endpoint", imagingStudy.endpoint[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.procedureCode", imagingStudy.procedureCode[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.reason", imagingStudy.reason)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.interpreter", imagingStudy.interpreter[])
+
+}
+
+def R3ImagingStudy_OrderToR2(url, extension, data) {
+  var order: extension::fetchReferenceArray(url, extension)
+  if order then {
+    order
+  } else {
+    arrayOf(data)
+  }
+}
+
+def R2ImagingStudy_SeriesToR3(data) {
+  uid: data.uid
+  number: data.number
+  modality: data.modality
+  description: data.description
+  numberOfInstances: data.numberOfInstances
+  availability: data.availability
+  endpoint: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.series.endpoint", data.extension)
+  bodySite: data.bodySite
+  laterality: data.laterality
+  started: data.started
+  performer: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.series.performer", data.extension)
+  instance: R2ImagingStudy_Series_InstanceToR3(data.instance[])
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/DSTU2/imagingstudy-definitions.html#ImagingStudy.series.url", data.url)
+}
+
+def R3ImagingStudy_SeriesToR2(data) {
+  uid: data.uid
+  number: data.number
+  modality: data.modality
+  description: data.description
+  numberOfInstances: data.numberOfInstances
+  availability: data.availability
+  bodySite: data.bodySite
+  laterality: data.laterality
+  started: data.started
+  url: extension::fetchUri("https://www.hl7.org/fhir/DSTU2/imagingstudy-definitions.html#ImagingStudy.series.url", data.extension)
+  instance: R3ImagingStudy_Series_InstanceToR2(data.instance[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.series.endpoint", data.endpoint[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.series.performer", data.performer[])
+}
+
+def R2ImagingStudy_Series_InstanceToR3(data) {
+  uid: data.uid
+  number: data.number
+  sopClass: data.sopClass
+  title: data.title
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/DSTU2/imagingstudy-definitions.html#ImagingStudy.series.instance.type", data.type)
+  extension[]: extension::BuildAttachmentExtension("https://www.hl7.org/fhir/DSTU2/imagingstudy-definitions.html#ImagingStudy.series.instance.content", data.content[])
+}
+
+def R3ImagingStudy_Series_InstanceToR2(data) {
+  uid: data.uid
+  number: data.number
+  sopClass: data.sopClass
+  title: data.title
+  type: extension::fetchString("https://www.hl7.org/fhir/DSTU2/imagingstudy-definitions.html#ImagingStudy.series.instance.type", data.extension)
+  content: extension::fetchAttachmentArray("https://www.hl7.org/fhir/DSTU2/imagingstudy-definitions.html#ImagingStudy.series.instance.content", data.extension)
+}

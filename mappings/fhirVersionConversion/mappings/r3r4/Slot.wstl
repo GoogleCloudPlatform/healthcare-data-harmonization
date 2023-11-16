@@ -1,0 +1,41 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def SlotBase(slot) {
+  resourcebase::ResourceBase(slot)
+  identifier: slot.identifier
+  serviceType: slot.serviceType
+  specialty: slot.specialty
+  appointmentType: slot.appointmentType
+  start: slot.start
+  end: slot.end
+  overbooked: slot.overbooked
+  comment: slot.comment
+}
+
+def R3SlotToR4(slot) {
+  SlotBase(slot)
+  contained: datatypes::R3ResourceToR4(slot.contained[])
+  schedule: datatypes::R3ReferenceToR4(slot.schedule)
+  status: slot.status
+  serviceCategory: R3Slot_ServiceCategoryToR4("https://www.hl7.org/fhir/R4/slot-definitions.html#Slot.serviceCategory", slot.extension, slot.serviceCategory)
+}
+
+def R4SlotToR3(slot) {
+  SlotBase(slot)
+  contained: datatypes::R4ResourceToR3(slot.contained[])
+  schedule: datatypes::R4ReferenceToR3(slot.schedule)
+  status: slot.status
+  serviceCategory: slot.serviceCategory[0]
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/slot-definitions.html#Slot.serviceCategory", slot.serviceCategory[])
+}
+
+def R3Slot_ServiceCategoryToR4(url, extension, data) {
+  var serviceCategory: extension::fetchCodeableConceptArray(url, extension)
+  if serviceCategory then {
+    serviceCategory
+  } else {
+    arrayOf(data)
+  }
+}

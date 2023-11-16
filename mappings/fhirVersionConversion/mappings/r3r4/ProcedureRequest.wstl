@@ -1,0 +1,59 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 ProcedureRequest and FHIR R4 ServiceRequest
+//
+// Argument(s):
+//   procedureRequest : FHIR ProcedureRequest resource
+//
+// Output(s):
+//   FHIR ServiceRequest Resource
+//
+def ProcedureRequestBase(procedureRequest) {
+  resourcebase::ResourceBase(procedureRequest)
+  identifier: procedureRequest.identifier
+  requisition: procedureRequest.requisition
+  intent: procedureRequest.intent
+  priority: procedureRequest.priority
+  doNotPerform: procedureRequest.doNotPerform
+  category: procedureRequest.category
+  code: procedureRequest.code
+  occurrenceDateTime: procedureRequest.occurrenceDateTime
+  occurrencePeriod: procedureRequest.occurrencePeriod
+  occurrenceTiming: procedureRequest.occurrenceTiming
+  asNeededBoolean: procedureRequest.asNeededBoolean
+  asNeededCodeableConcept: procedureRequest.asNeededCodeableConcept
+  authoredOn: procedureRequest.authoredOn
+  performerType: procedureRequest.performerType
+  reasonCode: procedureRequest.reasonCode
+  bodySite: procedureRequest.bodySite
+  note: procedureRequest.note
+}
+
+// Description: Converts a FHIR STU3 ProcedureRequest resource to FHIR R4 ServiceRequest resource.
+//
+// Argument(s):
+//   procedureRequest : FHIR STU3 ProcedureRequest resource https://www.hl7.org/fhir/stu3/procedurerequest.html
+//
+// Output(s):
+//   FHIR R4 ServiceRequest Resource https://www.hl7.org/fhir/r4/servicerequest.html
+//
+def R3ProcedureRequestToR4(procedureRequest) {
+  ProcedureRequestBase(procedureRequest)
+  resourceType: "ServiceRequest"
+  contained: datatypes::R3ResourceToR4(procedureRequest.contained[])
+  instantiatesCanonical: datatypes::ReferenceToCanonical(procedureRequest.definition[])
+  instantiatesUri: extension::fetchUriArray("https://www.hl7.org/fhir/R4/procedureRequest-definitions.html#ProcedureRequest.instantiatesUri", procedureRequest.extension)
+  basedOn: datatypes::R3ReferenceToR4(procedureRequest.basedOn[where matchesRegex($.reference, "^CarePlan.*|^MedicationRequest.*")][])
+  status: utilities::Convert_TerminologyCode(procedureRequest.status, "http://hl7.org/fhir/request-status", "Request_Status_r3r4")
+  subject: datatypes::R3ReferenceToR4(procedureRequest.subject)
+  encounter: if matchesRegex(procedureRequest.context.reference, "^Encounter.*") then datatypes::R3ReferenceToR4(procedureRequest.context)
+  requester: datatypes::R3ReferenceToR4(procedureRequest.requester.agent)
+  performer[]: datatypes::R3ReferenceToR4(procedureRequest.performer)
+  reasonReference: datatypes::R3ReferenceToR4(procedureRequest.reasonReference[])
+  supportingInfo: datatypes::R3ReferenceToR4(procedureRequest.supportingInfo)
+  specimen: datatypes::R3ReferenceToR4(procedureRequest.specimen[])
+  relevantHistory: datatypes::R3ReferenceToR4(procedureRequest.relevantHistory[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.requester.onBehalfOf", procedureRequest.requester.onBehalfOf)
+}

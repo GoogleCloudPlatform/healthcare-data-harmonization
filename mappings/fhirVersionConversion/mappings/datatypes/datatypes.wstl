@@ -1,0 +1,150 @@
+package datatypes
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.harmonization.HarmonizationPlugin"
+
+// The "datatypes" package consists of FHIR datatypes mappings from STU3 to R4
+// and R4 to STU3.
+// This file imports all the datatypes mappings from this package and can be
+// used as a gateway to import all the package files, providing a convenient way
+// to utilize this package
+import "./Canonical.wstl"
+import "./CodeableConcept.wstl"
+import "./Code.wstl"
+import "./Coding.wstl"
+import "./DataRequirement.wstl"
+import "./datatypes.wstl"
+import "./Dosage.wstl"
+import "./Identifier.wstl"
+import "./Money.wstl"
+import "./Oid.wstl"
+import "./ParameterDefinition.wstl"
+import "./Quantity.wstl"
+import "./Reference.wstl"
+import "./RelatedArtifact.wstl"
+import "./Signature.wstl"
+import "./String.wstl"
+import "./Uri.wstl"
+
+// imports for the utility and supporting functions used in the mappings
+// in conjjunction with the datatypes package.
+import "../r3r4/fhir_r3r4.wstl"
+import "../../../utilities/terminologyFns.wstl"
+import "../../../utilities/utilities.wstl"
+import "../ResourceBase.wstl"
+import "../extension.wstl"
+
+// imports for all the concept maps used for code harmonization in the mappings.
+import "../code_harmonization/ActivityDefinition_r3r4.harmonization.json"
+import "../code_harmonization/Appointment_Response_Status_r3r4.harmonization.json"
+import "../code_harmonization/Claim_r3r4.harmonization.json"
+import "../code_harmonization/Clinical_Impression_Status_r3r4.harmonization.json"
+import "../code_harmonization/Event_Status_r3r4.harmonization.json"
+import "../code_harmonization/ExplanationOfBenefit_r3r4.harmonization.json"
+import "../code_harmonization/FhirTypes_r3r4.harmonization.json"
+import "../code_harmonization/Goal_LifeCycleStatus_r3r4.harmonization.json"
+import "../code_harmonization/Goal_AchievementStatus_r3r4.harmonization.json"
+import "../code_harmonization/ImagingStudy_Status_r3r4.harmonization.json"
+import "../code_harmonization/Request_Status_r3r4.harmonization.json"
+import "../code_harmonization/ResourceTypes_r3r4.harmonization.json"
+
+// Description: Converts a FHIR STU3 Resource to FHIR R4 Resource.
+//
+// Argument(s):
+//   data : FHIR STU3 Resource https://hl7.org/fhir/STU3/resource.html#Resource
+//
+// Output(s):
+//   FHIR R4 Resource https://hl7.org/fhir/R4/resource.html#Resource
+//
+def R3ResourceToR4(data) {
+  if isR3ToR4Mapped(data.resourceType) then {
+    callPackageFn("fhir_r3r4", "R3{data.resourceType}ToR4", data)
+  }
+}
+
+// Description: Converts a FHIR R4 Resource to FHIR STU3 Resource.
+//
+// Argument(s):
+//   data : FHIR R4 Resource https://hl7.org/fhir/R4/resource.html#Resource
+//
+// Output(s):
+//   FHIR STU3 Resource https://hl7.org/fhir/STU3/resource.html#Resource
+//
+def R4ResourceToR3(data) {
+  if isR3ToR4Mapped(data.resourceType) then {
+    callPackageFn("fhir_r3r4", "R4{data.resourceType}ToR3", data)
+  }
+}
+
+// Description: Converts a FHIR DSTU2 Resource to FHIR STU3 Resource.
+//
+// Argument(s):
+//   data : FHIR DSTU2 Resource https://hl7.org/fhir/DSTU2/resource.html#Resource
+//
+// Output(s):
+//   FHIR STU3 Resource https://hl7.org/fhir/STU3/resource.html#Resource
+//
+def R2ResourceToR3(data) {
+  if fhir_r2r3::IsResourceMapped(data.resourceType) then {
+    callPackageFn("fhir_r2r3", "R2{data.resourceType}ToR3", data)
+  }
+}
+
+// Description: Converts a FHIR STU3 Resource to FHIR DSTU2 Resource.
+//
+// Argument(s):
+//   data : FHIR STU3 Resource https://hl7.org/fhir/STU3/resource.html#Resource
+//
+// Output(s):
+//   FHIR DSTU2 Resource https://hl7.org/fhir/DSTU2/resource.html#Resource
+
+def R3ResourceToR2(data) {
+  if fhir_r2r3::IsResourceMapped(data.resourceType) then {
+    callPackageFn("fhir_r2r3", "R3{data.resourceType}ToR2", data)
+  }
+}
+
+// Description: Converts a FHIR STU3 Datatype to FHIR R4 Datatype.
+//
+// Argument(s):
+//   datatype : https://hl7.org/fhir/STU3/datatypes.html#open
+//   data : https://hl7.org/fhir/STU3/extensibility-definitions.html#Extension.value_x_
+//
+// Output(s):
+//   FHIR R4 Datatype https://hl7.org/fhir/R4/datatypes.html#open
+//
+def R3DatatypeToR4(required datatype, required data) {
+  // all datatypes for which R3 to R4 transformation functions exist
+  var mappedDatatypes: ["Dosage", "DataRequirement", "Money", "ParameterDefinition", "RelatedArtifact", "Reference", "Resource", "Signature"]
+  if mappedDatatypes[where $ == datatype]? then callFn("R3{datatype}ToR4", data) else data
+}
+
+// Description: Converts a FHIR STU3 Datatype to FHIR R4 Datatype.
+//
+// Argument(s):
+//   extension : array of FHIR extensions https://www.hl7.org/fhir/extensibility.html#extension
+//
+// Output(s):
+//   FHIR R4 extension https://www.hl7.org/fhir/extensibility.html#extension
+//
+def Convert_Extension(required extension) {
+  var valueType: fields(extension)[where matchesRegex($, "^value.*")][0]
+  if valueType then {
+    var type: extractRegex(valueType, "(?<=value).*")
+    set(valueType): R3DatatypeToR4(type, get(extension, valueType))
+  } else if extension.extension? then {
+    extension: Convert_Extension(extension.extension[])
+  } else if extension.modifierExtension? then {
+    extension: Convert_Extension(extension.modifierExtension[])
+  }
+  url: extension.url
+}
+
+// Description: Find if the mapped ResourceType present or not
+//
+// Argument(s):
+//   value: FHIR R4 resourceType
+//
+// Output(s):
+//   boolean : true or false
+//
+def isR3ToR4Mapped(required resourceType) !(utilities::Convert_TerminologyCode(resourceType, "http://hl7.org/fhir/resource-types", "ResourceTypes_r3r4") == "Resource")

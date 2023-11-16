@@ -1,0 +1,69 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def MessageHeaderBase(messageHeader) {
+  resourcebase::ResourceBase(messageHeader)
+  reason: messageHeader.reason
+}
+
+def R3MessageHeaderToR4(messageHeader) {
+  MessageHeaderBase(messageHeader)
+  contained: datatypes::R3ResourceToR4(messageHeader.contained[])
+  focus: datatypes::R3ReferenceToR4(messageHeader.focus[])
+  eventCoding: messageHeader.event
+  eventUri: extension::fetchUri("https://www.hl7.org/fhir/R4/messageheader-definitions.html#MessageHeader.eventUri", messageHeader.extension)
+  destination: R3MessageHeader_DestinationToR4(messageHeader.destination[], messageHeader.receiver)
+  sender: datatypes::R3ReferenceToR4(messageHeader.sender)
+  enterer: datatypes::R3ReferenceToR4(messageHeader.enterer)
+  author: datatypes::R3ReferenceToR4(messageHeader.author)
+  source: messageHeader.source
+  responsible: datatypes::R3ReferenceToR4(messageHeader.responsible)
+  response: R3MessageHeader_ResponseToR4(messageHeader.response)
+  definition: extension::fetchCanonical("https://www.hl7.org/fhir/R4/messageheader-definitions.html#MessageHeader.definition", messageHeader.extension)
+  extension[]: extension::BuildInstantExtension("https://www.hl7.org/fhir/STU3/messageheader-definitions.html#MessageHeader.timestamp", messageHeader.timestamp)
+}
+
+def R4MessageHeaderToR3(messageHeader) {
+  MessageHeaderBase(messageHeader)
+  contained: datatypes::R4ResourceToR3(messageHeader.contained[])
+  focus: datatypes::R4ReferenceToR3(messageHeader.focus[])
+  event: messageHeader.eventCoding
+  destination: R4MessageHeader_DestinationToR3(messageHeader.destination[])
+  receiver: messageHeader.destination[0].receiver
+  sender: datatypes::R4ReferenceToR3(messageHeader.sender)
+  timestamp: extension::fetchInstant("https://www.hl7.org/fhir/STU3/messageheader-definitions.html#MessageHeader.timestamp", messageHeader.extension)
+  enterer: datatypes::R4ReferenceToR3(messageHeader.enterer)
+  author: datatypes::R4ReferenceToR3(messageHeader.author)
+  source: messageHeader.source
+  responsible: datatypes::R4ReferenceToR3(messageHeader.responsible)
+  response: R4MessageHeader_ResponseToR3(messageHeader.response)
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/R4/messageheader-definitions.html#MessageHeader.eventUri", messageHeader.eventUri)
+  extension[]: extension::BuildCanonicalExtension("https://www.hl7.org/fhir/R4/messageheader-definitions.html#MessageHeader.definition", messageHeader.definition)
+}
+
+def R3MessageHeader_DestinationToR4(data, receiver) {
+  name: data.name
+  target: datatypes::R3ReferenceToR4(data.target)
+  endpoint: data.endpoint
+  receiver: extension::fetchReference("https://www.hl7.org/fhir/R4/messageheader-definitions.html#MessageHeader.destination.receiver", data.extension)
+}
+
+def R4MessageHeader_DestinationToR3(data) {
+  name: data.name
+  target: datatypes::R4ReferenceToR3(data.target)
+  endpoint: data.endpoint
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/messageheader-definitions.html#MessageHeader.destination.receiver", data.receiver)
+}
+
+def R3MessageHeader_ResponseToR4(data) {
+  identifier: data.identifier
+  code: data.code
+  details: datatypes::R3ReferenceToR4(data.details)
+}
+
+def R4MessageHeader_ResponseToR3(data) {
+  identifier: data.identifier
+  code: data.code
+  details: datatypes::R4ReferenceToR3(data.details)
+}

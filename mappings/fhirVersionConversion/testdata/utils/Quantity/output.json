@@ -1,0 +1,11 @@
+{
+  "extension": [
+    {
+      "valueQuantity": {
+        "code": "test_code",
+        "value": 1
+      },
+      "url": "test_url"
+    }
+  ]
+}

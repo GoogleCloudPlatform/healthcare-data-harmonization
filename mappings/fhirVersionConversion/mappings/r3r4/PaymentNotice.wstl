@@ -1,0 +1,41 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def PaymentNoticeBase(paymentNotice) {
+  resourcebase::ResourceBase(paymentNotice)
+  identifier: paymentNotice.identifier
+  paymentStatus: paymentNotice.paymentStatus
+}
+
+def R3PaymentNoticeToR4(paymentNotice) {
+  PaymentNoticeBase(paymentNotice)
+  contained: datatypes::R3ResourceToR4(paymentNotice.contained[])
+  request: datatypes::R3ReferenceToR4(paymentNotice.request)
+  response: datatypes::R3ReferenceToR4(paymentNotice.response)
+  status: paymentNotice.status
+  created: paymentNotice.created
+  provider: datatypes::R3ReferenceToR4(paymentNotice.provider)
+  payment: extension::fetchReference("https://www.hl7.org/fhir/R4/paymentnotice-definitions.html#PaymentNotice.payment", paymentNotice.extension)
+  paymentDate: paymentNotice.statusDate
+  payee: extension::fetchReference("https://www.hl7.org/fhir/R4/paymentnotice-definitions.html#PaymentNotice.payee", paymentNotice.extension)
+  recipient: datatypes::R3ReferenceToR4(paymentNotice.target)
+  amount: extension::fetchMoney("https://www.hl7.org/fhir/R4/paymentnotice-definitions.html#PaymentNotice.amount", paymentNotice.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/paymentnotice-definitions.html#PaymentNotice.organization", paymentNotice.organization)
+}
+
+def R4PaymentNoticeToR3(paymentNotice) {
+  PaymentNoticeBase(paymentNotice)
+  contained: datatypes::R4ResourceToR3(paymentNotice.contained[])
+  request: datatypes::R4ReferenceToR3(paymentNotice.request)
+  response: datatypes::R4ReferenceToR3(paymentNotice.response)
+  status: paymentNotice.status
+  created: paymentNotice.created
+  organization: extension::fetchReference("https://www.hl7.org/fhir/STU3/paymentnotice-definitions.html#PaymentNotice.organization", paymentNotice.extension)
+  provider: datatypes::R4ReferenceToR3(paymentNotice.provider)
+  statusDate: paymentNotice.paymentDate
+  target: datatypes::R4ReferenceToR3(paymentNotice.recipient)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/paymentnotice-definitions.html#PaymentNotice.payment", paymentNotice.payment)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/paymentnotice-definitions.html#PaymentNotice.payee", paymentNotice.payee)
+  extension[]: extension::BuildMoneyExtension("https://www.hl7.org/fhir/R4/paymentnotice-definitions.html#PaymentNotice.amount", paymentNotice.amount)
+}

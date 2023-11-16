@@ -1,0 +1,244 @@
+{
+  "approvalDate": "2016-03-12",
+  "author": [
+    [
+      {
+        "telecom": [
+          {
+            "system": "phone",
+            "use": "work",
+            "value": "415-362-4007"
+          },
+          {
+            "system": "email",
+            "use": "work",
+            "value": "info@motivemi.com"
+          }
+        ]
+      }
+    ]
+  ],
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "phone",
+          "use": "work",
+          "value": "415-362-4007"
+        },
+        {
+          "system": "email",
+          "use": "work",
+          "value": "info@motivemi.com"
+        }
+      ]
+    }
+  ],
+  "content": [
+    {
+      "contentType": "text/cql",
+      "url": "library-mmi-suiciderisk-orderset-logic-content.cql"
+    }
+  ],
+  "copyright": "© Copyright 2016 Motive Medical Intelligence. All rights reserved.",
+  "dataRequirement": [
+    {
+      "codeFilter": [
+        {
+          "path": "code",
+          "searchParam": "Suicide Risk Assessment"
+        }
+      ],
+      "type": "RiskAssessment"
+    }
+  ],
+  "date": "2015-07-22",
+  "description": "Logic for Suicide Risk Order Sets",
+  "effectivePeriod": {
+    "end": "2017-12-31",
+    "start": "2016-01-01"
+  },
+  "experimental": true,
+  "id": "suiciderisk-orderset-logic",
+  "identifier": [
+    {
+      "system": "http://motivemi.com/artifacts",
+      "use": "official",
+      "value": "mmi:suiciderisk-orderset-logic"
+    }
+  ],
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "code": "US",
+          "system": "urn:iso:std:iso:3166"
+        }
+      ]
+    }
+  ],
+  "lastReviewDate": "2016-08-15",
+  "name": "SuicideRiskOrderSetLogic",
+  "parameter": [
+    {
+      "max": "1",
+      "min": 1,
+      "name": "Patient",
+      "type": "Patient",
+      "use": "in"
+    },
+    {
+      "max": "1",
+      "min": 1,
+      "name": "Encounter",
+      "type": "Encounter",
+      "use": "in"
+    },
+    {
+      "max": "1",
+      "min": 1,
+      "name": "Practitioner",
+      "type": "Practitioner",
+      "use": "in"
+    }
+  ],
+  "publisher": "Motive Medical Intelligence",
+  "purpose": "Defines a referral to a mental-health integrated care program for use in suicide risk order sets. The definition is independent of the order set in which it appears to allow reuse of the general definition of the referrral.",
+  "relatedArtifact": [
+    {
+      "display": "Practice Guideline for the Treatment of Patients with Major Depressive Disorder",
+      "type": "citation",
+      "url": "http://psychiatryonline.org/pb/assets/raw/sitewide/practice_guidelines/guidelines/mdd.pdf"
+    },
+    {
+      "resource": "Library/library-fhir-model-definition",
+      "type": "depends-on"
+    },
+    {
+      "resource": "Library/library-fhir-helpers",
+      "type": "depends-on"
+    },
+    {
+      "resource": "http://nucc.org/provider-taxonomy",
+      "type": "depends-on"
+    },
+    {
+      "resource": "ValueSet/1.2.3.4.5",
+      "type": "depends-on"
+    }
+  ],
+  "resourceType": "Library",
+  "status": "active",
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Id: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">Library/mmi-suiciderisk-orderset-logic</td>\n            </tr>\n         </table>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Identifier: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <b>value: </b>\n                  <span>SuicideRiskLogic</span>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Version: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">1.0.0</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Title: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">Suicide Risk Order Set Logic</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Type: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-right: 25px;\">\n                  <span>\n                     <span>\n                        <span style=\"padding-left: 25px;\">\n                           <b>code: </b>\n                           <span>logic-library</span>\n                        </span>\n                     </span>\n                  </span>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Status: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">draft</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Description: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">Logic for Suicide Risk Order Sets</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Topic: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-right: 25px;\">\n                  <span style=\"padding-left: 25px;\">\n                     <b>text: </b>\n                     <span>Suicide Risk Order Set Logic</span>\n                  </span>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Related: </b>\n               </td>\n            </tr>\n            <tr style=\"vertical-align: top;\">\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <p style=\"margin-bottom: 5px;\">\n                     <b>type: </b>\n                     <span>depends-on</span>\n                  </p>\n                  <p style=\"margin-bottom: 5px;\">\n                     <b>Resource: </b>\n                     <br/>\n                     <span>\n                        <span style=\"padding-left: 25px;\">\n                           <b>reference: </b>\n                           <span>Library/library-fhir-model-definition</span>\n                        </span>\n                     </span>\n                  </p>\n               </td>\n            </tr>\n         </table>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Related: </b>\n               </td>\n            </tr>\n            <tr style=\"vertical-align: top;\">\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <p style=\"margin-bottom: 5px;\">\n                     <b>type: </b>\n                     <span>depends-on</span>\n                  </p>\n                  <p style=\"margin-bottom: 5px;\">\n                     <b>Resource: </b>\n                     <br/>\n                     <span>\n                        <span style=\"padding-left: 25px;\">\n                           <b>reference: </b>\n                           <span>Library/library-fhir-helpers</span>\n                           <br/>\n                        </span>\n                        <span style=\"padding-left: 25px;\">\n                           <b>display: </b>\n                           <span>FHIRHelpers</span>\n                        </span>\n                     </span>\n                  </p>\n               </td>\n            </tr>\n         </table>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Related: </b>\n               </td>\n            </tr>\n            <tr style=\"vertical-align: top;\">\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <p style=\"margin-bottom: 5px;\">\n                     <b>type: </b>\n                     <span>depends-on</span>\n                  </p>\n                  <p style=\"margin-bottom: 5px;\">\n                     <b>Resource: </b>\n                     <br/>\n                     <span>\n                        <span style=\"padding-left: 25px;\">\n                           <b>reference: </b>\n                           <span>http://nucc.org/provider-taxonomy</span>\n                        </span>\n                     </span>\n                  </p>\n               </td>\n            </tr>\n         </table>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Related: </b>\n               </td>\n            </tr>\n            <tr style=\"vertical-align: top;\">\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <p style=\"margin-bottom: 5px;\">\n                     <b>type: </b>\n                     <span>depends-on</span>\n                  </p>\n                  <p style=\"margin-bottom: 5px;\">\n                     <b>Resource: </b>\n                     <br/>\n                     <span>\n                        <span style=\"padding-left: 25px;\">\n                           <b>reference: </b>\n                           <span>ValueSet/1.2.3.4.5</span>\n                           <br/>\n                        </span>\n                        <span style=\"padding-left: 25px;\">\n                           <b>display: </b>\n                           <span>Suicide Risk Assessment</span>\n                        </span>\n                     </span>\n                  </p>\n               </td>\n            </tr>\n         </table>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Parameter: </b>\n               </td>\n            </tr>\n            <tr style=\"vertical-align: top;\">\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <span>\n                     <b>name: </b>\n                     <span>Patient</span>\n                     <br/>\n                  </span>\n                  <b>use: </b>\n                  <span>in</span>\n                  <br/>\n                  <span>\n                     <b>minimum cardinality: </b>\n                     <span>1</span>\n                     <br/>\n                  </span>\n                  <span>\n                     <b>maximum cardinality: </b>\n                     <span>1</span>\n                     <br/>\n                  </span>\n                  <b>type: </b>\n                  <span>Patient</span>\n                  <br/>\n                  <p style=\"margin-bottom: 5px;\"/>\n               </td>\n            </tr>\n         </table>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Parameter: </b>\n               </td>\n            </tr>\n            <tr style=\"vertical-align: top;\">\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <span>\n                     <b>name: </b>\n                     <span>Encounter</span>\n                     <br/>\n                  </span>\n                  <b>use: </b>\n                  <span>in</span>\n                  <br/>\n                  <span>\n                     <b>minimum cardinality: </b>\n                     <span>1</span>\n                     <br/>\n                  </span>\n                  <span>\n                     <b>maximum cardinality: </b>\n                     <span>1</span>\n                     <br/>\n                  </span>\n                  <b>type: </b>\n                  <span>Encounter</span>\n                  <br/>\n                  <p style=\"margin-bottom: 5px;\"/>\n               </td>\n            </tr>\n         </table>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Parameter: </b>\n               </td>\n            </tr>\n            <tr style=\"vertical-align: top;\">\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <span>\n                     <b>name: </b>\n                     <span>Practitioner</span>\n                     <br/>\n                  </span>\n                  <b>use: </b>\n                  <span>in</span>\n                  <br/>\n                  <span>\n                     <b>minimum cardinality: </b>\n                     <span>1</span>\n                     <br/>\n                  </span>\n                  <span>\n                     <b>maximum cardinality: </b>\n                     <span>1</span>\n                     <br/>\n                  </span>\n                  <b>type: </b>\n                  <span>Practitioner</span>\n                  <br/>\n                  <p style=\"margin-bottom: 5px;\"/>\n               </td>\n            </tr>\n         </table>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Data Requirements: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <div>\n                     <p style=\"margin-bottom: 5px;\">\n                        <b>type: </b>\n                        <span>RiskAssessment</span>\n                     </p>\n                     <p style=\"margin-bottom: 5px;\">\n                        <b>code filter:</b>\n                        <br/>\n                        <span style=\"padding-left: 25px;\">\n                           <b>path: </b>\n                           <span>code</span>\n                        </span>\n                        <br/>\n                        <span style=\"padding-left: 25px;\">\n                           <b>valueset: </b>\n                           <span>Suicide Risk Assessment</span>\n                        </span>\n                     </p>\n                  </div>\n               </td>\n            </tr>\n         </table>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Content: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <p style=\"margin-bottom: 5px;\">\n                     <b>type: </b>\n                     <span>text/cql</span>\n                  </p>\n                  <p style=\"margin-bottom: 5px;\">\n                     <b>url: </b>\n                     <span>library-mmi-suiciderisk-orderset-logic-content.cql</span>\n                  </p>\n               </td>\n            </tr>\n         </table>\n      </div>",
+    "status": "generated"
+  },
+  "title": "Suicide Risk Order Set Logic",
+  "topic": [
+    {
+      "text": "Suicide Risk Order Set Logic"
+    }
+  ],
+  "type": {
+    "coding": [
+      {
+        "code": "logic-library"
+      }
+    ]
+  },
+  "url": "http://motivemi.com/artifacts/Library/suiciderisk-orderset-logic",
+  "usage": "This activity definition is used as the definition of a referral request within various suicide risk order sets. Elements that apply universally are defined here, while elements that apply to the specific setting of a referral within a particular order set are defined in the order set.",
+  "useContext": [
+    {
+      "code": {
+        "code": "age",
+        "system": "http://hl7.org/fhir/usage-context-type"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "D000328",
+            "display": "Adult",
+            "system": "https://meshb.nlm.nih.gov"
+          }
+        ]
+      }
+    },
+    {
+      "code": {
+        "code": "focus",
+        "system": "http://hl7.org/fhir/usage-context-type"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "87512008",
+            "display": "Mild major depression",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      }
+    },
+    {
+      "code": {
+        "code": "focus",
+        "system": "http://hl7.org/fhir/usage-context-type"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "40379007",
+            "display": "Major depression, recurrent, mild",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      }
+    },
+    {
+      "code": {
+        "code": "focus",
+        "system": "http://hl7.org/fhir/usage-context-type"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "225444004",
+            "display": "At risk for suicide (finding)",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      }
+    },
+    {
+      "code": {
+        "code": "user",
+        "system": "http://hl7.org/fhir/usage-context-type"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "309343006",
+            "display": "Physician",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      }
+    },
+    {
+      "code": {
+        "code": "venue",
+        "system": "http://hl7.org/fhir/usage-context-type"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "440655000",
+            "display": "Outpatient environment",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      }
+    }
+  ],
+  "version": "1.0.0"
+}

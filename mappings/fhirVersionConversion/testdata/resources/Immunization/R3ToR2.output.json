@@ -1,0 +1,134 @@
+{
+  "date": "2013-01-10",
+  "doseQuantity": {
+    "code": "mg",
+    "system": "http://unitsofmeasure.org",
+    "value": 5
+  },
+  "encounter": {
+    "reference": "Encounter/example"
+  },
+  "expirationDate": "2015-02-15",
+  "explanation": {
+    "reason": [
+      {
+        "coding": [
+          {
+            "code": "429060002",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      }
+    ]
+  },
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/immunization-definitions.html#Immunization.status",
+      "valueCode": "completed"
+    }
+  ],
+  "id": "example",
+  "identifier": [
+    {
+      "system": "urn:ietf:rfc:3986",
+      "value": "urn:oid:1.3.6.1.4.1.21367.2005.3.7.1234"
+    }
+  ],
+  "location": {
+    "reference": "Location/1"
+  },
+  "lotNumber": "AAJN11K",
+  "manufacturer": {
+    "reference": "Organization/hl7"
+  },
+  "note": [
+    {
+      "text": "Notes on adminstration of vaccine"
+    }
+  ],
+  "patient": {
+    "reference": "Patient/example"
+  },
+  "reaction": [
+    {
+      "date": "2013-01-10",
+      "detail": {
+        "reference": "Observation/example"
+      },
+      "reported": true
+    }
+  ],
+  "reported": true,
+  "resourceType": "Immunization",
+  "route": {
+    "coding": [
+      {
+        "code": "IM",
+        "display": "Injection, intramuscular",
+        "system": "http://hl7.org/fhir/v3/RouteOfAdministration"
+      }
+    ]
+  },
+  "site": {
+    "coding": [
+      {
+        "code": "LA",
+        "display": "left arm",
+        "system": "http://hl7.org/fhir/v3/ActSite"
+      }
+    ]
+  },
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\u003cp\u003e\u003cb\u003eGenerated Narrative with Details\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eid\u003c/b\u003e: example\u003c/p\u003e\u003cp\u003e\u003cb\u003eidentifier\u003c/b\u003e: urn:oid:1.3.6.1.4.1.21367.2005.3.7.1234\u003c/p\u003e\u003cp\u003e\u003cb\u003estatus\u003c/b\u003e: completed\u003c/p\u003e\u003cp\u003e\u003cb\u003enotGiven\u003c/b\u003e: false\u003c/p\u003e\u003cp\u003e\u003cb\u003evaccineCode\u003c/b\u003e: Fluvax (Influenza) \u003cspan\u003e(Details : {urn:oid:1.2.36.1.2001.1005.17 code 'FLUVAX' = 'Fluvax)\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003epatient\u003c/b\u003e: \u003ca\u003ePatient/example\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eencounter\u003c/b\u003e: \u003ca\u003eEncounter/example\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003edate\u003c/b\u003e: 10/01/2013\u003c/p\u003e\u003cp\u003e\u003cb\u003eprimarySource\u003c/b\u003e: true\u003c/p\u003e\u003cp\u003e\u003cb\u003elocation\u003c/b\u003e: \u003ca\u003eLocation/1\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003emanufacturer\u003c/b\u003e: \u003ca\u003eOrganization/hl7\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003elotNumber\u003c/b\u003e: AAJN11K\u003c/p\u003e\u003cp\u003e\u003cb\u003eexpirationDate\u003c/b\u003e: 15/02/2015\u003c/p\u003e\u003cp\u003e\u003cb\u003esite\u003c/b\u003e: left arm \u003cspan\u003e(Details : {http://hl7.org/fhir/v3/ActSite code 'LA' = 'left arm', given as 'left arm'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eroute\u003c/b\u003e: Injection, intramuscular \u003cspan\u003e(Details : {http://hl7.org/fhir/v3/RouteOfAdministration code 'IM' = 'Injection, intramuscular', given as 'Injection, intramuscular'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003edoseQuantity\u003c/b\u003e: 5 mg\u003cspan\u003e (Details: UCUM code mg = 'mg')\u003c/span\u003e\u003c/p\u003e\u003cblockquote\u003e\u003cp\u003e\u003cb\u003epractitioner\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003erole\u003c/b\u003e: Ordering Provider \u003cspan\u003e(Details : {http://hl7.org/fhir/v2/0443 code 'OP' = 'Ordering Provider)\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eactor\u003c/b\u003e: \u003ca\u003ePractitioner/example\u003c/a\u003e\u003c/p\u003e\u003c/blockquote\u003e\u003cblockquote\u003e\u003cp\u003e\u003cb\u003epractitioner\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003erole\u003c/b\u003e: Administering Provider \u003cspan\u003e(Details : {http://hl7.org/fhir/v2/0443 code 'AP' = 'Administering Provider)\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eactor\u003c/b\u003e: \u003ca\u003ePractitioner/example\u003c/a\u003e\u003c/p\u003e\u003c/blockquote\u003e\u003cp\u003e\u003cb\u003enote\u003c/b\u003e: Notes on adminstration of vaccine\u003c/p\u003e\u003ch3\u003eExplanations\u003c/h3\u003e\u003ctable\u003e\u003ctr\u003e\u003ctd\u003e-\u003c/td\u003e\u003ctd\u003e\u003cb\u003eReason\u003c/b\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e*\u003c/td\u003e\u003ctd\u003eProcedure to meet occupational requirement \u003cspan\u003e(Details : {SNOMED CT code '429060002' = 'Procedure to meet occupational requirement)\u003c/span\u003e\u003c/td\u003e\u003c/tr\u003e\u003c/table\u003e\u003ch3\u003eReactions\u003c/h3\u003e\u003ctable\u003e\u003ctr\u003e\u003ctd\u003e-\u003c/td\u003e\u003ctd\u003e\u003cb\u003eDate\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eDetail\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eReported\u003c/b\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e*\u003c/td\u003e\u003ctd\u003e10/01/2013\u003c/td\u003e\u003ctd\u003e\u003ca\u003eObservation/example\u003c/a\u003e\u003c/td\u003e\u003ctd\u003etrue\u003c/td\u003e\u003c/tr\u003e\u003c/table\u003e\u003ch3\u003eVaccinationProtocols\u003c/h3\u003e\u003ctable\u003e\u003ctr\u003e\u003ctd\u003e-\u003c/td\u003e\u003ctd\u003e\u003cb\u003eDoseSequence\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eDescription\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eAuthority\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eSeries\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eSeriesDoses\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eTargetDisease\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eDoseStatus\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eDoseStatusReason\u003c/b\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e*\u003c/td\u003e\u003ctd\u003e1\u003c/td\u003e\u003ctd\u003eVaccination Protocol Sequence 1\u003c/td\u003e\u003ctd\u003e\u003ca\u003eOrganization/hl7\u003c/a\u003e\u003c/td\u003e\u003ctd\u003eVaccination Series 1\u003c/td\u003e\u003ctd\u003e2\u003c/td\u003e\u003ctd\u003eGestational rubella syndrome \u003cspan\u003e(Details : {SNOMED CT code '1857005' = 'Gestational rubella syndrome)\u003c/span\u003e\u003c/td\u003e\u003ctd\u003eCounts \u003cspan\u003e(Details : {http://hl7.org/fhir/vaccination-protocol-dose-status code 'count' = 'Counts', given as 'Counts'})\u003c/span\u003e\u003c/td\u003e\u003ctd\u003eCold chain break \u003cspan\u003e(Details : {http://hl7.org/fhir/vaccination-protocol-dose-status-reason code 'coldchbrk' = 'Cold chain break', given as 'Cold chain break'})\u003c/span\u003e\u003c/td\u003e\u003c/tr\u003e\u003c/table\u003e\u003c/div\u003e",
+    "status": "generated"
+  },
+  "vaccinationProtocol": [
+    {
+      "authority": {
+        "reference": "Organization/hl7"
+      },
+      "description": "Vaccination Protocol Sequence 1",
+      "doseSequence": 1,
+      "doseStatus": {
+        "coding": [
+          {
+            "code": "count",
+            "display": "Counts",
+            "system": "http://hl7.org/fhir/vaccination-protocol-dose-status"
+          }
+        ]
+      },
+      "doseStatusReason": {
+        "coding": [
+          {
+            "code": "coldchbrk",
+            "display": "Cold chain break",
+            "system": "http://hl7.org/fhir/vaccination-protocol-dose-status-reason"
+          }
+        ]
+      },
+      "series": "Vaccination Series 1",
+      "seriesDoses": 2,
+      "targetDisease": [
+        {
+          "coding": [
+            {
+              "code": "1857005",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "vaccineCode": {
+    "coding": [
+      {
+        "code": "FLUVAX",
+        "system": "urn:oid:1.2.36.1.2001.1005.17"
+      }
+    ],
+    "text": "Fluvax (Influenza)"
+  },
+  "wasNotGiven": false
+}

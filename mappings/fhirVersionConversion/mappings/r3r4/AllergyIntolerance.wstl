@@ -1,0 +1,72 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   allergyIntolerance : FHIR AllergyIntolerance resource
+//
+// Output(s):
+//   FHIR AllergyIntolerance Resource
+//
+def AllergyIntoleranceBase(allergyIntolerance) {
+  resourcebase::ResourceBase(allergyIntolerance)
+  identifier: allergyIntolerance.identifier
+  code: allergyIntolerance.code
+  onsetDateTime: allergyIntolerance.onsetDateTime
+  onsetAge: allergyIntolerance.onsetAge
+  onsetPeriod: allergyIntolerance.onsetPeriod
+  onsetRange: allergyIntolerance.onsetRange
+  onsetString: allergyIntolerance.onsetString
+  lastOccurrence: allergyIntolerance.lastOccurrence
+  note: allergyIntolerance.note
+}
+
+// Description: Converts a FHIR STU3 AllergyIntolerance resource to FHIR R4 AllergyIntolerance resource.
+//
+// Argument(s):
+//   allergyIntolerance : FHIR STU3 AllergyIntolerance resource https://www.hl7.org/fhir/stu3/allergyIntolerance.html
+//
+// Output(s):
+//   FHIR R4 AllergyIntolerance Resource https://www.hl7.org/fhir/r4/allergyIntolerance.html
+//
+def R3AllergyIntoleranceToR4(allergyIntolerance) {
+  AllergyIntoleranceBase(allergyIntolerance)
+  contained: datatypes::R3ResourceToR4(allergyIntolerance.contained[])
+  patient: datatypes::R3ReferenceToR4(allergyIntolerance.patient)
+  clinicalStatus: datatypes::CodeToCodeableConcept(allergyIntolerance.clinicalStatus)
+  verificationStatus: datatypes::CodeToCodeableConcept(allergyIntolerance.verificationStatus)
+  type: allergyIntolerance.type
+  category: allergyIntolerance.category
+  criticality: allergyIntolerance.criticality
+  encounter: extension::fetchReference("https://www.hl7.org/fhir/R4/allergyintolerance-definitions.html#AllergyIntolerance.encounter", allergyIntolerance.extension)
+  recordedDate: allergyIntolerance.assertedDate
+  recorder: datatypes::R3ReferenceToR4(allergyIntolerance.recorder)
+  asserter: datatypes::R3ReferenceToR4(allergyIntolerance.asserter)
+  reaction: allergyIntolerance.reaction
+}
+
+// Description: Converts a FHIR R4 AllergyIntolerance resource to FHIR STU3 AllergyIntolerance resource.
+//
+// Argument(s):
+//   allergyIntolerance : FHIR R4 AllergyIntolerance resource https://www.hl7.org/fhir/r4/allergyIntolerance.html
+//
+// Output(s):
+//   FHIR STU3 AllergyIntolerance Resource https://www.hl7.org/fhir/stu3/allergyIntolerance.html
+//
+def R4AllergyIntoleranceToR3(allergyIntolerance) {
+  AllergyIntoleranceBase(allergyIntolerance)
+  contained: datatypes::R4ResourceToR3(allergyIntolerance.contained[])
+  patient: datatypes::R4ReferenceToR3(allergyIntolerance.patient)
+  clinicalStatus: datatypes::CodeableConceptToCode(allergyIntolerance.clinicalStatus)
+  verificationStatus: datatypes::CodeableConceptToCode(allergyIntolerance.verificationStatus)
+  type: allergyIntolerance.type
+  category: allergyIntolerance.category
+  criticality: allergyIntolerance.criticality
+  assertedDate: allergyIntolerance.recordedDate
+  recorder: datatypes::R4ReferenceToR3(allergyIntolerance.recorder)
+  asserter: datatypes::R4ReferenceToR3(allergyIntolerance.asserter)
+  reaction: allergyIntolerance.reaction
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/allergyintolerance-definitions.html#AllergyIntolerance.encounter", allergyIntolerance.encounter)
+}

@@ -1,0 +1,38 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def ScheduleBase(schedule) {
+  resourcebase::ResourceBase(schedule)
+  identifier: schedule.identifier
+  serviceType: schedule.serviceType
+  specialty: schedule.specialty
+  planningHorizon: schedule.planningHorizon
+  comment: schedule.comment
+}
+
+def R3ScheduleToR4(schedule) {
+  ScheduleBase(schedule)
+  contained: datatypes::R3ResourceToR4(schedule.contained[])
+  actor: datatypes::R3ReferenceToR4(schedule.actor[])
+  active: schedule.active
+  serviceCategory: R3Schedule_ServiceCategoryToR4("https://www.hl7.org/fhir/R4/schedule-definitions.html#schedule.serviceCategory", schedule.extension, schedule.serviceCategory)
+}
+
+def R4ScheduleToR3(schedule) {
+  scheduleBase(schedule)
+  contained: datatypes::R4ResourceToR3(schedule.contained[])
+  actor: datatypes::R4ReferenceToR3(schedule.actor[])
+  active: schedule.active
+  serviceCategory: schedule.serviceCategory[0]
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/schedule-definitions.html#schedule.serviceCategory", schedule.serviceCategory[])
+}
+
+def R3Schedule_ServiceCategoryToR4(url, extension, data) {
+  var serviceCategory: extension::fetchCodeableConceptArray(url, extension)
+  if serviceCategory then {
+    serviceCategory
+  } else {
+    arrayOf(data)
+  }
+}

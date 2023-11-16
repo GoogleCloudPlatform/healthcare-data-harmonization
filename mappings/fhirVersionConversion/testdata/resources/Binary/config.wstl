@@ -1,0 +1,11 @@
+// R3 Binary To R4
+$this: R3BinaryToR4($root)
+
+// R4 Binary To R3
+$this: R4BinaryToR3($root)
+
+// R2 Binary To R3
+$this: R2BinaryToR3($root)
+
+// R3 Binary To R2
+$this: R3BinaryToR2($root)

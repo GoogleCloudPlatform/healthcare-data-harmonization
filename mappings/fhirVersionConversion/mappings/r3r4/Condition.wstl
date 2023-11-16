@@ -1,0 +1,139 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   condition : FHIR Condition resource
+//
+// Output(s):
+//   FHIR Condition Resource
+//
+def ConditionBase(condition) {
+  resourcebase::ResourceBase(condition)
+  identifier: condition.identifier
+  severity: condition.severity
+  code: condition.code
+  bodySite: condition.bodySite
+  onsetDateTime: condition.onsetDateTime
+  onsetAge: condition.onsetAge
+  onsetPeriod: condition.onsetPeriod
+  onsetRange: condition.onsetRange
+  onsetString: condition.onsetString
+  note: condition.note
+  abatementDateTime: condition.abatementDateTime
+  abatementAge: condition.abatementAge
+  abatementPeriod: condition.abatementPeriod
+  abatementRange: condition.abatementRange
+  abatementString: condition.abatementString
+}
+
+// Description: Converts a FHIR STU3 Condition resource to FHIR R4 Condition resource.
+//
+// Argument(s):
+//   condition : FHIR STU3 Condition resource https://www.hl7.org/fhir/stu3/condition.html
+//
+// Output(s):
+//   FHIR R4 Condition Resource https://www.hl7.org/fhir/r4/condition.html
+//
+def R3ConditionToR4(condition) {
+  ConditionBase(condition)
+  contained: datatypes::R3ResourceToR4(condition.contained[])
+  evidence: R3Condition_EvidenceToR4(condition.evidence[])
+  subject: datatypes::R3ReferenceToR4(condition.subject)
+  clinicalStatus: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/condition-definitions.html#Condition.clinicalStatus", condition.extension)
+  clinicalStatus.coding[0].code: if !$this.clinicalStatus then condition.clinicalStatus
+  verificationStatus: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/condition-definitions.html#Condition.verificationStatus", condition.extension)
+  verificationStatus.coding[0].code: if !$this.verificationStatus then condition.verificationStatus
+  category: condition.category
+  encounter: if matchesRegex(condition.context.reference, "^Encounter.*") then datatypes::R3ReferenceToR4(condition.context)
+  recordedDate: condition.assertedDate
+  recorder: extension::fetchReference("https://www.hl7.org/fhir/R4/condition-definitions.html#Condition.recorder", condition.extension)
+  asserter: datatypes::R3ReferenceToR4(condition.asserter)
+  stage[]: R3Condition_StageToR4(condition.stage)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/condition-definitions.html#Condition.abatementBoolean", condition.abatementBoolean)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/condition-definitions.html#Condition.clinicalStatus", condition.clinicalStatus)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/condition-definitions.html#Condition.verificationStatus", condition.verificationStatus)
+  extension[]: if !$this.encounter then extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/condition-definitions.html#Condition.context", condition.context)
+}
+
+// Description: Converts a FHIR R4 Condition resource to FHIR STU3 Condition resource.
+//
+// Argument(s):
+//   condition : FHIR R4 Condition resource https://www.hl7.org/fhir/r4/condition.html
+//
+// Output(s):
+//   FHIR STU3 Condition Resource https://www.hl7.org/fhir/stu3/condition.html
+//
+def R4ConditionToR3(condition) {
+  ConditionBase(condition)
+  contained: datatypes::R4ResourceToR3(condition.contained[])
+  evidence: R4Condition_EvidenceToR3(condition.evidence[])
+  subject: datatypes::R4ReferenceToR3(condition.subject)
+  clinicalStatus: extension::fetchCode("https://www.hl7.org/fhir/STU3/condition-definitions.html#Condition.clinicalStatus", condition.extension)
+  verificationStatus: extension::fetchCode("https://www.hl7.org/fhir/STU3/condition-definitions.html#Condition.verificationStatus", condition.extension)
+  category: condition.category
+  context: datatypes::R4ReferenceToR3(condition.encounter)
+  abatementBoolean: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/condition-definitions.html#Condition.abatementBoolean", condition.extension)
+  assertedDate: condition.recordedDate
+  asserter: datatypes::R4ReferenceToR3(condition.asserter)
+  stage: R4Condition_StageToR3(condition.stage[0])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/condition-definitions.html#Condition.recorder", condition.recorder)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/condition-definitions.html#Condition.clinicalStatus", condition.clinicalStatus)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/condition-definitions.html#Condition.verificationStatus", condition.verificationStatus)
+}
+
+// Description: Converts a FHIR STU3 Condition.Stage to FHIR R4 Condition.Stage.
+//
+// Argument(s):
+//   data : FHIR STU3 Condition.Stage http://hl7.org/fhir/STU3/condition-definitions.html#Condition.stage
+//
+// Output(s):
+//   FHIR R4 Condition.Stage http://hl7.org/fhir/R4/condition-definitions.html#Condition.stage
+//
+def R3Condition_StageToR4(data) {
+  summary: data.summary
+  assessment: datatypes::R3ReferenceToR4(data.assessment[])
+  type: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/condition-definitions.html#Condition.stage.type", data.extension)
+}
+
+// Description: Converts a FHIR R4 Condition.Stage to FHIR STU3 Condition.Stage.
+//
+// Argument(s):
+//   data : FHIR R4 Condition.Stage http://hl7.org/fhir/R4/condition-definitions.html#Condition.stage
+//
+// Output(s):
+//   FHIR STU3 Condition.Stage http://hl7.org/fhir/STU3/condition-definitions.html#Condition.stage
+//
+def R4Condition_StageToR3(data) {
+  summary: data.summary
+  assessment: datatypes::R4ReferenceToR3(data.assessment[])
+  type: data.type
+}
+
+// Description: Converts a FHIR STU3 Condition.Evidence to FHIR R4 Condition.Evidence.
+//
+// Argument(s):
+//   data : FHIR STU3 Condition.Evidence http://hl7.org/fhir/STU3/condition-definitions.html#Condition.evidence
+//
+// Output(s):
+//   FHIR R4 Condition.Evidence http://hl7.org/fhir/R4/condition-definitions.html#Condition.evidence
+//
+def R3Condition_EvidenceToR4(data) {
+  code: data.code
+  detail: datatypes::R3ReferenceToR4(data.detail[])
+}
+
+// Description: Converts a FHIR R4 Condition.Evidence to FHIR STU3 Condition.Evidence.
+//
+// Argument(s):
+//   data : FHIR R4 Condition.Evidence http://hl7.org/fhir/R4/condition-definitions.html#Condition.evidence
+//
+// Output(s):
+//   FHIR STU3 Condition.Evidence http://hl7.org/fhir/STU3/condition-definitions.html#Condition.evidence
+//
+def R4Condition_EvidenceToR3(data) {
+  code: data.code
+  detail: datatypes::R4ReferenceToR3(data.detail[])
+}

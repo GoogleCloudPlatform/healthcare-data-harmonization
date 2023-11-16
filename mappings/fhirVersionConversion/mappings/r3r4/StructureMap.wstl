@@ -1,0 +1,178 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def StructureMapBase(structureMap) {
+  resourcebase::ResourceBase(structureMap)
+  url: structureMap.url
+  identifier: structureMap.identifier
+  version: structureMap.version
+  name: structureMap.name
+  title: structureMap.title
+  date: structureMap.date
+  publisher: structureMap.publisher
+  contact: structureMap.contact
+  description: structureMap.description
+  useContext: structureMap.useContext
+  jurisdiction: structureMap.jurisdiction
+  purpose: structureMap.purpose
+  copyright: structureMap.copyright
+}
+
+def R3StructureMapToR4(structureMap) {
+  StructureMapBase(structureMap)
+  contained: datatypes::R3ResourceToR4(structureMap.contained[])
+  status: structureMap.status
+  experimental: structureMap.experimental
+  structure: structureMap.structure
+  'import': structureMap.'import'
+  group: R3StructureMap_GroupToR4(structureMap.group[])
+}
+
+def R4StructureMapToR3(structureMap) {
+  StructureMapBase(structureMap)
+  contained: datatypes::R4ResourceToR3(structureMap.contained[])
+  status: structureMap.status
+  experimental: structureMap.experimental
+  structure: structureMap.structure
+  'import': structureMap.'import'
+  group: R4StructureMap_GroupToR3(structureMap.group[])
+}
+
+def R3StructureMap_GroupToR4(data) {
+  name: data.name
+  extends: data.extends
+  typeMode: data.typeMode
+  documentation: data.documentation
+  input: data.input
+  rule: R3StructureMap_Group_RuleToR4(data.rule[])
+}
+
+def R4StructureMap_GroupToR3(data) {
+  name: data.name
+  extends: data.extends
+  typeMode: data.typeMode
+  documentation: data.documentation
+  input: data.input
+  rule: R4StructureMap_Group_RuleToR3(data.rule[])
+}
+
+def R3StructureMap_Group_RuleToR4(data) {
+  name: data.name
+  source: R3StructureMap_Group_Rule_SourceToR4(data.source[])
+  target: data.target
+  rule: data.rule
+  dependent: data.dependent
+  documentation: data.documentation
+}
+
+def R4StructureMap_Group_RuleToR3(data) {
+  name: data.name
+  source: R4StructureMap_Group_Rule_SourceToR3(data.source[])
+  target: data.target
+  rule: data.rule
+  dependent: data.dependent
+  documentation: data.documentation
+}
+
+def R3StructureMap_Group_Rule_SourceToR4(data) {
+  context: data.context
+  min: data.min
+  max: data.max
+  type: data.type
+  defaultValueBase64Binary: data.defaultValueBase64Binary
+  defaultValueBoolean: data.defaultValueBoolean
+  defaultValueCode: data.defaultValueCode
+  defaultValueDate: data.defaultValueDate
+  defaultValueDateTime: data.defaultValueDateTime
+  defaultValueDecimal: data.defaultValueDecimal
+  defaultValueId: data.defaultValueId
+  defaultValueInstant: data.defaultValueInstant
+  defaultValueInteger: data.defaultValueInteger
+  defaultValueMarkdown: data.defaultValueMarkdown
+  defaultValueOid: data.defaultValueOid
+  defaultValuePositiveInt: data.defaultValuePositiveInt
+  defaultValueString: data.defaultValueString
+  defaultValueTime: data.defaultValueTime
+  defaultValueUnsignedInt: data.defaultValueUnsignedInt
+  defaultValueUri: data.defaultValueUri
+  defaultValueAddress: data.defaultValueAddress
+  defaultValueAge: data.defaultValueAge
+  defaultValueAnnotation: data.defaultValueAnnotation
+  defaultValueAttachment: data.defaultValueAttachment
+  defaultValueCodeableConcept: data.defaultValueCodeableConcept
+  defaultValueCoding: data.defaultValueCoding
+  defaultValueContactPoint: data.defaultValueContactPoint
+  defaultValueCount: data.defaultValueCount
+  defaultValueDistance: data.defaultValueDistance
+  defaultValueDuration: data.defaultValueDuration
+  defaultValueHumanName: data.defaultValueHumanName
+  defaultValueIdentifier: data.defaultValueIdentifier
+  defaultValueMoney: data.defaultValueMoney
+  defaultValuePeriod: data.defaultValuePeriod
+  defaultValueQuantity: data.defaultValueQuantity
+  defaultValueRange: data.defaultValueRange
+  defaultValueRatio: data.defaultValueRatio
+  defaultValueReference: datatypes::R3ReferenceToR4(data.defaultValueReference)
+  defaultValueSampledData: data.defaultValueSampledData
+  defaultValueSignature: data.defaultValueSignature
+  defaultValueTiming: data.defaultValueTiming
+  defaultValueMeta: data.defaultValueMeta
+  element: data.element
+  listMode: data.listMode
+  variable: data.variable
+  condition: data.condition
+  check: data.check
+  logMessage: extension::fetchString("https://www.hl7.org/fhir/R4/structuremap-definitions.html#StructureMap.group.rule.source.logMessage", data.extension)
+}
+
+def R4StructureMap_Group_Rule_SourceToR3(data) {
+  context: data.context
+  min: data.min
+  max: data.max
+  type: data.type
+  defaultValueBase64Binary: data.defaultValueBase64Binary
+  defaultValueBoolean: data.defaultValueBoolean
+  defaultValueCode: data.defaultValueCode
+  defaultValueDate: data.defaultValueDate
+  defaultValueDateTime: data.defaultValueDateTime
+  defaultValueDecimal: data.defaultValueDecimal
+  defaultValueId: data.defaultValueId
+  defaultValueInstant: data.defaultValueInstant
+  defaultValueInteger: data.defaultValueInteger
+  defaultValueMarkdown: data.defaultValueMarkdown
+  defaultValueOid: data.defaultValueOid
+  defaultValuePositiveInt: data.defaultValuePositiveInt
+  defaultValueString: data.defaultValueString
+  defaultValueTime: data.defaultValueTime
+  defaultValueUnsignedInt: data.defaultValueUnsignedInt
+  defaultValueUri: data.defaultValueUri
+  defaultValueAddress: data.defaultValueAddress
+  defaultValueAge: data.defaultValueAge
+  defaultValueAnnotation: data.defaultValueAnnotation
+  defaultValueAttachment: data.defaultValueAttachment
+  defaultValueCodeableConcept: data.defaultValueCodeableConcept
+  defaultValueCoding: data.defaultValueCoding
+  defaultValueContactPoint: data.defaultValueContactPoint
+  defaultValueCount: data.defaultValueCount
+  defaultValueDistance: data.defaultValueDistance
+  defaultValueDuration: data.defaultValueDuration
+  defaultValueHumanName: data.defaultValueHumanName
+  defaultValueIdentifier: data.defaultValueIdentifier
+  defaultValueMoney: data.defaultValueMoney
+  defaultValuePeriod: data.defaultValuePeriod
+  defaultValueQuantity: data.defaultValueQuantity
+  defaultValueRange: data.defaultValueRange
+  defaultValueRatio: data.defaultValueRatio
+  defaultValueReference: datatypes::R4ReferenceToR3(data.defaultValueReference)
+  defaultValueSampledData: data.defaultValueSampledData
+  defaultValueSignature: data.defaultValueSignature
+  defaultValueTiming: data.defaultValueTiming
+  defaultValueMeta: data.defaultValueMeta
+  element: data.element
+  listMode: data.listMode
+  variable: data.variable
+  condition: data.condition
+  check: data.check
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/structuremap-definitions.html#StructureMap.group.rule.source.logMessage", data.logMessage)
+}

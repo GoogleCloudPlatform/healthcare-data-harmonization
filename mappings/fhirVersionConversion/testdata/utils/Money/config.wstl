@@ -1,0 +1,5 @@
+// store to extension
+extension[]: addMoney("test_url", $root.money)
+
+// fetch from extension
+money: fetchMoney("test_url", $root.extension)

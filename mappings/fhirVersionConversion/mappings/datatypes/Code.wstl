@@ -1,0 +1,13 @@
+package datatypes
+
+// Description: Converts a code datatype to CodeableConcept datatype
+//
+// Argument(s):
+//   code: FHIR Code datatype https://www.hl7.org/fhir/datatypes.html#code
+//
+// Output(s):
+//   FHIR CodeableConcept datatype https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def CodeToCodeableConcept(code) {
+  coding[0].code: code
+}

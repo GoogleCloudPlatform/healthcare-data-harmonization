@@ -1,0 +1,132 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   clinicalImpression : FHIR ClinicalImpression resource
+//
+// Output(s):
+//   FHIR ClinicalImpression Resource
+//
+def ClinicalImpressionBase(clinicalImpression) {
+  resourcebase::ResourceBase(clinicalImpression)
+  identifier: clinicalImpression.identifier
+  code: clinicalImpression.code
+  description: clinicalImpression.description
+  effectiveDateTime: clinicalImpression.effectiveDateTime
+  effectivePeriod: clinicalImpression.effectivePeriod
+  date: clinicalImpression.date
+  protocol: clinicalImpression.protocol
+  summary: clinicalImpression.summary
+  prognosisCodeableConcept: clinicalImpression.prognosisCodeableConcept
+  note: clinicalImpression.note
+}
+
+// Description: Converts a FHIR STU3 ClinicalImpression resource to FHIR R4 ClinicalImpression resource.
+//
+// Argument(s):
+//   clinicalImpression : FHIR STU3 ClinicalImpression resource https://www.hl7.org/fhir/stu3/clinicalImpression.html
+//
+// Output(s):
+//   FHIR R4 ClinicalImpression Resource https://www.hl7.org/fhir/r4/clinicalImpression.html
+//
+def R3ClinicalImpressionToR4(clinicalImpression) {
+  ClinicalImpressionBase(clinicalImpression)
+  contained: datatypes::R3ResourceToR4(clinicalImpression.contained[])
+  prognosisReference: datatypes::R3ReferenceToR4(clinicalImpression.prognosisReference[])
+  finding: R3ClinicalImpression_FindingToR4(clinicalImpression.finding[])
+  problem: datatypes::R3ReferenceToR4(clinicalImpression.problem[])
+  previous: datatypes::R3ReferenceToR4(clinicalImpression.previous)
+  subject: datatypes::R3ReferenceToR4(clinicalImpression.subject)
+  status: utilities::Convert_TerminologyCode(clinicalImpression.status, "http://hl7.org/fhir/clinical-impression-status", "Clinical_Impression_Status_r3r4")
+  statusReason: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/clinicalimpression-definitions.html#ClinicalImpression.statusReason", clinicalImpression.extension)
+  encounter: if matchesRegex(clinicalImpression.context.reference, "^Encounter.*") then datatypes::R3ReferenceToR4(clinicalImpression.context)
+  assessor: datatypes::R3ReferenceToR4(clinicalImpression.assessor)
+  investigation: R3ClinicalImpression_InvestigationToR4(clinicalImpression.investigation[])
+  supportingInfo: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/clinicalimpression-definitions.html#ClinicalImpression.supportingInfo", clinicalImpression.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.action", clinicalImpression.action[])
+  extension[]: if !$this.encounter then extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.context", clinicalImpression.context)
+}
+
+// Description: Converts a FHIR R4 ClinicalImpression resource to FHIR STU3 ClinicalImpression resource.
+//
+// Argument(s):
+//   clinicalImpression : FHIR R4 ClinicalImpression resource https://www.hl7.org/fhir/r4/clinicalImpression.html
+//
+// Output(s):
+//   FHIR STU3 ClinicalImpression Resource https://www.hl7.org/fhir/stu3/clinicalImpression.html
+//
+def R4ClinicalImpressionToR3(clinicalImpression) {
+  ClinicalImpressionBase(clinicalImpression)
+  contained: datatypes::R4ResourceToR3(clinicalImpression.contained[])
+  prognosisReference: datatypes::R4ReferenceToR3(clinicalImpression.prognosisReference[])
+  finding: R4ClinicalImpression_FindingToR3(clinicalImpression.finding[])
+  problem: datatypes::R4ReferenceToR3(clinicalImpression.problem[])
+  previous: datatypes::R4ReferenceToR3(clinicalImpression.previous)
+  subject: datatypes::R4ReferenceToR3(clinicalImpression.subject)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.status", clinicalImpression.extension)
+  status: if status? then status else clinicalImpression.status
+  context: datatypes::R4ReferenceToR3(clinicalImpression.encounter)
+  assessor: datatypes::R4ReferenceToR3(clinicalImpression.assessor)
+  investigation: R4ClinicalImpression_InvestigationToR3(clinicalImpression.investigation[])
+  action: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.action", clinicalImpression.extension)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/clinicalimpression-definitions.html#ClinicalImpression.statusReason", clinicalImpression.statusReason)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/clinicalimpression-definitions.html#ClinicalImpression.supportingInfo", clinicalImpression.supportingInfo[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/clinicalimpression-definitions.html#ClinicalImpression.status", clinicalImpression.status)
+}
+
+// Description: Converts a FHIR STU3 ClinicalImpression.Investigation to FHIR R4 ClinicalImpression.Investigation.
+//
+// Argument(s):
+//   data : FHIR STU3 ClinicalImpression.Investigation http://hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.investigation
+//
+// Output(s):
+//   FHIR R4 ClinicalImpression.Investigation Resource http://hl7.org/fhir/R4/clinicalimpression-definitions.html#ClinicalImpression.investigation
+//
+def R3ClinicalImpression_InvestigationToR4(data) {
+  code: data.code
+  item: datatypes::R3ReferenceToR4(data.item[])
+}
+
+// Description: Converts a FHIR R4 ClinicalImpression.Investigation to FHIR STU3 ClinicalImpression.Investigation.
+//
+// Argument(s):
+//   data : FHIR R4 ClinicalImpression.Investigation http://hl7.org/fhir/R4/clinicalimpression-definitions.html#ClinicalImpression.investigation
+//
+// Output(s):
+//   FHIR STU3 ClinicalImpression.Investigation Resource http://hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.investigation
+//
+def R4ClinicalImpression_InvestigationToR3(data) {
+  code: data.code
+  item: datatypes::R4ReferenceToR3(data.item[])
+}
+
+// Description: Converts a FHIR STU3 ClinicalImpression.Finding to FHIR R4 ClinicalImpression.Finding.
+//
+// Argument(s):
+//   data : FHIR STU3 ClinicalImpression.Finding http://hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.finding
+//
+// Output(s):
+//   FHIR R4 ClinicalImpression.Finding Resource http://hl7.org/fhir/R4/clinicalimpression-definitions.html#ClinicalImpression.finding
+//
+def R3ClinicalImpression_FindingToR4(data) {
+  itemCodeableConcept: data.itemCodeableConcept
+  itemReference: datatypes::R3ReferenceToR4(data.itemReference)
+  basis: data.basis
+}
+
+// Description: Converts a FHIR R4 ClinicalImpression.Finding to FHIR STU3 ClinicalImpression.Finding.
+//
+// Argument(s):
+//   data : FHIR R4 ClinicalImpression.Finding http://hl7.org/fhir/R4/clinicalimpression-definitions.html#ClinicalImpression.finding
+//
+// Output(s):
+//   FHIR STU3 ClinicalImpression.Finding Resource http://hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.finding
+//
+def R4ClinicalImpression_FindingToR3(data) {
+  itemCodeableConcept: data.itemCodeableConcept
+  itemReference: datatypes::R4ReferenceToR3(data.itemReference)
+  basis: data.basis
+}

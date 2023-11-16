@@ -1,0 +1,11 @@
+{
+  "extension": [
+    {
+      "url": "test_url",
+      "valueRatio": {
+        "numerator": {
+            "value": 1
+        }
+    }
+  ]
+}

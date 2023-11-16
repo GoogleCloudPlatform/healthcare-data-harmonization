@@ -1,0 +1,78 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   deviceMetric : FHIR DeviceMetric resource
+//
+// Output(s):
+//   FHIR DeviceMetric Resource
+//
+def DeviceMetricBase(deviceMetric) {
+  resourcebase::ResourceBase(deviceMetric)
+  type: deviceMetric.type
+  unit: deviceMetric.unit
+  measurementPeriod: deviceMetric.measurementPeriod
+}
+
+// Description: Converts a FHIR STU3 DeviceMetric resource to FHIR R4 DeviceMetric resource.
+//
+// Argument(s):
+//   deviceMetric : FHIR STU3 DeviceMetric resource https://www.hl7.org/fhir/stu3/deviceMetric.html
+//
+// Output(s):
+//   FHIR R4 DeviceMetric Resource https://www.hl7.org/fhir/r4/deviceMetric.html
+//
+def R3DeviceMetricToR4(deviceMetric) {
+  DeviceMetricBase(deviceMetric)
+  contained: datatypes::R3ResourceToR4(deviceMetric.contained[])
+  identifier: R3DeviceMetric_IdentifierToR4("https://www.hl7.org/fhir/R4/devicemetric-definitions.html#DeviceMetric.identifier", deviceMetric.extension, deviceMetric.identifier)
+  source: datatypes::R3ReferenceToR4(deviceMetric.source)
+  parent: extension::fetchReference("https://www.hl7.org/fhir/R4/devicemetric-definitions.html#DeviceMetric.parent", deviceMetric.extension)
+  operationalStatus: deviceMetric.operationalStatus
+  color: deviceMetric.color
+  category: deviceMetric.category
+  calibration: deviceMetric.calibration
+}
+
+// Description: Converts a FHIR R4 DeviceMetric resource to FHIR STU3 DeviceMetric resource.
+//
+// Argument(s):
+//   deviceMetric : FHIR R4 DeviceMetric resource https://www.hl7.org/fhir/r4/deviceMetric.html
+//
+// Output(s):
+//   FHIR STU3 DeviceMetric Resource https://www.hl7.org/fhir/stu3/deviceMetric.html
+//
+def R4DeviceMetricToR3(deviceMetric) {
+  DeviceMetricBase(deviceMetric)
+  contained: datatypes::R4ResourceToR3(deviceMetric.contained[])
+  identifier: deviceMetric.identifier[0]
+  source: datatypes::R4ReferenceToR3(deviceMetric.source)
+  parent: datatypes::R4ReferenceToR3(deviceMetric.parent)
+  operationalStatus: deviceMetric.operationalStatus
+  color: deviceMetric.color
+  category: deviceMetric.category
+  calibration: deviceMetric.calibration
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/R4/devicemetric-definitions.html#DeviceMetric.identifier", deviceMetric.identifier[])
+}
+
+// Description: Converts a FHIR STU3 DeviceMetric.Identifier to FHIR R4 DeviceMetric.Identifier.
+//
+// Argument(s):
+//   data : FHIR STU3 DeviceMetric.Identifier http://hl7.org/fhir/STU3/condition-definitions.html#DeviceMetric.identifier
+//   url : FHIR R4 Extension.url http://hl7.org/fhir/R4/extensibility-definitions.html#Extension.url
+//   extension : FHIR R4 DomainResource.Extension http://hl7.org/fhir/R4/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 DeviceMetric.Identifier http://hl7.org/fhir/R4/condition-definitions.html#DeviceMetric.identifier
+//
+def R3DeviceMetric_IdentifierToR4(url, extension, data) {
+  var identifier: extension::fetchIdentifierArray(url, extension)
+  if identifier then {
+    identifier
+  } else {
+    arrayOf(data)
+  }
+}

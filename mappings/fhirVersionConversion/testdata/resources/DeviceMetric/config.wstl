@@ -1,0 +1,11 @@
+// R3 DeviceMetric To R4
+$this: R3DeviceMetricToR4($root)
+
+// R4 DeviceMetric To R3
+$this: R4DeviceMetricToR3($root)
+
+// R2 DeviceMetric To R3
+$this: R2DeviceMetricToR3($root)
+
+// R3 DeviceMetric To R2
+$this: R3DeviceMetricToR2($root)

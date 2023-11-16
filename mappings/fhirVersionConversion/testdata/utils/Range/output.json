@@ -1,0 +1,12 @@
+{
+  "extension": [
+    {
+      "url": "test_url",
+      "valueRange": {
+        "low": {
+          "value": 1
+        }
+      }
+    }
+  ]
+}

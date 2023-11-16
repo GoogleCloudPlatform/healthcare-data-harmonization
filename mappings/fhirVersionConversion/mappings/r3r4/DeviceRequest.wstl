@@ -1,0 +1,135 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   deviceRequest : FHIR DeviceRequest resource
+//
+// Output(s):
+//   FHIR DeviceRequest Resource
+//
+def DeviceRequestBase(deviceRequest) {
+  resourcebase::ResourceBase(deviceRequest)
+  identifier: deviceRequest.identifier
+  groupIdentifier: deviceRequest.groupIdentifier
+  codeCodeableConcept: deviceRequest.codeCodeableConcept
+  occurrenceDateTime: deviceRequest.occurrenceDateTime
+  occurrencePeriod: deviceRequest.occurrencePeriod
+  occurrenceTiming: deviceRequest.occurrenceTiming
+  authoredOn: deviceRequest.authoredOn
+  performerType: deviceRequest.performerType
+  reasonCode: deviceRequest.reasonCode
+  note: deviceRequest.note
+}
+
+// Description: Converts a FHIR STU3 DeviceRequest resource to FHIR R4 DeviceRequest resource.
+//
+// Argument(s):
+//   deviceRequest : FHIR STU3 DeviceRequest resource https://www.hl7.org/fhir/stu3/deviceRequest.html
+//
+// Output(s):
+//   FHIR R4 DeviceRequest Resource https://www.hl7.org/fhir/r4/deviceRequest.html
+//
+def R3DeviceRequestToR4(deviceRequest) {
+  DeviceRequestBase(deviceRequest)
+  contained: datatypes::R3ResourceToR4(deviceRequest.contained[])
+  relevantHistory: datatypes::R3ReferenceToR4(deviceRequest.relevantHistory[])
+  supportingInfo: datatypes::R3ReferenceToR4(deviceRequest.supportingInfo[])
+  basedOn: datatypes::R3ReferenceToR4(deviceRequest.basedOn[])
+  priorRequest: datatypes::R3ReferenceToR4(deviceRequest.priorRequest[])
+  codeReference: datatypes::R3ReferenceToR4(deviceRequest.codeReference)
+  subject: datatypes::R3ReferenceToR4(deviceRequest.subject)
+  instantiatesCanonical: datatypes::ReferenceToCanonical(deviceRequest.definition[])
+  instantiatesUri: extension::fetchUriArray("https://www.hl7.org/fhir/R4/devicerequest-definitions.html#DeviceRequest.instantiatesUri", deviceRequest.extension)
+  status: extension::fetchCode("https://www.hl7.org/fhir/R4/devicerequest-definitions.html#DeviceRequest.status", deviceRequest.extension)
+  status: if !$this.status then utilities::Convert_TerminologyCode(deviceRequest.status, "http://hl7.org/fhir/request-status", "Request_Status_r3r4");
+  intent: extension::fetchCode("https://www.hl7.org/fhir/R4/devicerequest-definitions.html#DeviceRequest.intent", deviceRequest.extension)
+  intent: if (!$this.intent and deviceRequest.intent.coding[0].code!="encoded") then deviceRequest.intent.coding[0].code else "plan";
+  priority: deviceRequest.priority
+  parameter: BuildR4_DeviceRequest_Parameter(deviceRequest.extension)
+  encounter: if matchesRegex(deviceRequest.context.reference, "^Encounter.*") then datatypes::R3ReferenceToR4(deviceRequest.context)
+  requester: R3DeviceRequest_RequesterToR4(deviceRequest.requester)
+  performer: datatypes::R3ReferenceToR4(deviceRequest.performer)
+  reasonReference: datatypes::R3ReferenceToR4(deviceRequest.reasonReference[])
+  insurance: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/devicerequest-definitions.html#DeviceRequest.insurance", deviceRequest.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/devicerequest-definitions.html#DeviceRequest.requester.onBehalfOf", deviceRequest.requester.onBehalfOf)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/devicerequest-definitions.html#DeviceRequest.intent", deviceRequest.intent)
+  extension[]: if !$this.encounter then extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/devicerequest-definitions.html#DeviceRequest.context", deviceRequest.context)
+}
+
+// Description: Converts a FHIR R4 DeviceRequest resource to FHIR STU3 DeviceRequest resource.
+//
+// Argument(s):
+//   deviceRequest : FHIR R4 DeviceRequest resource https://www.hl7.org/fhir/r4/deviceRequest.html
+//
+// Output(s):
+//   FHIR STU3 DeviceRequest Resource https://www.hl7.org/fhir/stu3/deviceRequest.html
+//
+def R4DeviceRequestToR3(deviceRequest) {
+  DeviceRequestBase(deviceRequest)
+  contained: datatypes::R4ResourceToR3(deviceRequest.contained[])
+  relevantHistory: datatypes::R4ReferenceToR3(deviceRequest.relevantHistory[])
+  supportingInfo: datatypes::R4ReferenceToR3(deviceRequest.supportingInfo[])
+  basedOn: datatypes::R4ReferenceToR3(deviceRequest.basedOn[])
+  priorRequest: datatypes::R4ReferenceToR3(deviceRequest.priorRequest[])
+  codeReference: datatypes::R4ReferenceToR3(deviceRequest.codeReference)
+  subject: datatypes::R4ReferenceToR3(deviceRequest.subject)
+  definition: datatypes::CanonicalToReference(deviceRequest.definition[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/devicerequest-definitions.html#DeviceRequest.status", deviceRequest.extension)
+  status: if status? then status else deviceRequest.status
+  var intent: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/devicerequest-definitions.html#DeviceRequest.intent", deviceRequest.extension)
+  var intentCodeableConcept.coding[0].code: deviceRequest.intent
+  intent: if intent? then intent else intentCodeableConcept
+  priority: deviceRequest.priority
+  context: datatypes::R4ReferenceToR3(deviceRequest.encounter)
+  requester: R4DeviceRequest_RequesterToR4("https://www.hl7.org/fhir/STU3/devicerequest-definitions.html#DeviceRequest.requester.onBehalfOf", deviceRequest.extension, deviceRequest.requester)
+  performer: datatypes::R4ReferenceToR3(deviceRequest.performer)
+  reasonReference: datatypes::R4ReferenceToR3(deviceRequest.reasonReference[])
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/R4/devicerequest-definitions.html#DeviceRequest.instantiatesUri", deviceRequest.instantiatesUri[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/devicerequest-definitions.html#DeviceRequest.insurance", deviceRequest.insurance[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/devicerequest-definitions.html#DeviceRequest.status", deviceRequest.status)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/devicerequest-definitions.html#DeviceRequest.intent", deviceRequest.intent)
+}
+
+// Description: Converts a FHIR STU3 DeviceRequest.Requester to FHIR R4 DeviceRequest.Requester.
+//
+// Argument(s):
+//   data : FHIR STU3 DeviceRequest.Requester http://hl7.org/fhir/STU3/devicerequest-definitions.html#DeviceRequest.requester
+//
+// Output(s):
+//   FHIR R4 DeviceRequest.Requester http://hl7.org/fhir/R4/devicerequest-definitions.html#DeviceRequest.requester
+//
+def R3DeviceRequest_RequesterToR4(data) {
+  datatypes::R3ReferenceToR4(data.agent)
+}
+
+// Description: Converts a FHIR R4 DeviceRequest.Requester to FHIR STU3 DeviceRequest.Requester.
+//
+// Argument(s):
+//   data : FHIR R4 DeviceRequest.Requester http://hl7.org/fhir/R4/devicerequest-definitions.html#DeviceRequest.requester
+//
+// Output(s):
+//   FHIR STU3 DeviceRequest.Requester http://hl7.org/fhir/STU3/devicerequest-definitions.html#DeviceRequest.requester
+//
+def R4DeviceRequest_RequesterToR4(uri, extension, data) {
+  agent: datatypes::R4ReferenceToR3(data)
+  onBehalfOf: extension::fetchReference(uri, extension)
+}
+
+// Description: Constructs a FHIR R4 DeviceRequest.Parameter
+//
+// Argument(s):
+//   Extension : FHIR STU3 DeviceRequest.extension http://hl7.org/fhir/STU3/element-definitions.html#Element.extension
+//
+// Output(s):
+//   FHIR R4 DeviceRequest.Parameter https://www.hl7.org/fhir/r4/devicerequest-definitions.html#DeviceRequest.parameter
+//
+def BuildR4_DeviceRequest_Parameter(Extension) {
+  code: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/devicerequest-definitions.html#DeviceRequest.parameter.code", Extension)
+  valueCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/devicerequest-definitions.html#DeviceRequest.parameter.valueCodeableConcept", Extension)
+  valueQuantity: extension::fetchQuantity("https://www.hl7.org/fhir/R4/devicerequest-definitions.html#DeviceRequest.parameter.valueQuantity", Extension)
+  valueRange: extension::fetchRange("https://www.hl7.org/fhir/R4/devicerequest-definitions.html#DeviceRequest.parameter.valueRange", Extension)
+  valueBoolean: extension::fetchBoolean("https://www.hl7.org/fhir/R4/devicerequest-definitions.html#DeviceRequest.parameter.valueBoolean", Extension)
+}

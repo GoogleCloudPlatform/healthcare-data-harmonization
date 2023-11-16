@@ -1,0 +1,107 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def MedicationStatementBase(medicationStatement) {
+  resourcebase::ResourceBase(medicationStatement)
+  identifier: medicationStatement.identifier
+  medicationCodeableConcept: medicationStatement.medicationCodeableConcept
+  effectiveDateTime: medicationStatement.effectiveDateTime
+  effectivePeriod: medicationStatement.effectivePeriod
+  dateAsserted: medicationStatement.dateAsserted
+  reasonNotTaken: medicationStatement.reasonNotTaken
+}
+
+def R2MedicationStatementToR3(medicationStatement) {
+  MedicationStatementBase(medicationStatement)
+  contained: datatypes::R2ResourceToR3(medicationStatement.contained[])
+  medicationReference: datatypes::R2ReferenceToR3(medicationStatement.medicationReference)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.status", medicationStatement.extension)
+  status: if status? then status else medicationStatement.status
+  basedOn: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.basedOn", medicationStatement.extension)
+  partOf: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.partOf", medicationStatement.extension)
+  context: extension::fetchReference("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.context", medicationStatement.extension)
+  category: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.category", medicationStatement.extension)
+  informationSource: datatypes::R2ReferenceToR3(medicationStatement.informationSource)
+  subject: datatypes::R2ReferenceToR3(medicationStatement.patient)
+  derivedFrom: datatypes::R2ReferenceToR3(medicationStatement.supportingInformation[])
+  taken: extension::fetchCode("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.taken", medicationStatement.extension)
+  reasonCode: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.reasonCode", medicationStatement.extension)
+  reasonReference: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.reasonReference", medicationStatement.extension)
+  note: extension::fetchAnnotationArray("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.note", medicationStatement.extension)
+  dosage: R2MedicationStatement_DosageToR3(medicationStatement.dosage[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/medicationstatement-definitions.html#MedicationStatement.status", medicationStatement.status)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/DSTU2/medicationstatement-definitions.html#MedicationStatement.wasNotTaken", medicationStatement.wasNotTaken)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/medicationstatement-definitions.html#MedicationStatement.reasonForUseCodeableConcept", medicationStatement.reasonForUseCodeableConcept)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/medicationstatement-definitions.html#MedicationStatement.reasonForUseReference", medicationStatement.reasonForUseReference)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/DSTU2/medicationstatement-definitions.html#MedicationStatement.note", medicationStatement.note)
+}
+
+def R3MedicationStatementToR2(medicationStatement) {
+  MedicationStatementBase(medicationStatement)
+  contained: datatypes::R3ResourceToR2(medicationStatement.contained[])
+  medicationReference: datatypes::R3ReferenceToR2(medicationStatement.medicationReference)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/medicationstatement-definitions.html#MedicationStatement.status", medicationStatement.extension)
+  status: if status? then status else medicationStatement.status
+  wasNotTaken: extension::fetchBoolean("https://www.hl7.org/fhir/DSTU2/medicationstatement-definitions.html#MedicationStatement.wasNotTaken", medicationStatement.extension)
+  reasonForUseCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/DSTU2/medicationstatement-definitions.html#MedicationStatement.reasonForUseCodeableConcept", medicationStatement.extension)
+  reasonForUseReference: extension::fetchReference("https://www.hl7.org/fhir/DSTU2/medicationstatement-definitions.html#MedicationStatement.reasonForUseReference", medicationStatement.extension)
+  note: extension::fetchString("https://www.hl7.org/fhir/DSTU2/medicationstatement-definitions.html#MedicationStatement.note", medicationStatement.extension)
+  informationSource: datatypes::R3ReferenceToR2(medicationStatement.informationSource)
+  patient: datatypes::R3ReferenceToR2(medicationStatement.subject)
+  supportingInformation: datatypes::R3ReferenceToR2(medicationStatement.derivedFrom[])
+  dosage: R3MedicationStatement_DosageToR2(medicationStatement.dosage[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.status", medicationStatement.status)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.basedOn", medicationStatement.basedOn[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.partOf", medicationStatement.partOf[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.context", medicationStatement.context)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.category", medicationStatement.category)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.taken", medicationStatement.taken)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.reasonCode", medicationStatement.reasonCode[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.reasonReference", medicationStatement.reasonReference[])
+  extension[]: extension::BuildAnnotationExtension("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.note", medicationStatement.note[])
+}
+
+def R2MedicationStatement_DosageToR3(data) {
+  sequence: extension::fetchInteger("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.dosage.sequence", data.extension)
+  text: data.text
+  additionalInstruction[]: data.additionalInstruction
+  patientInstruction: extension::fetchString("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.dosage.patientInstruction", data.extension)
+  timing: data.timing
+  asNeededBoolean: data.asNeededBoolean
+  asNeededCodeableConcept: data.asNeededCodeableConcept
+  site: data.siteCodeableConcept
+  route: data.route
+  method: data.method
+  doseRange: data.doseRange
+  doseQuantity: data.doseQuantity
+  maxDosePerPeriod: data.maxDosePerPeriod
+  maxDosePerAdministration: extension::fetchQuantity("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.dosage.maxDosePerAdministration", data.extension)
+  maxDosePerLifetime: extension::fetchQuantity("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.dosage.maxDosePerLifetime", data.extension)
+  rateRatio: data.rateRatio
+  rateRange: data.rateRange
+  rateQuantity: extension::fetchQuantity("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.dosage.rateQuantity", data.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/medicationstatement-definitions.html#MedicationStatement.dosage.siteReference", data.siteReference)
+}
+
+def R3MedicationStatement_DosageToR2(data) {
+  text: data.text
+  additionalInstruction: data.additionalInstruction[0]
+  timing: data.timing
+  asNeededBoolean: data.asNeededBoolean
+  asNeededCodeableConcept: data.asNeededCodeableConcept
+  siteCodeableConcept: data.site
+  siteReference: extension::fetchReference("https://www.hl7.org/fhir/DSTU2/medicationstatement-definitions.html#MedicationStatement.dosage.siteReference", data.extension)
+  route: data.route
+  method: data.method
+  doseRange: data.doseRange
+  doseQuantity: data.doseQuantity
+  maxDosePerPeriod: data.maxDosePerPeriod
+  rateRatio: data.rateRatio
+  rateRange: data.rateRange
+  extension[]: extension::BuildIntegerExtension("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.dosage.sequence", data.sequence)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.dosage.patientInstruction", data.patientInstruction)
+  extension[]: extension::BuildQuantityExtension("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.dosage.maxDosePerAdministration", data.maxDosePerAdministration)
+  extension[]: extension::BuildQuantityExtension("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.dosage.maxDosePerLifetime", data.maxDosePerLifetime)
+  extension[]: extension::BuildQuantityExtension("https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.dosage.rateQuantity", data.rateQuantity)
+}

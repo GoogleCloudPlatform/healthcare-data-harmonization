@@ -1,0 +1,74 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   flag : FHIR Flag resource
+//
+// Output(s):
+//   FHIR Flag Resource
+//
+def FlagBase(flag) {
+  resourcebase::ResourceBase(flag)
+  identifier: flag.identifier
+  code: flag.code
+  period: flag.period
+}
+
+// Description: Converts a FHIR STU3 Flag resource to FHIR R4 Flag resource.
+//
+// Argument(s):
+//   flag : FHIR STU3 Flag resource https://www.hl7.org/fhir/stu3/flag.html
+//
+// Output(s):
+//   FHIR R4 Flag Resource https://www.hl7.org/fhir/r4/flag.html
+//
+def R3FlagToR4(flag) {
+  FlagBase(flag)
+  contained: datatypes::R3ResourceToR4(flag.contained[])
+  subject: datatypes::R3ReferenceToR4(flag.subject)
+  encounter: datatypes::R3ReferenceToR4(flag.encounter)
+  status: flag.status
+  category: R3Flag_CategoryToR4("https://www.hl7.org/fhir/R4/flag-definitions.html#Flag.category", flag.extension, flag.category)
+  author: datatypes::R3ReferenceToR4(flag.author)
+}
+
+// Description: Converts a FHIR R4 Flag resource to FHIR STU3 Flag resource.
+//
+// Argument(s):
+//   flag : FHIR R4 Flag resource https://www.hl7.org/fhir/r4/flag.html
+//
+// Output(s):
+//   FHIR STU3 Flag Resource https://www.hl7.org/fhir/stu3/flag.html
+//
+def R4FlagToR3(flag) {
+  FlagBase(flag)
+  contained: datatypes::R4ResourceToR3(flag.contained[])
+  subject: datatypes::R4ReferenceToR3(flag.subject)
+  encounter: datatypes::R4ReferenceToR3(flag.encounter)
+  status: flag.status
+  category: flag.category[0]
+  author: datatypes::R4ReferenceToR3(flag.author)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/flag-definitions.html#Flag.category", flag.category[])
+}
+
+// Description: Converts a FHIR STU3 Flag.Category to FHIR R4 Flag.Category.
+//
+// Argument(s):
+//   data : FHIR STU3 Flag.Category http://hl7.org/fhir/STU3/flag-definitions.html#Flag.category
+//   url : FHIR STU3 Extension.url http://hl7.org/fhir/STU3/extensibility-definitions.html#Extension.url
+//   extension : FHIR STU3 DomainResource.Extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 Flag.Category http://hl7.org/fhir/R4/flag-definitions.html#Flag.category
+//
+def R3Flag_CategoryToR4(url, extension, data) {
+  var category: extension::fetchCodeableConceptArray(url, extension)
+  if category then {
+    category
+  } else {
+    arrayOf(data)
+  }
+}

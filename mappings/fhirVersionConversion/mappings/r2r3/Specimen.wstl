@@ -1,0 +1,92 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def SpecimenBase(specimen) {
+  resourcebase::ResourceBase(specimen)
+  identifier: specimen.identifier
+  accessionIdentifier: specimen.accessionIdentifier
+  status: specimen.status
+  type: specimen.type
+  receivedTime: specimen.receivedTime
+}
+
+def R2SpecimenToR3(specimen) {
+  SpecimenBase(specimen)
+  contained: datatypes::R2ResourceToR3(specimen.contained[])
+  container: R2Specimen_ContainerToR3(specimen.container[])
+  subject: datatypes::R2ReferenceToR3(specimen.subject)
+  parent: datatypes::R2ReferenceToR3(specimen.parent[])
+  request: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/specimen-definitions.html#Specimen.request", specimen.extension)
+  collection: R2Specimen_CollectionToR3(specimen.collection)
+  processing: R2Specimen_ProcessingToR3(specimen.treatment[])
+  note: extension::fetchAnnotationArray("https://www.hl7.org/fhir/STU3/specimen-definitions.html#Specimen.note", specimen.extension)
+}
+
+def R3SpecimenToR2(specimen) {
+  SpecimenBase(specimen)
+  contained: datatypes::R3ResourceToR2(specimen.contained[])
+  container: R3Specimen_ContainerToR2(specimen.container[])
+  subject: datatypes::R3ReferenceToR2(specimen.subject)
+  parent: datatypes::R3ReferenceToR2(specimen.parent[])
+  collection: R3Specimen_CollectionToR2(specimen.collection)
+  treatment: R3Specimen_ProcessingToR2(specimen.processing[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/specimen-definitions.html#Specimen.request", specimen.request[])
+  extension[]: extension::BuildAnnotationExtension("https://www.hl7.org/fhir/STU3/specimen-definitions.html#Specimen.note", specimen.note[])
+}
+
+def R2Specimen_CollectionToR3(data) {
+  collector: datatypes::R2ReferenceToR3(data.collector)
+  collectedDateTime: data.collectedDateTime
+  collectedPeriod: data.collectedPeriod
+  quantity: data.quantity
+  method: data.method
+  bodySite: data.bodySite
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/DSTU2/specimen-definitions.html#Specimen.collection.comment", data.comment[])
+}
+
+def R3Specimen_CollectionToR2(data) {
+  collector: datatypes::R3ReferenceToR2(data.collector)
+  collectedDateTime: data.collectedDateTime
+  collectedPeriod: data.collectedPeriod
+  quantity: data.quantity
+  method: data.method
+  bodySite: data.bodySite
+  comment: extension::fetchStringArray("https://www.hl7.org/fhir/DSTU2/specimen-definitions.html#Specimen.collection.comment", data.extension)
+}
+
+def R2Specimen_ProcessingToR3(data) {
+  description: data.description
+  procedure: data.procedure
+  additive: datatypes::R2ReferenceToR3(data.additive[])
+  timeDateTime: extension::fetchDateTime("https://www.hl7.org/fhir/STU3/specimen-definitions.html#Specimen.processing.timeDateTime", data.extension)
+  timePeriod: extension::fetchPeriod("https://www.hl7.org/fhir/STU3/specimen-definitions.html#Specimen.processing.timePeriod", data.extension)
+}
+
+def R3Specimen_ProcessingToR2(data) {
+  description: data.description
+  procedure: data.procedure
+  additive: datatypes::R3ReferenceToR2(data.additive[])
+  extension[]: extension::BuildDateTimeExtension("https://www.hl7.org/fhir/STU3/specimen-definitions.html#Specimen.processing.timeDateTime", data.timeDateTime)
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/STU3/specimen-definitions.html#Specimen.processing.timePeriod", data.timePeriod)
+}
+
+def R2Specimen_ContainerToR3(data) {
+  identifier: data.identifier
+  description: data.description
+  type: data.type
+  capacity: data.capacity
+  specimenQuantity: data.specimenQuantity
+  additiveCodeableConcept: data.additiveCodeableConcept
+  additiveReference: datatypes::R2ReferenceToR3(data.additiveReference)
+}
+
+def R3Specimen_ContainerToR2(data) {
+  identifier: data.identifier
+  description: data.description
+  type: data.type
+  capacity: data.capacity
+  specimenQuantity: data.specimenQuantity
+  additiveCodeableConcept: data.additiveCodeableConcept
+  additiveReference: datatypes::R3ReferenceToR2(data.additiveReference)
+}

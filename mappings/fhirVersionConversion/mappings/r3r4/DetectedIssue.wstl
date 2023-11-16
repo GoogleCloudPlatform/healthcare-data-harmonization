@@ -1,0 +1,125 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   detectedIssue : FHIR DetectedIssue resource
+//
+// Output(s):
+//   FHIR DetectedIssue Resource
+//
+def DetectedIssueBase(detectedIssue) {
+  resourcebase::ResourceBase(detectedIssue)
+  detail: detectedIssue.detail
+  reference: detectedIssue.reference
+}
+
+// Description: Converts a FHIR STU3 DetectedIssue resource to FHIR R4 DetectedIssue resource.
+//
+// Argument(s):
+//   detectedIssue : FHIR STU3 DetectedIssue resource https://www.hl7.org/fhir/stu3/detectedIssue.html
+//
+// Output(s):
+//   FHIR R4 DetectedIssue Resource https://www.hl7.org/fhir/r4/detectedIssue.html
+//
+def R3DetectedIssueToR4(detectedIssue) {
+  DetectedIssueBase(detectedIssue)
+  contained: datatypes::R3ResourceToR4(detectedIssue.contained[])
+  implicated: datatypes::R3ReferenceToR4(detectedIssue.implicated[])
+  patient: datatypes::R3ReferenceToR4(detectedIssue.patient)
+  identifier: R3DetectedIssue_IdentifierToR4("https://www.hl7.org/fhir/R4/detectedissue-definitions.html#DetectedIssue.identifier", detectedIssue.extension, detectedIssue.identifier)
+  status: detectedIssue.status
+  code: detectedIssue.category
+  severity: detectedIssue.severity
+  identifiedDateTime: detectedIssue.date
+  identifiedPeriod: extension::fetchPeriod("https://www.hl7.org/fhir/R4/detectedissue-definitions.html#DetectedIssue.identifiedPeriod", detectedIssue.extension)
+  author: datatypes::R3ReferenceToR4(detectedIssue.author)
+  mitigation: R3DetectedIssue_MitigationToR4(detectedIssue.mitigation[])
+  evidence: BuildR4_DetectedIssue_Evidence(detectedIssue.extension)
+}
+
+// Description: Converts a FHIR R4 DetectedIssue resource to FHIR STU3 DetectedIssue resource.
+//
+// Argument(s):
+//   detectedIssue : FHIR R4 DetectedIssue resource https://www.hl7.org/fhir/r4/detectedIssue.html
+//
+// Output(s):
+//   FHIR STU3 DetectedIssue Resource https://www.hl7.org/fhir/stu3/detectedIssue.html
+//
+def R4DetectedIssueToR3(detectedIssue) {
+  DetectedIssueBase(detectedIssue)
+  contained: datatypes::R4ResourceToR3(detectedIssue.contained[])
+  implicated: datatypes::R4ReferenceToR3(detectedIssue.implicated[])
+  patient: datatypes::R4ReferenceToR3(detectedIssue.patient)
+  identifier: detectedIssue.identifier[0]
+  status: detectedIssue.status
+  category: detectedIssue.code
+  severity: detectedIssue.severity
+  date: detectedIssue.identifiedDateTime
+  author: datatypes::R4ReferenceToR3(detectedIssue.author)
+  mitigation: R4DetectedIssue_MitigationToR3(detectedIssue.mitigation[])
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/R4/detectedissue-definitions.html#DetectedIssue.identifier", detectedIssue.identifier[])
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/R4/detectedissue-definitions.html#DetectedIssue.identifiedPeriod", detectedIssue.identifiedPeriod)
+}
+
+// Description: Converts a FHIR STU3 DetectedIssue.Identifier to FHIR R4 DetectedIssue.Identifier.
+//
+// Argument(s):
+//   data : FHIR STU3 DetectedIssue.Identifier http://hl7.org/fhir/STU3/detectedissue-definitions.html#DetectedIssue.identifier
+//   url : FHIR R4 Extension.url http://hl7.org/fhir/R4/extensibility-definitions.html#Extension.url
+//   extension : FHIR R4 DomainResource.Extension http://hl7.org/fhir/R4/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 DetectedIssue.Identifier http://hl7.org/fhir/R4/detectedissue-definitions.html#DetectedIssue.identifier
+//
+def R3DetectedIssue_IdentifierToR4(url, extension, data) {
+  var identifier: extension::fetchIdentifierArray(url, extension)
+  if identifier then {
+    identifier
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 DetectedIssue.Mitigation to FHIR R4 DetectedIssue.Mitigation.
+//
+// Argument(s):
+//   data : FHIR STU3 DetectedIssue.Mitigation http://hl7.org/fhir/STU3/detectedissue-definitions.html#DetectedIssue.mitigation
+//
+// Output(s):
+//   FHIR R4 DetectedIssue.Mitigation http://hl7.org/fhir/R4/detectedissue-definitions.html#DetectedIssue.mitigation
+//
+def R3DetectedIssue_MitigationToR4(data) {
+  action: data.action
+  date: data.date
+  author: datatypes::R3ReferenceToR4(data.author)
+}
+
+// Description: Converts a FHIR R4 DetectedIssue.Mitigation to FHIR STU3 DetectedIssue.Mitigation.
+//
+// Argument(s):
+//   data : FHIR R4 DetectedIssue.Mitigation http://hl7.org/fhir/R4/detectedissue-definitions.html#DetectedIssue.mitigation
+//
+// Output(s):
+//   FHIR STU3 DetectedIssue.Mitigation http://hl7.org/fhir/STU3/detectedissue-definitions.html#DetectedIssue.mitigation
+//
+def R4DetectedIssue_MitigationToR3(data) {
+  action: data.action
+  date: data.date
+  author: datatypes::R4ReferenceToR3(data.author)
+}
+
+// Description: Constructs a FHIR R4 DetectedIssue.Evidence
+//
+// Argument(s):
+//   Extension : FHIR STU3 DetectedIssue.extension http://hl7.org/fhir/STU3/element-definitions.html#Element.extension
+//
+// Output(s):
+//   FHIR R4 DetectedIssue.Evidence https://www.hl7.org/fhir/r4/contract-definitions.html#DetectedIssue.evidence
+//
+def BuildR4_DetectedIssue_Evidence(Extension) {
+  code: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/detectedissue-definitions.html#DetectedIssue.evidence.code", Extension)
+  detail: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/detectedissue-definitions.html#DetectedIssue.evidence.detail", Extension)
+}

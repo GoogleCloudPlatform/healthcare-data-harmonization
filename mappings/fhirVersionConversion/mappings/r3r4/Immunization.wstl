@@ -1,0 +1,237 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   immunization : FHIR Immunization resource
+//
+// Output(s):
+//   FHIR Immunization Resource
+//
+def ImmunizationBase(immunization) {
+  resourcebase::ResourceBase(immunization)
+  identifier: immunization.identifier
+  vaccineCode: immunization.vaccineCode
+  reportOrigin: immunization.reportOrigin
+  lotNumber: immunization.lotNumber
+  expirationDate: immunization.expirationDate
+  site: immunization.site
+  route: immunization.route
+  doseQuantity: immunization.doseQuantity
+  note: immunization.note
+}
+
+// Description: Converts a FHIR STU3 Immunization resource to FHIR R4 Immunization resource.
+//
+// Argument(s):
+//   immunization : FHIR STU3 Immunization resource https://www.hl7.org/fhir/stu3/immunization.html
+//
+// Output(s):
+//   FHIR R4 Immunization Resource https://www.hl7.org/fhir/r4/immunization.html
+//
+def R3ImmunizationToR4(immunization) {
+  ImmunizationBase(immunization)
+  contained: datatypes::R3ResourceToR4(immunization.contained[])
+  reaction: R3Immunization_ReactionToR4(immunization.reaction[])
+  manufacturer: datatypes::R3ReferenceToR4(immunization.manufacturer)
+  location: datatypes::R3ReferenceToR4(immunization.location)
+  patient: datatypes::R3ReferenceToR4(immunization.patient)
+  encounter: datatypes::R3ReferenceToR4(immunization.encounter)
+  status: R3Immunization_StatusToR4(immunization.status, immunization.notGiven)
+  statusReason: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.statusReason", immunization.extension)
+  occurrenceDateTime: immunization.date
+  occurrenceString: extension::fetchString("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.occurrenceString", immunization.extension)
+  occurrenceString: if !$this.occurrenceDateTime then utilities::defaultIfNull($this.occurrenceString, "Unknown")
+  recorded: extension::fetchDateTime("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.recorded", immunization.extension)
+  primarySource: immunization.primarySource
+  performer: R3Immunization_PractitionerToR4(immunization.practitioner[])
+  reasonCode: immunization.explanation.reason
+  reasonReference: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.reasonReference", immunization.extension)
+  isSubpotent: extension::fetchBoolean("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.isSubpotent", immunization.extension)
+  subpotentReason: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.subpotentReason", immunization.extension)
+  programEligibility: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.programEligibility", immunization.extension)
+  fundingSource: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.fundingSource", immunization.extension)
+  protocolApplied: R3Immunization_VaccinationProtocolToR4(immunization.vaccinationProtocol[])
+  education[]: BuildR4_Immunization_Education(immunization.extension)
+  extension[]: if immunization.notGiven == false then extension::BuildBooleanExtension("http://hl7.org/fhir/3.0/StructureDefinition/extension-Immunization.notGiven", immunization.notGiven)
+  extension[]: if immunization.notGiven == true then extension::BuildCodeExtension("http://hl7.org/fhir/3.0/StructureDefinition/extension-Immunization.status", immunization.status)
+  extension[]: extension::BuildCodeableConceptExtension("http://hl7.org/fhir/3.0/StructureDefinition/extension-Immunization.explanation.reasonNotGiven", immunization.explanation.reasonNotGiven)
+}
+
+// Description: Converts a FHIR R4 Immunization resource to FHIR STU3 Immunization resource.
+//
+// Argument(s):
+//   immunization : FHIR R4 Immunization resource https://www.hl7.org/fhir/r4/immunization.html
+//
+// Output(s):
+//   FHIR STU3 Immunization Resource https://www.hl7.org/fhir/stu3/immunization.html
+//
+def R4ImmunizationToR3(immunization) {
+  ImmunizationBase(immunization)
+  contained: datatypes::R4ResourceToR3(immunization.contained[])
+  reaction: R4Immunization_ReactionToR3(immunization.reaction[])
+  manufacturer: datatypes::R4ReferenceToR3(immunization.manufacturer)
+  location: datatypes::R4ReferenceToR3(immunization.location)
+  patient: datatypes::R4ReferenceToR3(immunization.patient)
+  encounter: datatypes::R4ReferenceToR3(immunization.encounter)
+  status: immunization.status
+  notGiven: R4Immunization_NotGivenToR3(immunization.status)
+  date: immunization.occurrenceDateTime
+  primarySource: immunization.primarySource
+  practitioner: R4Immunization_PerformerToR3(immunization.performer[])
+  explanation.reason: immunization.reasonCode
+  vaccinationProtocol: R4Immunization_ProtocolAppliedToR3(immunization.protocolApplied[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.statusReason", immunization.statusReason)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.occurrenceString", immunization.occurrenceString)
+  extension[]: extension::BuildDateTimeExtension("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.recorded", immunization.recorded)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.reasonReference", immunization.reasonReference[])
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.isSubpotent", immunization.isSubpotent)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.subpotentReason", immunization.subpotentReason[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.programEligibility", immunization.programEligibility[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.fundingSource", immunization.fundingSource)
+}
+
+// Description: Converts a FHIR STU3 Immunization.Status to FHIR R4 Immunization.Status.
+//
+// Argument(s):
+//   status : FHIR STU3 Immunization.Status http://hl7.org/fhir/STU3/immunization-definitions.html#Immunization.status
+//   notGiven : FHIR STU3 Immunization.Status http://hl7.org/fhir/STU3/immunization-definitions.html#Immunization.notGiven
+//
+// Output(s):
+//   FHIR R4 Immunization.Status http://hl7.org/fhir/R4/immunization-definitions.html#Immunization.status
+//
+def R3Immunization_StatusToR4(status, notGiven) {
+  if (notGiven==true) then {
+    "not-done"
+  } else {
+    status
+  }
+}
+
+// Description: Converts a FHIR R4 Immunization.Status to FHIR STU3 Immunization.Status.
+//
+// Argument(s):
+//   status : FHIR R4 Immunization.Status http://hl7.org/fhir/R4/immunization-definitions.html#Immunization.status
+//
+// Output(s):
+//   FHIR STU3 Immunization.Status http://hl7.org/fhir/STU3/immunization-definitions.html#Immunization.status
+//
+def R4Immunization_NotGivenToR3(status) {
+  if status == "not-done" then {
+    true
+  } else {
+    false
+  }
+}
+
+// Description: Converts a FHIR STU3 Immunization.Practitioner to FHIR R4 Immunization.Practitioner.
+//
+// Argument(s):
+//   data : FHIR STU3 Immunization.Practitioner http://hl7.org/fhir/STU3/immunization-definitions.html#Immunization.practitioner
+//
+// Output(s):
+//   FHIR R4 Immunization.Practitioner http://hl7.org/fhir/R4/immunization-definitions.html#Immunization.practitioner
+//
+def R3Immunization_PractitionerToR4(data) {
+  function: data.role
+  actor: datatypes::R3ReferenceToR4(data.actor)
+}
+
+// Description: Converts a FHIR R4 Immunization.Paractitioner to FHIR STU3 Immunization.Paractitioner.
+//
+// Argument(s):
+//   data : FHIR R4 Immunization.Paractitioner http://hl7.org/fhir/R4/immunization-definitions.html#Immunization.practitioner
+//
+// Output(s):
+//   FHIR STU3 Immunization.Paractitioner http://hl7.org/fhir/STU3/immunization-definitions.html#Immunization.practitioner
+//
+def R4Immunization_PerformerToR3(data) {
+  role: data.function
+  actor: datatypes::R4ReferenceToR3(data.actor)
+}
+
+// Description: Converts a FHIR STU3 Immunization.VaccinationProtocol to FHIR R4 Immunization.ProtocolApplied.
+//
+// Argument(s):
+//   data : FHIR STU3 Immunization.VaccinationProtocol http://hl7.org/fhir/STU3/immunization-definitions.html#Immunization.vaccinationProtocol
+//
+// Output(s):
+//   FHIR R4 Immunization.ProtocolApplied http://hl7.org/fhir/R4/immunization-definitions.html#Immunization.protocolApplied
+//
+def R3Immunization_VaccinationProtocolToR4(data) {
+  series: data.series
+  authority: datatypes::R3ReferenceToR4(data.authority)
+  targetDisease: data.targetDisease
+  doseNumberPositiveInt: data.doseSequence
+  doseNumberString: extension::fetchString("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.protocolApplied.doseNumberString", data.extension)
+  doseNumberString: if !$this.doseNumberPositiveInt then utilities::defaultIfNull($this.doseNumberString, "Unknown")
+  seriesDosesPositiveInt: data.seriesDoses
+  seriesDosesString: extension::fetchString("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.protocolApplied.seriesDosesString", data.extension)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/immunization-definitions.html#Immunization.vaccinationProtocol.description", data.description)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/immunization-definitions.html#Immunization.vaccinationProtocol.doseStatus", data.doseStatus)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/immunization-definitions.html#Immunization.vaccinationProtocol.doseStatusReason", data.doseStatusReason)
+}
+
+// Description: Converts a FHIR R4 Immunization.ProtocolApplied to FHIR STU3 Immunization.VaccinationProtocol.
+//
+// Argument(s):
+//   data : FHIR R4 Immunization.ProtocolApplied http://hl7.org/fhir/R4/immunization-definitions.html#Immunization.protocolApplied
+//
+// Output(s):
+//   FHIR STU3 Immunization.VaccinationProtocol http://hl7.org/fhir/STU3/immunization-definitions.html#Immunization.vaccinationProtocol
+//
+def R4Immunization_ProtocolAppliedToR3(data) {
+  description: extension::fetchString("https://www.hl7.org/fhir/STU3/immunization-definitions.html#Immunization.vaccinationProtocol.description", data.extension)
+  series: data.series
+  authority: datatypes::R4ReferenceToR3(data.authority)
+  targetDisease: data.targetDisease
+  doseSequence: data.doseNumberPositiveInt
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.protocolApplied.doseNumberString", data.doseNumberString)
+  extension[]: extension::BuildPositiveIntExtension("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.protocolApplied.seriesDosesPositiveInt", data.seriesDosesPositiveInt)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.protocolApplied.seriesDosesString", data.seriesDosesString)
+}
+
+// Description: Converts a FHIR STU3 Immunization.Reaction to FHIR R4 Immunization.Reaction.
+//
+// Argument(s):
+//   data : FHIR STU3 Immunization.Reaction http://hl7.org/fhir/STU3/immunization-definitions.html#Immunization.reaction
+//
+// Output(s):
+//   FHIR R4 Immunization.Reaction http://hl7.org/fhir/R4/immunization-definitions.html#Immunization.reaction
+//
+def R3Immunization_ReactionToR4(data) {
+  date: data.date
+  detail: datatypes::R3ReferenceToR4(data.detail)
+  reported: data.reported
+}
+
+// Description: Converts a FHIR R4 Immunization.Reaction to FHIR STU3 Immunization.Reaction.
+//
+// Argument(s):
+//   data : FHIR R4 Immunization.Reaction http://hl7.org/fhir/R4/immunization-definitions.html#Immunization.reaction
+//
+// Output(s):
+//   FHIR STU3 Immunization.Reaction http://hl7.org/fhir/STU3/immunization-definitions.html#Immunization.reaction
+//
+def R4Immunization_ReactionToR3(data) {
+  date: data.date
+  detail: datatypes::R4ReferenceToR3(data.detail)
+  reported: data.reported
+}
+
+// Description: Constructs a FHIR R4 Immunization.Education
+//
+// Argument(s):
+//   Extension : FHIR STU3 Immunization.extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 Immunization.Education https://www.hl7.org/fhir/stu3/immunization.html#Immunization.education
+//
+def BuildR4_Immunization_Education(Extension) {
+  documentType: extension::fetchString("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.education.documentType", Extension)
+  reference: extension::fetchUri("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.education.reference", Extension)
+  reference: extension::fetchDateTime("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.education.publicationDate", Extension)
+  reference: extension::fetchDateTime("https://www.hl7.org/fhir/R4/immunization-definitions.html#Immunization.education.presentationDate", Extension)
+}

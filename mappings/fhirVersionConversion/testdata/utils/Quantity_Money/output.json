@@ -1,0 +1,12 @@
+{
+  "data": {
+    "low": {
+      "value": 1,
+      "comparator": ">"
+    },
+    "high": {
+      "value": 10,
+      "comparator": "<"
+    }
+  }
+}

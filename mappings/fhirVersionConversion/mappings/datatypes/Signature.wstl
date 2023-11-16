@@ -1,0 +1,21 @@
+package datatypes
+
+// Description: Converts a FHIR STU3 Signature to FHIR R4 Signature.
+//
+// Argument(s):
+//   signature : FHIR STU3 Signature https://hl7.org/fhir/STU3/metadatatypes.html#Signature
+//
+// Output(s):
+//   FHIR R4 Signature https://hl7.org/fhir/R4/metadatatypes.html#Signature
+//
+def R3SignatureToR4(required signature) {
+  type: signature.type
+  when: signature.when
+  who: signature.whoReference
+  onBehalfOf: signature.onBehalfOfReference
+  sigFormat: signature.contentType
+  data: signature.blob
+  targetFormat: extension::fetchCode("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.signer.signature.targetFormat", signature.extension)
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.topic", signature.whoUri)
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.topic", signature.onBehalfOfUri)
+}

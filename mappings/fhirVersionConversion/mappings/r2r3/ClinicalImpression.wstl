@@ -1,0 +1,96 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def ClinicalImpressionBase(clinicalImpression) {
+  resourcebase::ResourceBase(clinicalImpression)
+  status: clinicalImpression.status
+  description: clinicalImpression.description
+  date: clinicalImpression.date
+  summary: clinicalImpression.summary
+}
+
+def R2ClinicalImpressionToR3(clinicalImpression) {
+  ClinicalImpressionBase(clinicalImpression)
+  contained: datatypes::R2ResourceToR3(clinicalImpression.contained[])
+  assessor: datatypes::R2ReferenceToR3(clinicalImpression.assessor)
+  previous: datatypes::R2ReferenceToR3(clinicalImpression.previous)
+  problem: datatypes::R2ReferenceToR3(clinicalImpression.problem[])
+  identifier: extension::fetchIdentifierArray("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.identifier", clinicalImpression.extension)
+  code: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.code", clinicalImpression.extension)
+  subject: datatypes::R2ReferenceToR3(clinicalImpression.patient)
+  context: extension::fetchReference("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.context", clinicalImpression.extension)
+  effectiveDateTime: extension::fetchDateTime("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.effectiveDateTime", clinicalImpression.extension)
+  effectivePeriod: extension::fetchPeriod("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.effectivePeriod", clinicalImpression.extension)
+  investigation: R2ClinicalImpression_InvestigationsToR3(clinicalImpression.investigations[])
+  protocol: R2ClinicalImpression_ProtocolToR3("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.protocol", clinicalImpression.extension, clinicalImpression.protocol)
+  finding: R2ClinicalImpression_FindingToR3(clinicalImpression.finding[])
+  prognosisCodeableConcept: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.prognosisCodeableConcept", clinicalImpression.extension)
+  prognosisReference: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.prognosisReference", clinicalImpression.extension)
+  action: datatypes::R2ReferenceToR3(clinicalImpression.action[])
+  note: extension::fetchAnnotationArray("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.note", clinicalImpression.extension)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/clinicalimpression-definitions.html#ClinicalImpression.triggerCodeableConcept", clinicalImpression.triggerCodeableConcept)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/clinicalimpression-definitions.html#ClinicalImpression.triggerReference", clinicalImpression.triggerReference)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/clinicalimpression-definitions.html#ClinicalImpression.resolved", clinicalImpression.resolved[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/DSTU2/clinicalimpression-definitions.html#ClinicalImpression.prognosis", clinicalImpression.prognosis)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/clinicalimpression-definitions.html#ClinicalImpression.plan", clinicalImpression.plan[])
+
+}
+
+def R3ClinicalImpressionToR2(clinicalImpression) {
+  ClinicalImpressionBase(clinicalImpression)
+  contained: datatypes::R3ResourceToR2(clinicalImpression.contained[])
+  assessor: datatypes::R3ReferenceToR2(clinicalImpression.assessor)
+  previous: datatypes::R3ReferenceToR2(clinicalImpression.previous)
+  problem: datatypes::R3ReferenceToR2(clinicalImpression.problem[])
+  patient: datatypes::R3ReferenceToR2(clinicalImpression.subject)
+  investigation: R3ClinicalImpression_InvestigationsToR2(clinicalImpression.investigations[])
+  protocol: clinicalImpression.protocol[0]
+  finding: R3ClinicalImpression_FindingToR2(clinicalImpression.finding[])
+  action: datatypes::R3ReferenceToR2(clinicalImpression.action[])
+  triggerCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/DSTU2/clinicalimpression-definitions.html#ClinicalImpression.triggerCodeableConcept", clinicalImpression.extension)
+  triggerReference: extension::fetchReference("https://www.hl7.org/fhir/DSTU2/clinicalimpression-definitions.html#ClinicalImpression.triggerReference", clinicalImpression.extension)
+  resolved: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/DSTU2/clinicalimpression-definitions.html#ClinicalImpression.resolved", clinicalImpression.extension)
+  prognosis: extension::fetchString("https://www.hl7.org/fhir/DSTU2/clinicalimpression-definitions.html#ClinicalImpression.prognosis", clinicalImpression.extension)
+  plan: extension::fetchReferenceArray("https://www.hl7.org/fhir/DSTU2/clinicalimpression-definitions.html#ClinicalImpression.plan", clinicalImpression.extension)
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.identifier", clinicalImpression.identifier[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.code", clinicalImpression.code)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.context", clinicalImpression.context)
+  extension[]: extension::BuildDateTimeExtension("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.effectiveDateTime", clinicalImpression.effectiveDateTime)
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.effectivePeriod", clinicalImpression.effectivePeriod)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.prognosisCodeableConcept", clinicalImpression.prognosisCodeableConcept[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.prognosisReference", clinicalImpression.prognosisReference[])
+  extension[]: extension::BuildAnnotationExtension("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.note", clinicalImpression.note[])
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.protocol", clinicalImpression.protocol[])
+}
+
+def R2ClinicalImpression_ProtocolToR3(url, extension, data) {
+  var uri: extension::fetchUriArray(url, extension)
+  if uri then {
+    uri
+  } else {
+    arrayOf(data)
+  }
+}
+
+def R2ClinicalImpression_FindingToR3(data) {
+  itemCodeableConcept: data.item
+  itemReference: extension::fetchReference("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.finding.itemReference", data.extension)
+  basis: data.basis
+}
+
+def R3ClinicalImpression_FindingToR2(data) {
+  item: data.itemCodeableConcept
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.finding.itemReference", data.itemReference)
+  basis: data.basis
+}
+
+def R2ClinicalImpression_InvestigationsToR3(data) {
+  code: data.code
+  item: datatypes::R2ReferenceToR3(data.item[])
+}
+
+def R3ClinicalImpression_InvestigationsToR2(data) {
+  code: data.code
+  item: datatypes::R3ReferenceToR2(data.item[])
+}

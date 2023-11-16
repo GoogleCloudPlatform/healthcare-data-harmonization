@@ -1,0 +1,346 @@
+{
+  "careTeam": [
+    {
+      "provider": {
+        "reference": "Practitioner/example"
+      },
+      "sequence": 1
+    }
+  ],
+  "claim": {
+    "reference": "Claim/100150"
+  },
+  "claimResponse": {
+    "reference": "ClaimResponse/R3500"
+  },
+  "created": "2014-08-16",
+  "disposition": "Claim settled as per contract.",
+  "enterer": {
+    "reference": "Practitioner/1"
+  },
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.use",
+      "valueCode": "claim"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.outcome",
+      "valueCode": "complete"
+    }
+  ],
+  "facility": {
+    "reference": "Location/1"
+  },
+  "id": "EB3500",
+  "identifier": [
+    {
+      "system": "http://www.BenefitsInc.com/fhir/explanationofbenefit",
+      "value": "987654321"
+    }
+  ],
+  "insurance": [
+    {
+      "coverage": {
+        "reference": "Coverage/9876B1"
+      },
+      "focal": true
+    }
+  ],
+  "insurer": {
+    "reference": "Organization/3"
+  },
+  "item": [
+    {
+      "adjudication": [
+        {
+          "amount": {
+            "currency": "USD",
+            "value": 120
+          },
+          "category": {
+            "coding": [
+              {
+                "code": "eligible"
+              }
+            ]
+          }
+        },
+        {
+          "category": {
+            "coding": [
+              {
+                "code": "eligpercent"
+              }
+            ]
+          },
+          "value": 0.8
+        },
+        {
+          "amount": {
+            "currency": "USD",
+            "value": 96
+          },
+          "category": {
+            "coding": [
+              {
+                "code": "benefit"
+              }
+            ]
+          }
+        }
+      ],
+      "careTeamSequence": [
+        1
+      ],
+      "encounter": [
+        {
+          "reference": "Encounter/example"
+        }
+      ],
+      "net": {
+        "currency": "USD",
+        "value": 135.57
+      },
+      "productOrService": {
+        "coding": [
+          {
+            "code": "1205",
+            "system": "http://terminology.hl7.org/CodeSystem/ex-USCLS"
+          }
+        ]
+      },
+      "sequence": 1,
+      "servicedDate": "2014-08-16",
+      "udi": [
+        {
+          "reference": "Device/example"
+        }
+      ],
+      "unitPrice": {
+        "currency": "USD",
+        "value": 135.57
+      }
+    },
+    {
+      "adjudication": [
+        {
+          "amount": {
+            "currency": "USD",
+            "value": 180
+          },
+          "category": {
+            "coding": [
+              {
+                "code": "benefit"
+              }
+            ]
+          }
+        }
+      ],
+      "careTeamSequence": [
+        1
+      ],
+      "detail": [
+        {
+          "adjudication": [
+            {
+              "amount": {
+                "currency": "USD",
+                "value": 180
+              },
+              "category": {
+                "coding": [
+                  {
+                    "code": "benefit"
+                  }
+                ]
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.item.detail.type",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "code": "CPNDINDING",
+                    "system": "http://hl7.org/fhir/v3/ActCode"
+                  }
+                ]
+              }
+            }
+          ],
+          "net": {
+            "currency": "USD",
+            "value": 200
+          },
+          "productOrService": {
+            "coding": [
+              {
+                "code": "group"
+              }
+            ]
+          },
+          "sequence": 1,
+          "subDetail": [
+            {
+              "adjudication": [
+                {
+                  "amount": {
+                    "currency": "USD",
+                    "value": 200
+                  },
+                  "category": {
+                    "coding": [
+                      {
+                        "code": "eligible"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "category": {
+                    "coding": [
+                      {
+                        "code": "eligpercent"
+                      }
+                    ]
+                  },
+                  "value": 0.9
+                },
+                {
+                  "amount": {
+                    "currency": "USD",
+                    "value": 180
+                  },
+                  "category": {
+                    "coding": [
+                      {
+                        "code": "benefit"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "extension": [
+                {
+                  "url": "https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.item.detail.subDetail.type",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "code": "CPNDINDING",
+                        "system": "http://hl7.org/fhir/v3/ActCode"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "net": {
+                "currency": "USD",
+                "value": 200
+              },
+              "productOrService": {
+                "text": "unknown"
+              },
+              "sequence": 1,
+              "udi": [
+                {
+                  "reference": "Device/example"
+                }
+              ],
+              "unitPrice": {
+                "currency": "USD",
+                "value": 200
+              }
+            }
+          ],
+          "udi": [
+            {
+              "reference": "Device/example"
+            }
+          ]
+        }
+      ],
+      "net": {
+        "currency": "USD",
+        "value": 200
+      },
+      "productOrService": {
+        "coding": [
+          {
+            "code": "group"
+          }
+        ]
+      },
+      "sequence": 2,
+      "servicedDate": "2014-08-16"
+    }
+  ],
+  "outcome": "complete",
+  "patient": {
+    "reference": "Patient/pat1"
+  },
+  "payee": {
+    "party": {
+      "reference": "Organization/2"
+    },
+    "type": {
+      "coding": [
+        {
+          "code": "provider",
+          "system": "http://terminology.hl7.org/CodeSystem/payeetype"
+        }
+      ]
+    }
+  },
+  "provider": {
+    "reference": "Practitioner/1"
+  },
+  "resourceType": "ExplanationOfBenefit",
+  "status": "active",
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the ExplanationOfBenefit</div>",
+    "status": "generated"
+  },
+  "total": [
+    {
+      "amount": {
+        "currency": "USD",
+        "value": 135.57
+      },
+      "category": {
+        "coding": [
+          {
+            "code": "submitted",
+            "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+          }
+        ],
+        "text": "Submitted Amount"
+      }
+    },
+    {
+      "amount": {
+        "currency": "USD",
+        "value": 96
+      },
+      "category": {
+        "coding": [
+          {
+            "code": "benefit",
+            "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+          }
+        ],
+        "text": "Benefit Amount"
+      }
+    }
+  ],
+  "type": {
+    "coding": [
+      {
+        "code": "oral",
+        "system": "http://terminology.hl7.org/CodeSystem/claim-type"
+      }
+    ]
+  },
+  "use": "claim"
+}

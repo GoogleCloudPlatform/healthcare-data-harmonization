@@ -1,0 +1,35 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def NamingSystemBase(namingSystem) {
+  resourcebase::ResourceBase(namingSystem)
+  name: namingSystem.name
+  date: namingSystem.date
+  publisher: namingSystem.publisher
+  contact: namingSystem.contact
+  responsible: namingSystem.responsible
+  type: namingSystem.type
+  description: namingSystem.description
+  useContext: namingSystem.useContext
+  jurisdiction: namingSystem.jurisdiction
+  usage: namingSystem.usage
+}
+
+def R3NamingSystemToR4(namingSystem) {
+  NamingSystemBase(namingSystem)
+  contained: datatypes::R3ResourceToR4(namingSystem.contained[])
+  status: namingSystem.status
+  kind: namingSystem.kind
+  uniqueId: namingSystem.uniqueId
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/namingsystem-definitions.html#NamingSystem.replacedBy", namingSystem.replacedBy)
+}
+
+def R4NamingSystemToR3(namingSystem) {
+  NamingSystemBase(namingSystem)
+  contained: datatypes::R4ResourceToR3(namingSystem.contained[])
+  status: namingSystem.status
+  kind: namingSystem.kind
+  uniqueId: namingSystem.uniqueId
+  replacedBy: extension::fetchReference("https://www.hl7.org/fhir/STU3/namingsystem-definitions.html#NamingSystem.replacedBy", namingSystem.extension)
+}

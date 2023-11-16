@@ -1,0 +1,5 @@
+// CodeableConcept to String
+data: CodeableConceptToString($root.data)
+
+// String to CodeableConcept
+data: StringToCodeableConcept($root.data)

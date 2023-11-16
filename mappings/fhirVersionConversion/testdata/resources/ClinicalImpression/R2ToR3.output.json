@@ -1,0 +1,60 @@
+{
+  "assessor": {
+    "reference": "Practitioner/example"
+  },
+  "context": {
+    "reference": "Encounter/example"
+  },
+  "date": "2014-12-06T22:33:00+11:00",
+  "description": "This 26 yo male patient is brought into ER by ambulance after being involved in a motor vehicle accident",
+  "effectivePeriod": {
+    "end": "2014-12-06T22:33:00+11:00",
+    "start": "2014-12-06T20:00:00+11:00"
+  },
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.context",
+      "valueReference": {
+        "reference": "Encounter/example"
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/clinicalimpression-definitions.html#ClinicalImpression.effectivePeriod",
+      "valuePeriod": {
+        "end": "2014-12-06T22:33:00+11:00",
+        "start": "2014-12-06T20:00:00+11:00"
+      }
+    }
+  ],
+  "finding": [
+    {
+      "itemCodeableConcept": {
+        "coding": [
+          {
+            "code": "850.0",
+            "system": "http://hl7.org/fhir/sid/icd-9"
+          }
+        ]
+      }
+    }
+  ],
+  "id": "example",
+  "problem": [
+    {
+      "display": "MVA"
+    }
+  ],
+  "protocol": [
+    null
+  ],
+  "resourceType": "ClinicalImpression",
+  "status": "completed",
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "summary": "provisional diagnoses of laceration of head and traumatic brain injury (TBI)",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\u003cp\u003e\u003cb\u003eGenerated Narrative with Details\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eid\u003c/b\u003e: example\u003c/p\u003e\u003cp\u003e\u003cb\u003eidentifier\u003c/b\u003e: 12345\u003c/p\u003e\u003cp\u003e\u003cb\u003estatus\u003c/b\u003e: completed\u003c/p\u003e\u003cp\u003e\u003cb\u003edescription\u003c/b\u003e: This 26 yo male patient is brought into ER by ambulance after being involved in a motor vehicle accident\u003c/p\u003e\u003cp\u003e\u003cb\u003esubject\u003c/b\u003e: \u003ca\u003ePatient/example\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003econtext\u003c/b\u003e: \u003ca\u003eEncounter/example\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eeffective\u003c/b\u003e: 06/12/2014 8:00:00 PM --\u0026gt; 06/12/2014 10:33:00 PM\u003c/p\u003e\u003cp\u003e\u003cb\u003edate\u003c/b\u003e: 06/12/2014 10:33:00 PM\u003c/p\u003e\u003cp\u003e\u003cb\u003eassessor\u003c/b\u003e: \u003ca\u003ePractitioner/example\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eproblem\u003c/b\u003e: MVA\u003c/p\u003e\u003ch3\u003eInvestigations\u003c/h3\u003e\u003ctable\u003e\u003ctr\u003e\u003ctd\u003e-\u003c/td\u003e\u003ctd\u003e\u003cb\u003eCode\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eItem\u003c/b\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e*\u003c/td\u003e\u003ctd\u003eInitial Examination \u003cspan\u003e(Details )\u003c/span\u003e\u003c/td\u003e\u003ctd\u003edeep laceration of the scalp (left temporo-occipital)\u003c/td\u003e\u003c/tr\u003e\u003c/table\u003e\u003cp\u003e\u003cb\u003esummary\u003c/b\u003e: provisional diagnoses of laceration of head and traumatic brain injury (TBI)\u003c/p\u003e\u003ch3\u003eFindings\u003c/h3\u003e\u003ctable\u003e\u003ctr\u003e\u003ctd\u003e-\u003c/td\u003e\u003ctd\u003e\u003cb\u003eItem[x]\u003c/b\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e*\u003c/td\u003e\u003ctd\u003e850.0 \u003cspan\u003e(Details : {ICD-9 code '850.0' = '850.0)\u003c/span\u003e\u003c/td\u003e\u003c/tr\u003e\u003c/table\u003e\u003c/div\u003e",
+    "status": "generated"
+  }
+}

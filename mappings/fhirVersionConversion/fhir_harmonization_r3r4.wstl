@@ -1,0 +1,3 @@
+import "./mappings/r3r4/fhir_r3r4.wstl"
+
+resources[]: callPackageFn("fhir_r3r4", "R3{$root.resourceType}ToR4", $root)

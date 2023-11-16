@@ -1,0 +1,115 @@
+{
+  "accession": {
+    "assigner": {
+      "reference": "Organization/dicom-organization"
+    },
+    "type": {
+      "coding": [
+        {
+          "code": "ACSN",
+          "system": "http://hl7.org/fhir/v2/0203"
+        }
+      ]
+    },
+    "use": "usual",
+    "value": "W12342398"
+  },
+  "availability": "ONLINE",
+  "description": "XR Wrist 3+ Views",
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.reason",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "357009",
+            "display": "Closed fracture of trapezoidal bone of wrist",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      }
+    }
+  ],
+  "id": "example-xr",
+  "identifier": [
+    {
+      "assigner": {
+        "reference": "Organization/dicom-organization"
+      },
+      "use": "secondary",
+      "value": "55551234"
+    }
+  ],
+  "interpreter": {
+    "reference": "Practitioner/example"
+  },
+  "modalityList": [
+    {
+      "code": "DX",
+      "system": "http://dicom.nema.org/resources/ontology/DCM"
+    }
+  ],
+  "numberOfInstances": 2,
+  "numberOfSeries": 1,
+  "order": [
+    {
+      "reference": "Encounter/example"
+    }
+  ],
+  "patient": {
+    "reference": "Patient/dicom"
+  },
+  "procedure": [
+    {
+      "reference": "Procedure/example"
+    }
+  ],
+  "referrer": {
+    "reference": "Practitioner/example"
+  },
+  "resourceType": "ImagingStudy",
+  "series": [
+    {
+      "availability": "ONLINE",
+      "bodySite": {
+        "code": "T-15460",
+        "display": "Wrist Joint",
+        "system": "http://snomed.info/sct"
+      },
+      "description": "XR Wrist 3+ Views",
+      "instance": [
+        {
+          "number": 1,
+          "sopClass": "urn:oid:1.2.840.10008.5.1.4.1.1.2",
+          "title": "PA VIEW",
+          "uid": "urn:oid:2.16.124.113543.6003.1154777499.30246.19789.3503430045.1.1"
+        },
+        {
+          "number": 2,
+          "sopClass": "urn:oid:1.2.840.10008.5.1.4.1.1.2",
+          "title": "LL VIEW",
+          "uid": "urn:oid:2.16.124.113543.6003.1154777499.30246.19789.3503430045.1.2"
+        }
+      ],
+      "laterality": {
+        "code": "419161000",
+        "display": "Unilateral left",
+        "system": "http://snomed.info/sct"
+      },
+      "modality": {
+        "code": "DX",
+        "system": "http://dicom.nema.org/resources/ontology/DCM"
+      },
+      "number": 3,
+      "numberOfInstances": 2,
+      "started": "2011-01-01T11:01:20+03:00",
+      "uid": "urn:oid:2.16.124.113543.6003.1154777499.30246.19789.3503430045.1"
+    }
+  ],
+  "started": "2017-01-01T11:01:20+03:00",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003eXR Wrist 3+ Views. John Smith (MRN: 09236). Accession: W12342398. Performed: 2017-01-01. 1 series, 2 images.\u003c/div\u003e",
+    "status": "generated"
+  },
+  "uid": "urn:oid:2.16.124.113543.6003.1154777499.30246.19789.3503430046"
+}

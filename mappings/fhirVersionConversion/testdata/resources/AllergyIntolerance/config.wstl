@@ -1,0 +1,11 @@
+// R3 AllergyIntolerance To R4
+$this: R3AllergyIntoleranceToR4($root)
+
+// R4 AllergyIntolerance To R3
+$this: R4AllergyIntoleranceToR3($root)
+
+// R2 AllergyIntolerance To R3
+$this: R2AllergyIntoleranceToR3($root)
+
+// R3 AllergyIntolerance To R2
+$this: R3AllergyIntoleranceToR2($root)

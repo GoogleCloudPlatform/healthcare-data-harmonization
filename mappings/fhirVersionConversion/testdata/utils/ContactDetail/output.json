@@ -1,0 +1,43 @@
+{
+  "extension": [
+    {
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#ContactDetail.name",
+          "valueString": "ONC"
+        },
+        {
+          "url": "https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#ContactDetail.telecom",
+          "valueContactPoint": {
+            "system": "url",
+            "value": "http://www.healthit.gov"
+          }
+        },
+        {
+          "url": "https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#ContactDetail.telecom",
+          "valueContactPoint": {
+            "system": "url",
+            "value": "http://www.healthit.gov2"
+          }
+        }
+      ],
+      "url": "test_url"
+    },
+    {
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#ContactDetail.name",
+          "valueString": "HL7"
+        },
+        {
+          "url": "https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#ContactDetail.telecom",
+          "valueContactPoint": {
+            "system": "url",
+            "value": "http://hl7.org/fhir"
+          }
+        }
+      ],
+      "url": "test_url"
+    }
+  ]
+}

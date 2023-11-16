@@ -1,0 +1,55 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   enrollmentRequest : FHIR EnrollmentRequest resource
+//
+// Output(s):
+//   FHIR EnrollmentRequest Resource
+//
+def EnrollmentRequestBase(enrollmentRequest) {
+  resourcebase::ResourceBase(enrollmentRequest)
+  identifier: enrollmentRequest.identifier
+  created: enrollmentRequest.created
+}
+
+// Description: Converts a FHIR STU3 EnrollmentRequest resource to FHIR R4 EnrollmentRequest resource.
+//
+// Argument(s):
+//   enrollmentRequest : FHIR STU3 EnrollmentRequest resource https://www.hl7.org/fhir/stu3/enrollmentrequest.html
+//
+// Output(s):
+//   FHIR R4 EnrollmentRequest Resource https://www.hl7.org/fhir/r4/enrollmentrequest.html
+//
+def R3EnrollmentRequestToR4(enrollmentRequest) {
+  EnrollmentRequestBase(enrollmentRequest)
+  contained: datatypes::R3ResourceToR4(enrollmentRequest.contained[])
+  insurer: datatypes::R3ReferenceToR4(enrollmentRequest.insurer)
+  coverage: datatypes::R3ReferenceToR4(enrollmentRequest.coverage)
+  status: enrollmentRequest.status
+  provider: datatypes::R3ReferenceToR4(enrollmentRequest.provider)
+  candidate: datatypes::R3ReferenceToR4(enrollmentRequest.subject)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/enrollmentrequest-definitions.html#EnrollmentRequest.organization", enrollmentRequest.organization)
+}
+
+// Description: Converts a FHIR R4 EnrollmentRequest resource to FHIR STU3 EnrollmentRequest resource.
+//
+// Argument(s):
+//   enrollmentRequest : FHIR R4 EnrollmentRequest resource https://www.hl7.org/fhir/r4/enrollmentrequest.html
+//
+// Output(s):
+//   FHIR STU3 EnrollmentRequest Resource https://www.hl7.org/fhir/stu3/enrollmentrequest.html
+//
+def R4EnrollmentRequestToR3(enrollmentRequest) {
+  EnrollmentRequestBase(enrollmentRequest)
+  contained: datatypes::R4ResourceToR3(enrollmentRequest.contained[])
+  insurer: datatypes::R4ReferenceToR3(enrollmentRequest.insurer)
+  coverage: datatypes::R4ReferenceToR3(enrollmentRequest.coverage)
+  status: enrollmentRequest.status
+  provider: datatypes::R4ReferenceToR3(enrollmentRequest.provider)
+  subject: datatypes::R4ReferenceToR3(enrollmentRequest.candidate)
+  organization: extension::fetchReference("https://www.hl7.org/fhir/STU3/enrollmentrequest-definitions.html#EnrollmentRequest.organization", enrollmentRequest.extension)
+}

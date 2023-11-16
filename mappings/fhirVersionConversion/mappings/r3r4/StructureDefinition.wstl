@@ -1,0 +1,57 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def StructureDefinitionBase(structureDefinition) {
+  resourcebase::ResourceBase(structureDefinition)
+  url: structureDefinition.url
+  identifier: structureDefinition.identifier
+  version: structureDefinition.version
+  name: structureDefinition.name
+  title: structureDefinition.title
+  date: structureDefinition.date
+  publisher: structureDefinition.publisher
+  contact: structureDefinition.contact
+  description: structureDefinition.description
+  useContext: structureDefinition.useContext
+  jurisdiction: structureDefinition.jurisdiction
+  purpose: structureDefinition.purpose
+  copyright: structureDefinition.copyright
+  mapping: structureDefinition.mapping
+  abstract: structureDefinition.abstract
+  contextInvariant: structureDefinition.contextInvariant
+  snapshot: structureDefinition.snapshot
+  differential: structureDefinition.differential
+}
+
+def R3StructureDefinitionToR4(structureDefinition) {
+  StructureDefinitionBase(structureDefinition)
+  contained: datatypes::R3ResourceToR4(structureDefinition.contained[])
+  status: structureDefinition.status
+  experimental: structureDefinition.experimental
+  keyword: structureDefinition.keyword
+  fhirVersion: extension::fetchCode("https://www.hl7.org/fhir/R4/structuredefinition-definitions.html#StructureDefinition.fhirVersion", structureDefinition.extension)
+  kind: structureDefinition.kind
+  type: extension::fetchUri("https://www.hl7.org/fhir/R4/structuredefinition-definitions.html#StructureDefinition.type", structureDefinition.extension)
+  baseDefinition: structureDefinition.baseDefinition
+  derivation: structureDefinition.derivation
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.fhirVersion", structureDefinition.fhirVersion)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.type", structureDefinition.type)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.contextType", structureDefinition.contextType)
+}
+
+def R4StructureDefinitionToR3(structureDefinition) {
+  StructureDefinitionBase(structureDefinition)
+  contained: datatypes::R4ResourceToR3(structureDefinition.contained[])
+  status: structureDefinition.status
+  experimental: structureDefinition.experimental
+  keyword: structureDefinition.keyword
+  fhirVersion: extension::fetchString("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.fhirVersion", structureDefinition.extension)
+  kind: structureDefinition.kind
+  contextType: extension::fetchCode("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.contextType", structureDefinition.extension)
+  type: extension::fetchCode("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.type", structureDefinition.extension)
+  baseDefinition: structureDefinition.baseDefinition
+  derivation: structureDefinition.derivation
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/structuredefinition-definitions.html#StructureDefinition.fhirVersion", structureDefinition.fhirVersion)
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/R4/structuredefinition-definitions.html#StructureDefinition.type", structureDefinition.type)
+}

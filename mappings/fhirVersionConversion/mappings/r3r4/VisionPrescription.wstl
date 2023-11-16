@@ -1,0 +1,136 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   visionPrescription : FHIR VisionPrescription Resource
+//
+// Output(s):
+//   FHIR VisionPrescription Resource
+//
+def VisionPrescriptionBase(visionPrescription) {
+  resourcebase::ResourceBase(visionPrescription)
+  identifier: visionPrescription.identifier
+}
+
+// Description: Converts a FHIR STU3 VisionPrescription resource to FHIR R4 VisionPrescription resource.
+//
+// Argument(s):
+//   visionPrescription : FHIR STU3 VisionPrescription resource https://www.hl7.org/fhir/stu3/visionPrescription.html
+//
+// Output(s):
+//   FHIR R4 VisionPrescription Resource https://www.hl7.org/fhir/r4/visionPrescription.html
+//
+def R3VisionPrescriptionToR4(visionPrescription) {
+  VisionPrescriptionBase(visionPrescription)
+  contained: datatypes::R3ResourceToR4(visionPrescription.contained[])
+  encounter: datatypes::R3ReferenceToR4(visionPrescription.encounter)
+  status: visionPrescription.status
+  status: utilities::defaultIfNull($this.status, "active")
+  created: extension::fetchDateTime("https://www.hl7.org/fhir/R4/visionprescription-definitions.html#VisionPrescription.created", visionPrescription.extension)
+  created: utilities::defaultIfNull($this.created, currentTime("yyyy-MM-dd"))
+  patient: datatypes::R3ReferenceToR4(visionPrescription.patient)
+  patient.display: utilities::defaultIfNull($this.patient, "Patient")
+  dateWritten: visionPrescription.dateWritten
+  dateWritten: utilities::defaultIfNull($this.dateWritten, currentTime("yyyy-MM-dd"))
+  prescriber: datatypes::R3ReferenceToR4(visionPrescription.prescriber)
+  prescriber.display: utilities::defaultIfNull($this.prescriber, "Practitioner")
+  lensSpecification[]: if visionPrescription.dispense then {
+    R3VisionPrescription_LensSpecificationToR4(visionPrescription.dispense[])
+  } else {
+    // place-holders for 1..1 cardinality
+    product.text: "unknown"
+    eye: "left"
+  }
+}
+
+// Description: Converts a FHIR R4 VisionPrescription resource to FHIR STU3 VisionPrescription resource.
+//
+// Argument(s):
+//   visionPrescription : FHIR R4 VisionPrescription resource https://www.hl7.org/fhir/r4/visionPrescription.html
+//
+// Output(s):
+//   FHIR STU3 VisionPrescription Resource https://www.hl7.org/fhir/stu3/visionPrescription.html
+//
+def R4VisionPrescriptionToR3(visionPrescription) {
+  VisionPrescriptionBase(visionPrescription)
+  contained: datatypes::R4ResourceToR3(visionPrescription.contained[])
+  encounter: datatypes::R4ReferenceToR3(visionPrescription.encounter)
+  status: visionPrescription.status
+  patient: datatypes::R4ReferenceToR3(visionPrescription.patient)
+  dateWritten: visionPrescription.dateWritten
+  prescriber: datatypes::R4ReferenceToR3(visionPrescription.prescriber)
+  reasonCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/visionprescription-definitions.html#VisionPrescription.reasonCodeableConcept", visionPrescription.extension)
+  reasonReference: extension::fetchReference("https://www.hl7.org/fhir/STU3/visionprescription-definitions.html#VisionPrescription.reasonReference", visionPrescription.extension)
+  dispense: R4VisionPrescription_LensSpecificationToR3(visionPrescription.lensSpecification[])
+  extension[]: extension::BuildDateTimeExtension("https://www.hl7.org/fhir/R4/visionprescription-definitions.html#VisionPrescription.created", visionPrescription.created)
+}
+
+// Description: Converts a FHIR STU3 VisionPrescription.dispense to FHIR R4 VisionPrescription.lensSpecification.
+//
+// Argument(s):
+//   data : FHIR STU3 VisionPrescription.dispense http://hl7.org/fhir/STU3/visionprescription-definitions.html#VisionPrescription.dispense
+//
+// Output(s):
+//   FHIR R4 VisionPrescription.lensSpecification http://hl7.org/fhir/R4/visionprescription-definitions.html#VisionPrescription.lensSpecification
+//
+def R3VisionPrescription_LensSpecificationToR4(required data) {
+  product: data.product
+  product.text: utilities::defaultIfNull($this.product, "unknown")
+  eye: data.eye
+  eye: utilities::defaultIfNull($this.eye, "left")
+  sphere: data.sphere
+  cylinder: data.cylinder
+  axis: data.axis
+  prism[]: R3VisionPrescription_LensSpecification_PrismToR4(data.prism, data.base)
+  add: data.add
+  power: data.power
+  backCurve: data.backCurve
+  diameter: data.diameter
+  duration: data.duration
+  color: data.color
+  brand: data.brand
+  note: data.note
+}
+
+// Description: Converts a FHIR R4 VisionPrescription.lensSpecification to FHIR STU3 VisionPrescription.dispense.
+//
+// Argument(s):
+//   data : FHIR R4 VisionPrescription.lensSpecification http://hl7.org/fhir/R4/visionprescription-definitions.html#VisionPrescription.lensSpecification
+//
+// Output(s):
+//   FHIR STU3 VisionPrescription.dispense http://hl7.org/fhir/STU3/visionprescription-definitions.html#VisionPrescription.dispense
+//
+def R4VisionPrescription_LensSpecificationToR3(data) {
+  product: data.product
+  eye: data.eye
+  sphere: data.sphere
+  cylinder: data.cylinder
+  axis: data.axis
+  prism: data.prism[0].amount
+  base: data.prism[0].base
+  add: data.add
+  power: data.power
+  backCurve: data.backCurve
+  diameter: data.diameter
+  duration: data.duration
+  color: data.color
+  brand: data.brand
+  note: data.note
+}
+
+// Description: Converts a FHIR STU3 VisionPrescription.dispense.prism to FHIR R4 VisionPrescription.lensSpecification.prism.
+//
+// Argument(s):
+//  amount : FHIR STU3 VisionPrescription.dispense.amount http://hl7.org/fhir/stu3/visionprescription-definitions.html#VisionPrescription.dispense.amount
+//  base : FHIR STU3 VisionPrescription.dispense.base http://hl7.org/fhir/stu3/visionprescription-definitions.html#VisionPrescription.dispense.base
+//
+// Output(s):
+//   FHIR STU3 VisionPrescription.lensSpecification.prism http://hl7.org/fhir/r4/visionprescription-definitions.html#VisionPrescription.lensSpecification.prism
+//
+def R3VisionPrescription_LensSpecification_PrismToR4(required amount, required base) {
+  amount: amount
+  base: base
+}

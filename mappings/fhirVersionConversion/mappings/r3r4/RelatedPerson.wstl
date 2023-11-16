@@ -1,0 +1,42 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def RelatedPersonBase(relatedPerson) {
+  resourcebase::ResourceBase(relatedPerson)
+  identifier: relatedPerson.identifier
+  name: relatedPerson.name
+  telecom: relatedPerson.telecom
+  birthDate: relatedPerson.birthDate
+  address: relatedPerson.address
+  photo: relatedPerson.photo
+  period: relatedPerson.period
+}
+
+def R3RelatedPersonToR4(relatedPerson) {
+  RelatedPersonBase(relatedPerson)
+  contained: datatypes::R3ResourceToR4(relatedPerson.contained[])
+  patient: datatypes::R3ReferenceToR4(relatedPerson.patient)
+  active: relatedPerson.active
+  relationship: R3RelatedPerson_RelationshipToR4("https://www.hl7.org/fhir/R4/relatedperson-definitions.html#RelatedPerson.relationship", relatedPerson.extension, relatedPerson.relationship)
+  gender: relatedPerson.gender
+}
+
+def R4RelatedPersonToR3(relatedPerson) {
+  RelatedPersonBase(relatedPerson)
+  contained: datatypes::R4ResourceToR3(relatedPerson.contained[])
+  patient: datatypes::R4ReferenceToR3(relatedPerson.patient)
+  active: relatedPerson.active
+  relationship: relatedPerson.relationship[0]
+  gender: relatedPerson.gender
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/relatedperson-definitions.html#RelatedPerson.relationship", relatedPerson.relationship[])
+}
+
+def R3RelatedPerson_RelationshipToR4(url, extension, data) {
+  var relationship: extension::fetchCodeableConceptArray(url, extension)
+  if relationship then {
+    relationship
+  } else {
+    arrayOf(data)
+  }
+}

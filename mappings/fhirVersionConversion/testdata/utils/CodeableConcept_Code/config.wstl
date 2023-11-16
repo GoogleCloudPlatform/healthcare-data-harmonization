@@ -1,0 +1,5 @@
+// CodeableConcept to Code
+data: CodeableConceptToCode($root.data)
+
+// Code to CodeableConcept
+data: CodeToCodeableConcept($root.data)

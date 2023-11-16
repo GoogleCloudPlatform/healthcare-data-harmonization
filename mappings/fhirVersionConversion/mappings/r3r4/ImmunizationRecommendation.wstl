@@ -1,0 +1,144 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   immunizationRecommendation : FHIR ImmunizationRecommendation resource
+//
+// Output(s):
+//   FHIR ImmunizationRecommendation Resource
+//
+def ImmunizationRecommendationBase(immunizationRecommendation){
+  resourcebase::ResourceBase(immunizationRecommendation)
+  identifier: immunizationRecommendation.identifier
+}
+
+// Description: Converts a FHIR STU3 ImmunizationRecommendation resource to FHIR R4 ImmunizationRecommendation resource.
+//
+// Argument(s):
+//   immunizationRecommendation : FHIR STU3 ImmunizationRecommendation resource https://www.hl7.org/fhir/stu3/immunizationrecommendation.html
+//
+// Output(s):
+//   FHIR R4 ImmunizationRecommendation Resource https://www.hl7.org/fhir/r4/immunizationrecommendation.html
+//
+def R3ImmunizationRecommendationToR4(immunizationRecommendation) {
+  ImmunizationRecommendationBase(immunizationRecommendation)
+  contained: datatypes::R3ResourceToR4(immunizationRecommendation.contained[])
+  patient: datatypes::R3ReferenceToR4(immunizationRecommendation.patient)
+  date: R3ImmunizationRecommendation_DateToR4(immunizationRecommendation.recommendation)
+  authority: R3ImmunizationRecommendation_AuthorityToR4(immunizationRecommendation.recommendation)
+  recommendation: R3ImmunizationRecommendation_RecommendationToR4(immunizationRecommendation.recommendation[])
+}
+
+// Description: Converts a FHIR R4 ImmunizationRecommendation resource to FHIR STU3 ImmunizationRecommendation resource.
+//
+// Argument(s):
+//   immunizationRecommendation : FHIR R4 ImmunizationRecommendation resource https://www.hl7.org/fhir/r4/immunizationrecommendation.html
+//
+// Output(s):
+//   FHIR STU3 ImmunizationRecommendation Resource https://www.hl7.org/fhir/stu3/immunizationrecommendation.html
+//
+def R4ImmunizationRecommendationToR3(immunizationRecommendation) {
+  ImmunizationRecommendationBase(immunizationRecommendation)
+  contained: datatypes::R4ResourceToR3(immunizationRecommendation.contained[])
+  patient: datatypes::R4ReferenceToR3(immunizationRecommendation.patient)
+  recommendation: R4ImmunizationRecommendation_RecommendationToR3(immunizationRecommendation.recommendation[], immunizationRecommendation.date, immunizationRecommendation.authority)
+}
+
+// Description: Converts a FHIR STU3 ImmunizationRecommendation.Recommendation to FHIR R4 ImmunizationRecommendation.Date.
+//
+// Argument(s):
+//   data : FHIR STU3 ImmunizationRecommendation.Recommendation http://hl7.org/fhir/STU3/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation
+//
+// Output(s):
+//   FHIR R4 ImmunizationRecommendation.Date http://hl7.org/fhir/R4/immunizationrecommendation-definitions.html#ImmunizationRecommendation.date
+//
+def R3ImmunizationRecommendation_DateToR4(data) {
+  data[0].date
+}
+
+// Description: Converts a FHIR STU3 ImmunizationRecommendation.Recommendation to FHIR R4 ImmunizationRecommendation.Authority.
+//
+// Argument(s):
+//   data : FHIR STU3 ImmunizationRecommendation.Recommendation http://hl7.org/fhir/STU3/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation
+//
+// Output(s):
+//   FHIR R4 ImmunizationRecommendation.Authority http://hl7.org/fhir/R4/immunizationrecommendation-definitions.html#ImmunizationRecommendation.authority
+//
+def R3ImmunizationRecommendation_AuthorityToR4(data) {
+  datatypes::R3ReferenceToR4(data[0].protocol.authority)
+}
+
+// Description: Converts a FHIR STU3 ImmunizationRecommendation.Recommendation to FHIR R4 ImmunizationRecommendation.Recommendation.
+//
+// Argument(s):
+//   data : FHIR STU3 ImmunizationRecommendation.Recommendation http://hl7.org/fhir/STU3/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation
+//
+// Output(s):
+//   FHIR R4 ImmunizationRecommendation.Recommendation http://hl7.org/fhir/R4/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation
+//
+def R3ImmunizationRecommendation_RecommendationToR4(data) {
+  vaccineCode: R3Recommendation_VaccineCodeToR4("https://www.hl7.org/fhir/R4/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation.vaccineCode", data.extension, data.vaccineCode)
+  targetDisease: data.targetDisease
+  contraindicatedVaccineCode: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation.contraindicatedVaccineCode", data.extension)
+  forecastStatus: data.forecastStatus
+  forecastReason: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation.forecastReason", data.extension)
+  dateCriterion: data.dateCriterion
+  description: data.protocol.description
+  series: data.protocol.series
+  doseNumberPositiveInt: data.doseNumber
+  doseNumberString: extension::fetchString("https://www.hl7.org/fhir/R4/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation.doseNumberString", data.extension)
+  seriesDosesPositiveInt: extension::fetchPositiveInt("https://www.hl7.org/fhir/R4/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation.seriesDosesPositiveInt", data.extension)
+  seriesDosesString: extension::fetchString("https://www.hl7.org/fhir/R4/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation.seriesDosesString", data.extension)
+  supportingImmunization: datatypes::R3ReferenceToR4(data.supportingImmunization[])
+  supportingPatientInformation: datatypes::R3ReferenceToR4(data.supportingPatientInformation[])
+  extension[]: extension::BuildPositiveIntExtension("https://www.hl7.org/fhir/STU3/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation.protocol.doseSequence", data.protocol.doseSequence)
+}
+
+// Description: Converts a FHIR R4 ImmunizationRecommendation.Recommendation to FHIR STU3 ImmunizationRecommendation.Recommendation.
+//
+// Argument(s):
+//   data : FHIR R4 ImmunizationRecommendation.Recommendation http://hl7.org/fhir/R4/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation
+//
+// Output(s):
+//   FHIR STU3 ImmunizationRecommendation.Recommendation http://hl7.org/fhir/STU3/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation
+//
+def R4ImmunizationRecommendation_RecommendationToR3(data, date, authority) {
+  date: date
+  vaccineCode: data.vaccineCode[0]
+  targetDisease: data.targetDisease
+  forecastStatus: data.forecastStatus
+  dateCriterion: data.dateCriterion
+  protocol.description: data.description
+  protocol.series: data.series
+  protocal.authority: datatypes::R4ReferenceToR3(authority)
+  doseNumber: data.doseNumberPositiveInt
+  supportingImmunization: datatypes::R4ReferenceToR3(data.supportingImmunization[])
+  supportingPatientInformation: datatypes::R4ReferenceToR3(data.supportingPatientInformation[])
+  extension[]: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation.contraindicatedVaccineCode", data.extension)
+  extension[]: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation.forecastReason", data.extension)
+  extension[]: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation.doseNumberString", data.extension)
+  extension[]: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation.seriesDosesPositiveInt", data.extension)
+  extension[]: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation.seriesDosesString", data.extension)
+}
+
+// Description: Converts a FHIR STU3 ImmunizationRecommendation.Recommendation.VaccineCode to FHIR R4 ImmunizationRecommendation.Recommendation.VaccineCode.
+//
+// Argument(s):
+//   data : FHIR STU3 ImmunizationRecommendation.Recommendation.VaccineCode http://hl7.org/fhir/STU3/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation.vaccineCode
+//   url : FHIR R4 Extension.url http://hl7.org/fhir/R4/extensibility-definitions.html#Extension.url
+//   extension : FHIR R4 DomainResource.Extension http://hl7.org/fhir/R4/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 ImmunizationRecommendation.Recommendation.VaccineCode http://hl7.org/fhir/R4/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation.vaccineCode
+//
+def R3Recommendation_VaccineCodeToR4(url, extension, data) {
+  var vaccineCode: extension::fetchReferenceArray(url, extension)
+  if vaccineCode then {
+    vaccineCode
+  } else {
+    arrayOf(data)
+  }
+}

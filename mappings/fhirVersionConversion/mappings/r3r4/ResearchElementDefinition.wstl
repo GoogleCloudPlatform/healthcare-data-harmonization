@@ -1,0 +1,3 @@
+package fhir_r3r4
+
+// ResearchElementDefinition (https://www.hl7.org/fhir/researchelementdefinition.html) is a newly created resource type in FHIR R4, which does not exist in R3.

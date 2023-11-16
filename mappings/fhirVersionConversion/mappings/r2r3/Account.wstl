@@ -1,0 +1,39 @@
+package fhir_r2r3
+
+import "../datatypes/datatypes.wstl"
+
+def AccountBase(account) {
+  resourcebase::ResourceBase(account)
+  identifier: account.identifier
+  type: account.type
+  name: account.name
+  description: account.description
+}
+
+def R2AccountToR3(account) {
+  AccountBase(account)
+  contained: datatypes::R2ResourceToR3(account.contained[])
+  owner: datatypes::R2ReferenceToR3(account.owner)
+  subject: datatypes::R2ReferenceToR3(account.subject)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/account-definitions.html#Account.status", account.extension)
+  status: if status? then status else account.status
+  period: account.coveragePeriod
+  active: account.activePeriod
+  balance: datatypes::QuantityToMoney(account.balance, account.balance)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/account-definitions.html#Account.status", account.status)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/account-definitions.html#Account.currency", account.currency)
+}
+
+def R3AccountToR2(account) {
+  AccountBase(account)
+  contained: datatypes::R3ResourceToR2(account.contained[])
+  owner: datatypes::R3ReferenceToR2(account.owner)
+  subject: datatypes::R3ReferenceToR2(account.subject)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/account-definitions.html#Account.status", account.extension)
+  status: if status? then status else account.status
+  activePeriod: account.active
+  currency: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/account-definitions.html#Account.currency", account.extension)
+  coveragePeriod: account.period
+  balance: datatypes::MoneyToQuantity(account.balance)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/account-definitions.html#Account.status", account.status)
+}

@@ -1,0 +1,62 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "accepted",
+          "display": "Accepted",
+          "target": [
+            {
+              "code": "accepted",
+              "display": "Accepted",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "declined",
+          "display": "Declined",
+          "target": [
+            {
+              "code": "declined",
+              "display": "Declined",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "tentative",
+          "display": "Tentative",
+          "target": [
+            {
+              "code": "tentative",
+              "display": "Tentative",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "needs-action",
+          "display": "Needs Action",
+          "target": [
+            {
+              "code": "needs-action",
+              "display": "Needs Action",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/participationstatus",
+      "target": "http://hl7.org/fhir/participationstatus",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "tentative",
+        "display": "Tentative"
+      }
+    }
+  ],
+  "id": "Appointment_Response_Status_r3r4",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

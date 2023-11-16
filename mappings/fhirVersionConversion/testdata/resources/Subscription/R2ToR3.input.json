@@ -1,0 +1,14 @@
+{
+  "channel": {
+    "endpoint": "https://biliwatch.com/customers/mount-auburn-miu/on-result",
+    "header": "Authorization: Bearer secret-token-abc-123",
+    "payload": "application/fhir+json",
+    "type": "rest-hook"
+  },
+  "id": "example",
+  "resourceType": "Subscription",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e[Put rendering here]\u003c/div\u003e",
+    "status": "generated"
+  }
+}

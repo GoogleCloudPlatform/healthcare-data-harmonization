@@ -1,0 +1,135 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   communicationRequest : FHIR CommunicationRequest resource
+//
+// Output(s):
+//   FHIR CommunicationRequest Resource
+//
+def CommunicationRequestBase(communicationRequest) {
+  resourcebase::ResourceBase(communicationRequest)
+  identifier: communicationRequest.identifier
+  groupIdentifier: communicationRequest.groupIdentifier
+  category: communicationRequest.category
+  medium: communicationRequest.medium
+  occurrenceDateTime: communicationRequest.occurrenceDateTime
+  occurrencePeriod: communicationRequest.occurrencePeriod
+  authoredOn: communicationRequest.authoredOn
+  reasonCode: communicationRequest.reasonCode
+  note: communicationRequest.note
+}
+
+// Description: Converts a FHIR STU3 CommunicationRequest resource to FHIR R4 CommunicationRequest resource.
+//
+// Argument(s):
+//   communicationRequest : FHIR STU3 CommunicationRequest resource https://www.hl7.org/fhir/stu3/communicationRequest.html
+//
+// Output(s):
+//   FHIR R4 CommunicationRequest Resource https://www.hl7.org/fhir/r4/communicationRequest.html
+//
+def R3CommunicationRequestToR4(communicationRequest) {
+  CommunicationRequestBase(communicationRequest)
+  contained: datatypes::R3ResourceToR4(communicationRequest.contained[])
+  payload: R3CommunicationRequest_PayloadToR4(communicationRequest.payload[])
+  subject: datatypes::R3ReferenceToR4(communicationRequest.subject)
+  basedOn: datatypes::R3ReferenceToR4(communicationRequest.basedOn[])
+  replaces: datatypes::R3ReferenceToR4(communicationRequest.replaces[])
+  status: utilities::Convert_TerminologyCode(communicationRequest.status, "http://hl7.org/fhir/request-status", "Request_Status_r3r4")
+  statusReason: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/communicationrequest-definitions.html#CommunicationRequest.statusReason", communicationRequest.extension)
+  priority: communicationRequest.priority
+  doNotPerform: extension::fetchBoolean("https://www.hl7.org/fhir/R4/communicationrequest-definitions.html#CommunicationRequest.doNotPerform", communicationRequest.extension)
+  about: datatypes::R3ReferenceToR4(communicationRequest.topic[])
+  encounter: if matchesRegex(communicationRequest.context.reference, "^Encounter.*") then datatypes::R3ReferenceToR4(communicationRequest.context)
+  requester: R3CommunicationRequest_RequesterToR4(communicationRequest.requester)
+  recipient: datatypes::R3ReferenceToR4(communicationRequest.recipient[])
+  sender: datatypes::R3ReferenceToR4(communicationRequest.sender)
+  reasonReference: datatypes::R3ReferenceToR4(communicationRequest.reasonReference[])
+  extension[]: if !$this.encounter then extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/communicationrequest-definitions.html#CommunicationRequest.context", communicationRequest.context)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/communicationrequest-definitions.html#CommunicationRequest.requester.onBehalfOf", communicationRequest.requester.onBehalfOf)
+}
+
+// Description: Converts a FHIR R4 CommunicationRequest resource to FHIR STU3 CommunicationRequest resource.
+//
+// Argument(s):
+//   communicationRequest : FHIR R4 CommunicationRequest resource https://www.hl7.org/fhir/r4/communicationRequest.html
+//
+// Output(s):
+//   FHIR STU3 CommunicationRequest Resource https://www.hl7.org/fhir/stu3/communicationRequest.html
+//
+def R4CommunicationRequestToR3(communicationRequest) {
+  CommunicationRequestBase(communicationRequest)
+  contained: datatypes::R4ResourceToR3(communicationRequest.contained[])
+  payload: R4CommunicationRequest_PayloadToR3(communicationRequest.payload[])
+  subject: datatypes::R4ReferenceToR3(communicationRequest.subject)
+  basedOn: datatypes::R4ReferenceToR3(communicationRequest.basedOn[])
+  replaces: datatypes::R4ReferenceToR3(communicationRequest.replaces[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/communicationrequest-definitions.html#CommunicationRequest.status", communicationRequest.extension)
+  status: if status? then status else communicationRequest.status
+  priority: communicationRequest.priority
+  recipient: datatypes::R4ReferenceToR3(communicationRequest.recipient[])
+  topic: datatypes::R4ReferenceToR3(communicationRequest.about[])
+  context: datatypes::R4ReferenceToR3(communicationRequest.encounter)
+  sender: datatypes::R4ReferenceToR3(communicationRequest.sender)
+  requester: R4CommunicationRequest_RequesterToR3("https://www.hl7.org/fhir/STU3/communicationrequest-definitions.html#CommunicationRequest.requester.onBehalfOf", communicationRequest.extension, communicationRequest.requester)
+  reasonReference: datatypes::R4ReferenceToR3(communicationRequest.reasonReference[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/communicationrequest-definitions.html#CommunicationRequest.statusReason", communicationRequest.statusReason)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/R4/communicationrequest-definitions.html#CommunicationRequest.doNotPerform", communicationRequest.doNotPerform)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/communicationrequest-definitions.html#CommunicationRequest.status", communicationRequest.status)
+}
+
+// Description: Converts a FHIR STU3 CommunicationRequest.Requester to FHIR R4 CommunicationRequest.Requester.
+//
+// Argument(s):
+//   data : FHIR STU3 CommunicationRequest.Requester http://hl7.org/fhir/STU3/communicationrequest-definitions.html#CommunicationRequest.requester
+//
+// Output(s):
+//   FHIR R4 CommunicationRequest.Requester Resource http://hl7.org/fhir/R4/communicationrequest-definitions.html#CommunicationRequest.requester
+//
+def R3CommunicationRequest_RequesterToR4(data) {
+  datatypes::R3ReferenceToR4(data.agent)
+}
+
+// Description: Converts a FHIR R4 CommunicationRequest.Requester to FHIR STU3 CommunicationRequest.Requester.
+//
+// Argument(s):
+//   data : FHIR R4 CommunicationRequest.Requester http://hl7.org/fhir/R4/communicationrequest-definitions.html#CommunicationRequest.requester
+//
+// Output(s):
+//   FHIR STU3 CommunicationRequest.Requester Resource http://hl7.org/fhir/STU3/communicationrequest-definitions.html#CommunicationRequest.requester
+//
+def R4CommunicationRequest_RequesterToR3(url, extension, data) {
+  agent: datatypes::R4ReferenceToR3(data)
+  onBehalfOf: extension::fetchReference(url, extension)
+}
+
+// Description: Converts a FHIR STU3 CommunicationRequest.Payload to FHIR R4 CommunicationRequest.Payload.
+//
+// Argument(s):
+//   data : FHIR STU3 CommunicationRequest.Payload http://hl7.org/fhir/STU3/communicationrequest-definitions.html#CommunicationRequest.payload
+//
+// Output(s):
+//   FHIR R4 CommunicationRequest.Payload Resource http://hl7.org/fhir/R4/communicationrequest-definitions.html#CommunicationRequest.payload
+//
+def R3CommunicationRequest_PayloadToR4(data) {
+  contentString: data.contentString
+  contentAttachment: data.contentAttachment
+  contentReference: datatypes::R3ReferenceToR4(data.contentReference)
+}
+
+// Description: Converts a FHIR R4 CommunicationRequest.Payload to FHIR STU3 CommunicationRequest.Payload.
+//
+// Argument(s):
+//   data : FHIR R4 CommunicationRequest.Payload http://hl7.org/fhir/R4/communicationrequest-definitions.html#CommunicationRequest.payload
+//
+// Output(s):
+//   FHIR STU3 CommunicationRequest.Payload Resource http://hl7.org/fhir/STU3/communicationrequest-definitions.html#CommunicationRequest.payload
+//
+def R4CommunicationRequest_PayloadToR3(data) {
+  contentString: data.contentString
+  contentAttachment: data.contentAttachment
+  contentReference: datatypes::R4ReferenceToR3(data.contentReference)
+}

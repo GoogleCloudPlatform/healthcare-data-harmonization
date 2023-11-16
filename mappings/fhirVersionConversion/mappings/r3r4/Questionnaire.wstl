@@ -1,0 +1,161 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def QuestionnaireBase(questionnaire) {
+  resourcebase::ResourceBase(questionnaire)
+  url: questionnaire.url
+  identifier: questionnaire.identifier
+  version: questionnaire.version
+  name: questionnaire.name
+  title: questionnaire.title
+  date: questionnaire.date
+  publisher: questionnaire.publisher
+  contact: questionnaire.contact
+  description: questionnaire.description
+  useContext: questionnaire.useContext
+  jurisdiction: questionnaire.jurisdiction
+  purpose: questionnaire.purpose
+  copyright: questionnaire.copyright
+  approvalDate: questionnaire.approvalDate
+  lastReviewDate: questionnaire.lastReviewDate
+  effectivePeriod: questionnaire.effectivePeriod
+  code: questionnaire.code
+}
+
+def R3QuestionnaireToR4(questionnaire) {
+  QuestionnaireBase(questionnaire)
+  contained: datatypes::R3ResourceToR4(questionnaire.contained[])
+  derivedFrom: extension::fetchCanonicalArray("https://www.hl7.org/fhir/R4/questionnaire-definitions.html#Questionnaire.derivedFrom", questionnaire.extension)
+  status: questionnaire.status
+  experimental: questionnaire.experimental
+  subjectType: questionnaire.subjectType
+  item: R3Questionnaire_ItemToR4(questionnaire.item[])
+}
+
+def R4QuestionnaireToR3(questionnaire) {
+  QuestionnaireBase(questionnaire)
+  contained: datatypes::R4ResourceToR3(questionnaire.contained[])
+  status: questionnaire.status
+  experimental: questionnaire.experimental
+  subjectType: questionnaire.subjectType
+  item: R4Questionnaire_ItemToR3(questionnaire.item[])
+  extension[]: extension::BuildCanonicalExtension("https://www.hl7.org/fhir/R4/questionnaire-definitions.html#Questionnaire.derivedFrom", questionnaire.derivedFrom[])
+}
+
+def R3Questionnaire_ItemToR4(data) {
+  linkId: data.linkId
+  definition: data.definition
+  code: data.code
+  prefix: data.prefix
+  text: data.text
+  type: data.type
+  enableWhen: R3Questionnaire_Item_EnableWhenToR4(data.enableWhen[])
+  enableBehavior: extension::fetchCode("https://www.hl7.org/fhir/R4/questionnaire-definitions.html#Questionnaire.item.enableBehavior", data.extension)
+  'required': data.'required'
+  repeats: data.repeats
+  readOnly: data.readOnly
+  maxLength: data.maxLength
+  answerValueSet: datatypes::ReferenceToCanonical(data.options)
+  answerOption: R3Questionnaire_Item_AnswerOptionToR4(data.'option'[])
+  var initialObject.valueBoolean: data.initialBoolean
+  var initialObject.valueDecimal: data.initialDecimal
+  var initialObject.valueInteger: data.initialInteger
+  var initialObject.valueDate: data.initialDate
+  var initialObject.valueDateTime: data.initialDateTime
+  var initialObject.valueTime: data.initialTime
+  var initialObject.valueString: data.initialString
+  var initialObject.valueUri: data.initialUri
+  var initialObject.valueAttachment: data.initialAttachment
+  var initialObject.valueCoding: data.initialCoding
+  var initialObject.valueQuantity: data.initialQuantity
+  var initialObject.valueReference: datatypes::R3ReferenceToR4(data.initialReference)
+  initial[]: initialObject
+  item: data.item
+}
+
+def R4Questionnaire_ItemToR3(data) {
+  linkId: data.linkId
+  definition: data.definition
+  code: data.code
+  prefix: data.prefix
+  text: data.text
+  type: data.type
+  enableWhen: R4Questionnaire_Item_EnableWhenToR3(data.enableWhen[])
+  'required': data.'required'
+  repeats: data.repeats
+  readOnly: data.readOnly
+  maxLength: data.maxLength
+  options: datatypes::CanonicalToReference(data.answerValueSet)
+  'option': R4Questionnaire_Item_AnswerOptionToR3(data.answerOption[])
+  initialBoolean: data.initial[0].valueBoolean
+  initialDecimal: data.initial[0].valueDecimal
+  initialInteger: data.initial[0].valueInteger
+  initialDate: data.initial[0].valueDate
+  initialDateTime: data.initial[0].valueDateTime
+  initialTime: data.initial[0].valueTime
+  initialString: data.initial[0].valueString
+  initialUri: data.initial[0].valueUri
+  initialAttachment: data.initial[0].valueAttachment
+  initialCoding: data.initial[0].valueCoding
+  initialQuantity: data.initial[0].valueQuantity
+  initialReference: datatypes::R4ReferenceToR3(data.initial[0].valueReference)
+  item: data.item
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/questionnaire-definitions.html#Questionnaire.item.enableBehavior", data.enableBehavior)
+}
+
+def R3Questionnaire_Item_EnableWhenToR4(data) {
+  question: data.question
+  operator: extension::fetchCode("https://www.hl7.org/fhir/R4/questionnaire-definitions.html#Questionnaire.item.enableWhen.operator", data.extension)
+  answerBoolean: data.answerBoolean
+  answerDecimal: data.answerDecimal
+  answerInteger: data.answerInteger
+  answerDate: data.answerDate
+  answerDateTime: data.answerDateTime
+  answerTime: data.answerTime
+  answerString: data.answerString
+  answerCoding: data.answerCoding
+  answerQuantity: data.answerQuantity
+  answerReference: datatypes::R3ReferenceToR4(data.answerReference)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.enableWhen.hasAnswer", data.hasAnswer)
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.enableWhen.answerUri", data.answerUri)
+  extension[]: extension::BuildAttachmentExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.enableWhen.answerAttachment", data.answerAttachment)
+}
+
+def R4Questionnaire_Item_EnableWhenToR3(data) {
+  question: data.question
+  hasAnswer: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.enableWhen.hasAnswer", data.extension)
+  answerBoolean: data.answerBoolean
+  answerDecimal: data.answerDecimal
+  answerInteger: data.answerInteger
+  answerDate: data.answerDate
+  answerDateTime: data.answerDateTime
+  answerTime: data.answerTime
+  answerString: data.answerString
+  answerUri: extension::fetchUri("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.enableWhen.answerUri", data.extension)
+  answerAttachment: extension::fetchAttachment("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.enableWhen.answerAttachment", data.extension)
+  answerCoding: data.answerCoding
+  answerQuantity: data.answerQuantity
+  answerReference: datatypes::R4ReferenceToR3(data.answerReference)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/questionnaire-definitions.html#Questionnaire.item.enableWhen.operator", data.operator)
+}
+
+def R3Questionnaire_Item_AnswerOptionToR4(data) {
+  valueInteger: data.valueInteger
+  valueDate: data.valueDate
+  valueTime: data.valueTime
+  valueString: data.valueString
+  valueCoding: data.valueCoding
+  valueReference: extension::fetchReference("https://www.hl7.org/fhir/R4/questionnaire-definitions.html#Questionnaire.item.answerOption.valueReference", data.extension)
+  initialSelected: extension::fetchBoolean("https://www.hl7.org/fhir/R4/questionnaire-definitions.html#Questionnaire.item.answerOption.initialSelected", data.extension)
+}
+
+def R4Questionnaire_Item_AnswerOptionToR3(data) {
+  valueInteger: data.valueInteger
+  valueDate: data.valueDate
+  valueTime: data.valueTime
+  valueString: data.valueString
+  valueCoding: data.valueCoding
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/questionnaire-definitions.html#Questionnaire.item.answerOption.valueReference", data.valueReference)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/R4/questionnaire-definitions.html#Questionnaire.item.answerOption.initialSelected", data.initialSelected)
+}

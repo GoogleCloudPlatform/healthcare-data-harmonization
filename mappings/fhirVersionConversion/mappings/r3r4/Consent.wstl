@@ -1,0 +1,212 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   consent : FHIR Consent resource
+//
+// Output(s):
+//   FHIR Consent Resource
+//
+def ConsentBase(consent) {
+  resourcebase::ResourceBase(consent)
+  dateTime: consent.dateTime
+  policy: consent.policy
+  sourceAttachment: consent.sourceAttachment
+}
+
+// Description: Converts a FHIR STU3 Consent resource to FHIR R4 Consent resource.
+//
+// Argument(s):
+//   consent : FHIR STU3 Consent resource https://www.hl7.org/fhir/stu3/consent.html
+//
+// Output(s):
+//   FHIR R4 Consent Resource https://www.hl7.org/fhir/r4/consent.html
+//
+def R3ConsentToR4(consent) {
+  ConsentBase(consent)
+  contained: datatypes::R3ResourceToR4(consent.contained[])
+  sourceReference: datatypes::R3ReferenceToR4(consent.sourceReference)
+  organization: datatypes::R3ReferenceToR4(consent.organization[])
+  identifier: R3Consent_IdentifierToR4("https://www.hl7.org/fhir/R4/consent-definitions.html#Consent.identifier", consent.extension, consent.identifier)
+  status: consent.status
+  scope: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/consent-definitions.html#Consent.scope", consent.extension)
+  scope.text: utilities::defaultIfNull($this.scope, "unknown")
+  category: consent.category
+  category[0].text: utilities::defaultIfNull($this.category, "unknown")
+  patient: datatypes::R3ReferenceToR4(consent.patient)
+  performer: datatypes::R3ReferenceToR4(consent.consentingParty[])
+  policyRule: datatypes::UriToCodeableConcept(consent.policyRule)
+  provision: if !(listLen(consent.except) > 1) then R3Consent_ProvisionToR4(consent.except[0])
+  provision.provision: if listLen(consent.except) > 1 then R3Consent_ProvisionToR4(consent.except[])
+  verification[]: BuildR4_Consent_Verification(consent.extension)
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/STU3/consent-definitions.html#Consent.sourceIdentifier", consent.sourceIdentifier)
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/STU3/consent-definitions.html#Consent.period", consent.period)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/STU3/consent-definitions.html#Consent.securityLabel", consent.securityLabel[])
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/STU3/consent-definitions.html#Consent.purpose", consent.purpose[])
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/STU3/consent-definitions.html#Consent.dataPeriod", consent.dataPeriod)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/consent-definitions.html#Consent.actor.role", consent.actor[*].role[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/consent-definitions.html#Consent.actor.reference", consent.actor[*].reference[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/consent-definitions.html#Consent.action", consent.action[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/consent-definitions.html#Consent.data.meaning", consent.data[*].meaning[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/consent-definitions.html#Consent.data.reference", consent.data[*].reference[])
+}
+
+// Description: Converts a FHIR R4 Consent resource to FHIR STU3 Consent resource.
+//
+// Argument(s):
+//   consent : FHIR R4 Consent resource https://www.hl7.org/fhir/r4/consent.html
+//
+// Output(s):
+//   FHIR STU3 Consent Resource https://www.hl7.org/fhir/stu3/consent.html
+//
+def R4ConsentToR3(consent) {
+  ConsentBase(consent)
+  contained: datatypes::R4ResourceToR3(consent.contained[])
+  sourceReference: datatypes::R4ReferenceToR3(consent.sourceReference)
+  organization: datatypes::R4ReferenceToR3(consent.organization[])
+  identifier: consent.identifier[0]
+  status: consent.status
+  category: consent.category
+  patient: datatypes::R4ReferenceToR3(consent.patient)
+  period: extension::fetchPeriod("https://www.hl7.org/fhir/STU3/consent-definitions.html#Consent.period", consent.extension)
+  consentingParty: datatypes::R4ReferenceToR3(consent.performer[])
+  actor: consent.actor
+  action: consent.action
+  sourceIdentifier: extension::fetchIdentifier("https://www.hl7.org/fhir/STU3/consent-definitions.html#Consent.sourceIdentifier", consent.extension)
+  policyRule: datatypes::CodeableConceptToCode(consent.policyRule)
+  securityLabel: extension::fetchCodingArray("https://www.hl7.org/fhir/STU3/consent-definitions.html#Consent.securityLabel", consent.extension)
+  purpose: extension::fetchCodingArray("https://www.hl7.org/fhir/STU3/consent-definitions.html#Consent.purpose", consent.extension)
+  dataPeriod: extension::fetchPeriod("https://www.hl7.org/fhir/STU3/consent-definitions.html#Consent.dataPeriod", consent.extension)
+  data: consent.data
+  except: R4Consent_ProvisionToR3(consent.provision)
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/R4/consent-definitions.html#Consent.identifier", consent.identifier)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/consent-definitions.html#Consent.scope", consent.scope)
+}
+
+// Description: Converts a FHIR STU3 Consent.Identifier to FHIR R4 Consent.Identifier.
+//
+// Argument(s):
+//   data : FHIR STU3 Consent.Identifier http://hl7.org/fhir/STU3/consent-definitions.html#Consent.identifier
+//
+// Output(s):
+//   FHIR R4 Consent.Identifier Resource http://hl7.org/fhir/R4/consent-definitions.html#Consent.identifier
+//
+def R3Consent_IdentifierToR4(url, extension, data) {
+  var identifier: extension::fetchIdentifierArray(url, extension)
+  if identifier then {
+    identifier
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 Consent.Provision to FHIR R4 Consent.Provision.
+//
+// Argument(s):
+//   data : FHIR STU3 Consent.Provision http://hl7.org/fhir/STU3/consent-definitions.html#Consent.provision
+//
+// Output(s):
+//   FHIR R4 Consent.Provision Resource http://hl7.org/fhir/R4/consent-definitions.html#Consent.provision
+//
+def R3Consent_ProvisionToR4(data) {
+  type: data.type
+  period: data.period
+  actor: R3Consent_Provision_ActorToR4(data.actor[])
+  action: data.action
+  securityLabel: data.securityLabel
+  purpose: data.purpose
+  class: data.class
+  code: datatypes::CodingToCodeableConcept(data.code[])
+  dataPeriod: data.dataPeriod
+  data: R3Consent_Provision_DataToR4(data.data[])
+}
+
+// Description: Converts a FHIR R4 Consent.Provision to FHIR STU3 Consent.Provision.
+//
+// Argument(s):
+//   data : FHIR R4 Consent.Provision http://hl7.org/fhir/R4/consent-definitions.html#Consent.provision
+//
+// Output(s):
+//   FHIR STU3 Consent.Provision Resource http://hl7.org/fhir/STU3/consent-definitions.html#Consent.provision
+//
+def R4Consent_ProvisionToR3(data) {
+  type: data.type
+  period: data.period
+  actor: R4Consent_Provision_ActorToR3(data.actor[])
+  action: data.action
+  securityLabel: data.securityLabel
+  purpose: data.purpose
+  class: data.class
+  code: data.code
+  dataPeriod: data.dataPeriod
+  data: R4Consent_Provision_DataToR3(data.data[])
+}
+
+// Description: Converts a FHIR STU3 Consent.Provision.Actor to FHIR R4 Consent.Provision.Actor.
+//
+// Argument(s):
+//   data : FHIR STU3 Consent.Provision.Actor http://hl7.org/fhir/STU3/consent-definitions.html#Consent.provision.actor
+//
+// Output(s):
+//   FHIR R4 Consent.Provision.Actor Resource http://hl7.org/fhir/R4/consent-definitions.html#Consent.provision.actor
+//
+def R3Consent_Provision_ActorToR4(data) {
+  role: data.role
+  reference: datatypes::R3ReferenceToR4(data.reference)
+}
+
+// Description: Converts a FHIR R4 Consent.Provision.Actor to FHIR STU3 Consent.Provision.Actor.
+//
+// Argument(s):
+//   data : FHIR R4 Consent.Provision.Actor http://hl7.org/fhir/R4/consent-definitions.html#Consent.provision.actor
+//
+// Output(s):
+//   FHIR STU3 Consent.Provision.Actor Resource http://hl7.org/fhir/STU3/consent-definitions.html#Consent.provision.actor
+//
+def R4Consent_Provision_ActorToR3(data) {
+  role: data.role
+  reference: datatypes::R4ReferenceToR3(data.reference)
+}
+
+// Description: Converts a FHIR STU3 Consent.Provision.Data to FHIR R4 Consent.Provision.Data.
+//
+// Argument(s):
+//   data : FHIR STU3 Consent.Provision.Data http://hl7.org/fhir/STU3/consent-definitions.html#Consent.provision.data
+//
+// Output(s):
+//   FHIR R4 Consent.Provision.Data Resource http://hl7.org/fhir/R4/consent-definitions.html#Consent.provision.data
+//
+def R3Consent_Provision_DataToR4(data) {
+  meaning: data.meaning
+  reference: datatypes::R3ReferenceToR4(data.reference)
+}
+
+// Description: Converts a FHIR R4 Consent.Provision.Data to FHIR STU3 Consent.Provision.Data.
+//
+// Argument(s):
+//   data : FHIR R4 Consent.Provision.Data http://hl7.org/fhir/R4/consent-definitions.html#Consent.provision.data
+//
+// Output(s):
+//   FHIR STU3 Consent.Provision.Data Resource http://hl7.org/fhir/STU3/consent-definitions.html#Consent.provision.data
+//
+def R4Consent_Provision_DataToR3(data) {
+  meaning: data.meaning
+  reference: datatypes::R4ReferenceToR3(data.reference)
+}
+
+// Description: Constructs a FHIR R4 Consent.Verification
+//
+// Argument(s):
+//   Extension : FHIR STU3 Device.extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 Consent.Verification https://www.hl7.org/fhir/r4/consent-definitions.html#Consent.verification
+//
+def BuildR4_Consent_Verification(Extension) {
+  verified: extension::fetchBoolean("https://www.hl7.org/fhir/R4/consent-definitions.html#consent.verification.verified", Extension)
+  verifiedWith: extension::fetchReference("https://www.hl7.org/fhir/R4/consent-definitions.html#consent.verification.verifiedWith", Extension)
+  verificationDate: extension::fetchDateTime("https://www.hl7.org/fhir/R4/consent-definitions.html#consent.verification.verificationDate", Extension)
+}

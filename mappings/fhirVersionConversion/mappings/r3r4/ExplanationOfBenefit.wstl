@@ -1,0 +1,864 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   explanationOfBenefit : FHIR AuditEvent resource
+//
+// Output(s):
+//   FHIR ExplanationOfBenefit Resource
+//
+def ExplanationOfBenefitBase(explanationOfBenefit) {
+  resourcebase::ResourceBase(explanationOfBenefit)
+  identifier: explanationOfBenefit.identifier
+  billablePeriod: explanationOfBenefit.billablePeriod
+  related: explanationOfBenefit.related
+  disposition: explanationOfBenefit.disposition
+  precedence: explanationOfBenefit.precedence
+}
+
+// Description: Converts a FHIR STU3 ExplanationOfBenefit resource to FHIR R4 ExplanationOfBenefit resource.
+//
+// Argument(s):
+//   explanationOfBenefit : FHIR STU3 ExplanationOfBenefit resource https://www.hl7.org/fhir/stu3/explanationOfBenefit.html
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit Resource https://www.hl7.org/fhir/r4/explanationOfBenefit.html
+//
+def R3ExplanationOfBenefitToR4(explanationOfBenefit) {
+  ExplanationOfBenefitBase(explanationOfBenefit)
+  contained: datatypes::R3ResourceToR4(explanationOfBenefit.contained[])
+  claimResponse: datatypes::R3ReferenceToR4(explanationOfBenefit.claimResponse)
+  facility: datatypes::R3ReferenceToR4(explanationOfBenefit.facility)
+  claim: datatypes::R3ReferenceToR4(explanationOfBenefit.claim)
+  prescription: datatypes::R3ReferenceToR4(explanationOfBenefit.prescription)
+  originalPrescription: datatypes::R3ReferenceToR4(explanationOfBenefit.originalPrescription)
+  status: explanationOfBenefit.status
+  status: utilities::defaultIfNull($this.status, "entered-in-error")
+  type: explanationOfBenefit.type
+  type.text: utilities::defaultIfNull($this.type, "unknown")
+  subType: if listLen(explanationOfBenefit.subType) == 1 then explanationOfBenefit.subType[0]
+  use: extension::fetchCode("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.use", explanationOfBenefit.extension)
+  use: utilities::defaultIfNull($this.use, "claim")
+  patient: datatypes::R3ReferenceToR4(explanationOfBenefit.patient)
+  patient.display: utilities::defaultIfNull($this.patient, "Patient")
+  created: explanationOfBenefit.created
+  created: utilities::defaultIfNull($this.created, currentTime("yyyy-MM-dd"))
+  enterer: datatypes::R3ReferenceToR4(explanationOfBenefit.enterer)
+  insurer: datatypes::R3ReferenceToR4(explanationOfBenefit.insurer)
+  insurer.display: utilities::defaultIfNull($this.insurer, "Organization")
+  provider: datatypes::R3ReferenceToR4(explanationOfBenefit.provider)
+  provider.display: utilities::defaultIfNull($this.provider, "Practitioner")
+  priority: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.priority", explanationOfBenefit.extension)
+  fundsReserveRequested: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.fundsReserveRequested", explanationOfBenefit.extension)
+  fundsReserve: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.fundsReserve", explanationOfBenefit.extension)
+  payee: R3ExplanationOfBenefit_PayeeToR4(explanationOfBenefit.payee)
+  referral: extension::fetchReference("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.referral", explanationOfBenefit.extension)
+  outcome: R3ExplanationOfBenefit_OutcomeToR4("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.outcome", explanationOfBenefit.extension, explanationOfBenefit.outcome)
+  outcome: utilities::defaultIfNull($this.outcome, "error")
+  preAuthRef: extension::fetchStringArray("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.preAuthRef", explanationOfBenefit.extension)
+  preAuthRefPeriod: extension::fetchPeriodArray("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.preAuthRefPeriod", explanationOfBenefit.extension)
+  careTeam: explanationOfBenefit.careTeam
+  supportingInfo: R3ExplanationOfBenefit_InformationToR4(explanationOfBenefit.information[])
+  diagnosis: R3ExplanationOfBenefit_DiagnosisToR4(explanationOfBenefit.diagnosis[])
+  procedure: R3ExplanationOfBenefit_ProcedureToR4(explanationOfBenefit.procedure[])
+  insurance[]: R3ExplanationOfBenefit_InsuranceToR4(explanationOfBenefit.insurance)
+  accident: explanationOfBenefit.accident
+  item: R3ExplanationOfBenefit_ItemToR4(explanationOfBenefit.item[])
+  addItem: R3ExplanationOfBenefit_AddItemToR4(explanationOfBenefit.addItem[])
+  adjudication[]: BuildR4_ExplanationOfBenefit_Adjudication(explanationOfBenefit.extension)
+  total[]: R3ExplanationOfBenefit_TotalCostToR4(explanationOfBenefit.totalCost)
+  total[]: R3ExplanationOfBenefit_TotalBenefitToR4(explanationOfBenefit.totalBenefit)
+  total[]: R3ExplanationOfBenefit_UnallocDeductableToR4(explanationOfBenefit.unallocDeductable)
+  payment: R3ExplanationOfBenefit_PaymentToR4(explanationOfBenefit.payment)
+  formCode: explanationOfBenefit.form
+  form: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.formCode", explanationOfBenefit.extension)
+  processNote: R3ExplanationOfBenefit_ProcessNoteToR4(explanationOfBenefit.processNote[])
+  benefitPeriod: extension::fetchPeriod("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.benefitPeriod", explanationOfBenefit.extension)
+  benefitBalance: R3ExplanationOfBenefit_BenefitBalanceToR4(explanationOfBenefit.benefitBalance[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.organization", explanationOfBenefit.organization)
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.hospitalization", explanationOfBenefit.hospitalization)
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.employmentImpacted", explanationOfBenefit.employmentImpacted)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.outcome", explanationOfBenefit.outcome)
+  extension[]: if !$this.subType then extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.subType", explanationOfBenefit.subType[])
+}
+
+// Description: Converts a FHIR R4 ExplanationOfBenefit resource to FHIR STU3 ExplanationOfBenefit resource.
+//
+// Argument(s):
+//   explanationOfBenefit : FHIR R4 ExplanationOfBenefit resource https://www.hl7.org/fhir/r4/explanationOfBenefit.html
+//
+// Output(s):
+//   FHIR STU3 ExplanationOfBenefit Resource https://www.hl7.org/fhir/stu3/explanationOfBenefit.html
+//
+def R4ExplanationOfBenefitToR3(explanationOfBenefit) {
+  ExplanationOfBenefitBase(explanationOfBenefit)
+  contained: datatypes::R4ResourceToR3(explanationOfBenefit.contained[])
+  claimResponse: datatypes::R4ReferenceToR3(explanationOfBenefit.claimResponse)
+  facility: datatypes::R4ReferenceToR3(explanationOfBenefit.facility)
+  claim: datatypes::R4ReferenceToR3(explanationOfBenefit.claim)
+  prescription: datatypes::R4ReferenceToR3(explanationOfBenefit.prescription)
+  originalPrescription: datatypes::R4ReferenceToR3(explanationOfBenefit.originalPrescription)
+  status: explanationOfBenefit.status
+  type: explanationOfBenefit.type
+  subType: explanationOfBenefit.subType
+  patient: datatypes::R4ReferenceToR3(explanationOfBenefit.patient)
+  created: explanationOfBenefit.created
+  enterer: datatypes::R4ReferenceToR3(explanationOfBenefit.enterer)
+  insurer: datatypes::R4ReferenceToR3(explanationOfBenefit.insurer)
+  provider: datatypes::R4ReferenceToR3(explanationOfBenefit.provider)
+  organization: extension::fetchReference("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.organization", explanationOfBenefit.extension)
+  referral: datatypes::R4ReferenceToR3(explanationOfBenefit.referral)
+  outcome: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.outcome", explanationOfBenefit.extension)
+  payee: R4ExplanationOfBenefit_PayeeToR3(explanationOfBenefit.payee)
+  careTeam: explanationOfBenefit.careTeam
+  information: R4ExplanationOfBenefit_SupportingInfoToR3(explanationOfBenefit.supportingInfo[])
+  diagnosis: R4ExplanationOfBenefit_DiagnosisToR3(explanationOfBenefit.diagnosis[])
+  procedure: R4ExplanationOfBenefit_ProcedureToR3(explanationOfBenefit.procedure[])
+  insurance: R4ExplanationOfBenefit_InsuranceToR3(explanationOfBenefit.insurance)
+  accident: explanationOfBenefit.accident
+  employmentImpacted: extension::fetchPeriod("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.employmentImpacted", explanationOfBenefit.extension)
+  hospitalization: extension::fetchPeriod("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.hospitalization", explanationOfBenefit.extension)
+  item: R4ExplanationOfBenefit_ItemToR3(explanationOfBenefit.item[])
+  addItem: R4ExplanationOfBenefit_AddItemToR3(explanationOfBenefit.addItem[])
+  totalCost: R4ExplanationOfBenefit_TotalToR3(explanationOfBenefit.total[0])
+  unallocDeductable: explanationOfBenefit.unallocDeductable
+  totalBenefit: R4ExplanationOfBenefit_TotalToR3(explanationOfBenefit.total[1])
+  processNote: R4ExplanationOfBenefit_ProcessNoteToR3(explanationOfBenefit.processNote[])
+  benefitBalance: R4ExplanationOfBenefit_BenefitBalanceToR3(explanationOfBenefit.benefitBalance[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.use", explanationOfBenefit.use)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.priority", explanationOfBenefit.priority)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.fundsReserveRequested", explanationOfBenefit.fundsReserveRequested)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.fundsReserve", explanationOfBenefit.fundsReserve)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.preAuthRef", explanationOfBenefit.preAuthRef[])
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.preAuthRefPeriod", explanationOfBenefit.preAuthRefPeriod[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.formCode", explanationOfBenefit.formCode)
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.benefitPeriod", explanationOfBenefit.benefitPeriod)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.outcome", explanationOfBenefit.outcome)
+}
+
+// Description: Converts a FHIR STU3 ExplanationOfBenefit.Payee to FHIR R4 ExplanationOfBenefit.Payee.
+//
+// Argument(s):
+//   data : FHIR STU3 ExplanationOfBenefit.Payee http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.payee
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.Payee http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.payee
+//
+def R3ExplanationOfBenefit_PayeeToR4(data) {
+  type: data.type
+  party: datatypes::R3ReferenceToR4(data.party)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.payee.resourceType", data.resourceType)
+}
+
+// Description: Converts a FHIR R4 ExplanationOfBenefit.Payee to FHIR STU3 ExplanationOfBenefit.Payee.
+//
+// Argument(s):
+//   data : FHIR R4 ExplanationOfBenefit.Payee http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.payee
+//
+// Output(s):
+//   FHIR STU3 ExplanationOfBenefit.Payee http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.payee
+//
+def R4ExplanationOfBenefit_PayeeToR3(data) {
+  type: data.type
+  party: datatypes::R4ReferenceToR3(data.party)
+  resourceType: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.payee.resourceType", data.extension)
+}
+
+// Description: Converts a FHIR STU3 ExplanationOfBenefit.Information to FHIR R4 ExplanationOfBenefit.SupportingInfo.
+//
+// Argument(s):
+//   data : FHIR STU3 ExplanationOfBenefit.Information http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.information
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.SupportingInfo http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.SupportingInfo
+//
+def R3ExplanationOfBenefit_InformationToR4(data) {
+  sequence: data.sequence
+  category: data.category
+  code: data.code
+  timingDate: data.timingDate
+  timingPeriod: data.timingPeriod
+  valueBoolean: extension::fetchBoolean("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.supportingInfo.valueBoolean", data.extension)
+  valueString: data.valueString
+  valueQuantity: data.valueQuantity
+  valueAttachment: data.valueAttachment
+  valueReference: datatypes::R3ReferenceToR4(data.valueReference)
+  reason: data.reason
+}
+
+// Description: Converts a FHIR R4 ExplanationOfBenefit.SupportingInfo to FHIR STU3 ExplanationOfBenefit.Information .
+//
+// Argument(s):
+//   data : FHIR R4 ExplanationOfBenefit.SupportingInfo http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.SupportingInfo
+//
+// Output(s):
+//   FHIR STU3 ExplanationOfBenefit.Information http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.information
+//
+def R4ExplanationOfBenefit_SupportingInfoToR3(data) {
+  sequence: data.sequence
+  category: data.category
+  code: data.code
+  timingDate: data.timingDate
+  timingPeriod: data.timingPeriod
+  valueString: data.valueString
+  valueQuantity: data.valueQuantity
+  valueAttachment: data.valueAttachment
+  valueReference: datatypes::R4ReferenceToR3(data.valueReference)
+  reason: data.reason
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.supportingInfo.valueBoolean", data.valueBoolean)
+}
+
+// Description: Converts a FHIR STU3 ExplanationOfBenefit.Diagnosis to FHIR R4 ExplanationOfBenefit.Diagnosis.
+//
+// Argument(s):
+//   data : FHIR STU3 ExplanationOfBenefit.Diagnosis http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.diagnosis
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.Diagnosis http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.diagnosis
+//
+def R3ExplanationOfBenefit_DiagnosisToR4(data) {
+  sequence: data.sequence
+  diagnosisCodeableConcept: data.diagnosisCodeableConcept
+  diagnosisReference: datatypes::R3ReferenceToR4(data.diagnosisReference)
+  type: data.type
+  onAdmission: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.diagnosis.onAdmission", data.extension)
+  packageCode: data.packageCode
+}
+
+// Description: Converts a FHIR R4 ExplanationOfBenefit.Diagnosis to FHIR STU3 ExplanationOfBenefit.Diagnosis.
+//
+// Argument(s):
+//   data : FHIR R4 ExplanationOfBenefit.Diagnosis http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.diagnosis
+//
+// Output(s):
+//   FHIR STU3 ExplanationOfBenefit.Diagnosis http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.diagnosis
+//
+def R4ExplanationOfBenefit_DiagnosisToR3(data) {
+  sequence: data.sequence
+  diagnosisCodeableConcept: data.diagnosisCodeableConcept
+  diagnosisReference: datatypes::R4ReferenceToR3(data.diagnosisReference)
+  type: data.type
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.diagnosis.onAdmission", data.onAdmission)
+  packageCode: data.packageCode
+}
+
+// Description: Converts a FHIR STU3 ExplanationOfBenefit.Procedure to FHIR R4 ExplanationOfBenefit.Procedure.
+//
+// Argument(s):
+//   data : FHIR STU3 ExplanationOfBenefit.Procedure http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.procedure
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.Procedure http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.procedure
+//
+def R3ExplanationOfBenefit_ProcedureToR4(data) {
+  sequence: data.sequence
+  type: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.procedure.type", data.extension)
+  date: data.date
+  procedureCodeableConcept: data.procedureCodeableConcept
+  procedureReference: datatypes::R3ReferenceToR4(data.procedureReference)
+  udi: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.procedure.udi", data.extension)
+}
+
+// Description: Converts a FHIR R4 ExplanationOfBenefit.Procedure to FHIR STU3 ExplanationOfBenefit.Procedure.
+//
+// Argument(s):
+//   data : FHIR R4 ExplanationOfBenefit.Procedure http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.procedure
+//
+// Output(s):
+//   FHIR STU3 ExplanationOfBenefit.Procedure http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.procedure
+//
+def R4ExplanationOfBenefit_ProcedureToR3(data) {
+  sequence: data.sequence
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.procedure.type", data.type[])
+  date: data.date
+  procedureCodeableConcept: data.procedureCodeableConcept
+  procedureReference: datatypes::R4ReferenceToR3(data.procedureReference)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.procedure.udi", data.udi[])
+}
+
+// Description: Converts a FHIR STU3 ExplanationOfBenefit.Insurance to FHIR R4 ExplanationOfBenefit.Insurance.
+//
+// Argument(s):
+//   data : FHIR STU3 ExplanationOfBenefit.Insurance http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.insurance
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.Insurance http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.insurance
+//
+def R3ExplanationOfBenefit_InsuranceToR4(data) {
+  focal: extension::fetchBoolean("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.insurance.focal", data.extension)
+  focal: utilities::defaultIfNull($this.focal, false)
+  coverage: data.coverage
+  coverage.display: utilities::defaultIfNull($this.coverage, "Coverage")
+  preAuthRef: data.preAuthRef
+}
+
+// Description: Converts a FHIR R4 ExplanationOfBenefit.Insurance to FHIR STU3 ExplanationOfBenefit.Insurance.
+//
+// Argument(s):
+//   data : FHIR R4 ExplanationOfBenefit.Insurance http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.insurance
+//
+// Output(s):
+//   FHIR STU3 ExplanationOfBenefit.Insurance http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.insurance
+//
+def R4ExplanationOfBenefit_InsuranceToR3(data) {
+  coverage: data[0].coverage
+  preAuthRef: data[0].preAuthRef
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.insurance.focal", data[0].focal)
+}
+
+// Description: Converts a FHIR STU3 ExplanationOfBenefit.Item to FHIR R4 ExplanationOfBenefit.Item.
+//
+// Argument(s):
+//   data : FHIR STU3 ExplanationOfBenefit.Item http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.item
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.Item http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.item
+//
+def R3ExplanationOfBenefit_ItemToR4(data) {
+  sequence: data.sequence
+  careTeamSequence: data.careTeamLinkId
+  diagnosisSequence: data.diagnosisLinkId
+  procedureSequence: data.procedureLinkId
+  informationSequence: data.informationLinkId
+  revenue: data.revenue
+  category: data.category
+  productOrService: data.service
+  productOrService.text: utilities::defaultIfNull($this.productOrService, "unknown")
+  modifier: data.modifier
+  programCode: data.programCode
+  servicedDate: data.servicedDate
+  servicedPeriod: data.servicedPeriod
+  locationCodeableConcept: data.locationCodeableConcept
+  locationAddress: data.locationAddress
+  locationReference: datatypes::R3ReferenceToR4(data.locationReference)
+  quantity: data.quantity
+  unitPrice: datatypes::R3MoneyToR4(data.unitPrice)
+  factor: data.factor
+  net: datatypes::R3MoneyToR4(data.net)
+  udi: datatypes::R3ReferenceToR4(data.udi[])
+  bodySite: data.bodySite
+  subSite: data.subSite
+  encounter: data.encounter
+  noteNumber: data.noteNumber
+  adjudication: R3ExplanationOfBenefit_Item_AdjudicationToR4(data.adjudication[])
+  detail: R3ExplanationOfBenefit_Item_DetailToR4(data.detail[])
+}
+
+// Description: Converts a FHIR R4 ExplanationOfBenefit.Item to FHIR STU3 ExplanationOfBenefit.Item.
+//
+// Argument(s):
+//   data : FHIR R4 ExplanationOfBenefit.Item http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.item
+//
+// Output(s):
+//   FHIR STU3 ExplanationOfBenefit.Item http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.item
+//
+def R4ExplanationOfBenefit_ItemToR3(data) {
+  sequence: data.sequence
+  careTeamLinkId: data.careTeamSequence
+  diagnosisLinkId: data.diagnosisSequence
+  procedureLinkId: data.procedureSequence
+  informationLinkId: data.informationSequence
+  revenue: data.revenue
+  category: data.category
+  service: data.productOrService
+  modifier: data.modifier
+  programCode: data.programCode
+  servicedDate: data.servicedDate
+  servicedPeriod: data.servicedPeriod
+  locationCodeableConcept: data.locationCodeableConcept
+  locationAddress: data.locationAddress
+  locationReference: datatypes::R4ReferenceToR3(data.locationReference)
+  quantity: data.quantity
+  unitPrice: datatypes::R4MoneyToR3(data.unitPrice)
+  factor: data.factor
+  net: datatypes::R4MoneyToR3(data.net)
+  udi: datatypes::R4ReferenceToR3(data.udi[])
+  bodySite: data.bodySite
+  subSite: data.subSite
+  encounter: data.encounter
+  noteNumber: data.noteNumber
+  adjudication: R4ExplanationOfBenefit_Item_AdjudicationToR3(data.adjudication[])
+  detail: R4ExplanationOfBenefit_Item_DetailToR3(data.detail[])
+}
+
+// Description: Converts a FHIR STU3 ExplanationOfBenefit.Item.Detail to FHIR R4 ExplanationOfBenefit.Item.Detail.
+//
+// Argument(s):
+//   data : FHIR STU3 ExplanationOfBenefit.Item.Detail http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.item.detail
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.Item.Detail http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.item.detail
+//
+def R3ExplanationOfBenefit_Item_DetailToR4(data) {
+  sequence: data.sequence
+  revenue: data.revenue
+  category: data.category
+  productOrService: data.service
+  productOrService.text: utilities::defaultIfNull($this.productOrService, "unknown")
+  modifier: data.modifier
+  programCode: data.programCode
+  quantity: data.quantity
+  unitPrice: datatypes::R3MoneyToR4(data.unitPrice)
+  factor: data.factor
+  net: datatypes::R3MoneyToR4(data.net)
+  udi: datatypes::R3ReferenceToR4(data.udi[])
+  noteNumber: data.noteNumber
+  adjudication: R3ExplanationOfBenefit_Item_AdjudicationToR4(data.adjudication[])
+  subDetail: R3ExplanationOfBenefit_Item_Detail_SubDetailToR4(data.subDetail[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.item.detail.type", data.type)
+}
+
+// Description: Converts a FHIR R4 ExplanationOfBenefit.Item.Detail to FHIR STU3 ExplanationOfBenefit.Item.Detail.
+//
+// Argument(s):
+//   data : FHIR R4 ExplanationOfBenefit.Item.Detail http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.item.detail
+//
+// Output(s):
+//   FHIR STU3 ExplanationOfBenefit.Item.Detail http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.item.detail
+//
+def R4ExplanationOfBenefit_Item_DetailToR3(data) {
+  sequence: data.sequence
+  revenue: data.revenue
+  category: data.category
+  service: data.productOrService
+  modifier: data.modifier
+  programCode: data.programCode
+  quantity: data.quantity
+  unitPrice: datatypes::R4MoneyToR3(data.unitPrice)
+  factor: data.factor
+  net: datatypes::R4MoneyToR3(data.net)
+  udi: datatypes::R4ReferenceToR3(data.udi[])
+  noteNumber: data.noteNumber
+  adjudication: R4ExplanationOfBenefit_Item_AdjudicationToR3(data.adjudication[])
+  subDetail: R4ExplanationOfBenefit_Item_Detail_SubDetailToR3(data.subDetail[])
+}
+
+// Description: Converts a FHIR STU3 ExplanationOfBenefit.Item.Detail.SubDetail to FHIR R4 ExplanationOfBenefit.Item.Detail.SubDetail.
+//
+// Argument(s):
+//   data : FHIR STU3 ExplanationOfBenefit.Item.Detail.SubDetail http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.item.detail.subDetail
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.Item.Detail.SubDetail http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.item.detail.subDetail
+//
+def R3ExplanationOfBenefit_Item_Detail_SubDetailToR4(data) {
+  sequence: data.sequence
+  revenue: data.revenue
+  category: data.category
+  productOrService: data.service
+  productOrService.text: utilities::defaultIfNull($this.productOrService, "unknown")
+  modifier: data.modifier
+  programCode: data.programCode
+  quantity: data.quantity
+  unitPrice: datatypes::R3MoneyToR4(data.unitPrice)
+  factor: data.factor
+  net: datatypes::R3MoneyToR4(data.net)
+  udi: datatypes::R3ReferenceToR4(data.udi[])
+  noteNumber: data.noteNumber
+  adjudication: R3ExplanationOfBenefit_Item_AdjudicationToR4(data.adjudication[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.item.detail.subDetail.type", data.type)
+}
+
+// Description: Converts a FHIR R4 ExplanationOfBenefit.Item.Detail.SubDetail to FHIR STU3 ExplanationOfBenefit.Item.Detail.SubDetail.
+//
+// Argument(s):
+//   data : FHIR R4 ExplanationOfBenefit.Item.Detail.SubDetail http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.item.detail.subDetail
+//
+// Output(s):
+//   FHIR STU3 ExplanationOfBenefit.Item.Detail.SubDetail http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.item.detail.subDetail
+//
+def R4ExplanationOfBenefit_Item_Detail_SubDetailToR3(data) {
+  sequence: data.sequence
+  revenue: data.revenue
+  category: data.category
+  service: data.productOrService
+  modifier: data.modifier
+  programCode: data.programCode
+  quantity: data.quantity
+  unitPrice: datatypes::R4MoneyToR3(data.unitPrice)
+  factor: data.factor
+  net: datatypes::R4MoneyToR3(data.net)
+  udi: datatypes::R4ReferenceToR3(data.udi[])
+  noteNumber: data.noteNumber
+  adjudication: R4ExplanationOfBenefit_Item_AdjudicationToR3(data.adjudication[])
+  type: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.item.detail.subDetail.type", data.extension)
+}
+
+// Description: Converts a FHIR STU3 ExplanationOfBenefit.AddItem to FHIR R4 ExplanationOfBenefit.AddItem.
+//
+// Argument(s):
+//   data : FHIR STU3 ExplanationOfBenefit.AddItem http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.addItem
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.AddItem http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.addItem
+//
+def R3ExplanationOfBenefit_AddItemToR4(data) {
+  itemSequence: data.sequenceLinkId
+  detailSequence: extension::fetchStringArray("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detailSequence", data.extension)
+  subDetailSequence: extension::fetchStringArray("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.subDetailSequence", data.extension)
+  provider: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.provider", data.extension)
+  productOrService: data.service
+  productOrService.text: utilities::defaultIfNull($this.productOrService, "unknown")
+  modifier: data.modifier
+  programCode: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.programCode", data.extension)
+  servicedDate: extension::fetchDate("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.servicedDate", data.extension)
+  servicedPeriod: extension::fetchPeriod("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.servicedPeriod", data.extension)
+  locationCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.locationCodeableConcept", data.extension)
+  locationAddress: extension::fetchAddress("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.locationAddress", data.extension)
+  locationReference: extension::fetchReference("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.locationReference", data.extension)
+  quantity: extension::fetchQuantity("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.quantity", data.extension)
+  unitPrice: extension::fetchMoney("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.unitPrice", data.extension)
+  factor: extension::fetchDecimal("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.factor", data.extension)
+  net: datatypes::R3MoneyToR4(data.fee)
+  bodySite: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.bodySite", data.extension)
+  subSite: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.subSite", data.extension)
+  noteNumber: data.noteNumber
+  adjudication: R3ExplanationOfBenefit_Item_AdjudicationToR4(data.adjudication[])
+  detail: R3ExplanationOfBenefit_AddItem_DetailToR4(data.detail[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.revenue", data.revenue)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.category", data.category)
+}
+
+// Description: Converts a FHIR R4 ExplanationOfBenefit.AddItem to FHIR STU3 ExplanationOfBenefit.AddItem.
+//
+// Argument(s):
+//   data : FHIR R4 ExplanationOfBenefit.AddItem http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.addItem
+//
+// Output(s):
+//   FHIR STU3 ExplanationOfBenefit.AddItem http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.addItem
+//
+def R4ExplanationOfBenefit_AddItemToR3(data) {
+  sequenceLinkId: data.itemSequence
+  revenue: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.revenue", data.extension)
+  category: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.category", data.extension)
+  service: data.productOrService
+  modifier: data.modifier
+  fee: data.net
+  noteNumber: data.noteNumber
+  adjudication: R4ExplanationOfBenefit_Item_AdjudicationToR3(data.adjudication[])
+  detail: R4ExplanationOfBenefit_AddItem_DetailToR3(data.detail[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detailSequence", data.detailSequence[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.subDetailSequence", data.subDetailSequence[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.provider", data.provider[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.programCode", data.programCode[])
+  extension[]: extension::BuildDateExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.servicedDate", data.servicedDate)
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.servicedPeriod", data.servicedPeriod)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.locationCodeableConcept", data.locationCodeableConcept)
+  extension[]: extension::BuildAddressExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.locationAddress", data.locationAddress)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.locationReference", data.locationReference)
+  extension[]: extension::BuildQuantityExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.quantity", data.quantity)
+  extension[]: extension::BuildMoneyExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.unitPrice", data.unitPrice)
+  extension[]: extension::BuildDecimalExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.factor", data.factor)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.bodySite", data.bodySite)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.subSite", data.subSite[])
+}
+
+// Description: Converts a FHIR STU3 ExplanationOfBenefit.AddItem.Detail to FHIR R4 ExplanationOfBenefit.AddItem.Detail.
+//
+// Argument(s):
+//   data : FHIR STU3 ExplanationOfBenefit.AddItem.Detail http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.addItem.detail
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.AddItem.Detail http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.addItem.detail
+//
+def R3ExplanationOfBenefit_AddItem_DetailToR4(data) {
+  productOrService: data.service
+  productOrService.text: utilities::defaultIfNull($this.productOrService, "unknown")
+  modifier: data.modifier
+  quantity: extension::fetchQuantity("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detail.quantity", data.extension)
+  unitPrice: extension::fetchMoney("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detail.unitPrice", data.extension)
+  factor: extension::fetchDecimal("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detail.factor", data.extension)
+  net: datatypes::R3MoneyToR4(data.fee)
+  noteNumber: data.noteNumber
+  adjudication: R3ExplanationOfBenefit_Item_AdjudicationToR4(data.adjudication[])
+  subDetail[]: BuildR4_ExplanationOfBenefit_AddItem_Detail_SubDetail(data.extension)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detail.revenue", data.revenue)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detail.category", data.category)
+}
+
+// Description: Converts a FHIR R4 ExplanationOfBenefit.AddItem.Detail to FHIR STU3 ExplanationOfBenefit.AddItem.Detail.
+//
+// Argument(s):
+//   data : FHIR R4 ExplanationOfBenefit.AddItem.Detail http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.addItem.detail
+//
+// Output(s):
+//   FHIR STU3 ExplanationOfBenefit.AddItem.Detail http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.addItem.detail
+//
+def R4ExplanationOfBenefit_AddItem_DetailToR3(data) {
+  revenue: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detail.revenue", data.extension)
+  category: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detail.category", data.extension)
+  service: data.productOrService
+  modifier: data.modifier
+  fee: data.net
+  noteNumber: data.noteNumber
+  adjudication: R4ExplanationOfBenefit_Item_AdjudicationToR3(data.adjudication[])
+  extension[]: extension::BuildMoneyExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detail.unitPrice", data.unitPrice)
+  extension[]: extension::BuildDecimalExtension("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detail.factor", data.factor)
+}
+
+// Description: Converts a FHIR STU3 ExplanationOfBenefit.TotalCost to FHIR R4 ExplanationOfBenefit.Total.
+//
+// Argument(s):
+//   data : FHIR STU3 ExplanationOfBenefit.TotalCost http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.totalCost
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.Total http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.total
+//
+def R3ExplanationOfBenefit_TotalCostToR4(required cost) {
+  category.text: "Submitted Amount"
+  var coding.code: "submitted"
+  var coding.system: "http://terminology.hl7.org/CodeSystem/adjudication"
+  category.coding[]: coding
+  amount: datatypes::R3MoneyToR4(cost)
+}
+
+// Description: Converts a FHIR STU3 ExplanationOfBenefit.TotalBenefit to FHIR R4 ExplanationOfBenefit.Total.
+//
+// Argument(s):
+//   data : FHIR STU3 ExplanationOfBenefit.TotalBenefit http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.totalbenefit
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.Total http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.total
+//
+def R3ExplanationOfBenefit_TotalBenefitToR4(required benefit) {
+  category.text: "Benefit Amount"
+  var coding.code: "benefit"
+  var coding.system: "http://terminology.hl7.org/CodeSystem/adjudication"
+  category.coding[]: coding
+  amount: datatypes::R3MoneyToR4(benefit)
+}
+
+// Description: Converts a FHIR STU3 ExplanationOfBenefit.UnallocDeductable to FHIR R4 ExplanationOfBenefit.Total.
+//
+// Argument(s):
+//   data : FHIR STU3 ExplanationOfBenefit.UnallocDeductable http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.unallocDeductable
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.Total http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.total
+//
+def R3ExplanationOfBenefit_UnallocDeductableToR4(required unallocDeductable) {
+  category.text: "Unallocated Deductible"
+  var coding.code: "unallocdeduct"
+  var coding.system: "http://terminology.hl7.org/CodeSystem/adjudication"
+  category.coding[]: coding
+  amount: datatypes::R3MoneyToR4(unallocDeductable)
+}
+
+// Description: Converts a FHIR STU3 ExplanationOfBenefit.Payment to FHIR R4 ExplanationOfBenefit.Payment.
+//
+// Argument(s):
+//   data : FHIR STU3 ExplanationOfBenefit.Payment http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.payment
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.Payment http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.payment
+//
+def R3ExplanationOfBenefit_PaymentToR4(data) {
+  type: data.type
+  adjustment: datatypes::R3MoneyToR4(data.adjustment)
+  adjustmentReason: data.adjustmentReason
+  date: data.date
+  amount: datatypes::R3MoneyToR4(data.amount)
+  identifier: data. identifier
+}
+
+// Description: Converts a FHIR R4 ExplanationOfBenefit.Total to FHIR STU3 ExplanationOfBenefit.TotalCost/ExplanationOfBenefit.TotalBenefit.
+//
+// Argument(s):
+//   data : FHIR R4 ExplanationOfBenefit.Total http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.total
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.TotalCost http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.totalCost or
+//   FHIR R4 ExplanationOfBenefit.TotalBenefit http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.totalBenefit
+//
+def R4ExplanationOfBenefit_TotalToR3(data) {
+  data.amount
+}
+
+// Description: Converts a FHIR STU3 ExplanationOfBenefit.ProcessNote to FHIR R4 ExplanationOfBenefit.ProcessNote.
+//
+// Argument(s):
+//   data : FHIR STU3 ExplanationOfBenefit.ProcessNote http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.processNote
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.ProcessNote http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.processNote
+//
+def R3ExplanationOfBenefit_ProcessNoteToR4(data) {
+  number: data.number
+  type: datatypes::CodeableConceptToCode(data.type)
+  text: data.text
+  language: data.language
+}
+
+// Description: Converts a FHIR R4 ExplanationOfBenefit.ProcessNote to FHIR STU3 ExplanationOfBenefit.ProcessNote.
+//
+// Argument(s):
+//   data : FHIR R4 ExplanationOfBenefit.ProcessNote http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.processNote
+//
+// Output(s):
+//   FHIR STU3 ExplanationOfBenefit.ProcessNote http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.processNote
+//
+def R4ExplanationOfBenefit_ProcessNoteToR3(data) {
+  number: data.number
+  type: datatypes::CodeToCodeableConcept(data.type)
+  text: data.text
+  language: data.language
+}
+
+// Description: Converts a FHIR STU3 ExplanationOfBenefit.BenefitBalance to FHIR R4 ExplanationOfBenefit.BenefitBalance.
+//
+// Argument(s):
+//   data : FHIR STU3 ExplanationOfBenefit.BenefitBalance http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.benefitBalance
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.BenefitBalance http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.benefitBalance
+//
+def R3ExplanationOfBenefit_BenefitBalanceToR4(data) {
+  category: data.category
+  excluded: data.excluded
+  name: data.name
+  description: data.description
+  network: data.network
+  unit: data.unit
+  term: data.term
+  financial: R3ExplanationOfBenefit_BenefitBalance_FinancialToR4(data.financial)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.benefitBalance.subCategory", data.subCategory)
+}
+
+// Description: Converts a FHIR R4 ExplanationOfBenefit.BenefitBalance to FHIR STU3 ExplanationOfBenefit.BenefitBalance.
+//
+// Argument(s):
+//   data : FHIR R4 ExplanationOfBenefit.BenefitBalance http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.benefitBalance
+//
+// Output(s):
+//   FHIR STU3 ExplanationOfBenefit.BenefitBalance http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.benefitBalance
+//
+def R4ExplanationOfBenefit_BenefitBalanceToR3(data) {
+  category: data.category
+  subCategory: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.benefitBalance.subCategory", data.extension)
+  excluded: data.excluded
+  name: data.name
+  description: data.description
+  network: data.network
+  unit: data.unit
+  term: data.term
+  financia: data.financial
+}
+
+// Description: Converts a FHIR STU3 ExplanationOfBenefit.Item.Adjudication to FHIR R4 ExplanationOfBenefit.Item.Adjudication.
+//
+// Argument(s):
+//   data : FHIR STU3 ExplanationOfBenefit.Item.Adjudication http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.item.adjudication
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.Item.Adjudication http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.item.adjudication
+//
+def R3ExplanationOfBenefit_Item_AdjudicationToR4(data) {
+  category: data.category
+  reason: data.reason
+  amount: datatypes::R3MoneyToR4(data.amount)
+  value: data.value
+}
+
+// Description: Converts a FHIR R4 ExplanationOfBenefit.Item.Adjudication to FHIR STU3 ExplanationOfBenefit.Item.Adjudication.
+//
+// Argument(s):
+//   data : FHIR R4 ExplanationOfBenefit.Item.Adjudication http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.item.adjudication
+//
+// Output(s):
+//   FHIR STU3 ExplanationOfBenefit.Item.Adjudication http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.item.adjudication
+//
+def R4ExplanationOfBenefit_Item_AdjudicationToR3(data) {
+  category: data.category
+  reason: data.reason
+  amount: datatypes::R4MoneyToR3(data.amount)
+  value: data.value
+}
+
+// Description: Converts a FHIR STU3 ExplanationOfBenefit.BenefitBalance.Financial to FHIR R4 ExplanationOfBenefit.BenefitBalance.Financial.
+//
+// Argument(s):
+//   data : FHIR STU3 ExplanationOfBenefit.BenefitBalance.Financial http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.benefitBalance.financial
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.BenefitBalance.Financial http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.benefitBalance.financial
+//
+def R3ExplanationOfBenefit_BenefitBalance_FinancialToR4(data) {
+  type: data.type
+  allowedUnsignedInt: data.allowedUnsignedInt
+  allowedString: data.allowedString
+  allowedMoney: datatypes::R3MoneyToR4(data.allowedMoney)
+  usedUnsignedInt: data.usedUnsignedInt
+  usedMoney: datatypes::R3MoneyToR4(data.usedMoney)
+}
+
+// Description: Converts a FHIR STU3 ExplanationOfBenefit.OutCome to FHIR R4 ExplanationOfBenefit.OutCome.
+//
+// Argument(s):
+//   data : FHIR STU3 ExplanationOfBenefit.OutCome http://hl7.org/fhir/STU3/explanationOfBenefit-definitions.html#explanationOfBenefit.outcome
+//   url : FHIR R4 Extension.url http://hl7.org/fhir/R4/extensibility-definitions.html#Extension.url
+//   extension : FHIR R4 DomainResource.Extension http://hl7.org/fhir/R4/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.OutCome http://hl7.org/fhir/R4/explanationOfBenefit-definitions.html#explanationOfBenefit.outcome
+//
+def R3ExplanationOfBenefit_OutcomeToR4(url, extension, data) {
+  var outcome: extension::fetchCode(url, extension)
+  if outcome then {
+    outcome
+  } else {
+    utilities::Convert_TerminologyCode(datatypes::CodeableConceptToCode(data), "STU3ExplanationOfBenefitOutcome", "ExplanationOfBenefit")
+  }
+}
+
+// Description: Constructs a FHIR R4 ExplanationOfBenefit.Adjudication
+//
+// Argument(s):
+//   data : FHIR STU3 ExplanationOfBenefit.extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.Adjudication https://www.hl7.org/fhir/stu3/explanationOfBenefit-definitions.html#explanationOfBenefit.adjudication
+//
+def BuildR4_ExplanationOfBenefit_Adjudication(Extension) {
+  category: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.adjudication.category", Extension)
+  reason: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.adjudication.reason", Extension)
+  amount: extension::fetchMoney("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.adjudication.amount", Extension)
+  value: extension::fetchDecimal("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.adjudication.value", Extension)
+}
+
+// Description: Constructs a FHIR R4 ExplanationOfBenefit.AddItem.Detail.SubDetail
+//
+// Argument(s):
+//   Extension : FHIR R4 ExplanationOfBenefit.AddItem.Detail.extension http://hl7.org/fhir/STU3/element-definitions.html#Element.extension
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.Adjudication https://www.hl7.org/fhir/stu3/explanationOfBenefit-definitions.html#explanationOfBenefit.adjudication
+//
+def BuildR4_ExplanationOfBenefit_AddItem_Detail_SubDetail(Extension) {
+  productOrService: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detail.subDetail.productOrService", Extension)
+  productOrService.text: utilities::defaultIfNull($this.productOrService, "unknown")
+  modifier: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detail.subDetail.modifier", Extension)
+  quantity: extension::fetchQuantity("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detail.subDetail.quantity", Extension)
+  unitPrice: extension::fetchMoney("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detail.subDetail.unitPrice", Extension)
+  factor: extension::fetchDecimal("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detail.subDetail.factor", Extension)
+  net: extension::fetchMoney("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detail.subDetail.net", Extension)
+  noteNumber: extension::fetchPositiveIntArray("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detail.subDetail.noteNumber", Extension)
+  adjudication[]: BuildR4_ExplanationOfBenefit_AddItem_Detail_SubDetail_Adjudication(Extension)
+}
+
+// Description: Constructs a FHIR R4 ExplanationOfBenefit.ExplanationOfBenefit.AddItem.Detail.SubDetail.Adjudication
+//
+// Argument(s):
+//   Extension : FHIR R4 ExplanationOfBenefit.AddItem.Detail.extension http://hl7.org/fhir/STU3/element-definitions.html#Element.extension
+//
+// Output(s):
+//   FHIR R4 ExplanationOfBenefit.Adjudication https://www.hl7.org/fhir/stu3/explanationOfBenefit-definitions.html#explanationOfBenefit.adjudication
+//
+def BuildR4_ExplanationOfBenefit_AddItem_Detail_SubDetail_Adjudication(Extension) {
+  category: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detail.subDetail.adjudication.category", Extension)
+  reason: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detail.subDetail.adjudication.reason", Extension)
+  amount: extension::fetchMoney("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detail.subDetail.adjudication.amount", Extension)
+  value: extension::fetchDecimal("https://www.hl7.org/fhir/R4/explanationofbenefit-definitions.html#ExplanationOfBenefit.addItem.detail.subDetail.adjudication.value", Extension)
+}

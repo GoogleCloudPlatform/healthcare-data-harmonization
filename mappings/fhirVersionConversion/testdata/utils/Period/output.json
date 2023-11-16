@@ -1,0 +1,11 @@
+{
+  "extension": [
+    {
+      "url": "test_url",
+      "valuePeriod": {
+        "start": "2010",
+        "end": "2020"
+      }
+    }
+  ]
+}

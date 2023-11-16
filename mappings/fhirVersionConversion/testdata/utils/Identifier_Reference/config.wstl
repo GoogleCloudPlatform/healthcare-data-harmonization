@@ -1,0 +1,5 @@
+// Identifier to Reference
+data: CanonicalToReference($root.data)
+
+// Reference to Identifier
+data: ReferenceToCanonical($root.data)

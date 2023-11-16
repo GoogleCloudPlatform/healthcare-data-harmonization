@@ -1,0 +1,136 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def MedicationDispenseBase(medicationDispense) {
+  resourcebase::ResourceBase(medicationDispense)
+  medicationCodeableConcept: medicationDispense.medicationCodeableConcept
+  type: medicationDispense.type
+  quantity: medicationDispense.quantity
+  daysSupply: medicationDispense.daysSupply
+  whenPrepared: medicationDispense.whenPrepared
+  whenHandedOver: medicationDispense.whenHandedOver
+}
+
+def R2MedicationDispenseToR3(medicationDispense) {
+  MedicationDispenseBase(medicationDispense)
+  contained: datatypes::R2ResourceToR3(medicationDispense.contained[])
+  destination: datatypes::R2ReferenceToR3(medicationDispense.destination)
+  receiver: datatypes::R2ReferenceToR3(medicationDispense.receiver[])
+  medicationReference: datatypes::R2ReferenceToR3(medicationDispense.medicationReference)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.status", medicationDispense.extension)
+  status: if status? then status else medicationDispense.status
+  identifier: R2MedicationDispense_IdentifierToR3("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.identifier", medicationDispense.extension, medicationDispense.identifier)
+  partOf: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.partOf", medicationDispense.extension)
+  category: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.category", medicationDispense.extension)
+  subject: datatypes::R2ReferenceToR3(medicationDispense.patient)
+  context: extension::fetchReference("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.context", medicationDispense.extension)
+  supportingInformation: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.supportingInformation", medicationDispense.extension)
+  authorizingPrescription: datatypes::R2ReferenceToR3(medicationDispense.authorizingPrescription[])
+  note: extension::fetchAnnotationArray("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.note", medicationDispense.extension)
+  dosageInstruction: R2MedicationDispense_DosageInstructionToR3(medicationDispense.dosageInstruction[])
+  substitution: R2MedicationDispense_SubstitutionToR3(medicationDispense.substitution)
+  detectedIssue: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.detectedIssue", medicationDispense.extension)
+  notDone: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.notDone", medicationDispense.extension)
+  notDoneReasonCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.notDoneReasonCodeableConcept", medicationDispense.extension)
+  notDoneReasonReference: extension::fetchReference("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.notDoneReasonReference", medicationDispense.extension)
+  eventHistory: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.eventHistory", medicationDispense.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/medicationdispense-definitions.html#MedicationDispense.dispenser", medicationDispense.dispenser)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/medicationdispense-definitions.html#MedicationDispense.status", medicationDispense.status)
+}
+
+def R3MedicationDispenseToR2(medicationDispense) {
+  MedicationDispenseBase(medicationDispense)
+  contained: datatypes::R3ResourceToR2(medicationDispense.contained[])
+  destination: datatypes::R3ReferenceToR2(medicationDispense.destination)
+  receiver: datatypes::R3ReferenceToR2(medicationDispense.receiver[])
+  medicationReference: datatypes::R3ReferenceToR2(medicationDispense.medicationReference)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/medicationdispense-definitions.html#MedicationDispense.status", medicationDispense.extension)
+  status: if status? then status else medicationDispense.status
+  identifier: medicationDispense.identifier[0]
+  dispenser: extension::fetchReference("https://www.hl7.org/fhir/DSTU2/medicationdispense-definitions.html#MedicationDispense.dispenser", medicationDispense.extension)
+  authorizingPrescription: datatypes::R3ReferenceToR2(medicationDispense.authorizingPrescription[])
+  note: extension::fetchString("https://www.hl7.org/fhir/DSTU2/medicationdispense-definitions.html#MedicationDispense.note", medicationDispense.extension)
+  patient: datatypes::R3ReferenceToR2(medicationDispense.subject)
+  dosageInstruction: R3MedicationDispense_DosageInstructionToR2(medicationDispense.dosageInstruction[])
+  substitution: R3MedicationDispense_SubstitutionToR2(medicationDispense.substitution)
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.identifier", medicationDispense.identifier[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.partOf", medicationDispense.partOf[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.category", medicationDispense.category)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.context", medicationDispense.context)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.supportingInformation", medicationDispense.supportingInformation[])
+  extension[]: extension::BuildAnnotationExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.note", medicationDispense.note[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.detectedIssue", medicationDispense.detectedIssue[])
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.notDone", medicationDispense.notDone)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.notDoneReasonCodeableConcept", medicationDispense.notDoneReasonCodeableConcept)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.notDoneReasonReference", medicationDispense.notDoneReasonReference)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.eventHistory", medicationDispense.eventHistory[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.status", medicationDispense.status)
+}
+
+def R2MedicationDispense_IdentifierToR3(url, extension, data) {
+  var identifier: extension::fetchIdentifierArray(url, extension)
+  if identifier then {
+    identifier
+  } else {
+    arrayOf(data)
+  }
+}
+
+def R2MedicationDispense_DosageInstructionToR3(data) {
+  sequence: extension::fetchInteger("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.dosageInstruction.sequence", data.extension)
+  text: data.text
+  additionalInstruction[]: data.additionalInstruction
+  patientInstruction: extension::fetchString("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.dosageInstruction.patientInstruction", data.extension)
+  timing: data.timing
+  asNeededBoolean: data.asNeededBoolean
+  asNeededCodeableConcept: data.asNeededCodeableConcept
+  site: data.siteCodeableConcept
+  route: data.route
+  method: data.method
+  doseRange: data.doseRange
+  doseQuantity: data.doseQuantity
+  maxDosePerPeriod: data.maxDosePerPeriod
+  maxDosePerAdministration: extension::fetchQuantity("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.dosageInstruction.maxDosePerAdministration", data.extension)
+  maxDosePerLifetime: extension::fetchQuantity("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.dosageInstruction.maxDosePerLifetime", data.extension)
+  rateRatio: data.rateRatio
+  rateRange: data.rateRange
+  rateQuantity: extension::fetchQuantity("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.dosageInstruction.rateQuantity", data.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/medicationdispense-definitions.html#MedicationDispense.dosageInstruction.siteReference", data.siteReference)
+}
+
+def R3MedicationDispense_DosageInstructionToR2(data) {
+  text: data.text
+  additionalInstruction: data.additionalInstruction[0]
+  timing: data.timing
+  asNeededBoolean: data.asNeededBoolean
+  asNeededCodeableConcept: data.asNeededCodeableConcept
+  siteCodeableConcept: data.site
+  siteReference: extension::fetchReference("https://www.hl7.org/fhir/DSTU2/medicationdispense-definitions.html#MedicationDispense.dosageInstruction.siteReference", data.extension)
+  route: data.route
+  method: data.method
+  doseRange: data.doseRange
+  doseQuantity: data.doseQuantity
+  maxDosePerPeriod: data.maxDosePerPeriod
+  rateRatio: data.rateRatio
+  rateRange: data.rateRange
+  extension[]: extension::BuildIntegerExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.dosageInstruction.sequence", data.sequence)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.dosageInstruction.patientInstruction", data.patientInstruction)
+  extension[]: extension::BuildQuantityExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.dosageInstruction.maxDosePerAdministration", data.maxDosePerAdministration)
+  extension[]: extension::BuildQuantityExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.dosageInstruction.maxDosePerLifetime", data.maxDosePerLifetime)
+  extension[]: extension::BuildQuantityExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.dosageInstruction.rateQuantity", data.rateQuantity)
+}
+
+def R2MedicationDispense_SubstitutionToR3(data) {
+  wasSubstituted: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.substitution.wasSubstituted", data.extension)
+  type: data.type
+  reason: data.reason
+  responsibleParty: datatypes::R2ReferenceToR3(data.responsibleParty[])
+}
+
+def R3MedicationDispense_SubstitutionToR2(data) {
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.substitution.wasSubstituted", data.wasSubstituted)
+  type: data.type
+  reason: data.reason
+  responsibleParty: datatypes::R3ReferenceToR2(data.responsibleParty[])
+}

@@ -1,0 +1,45 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   binary : FHIR Binary resource
+//
+// Output(s):
+//   FHIR Binary Resource
+//
+def BinaryBase(binary) {
+  resourcebase::ResourceBase(binary)
+}
+
+// Description: Converts a FHIR STU3 Binary resource to FHIR R4 Binary resource.
+//
+// Argument(s):
+//   binary : FHIR STU3 Binary resource https://www.hl7.org/fhir/stu3/binary.html
+//
+// Output(s):
+//   FHIR R4 Binary Resource https://www.hl7.org/fhir/r4/binary.html
+//
+def R3BinaryToR4(binary) {
+  BinaryBase(binary)
+  securityContext: datatypes::R3ReferenceToR4(binary.securityContext)
+  contentType: binary.contentType
+  data: binary.content
+}
+
+// Description: Converts a FHIR R4 Binary resource to FHIR STU3 Binary resource.
+//
+// Argument(s):
+//   binary : FHIR R4 Binary resource https://www.hl7.org/fhir/r4/binary.html
+//
+// Output(s):
+//   FHIR STU3 Binary Resource https://www.hl7.org/fhir/stu3/binary.html
+//
+def R4BinaryToR3(binary) {
+  BinaryBase(binary)
+  securityContext: datatypes::R4ReferenceToR3(binary.securityContext)
+  contentType: binary.contentType
+  content: binary.data
+}

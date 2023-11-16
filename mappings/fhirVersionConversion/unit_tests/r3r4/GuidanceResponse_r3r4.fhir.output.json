@@ -1,0 +1,78 @@
+{
+  "contained": [
+    {
+      "id": "outputParameters1",
+      "parameter": [
+        {
+          "name": "score",
+          "valueDecimal": 7
+        },
+        {
+          "name": "item-assessed",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "70450",
+                "display": "CT, head, wo iv contrast",
+                "system": "http://www.ama-assn.org/go/cpt"
+              }
+            ]
+          }
+        },
+        {
+          "name": "device",
+          "valueReference": {
+            "reference": "Device/software"
+          }
+        },
+        {
+          "name": "guideline-followed",
+          "valueUri": "http://someguidelineprovider.org/radiology-appropriateness-guidelines.html"
+        }
+      ],
+      "resourceType": "Parameters"
+    }
+  ],
+  "encounter": {
+    "reference": "Encounter/example"
+  },
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/R4/guidanceresponse-definitions.html#GuidanceResponse.moduleUri",
+      "valueUri": "http://someguidelineprovider.org/radiology-appropriateness-guidelines.html"
+    }
+  ],
+  "id": "example",
+  "identifier": [
+    {
+      "system": "http://example.org",
+      "value": "guidanceResponse1"
+    }
+  ],
+  "moduleCanonical": "ServiceDefinition/example",
+  "moduleUri": "http://someguidelineprovider.org/radiology-appropriateness-guidelines.html",
+  "occurrenceDateTime": "2017-03-10T16:02:00Z",
+  "outputParameters": {
+    "reference": "#outputParameters1"
+  },
+  "performer": {
+    "reference": "Device/software"
+  },
+  "reasonCode": [
+    {
+      "text": "Guideline Appropriate Ordering Assessment"
+    }
+  ],
+  "requestIdentifier": {
+    "id": "guidanceRequest1"
+  },
+  "resourceType": "GuidanceResponse",
+  "status": "success",
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>contained</b>: </p><p><b>requestIdentifier</b>: guidanceRequest1</p><p><b>identifier</b>: guidanceResponse1</p><p><b>module</b>: <a>http://someguidelineprovider.org/radiology-appropriateness-guidelines.html</a></p><p><b>status</b>: success</p><p><b>subject</b>: <a>Patient/example</a></p><p><b>encounter</b>: <a>Encounter/example</a></p><p><b>occurrenceDateTime</b>: 10/03/2017 4:02:00 PM</p><p><b>performer</b>: <a>Device/software</a></p><p><b>reasonCode</b>: Guideline Appropriate Ordering Assessment <span>(Details )</span></p><p><b>outputParameters</b>: id: outputParameters1</p></div>",
+    "status": "generated"
+  }
+}

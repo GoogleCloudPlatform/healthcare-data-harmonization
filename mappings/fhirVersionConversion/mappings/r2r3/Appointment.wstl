@@ -1,0 +1,74 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def AppointmentBase(appointment) {
+  resourcebase::ResourceBase(appointment)
+  identifier: appointment.identifier
+  status: appointment.status
+  priority: appointment.priority
+  description: appointment.description
+  start: appointment.start
+  end: appointment.end
+  minutesDuration: appointment.minutesDuration
+  comment: appointment.comment
+}
+
+def R2AppointmentToR3(appointment) {
+  AppointmentBase(appointment)
+  contained: datatypes::R2ResourceToR3(appointment.contained[])
+  slot: datatypes::R2ReferenceToR3(appointment.slot)
+  serviceCategory: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.serviceCategory", appointment.extension)
+  serviceType: R2Appointment_ServiceTypeToR3("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.serviceType", appointment.extension, appointment.type)
+  specialty: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.specialty", appointment.extension)
+  appointmentType: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.appointmentType", appointment.extension)
+  reason: R2Appointment_ServiceTypeToR3("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.reason", appointment.extension, appointment.reason)
+  indication: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.indication", appointment.extension)
+  supportingInformation: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.supportingInformation", appointment.extension)
+  created: extension::fetchDateTime("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.created", appointment.extension)
+  incomingReferral: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.incomingReferral", appointment.extension)
+  participant: R2Appointment_ParticipantToR3(appointment.participant[])
+  requestedPeriod: extension::fetchPeriodArray("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.requestedPeriod", appointment.extension)
+}
+
+def R3AppointmentToR2(appointment) {
+  AppointmentBase(appointment)
+  contained: datatypes::R3ResourceToR2(appointment.contained[])
+  slot: datatypes::R3ReferenceToR2(appointment.slot)
+  type: appointment.serviceType[0]
+  reason: appointment.reason[0]
+  participant: R3Appointment_ParticipantToR2(appointment.participant[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.serviceCategory", appointment.serviceCategory)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.serviceType", appointment.serviceType[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.specialty", appointment.specialty[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.appointmentType", appointment.appointmentType)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.reason", appointment.reason[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.indication", appointment.indication[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.supportingInformation", appointment.supportingInformation[])
+  extension[]: extension::BuildDateTimeExtension("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.created", appointment.created)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.incomingReferral", appointment.incomingReferral[])
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/STU3/appointment-definitions.html#Appointment.requestedPeriod", appointment.requestedPeriod[])
+}
+
+def R2Appointment_ServiceTypeToR3(url, extension, data) {
+  var serviceType: extension::fetchCodeableConceptArray(url, extension)
+  if serviceType then {
+    serviceType
+  } else {
+    arrayOf(data)
+  }
+}
+
+def R2Appointment_ParticipantToR3(data) {
+  type: data.type
+  actor: datatypes::R2ReferenceToR3(data.actor)
+  'required': data.'required'
+  status: data.status
+}
+
+def R3Appointment_ParticipantToR2(data) {
+  type: data.type
+  actor: datatypes::R3ReferenceToR2(data.actor)
+  'required': data.'required'
+  status: data.status
+}

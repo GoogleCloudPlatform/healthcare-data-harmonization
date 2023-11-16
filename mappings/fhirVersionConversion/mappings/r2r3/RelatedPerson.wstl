@@ -1,0 +1,44 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def RelatedPersonBase(relatedPerson) {
+  resourcebase::ResourceBase(relatedPerson)
+  identifier: relatedPerson.identifier
+  telecom: relatedPerson.telecom
+  gender: relatedPerson.gender
+  birthDate: relatedPerson.birthDate
+  address: relatedPerson.address
+  photo: relatedPerson.photo
+  period: relatedPerson.period
+}
+
+def R2RelatedPersonToR3(relatedPerson) {
+  RelatedPersonBase(relatedPerson)
+  contained: datatypes::R2ResourceToR3(relatedPerson.contained[])
+  patient: datatypes::R2ReferenceToR3(relatedPerson.patient)
+  active: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/relatedperson-definitions.html#RelatedPerson.active", relatedPerson.extension)
+  relationship: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/relatedperson-definitions.html#RelatedPerson.relationship", relatedPerson.extension)
+  name: R2RelatedPerson_NameToR3("https://www.hl7.org/fhir/STU3/relatedperson-definitions.html#RelatedPerson.name", relatedPerson.extension, relatedPerson.name)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/relatedperson-definitions.html#RelatedPerson.relationship", relatedPerson.relationship)
+}
+
+def R3RelatedPersonToR2(relatedPerson) {
+  RelatedPersonBase(relatedPerson)
+  contained: datatypes::R3ResourceToR2(relatedPerson.contained[])
+  patient: datatypes::R3ReferenceToR2(relatedPerson.patient)
+  name: relatedPerson.name[0]
+  relationship: extension::fetchCodeableConcept("https://www.hl7.org/fhir/DSTU2/relatedperson-definitions.html#RelatedPerson.relationship", relatedPerson.extension)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/relatedperson-definitions.html#RelatedPerson.active", relatedPerson.active)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/relatedperson-definitions.html#RelatedPerson.relationship", relatedPerson.relationship)
+  extension[]: extension::BuildHumanNameExtension("https://www.hl7.org/fhir/STU3/relatedperson-definitions.html#RelatedPerson.name", relatedPerson.name[])
+}
+
+def R2RelatedPerson_NameToR3(url, extension, data) {
+  var name: extension::fetchHumanNameArray(url, extension)
+  if name then {
+    name
+  } else {
+    arrayOf(data)
+  }
+}

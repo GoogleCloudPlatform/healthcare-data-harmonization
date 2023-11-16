@@ -1,0 +1,60 @@
+{
+  "compose": {
+    "inactive": true,
+    "include": [
+      {
+        "concept": [
+          {
+            "code": "14647-2",
+            "display": "Cholesterol [Moles/Volume]"
+          },
+          {
+            "code": "2093-3",
+            "display": "Cholesterol [Mass/Volume]"
+          },
+          {
+            "code": "35200-5",
+            "display": "Cholesterol [Mass Or Moles/Volume]"
+          },
+          {
+            "code": "9342-7",
+            "display": "Cholesterol [Percentile]"
+          }
+        ],
+        "system": "http://loinc.org",
+        "version": "2.36"
+      }
+    ],
+    "lockedDate": "2012-06-13"
+  },
+  "copyright": "This content from LOINC ® is copyright © 1995 Regenstrief Institute, Inc. and the LOINC Committee, and available at no cost under the license at http://loinc.org/terms-of-use.",
+  "date": "2015-06-22",
+  "description": "This is an example value set that includes all the LOINC codes for serum/plasma cholesterol from v2.36.",
+  "experimental": true,
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.status",
+      "valueCode": "draft"
+    }
+  ],
+  "id": "example-extensional",
+  "identifier": {
+    "system": "http://acme.com/identifiers/valuesets",
+    "value": "loinc-cholesterol-int"
+  },
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/StructureDefinition/shareablevalueset"
+    ]
+  },
+  "name": "LOINC Codes for Cholesterol in Serum/Plasma",
+  "publisher": "HL7 International",
+  "resourceType": "ValueSet",
+  "status": "draft",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\n\t\t\t\u003cp\u003eValue set \u0026quot;LOINC Codes for Cholesterol\u0026quot;: This is an example value set that includes \n        all the  codes for serum cholesterol from LOINC v2.36.\u003c/p\u003e\n\t\t\t\u003cp\u003eDeveloped by: FHIR project team (example)\u003c/p\u003e\n\t\t\t\u003cp\u003ePublished for testing on 13-June 2012\u003c/p\u003e\n\t\t\t\u003cp\u003eThis value set includes the following LOINC codes:\u003c/p\u003e\n\t\t\t\u003cul\u003e\n\t\t\t\t\u003cli\u003e14647-2: Cholesterol [Moles/Volume]\u003c/li\u003e\n\t\t\t\t\u003cli\u003e2093-3: Cholesterol [Mass/Volume]\u003c/li\u003e\n\t\t\t\t\u003cli\u003e35200-5: Cholesterol [Mass Or Moles/Volume] \u003c/li\u003e\n\t\t\t\t\u003cli\u003e9342-7: Cholesterol [Percentile]\u003c/li\u003e\n\t\t\t\u003c/ul\u003e\n\t\t\t\u003cp\u003eThis content from LOINC® is copyright © 1995 Regenstrief Institute, Inc. and the LOINC Committee, and available at no cost under the license at http://loinc.org/terms-of-use.\u003c/p\u003e\n\t\t\u003c/div\u003e",
+    "status": "generated"
+  },
+  "url": "http://hl7.org/fhir/ValueSet/example-extensional",
+  "version": "20150622"
+}

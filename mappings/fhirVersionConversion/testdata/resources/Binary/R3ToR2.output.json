@@ -1,0 +1,14 @@
+{
+  "content": "JVBERi0xLjUNJeLjz9MNCjEwIDAgb2JqDTw8L0xpbmVhcml6ZWQgMS9MIDEzMDA2OC9PIDEyL0Ug MTI1NzM1L04gMS9UIDEyOTc2NC9IIFsgNTQ2IDIwNF0+Pg1lbmRvYmoNICAgICAgICAgICAgICAg DQo0MSAwIG9iag08PC9EZWNvZGVQYXJtczw8L0NvbHVtbnMgNS9QcmVkaWN0b3IgMTI+Pi9GaWx0 ZXIvRmxhdGVEZWNvZGUvSURbPDRDRDkwQkY3MkI2NjU5NkVCMEJDQzlBN0ZGNzIwMjE3PjwyOTkw ODAzRkY2QTc0OTQ4OEEwNTdBREQzRDdFQTM0Nj5dL0luZGV4WzEwIDU4XS9JbmZvIDkgM",
+  "contentType": "application/pdf",
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/binary-definitions.html#Binary.securityContext",
+      "valueReference": {
+        "reference": "DocumentReference/example"
+      }
+    }
+  ],
+  "id": "example",
+  "resourceType": "Binary"
+}

@@ -1,0 +1,5 @@
+// store to extension
+extension[]: addCodeableConcept("test_url", $root.data)
+
+// fetch from extension
+data: fetchCodeableConcept("test_url", $root.extension)

@@ -1,0 +1,5 @@
+// String to Coding
+$this: StringToCoding("system", $root.data)
+
+// Coding to String
+$this: CodingToString($root.data)

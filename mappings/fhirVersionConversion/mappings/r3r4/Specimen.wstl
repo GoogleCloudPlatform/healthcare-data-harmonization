@@ -1,0 +1,98 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def SpecimenBase(specimen) {
+  resourcebase::ResourceBase(specimen)
+  identifier: specimen.identifier
+  accessionIdentifier: specimen.accessionIdentifier
+  type: specimen.type
+  receivedTime: specimen.receivedTime
+  note: specimen.note
+}
+
+def R3SpecimenToR4(specimen) {
+  SpecimenBase(specimen)
+  contained: datatypes::R3ResourceToR4(specimen.contained[])
+  container: R3Specimen_ContainerToR4(specimen.container[])
+  processing: R3Specimen_ProcessingToR4(specimen.processing[])
+  parent: datatypes::R3ReferenceToR4(specimen.parent[])
+  status: specimen.status
+  subject: datatypes::R3ReferenceToR4(specimen.subject)
+  request: datatypes::R3ReferenceToR4(specimen.request[])
+  collection: R3Specimen_CollectionToR4(specimen.collection)
+  condition: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/specimen-definitions.html#Specimen.https://www.hl7.org/fhir/R4/specimen-definitions.html#Specimen.condition", specimen.extension)
+}
+
+def R4SpecimenToR3(specimen) {
+  SpecimenBase(specimen)
+  contained: datatypes::R4ResourceToR3(specimen.contained[])
+  container: R4Specimen_ContainerToR3(specimen.container[])
+  processing: R4Specimen_ProcessingToR3(specimen.processing[])
+  parent: datatypes::R4ReferenceToR3(specimen.parent[])
+  status: specimen.status
+  subject: datatypes::R4ReferenceToR3(specimen.subject)
+  request: datatypes::R4ReferenceToR3(specimen.request[])
+  collection: R4Specimen_CollectionToR3(specimen.collection)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/specimen-definitions.html#Specimen.https://www.hl7.org/fhir/R4/specimen-definitions.html#Specimen.condition", specimen.condition[])
+}
+
+def R3Specimen_CollectionToR4(data) {
+  collector: datatypes::R3ReferenceToR4(data.collector)
+  collectedDateTime: data.collectedDateTime
+  collectedPeriod: data.collectedPeriod
+  duration: extension::fetchAge("https://www.hl7.org/fhir/R4/specimen-definitions.html#Specimen.collection.duration", data.extension)
+  quantity: data.quantity
+  method: data.method
+  bodySite: data.bodySite
+  fastingStatusCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/specimen-definitions.html#Specimen.collection.fastingStatusCodeableConcept", data.extension)
+  fastingStatusDuration: extension::fetchReference("https://www.hl7.org/fhir/R4/specimen-definitions.html#Specimen.collection.fastingStatusDuration", data.extension)
+}
+
+def R4Specimen_CollectionToR3(data) {
+  collector: datatypes::R4ReferenceToR3(data.collector)
+  collectedDateTime: data.collectedDateTime
+  collectedPeriod: data.collectedPeriod
+  quantity: data.quantity
+  method: data.method
+  bodySite: data.bodySite
+  extension[]: extension::BuildAgeExtension("https://www.hl7.org/fhir/R4/specimen-definitions.html#Specimen.collection.duration", data.duration)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/specimen-definitions.html#Specimen.collection.fastingStatusCodeableConcept", data.fastingStatusCodeableConcept)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/specimen-definitions.html#Specimen.collection.fastingStatusDuration", data.fastingStatusDuration)
+}
+
+def R3Specimen_ProcessingToR4(data) {
+  description: data.description
+  procedure: data.procedure
+  additive: datatypes::R3ReferenceToR4(data.additive[])
+  timeDateTime: data.timeDateTime
+  timePeriod: data.timePeriod
+}
+
+def R4Specimen_ProcessingToR3(data) {
+  description: data.description
+  procedure: data.procedure
+  additive: datatypes::R4ReferenceToR3(data.additive[])
+  timeDateTime: data.timeDateTime
+  timePeriod: data.timePeriod
+}
+
+def R3Specimen_ContainerToR4(data) {
+  identifier: data.identifier
+  description: data.description
+  type: data.type
+  capacity: data.capacity
+  specimenQuantity: data.specimenQuantity
+  additiveCodeableConcept: data.additiveCodeableConcept
+  additiveReference: datatypes::R3ReferenceToR4(data.additiveReference)
+}
+
+def R4Specimen_ContainerToR3(data) {
+  identifier: data.identifier
+  description: data.description
+  type: data.type
+  capacity: data.capacity
+  specimenQuantity: data.specimenQuantity
+  additiveCodeableConcept: data.additiveCodeableConcept
+  additiveReference: datatypes::R4ReferenceToR3(data.additiveReference)
+}

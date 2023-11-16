@@ -1,0 +1,103 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def ConceptMapBase(conceptMap) {
+  resourcebase::ResourceBase(conceptMap)
+  url: conceptMap.url
+  identifier: conceptMap.identifier
+  version: conceptMap.version
+  name: conceptMap.name
+  date: conceptMap.date
+  publisher: conceptMap.publisher
+  sourceUri: conceptMap.sourceUri
+  targetUri: conceptMap.targetUri
+}
+
+def R2ConceptMapToR3(conceptMap) {
+  ConceptMapBase(conceptMap)
+  contained: datatypes::R2ResourceToR3(conceptMap.contained[])
+  title: extension::fetchString("https://www.hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.title", conceptMap.extension)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.status", conceptMap.extension)
+  status: if status? then status else conceptMap.status
+  experimental: conceptMap.experimental
+  contact: extension::fetchContactDetailArray("https://www.hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.contact", conceptMap.extension)
+  description: conceptMap.description
+  useContext: extension::fetchUsageContextArray("https://www.hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.useContext", conceptMap.extension)
+  jurisdiction: conceptMap.useContext
+  purpose: conceptMap.requirements
+  copyright: conceptMap.copyright
+  group[].element: R2ConceptMap_ElementToR3(conceptMap.element[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/conceptmap-definitions.html#ConceptMap.status", conceptMap.status)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/conceptmap-definitions.html#ConceptMap.sourceReference", conceptMap.sourceReference)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/conceptmap-definitions.html#ConceptMap.targetReference", conceptMap.targetReference)
+}
+
+def R3ConceptMapToR2(conceptMap) {
+  ConceptMapBase(conceptMap)
+  contained: datatypes::R3ResourceToR2(conceptMap.contained[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/conceptmap-definitions.html#ConceptMap.status", conceptMap.extension)
+  status: if status? then status else conceptMap.status
+  experimental: conceptMap.experimental
+  description: conceptMap.description
+  useContext: conceptMap.jurisdiction
+  requirements: conceptMap.purpose
+  copyright: conceptMap.copyright
+  sourceReference: extension::fetchReference("https://www.hl7.org/fhir/DSTU2/conceptmap-definitions.html#ConceptMap.sourceReference", conceptMap.extension)
+  targetReference: extension::fetchReference("https://www.hl7.org/fhir/DSTU2/conceptmap-definitions.html#ConceptMap.targetReference", conceptMap.extension)
+  element: R3ConceptMap_ElementToR2(conceptMap.group[0].element[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.title", conceptMap.title)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.status", conceptMap.status)
+  extension[]: extension::BuildContactDetail("https://www.hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.contact", conceptMap.contact[])
+  extension[]: extension::BuildBase64BinaryExtension("https://www.hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.useContext", conceptMap.useContext[])
+}
+
+def R2ConceptMap_ElementToR3(data) {
+  code: data.code
+  display: extension::fetchString("https://www.hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.group.element.target.display", data.extension)
+  target: R2ConceptMap_Element_TargetToR3(data.target[])
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/DSTU2/conceptmap-definitions.html#ConceptMap.element.target.codeSystem", data.codeSystem)
+}
+
+def R3ConceptMap_ElementToR2(data) {
+  code: data.code
+  codeSystem: extension::fetchUri("https://www.hl7.org/fhir/DSTU2/conceptmap-definitions.html#ConceptMap.element.target.codeSystem", data.extension)
+  target: R3ConceptMap_Element_TargetToR2(data.target[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.group.element.target.display", data.display)
+}
+
+def R2ConceptMap_Element_TargetToR3(data) {
+  code: data.code
+  display: extension::fetchString("https://www.hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.group.element.target.display", data.extension)
+  equivalence: extension::fetchCode("https://www.hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.group.element.target.equivalence", data.extension)
+  comment: data.comment
+  dependsOn: R2ConceptMap_Element_Target_DependsOnToR3(data.dependsOn[])
+  product: data.product
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/DSTU2/conceptmap-definitions.html#ConceptMap.element.target.codeSystem", data.codeSystem)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/conceptmap-definitions.html#ConceptMap.element.target.equivalence", data.equivalence)
+}
+
+def R3ConceptMap_Element_TargetToR2(data) {
+  code: data.code
+  codeSystem: extension::fetchUri("https://www.hl7.org/fhir/DSTU2/conceptmap-definitions.html#ConceptMap.element.target.codeSystem", data.extension)
+  equivalence: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/conceptmap-definitions.html#ConceptMap.element.target.equivalence", data.extension)
+  comment: data.comment
+  dependsOn: R3ConceptMap_Element_Target_DependsOnToR2(data.dependsOn[])
+  product: data.product
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.group.element.target.display", data.display)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.group.element.target.equivalence", data.equivalence)
+}
+
+def R2ConceptMap_Element_Target_DependsOnToR3(data) {
+  property: data.property
+  system: data.system
+  code: data.code
+  display: extension::fetchString("https://www.hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.group.element.target.dependsOn.display", data.extension)
+}
+
+def R3ConceptMap_Element_Target_DependsOnToR2(data) {
+  element: data.property
+  codeSystem: data.system
+  code: data.code
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/conceptmap-definitions.html#ConceptMap.group.element.target.dependsOn.display", data.display)
+}

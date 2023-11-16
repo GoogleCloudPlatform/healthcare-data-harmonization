@@ -1,0 +1,11 @@
+// R3 MedicationRequest To R4
+$this: R3MedicationRequestToR4($root)
+
+// R4 MedicationRequest To R3
+$this: R4MedicationRequestToR3($root)
+
+// R2 MedicationRequest To R3
+$this: R2MedicationRequestToR3($root)
+
+// R3 MedicationRequest To R2
+$this: R3MedicationRequestToR2($root)

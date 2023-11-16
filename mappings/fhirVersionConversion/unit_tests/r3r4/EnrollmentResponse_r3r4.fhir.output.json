@@ -1,0 +1,40 @@
+{
+  "created": "2014-08-16",
+  "disposition": "Dependant added to policy.",
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/enrollmentresponse-definitions.html#EnrollmentResponse.outcome",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "complete",
+            "system": "http://hl7.org/fhir/remittance-outcome"
+          }
+        ]
+      }
+    }
+  ],
+  "id": "ER2500",
+  "identifier": [
+    {
+      "system": "http://www.BenefitsInc.com/fhir/enrollmentresponse",
+      "value": "781234"
+    }
+  ],
+  "organization": {
+    "reference": "Organization/2"
+  },
+  "outcome": "complete",
+  "request": {
+    "reference": "http://www.BenefitsInc.com/fhir/eligibility/225476332402"
+  },
+  "requestProvider": {
+    "reference": "Practitioner/1"
+  },
+  "resourceType": "EnrollmentResponse",
+  "status": "active",
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the EnrollmentResponse</div>",
+    "status": "generated"
+  }
+}

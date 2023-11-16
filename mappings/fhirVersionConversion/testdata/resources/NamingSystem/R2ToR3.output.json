@@ -1,0 +1,47 @@
+{
+  "date": "2015-08-31",
+  "description": "Australian HI Identifier as established by relevant regulations etc",
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/namingsystem-definitions.html#NamingSystem.status",
+      "valueCode": "active"
+    }
+  ],
+  "id": "example-id",
+  "kind": "identifier",
+  "name": "Austalian Healthcare Identifier - Individual",
+  "publisher": "HL7 Australia on behalf of NEHTA",
+  "resourceType": "NamingSystem",
+  "responsible": "HI Service Operator / NEHTA",
+  "status": "active",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\n      \u003cp\u003e\n        \u003cb\u003eAustralian IHI Number\u003c/b\u003e\n      \u003c/p\u003e\n      \n      \u003cp\u003e oid: 1.2.36.1.2001.1003.0\u003c/p\u003e\n      \n      \u003cp\u003e uri: http://ns.electronichealth.net.au/id/hi/ihi/1.0\u003c/p\u003e\n    \n    \u003c/div\u003e",
+    "status": "generated"
+  },
+  "type": {
+    "coding": [
+      {
+        "code": "NI",
+        "display": "National unique individual identifier",
+        "system": "http://hl7.org/fhir/v2/0203"
+      }
+    ],
+    "text": "IHI"
+  },
+  "uniqueId": [
+    {
+      "comment": "This value is used in Australian CDA documents",
+      "type": "oid",
+      "value": "1.2.36.1.2001.1003.0"
+    },
+    {
+      "period": {
+        "start": "2015-08-21"
+      },
+      "preferred": true,
+      "type": "uri",
+      "value": "http://ns.electronichealth.net.au/id/hi/ihi/1.0"
+    }
+  ],
+  "usage": "Used in Australia for identifying patients"
+}

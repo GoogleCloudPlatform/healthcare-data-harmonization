@@ -1,0 +1,167 @@
+{
+  "appointment": {
+    "reference": "Appointment/example"
+  },
+  "episodeOfCare": [
+    {
+      "reference": "EpisodeOfCare/example"
+    }
+  ],
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/encounter-definitions.html#Encounter.status",
+      "valueCode": "finished"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/encounter-definitions.html#Encounter.class",
+      "valueCoding": {
+        "code": "IMP",
+        "display": "inpatient encounter",
+        "system": "http://hl7.org/fhir/v3/ActCode"
+      }
+    }
+  ],
+  "hospitalization": {
+    "admitSource": {
+      "coding": [
+        {
+          "code": "309902002",
+          "display": "Clinical Oncology Department",
+          "system": "http://snomed.info/sct"
+        }
+      ]
+    },
+    "destination": {
+      "reference": "Location/2"
+    },
+    "dietPreference": [
+      {
+        "coding": [
+          {
+            "code": "276026009",
+            "display": "Fluid balance regulation",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      }
+    ],
+    "origin": {
+      "reference": "Location/2"
+    },
+    "reAdmission": {
+      "coding": [
+        {
+          "display": "readmitted"
+        }
+      ]
+    },
+    "specialArrangement": [
+      {
+        "coding": [
+          {
+            "code": "wheel",
+            "display": "Wheelchair",
+            "system": "http://hl7.org/fhir/encounter-special-arrangements"
+          }
+        ]
+      }
+    ],
+    "specialCourtesy": [
+      {
+        "coding": [
+          {
+            "code": "NRM",
+            "display": "normal courtesy",
+            "system": "http://hl7.org/fhir/v3/EncounterSpecialCourtesy"
+          }
+        ]
+      }
+    ]
+  },
+  "id": "f203",
+  "identifier": [
+    {
+      "use": "temp",
+      "value": "Encounter_Roel_20130311"
+    }
+  ],
+  "incomingReferral": [
+    {
+      "reference": "ReferralRequest/example"
+    }
+  ],
+  "partOf": {
+    "reference": "Encounter/f203"
+  },
+  "participant": [
+    {
+      "individual": {
+        "reference": "Practitioner/f201"
+      },
+      "type": [
+        {
+          "coding": [
+            {
+              "code": "PART",
+              "system": "http://hl7.org/fhir/v3/ParticipationType"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "patient": {
+    "display": "Roel",
+    "reference": "Patient/f201"
+  },
+  "period": {
+    "end": "2013-03-20",
+    "start": "2013-03-11"
+  },
+  "priority": {
+    "coding": [
+      {
+        "code": "394849002",
+        "display": "High priority",
+        "system": "http://snomed.info/sct"
+      }
+    ]
+  },
+  "reason": [
+    {
+      "text": "The patient seems to suffer from bilateral pneumonia and renal insufficiency, most likely due to chemotherapy."
+    }
+  ],
+  "resourceType": "Encounter",
+  "serviceProvider": {
+    "reference": "Organization/2"
+  },
+  "statusHistory": [
+    {
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/STU3/encounter-definitions.html#Encounter.statusHistory.status",
+          "valueCode": "arrived"
+        }
+      ],
+      "period": {
+        "start": "2013-03-08"
+      }
+    }
+  ],
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\u003cp\u003e\u003cb\u003eGenerated Narrative with Details\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eid\u003c/b\u003e: f203\u003c/p\u003e\u003cp\u003e\u003cb\u003eidentifier\u003c/b\u003e: Encounter_Roel_20130311 (TEMP)\u003c/p\u003e\u003cp\u003e\u003cb\u003estatus\u003c/b\u003e: finished\u003c/p\u003e\u003ch3\u003eStatusHistories\u003c/h3\u003e\u003ctable\u003e\u003ctr\u003e\u003ctd\u003e-\u003c/td\u003e\u003ctd\u003e\u003cb\u003eStatus\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003ePeriod\u003c/b\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e*\u003c/td\u003e\u003ctd\u003earrived\u003c/td\u003e\u003ctd\u003e08/03/2013 --\u0026gt; (ongoing)\u003c/td\u003e\u003c/tr\u003e\u003c/table\u003e\u003cp\u003e\u003cb\u003eclass\u003c/b\u003e: inpatient encounter (Details: http://hl7.org/fhir/v3/ActCode code IMP = 'inpatient encounter', stated as 'inpatient encounter')\u003c/p\u003e\u003cp\u003e\u003cb\u003etype\u003c/b\u003e: Inpatient stay for nine days \u003cspan\u003e(Details : {SNOMED CT code '183807002' = 'Inpatient stay 9 days', given as 'Inpatient stay for nine days'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003epriority\u003c/b\u003e: High priority \u003cspan\u003e(Details : {SNOMED CT code '394849002' = 'High priority', given as 'High priority'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003esubject\u003c/b\u003e: \u003ca\u003eRoel\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eepisodeOfCare\u003c/b\u003e: \u003ca\u003eEpisodeOfCare/example\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eincomingReferral\u003c/b\u003e: \u003ca\u003eReferralRequest/example\u003c/a\u003e\u003c/p\u003e\u003ch3\u003eParticipants\u003c/h3\u003e\u003ctable\u003e\u003ctr\u003e\u003ctd\u003e-\u003c/td\u003e\u003ctd\u003e\u003cb\u003eType\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eIndividual\u003c/b\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e*\u003c/td\u003e\u003ctd\u003eParticipation \u003cspan\u003e(Details : {http://hl7.org/fhir/v3/ParticipationType code 'PART' = 'Participation)\u003c/span\u003e\u003c/td\u003e\u003ctd\u003e\u003ca\u003ePractitioner/f201\u003c/a\u003e\u003c/td\u003e\u003c/tr\u003e\u003c/table\u003e\u003cp\u003e\u003cb\u003eappointment\u003c/b\u003e: \u003ca\u003eAppointment/example\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eperiod\u003c/b\u003e: 11/03/2013 --\u0026gt; 20/03/2013\u003c/p\u003e\u003cp\u003e\u003cb\u003ereason\u003c/b\u003e: The patient seems to suffer from bilateral pneumonia and renal insufficiency, most likely due to chemotherapy. \u003cspan\u003e(Details )\u003c/span\u003e\u003c/p\u003e\u003cblockquote\u003e\u003cp\u003e\u003cb\u003ediagnosis\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003econdition\u003c/b\u003e: \u003ca\u003eCondition/stroke\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003erole\u003c/b\u003e: Admission diagnosis \u003cspan\u003e(Details : {http://hl7.org/fhir/diagnosis-role code 'AD' = 'Admission diagnosis', given as 'Admission diagnosis'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003erank\u003c/b\u003e: 1\u003c/p\u003e\u003c/blockquote\u003e\u003cblockquote\u003e\u003cp\u003e\u003cb\u003ediagnosis\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003econdition\u003c/b\u003e: \u003ca\u003eCondition/f201\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003erole\u003c/b\u003e: Discharge diagnosis \u003cspan\u003e(Details : {http://hl7.org/fhir/diagnosis-role code 'DD' = 'Discharge diagnosis', given as 'Discharge diagnosis'})\u003c/span\u003e\u003c/p\u003e\u003c/blockquote\u003e\u003cp\u003e\u003cb\u003eaccount\u003c/b\u003e: \u003ca\u003eAccount/example\u003c/a\u003e\u003c/p\u003e\u003ch3\u003eHospitalizations\u003c/h3\u003e\u003ctable\u003e\u003ctr\u003e\u003ctd\u003e-\u003c/td\u003e\u003ctd\u003e\u003cb\u003eOrigin\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eAdmitSource\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eReAdmission\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eDietPreference\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eSpecialCourtesy\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eSpecialArrangement\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eDestination\u003c/b\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e*\u003c/td\u003e\u003ctd\u003e\u003ca\u003eLocation/2\u003c/a\u003e\u003c/td\u003e\u003ctd\u003eClinical Oncology Department \u003cspan\u003e(Details : {SNOMED CT code '309902002' = 'Clinical oncology department', given as 'Clinical Oncology Department'})\u003c/span\u003e\u003c/td\u003e\u003ctd\u003ereadmitted \u003cspan\u003e(Details : {[not stated] code 'null' = 'null', given as 'readmitted'})\u003c/span\u003e\u003c/td\u003e\u003ctd\u003eFluid balance regulation \u003cspan\u003e(Details : {SNOMED CT code '276026009' = 'Fluid balance regulation', given as 'Fluid balance regulation'})\u003c/span\u003e\u003c/td\u003e\u003ctd\u003enormal courtesy \u003cspan\u003e(Details : {http://hl7.org/fhir/v3/EncounterSpecialCourtesy code 'NRM' = 'normal courtesy', given as 'normal courtesy'})\u003c/span\u003e\u003c/td\u003e\u003ctd\u003eWheelchair \u003cspan\u003e(Details : {http://hl7.org/fhir/encounter-special-arrangements code 'wheel' = 'Wheelchair', given as 'Wheelchair'})\u003c/span\u003e\u003c/td\u003e\u003ctd\u003e\u003ca\u003eLocation/2\u003c/a\u003e\u003c/td\u003e\u003c/tr\u003e\u003c/table\u003e\u003cp\u003e\u003cb\u003eserviceProvider\u003c/b\u003e: \u003ca\u003eOrganization/2\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003epartOf\u003c/b\u003e: \u003ca\u003eEncounter/f203\u003c/a\u003e\u003c/p\u003e\u003c/div\u003e",
+    "status": "generated"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "code": "183807002",
+          "display": "Inpatient stay for nine days",
+          "system": "http://snomed.info/sct"
+        }
+      ]
+    }
+  ]
+}

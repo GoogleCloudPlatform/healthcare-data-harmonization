@@ -1,0 +1,5 @@
+// store to extension
+extension[]: addContactDetail_test("test_url", $root.contact[])
+
+// fetch from extension
+contact: fetchContactDetailArray_test("test_url", $root.extension)

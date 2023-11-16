@@ -1,0 +1,79 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   substance : FHIR Substance resource
+//
+// Output(s):
+//   FHIR Substance Resource
+//
+def SubstanceBase(substance) {
+  resourcebase::ResourceBase(substance)
+  identifier: substance.identifier
+  code: substance.code
+  description: substance.description
+  instance: substance.instance
+}
+
+// Description: Converts a FHIR STU3 Substance resource to FHIR R4 Substance resource.
+//
+// Argument(s):
+//   substance : FHIR STU3 Substance resource https://www.hl7.org/fhir/stu3/substance.html
+//
+// Output(s):
+//   FHIR R4 Substance Resource https://www.hl7.org/fhir/r4/substance.html
+//
+def R3SubstanceToR4(substance) {
+  SubstanceBase(substance)
+  contained: datatypes::R3ResourceToR4(substance.contained[])
+  ingredient: R3Substance_IngredientToR4(substance.ingredient[])
+  status: substance.status
+  category: substance.category
+}
+
+// Description: Converts a FHIR R4 Substance resource to FHIR STU3 Substance resource.
+//
+// Argument(s):
+//   substance : FHIR R4 Substance resource https://www.hl7.org/fhir/r4/substance.html
+//
+// Output(s):
+//   FHIR STU3 Substance Resource https://www.hl7.org/fhir/stu3/substance.html
+//
+def R4SubstanceToR3(substance) {
+  SubstanceBase(substance)
+  contained: datatypes::R4ResourceToR3(substance.contained[])
+  ingredient: R4Substance_IngredientToR3(substance.ingredient[])
+  status: substance.status
+  category: substance.category
+}
+
+// Description: Converts a FHIR STU3 Substance.Ingredient to FHIR R4 Substance.Ingredient.
+//
+// Argument(s):
+//   data : FHIR STU3 Substance.Ingredient https://www.hl7.org/fhir/stu3/substance-definitions.html#Substance.ingredient
+//
+// Output(s):
+//   FHIR R4 Substance.Ingredient https://www.hl7.org/fhir/r4/substance-definitions.html#Substance.ingredient
+//
+def R3Substance_IngredientToR4(data) {
+  quantity: data.quantity
+  substanceCodeableConcept: data.substanceCodeableConcept
+  substanceReference: datatypes::R3ReferenceToR4(data.substanceReference)
+}
+
+// Description: Converts a FHIR R4 Substance.Ingredient to FHIR STU3 Substance.Ingredient.
+//
+// Argument(s):
+//   data : FHIR R4 Substance.Ingredient https://www.hl7.org/fhir/r4/substance-definitions.html#Substance.ingredient
+//
+// Output(s):
+//   FHIR STU3 Substance.Ingredient https://www.hl7.org/fhir/stu3/substance-definitions.html#Substance.ingredient
+//
+def R4Substance_IngredientToR3(data) {
+  quantity: data.quantity
+  substanceCodeableConcept: data.substanceCodeableConcept
+  substanceReference: datatypes::R4ReferenceToR3(data.substanceReference)
+}

@@ -1,0 +1,127 @@
+{
+  "event": {
+    "action": "E",
+    "outcome": "0",
+    "recorded": "2012-10-25T22:04:27+11:00",
+    "subtype": [
+      {
+        "code": "110120",
+        "display": "Application Start",
+        "system": "http://dicom.nema.org/resources/ontology/DCM"
+      }
+    ],
+    "type": {
+      "code": "110100",
+      "display": "Application Activity",
+      "system": "http://dicom.nema.org/resources/ontology/DCM"
+    }
+  },
+  "id": "example",
+  "object": [
+    {
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/DSTU2/auditevent-definitions.html#AuditEvent.object.type",
+          "valueCoding": {
+            "code": "4",
+            "display": "Other",
+            "system": "http://hl7.org/fhir/object-type"
+          }
+        },
+        {
+          "url": "https://www.hl7.org/fhir/DSTU2/auditevent-definitions.html#AuditEvent.object.lifecycle",
+          "valueCoding": {
+            "code": "6",
+            "display": "Access / Use",
+            "system": "http://hl7.org/fhir/dicom-audit-lifecycle"
+          }
+        }
+      ],
+      "identifier": {
+        "type": {
+          "coding": [
+            {
+              "code": "SNO",
+              "system": "http://hl7.org/fhir/identifier-type"
+            }
+          ],
+          "text": "Dell Serial Number"
+        },
+        "value": "ABCDEF"
+      },
+      "name": "Grahame's Laptop",
+      "role": {
+        "code": "4",
+        "display": "Domain Resource",
+        "system": "http://hl7.org/fhir/object-role"
+      }
+    }
+  ],
+  "participant": [
+    {
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/STU3/auditevent-definitions.html#AuditEvent.agent.role",
+          "valueCodeableConcept": [
+            {
+              "text": "Service User (Logon)"
+            }
+          ]
+        }
+      ],
+      "network": {
+        "address": "127.0.0.1",
+        "type": "2"
+      },
+      "requestor": false,
+      "userId": {
+        "value": "Grahame"
+      }
+    },
+    {
+      "altId": "6580",
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/STU3/auditevent-definitions.html#AuditEvent.agent.role",
+          "valueCodeableConcept": [
+            {
+              "coding": [
+                {
+                  "code": "110153",
+                  "display": "Source Role ID",
+                  "system": "http://dicom.nema.org/resources/ontology/DCM"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "network": {
+        "address": "Workstation1.ehr.familyclinic.com",
+        "type": "1"
+      },
+      "requestor": false,
+      "userId": {
+        "value": "2.16.840.1.113883.4.2|2.16.840.1.113883.4.2"
+      }
+    }
+  ],
+  "resourceType": "AuditEvent",
+  "source": {
+    "identifier": {
+      "value": "Grahame's Laptop"
+    },
+    "site": "Development",
+    "type": [
+      {
+        "code": "110122",
+        "display": "Login",
+        "system": "http://dicom.nema.org/resources/ontology/DCM"
+      }
+    ]
+  },
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003eApplication Start for under service login \u0026quot;Grahame\u0026quot; (id: Grahame's Test HL7Connect)\u003c/div\u003e",
+    "status": "generated"
+  }
+}

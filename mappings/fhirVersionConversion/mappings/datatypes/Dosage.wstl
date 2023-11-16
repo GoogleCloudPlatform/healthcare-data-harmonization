@@ -1,0 +1,31 @@
+package datatypes
+
+// Description: Converts a FHIR STU3 Dosage datatype to FHIR R4 Dosage.
+//
+// Argument(s):
+//   dosage : FHIR STU3 Dosage http://hl7.org/fhir/STU3/dosage.html#Dosage
+//
+// Output(s):
+//   FHIR R4 Dosage http://hl7.org/fhir/R4/dosage.html
+//
+def R3DosageToR4(required dosage) {
+  sequence: dosage.sequence
+  text: dosage.text
+  additionalInstruction: dosage.additionalInstruction
+  patientInstruction: dosage.patientInstruction
+  timing: dosage.timing
+  asNeededBoolean: dosage.asNeededBoolean
+  asNeededCodeableConcept: dosage.asNeededCodeableConcept
+  site: dosage.site
+  route: dosage.route
+  method: dosage.method
+  doseAndRate[0].type: extension::fetchCodeableConcept("https://www.hl7.org/fhir/r4/dosage-definitions.html#Dosage.doseAndRate.type", dosage.extension)
+  doseAndRate[0].doseRange: dosage.doseRange
+  doseAndRate[0].doseQuantity: dosage.doseQuantity
+  doseAndRate[0].rateRatio: dosage.rateRatio
+  doseAndRate[0].rateRange: dosage.rateRange
+  doseAndRate[0].rateQuantity: dosage.rateQuantity
+  maxDosePerPeriod: dosage.maxDosePerPeriod
+  maxDosePerAdministration: dosage.maxDosePerAdministration
+  maxDosePerLifetime: dosage.maxDosePerLifetime
+}

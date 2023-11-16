@@ -1,0 +1,90 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   episodeOfCare : FHIR EpisodeOfCare resource
+//
+// Output(s):
+//   FHIR EpisodeOfCare Resource
+//
+def EpisodeOfCareBase(episodeOfCare) {
+  resourcebase::ResourceBase(episodeOfCare)
+  identifier: episodeOfCare.identifier
+  type: episodeOfCare.type
+  period: episodeOfCare.period
+}
+
+// Description: Converts a FHIR STU3 EpisodeOfCare resource to FHIR R4 EpisodeOfCare resource.
+//
+// Argument(s):
+//   episodeOfCare : FHIR STU3 EpisodeOfCare resource https://www.hl7.org/fhir/stu3/episodeofcare.html
+//
+// Output(s):
+//   FHIR R4 EpisodeOfCare Resource https://www.hl7.org/fhir/r4/episodeofcare.html
+//
+def R3EpisodeOfCareToR4(episodeOfCare) {
+  EpisodeOfCareBase(episodeOfCare)
+  contained: datatypes::R3ResourceToR4(episodeOfCare.contained[])
+  team: datatypes::R3ReferenceToR4(episodeOfCare.team[])
+  account: datatypes::R3ReferenceToR4(episodeOfCare.account[])
+  diagnosis: R3EpisodeOfCare_DiagnosisToR4(episodeOfCare.diagnosis[])
+  patient: datatypes::R3ReferenceToR4(episodeOfCare.patient)
+  managingOrganization: datatypes::R3ReferenceToR4(episodeOfCare.managingOrganization)
+  status: episodeOfCare.status
+  statusHistory: episodeOfCare.statusHistory
+  referralRequest: extension::fetchReferenceArray("https://hl7.org/fhir/R4/episodeofcare-definitions.html#EpisodeOfCare.referralRequest", episodeOfCare.extension)
+  careManager: datatypes::R3ReferenceToR4(episodeOfCare.careManager)
+}
+
+// Description: Converts a FHIR R4 EpisodeOfCare resource to FHIR STU3 EpisodeOfCare resource.
+//
+// Argument(s):
+//   episodeOfCare : FHIR R4 EpisodeOfCare resource https://www.hl7.org/fhir/r4/episodeofcare.html
+//
+// Output(s):
+//   FHIR STU3 EpisodeOfCare Resource https://www.hl7.org/fhir/stu3/episodeofcare.html
+//
+def R4EpisodeOfCareToR3(episodeOfCare) {
+  EpisodeOfCareBase(episodeOfCare)
+  contained: datatypes::R4ResourceToR3(episodeOfCare.contained[])
+  team: datatypes::R4ReferenceToR3(episodeOfCare.team[])
+  account: datatypes::R4ReferenceToR3(episodeOfCare.account[])
+  diagnosis: R4EpisodeOfCare_DiagnosisToR3(episodeOfCare.diagnosis[])
+  patient: datatypes::R4ReferenceToR3(episodeOfCare.patient)
+  managingOrganization: datatypes::R4ReferenceToR3(episodeOfCare.managingOrganization)
+  status: episodeOfCare.status
+  statusHistory: episodeOfCare.statusHistory
+  referralRequest: extension::fetchReferenceArray("https://hl7.org/fhir/STU3/episodeofcare-definitions.html#EpisodeOfCare.referralRequest", episodeOfCare.extension)
+  careManager: datatypes::R4ReferenceToR3(episodeOfCare.careManager)
+}
+
+// Description: Converts a FHIR STU3 EpisodeOfCare.Diagnosis to FHIR R4 EpisodeOfCare.Diagnosis.
+//
+// Argument(s):
+//   data : FHIR STU3 EpisodeOfCare.Diagnosis http://hl7.org/fhir/STU3/episodeofcare-definitions.html#EpisodeOfCare.diagnosis
+//
+// Output(s):
+//   FHIR R4 EpisodeOfCare.Diagnosis http://hl7.org/fhir/R4/episodeofcare-definitions.html#EpisodeOfCare.diagnosis
+//
+def R3EpisodeOfCare_DiagnosisToR4(data) {
+  condition: datatypes::R3ReferenceToR4(data.condition)
+  role: data.role
+  rank: data.rank
+}
+
+// Description: Converts a FHIR R4 EpisodeOfCare.Diagnosis to FHIR STU3 EpisodeOfCare.Diagnosis.
+//
+// Argument(s):
+//   data : FHIR R4 EpisodeOfCare.Diagnosis http://hl7.org/fhir/R4/episodeofcare-definitions.html#EpisodeOfCare.diagnosis
+//
+// Output(s):
+//   FHIR STU3 EpisodeOfCare.Diagnosis http://hl7.org/fhir/STU3/episodeofcare-definitions.html#EpisodeOfCare.diagnosis
+//
+def R4EpisodeOfCare_DiagnosisToR3(data) {
+  condition: datatypes::R4ReferenceToR3(data.condition)
+  role: data.role
+  rank: data.rank
+}

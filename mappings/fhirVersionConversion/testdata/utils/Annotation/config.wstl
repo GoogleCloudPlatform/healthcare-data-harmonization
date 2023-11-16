@@ -1,0 +1,5 @@
+// store to extension
+extension[]: addAnnotation("test_url", $root.data)
+
+// fetch from extension
+data: fetchAnnotation("test_url", $root.extension)

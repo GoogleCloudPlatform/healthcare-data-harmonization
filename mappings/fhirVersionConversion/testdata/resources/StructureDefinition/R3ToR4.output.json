@@ -1,0 +1,299 @@
+{
+  "abstract": true,
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://hl7.org/fhir"
+        }
+      ]
+    }
+  ],
+  "date": "2019-11-01T09:29:23+11:00",
+  "description": "Base StructureDefinition for Element Type: Base definition for all elements in a resource.",
+  "differential": {
+    "element": [
+      {
+        "condition": [
+          "ele-1"
+        ],
+        "constraint": [
+          {
+            "expression": "hasValue() or (children().count() \u003e id.count())",
+            "human": "All FHIR elements must have a @value or children",
+            "key": "ele-1",
+            "severity": "error",
+            "xpath": "@value|f:*|h:div"
+          }
+        ],
+        "definition": "Base definition for all elements in a resource.",
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "normative"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+            "valueCode": "4.0.0"
+          }
+        ],
+        "id": "Element",
+        "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          }
+        ],
+        "max": "*",
+        "min": 0,
+        "path": "Element",
+        "short": "Base for all elements"
+      },
+      {
+        "definition": "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+        "id": "Element.id",
+        "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          }
+        ],
+        "max": "1",
+        "min": 0,
+        "path": "Element.id",
+        "representation": [
+          "xmlAttr"
+        ],
+        "short": "Unique id for inter-element referencing",
+        "type": [
+          {
+            "code": "http://hl7.org/fhirpath/System.String",
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                "valueUrl": "string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "alias": [
+          "extensions",
+          "user content"
+        ],
+        "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
+        "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+        "id": "Element.extension",
+        "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          }
+        ],
+        "max": "*",
+        "min": 0,
+        "path": "Element.extension",
+        "short": "Additional content defined by implementations",
+        "slicing": {
+          "description": "Extensions are always sliced by (at least) url",
+          "discriminator": [
+            {
+              "path": "url",
+              "type": "value"
+            }
+          ],
+          "rules": "open"
+        },
+        "type": [
+          {
+            "code": "Extension"
+          }
+        ]
+      }
+    ]
+  },
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+      "valueCode": "normative"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+      "valueCode": "4.0.0"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/R4/structuredefinition-definitions.html#StructureDefinition.fhirVersion",
+      "valueCode": "4.0.1"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/R4/structuredefinition-definitions.html#StructureDefinition.type",
+      "valueUri": "Element"
+    }
+  ],
+  "fhirVersion": "4.0.1",
+  "id": "Element",
+  "kind": "complex-type",
+  "mapping": [
+    {
+      "identity": "rim",
+      "name": "RIM Mapping",
+      "uri": "http://hl7.org/v3"
+    }
+  ],
+  "meta": {
+    "lastUpdated": "2019-11-01T09:29:23.356+11:00"
+  },
+  "name": "Element",
+  "publisher": "HL7 FHIR Standard",
+  "resourceType": "StructureDefinition",
+  "snapshot": {
+    "element": [
+      {
+        "base": {
+          "max": "*",
+          "min": 0,
+          "path": "Element"
+        },
+        "condition": [
+          "ele-1"
+        ],
+        "constraint": [
+          {
+            "expression": "hasValue() or (children().count() \u003e id.count())",
+            "human": "All FHIR elements must have a @value or children",
+            "key": "ele-1",
+            "severity": "error",
+            "xpath": "@value|f:*|h:div"
+          }
+        ],
+        "definition": "Base definition for all elements in a resource.",
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "normative"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+            "valueCode": "4.0.0"
+          }
+        ],
+        "id": "Element",
+        "isModifier": false,
+        "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          }
+        ],
+        "max": "*",
+        "min": 0,
+        "path": "Element",
+        "short": "Base for all elements"
+      },
+      {
+        "base": {
+          "max": "1",
+          "min": 0,
+          "path": "Element.id"
+        },
+        "definition": "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+        "id": "Element.id",
+        "isModifier": false,
+        "isSummary": false,
+        "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          }
+        ],
+        "max": "1",
+        "min": 0,
+        "path": "Element.id",
+        "representation": [
+          "xmlAttr"
+        ],
+        "short": "Unique id for inter-element referencing",
+        "type": [
+          {
+            "code": "http://hl7.org/fhirpath/System.String",
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                "valueUrl": "string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "alias": [
+          "extensions",
+          "user content"
+        ],
+        "base": {
+          "max": "*",
+          "min": 0,
+          "path": "Element.extension"
+        },
+        "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
+        "constraint": [
+          {
+            "expression": "hasValue() or (children().count() \u003e id.count())",
+            "human": "All FHIR elements must have a @value or children",
+            "key": "ele-1",
+            "severity": "error",
+            "source": "http://hl7.org/fhir/StructureDefinition/Element",
+            "xpath": "@value|f:*|h:div"
+          },
+          {
+            "expression": "extension.exists() != value.exists()",
+            "human": "Must have either extensions or value[x], not both",
+            "key": "ext-1",
+            "severity": "error",
+            "source": "http://hl7.org/fhir/StructureDefinition/Extension",
+            "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])"
+          }
+        ],
+        "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+        "id": "Element.extension",
+        "isModifier": false,
+        "isSummary": false,
+        "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          }
+        ],
+        "max": "*",
+        "min": 0,
+        "path": "Element.extension",
+        "short": "Additional content defined by implementations",
+        "slicing": {
+          "description": "Extensions are always sliced by (at least) url",
+          "discriminator": [
+            {
+              "path": "url",
+              "type": "value"
+            }
+          ],
+          "rules": "open"
+        },
+        "type": [
+          {
+            "code": "Extension"
+          }
+        ]
+      }
+    ]
+  },
+  "status": "active",
+  "text": {
+    "div": "\u003cdiv\u003e!-- Snipped for Brevity --\u003e\u003c/div\u003e",
+    "status": "generated"
+  },
+  "type": "Element",
+  "url": "http://hl7.org/fhir/StructureDefinition/Element",
+  "version": "4.0.1"
+}

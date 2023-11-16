@@ -1,0 +1,48 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def SlotBase(slot) {
+  resourcebase::ResourceBase(slot)
+  identifier: slot.identifier
+  start: slot.start
+  end: slot.end
+  overbooked: slot.overbooked
+  comment: slot.comment
+}
+
+def R2SlotToR3(slot) {
+  SlotBase(slot)
+  contained: datatypes::R2ResourceToR3(slot.contained[])
+  schedule: datatypes::R2ReferenceToR3(slot.schedule)
+  serviceCategory: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/slot-definitions.html#Slot.serviceCategory", slot.extension)
+  serviceType: R2Slot_ServiceTypeToR3("https://www.hl7.org/fhir/STU3/slot-definitions.html#Slot.serviceType", slot.extension, slot.type)
+  specialty: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/slot-definitions.html#Slot.specialty", slot.extension)
+  appointmentType: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/slot-definitions.html#Slot.appointmentType", slot.extension)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/slot-definitions.html#Slot.status", slot.extension)
+  status: if status? then status else slot.freeBusyType
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/slot-definitions.html#Slot.freeBusyType", slot.freeBusyType)
+}
+
+def R3SlotToR2(slot) {
+  SlotBase(slot)
+  contained: datatypes::R3ResourceToR2(slot.contained[])
+  schedule: datatypes::R3ReferenceToR2(slot.schedule)
+  type: slot.serviceType[0]
+  var freeBusyType: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/slot-definitions.html#Slot.freeBusyType", slot.extension)
+  freeBusyType: if freeBusyType? then freeBusyType else slot.status
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/slot-definitions.html#Slot.serviceCategory", slot.serviceCategory)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/slot-definitions.html#Slot.specialty", slot.specialty[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/slot-definitions.html#Slot.appointmentType", slot.appointmentType)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/slot-definitions.html#Slot.status", slot.status)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/slot-definitions.html#Slot.serviceType", slot.serviceType[])
+}
+
+def R2Slot_ServiceTypeToR3(url, extension, data) {
+  var serviceType: extension::fetchCodeableConceptArray(url, extension)
+  if serviceType then {
+    serviceType
+  } else {
+    arrayOf(data)
+  }
+}

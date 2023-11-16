@@ -1,0 +1,73 @@
+{
+  "contained": [
+    {
+      "id": "outputParameters1",
+      "parameter": [
+        {
+          "name": "score",
+          "valueDecimal": 7
+        },
+        {
+          "name": "item-assessed",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "70450",
+                "display": "CT, head, wo iv contrast",
+                "system": "http://www.ama-assn.org/go/cpt"
+              }
+            ]
+          }
+        },
+        {
+          "name": "device",
+          "valueReference": {
+            "reference": "Device/software"
+          }
+        },
+        {
+          "name": "guideline-followed",
+          "valueUri": "http://someguidelineprovider.org/radiology-appropriateness-guidelines.html"
+        }
+      ],
+      "resourceType": "Parameters"
+    }
+  ],
+  "context": {
+    "reference": "Encounter/example"
+  },
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/R4/guidanceresponse-definitions.html#GuidanceResponse.moduleUri",
+      "valueUri": "http://someguidelineprovider.org/radiology-appropriateness-guidelines.html"
+    }
+  ],
+  "id": "example",
+  "identifier": {
+    "system": "http://example.org",
+    "value": "guidanceResponse1"
+  },
+  "module": {
+    "reference": "ServiceDefinition/example"
+  },
+  "occurrenceDateTime": "2017-03-10T16:02:00Z",
+  "outputParameters": {
+    "reference": "#outputParameters1"
+  },
+  "performer": {
+    "reference": "Device/software"
+  },
+  "reasonCodeableConcept": {
+    "text": "Guideline Appropriate Ordering Assessment"
+  },
+  "requestId": "guidanceRequest1",
+  "resourceType": "GuidanceResponse",
+  "status": "success",
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\u003cp\u003e\u003cb\u003eGenerated Narrative with Details\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eid\u003c/b\u003e: example\u003c/p\u003e\u003cp\u003e\u003cb\u003econtained\u003c/b\u003e: \u003c/p\u003e\u003cp\u003e\u003cb\u003erequestIdentifier\u003c/b\u003e: guidanceRequest1\u003c/p\u003e\u003cp\u003e\u003cb\u003eidentifier\u003c/b\u003e: guidanceResponse1\u003c/p\u003e\u003cp\u003e\u003cb\u003emodule\u003c/b\u003e: \u003ca\u003ehttp://someguidelineprovider.org/radiology-appropriateness-guidelines.html\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003estatus\u003c/b\u003e: success\u003c/p\u003e\u003cp\u003e\u003cb\u003esubject\u003c/b\u003e: \u003ca\u003ePatient/example\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eencounter\u003c/b\u003e: \u003ca\u003eEncounter/example\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eoccurrenceDateTime\u003c/b\u003e: 10/03/2017 4:02:00 PM\u003c/p\u003e\u003cp\u003e\u003cb\u003eperformer\u003c/b\u003e: \u003ca\u003eDevice/software\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003ereasonCode\u003c/b\u003e: Guideline Appropriate Ordering Assessment \u003cspan\u003e(Details )\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eoutputParameters\u003c/b\u003e: id: outputParameters1\u003c/p\u003e\u003c/div\u003e",
+    "status": "generated"
+  }
+}

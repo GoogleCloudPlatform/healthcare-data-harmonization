@@ -1,0 +1,53 @@
+{
+  "condition": [
+    {
+      "code": {
+        "coding": [
+          {
+            "code": "315619001",
+            "display": "Myocardial Infarction",
+            "system": "http://snomed.info/sct"
+          }
+        ],
+        "text": "Heart Attack"
+      },
+      "note": [
+        {
+          "text": "Was fishing at the time. At least he went doing someting he loved."
+        }
+      ],
+      "onsetAge": {
+        "code": "a",
+        "system": "http://unitsofmeasure.org",
+        "unit": "yr",
+        "value": 74
+      }
+    }
+  ],
+  "date": "2011-03-18",
+  "id": "father",
+  "identifier": [
+    {
+      "value": "12345"
+    }
+  ],
+  "patient": {
+    "display": "Peter Patient",
+    "reference": "Patient/example"
+  },
+  "relationship": {
+    "coding": [
+      {
+        "code": "FTH",
+        "display": "father",
+        "system": "http://terminology.hl7.org/CodeSystem/v3-RoleCode"
+      }
+    ]
+  },
+  "resourceType": "FamilyMemberHistory",
+  "status": "completed",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003eFather died of a heart attack aged 74\u003c/div\u003e",
+    "status": "generated"
+  }
+}

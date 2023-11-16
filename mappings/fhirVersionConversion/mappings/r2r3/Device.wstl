@@ -1,0 +1,60 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def DeviceBase(device) {
+  resourcebase::ResourceBase(device)
+  identifier: device.identifier
+  lotNumber: device.lotNumber
+  manufacturer: device.manufacturer
+  manufactureDate: device.manufactureDate
+  model: device.model
+  version: device.version
+  contact: device.contact
+  url: device.url
+  note: device.note
+}
+
+def R2DeviceToR3(device) {
+  DeviceBase(device)
+  contained: datatypes::R2ResourceToR3(device.contained[])
+  location: datatypes::R2ReferenceToR3(device.location)
+  patient: datatypes::R2ReferenceToR3(device.patient)
+  owner: datatypes::R2ReferenceToR3(device.owner)
+  udi.deviceIdentifier: extension::fetchString("https://www.hl7.org/fhir/STU3/device-definitions.html#Device.udi.deviceIdentifier", device.extension)
+  udi.name: extension::fetchString("https://www.hl7.org/fhir/STU3/device-definitions.html#Device.udi.name", device.extension)
+  udi.jurisdiction: extension::fetchUri("https://www.hl7.org/fhir/STU3/device-definitions.html#Device.udi.jurisdiction", device.extension)
+  udi.carrierHRF: extension::fetchString("https://www.hl7.org/fhir/STU3/device-definitions.html#Device.udi.carrierHRF", device.extension)
+  udi.carrierAIDC: extension::fetchBase64Binary("https://www.hl7.org/fhir/STU3/device-definitions.html#Device.udi.carrierAIDC", device.extension)
+  udi.issuer: extension::fetchUri("https://www.hl7.org/fhir/STU3/device-definitions.html#Device.udi.issuer", device.extension)
+  udi.entryType: extension::fetchCode("https://www.hl7.org/fhir/STU3/device-definitions.html#Device.udi.entryType", device.extension)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/device-definitions.html#Device.status", device.extension)
+  status: if status? then status else device.status
+  type: device.type
+  expirationDate: device.expiry
+  safety: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/device-definitions.html#Device.safety", device.extension)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/DSTU2/device-definitions.html#Device.udi", device.udi)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/device-definitions.html#Device.status", device.status)
+}
+
+def R3DeviceToR2(device) {
+  DeviceBase(device)
+  contained: datatypes::R3ResourceToR2(device.contained[])
+  location: datatypes::R3ReferenceToR2(device.location)
+  patient: datatypes::R3ReferenceToR2(device.patient)
+  owner: datatypes::R3ReferenceToR2(device.owner)
+  udi: extension::fetchString("https://www.hl7.org/fhir/DSTU2/device-definitions.html#Device.udi", device.extension)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/device-definitions.html#Device.status", device.extension)
+  status: if status? then status else device.status
+  type: device.type
+  expiry: device.expirationDate
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/device-definitions.html#Device.udi.deviceIdentifier", device.udi.deviceIdentifier)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/device-definitions.html#Device.udi.name", device.udi.name)
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/STU3/device-definitions.html#Device.udi.jurisdiction", device.udi.jurisdiction)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/device-definitions.html#Device.udi.carrierHRF", device.udi.carrierHRF)
+  extension[]: extension::BuildBase64BinaryExtension("https://www.hl7.org/fhir/STU3/device-definitions.html#Device.udi.carrierAIDC", device.udi.carrierAIDC)
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/STU3/device-definitions.html#Device.udi.issuer", device.udi.issuer)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/device-definitions.html#Device.udi.entryType", device.udi.entryType)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/device-definitions.html#Device.status", device.status)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/device-definitions.html#Device.safety", device.safety[])
+}

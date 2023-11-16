@@ -1,0 +1,1834 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "Account",
+          "display": "Account",
+          "target": [
+            {
+              "code": "Account",
+              "display": "Account",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ActivityDefinition",
+          "display": "ActivityDefinition",
+          "target": [
+            {
+              "code": "ActivityDefinition",
+              "display": "ActivityDefinition",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "AdverseEvent",
+          "display": "AdverseEvent",
+          "target": [
+            {
+              "code": "AdverseEvent",
+              "display": "AdverseEvent",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "AllergyIntolerance",
+          "display": "AllergyIntolerance",
+          "target": [
+            {
+              "code": "AllergyIntolerance",
+              "display": "AllergyIntolerance",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Appointment",
+          "display": "Appointment",
+          "target": [
+            {
+              "code": "Appointment",
+              "display": "Appointment",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "AppointmentResponse",
+          "display": "AppointmentResponse",
+          "target": [
+            {
+              "code": "AppointmentResponse",
+              "display": "AppointmentResponse",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "AuditEvent",
+          "display": "AuditEvent",
+          "target": [
+            {
+              "code": "AuditEvent",
+              "display": "AuditEvent",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Basic",
+          "display": "Basic",
+          "target": [
+            {
+              "code": "Basic",
+              "display": "Basic",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Binary",
+          "display": "Binary",
+          "target": [
+            {
+              "code": "Binary",
+              "display": "Binary",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "BodySite",
+          "display": "BodySite",
+          "target": [
+            {
+              "code": "BodyStructure",
+              "display": "BodyStructure",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Bundle",
+          "display": "Bundle",
+          "target": [
+            {
+              "code": "Bundle",
+              "display": "Bundle",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "CapabilityStatement",
+          "display": "CapabilityStatement",
+          "target": [
+            {
+              "code": "CapabilityStatement",
+              "display": "CapabilityStatement",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "CarePlan",
+          "display": "CarePlan",
+          "target": [
+            {
+              "code": "CarePlan",
+              "display": "CarePlan",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "CareTeam",
+          "display": "CareTeam",
+          "target": [
+            {
+              "code": "CareTeam",
+              "display": "CareTeam",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ChargeItem",
+          "display": "ChargeItem",
+          "target": [
+            {
+              "code": "ChargeItem",
+              "display": "ChargeItem",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Claim",
+          "display": "Claim",
+          "target": [
+            {
+              "code": "Claim",
+              "display": "Claim",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ClaimResponse",
+          "display": "ClaimResponse",
+          "target": [
+            {
+              "code": "ClaimResponse",
+              "display": "ClaimResponse",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ClinicalImpression",
+          "display": "ClinicalImpression",
+          "target": [
+            {
+              "code": "ClinicalImpression",
+              "display": "ClinicalImpression",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "CodeSystem",
+          "display": "CodeSystem",
+          "target": [
+            {
+              "code": "CodeSystem",
+              "display": "CodeSystem",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Communication",
+          "display": "Communication",
+          "target": [
+            {
+              "code": "Communication",
+              "display": "Communication",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "CommunicationRequest",
+          "display": "CommunicationRequest",
+          "target": [
+            {
+              "code": "CommunicationRequest",
+              "display": "CommunicationRequest",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "CompartmentDefinition",
+          "display": "CompartmentDefinition",
+          "target": [
+            {
+              "code": "CompartmentDefinition",
+              "display": "CompartmentDefinition",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Composition",
+          "display": "Composition",
+          "target": [
+            {
+              "code": "Composition",
+              "display": "Composition",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ConceptMap",
+          "display": "ConceptMap",
+          "target": [
+            {
+              "code": "ConceptMap",
+              "display": "ConceptMap",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Condition",
+          "display": "Condition",
+          "target": [
+            {
+              "code": "Condition",
+              "display": "Condition",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Consent",
+          "display": "Consent",
+          "target": [
+            {
+              "code": "Consent",
+              "display": "Consent",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Contract",
+          "display": "Contract",
+          "target": [
+            {
+              "code": "Contract",
+              "display": "Contract",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Coverage",
+          "display": "Coverage",
+          "target": [
+            {
+              "code": "Coverage",
+              "display": "Coverage",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "DetectedIssue",
+          "display": "DetectedIssue",
+          "target": [
+            {
+              "code": "DetectedIssue",
+              "display": "DetectedIssue",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "DeviceMetric",
+          "display": "DeviceMetric",
+          "target": [
+            {
+              "code": "DeviceMetric",
+              "display": "DeviceMetric",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Device",
+          "display": "Device",
+          "target": [
+            {
+              "code": "Device",
+              "display": "Device",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "DeviceRequest",
+          "display": "DeviceRequest",
+          "target": [
+            {
+              "code": "DeviceRequest",
+              "display": "DeviceRequest",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "DeviceUseStatement",
+          "display": "DeviceUseStatement",
+          "target": [
+            {
+              "code": "DeviceUseStatement",
+              "display": "DeviceUseStatement",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "DiagnosticReport",
+          "display": "DiagnosticReport",
+          "target": [
+            {
+              "code": "DiagnosticReport",
+              "display": "DiagnosticReport",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "DocumentManifest",
+          "display": "DocumentManifest",
+          "target": [
+            {
+              "code": "DocumentManifest",
+              "display": "DocumentManifest",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "DocumentReference",
+          "display": "DocumentReference",
+          "target": [
+            {
+              "code": "DocumentReference",
+              "display": "DocumentReference",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "DomainResource",
+          "display": "DomainResource",
+          "target": [
+            {
+              "code": "DomainResource",
+              "display": "DomainResource",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Encounter",
+          "display": "Encounter",
+          "target": [
+            {
+              "code": "Encounter",
+              "display": "Encounter",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Endpoint",
+          "display": "Endpoint",
+          "target": [
+            {
+              "code": "Endpoint",
+              "display": "Endpoint",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "EnrollmentRequest",
+          "display": "EnrollmentRequest",
+          "target": [
+            {
+              "code": "EnrollmentRequest",
+              "display": "EnrollmentRequest",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "EnrollmentResponse",
+          "display": "EnrollmentResponse",
+          "target": [
+            {
+              "code": "EnrollmentResponse",
+              "display": "EnrollmentResponse",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "EpisodeOfCare",
+          "display": "EpisodeOfCare",
+          "target": [
+            {
+              "code": "EpisodeOfCare",
+              "display": "EpisodeOfCare",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ExplanationOfBenefit",
+          "display": "ExplanationOfBenefit",
+          "target": [
+            {
+              "code": "ExplanationOfBenefit",
+              "display": "ExplanationOfBenefit",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "FamilyMemberHistory",
+          "display": "FamilyMemberHistory",
+          "target": [
+            {
+              "code": "FamilyMemberHistory",
+              "display": "FamilyMemberHistory",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Flag",
+          "display": "Flag",
+          "target": [
+            {
+              "code": "Flag",
+              "display": "Flag",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Goal",
+          "display": "Goal",
+          "target": [
+            {
+              "code": "Goal",
+              "display": "Goal",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "GraphDefinition",
+          "display": "GraphDefinition",
+          "target": [
+            {
+              "code": "GraphDefinition",
+              "display": "GraphDefinition",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Group",
+          "display": "Group",
+          "target": [
+            {
+              "code": "Group",
+              "display": "Group",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "GuidanceResponse",
+          "display": "GuidanceResponse",
+          "target": [
+            {
+              "code": "GuidanceResponse",
+              "display": "GuidanceResponse",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "HealthcareService",
+          "display": "HealthcareService",
+          "target": [
+            {
+              "code": "HealthcareService",
+              "display": "HealthcareService",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ImagingStudy",
+          "display": "ImagingStudy",
+          "target": [
+            {
+              "code": "ImagingStudy",
+              "display": "ImagingStudy",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Immunization",
+          "display": "Immunization",
+          "target": [
+            {
+              "code": "Immunization",
+              "display": "Immunization",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ImmunizationRecommendation",
+          "display": "ImmunizationRecommendation",
+          "target": [
+            {
+              "code": "ImmunizationRecommendation",
+              "display": "ImmunizationRecommendation",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ImplementationGuide",
+          "display": "ImplementationGuide",
+          "target": [
+            {
+              "code": "ImplementationGuide",
+              "display": "ImplementationGuide",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Library",
+          "display": "Library",
+          "target": [
+            {
+              "code": "Library",
+              "display": "Library",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Linkage",
+          "display": "Linkage",
+          "target": [
+            {
+              "code": "Linkage",
+              "display": "Linkage",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "List",
+          "display": "List",
+          "target": [
+            {
+              "code": "List",
+              "display": "List",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Location",
+          "display": "Location",
+          "target": [
+            {
+              "code": "Location",
+              "display": "Location",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Measure",
+          "display": "Measure",
+          "target": [
+            {
+              "code": "Measure",
+              "display": "Measure",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "MeasureReport",
+          "display": "MeasureReport",
+          "target": [
+            {
+              "code": "MeasureReport",
+              "display": "MeasureReport",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Media",
+          "display": "Media",
+          "target": [
+            {
+              "code": "Media",
+              "display": "Media",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "MedicationAdministration",
+          "display": "MedicationAdministration",
+          "target": [
+            {
+              "code": "MedicationAdministration",
+              "display": "MedicationAdministration",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "MedicationDispense",
+          "display": "MedicationDispense",
+          "target": [
+            {
+              "code": "MedicationDispense",
+              "display": "MedicationDispense",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Medication",
+          "display": "Medication",
+          "target": [
+            {
+              "code": "Medication",
+              "display": "Medication",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "MedicationRequest",
+          "display": "MedicationRequest",
+          "target": [
+            {
+              "code": "MedicationRequest",
+              "display": "MedicationRequest",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "MedicationStatement",
+          "display": "MedicationStatement",
+          "target": [
+            {
+              "code": "MedicationStatement",
+              "display": "MedicationStatement",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "MessageDefinition",
+          "display": "MessageDefinition",
+          "target": [
+            {
+              "code": "MessageDefinition",
+              "display": "MessageDefinition",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "MessageHeader",
+          "display": "MessageHeader",
+          "target": [
+            {
+              "code": "MessageHeader",
+              "display": "MessageHeader",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "NamingSystem",
+          "display": "NamingSystem",
+          "target": [
+            {
+              "code": "NamingSystem",
+              "display": "NamingSystem",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "NutritionOrder",
+          "display": "NutritionOrder",
+          "target": [
+            {
+              "code": "NutritionOrder",
+              "display": "NutritionOrder",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Observation",
+          "display": "Observation",
+          "target": [
+            {
+              "code": "Observation",
+              "display": "Observation",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "OperationDefinition",
+          "display": "OperationDefinition",
+          "target": [
+            {
+              "code": "OperationDefinition",
+              "display": "OperationDefinition",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "OperationOutcome",
+          "display": "OperationOutcome",
+          "target": [
+            {
+              "code": "OperationOutcome",
+              "display": "OperationOutcome",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Organization",
+          "display": "Organization",
+          "target": [
+            {
+              "code": "Organization",
+              "display": "Organization",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Parameters",
+          "display": "Parameters",
+          "target": [
+            {
+              "code": "Parameters",
+              "display": "Parameters",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Patient",
+          "display": "Patient",
+          "target": [
+            {
+              "code": "Patient",
+              "display": "Patient",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "PaymentNotice",
+          "display": "PaymentNotice",
+          "target": [
+            {
+              "code": "PaymentNotice",
+              "display": "PaymentNotice",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "PaymentReconciliation",
+          "display": "PaymentReconciliation",
+          "target": [
+            {
+              "code": "PaymentReconciliation",
+              "display": "PaymentReconciliation",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Person",
+          "display": "Person",
+          "target": [
+            {
+              "code": "Person",
+              "display": "Person",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "PlanDefinition",
+          "display": "PlanDefinition",
+          "target": [
+            {
+              "code": "PlanDefinition",
+              "display": "PlanDefinition",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Practitioner",
+          "display": "Practitioner",
+          "target": [
+            {
+              "code": "Practitioner",
+              "display": "Practitioner",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "PractitionerRole",
+          "display": "PractitionerRole",
+          "target": [
+            {
+              "code": "PractitionerRole",
+              "display": "PractitionerRole",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Procedure",
+          "display": "Procedure",
+          "target": [
+            {
+              "code": "Procedure",
+              "display": "Procedure",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Provenance",
+          "display": "Provenance",
+          "target": [
+            {
+              "code": "Provenance",
+              "display": "Provenance",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Questionnaire",
+          "display": "Questionnaire",
+          "target": [
+            {
+              "code": "Questionnaire",
+              "display": "Questionnaire",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "QuestionnaireResponse",
+          "display": "QuestionnaireResponse",
+          "target": [
+            {
+              "code": "QuestionnaireResponse",
+              "display": "QuestionnaireResponse",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "RelatedPerson",
+          "display": "RelatedPerson",
+          "target": [
+            {
+              "code": "RelatedPerson",
+              "display": "RelatedPerson",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "RequestGroup",
+          "display": "RequestGroup",
+          "target": [
+            {
+              "code": "RequestGroup",
+              "display": "RequestGroup",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ResearchStudy",
+          "display": "ResearchStudy",
+          "target": [
+            {
+              "code": "ResearchStudy",
+              "display": "ResearchStudy",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ResearchSubject",
+          "display": "ResearchSubject",
+          "target": [
+            {
+              "code": "ResearchSubject",
+              "display": "ResearchSubject",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Resource",
+          "display": "Resource",
+          "target": [
+            {
+              "code": "Resource",
+              "display": "Resource",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "RiskAssessment",
+          "display": "RiskAssessment",
+          "target": [
+            {
+              "code": "RiskAssessment",
+              "display": "RiskAssessment",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Schedule",
+          "display": "Schedule",
+          "target": [
+            {
+              "code": "Schedule",
+              "display": "Schedule",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "SearchParameter",
+          "display": "SearchParameter",
+          "target": [
+            {
+              "code": "SearchParameter",
+              "display": "SearchParameter",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Sequence",
+          "display": "Sequence",
+          "target": [
+            {
+              "code": "MolecularSequence",
+              "display": "MolecularSequence",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Slot",
+          "display": "Slot",
+          "target": [
+            {
+              "code": "Slot",
+              "display": "Slot",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Specimen",
+          "display": "Specimen",
+          "target": [
+            {
+              "code": "Specimen",
+              "display": "Specimen",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "StructureDefinition",
+          "display": "StructureDefinition",
+          "target": [
+            {
+              "code": "StructureDefinition",
+              "display": "StructureDefinition",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "StructureMap",
+          "display": "StructureMap",
+          "target": [
+            {
+              "code": "StructureMap",
+              "display": "StructureMap",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Subscription",
+          "display": "Subscription",
+          "target": [
+            {
+              "code": "Subscription",
+              "display": "Subscription",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Substance",
+          "display": "Substance",
+          "target": [
+            {
+              "code": "Substance",
+              "display": "Substance",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "SupplyDelivery",
+          "display": "SupplyDelivery",
+          "target": [
+            {
+              "code": "SupplyDelivery",
+              "display": "SupplyDelivery",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "SupplyRequest",
+          "display": "SupplyRequest",
+          "target": [
+            {
+              "code": "SupplyRequest",
+              "display": "SupplyRequest",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Task",
+          "display": "Task",
+          "target": [
+            {
+              "code": "Task",
+              "display": "Task",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "TestReport",
+          "display": "TestReport",
+          "target": [
+            {
+              "code": "TestReport",
+              "display": "TestReport",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "TestScript",
+          "display": "TestScript",
+          "target": [
+            {
+              "code": "TestScript",
+              "display": "TestScript",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ValueSet",
+          "display": "ValueSet",
+          "target": [
+            {
+              "code": "ValueSet",
+              "display": "ValueSet",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "VisionPrescription",
+          "display": "VisionPrescription",
+          "target": [
+            {
+              "code": "VisionPrescription",
+              "display": "VisionPrescription",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/ValueSet/all-types",
+      "target": "http://hl7.org/fhir/resource-types"
+    },
+    {
+      "element": [
+        {
+          "code": "Address",
+          "display": "Address",
+          "target": [
+            {
+              "code": "Address",
+              "display": "Address",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Age",
+          "display": "Age",
+          "target": [
+            {
+              "code": "Age",
+              "display": "Age",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Annotation",
+          "display": "Annotation",
+          "target": [
+            {
+              "code": "Annotation",
+              "display": "Annotation",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Attachment",
+          "display": "Attachment",
+          "target": [
+            {
+              "code": "Attachment",
+              "display": "Attachment",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "BackboneElement",
+          "display": "BackboneElement",
+          "target": [
+            {
+              "code": "BackboneElement",
+              "display": "BackboneElement",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "CodeableConcept",
+          "display": "CodeableConcept",
+          "target": [
+            {
+              "code": "CodeableConcept",
+              "display": "CodeableConcept",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Coding",
+          "display": "Coding",
+          "target": [
+            {
+              "code": "Coding",
+              "display": "Coding",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ContactDetail",
+          "display": "ContactDetail",
+          "target": [
+            {
+              "code": "ContactDetail",
+              "display": "ContactDetail",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ContactPoint",
+          "display": "ContactPoint",
+          "target": [
+            {
+              "code": "ContactPoint",
+              "display": "ContactPoint",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Contributor",
+          "display": "Contributor",
+          "target": [
+            {
+              "code": "Contributor",
+              "display": "Contributor",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Count",
+          "display": "Count",
+          "target": [
+            {
+              "code": "Count",
+              "display": "Count",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "DataRequirement",
+          "display": "DataRequirement",
+          "target": [
+            {
+              "code": "DataRequirement",
+              "display": "DataRequirement",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Distance",
+          "display": "Distance",
+          "target": [
+            {
+              "code": "Distance",
+              "display": "Distance",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Dosage",
+          "display": "Dosage",
+          "target": [
+            {
+              "code": "Dosage",
+              "display": "Dosage",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Duration",
+          "display": "Duration",
+          "target": [
+            {
+              "code": "Duration",
+              "display": "Duration",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Element",
+          "display": "Element",
+          "target": [
+            {
+              "code": "Element",
+              "display": "Element",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ElementDefinition",
+          "display": "ElementDefinition",
+          "target": [
+            {
+              "code": "ElementDefinition",
+              "display": "ElementDefinition",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Extension",
+          "display": "Extension",
+          "target": [
+            {
+              "code": "Extension",
+              "display": "Extension",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "HumanName",
+          "display": "HumanName",
+          "target": [
+            {
+              "code": "HumanName",
+              "display": "HumanName",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Identifier",
+          "display": "Identifier",
+          "target": [
+            {
+              "code": "Identifier",
+              "display": "Identifier",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Meta",
+          "display": "Meta",
+          "target": [
+            {
+              "code": "Meta",
+              "display": "Meta",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Money",
+          "display": "Money",
+          "target": [
+            {
+              "code": "Money",
+              "display": "Money",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Narrative",
+          "display": "Narrative",
+          "target": [
+            {
+              "code": "Narrative",
+              "display": "Narrative",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ParameterDefinition",
+          "display": "ParameterDefinition",
+          "target": [
+            {
+              "code": "ParameterDefinition",
+              "display": "ParameterDefinition",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Period",
+          "display": "Period",
+          "target": [
+            {
+              "code": "Period",
+              "display": "Period",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Quantity",
+          "display": "Quantity",
+          "target": [
+            {
+              "code": "Quantity",
+              "display": "Quantity",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Range",
+          "display": "Range",
+          "target": [
+            {
+              "code": "Range",
+              "display": "Range",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Ratio",
+          "display": "Ratio",
+          "target": [
+            {
+              "code": "Ratio",
+              "display": "Ratio",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Reference",
+          "display": "Reference",
+          "target": [
+            {
+              "code": "Reference",
+              "display": "Reference",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "RelatedArtifact",
+          "display": "RelatedArtifact",
+          "target": [
+            {
+              "code": "RelatedArtifact",
+              "display": "RelatedArtifact",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "SampledData",
+          "display": "SampledData",
+          "target": [
+            {
+              "code": "SampledData",
+              "display": "SampledData",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Signature",
+          "display": "Signature",
+          "target": [
+            {
+              "code": "Signature",
+              "display": "Signature",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "SimpleQuantity",
+          "display": "SimpleQuantity",
+          "target": [
+            {
+              "code": "SimpleQuantity",
+              "display": "SimpleQuantity",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Timing",
+          "display": "Timing",
+          "target": [
+            {
+              "code": "Timing",
+              "display": "Timing",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "TriggerDefinition",
+          "display": "TriggerDefinition",
+          "target": [
+            {
+              "code": "TriggerDefinition",
+              "display": "TriggerDefinition",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "UsageContext",
+          "display": "UsageContext",
+          "target": [
+            {
+              "code": "UsageContext",
+              "display": "UsageContext",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "base64Binary",
+          "display": "base64Binary",
+          "target": [
+            {
+              "code": "base64Binary",
+              "display": "base64Binary",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "boolean",
+          "display": "boolean",
+          "target": [
+            {
+              "code": "boolean",
+              "display": "boolean",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "code",
+          "display": "code",
+          "target": [
+            {
+              "code": "code",
+              "display": "code",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "date",
+          "display": "date",
+          "target": [
+            {
+              "code": "date",
+              "display": "date",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "dateTime",
+          "display": "dateTime",
+          "target": [
+            {
+              "code": "dateTime",
+              "display": "dateTime",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "decimal",
+          "display": "decimal",
+          "target": [
+            {
+              "code": "decimal",
+              "display": "decimal",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "id",
+          "display": "id",
+          "target": [
+            {
+              "code": "id",
+              "display": "id",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "instant",
+          "display": "instant",
+          "target": [
+            {
+              "code": "instant",
+              "display": "instant",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "integer",
+          "display": "integer",
+          "target": [
+            {
+              "code": "integer",
+              "display": "integer",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "markdown",
+          "display": "markdown",
+          "target": [
+            {
+              "code": "markdown",
+              "display": "markdown",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "oid",
+          "display": "oid",
+          "target": [
+            {
+              "code": "oid",
+              "display": "oid",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "positiveInt",
+          "display": "positiveInt",
+          "target": [
+            {
+              "code": "positiveInt",
+              "display": "positiveInt",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "string",
+          "display": "string",
+          "target": [
+            {
+              "code": "string",
+              "display": "string",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "time",
+          "display": "time",
+          "target": [
+            {
+              "code": "time",
+              "display": "time",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "unsignedInt",
+          "display": "unsignedInt",
+          "target": [
+            {
+              "code": "unsignedInt",
+              "display": "unsignedInt",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "uri",
+          "display": "uri",
+          "target": [
+            {
+              "code": "uri",
+              "display": "uri",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "uuid",
+          "display": "uuid",
+          "target": [
+            {
+              "code": "uuid",
+              "display": "uuid",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "xhtml",
+          "display": "XHTML",
+          "target": [
+            {
+              "code": "xhtml",
+              "display": "XHTML",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/ValueSet/all-types",
+      "target": "http://hl7.org/fhir/data-types"
+    },
+    {
+      "element": [
+        {
+          "code": "Type",
+          "display": "Type",
+          "target": [
+            {
+              "code": "Type",
+              "display": "Type",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Any",
+          "display": "Any",
+          "target": [
+            {
+              "code": "Any",
+              "display": "Any",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/ValueSet/all-types",
+      "target": "http://hl7.org/fhir/abstract-types",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "Type",
+        "display": "Type"
+      }
+    }
+  ],
+  "id": "FhirTypes_r3r4",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

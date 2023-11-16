@@ -1,0 +1,44 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def ResearchSubjectBase(researchSubject) {
+  resourcebase::ResourceBase(researchSubject)
+  period: researchSubject.period
+  assignedArm: researchSubject.assignedArm
+  actualArm: researchSubject.actualArm
+}
+
+def R3ResearchSubjectToR4(researchSubject) {
+  ResearchSubjectBase(researchSubject)
+  contained: datatypes::R3ResourceToR4(researchSubject.contained[])
+  consent: datatypes::R3ReferenceToR4(researchSubject.consent)
+  study: datatypes::R3ReferenceToR4(researchSubject.study)
+  individual: datatypes::R3ReferenceToR4(researchSubject.individual)
+  identifier: R3ResearchSubject_IdentifierToR4("https://www.hl7.org/fhir/R4/researchsubject-definitions.html#ResearchSubject.identifier", researchSubject.extension, researchSubject.identifier)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/R4/researchsubject-definitions.html#ResearchSubject.status", researchSubject.extension)
+  status: if status? then status else researchSubject.status
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/researchsubject-definitions.html#ResearchSubject.status", researchSubject.status)
+}
+
+def R4ResearchSubjectToR3(researchSubject) {
+  ResearchSubjectBase(researchSubject)
+  contained: datatypes::R4ResourceToR3(researchSubject.contained[])
+  consent: datatypes::R4ReferenceToR3(researchSubject.consent)
+  study: datatypes::R4ReferenceToR3(researchSubject.study)
+  individual: datatypes::R4ReferenceToR3(researchSubject.individual)
+  identifier: researchSubject.identifier[0]
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/researchsubject-definitions.html#ResearchSubject.status", researchSubject.extension)
+  status: if status? then status else researchSubject.status
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/R4/researchsubject-definitions.html#ResearchSubject.identifier", researchSubject.identifier[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/researchsubject-definitions.html#ResearchSubject.status", researchSubject.status)
+}
+
+def R3ResearchSubject_IdentifierToR4(url, extension, data) {
+  var identifier: extension::fetchIdentifierArray(url, extension)
+  if identifier then {
+    identifier
+  } else {
+    arrayOf(data)
+  }
+}

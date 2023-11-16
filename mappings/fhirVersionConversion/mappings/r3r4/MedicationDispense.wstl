@@ -1,0 +1,95 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def MedicationDispenseBase(medicationDispense) {
+  resourcebase::ResourceBase(medicationDispense)
+  identifier: medicationDispense.identifier
+  category: medicationDispense.category
+  medicationCodeableConcept: medicationDispense.medicationCodeableConcept
+  type: medicationDispense.type
+  quantity: medicationDispense.quantity
+  daysSupply: medicationDispense.daysSupply
+  whenPrepared: medicationDispense.whenPrepared
+  whenHandedOver: medicationDispense.whenHandedOver
+  note: medicationDispense.note
+  dosageInstruction: medicationDispense.dosageInstruction
+}
+
+def R3MedicationDispenseToR4(medicationDispense) {
+  MedicationDispenseBase(medicationDispense)
+  contained: datatypes::R3ResourceToR4(medicationDispense.contained[])
+  detectedIssue: datatypes::R3ReferenceToR4(medicationDispense.detectedIssue[])
+  eventHistory: datatypes::R3ReferenceToR4(medicationDispense.eventHistory[])
+  receiver: datatypes::R3ReferenceToR4(medicationDispense.receiver[])
+  destination: datatypes::R3ReferenceToR4(medicationDispense.destination)
+  authorizingPrescription: datatypes::R3ReferenceToR4(medicationDispense.authorizingPrescription[])
+  supportingInformation: datatypes::R3ReferenceToR4(medicationDispense.supportingInformation[])
+  subject: datatypes::R3ReferenceToR4(medicationDispense.subject)
+  context: datatypes::R3ReferenceToR4(medicationDispense.context)
+  medicationReference: datatypes::R3ReferenceToR4(medicationDispense.medicationReference)
+  partOf: datatypes::R3ReferenceToR4(medicationDispense.partOf[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/R4/medicationdispense-definitions.html#MedicationDispense.status", medicationDispense.extension)
+  status: if status? then status else medicationDispense.status
+  statusReasonCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/medicationdispense-definitions.html#MedicationDispense.statusReasonCodeableConcept", medicationDispense.extension)
+  statusReasonReference: extension::fetchReference("https://www.hl7.org/fhir/R4/medicationdispense-definitions.html#MedicationDispense.statusReasonReference", medicationDispense.extension)
+  performer: R3MedicationDispense_PerformerToR4(medicationDispense.performer[])
+  location: extension::fetchReference("https://www.hl7.org/fhir/R4/medicationdispense-definitions.html#MedicationDispense.location", medicationDispense.extension)
+  substitution: R3MedicationDispense_SubstitutionToR4(medicationDispense.substitution)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.notDone", medicationDispense.notDone)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.notDoneReasonCodeableConcept", medicationDispense.notDoneReasonCodeableConcept)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.notDoneReasonReference", medicationDispense.notDoneReasonReference)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.status", medicationDispense.status)
+}
+
+def R4MedicationDispenseToR3(medicationDispense) {
+  MedicationDispenseBase(medicationDispense)
+  contained: datatypes::R4ResourceToR3(medicationDispense.contained[])
+  detectedIssue: datatypes::R4ReferenceToR3(medicationDispense.detectedIssue[])
+  eventHistory: datatypes::R4ReferenceToR3(medicationDispense.eventHistory[])
+  receiver: datatypes::R4ReferenceToR3(medicationDispense.receiver[])
+  destination: datatypes::R4ReferenceToR3(medicationDispense.destination)
+  authorizingPrescription: datatypes::R4ReferenceToR3(medicationDispense.authorizingPrescription[])
+  supportingInformation: datatypes::R4ReferenceToR3(medicationDispense.supportingInformation[])
+  subject: datatypes::R4ReferenceToR3(medicationDispense.subject)
+  context: datatypes::R4ReferenceToR3(medicationDispense.context)
+  medicationReference: datatypes::R4ReferenceToR3(medicationDispense.medicationReference)
+  partOf: datatypes::R4ReferenceToR3(medicationDispense.partOf[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.status", medicationDispense.extension)
+  status: if status? then status else medicationDispense.status
+  performer: R4MedicationDispense_PerformerToR3(medicationDispense.performer[])
+  substitution: R4MedicationDispense_SubstitutionToR3(medicationDispense.substitution)
+  notDone: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.notDone", medicationDispense.extension)
+  notDoneReasonCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.notDoneReasonCodeableConcept", medicationDispense.extension)
+  notDoneReasonReference: extension::fetchReference("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.notDoneReasonReference", medicationDispense.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/medicationdispense-definitions.html#MedicationDispense.statusReasonCodeableConcept", medicationDispense.statusReasonCodeableConcept)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/medicationdispense-definitions.html#MedicationDispense.statusReasonReference", medicationDispense.statusReasonReference)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/medicationdispense-definitions.html#MedicationDispense.location", medicationDispense.location)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/medicationdispense-definitions.html#MedicationDispense.status", medicationDispense.status)
+}
+
+def R3MedicationDispense_SubstitutionToR4(data) {
+  wasSubstituted: data.wasSubstituted
+  type: data.type
+  reason: data.reason
+  responsibleParty: datatypes::R3ReferenceToR4(data.responsibleParty[])
+}
+
+def R4MedicationDispense_SubstitutionToR3(data) {
+  wasSubstituted: data.wasSubstituted
+  type: data.type
+  reason: data.reason
+  responsibleParty: datatypes::R4ReferenceToR3(data.responsibleParty[])
+}
+
+def R3MedicationDispense_PerformerToR4(data) {
+  function: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/medicationdispense-definitions.html#MedicationDispense.performer.function", data.extension)
+  actor: datatypes::R3ReferenceToR4(data.actor)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.performer.onBehalfOfs", data.onBehalfOf)
+}
+
+def R4MedicationDispense_PerformerToR3(data) {
+  actor: datatypes::R4ReferenceToR3(data.actor)
+  onBehalfOf: extension::fetchReference("https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.performer.onBehalfOf", data.extension)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/medicationdispense-definitions.html#MedicationDispense.performer.function", data.function)
+}

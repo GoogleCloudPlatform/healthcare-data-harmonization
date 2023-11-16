@@ -1,0 +1,120 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   adverseEvent : FHIR AdverseEvent resource
+//
+// Output(s):
+//   FHIR AdverseEvent Resource
+//
+def AdverseEventBase (adverseEvent) {
+  resourcebase::ResourceBase(adverseEvent)
+  identifier: adverseEvent.identifier
+  date: adverseEvent.date
+  seriousness: adverseEvent.seriousness
+  outcome: adverseEvent.outcome
+}
+
+// Description: Converts a FHIR STU3 AdverseEvent resource to FHIR R4 AdverseEvent resource.
+//
+// Argument(s):
+//   adverseEvent : FHIR STU3 AdverseEvent resource https://www.hl7.org/fhir/stu3/adverseEvent.html
+//
+// Output(s):
+//   FHIR R4 AdverseEvent Resource https://www.hl7.org/fhir/r4/adverseEvent.html
+//
+def R3AdverseEventToR4 (adverseEvent) {
+  AdverseEventBase(adverseEvent)
+  contained: datatypes::R3ResourceToR4(adverseEvent.contained[])
+  location: datatypes::R3ReferenceToR4(adverseEvent.location)
+  referenceDocument: datatypes::R3ReferenceToR4(adverseEvent.referenceDocument[])
+  study: datatypes::R3ReferenceToR4(adverseEvent.study[])
+  actuality: extension::fetchCode("https://www.hl7.org/fhir/R4/adverseevent-definitions.html#AdverseEvent.actuality", adverseEvent.extension)
+  actuality: utilities::defaultIfNull($this.actuality, "actual")
+  category[]: datatypes::CodeToCodeableConcept(adverseEvent.category)
+  event: adverseEvent.type
+  subject: datatypes::R3ReferenceToR4(adverseEvent.subject[where matchesRegex($.value, "^Patient.*")])
+  subject.display: utilities::defaultIfNull($this.subject, "Patient")
+  encounter: extension::fetchReference("https://www.hl7.org/fhir/R4/adverseevent-definitions.html#AdverseEvent.encounter", adverseEvent.extension)
+  detected: extension::fetchDateTime("https://www.hl7.org/fhir/R4/adverseevent-definitions.html#AdverseEvent.detected", adverseEvent.extension)
+  recordedDate: extension::fetchDateTime("https://www.hl7.org/fhir/R4/adverseevent-definitions.html#AdverseEvent.recordedDate", adverseEvent.extension)
+  resultingCondition: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/adverseevent-definitions.html#AdverseEvent.resultingCondition", adverseEvent.extension)
+  severity: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/adverseevent-definitions.html#AdverseEvent.severity", adverseEvent.extension)
+  recorder: datatypes::R3ReferenceToR4(adverseEvent.recorder)
+  contributor: adverseEvent.eventParticipant
+  suspectEntity: R3AdverseEvent_SuspectEntityToR4(adverseEvent.suspectEntity[])
+  subjectMedicalHistory: datatypes::R3ReferenceToR4(adverseEvent.subjectMedicalHistory[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/adverseevent-definitions.html#AdverseEvent.description", adverseEvent.description)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/adverseevent-definitions.html#AdverseEvent.reaction", adverseEvent.reaction[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/adverseevent-definitions.html#AdverseEvent.subject", adverseEvent.subject[where !matchesRegex($.value, "^Patient.*")])
+}
+
+// Description: Converts a FHIR R4 AdverseEvent resource to FHIR STU3 AdverseEvent resource.
+//
+// Argument(s):
+//   adverseEvent : FHIR R4 AdverseEvent resource https://www.hl7.org/fhir/r4/adverseEvent.html
+//
+// Output(s):
+//   FHIR STU3 AdverseEvent Resource https://www.hl7.org/fhir/stu3/adverseEvent.html
+//
+def R4AdverseEventToR3 (adverseEvent) {
+  AdverseEventBase(adverseEvent)
+  contained: datatypes::R4ResourceToR3(adverseEvent.contained[])
+  location: datatypes::R4ReferenceToR3(adverseEvent.location)
+  referenceDocument: datatypes::R4ReferenceToR3(adverseEvent.referenceDocument[])
+  study: datatypes::R4ReferenceToR3(adverseEvent.study[])
+  category: datatypes::CodeableConceptToCode(adverseEvent.category[0])
+  type: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/adverseevent-definitions.html#AdverseEvent.type", adverseEvent.extension)
+  subject: datatypes::R4ReferenceToR3(adverseEvent.subject)
+  reaction: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/adverseevent-definitions.html#AdverseEvent.reaction", adverseEvent.extension)
+  recorder: datatypes::R4ReferenceToR3(adverseEvent.recorder)
+  eventParticipant: extension::fetchReference("https://www.hl7.org/fhir/STU3/adverseevent-definitions.html#AdverseEvent.eventParticipant", adverseEvent.extension)
+  description: datatypes::CodeableConceptToString(adverseEvent.event)
+  suspectEntity: R4AdverseEvent_SuspectEntityToR3(adverseEvent.suspectEntity[])
+  subjectMedicalHistory: datatypes::R4ReferenceToR3(adverseEvent.subjectMedicalHistory[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/adverseevent-definitions.html#AdverseEvent.actuality", adverseEvent.actuality)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/adverseevent-definitions.html#AdverseEvent.encounter", adverseEvent.encounter)
+  extension[]: extension::BuildDateTimeExtension("https://www.hl7.org/fhir/R4/adverseevent-definitions.html#AdverseEvent.detected", adverseEvent.detected)
+  extension[]: extension::BuildDateTimeExtension("https://www.hl7.org/fhir/R4/adverseevent-definitions.html#AdverseEvent.recordedDate", adverseEvent.recordedDate)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/adverseevent-definitions.html#AdverseEvent.resultingCondition", adverseEvent.resultingCondition[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/adverseevent-definitions.html#AdverseEvent.severity", adverseEvent.severity)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/adverseevent-definitions.html#AdverseEvent.contributor", adverseEvent.contributor)
+}
+
+// Description: Converts a FHIR STU3 AdverseEvent.SuspectEntity to FHIR R4 AdverseEvent.SuspectEntity
+//
+// Argument(s):
+//   data : FHIR STU3 AdverseEvent.SuspectEntity http://hl7.org/fhir/STU3/adverseEvent-definitions.html#AdverseEvent.suspectEntity
+//
+// Output(s):
+//   FHIR R4 AdverseEvent.SuspectEntity http://hl7.org/fhir/R4/adverseEvent-definitions.html#AdverseEvent.suspectEntity
+//
+def R3AdverseEvent_SuspectEntityToR4(data) {
+  instance: datatypes::R3ReferenceToR4(data.instance)
+  var casuality.assessment: data.causalityAssessment
+  var casuality.productRelatedness: data.causalityProductRelatedness
+  var casuality.author: datatypes::R3ReferenceToR4(data.causalityAuthor)
+  var casuality.method: data.causalityMethod
+  causality[]: casuality
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/adverseevent-definitions.html#AdverseEvent.suspectEntity.causality", data.causality)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/adverseevent-definitions.html#AdverseEvent.suspectEntity.causalityResult", data.causalityResult)
+}
+
+// Description: Converts a FHIR R4 AdverseEvent.SuspectEntity to FHIR STU3 AdverseEvent.SuspectEntity
+//
+// Argument(s):
+//   data : FHIR R4 AdverseEvent.SuspectEntity http://hl7.org/fhir/R4/adverseEvent-definitions.html#AdverseEvent.suspectEntity
+//
+// Output(s):
+//   FHIR STU3 AdverseEvent.SuspectEntity http://hl7.org/fhir/STU3/adverseEvent-definitions.html#AdverseEvent.suspectEntity
+//
+def R4AdverseEvent_SuspectEntityToR3(data) {
+  instance: datatypes::R4ReferenceToR3(data.instance)
+  assessment: data.causality[0].assessment
+  productRelatedness: data.causality[0].productRelatedness
+  author: datatypes::R4ReferenceToR3(data.causality[0].author)
+  method: data.causality[0].method
+}

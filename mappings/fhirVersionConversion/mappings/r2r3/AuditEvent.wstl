@@ -1,0 +1,96 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def AuditEventBase(auditEvent) {
+  resourcebase::ResourceBase(auditEvent)
+  source: auditEvent.source
+}
+
+def R2AuditEventToR3(auditEvent) {
+  AuditEventBase(auditEvent)
+  contained: datatypes::R2ResourceToR3(auditEvent.contained[])
+  type: auditEvent.event.type
+  subtype: auditEvent.event.subtype
+  action: auditEvent.event.action
+  recorded: auditEvent.event.recorded
+  outcome: auditEvent.event.outcome
+  outcomeDesc: auditEvent.event.outcomeDesc
+  purposeOfEvent: auditEvent.event.purposeOfEvent
+  agent: R2AuditEvent_AgentToR3(auditEvent.participant[])
+  entity: R3AuditEvent_EntityToR2(auditEvent.object[])
+}
+
+def R3AuditEventToR2(auditEvent) {
+  AuditEventBase(auditEvent)
+  contained: datatypes::R3ResourceToR2(auditEvent.contained[])
+  event.type: auditEvent.type
+  event.subtype: auditEvent.subtype
+  event.action: auditEvent.action
+  event.recorded: auditEvent.recorded
+  event.outcome: auditEvent.outcome
+  event.outcomeDesc: auditEvent.outcomeDesc
+  event.purposeOfEvent: auditEvent.purposeOfEvent
+  participant: R3AuditEvent_AgentToR2(auditEvent.agent[])
+  object: R2AuditEvent_EntityToR3(auditEvent.entity[])
+}
+
+def R2AuditEvent_AgentToR3(data) {
+  role: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/auditevent-definitions.html#AuditEvent.agent.role", data.extension)
+  reference: datatypes::R2ReferenceToR3(data.reference)
+  userId: data.userId
+  altId: data.altId
+  name: data.name
+  requestor: data.requestor
+  location: datatypes::R2ReferenceToR3(data.location)
+  policy: data.policy
+  media: data.media
+  network: data.network
+  purposeOfUse: datatypes::CodingToCodeableConcept(data.purposeOfUse[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/auditevent-definitions.html#AuditEvent.participant.role", data.role)
+}
+
+def R3AuditEvent_AgentToR2(data) {
+  role: extension::fetchCodeableConcept("https://www.hl7.org/fhir/DSTU2/auditevent-definitions.html#AuditEvent.participant.role", data.extension)
+  reference: datatypes::R3ReferenceToR2(data.reference)
+  userId: data.userId
+  altId: data.altId
+  name: data.name
+  requestor: data.requestor
+  location: datatypes::R3ReferenceToR2(data.location)
+  policy: data.policy
+  media: data.media
+  network: data.network
+  purposeOfUse: datatypes::CodeableConceptToCoding(data.purposeOfUse[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/auditevent-definitions.html#AuditEvent.agent.role", data.role)
+}
+
+def R2AuditEvent_EntityToR3(data) {
+  identifier: data.identifier
+  reference: datatypes::R2ReferenceToR3(data.reference)
+  type: extension::fetchCoding("https://www.hl7.org/fhir/STU3/auditevent-definitions.html#AuditEvent.entity.type", data.extension)
+  role: data.role
+  lifecycle: extension::fetchCoding("https://www.hl7.org/fhir/STU3/auditevent-definitions.html#AuditEvent.entity.lifecycle", data.extension)
+  securityLabel: data.securityLabel
+  name: data.name
+  description: data.description
+  query: data.query
+  detail: data.detail
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/auditevent-definitions.html#AuditEvent.object.type", data.type)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/auditevent-definitions.html#AuditEvent.object.lifecycle", data.lifecycle)
+}
+
+def R3AuditEvent_EntityToR2(data) {
+  identifier: data.identifier
+  reference: datatypes::R3ReferenceToR2(data.reference)
+  type: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/auditevent-definitions.html#AuditEvent.object.type", data.extension)
+  role: data.role
+  lifecycle: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/auditevent-definitions.html#AuditEvent.object.lifecycle", data.extension)
+  securityLabel: data.securityLabel
+  name: data.name
+  description: data.description
+  query: data.query
+  detail: data.detail
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/STU3/auditevent-definitions.html#AuditEvent.entity.type", data.type)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/STU3/auditevent-definitions.html#AuditEvent.entity.lifecycle", data.lifecycle)
+}

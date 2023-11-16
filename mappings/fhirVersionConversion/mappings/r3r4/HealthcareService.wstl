@@ -1,0 +1,135 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   healthcareService : FHIR HealthcareService resource
+//
+// Output(s):
+//   FHIR HealthcareService Resource
+//
+def HealthcareServiceBase(healthcareService) {
+  resourcebase::ResourceBase(healthcareService)
+  identifier: healthcareService.identifier
+  type: healthcareService.type
+  specialty: healthcareService.specialty
+  name: healthcareService.name
+  comment: healthcareService.comment
+  photo: healthcareService.photo
+  telecom: healthcareService.telecom
+  serviceProvisionCode: healthcareService.serviceProvisionCode
+  characteristic: healthcareService.characteristic
+  referralMethod: healthcareService.referralMethod
+  appointmentRequired: healthcareService.appointmentRequired
+  notAvailable: healthcareService.notAvailable
+  availabilityExceptions: healthcareService.availabilityExceptions
+}
+
+// Description: Converts a FHIR STU3 HealthcareService resource to FHIR R4 HealthcareService resource.
+//
+// Argument(s):
+//   healthcareService : FHIR STU3 HealthcareService resource https://www.hl7.org/fhir/stu3/healthcareservice.html
+//
+// Output(s):
+//   FHIR R4 HealthcareService Resource https://www.hl7.org/fhir/r4/healthcareservice.html
+//
+def R3HealthcareServiceToR4(healthcareService) {
+  HealthcareServiceBase(healthcareService)
+  contained: datatypes::R3ResourceToR4(healthcareService.contained[])
+  endpoint: datatypes::R3ReferenceToR4(healthcareService.endpoint[])
+  coverageArea: datatypes::R3ReferenceToR4(healthcareService.coverageArea[])
+  location: datatypes::R3ReferenceToR4(healthcareService.location[])
+  providedBy: datatypes::R3ReferenceToR4(healthcareService.providedBy)
+  active: healthcareService.active
+  category: R3HealthcareService_CategoryToR4("https://www.hl7.org/fhir/R4/healthcareservice-definitions.html#HealthcareService.category", healthcareService.extension, healthcareService.category)
+  extraDetails: healthcareService.extraDetails
+  eligibility[]: R3HealthcareService_EligibilityToR4(healthcareService.eligibility, healthcareService.eligibilityNote)
+  program: datatypes::StringToCodeableConcept(healthcareService.program[])
+  communication: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/healthcareservice-definitions.html#HealthcareService.communication", healthcareService.extension)
+  availableTime: healthcareService.availableTime
+}
+
+// Description: Converts a FHIR R4 HealthcareService resource to FHIR STU3 HealthcareService resource.
+//
+// Argument(s):
+//   healthcareService : FHIR R4 HealthcareService resource https://www.hl7.org/fhir/r4/healthcareservice.html
+//
+// Output(s):
+//   FHIR STU3 HealthcareService Resource https://www.hl7.org/fhir/stu3/healthcareservice.html
+//
+def R4HealthcareServiceToR3(healthcareService) {
+  HealthcareServiceBase(healthcareService)
+  contained: datatypes::R4ResourceToR3(healthcareService.contained[])
+  endpoint: datatypes::R4ReferenceToR3(healthcareService.endpoint[])
+  coverageArea: datatypes::R4ReferenceToR3(healthcareService.coverageArea[])
+  location: datatypes::R4ReferenceToR3(healthcareService.location[])
+  providedBy: datatypes::R4ReferenceToR3(healthcareService.providedBy)
+  active: healthcareService.active
+  category: healthcareService.category[0]
+  extraDetails: healthcareService.extraDetails
+  eligibility: R4HealthcareService_EligibilityToR3(healthcareService.eligibility)
+  eligibilityNote: R4HealthcareService_EligibilityNoteToR3(healthcareService.eligibility)
+  programName: datatypes::CodeableConceptToString(healthcareService.programName[])
+  availableTime: healthcareService.availableTime
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/healthcareservice-definitions.html#HealthcareService.category", healthcareService.category[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/healthcareservice-definitions.html#HealthcareService.communication", healthcareService.communication[])
+}
+
+// Description: Converts a FHIR STU3 HealthcareService.Category to FHIR R4 HealthcareService.Category.
+//
+// Argument(s):
+//   data : FHIR STU3 HealthcareService.Category http://hl7.org/fhir/STU3/healthcareservice-definitions.html#HealthcareService.category
+//   url : FHIR STU3 Extension.url http://hl7.org/fhir/STU3/extensibility-definitions.html#Extension.url
+//   extension : FHIR STU3 DomainResource.Extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 HealthcareService.Category http://hl7.org/fhir/R4/healthcareservice-definitions.html#HealthcareService.category
+//
+def R3HealthcareService_CategoryToR4(url, extension, data) {
+  var category: extension::fetchCodeableConceptArray(url, extension)
+  if category then {
+    category
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 HealthcareService.Eligibility to FHIR R4 HealthcareService.Eligibility.
+//
+// Argument(s):
+//   eligibility : FHIR STU3 HealthcareService.Eligibility http://hl7.org/fhir/STU3/healthcareservice-definitions.html#HealthcareService.eligibility
+//   eligibilityNote: data : FHIR STU3 HealthcareService.EligibilityNote http://hl7.org/fhir/STU3/healthcareservice-definitions.html#HealthcareService.eligibilityNote
+//
+// Output(s):
+//   FHIR R4 HealthcareService.Eligibility http://hl7.org/fhir/R4/healthcareservice-definitions.html#HealthcareService.eligibility
+//
+def R3HealthcareService_EligibilityToR4(eligibility, eligibilityNote) {
+  code: eligibility
+  comment: eligibilityNote
+}
+
+// Description: Converts a FHIR R4 HealthcareService.Eligibility.Code to FHIR STU3 HealthcareService.Eligibility.
+//
+// Argument(s):
+//   data : FHIR R4 HealthcareService.Eligibility.Code http://hl7.org/fhir/R4/healthcareservice-definitions.html#HealthcareService.eligibility.code
+//
+// Output(s):
+//   FHIR STU3 HealthcareService.Eligibility http://hl7.org/fhir/STU3/healthcareservice-definitions.html#HealthcareService.eligibility
+//
+def R4HealthcareService_EligibilityToR3(data) {
+  data[0].code
+}
+
+// Description: Converts a FHIR R4 HealthcareService.Eligibility.Comment to FHIR STU3 HealthcareService.EligibilityNote.
+//
+// Argument(s):
+//   data : FHIR R4 HealthcareService.Eligibility.Comment http://hl7.org/fhir/R4/healthcareservice-definitions.html#HealthcareService.eligibility.comment
+//
+// Output(s):
+//   FHIR STU3 HealthcareService.EligibilityNote http://hl7.org/fhir/STU3/healthcareservice-definitions.html#HealthcareService.eligibilityNote
+//
+def R4HealthcareService_EligibilityNoteToR3(data) {
+  data[0].comment
+}

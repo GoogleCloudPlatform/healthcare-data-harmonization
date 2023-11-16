@@ -1,0 +1,17 @@
+{
+  "extension": [
+    {
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/datatypes-definitions.html#Money.currency",
+          "valueCode": "CAD"
+        },
+        {
+          "url": "https://www.hl7.org/fhir/datatypes-definitions.html#Money.value",
+          "valueDecimal": 1
+        }
+      ],
+      "url": "test_url"
+    }
+  ]
+}

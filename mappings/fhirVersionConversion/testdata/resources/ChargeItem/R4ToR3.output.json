@@ -1,0 +1,116 @@
+{
+  "account": [
+    {
+      "reference": "Account/example"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "code": "01510",
+        "display": "Zusatzpauschale für Beobachtung nach diagnostischer Koronarangiografie"
+      }
+    ]
+  },
+  "context": {
+    "reference": "Encounter/example"
+  },
+  "enteredDate": "2017-01-25T23:55:04+01:00",
+  "enterer": {
+    "reference": "Practitioner/example"
+  },
+  "factorOverride": 0.8,
+  "id": "example",
+  "identifier": {
+    "system": "http://myHospital.org/ChargeItems",
+    "value": "654321"
+  },
+  "note": [
+    {
+      "authorReference": {
+        "reference": "Practitioner/example"
+      },
+      "text": "The code is only applicable for periods longer than 4h",
+      "time": "2017-01-25T23:55:04+01:00"
+    }
+  ],
+  "occurrencePeriod": {
+    "end": "2017-01-25T12:35:00+01:00",
+    "start": "2017-01-25T08:00:00+01:00"
+  },
+  "overrideReason": "Patient is Cardiologist's golf buddy, so he gets a 20% discount!",
+  "participant": [
+    {
+      "actor": {
+        "reference": "Practitioner/example"
+      },
+      "role": {
+        "coding": [
+          {
+            "code": "17561000",
+            "display": "Cardiologist",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      }
+    },
+    {
+      "actor": {
+        "reference": "Practitioner/example"
+      },
+      "role": {
+        "coding": [
+          {
+            "code": "224542009",
+            "display": "Coronary Care Nurse",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      }
+    }
+  ],
+  "performingOrganization": {
+    "identifier": {
+      "system": "http://myhospital/NamingSystem/departments",
+      "value": "CARD_INTERMEDIATE_CARE"
+    }
+  },
+  "priceOverride": {
+    "currency": "EUR",
+    "value": 40
+  },
+  "quantity": {
+    "value": 1
+  },
+  "reason": [
+    {
+      "coding": [
+        {
+          "code": "123456",
+          "display": "DIAG-1",
+          "system": "http://hl7.org/fhir/sid/icd-10"
+        }
+      ]
+    }
+  ],
+  "requestingOrganization": {
+    "identifier": {
+      "system": "http://myhospital/NamingSystem/departments",
+      "value": "CARD_U1"
+    }
+  },
+  "resourceType": "ChargeItem",
+  "service": [
+    {
+      "reference": "Procedure/example"
+    }
+  ],
+  "status": "billable",
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003eExample of ChargeItem Usage in Context of the German EBM Billing code system\u003c/div\u003e",
+    "status": "generated"
+  }
+}

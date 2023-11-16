@@ -1,0 +1,228 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   encounter : FHIR Encounter resource
+//
+// Output(s):
+//   FHIR Encounter Resource
+//
+def EncounterBase(encounter) {
+  resourcebase::ResourceBase(encounter)
+  identifier: encounter.identifier
+  classHistory: encounter.classHistory
+  type: encounter.type
+  priority: encounter.priority
+  period: encounter.period
+  length: encounter.length
+}
+
+// Description: Converts a FHIR STU3 Encounter resource to FHIR R4 Encounter resource.
+//
+// Argument(s):
+//   encounter : FHIR STU3 Encounter resource https://www.hl7.org/fhir/stu3/encounter.html
+//
+// Output(s):
+//   FHIR R4 Encounter Resource https://www.hl7.org/fhir/r4/encounter.html
+//
+def R3EncounterToR4(encounter) {
+  EncounterBase(encounter)
+  contained: datatypes::R3ResourceToR4(encounter.contained[])
+  serviceProvider: datatypes::R3ReferenceToR4(encounter.serviceProvider)
+  partOf: datatypes::R3ReferenceToR4(encounter.partOf)
+  account: datatypes::R3ReferenceToR4(encounter.account[])
+  subject: datatypes::R3ReferenceToR4(encounter.subject)
+  episodeOfCare: datatypes::R3ReferenceToR4(encounter.episodeOfCare[])
+  status: encounter.status
+  statusHistory: encounter.statusHistory
+  class: encounter.class
+  class.display: utilities::defaultIfNull($this.class, "Unknown")
+  serviceType: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/encounter-definitions.html#Encounter.serviceType", encounter.extension)
+  basedOn: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/encounter-definitions.html#Encounter.basedOn", encounter.extension)
+  participant: R3Encounter_ParticipantToR4(encounter.participant[])
+  appointment: R3Encounter_AppointmentToR4("https://www.hl7.org/fhir/R4/encounter-definitions.html#Encounter.appointment", encounter.extension, datatypes::R3ReferenceToR4(encounter.appointment))
+  reasonCode: encounter.reason
+  reasonReference: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/encounter-definitions.html#Encounter.reasonReference", encounter.extension)
+  diagnosis: R3Encounter_DiagnosisToR4(encounter.diagnosis[])
+  hospitalization: R3Encounter_HospitalizationToR4(encounter.hospitalization)
+  location: R3Encounter_LocationToR4(encounter.location[])
+}
+
+// Description: Converts a FHIR R4 Encounter resource to FHIR STU3 Encounter resource.
+//
+// Argument(s):
+//   encounter : FHIR R4 Encounter resource https://www.hl7.org/fhir/r4/encounter.html
+//
+// Output(s):
+//   FHIR STU3 Encounter Resource https://www.hl7.org/fhir/stu3/encounter.html
+//
+def R4EncounterToR3(encounter) {
+  EncounterBase(encounter)
+  contained: datatypes::R4ResourceToR3(encounter.contained[])
+  serviceProvider: datatypes::R4ReferenceToR3(encounter.serviceProvider)
+  partOf: datatypes::R4ReferenceToR3(encounter.partOf)
+  account: datatypes::R4ReferenceToR3(encounter.account[])
+  subject: datatypes::R4ReferenceToR3(encounter.subject)
+  episodeOfCare: datatypes::R4ReferenceToR3(encounter.episodeOfCare[])
+  status: encounter.status
+  statusHistory: encounter.statusHistory
+  class: encounter.class
+  incomingReferral: datatypes::R4ReferenceToR3(encounter.basedOn[])
+  participant: R4Encounter_ParticipantToR3(encounter.participant[])
+  appointment: datatypes::R4ReferenceToR3(encounter.appointment[0])
+  reason: encounter.reasonCode
+  diagnosis: R4Encounter_DiagnosisToR3(encounter.diagnosis[])
+  hospitalization: R4Encounter_HospitalizationToR3(encounter.hospitalization)
+  location: R4Encounter_LocationToR3(encounter.location[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/encounter-definitions.html#Encounter.serviceType", encounter.serviceType)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/encounter-definitions.html#Encounter.appointment", encounter.appointment[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/encounter-definitions.html#Encounter.reasonReference", encounter.reasonReference)
+}
+
+// Description: Converts a FHIR R4 Encounter.Appointment to FHIR STU3 Encounter.Appointment.
+//
+// Argument(s):
+//   data : FHIR R4 Encounter.Appointment http://hl7.org/fhir/R4/encounter-definitions.html#Encounter.appointment
+//   url : FHIR R4 Extension.url http://hl7.org/fhir/R4/extensibility-definitions.html#Extension.url
+//   extension : FHIR R4 DomainResource.Extension http://hl7.org/fhir/R4/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR STU3 Encounter.Appointment http://hl7.org/fhir/STU3/encounter-definitions.html#Encounter.appointment
+//
+def R3Encounter_AppointmentToR4(url, extension, data) {
+  var appointment: extension::fetchReferenceArray(url, extension)
+  if appointment then {
+    appointment
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 Encounter.Diagnosis to FHIR R4 Encounter.Diagnosis.
+//
+// Argument(s):
+//   data : FHIR STU3 Encounter.Diagnosis http://hl7.org/fhir/STU3/encounter-definitions.html#Encounter.diagnosis
+//
+// Output(s):
+//   FHIR R4 Encounter.Diagnosis http://hl7.org/fhir/R4/encounter-definitions.html#Encounter.diagnosis
+//
+def R3Encounter_DiagnosisToR4(data) {
+  condition: datatypes::R3ReferenceToR4(data.condition)
+  use: data.role
+  rank: data.rank
+}
+
+// Description: Converts a FHIR R4 Encounter.Diagnosis to FHIR STU3 Encounter.Diagnosis.
+//
+// Argument(s):
+//   data : FHIR R4 Encounter.Diagnosis http://hl7.org/fhir/R4/encounter-definitions.html#Encounter.diagnosis
+//
+// Output(s):
+//   FHIR STU3 Encounter.Diagnosis http://hl7.org/fhir/STU3/encounter-definitions.html#Encounter.diagnosis
+//
+def R4Encounter_DiagnosisToR3(data) {
+  condition: datatypes::R4ReferenceToR3(data.condition)
+  role: data.use
+  rank: data.rank
+}
+
+// Description: Converts a FHIR STU3 Encounter.Location to FHIR R4 Encounter.Location.
+//
+// Argument(s):
+//   data : FHIR STU3 Encounter.Location http://hl7.org/fhir/STU3/encounter-definitions.html#Encounter.location
+//
+// Output(s):
+//   FHIR R4 Encounter.Location http://hl7.org/fhir/R4/encounter-definitions.html#Encounter.location
+//
+def R3Encounter_LocationToR4(data) {
+  location: datatypes::R3ReferenceToR4(data.location)
+  status: data.status
+  physicalType: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/encounter-definitions.html#Encounter.location.physicalType", data.extension)
+  period: data.period
+}
+
+// Description: Converts a FHIR R4 Encounter.Location to FHIR STU3 Encounter.Location.
+//
+// Argument(s):
+//   data : FHIR R4 Encounter.Location http://hl7.org/fhir/R4/encounter-definitions.html#Encounter.location
+//
+// Output(s):
+//   FHIR STU3 Encounter.Location http://hl7.org/fhir/STU3/encounter-definitions.html#Encounter.location
+//
+def R4Encounter_LocationToR3(data) {
+  location: datatypes::R4ReferenceToR3(data.location)
+  status: data.status
+  period: data.period
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/encounter-definitions.html#Encounter.location.physicalType", data.physicalType)
+}
+
+// Description: Converts a FHIR STU3 Encounter.Participant to FHIR R4 Encounter.Participant.
+//
+// Argument(s):
+//   data : FHIR STU3 Encounter.Participant http://hl7.org/fhir/STU3/encounter-definitions.html#Encounter.participant
+//
+// Output(s):
+//   FHIR R4 Encounter.Participant http://hl7.org/fhir/R4/encounter-definitions.html#Encounter.participant
+//
+def R3Encounter_ParticipantToR4(data) {
+  type: data.type
+  period: data.period
+  individual: datatypes::R3ReferenceToR4(data.individual)
+}
+
+// Description: Converts a FHIR R4 Encounter.Participant to FHIR STU3 Encounter.Participant.
+//
+// Argument(s):
+//   data : FHIR R4 Encounter.Participant http://hl7.org/fhir/R4/encounter-definitions.html#Encounter.participant
+//
+// Output(s):
+//   FHIR STU3 Encounter.Participant http://hl7.org/fhir/STU3/encounter-definitions.html#Encounter.participant
+//
+def R4Encounter_ParticipantToR3(data) {
+  type: data.type
+  period: data.period
+  individual: datatypes::R4ReferenceToR3(data.individual)
+}
+
+// Description: Converts a FHIR STU3 Encounter.Hospitalization to FHIR R4 Encounter.Hospitalization.
+//
+// Argument(s):
+//   data : FHIR STU3 Encounter.Hospitalization http://hl7.org/fhir/STU3/encounter-definitions.html#Encounter.hospitalization
+//
+// Output(s):
+//   FHIR R4 Encounter.Hospitalization http://hl7.org/fhir/R4/encounter-definitions.html#Encounter.hospitalization
+//
+def R3Encounter_HospitalizationToR4(data) {
+  preAdmissionIdentifier: data.preAdmissionIdentifier
+  origin: datatypes::R3ReferenceToR4(data.origin)
+  admitSource: data.admitSource
+  reAdmission: data.reAdmission
+  dietPreference: data.dietPreference
+  specialCourtesy: data.specialCourtesy
+  specialArrangement: data.specialArrangement
+  destination: datatypes::R3ReferenceToR4(data.destination)
+  dischargeDisposition: data.dischargeDisposition
+}
+
+// Description: Converts a FHIR R4 Encounter.Hospitalization to FHIR STU3 Encounter.Hospitalization.
+//
+// Argument(s):
+//   data : FHIR R4 Encounter.Hospitalization http://hl7.org/fhir/R4/encounter-definitions.html#Encounter.hospitalization
+//
+// Output(s):
+//   FHIR STU3 Encounter.Hospitalization http://hl7.org/fhir/STU3/encounter-definitions.html#Encounter.hospitalization
+//
+def R4Encounter_HospitalizationToR3(data) {
+  preAdmissionIdentifier: data.preAdmissionIdentifier
+  origin: datatypes::R4ReferenceToR3(data.origin)
+  admitSource: data.admitSource
+  reAdmission: data.reAdmission
+  dietPreference: data.dietPreference
+  specialCourtesy: data.specialCourtesy
+  specialArrangement: data.specialArrangement
+  destination: datatypes::R4ReferenceToR3(data.destination)
+  dischargeDisposition: data.dischargeDisposition
+}

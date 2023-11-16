@@ -1,0 +1,561 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   claim : FHIR AuditEvent resource
+//
+// Output(s):
+//   FHIR Claim Resource
+//
+def ClaimBase(claim) {
+  resourcebase::ResourceBase(claim)
+  identifier: claim.identifier
+  billablePeriod: claim.billablePeriod
+  fundsReserve: claim.fundsReserve
+}
+
+// Description: Converts a FHIR STU3 Claim resource to FHIR R4 Claim resource.
+//
+// Argument(s):
+//   claim : FHIR STU3 Claim resource https://www.hl7.org/fhir/stu3/claim.html
+//
+// Output(s):
+//   FHIR R4 Claim Resource https://www.hl7.org/fhir/r4/claim.html
+//
+def R3ClaimToR4(claim) {
+  ClaimBase(claim)
+  contained: datatypes::R3ResourceToR4(claim.contained[])
+  facility: datatypes::R3ReferenceToR4(claim.facility)
+  related: R3Claim_RelatedToR4(claim.related[])
+  status: claim.status
+  status: utilities::defaultIfNull($this.status, "entered-in-error")
+  type: claim.type
+  type.text: utilities::defaultIfNull($this.type, "unknown")
+  subType: if listLen(claim.subType) == 1 then claim.subType[0]
+  use: utilities::Convert_TerminologyCode(claim.status, "STU3ClaimUse", "Claim")
+  patient: datatypes::R3ReferenceToR4(claim.patient)
+  patient.display: utilities::defaultIfNull($this.patient, "Patient")
+  created: claim.created
+  created: utilities::defaultIfNull($this.created, currentTime("yyyy-MM-dd"))
+  enterer: datatypes::R3ReferenceToR4(claim.enterer)
+  insurer: datatypes::R3ReferenceToR4(claim.insurer)
+  provider: datatypes::R3ReferenceToR4(claim.provider)
+  provider.display: utilities::defaultIfNull($this.provider, "Practitioner")
+  priority: claim.priority
+  priority.text: utilities::defaultIfNull($this.priority, "unknown")
+  prescription: datatypes::R3ReferenceToR4(claim.prescription)
+  originalPrescription: datatypes::R3ReferenceToR4(claim.originalPrescription)
+  payee: R3Claim_PayeeToR4(claim.payee)
+  referral: extension::fetchReference("https://www.hl7.org/fhir/STU3/claim-definitions.html#Claim.referral", claim.extension)
+  careTeam: R3Claim_CareTeamToR4(claim.careTeam[])
+  supportingInfo: R3Claim_InformationToR4(claim.information[])
+  diagnosis: R3Claim_DiagnosisToR4(claim.diagnosis[])
+  procedure: R3Claim_ProcedureToR4(claim.procedure[])
+  insurance: R3Claim_InsuranceToR4(claim.insurance[])
+  // place-holder for 1..1 cardinality
+  if !$this.insurance then {
+    insurance[0].sequence: 1
+    insurance[0].focal: false
+    insurance[0].coverage.display: "Coverage"
+  }
+  accident: R3Claim_AccidentToR4(claim.accident)
+  item: R3Claim_ItemToR4(claim.item[])
+  total: datatypes::R3MoneyToR4(claim.total)
+  extension[]: if !$this.subType then extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/claim-definitions.html#Claim.subType", claim.subType[])
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/STU3/claim-definitions.html#Claim.employmentImpacted", claim.employmentImpacted)
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/STU3/claim-definitions.html#Claim.hospitalization", claim.hospitalization)
+  extension[]: if claim.use == "other" then extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/claim-definitions.html#Claim.use", claim.use)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/claim-definitions.html#Claim.organization", claim.organization)
+}
+
+// Description: Converts a FHIR R4 Claim resource to FHIR STU3 Claim resource.
+//
+// Argument(s):
+//   claim : FHIR R4 Claim resource https://www.hl7.org/fhir/r4/claim.html
+//
+// Output(s):
+//   FHIR STU3 Claim Resource https://www.hl7.org/fhir/stu3/claim.html
+//
+def R4ClaimToR3(claim) {
+  ClaimBase(claim)
+  contained: datatypes::R4ResourceToR3(claim.contained[])
+  facility: datatypes::R4ReferenceToR3(claim.facility)
+  related: R4Claim_RelatedToR3(claim.related[])
+  status: claim.status
+  type: claim.type
+  subType: R4Claim_SubTypeToR3("https://www.hl7.org/fhir/STU3/claim-definitions.html#Claim.subType", claim.extension, claim.subType)
+  use: extension::fetchCode("https://www.hl7.org/fhir/STU3/claim-definitions.html#Claim.use", claim.extension)
+  patient: datatypes::R4ReferenceToR3(claim.patient)
+  created: claim.created
+  enterer: datatypes::R4ReferenceToR3(claim.enterer)
+  insurer: datatypes::R4ReferenceToR3(claim.insurer)
+  provider: datatypes::R4ReferenceToR3(claim.provider)
+  organization: claim.organization
+  priority: claim.priority
+  prescription: datatypes::R4ReferenceToR3(claim.prescription)
+  originalPrescription: datatypes::R4ReferenceToR3(claim.originalPrescription)
+  payee: R4Claim_PayeeToR3(claim.payee)
+  referral: datatypes::R4ReferenceToR3(claim.referral)
+  careTeam: R4Claim_CareTeamToR3(claim.careTeam[])
+  information: R4Claim_SupportingInfoToR3(claim.information[])
+  diagnosis: R4Claim_DiagnosisToR3(claim.diagnosis[])
+  procedure: R4Claim_ProcedureToR3(claim.procedure[])
+  insurance: R4Claim_InsuranceToR3(claim.insurance[])
+  accident: R4Claim_AccidentToR3(claim.accident)
+  employmentImpacted: extension::fetchPeriod("https://www.hl7.org/fhir/STU3/claim-definitions.html#Claim.employmentImpacted", claim.extension)
+  hospitalization: extension::fetchPeriod("https://www.hl7.org/fhir/STU3/claim-definitions.html#Claim.hospitalization", claim.extension)
+  item: R4Claim_ItemToR3(claim.item[])
+  total: datatypes::R4MoneyToR3(claim.total)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/claim-definitions.html#Claim.use", claim.use)
+}
+
+// Description: Converts a FHIR STU3 Claim.Related to FHIR R4 Claim.Related.
+//
+// Argument(s):
+//   data : FHIR STU3 Claim.Related http://hl7.org/fhir/STU3/claim-definitions.html#Claim.related
+//
+// Output(s):
+//   FHIR R4 Claim.Related http://hl7.org/fhir/R4/claim-definitions.html#Claim.related
+//
+def R3Claim_RelatedToR4(data) {
+  claim: datatypes::R3ReferenceToR4(data.claim)
+  relationship: data.relationship
+  reference: data.reference
+}
+
+// Description: Converts a FHIR R4 Claim.Related to FHIR STU3 Claim.Related.
+//
+// Argument(s):
+//   data : FHIR R4 Claim.Related http://hl7.org/fhir/R4/claim-definitions.html#Claim.related
+//
+// Output(s):
+//   FHIR STU3 Claim.Related http://hl7.org/fhir/STU3/claim-definitions.html#Claim.related
+//
+def R4Claim_RelatedToR3(data) {
+  claim: datatypes::R4ReferenceToR3(data.claim)
+  relationship: data.relationship
+  reference: data.reference
+}
+
+// Description: Converts a FHIR STU3 Claim.CareTeam to FHIR R4 Claim.CareTeam.
+//
+// Argument(s):
+//   data : FHIR STU3 Claim.CareTeam http://hl7.org/fhir/STU3/claim-definitions.html#Claim.careTeam
+//
+// Output(s):
+//   FHIR R4 Claim.CareTeam http://hl7.org/fhir/R4/claim-definitions.html#Claim.careTeam
+//
+def R3Claim_CareTeamToR4(data) {
+  sequence: data.sequence
+  provider: datatypes::R3ReferenceToR4(data.provider)
+  responsible: data.responsible
+  role: data.role
+  qualification: data.qualification
+}
+
+// Description: Converts a FHIR R4 Claim.CareTeam to FHIR STU3 Claim.CareTeam.
+//
+// Argument(s):
+//   data : FHIR R4 Claim.CareTeam http://hl7.org/fhir/R4/claim-definitions.html#Claim.careTeam
+//
+// Output(s):
+//   FHIR STU3 Claim.CareTeam http://hl7.org/fhir/STU3/claim-definitions.html#Claim.careTeam
+//
+def R4Claim_CareTeamToR3(data) {
+  sequence: data.sequence
+  provider: datatypes::R4ReferenceToR3(data.provider)
+  responsible: data.responsible
+  role: data.role
+  qualification: data.qualification
+}
+
+// Description: Converts a FHIR R4 Claim.SubType to FHIR STU3 Claim.SubType.
+//
+// Argument(s):
+//   data : FHIR R4 Claim.SubType http://hl7.org/fhir/R4/claim-definitions.html#Claim.subType
+//   url : FHIR R4 Extension.url http://hl7.org/fhir/R4/extensibility-definitions.html#Extension.url
+//   extension : FHIR R4 DomainResource.Extension http://hl7.org/fhir/R4/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR STU3 Claim.SubType http://hl7.org/fhir/STU3/claim-definitions.html#Claim.subType
+//
+def R4Claim_SubTypeToR3(url, extension, data) {
+  var subType: extension::fetchCodeableConceptArray(url, extension)
+  if subType then {
+    subType
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 Claim.Accident to FHIR R4 Claim.Accident.
+//
+// Argument(s):
+//   data : FHIR STU3 Claim.Accident http://hl7.org/fhir/STU3/claim-definitions.html#Claim.accident
+//
+// Output(s):
+//   FHIR R4 Claim.Accident http://hl7.org/fhir/R4/claim-definitions.html#Claim.accident
+//
+def R3Claim_AccidentToR4(data) {
+  date: data.date
+  type: data.type
+  locationAddress: data.locationAddress
+  locationReference: datatypes::R3ReferenceToR4(data.locationReference)
+}
+
+// Description: Converts a FHIR R4 Claim.CareTeam to FHIR STU3 Claim.CareTeam.
+//
+// Argument(s):
+//   data : FHIR R4 Claim.CareTeam http://hl7.org/fhir/R4/claim-definitions.html#Claim.careTeam
+//
+// Output(s):
+//   FHIR STU3 Claim.CareTeam http://hl7.org/fhir/STU3/claim-definitions.html#Claim.careTeam
+//
+def R4Claim_AccidentToR3(data) {
+  date: data.date
+  type: data.type
+  locationAddress: data.locationAddress
+  locationReference: datatypes::R4ReferenceToR3(data.locationAddress)
+}
+
+// Description: Converts a FHIR STU3 Claim.Payee to FHIR R4 Claim.Payee.
+//
+// Argument(s):
+//   data : FHIR STU3 Claim.Payee http://hl7.org/fhir/STU3/claim-definitions.html#Claim.payee
+//
+// Output(s):
+//   FHIR R4 Claim.Payee http://hl7.org/fhir/R4/claim-definitions.html#Claim.payee
+//
+def R3Claim_PayeeToR4(data) {
+  type: data.type
+  party: datatypes::R3ReferenceToR4(data.party)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/STU3/claim-definitions.html#Claim.payee.resourceType", data.resourceType)
+}
+
+// Description: Converts a FHIR R4 Claim.Payee to FHIR STU3 Claim.Payee.
+//
+// Argument(s):
+//   data : FHIR R4 Claim.Payee http://hl7.org/fhir/R4/claim-definitions.html#Claim.payee
+//
+// Output(s):
+//   FHIR STU3 Claim.Payee http://hl7.org/fhir/STU3/claim-definitions.html#Claim.payee
+//
+def R4Claim_PayeeToR3(data) {
+  type: data.type
+  party: datatypes::R4ReferenceToR3(data.party)
+  resourceType: extension::fetchCoding("https://www.hl7.org/fhir/STU3/claim-definitions.html#Claim.payee.resourceType", data.extension)
+}
+
+// Description: Converts a FHIR STU3 ChargeItem.Information to FHIR R4 ChargeItem.SupportingInfo.
+//
+// Argument(s):
+//   data : FHIR STU3 ChargeItem.Information http://hl7.org/fhir/STU3/chargeItem-definitions.html#ChargeItem.information
+//
+// Output(s):
+//   FHIR R4 ChargeItem.SupportingInfo http://hl7.org/fhir/R4/chargeItem-definitions.html#ChargeItem.supportingInfo
+//
+def R3Claim_InformationToR4(data) {
+  sequence: data.sequence
+  category: data.category
+  code: data.code
+  timingData: data.timingData
+  timingPeriod: data.timingPeriod
+  valueBoolean: extension::fetchBoolean("https://www.hl7.org/fhir/R4/claim-definitions.html#Claim.supportingInfo.valueBoolean", data.extension)
+  valueString: data.valueString
+  valueQuantity: data.valueQuantity
+  valueAttachment: data.valueAttachment
+  valueReference: datatypes::R3ReferenceToR4(data.valueReference)
+  reason: data.reason
+}
+
+// Description: Converts a FHIR R4 ChargeItem.SupportingInfo to FHIR STU3 ChargeItem.Information.
+//
+// Argument(s):
+//   data : FHIR R4 ChargeItem.SupportingInfo http://hl7.org/fhir/R4/chargeItem-definitions.html#ChargeItem.supportingInfo
+//
+// Output(s):
+//   FHIR STU3 ChargeItem.Information http://hl7.org/fhir/STU3/chargeItem-definitions.html#ChargeItem.information
+//
+def R4Claim_SupportingInfoToR3(data) {
+  sequence: data.sequence
+  category: data.category
+  code: data.code
+  timingData: data.timingData
+  timingPeriod: data.timingPeriod
+  valueString: data.valueString
+  valueQuantity: data.valueQuantity
+  valueAttachment: data.valueAttachment
+  valueReference: datatypes::R4ReferenceToR3(data.valueReference)
+  reason: data.reason
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/R4/claim-definitions.html#Claim.supportingInfo.valueBoolean", data.valueBoolean)
+}
+
+// Description: Converts a FHIR STU3 Claim.Diagnosis to FHIR R4 Claim.Diagnosis.
+//
+// Argument(s):
+//   data : FHIR STU3 Claim.Diagnosis http://hl7.org/fhir/STU3/claim-definitions.html#Claim.diagnosis
+//
+// Output(s):
+//   FHIR R4 Claim.Diagnosis http://hl7.org/fhir/R4/claim-definitions.html#Claim.diagnosis
+//
+def R3Claim_DiagnosisToR4(data) {
+  sequence: data.sequence
+  diagnosisCodeableConcept: data.diagnosisCodeableConcept
+  diagnosisReference: datatypes::R3ReferenceToR4(data.diagnosisReference)
+  type: data.type
+  onAdmission: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/claim-definitions.html#Claim.diagnosis.onAdmission", data.extension)
+  packageCode: data.packageCode
+}
+
+// Description: Converts a FHIR R4 Claim.Diagnosis to FHIR STU3 Claim.Diagnosis.
+//
+// Argument(s):
+//   data : FHIR R4 Claim.Diagnosis http://hl7.org/fhir/R4/claim-definitions.html#Claim.diagnosis
+//
+// Output(s):
+//   FHIR STU3 Claim.Diagnosis http://hl7.org/fhir/STU3/claim-definitions.html#Claim.diagnosis
+//
+def R4Claim_DiagnosisToR3(data) {
+  sequence: data.sequence
+  diagnosisCodeableConcept: data.diagnosisCodeableConcept
+  diagnosisReference: datatypes::R4ReferenceToR3(data.diagnosisReference)
+  type: data.type
+  packageCode: data.packageCode
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/claim-definitions.html#Claim.diagnosis.diagnosisCodeableConcept", data.diagnosisCodeableConcept)
+}
+
+// Description: Converts a FHIR STU3 Claim.Procedure to FHIR R4 Claim.Procedure.
+//
+// Argument(s):
+//   data : FHIR STU3 Claim.Procedure http://hl7.org/fhir/STU3/claim-definitions.html#Claim.procedure
+//
+// Output(s):
+//   FHIR R4 Claim.Procedure http://hl7.org/fhir/R4/claim-definitions.html#Claim.procedure
+//
+def R3Claim_ProcedureToR4(data) {
+  sequence: data.sequence
+  type: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/claim-definitions.html#Claim.procedure.type", data.extension)
+  date: data.date
+  procedureCodeableConcept: data.procedureCodeableConcept
+  procedureReference: datatypes::R3ReferenceToR4(data.procedureReference)
+  udi: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/claim-definitions.html#Claim.procedure.udi", data.extension)
+}
+
+// Description: Converts a FHIR R4 Claim.Procedure to FHIR STU3 Claim.Procedure.
+//
+// Argument(s):
+//   data : FHIR R4 Claim.Procedure http://hl7.org/fhir/R4/claim-definitions.html#Claim.procedure
+//
+// Output(s):
+//   FHIR STU3 Claim.Procedure http://hl7.org/fhir/STU3/claim-definitions.html#Claim.procedure
+//
+def R4Claim_ProcedureToR3(data) {
+  sequence: data.sequence
+  date: data.date
+  procedureCodeableConcept: data.procedureCodeableConcept
+  procedureReference: datatypes::R4ReferenceToR3(data.procedureReference)
+  type: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/claim-definitions.html#Claim.procedure.type", data.type[])
+  udi: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/claim-definitions.html#Claim.procedure.udi", data.udi[])
+}
+
+// Description: Converts a FHIR STU3 Claim.Insurance to FHIR R4 Claim.Insurance.
+//
+// Argument(s):
+//   data : FHIR STU3 Claim.Insurance http://hl7.org/fhir/STU3/claim-definitions.html#Claim.insurance
+//
+// Output(s):
+//   FHIR R4 Claim.Insurance http://hl7.org/fhir/R4/claim-definitions.html#Claim.insurance
+//
+def R3Claim_InsuranceToR4(data) {
+  sequence: data.sequence
+  focal: data.focal
+  indentifier: extension::fetchIdentifier("https://www.hl7.org/fhir/R4/claim-definitions.html#Claim.insurance.identifier", data.extension)
+  coverage: datatypes::R3ReferenceToR4(data.coverage)
+  businessArrangement: data.businessArrangement
+  preAuthRef: data.preAuthRef
+  claimResponse: datatypes::R3ReferenceToR4(data.claimResponse)
+}
+
+// Description: Converts a FHIR R4 Claim.Insurance to FHIR STU3 Claim.Insurance.
+//
+// Argument(s):
+//   data : FHIR R4 Claim.Insurance http://hl7.org/fhir/R4/claim-definitions.html#Claim.insurance
+//
+// Output(s):
+//   FHIR STU3 Claim.Insurance http://hl7.org/fhir/STU3/claim-definitions.html#Claim.insurance
+//
+def R4Claim_InsuranceToR3(data) {
+  sequence: data.sequence
+  focal: data.focal
+  coverage: datatypes::R4ReferenceToR3(data.coverage)
+  businessArrangement: data.businessArrangement
+  preAuthRef: data.preAuthRef
+  claimResponse: datatypes::R4ReferenceToR3(data.claimResponse)
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/R4/claim-definitions.html#Claim.insurance.identifier", data.identifier)
+}
+
+// Description: Converts a FHIR STU3 Claim.Item to FHIR R4 Claim.Item.
+//
+// Argument(s):
+//   data : FHIR STU3 Claim.Item http://hl7.org/fhir/STU3/claim-definitions.html#Claim.item
+//
+// Output(s):
+//   FHIR R4 Claim.Item http://hl7.org/fhir/R4/claim-definitions.html#Claim.item
+//
+def R3Claim_ItemToR4(data) {
+  sequence: data.sequence
+  careTeamSequence: data.careTeamLinkId
+  diagnosisSequence: data.diagnosisLinkId
+  procedureSequence: data.procedureLinkId
+  informationSequence: data.informationLinkId
+  revenue: data.revenue
+  category: data.category
+  productOrService: data.service
+  productOrService.text: utilities::defaultIfNull($this.productOrService, "unknown")
+  modifier: data.modifier
+  programCode: data.programCode
+  servicedDate: data.servicedDate
+  servicedPeriod: data.servicedPeriod
+  locationCodeableConcept: data.locationCodeableConcept
+  locationAddress: data.locationAddress
+  locationReference: datatypes::R3ReferenceToR4(data.locationReference)
+  quantity: data.quantity
+  unitPrice: datatypes::R3MoneyToR4(data.unitPrice)
+  factor: data.factor
+  net: datatypes::R3MoneyToR4(data.net)
+  udi: datatypes::R3ReferenceToR4(data.udi[])
+  bodySite: data.bodySite
+  subSite: data.subSite
+  encounter: datatypes::R3ReferenceToR4(data.encounter[])
+  detail: R3Claim_Item_DetailToR4(data.detail[])
+}
+
+// Description: Converts a FHIR R4 Claim.Item to FHIR STU3 Claim.Item.
+//
+// Argument(s):
+//   data : FHIR R4 Claim.Item http://hl7.org/fhir/R4/claim-definitions.html#Claim.item
+//
+// Output(s):
+//   FHIR STU3 Claim.Item http://hl7.org/fhir/STU3/claim-definitions.html#Claim.item
+//
+def R4Claim_ItemToR3(data) {
+  sequence: data.sequence
+  careTeamLinkId: data.careTeamSequence
+  diagnosisLinkId: data.diagnosisSequence
+  procedureLinkId: data.procedureSequence
+  informationLinkId: data.informationSequence
+  revenue: data.revenue
+  category: data.category
+  service: data.productOrService
+  modifier: data.modifier
+  programCode: data.programCode
+  servicedDate: data.servicedDate
+  servicedPeriod: data.servicedPeriod
+  locationCodeableConcept: data.locationCodeableConcept
+  locationAddress: data.locationAddress
+  locationReference: datatypes::R4ReferenceToR3(data.locationReference)
+  quantity: data.quantity
+  unitPrice: datatypes::R4MoneyToR3(data.unitPrice)
+  factor: data.factor
+  net: datatypes::R4MoneyToR3(data.net)
+  udi: datatypes::R4ReferenceToR3(data.udi[])
+  bodySite: data.bodySite
+  subSite: data.subSite
+  encounter: datatypes::R4ReferenceToR3(data.encounter[])
+  detail: R4Claim_Item_DetailToR3(data.detail[])
+}
+
+// Description: Converts a FHIR STU3 Claim.Item.Detail to FHIR R4 Claim.Item.Detail.
+//
+// Argument(s):
+//   data : FHIR STU3 Claim.Item.Detail http://hl7.org/fhir/STU3/claim-definitions.html#Claim.item.detail
+//
+// Output(s):
+//   FHIR R4 Claim.Item.Detail http://hl7.org/fhir/R4/claim-definitions.html#Claim.item.detail
+//
+def R3Claim_Item_DetailToR4(data) {
+  sequence: data.sequence
+  revenue: data.revenue
+  category: data.category
+  productOrService: data.service
+  productOrService.text: utilities::defaultIfNull($this.productOrService, "unknown")
+  modifier: data.modifier
+  programCode: data.programCode
+  quantity: data.quantity
+  unitPrice: datatypes::R3MoneyToR4(data.unitPrice)
+  factor: data.factor
+  net: datatypes::R3MoneyToR4(data.net)
+  udi: datatypes::R3ReferenceToR4(data.udi[])
+  subDetail: R3Claim_Item_SubDetailToR4(data.subDetail[])
+}
+
+// Description: Converts a FHIR R4 Claim.Item.Detail to FHIR STU3 Claim.Item.Detail.
+//
+// Argument(s):
+//   data : FHIR R4 Claim.Item.Detail http://hl7.org/fhir/R4/claim-definitions.html#Claim.item.detail
+//
+// Output(s):
+//   FHIR STU3 Claim.Item.Detail http://hl7.org/fhir/STU3/claim-definitions.html#Claim.item.detail
+//
+def R4Claim_Item_DetailToR3(data) {
+  sequence: data.sequence
+  revenue: data.revenue
+  category: data.category
+  service: data.productOrService
+  modifier: data.modifier
+  programCode: data.programCode
+  quantity: data.quantity
+  unitPrice: datatypes::R4MoneyToR3(data.unitPrice)
+  factor: data.factor
+  net: datatypes::R4MoneyToR3(data.net)
+  udi: datatypes::R4ReferenceToR3(data.udi[])
+  subDetail: R4Claim_Item_SubDetailToR3(data.subDetail[])
+}
+
+// Description: Converts a FHIR STU3 Claim.Item.SubDetail to FHIR R4 Claim.Item.SubDetail.
+//
+// Argument(s):
+//   data : FHIR STU3 Claim.Item.SubDetail http://hl7.org/fhir/STU3/claim-definitions.html#Claim.item.subDetail
+//
+// Output(s):
+//   FHIR R4 Claim.Item.SubDetail http://hl7.org/fhir/R4/claim-definitions.html#Claim.item.subDetail
+//
+def R3Claim_Item_SubDetailToR4(data) {
+  sequence: data.sequence
+  revenue: data.revenue
+  category: data.category
+  productOrService: data.service
+  productOrService.text: utilities::defaultIfNull($this.productOrService, "unknown")
+  modifier: data.modifier
+  programCode: data.programCode
+  quantity: data.quantity
+  unitPrice: datatypes::R3MoneyToR4(data.unitPrice)
+  factor: data.factor
+  net: datatypes::R3MoneyToR4(data.net)
+  udi: datatypes::R3ReferenceToR4(data.udi[])
+}
+
+// Description: Converts a FHIR R4 Claim.Item.SubDetail to FHIR STU3 Claim.Item.SubDetail.
+//
+// Argument(s):
+//   data : FHIR R4 Claim.Item.SubDetail http://hl7.org/fhir/R4/claim-definitions.html#Claim.item.subDetail
+//
+// Output(s):
+//   FHIR STU3 Claim.Item.SubDetail http://hl7.org/fhir/STU3/claim-definitions.html#Claim.item.subDetail
+//
+def R4Claim_Item_SubDetailToR3(data) {
+  sequence: data.sequence
+  revenue: data.revenue
+  category: data.category
+  service: data.productOrService
+  modifier: data.modifier
+  programCode: data.programCode
+  quantity: data.quantity
+  unitPrice: datatypes::R4MoneyToR3(data.unitPrice)
+  factor: data.factor
+  net: datatypes::R4MoneyToR3(data.net)
+  udi: datatypes::R4ReferenceToR3(data.udi[])
+}

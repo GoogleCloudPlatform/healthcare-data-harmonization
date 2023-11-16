@@ -1,0 +1,41 @@
+{
+  "date": "2012-01",
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.url",
+      "valueUri": "http://hl7.org/fhir/Questionnaire/3141"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.title",
+      "valueString": "Cancer Quality Forum Questionnaire 2012"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.status",
+      "valueCode": "draft"
+    }
+  ],
+  "group": {
+    "concept": [
+      {
+        "code": "COMORBIDITY",
+        "system": "http://example.org/system/code/sections"
+      }
+    ],
+    "extension": [
+      {
+        "url": "https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.type",
+        "valueCode": "group"
+      }
+    ],
+    "linkId": "1"
+  },
+  "id": "3141",
+  "resourceType": "Questionnaire",
+  "subjectType": [
+    "Patient"
+  ],
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\n      \u003cpre\u003e\n            1.Comorbidity?\n              1.1 Cardial Comorbidity\n                1.1.1 Angina?\n                1.1.2 MI?\n              1.2 Vascular Comorbidity?\n              ...\n            Histopathology\n              Abdominal\n                pT category?\n              ...\n          \u003c/pre\u003e\n    \u003c/div\u003e",
+    "status": "generated"
+  }
+}

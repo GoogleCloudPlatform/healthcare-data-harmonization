@@ -1,0 +1,19 @@
+package datatypes
+
+// Description: Converts a FHIR STU3 RelatedArtifact to FHIR R4 RelatedArtifact.
+//
+// Argument(s):
+//   relatedArtifact : FHIR STU3 RelatedArtifact https://hl7.org/fhir/STU3/metadatatypes.html#RelatedArtifact
+//
+// Output(s):
+//   FHIR R4 RelatedArtifact https://hl7.org/fhir/R4/metadatatypes.html#RelatedArtifact
+//
+def R3RelatedArtifactToR4(required relatedArtifact) {
+  type: relatedArtifact.type
+  label: extension::fetchString("https://www.hl7.org/fhir/R4/relatedartifact-definitions.html#relatedArtifact.label", relatedArtifact.extension)
+  display: relatedArtifact.display
+  citation: relatedArtifact.citation
+  url: relatedArtifact.url
+  document: relatedArtifact.document
+  resource: datatypes::ReferenceToCanonical(relatedArtifact.resource)
+}

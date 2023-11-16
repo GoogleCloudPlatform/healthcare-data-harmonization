@@ -1,0 +1,11 @@
+// R3 HealthcareService To R4
+$this: R3HealthcareServiceToR4($root)
+
+// R4 HealthcareService To R3
+$this: R4HealthcareServiceToR3($root)
+
+// R2 HealthcareService To R3
+$this: R2HealthcareServiceToR3($root)
+
+// R3 HealthcareService To R2
+$this: R3HealthcareServiceToR2($root)

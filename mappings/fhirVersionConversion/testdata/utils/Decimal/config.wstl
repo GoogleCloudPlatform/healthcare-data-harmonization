@@ -1,0 +1,5 @@
+// store to extension
+extension[]: addDecimal("test_url", $root.data)
+
+// fetch from extension
+data: fetchDecimal("test_url", $root.extension)

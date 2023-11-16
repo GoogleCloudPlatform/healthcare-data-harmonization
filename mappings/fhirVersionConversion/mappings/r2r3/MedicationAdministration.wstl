@@ -1,0 +1,88 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def MedicationAdministrationBase(medicationAdministration) {
+  resourcebase::ResourceBase(medicationAdministration)
+  identifier: medicationAdministration.identifier
+  medicationCodeableConcept: medicationAdministration.medicationCodeableConcept
+  reasonNotGiven: medicationAdministration.reasonNotGiven
+}
+
+def R2MedicationAdministrationToR3(medicationAdministration) {
+  MedicationAdministrationBase(medicationAdministration)
+  contained: datatypes::R2ResourceToR3(medicationAdministration.contained[])
+  device: datatypes::R2ReferenceToR3(medicationAdministration.device[])
+  medicationReference: datatypes::R2ReferenceToR3(medicationAdministration.medicationReference)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.status", medicationAdministration.extension)
+  status: if status? then status else medicationAdministration.status
+  definition: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.definition", medicationAdministration.extension)
+  partOf: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.partOf", medicationAdministration.extension)
+  category: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.category", medicationAdministration.extension)
+  subject: datatypes::R2ReferenceToR3(medicationAdministration.patient)
+  context: datatypes::R2ReferenceToR3(medicationAdministration.encounter)
+  supportingInformation: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.supportingInformation", medicationAdministration.extension)
+  effectiveDateTime: medicationAdministration.effectiveTimeDateTime
+  effectivePeriod: medicationAdministration.effectiveTimePeriod
+  notGiven: medicationAdministration.wasNotGiven
+  reasonCode: medicationAdministration.reasonGiven
+  reasonReference: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.reasonReference", medicationAdministration.extension)
+  prescription: datatypes::R2ReferenceToR3(medicationAdministration.prescription)
+  note: extension::fetchAnnotationArray("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.note", medicationAdministration.extension)
+  dosage: R2MedicationAdministration_DosageToR3(medicationAdministration.dosage)
+  eventHistory: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.eventHistory", medicationAdministration.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/medicationadministration-definitions.html#MedicationAdministration.practitioner", medicationAdministration.practitioner)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/DSTU2/medicationadministration-definitions.html#MedicationAdministration.note", medicationAdministration.note)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/medicationadministration-definitions.html#MedicationAdministration.status", medicationAdministration.status)
+}
+
+def R3MedicationAdministrationToR2(medicationAdministration) {
+  MedicationAdministrationBase(medicationAdministration)
+  contained: datatypes::R3ResourceToR2(medicationAdministration.contained[])
+  device: datatypes::R3ReferenceToR2(medicationAdministration.device[])
+  medicationReference: datatypes::R3ReferenceToR2(medicationAdministration.medicationReference)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/medicationadministration-definitions.html#MedicationAdministration.status", medicationAdministration.extension)
+  status: if status? then status else medicationAdministration.status
+  reasonGiven: medicationAdministration.reasonCode
+  effectiveTimeDateTime: medicationAdministration.effectiveDateTime
+  effectiveTimePeriod: medicationAdministration.effectivePeriod
+  patient: datatypes::R3ReferenceToR2(medicationAdministration.subject)
+  encounter: datatypes::R3ReferenceToR2(medicationAdministration.context)
+  practitioner: extension::fetchReference("https://www.hl7.org/fhir/DSTU2/medicationadministration-definitions.html#MedicationAdministration.practitioner", medicationAdministration.extension)
+  prescription: datatypes::R3ReferenceToR2(medicationAdministration.prescription)
+  note: extension::fetchString("https://www.hl7.org/fhir/DSTU2/medicationadministration-definitions.html#MedicationAdministration.note", medicationAdministration.extension)
+  wasNotGiven: medicationAdministration.notGiven
+  dosage: R3MedicationAdministration_DosageToR2(medicationAdministration.dosage)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.definition", medicationAdministration.definition[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.partOf", medicationAdministration.partOf[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.category", medicationAdministration.category)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.supportingInformation", medicationAdministration.supportingInformation[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.reasonReference", medicationAdministration.reasonReference[])
+  extension[]: extension::BuildAnnotationExtension("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.note", medicationAdministration.note[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.eventHistory", medicationAdministration.eventHistory[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.status", medicationAdministration.status)
+}
+
+def R2MedicationAdministration_DosageToR3(data) {
+  text: data.text
+  site: data.siteCodeableConcept
+  route: data.route
+  method: data.method
+  dose: data.quantity
+  rateRatio: data.rateRatio
+  rateQuantity: extension::fetchQuantity("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.dosage.rateQuantity", data.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/medicationadministration-definitions.html#MedicationAdministration.dosage.siteReference", data.siteReference)
+  extension[]: extension::BuildRangeExtension("https://www.hl7.org/fhir/DSTU2/medicationadministration-definitions.html#MedicationAdministration.dosage.rateRange", data.rateRange)
+}
+
+def R3MedicationAdministration_DosageToR2(data) {
+  text: data.text
+  siteCodeableConcept: data.site
+  siteReference: extension::fetchReference("https://www.hl7.org/fhir/DSTU2/medicationadministration-definitions.html#MedicationAdministration.dosage.siteReference", data.extension)
+  route: data.route
+  method: data.method
+  quantity: data.dose
+  rateRatio: data.rateRatio
+  rateRange: extension::fetchRange("https://www.hl7.org/fhir/DSTU2/medicationadministration-definitions.html#MedicationAdministration.dosage.rateRange", data.extension)
+  extension[]: extension::BuildQuantityExtension("https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.dosage.rateQuantity", data.rateQuantity)
+}

@@ -1,0 +1,5 @@
+// store to extension
+extension[]: addDateTime("test_url", $root.data)
+
+// fetch from extension
+data: fetchDateTime("test_url", $root.extension)

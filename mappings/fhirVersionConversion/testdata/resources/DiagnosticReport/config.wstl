@@ -1,0 +1,11 @@
+// R3 DiagnosticReport To R4
+$this: R3DiagnosticReportToR4($root)
+
+// R4 DiagnosticReport To R3
+$this: R4DiagnosticReportToR3($root)
+
+// R2 DiagnosticReport To R3
+$this: R2DiagnosticReportToR3($root)
+
+// R3 DiagnosticReport To R2
+$this: R3DiagnosticReportToR2($root)

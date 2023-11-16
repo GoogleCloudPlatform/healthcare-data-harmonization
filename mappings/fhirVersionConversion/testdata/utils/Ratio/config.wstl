@@ -1,0 +1,5 @@
+// store to extension
+extension[]: addRange("test_url", $root.data)
+
+// fetch from extension
+data: fetchRatio("test_url", $root.extension)

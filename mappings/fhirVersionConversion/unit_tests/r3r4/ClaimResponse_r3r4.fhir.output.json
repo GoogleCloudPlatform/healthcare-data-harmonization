@@ -1,0 +1,241 @@
+{
+  "created": "2014-08-16",
+  "disposition": "Claim settled as per contract.",
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.type",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "oral",
+            "system": "http://terminology.hl7.org/CodeSystem/claim-type"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.subType",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "emergency",
+            "system": "http://terminology.hl7.org/CodeSystem/ex-claimsubtype"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.use",
+      "valueCode": "claim"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.outcome",
+      "valueCode": "complete"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.requestOrganization",
+      "valueReference": {
+        "reference": "Organization/1"
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.outcome",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "complete",
+            "system": "http://hl7.org/fhir/remittance-outcome"
+          }
+        ]
+      }
+    },
+    {
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/datatypes-definitions.html#Money.value",
+          "valueDecimal": 135.57
+        }
+      ],
+      "url": "https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.totalCost"
+    },
+    {
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/datatypes-definitions.html#Money.value",
+          "valueDecimal": 100.47
+        }
+      ],
+      "url": "https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.totalBenefit"
+    }
+  ],
+  "id": "R3500",
+  "identifier": [
+    {
+      "system": "http://www.BenefitsInc.com/fhir/remittance",
+      "value": "R3500"
+    }
+  ],
+  "insurer": {
+    "identifier": {
+      "system": "http://www.jurisdiction.org/insurers",
+      "value": "555123"
+    }
+  },
+  "item": [
+    {
+      "adjudication": [
+        {
+          "amount": {
+            "currency": "USD",
+            "value": 135.57
+          },
+          "category": {
+            "coding": [
+              {
+                "code": "eligible"
+              }
+            ]
+          }
+        },
+        {
+          "amount": {
+            "currency": "USD",
+            "value": 10
+          },
+          "category": {
+            "coding": [
+              {
+                "code": "copay"
+              }
+            ]
+          }
+        },
+        {
+          "category": {
+            "coding": [
+              {
+                "code": "eligpercent"
+              }
+            ]
+          },
+          "value": 80
+        },
+        {
+          "amount": {
+            "currency": "USD",
+            "value": 100.47
+          },
+          "category": {
+            "coding": [
+              {
+                "code": "benefit"
+              }
+            ]
+          },
+          "reason": {
+            "coding": [
+              {
+                "code": "ar002",
+                "display": "Plan Limit Reached",
+                "system": "http://terminology.hl7.org/CodeSystem/adjudication-reason"
+              }
+            ]
+          }
+        }
+      ],
+      "itemSequence": 1
+    }
+  ],
+  "outcome": "complete",
+  "patient": {
+    "reference": "Patient/1"
+  },
+  "payeeType": {
+    "coding": [
+      {
+        "code": "provider",
+        "system": "http://terminology.hl7.org/CodeSystem/payeetype"
+      }
+    ]
+  },
+  "payment": {
+    "amount": {
+      "currency": "USD",
+      "value": 100.47
+    },
+    "date": "2014-08-31",
+    "identifier": {
+      "system": "http://www.BenefitsInc.com/fhir/paymentidentifier",
+      "value": "201408-2-1569478"
+    },
+    "type": {
+      "coding": [
+        {
+          "code": "complete",
+          "system": "http://terminology.hl7.org/CodeSystem/ex-paymenttype"
+        }
+      ]
+    }
+  },
+  "request": {
+    "reference": "http://www.BenefitsInc.com/fhir/oralhealthclaim/15476332402"
+  },
+  "requestor": {
+    "reference": "Practitioner/1"
+  },
+  "resourceType": "ClaimResponse",
+  "status": "active",
+  "subType": {
+    "coding": [
+      {
+        "code": "emergency",
+        "system": "http://terminology.hl7.org/CodeSystem/ex-claimsubtype"
+      }
+    ]
+  },
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the ClaimResponse</div>",
+    "status": "generated"
+  },
+  "total": [
+    {
+      "amount": {
+        "currency": "USD",
+        "value": 135.57
+      },
+      "category": {
+        "coding": [
+          {
+            "code": "submitted",
+            "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+          }
+        ],
+        "text": "Submitted Amount"
+      }
+    },
+    {
+      "amount": {
+        "currency": "USD",
+        "value": 100.47
+      },
+      "category": {
+        "coding": [
+          {
+            "code": "benefit",
+            "system": "http://terminology.hl7.org/CodeSystem/adjudication"
+          }
+        ],
+        "text": "Benefit Amount"
+      }
+    }
+  ],
+  "type": {
+    "coding": [
+      {
+        "code": "oral",
+        "system": "http://terminology.hl7.org/CodeSystem/claim-type"
+      }
+    ]
+  },
+  "use": "claim"
+}

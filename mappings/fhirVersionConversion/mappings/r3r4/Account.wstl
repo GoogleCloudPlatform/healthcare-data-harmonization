@@ -1,0 +1,169 @@
+package fhir_r3r4
+
+import "../datatypes/datatypes.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   account : FHIR Account resource
+//
+// Output(s):
+//   FHIR Account Resource
+//
+def AccountBase(account) {
+  resourcebase::ResourceBase(account)
+  identifier: account.identifier
+  type: account.type
+  name: account.name
+  description: account.description
+}
+
+// Description: Converts a FHIR STU3 Account resource to FHIR R4 Account resource.
+//
+// Argument(s):
+//   account : FHIR STU3 Account resource https://www.hl7.org/fhir/stu3/account.html
+//
+// Output(s):
+//   FHIR R4 Account Resource https://www.hl7.org/fhir/r4/account.html
+//
+def R3AccountToR4(account) {
+  AccountBase(account)
+  contained: datatypes::R3ResourceToR4(account.contained[])
+  // Coverage contains reference.
+  coverage: R3Account_CoverageToR4(account.coverage[])
+  // R4 reference has an extra type field.
+  owner: datatypes::R3ReferenceToR4(account.owner)
+  // Guarantor contains reference.
+  guarantor: R3Account_GuarantorToR4(account.guarantor[])
+  // Status code is incompatible between the two versions. Restore the R4 status that might have been stored in R3 extension.
+  status: R3Account_StatusToR4("https://www.hl7.org/fhir/R4/account-definitions.html#Account.status", account.extension, account.status)
+  status: utilities::defaultIfNull($this.status, "unknown")
+  // Subject in R4 is repeated. Restore the R4 subjects from extension if present, otherwise use R3 subject in the list.
+  subject: R3Account_SubjectToR4("https://www.hl7.org/fhir/R4/account-definitions.html#Account.subject", account.extension, datatypes::R3ReferenceToR4(account.subject))
+  servicePeriod: account.period
+  // R3 doesn't have partOf. Restore the R4 partOf that might have been stored in R3 extension.
+  partOf: extension::fetchReference("https://www.hl7.org/fhir/R4/account-definitions.html#Account.partOf", account.extension)
+  // R4 doesn't have active. Add R3's active to R4's extension.
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/STU3/account-definitions.html#Account.active", account.active)
+  // R4 doesn't have balance. Add R3's balance to R4's extention. Note: R3 balance is of Money type, which is effectively Quantity in R4.
+  extension[]: extension::BuildQuantityExtension("https://www.hl7.org/fhir/STU3/account-definitions.html#Account.balance", account.balance)
+  // Status code is incompatbile between the two versions. Store R3 status in R4 extension.
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/account-definitions.html#Account.status", account.status)
+}
+
+// Description: Converts a FHIR R4 Account resource to FHIR STU3 Account resource.
+//
+// Argument(s):
+//   account : FHIR R4 Account resource https://www.hl7.org/fhir/r4/account.html
+//
+// Output(s):
+//   FHIR STU3 Account Resource https://www.hl7.org/fhir/stu3/account.html
+//
+def R4AccountToR3(account) {
+  AccountBase(account)
+  contained: datatypes::R4ResourceToR3(account.contained[])
+  coverage: R4Account_CoverageToR3(account.coverage[])
+  owner: datatypes::R4ReferenceToR3(account.owner)
+  guarantor: R4Account_GuarantorToR3(account.guarantor[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/account-definitions.html#Account.status", account.extension)
+  status: if status? then status else account.status
+  subject: datatypes::R4ReferenceToR3(account.subject[0])
+  period: account.servicePeriod
+  active: extension::fetchPeriod("https://www.hl7.org/fhir/STU3/account-definitions.html#Account.active", account.extension)
+  balance: extension::fetchQuantity("https://www.hl7.org/fhir/STU3/account-definitions.html#Account.balance", account.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/account-definitions.html#Account.subject", account.subject[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/account-definitions.html#Account.partOf", account.partOf)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/account-definitions.html#Account.status", account.status)
+}
+
+// Description: Converts a FHIR STU3 Account.Coverage to FHIR R4 Account.Coverage
+//
+// Argument(s):
+//   data : FHIR STU3 Account.Coverage http://hl7.org/fhir/STU3/account-definitions.html#Account.coverage
+//
+// Output(s):
+//   FHIR R4 Account.Coverage http://hl7.org/fhir/R4/account-definitions.html#Account.coverage
+//
+def R3Account_CoverageToR4(data) {
+  coverage: datatypes::R3ReferenceToR4(data.coverage)
+  priority: data.priority
+}
+
+// Description: Converts a FHIR R4 Account.Coverage to FHIR STU3 Account.Coverage
+//
+// Argument(s):
+//   data : FHIR R4 Account.Coverage http://hl7.org/fhir/R4/account-definitions.html#Account.coverage
+//
+// Output(s):
+//   FHIR STU3 Account.Coverage http://hl7.org/fhir/STU3/account-definitions.html#Account.coverage
+//
+def R4Account_CoverageToR3(data) {
+  coverage: datatypes::R4ReferenceToR3(data.coverage)
+  priority: data.priority
+}
+
+// Description: Converts a FHIR STU3 Account.Guarantor to FHIR R4 Account.Guarantor
+//
+// Argument(s):
+//   data : FHIR STU3 Account.Guarantor http://hl7.org/fhir/STU3/account-definitions.html#Account.guarantor
+//
+// Output(s):
+//   FHIR R4 Account.Guarantor http://hl7.org/fhir/R4/account-definitions.html#Account.guarantor
+//
+def R3Account_GuarantorToR4(data) {
+  party: datatypes::R3ReferenceToR4(data.party)
+  onHold: data.onHold
+  period: data.period
+}
+
+// Description: Converts a FHIR R4 Account.Guarantor to FHIR STU3 Account.Guarantor
+//
+// Argument(s):
+//   data : FHIR R4 Account.Guarantor http://hl7.org/fhir/R4/account-definitions.html#Account.guarantor
+//
+// Output(s):
+//   FHIR STU3 Account.Guarantor http://hl7.org/fhir/STU3/account-definitions.html#Account.guarantor
+//
+def R4Account_GuarantorToR3(data) {
+  party: datatypes::R4ReferenceToR3(data.party)
+  onHold: data.onHold
+  period: data.period
+}
+
+// Description: Converts a FHIR STU3 Account.Subject to FHIR R4 Account.Subject
+//
+// Argument(s):
+//   data : FHIR STU3 Account.Subject http://hl7.org/fhir/STU3/account-definitions.html#Account.subject
+//   url : FHIR STU3 Extension.url http://hl7.org/fhir/STU3/extensibility-definitions.html#Extension.url
+//   extension : FHIR STU3 DomainResource.Extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 Account.Subject http://hl7.org/fhir/R4/account-definitions.html#Account.subject
+//
+def R3Account_SubjectToR4(url, extension, data) {
+  var subject: extension::fetchReferenceArray(url, extension)
+  if subject then {
+    subject
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 Account.Status to FHIR R4 Account.Status
+//
+// Argument(s):
+//   data : FHIR STU3 Account.Status http://hl7.org/fhir/STU3/account-definitions.html#Account.status
+//   url : FHIR STU3 Extension.url http://hl7.org/fhir/STU3/extensibility-definitions.html#Extension.url
+//   extension : FHIR STU3 DomainResource.Extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 Account.Status http://hl7.org/fhir/R4/account-definitions.html#Account.status
+//
+def R3Account_StatusToR4(url, extension, data) {
+  var subject: extension::fetchCode(url, extension)
+  if subject then {
+    subject
+  } else if data then {
+    data
+  }
+}

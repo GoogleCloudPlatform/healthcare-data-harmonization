@@ -1,0 +1,97 @@
+{
+  "code": {
+    "coding": [
+      {
+        "code": "0206-8862-02",
+        "display": "Zosyn (piperacillin/tazobactam) 4.5gm injection",
+        "system": "http://hl7.org/fhir/sid/ndc"
+      }
+    ]
+  },
+  "contained": [
+    {
+      "id": "org7",
+      "name": "Wyeth Pharmaceuticals Inc",
+      "resourceType": "Organization"
+    }
+  ],
+  "id": "med0302",
+  "isBrand": true,
+  "manufacturer": {
+    "reference": "#org7"
+  },
+  "product": {
+    "form": {
+      "coding": [
+        {
+          "code": "385219001",
+          "display": "Injection solution (qualifier vallue)",
+          "system": "http://snomed.info/sct"
+        }
+      ]
+    },
+    "ingredient": [
+      {
+        "amount": {
+          "denominator": {
+            "code": "mL",
+            "system": "http://unitsofmeasure.org",
+            "value": 20
+          },
+          "numerator": {
+            "code": "g",
+            "system": "http://unitsofmeasure.org",
+            "value": 4
+          }
+        },
+        "extension": [
+          {
+            "url": "https://www.hl7.org/fhir/STU3/medication-definitions.html#Medication.ingredient.itemCodeableConcept",
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "203134",
+                  "display": "Piperacillin Sodium",
+                  "system": "http://www.nlm.nih.gov/research/umls/rxnorm"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "amount": {
+          "denominator": {
+            "code": "mL",
+            "system": "http://unitsofmeasure.org",
+            "value": 20
+          },
+          "numerator": {
+            "code": "g",
+            "system": "http://unitsofmeasure.org",
+            "value": 0.5
+          }
+        },
+        "extension": [
+          {
+            "url": "https://www.hl7.org/fhir/STU3/medication-definitions.html#Medication.ingredient.itemCodeableConcept",
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "221167",
+                  "display": "Tazobactam Sodium",
+                  "system": "http://www.nlm.nih.gov/research/umls/rxnorm"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "resourceType": "Medication",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\u003cp\u003e\u003cb\u003eGenerated Narrative with Details\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eid\u003c/b\u003e: med0302\u003c/p\u003e\u003cp\u003e\u003cb\u003econtained\u003c/b\u003e: \u003c/p\u003e\u003cp\u003e\u003cb\u003ecode\u003c/b\u003e: Zosyn (piperacillin/tazobactam) 4.5gm injection \u003cspan\u003e(Details : {http://hl7.org/fhir/sid/ndc code '0206-8862-02' = '0206-8862-02', given as 'Zosyn (piperacillin/tazobactam) 4.5gm injection'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eisBrand\u003c/b\u003e: true\u003c/p\u003e\u003cp\u003e\u003cb\u003emanufacturer\u003c/b\u003e: id: org7; name: Wyeth Pharmaceuticals Inc\u003c/p\u003e\u003cp\u003e\u003cb\u003eform\u003c/b\u003e: Injection solution (qualifier vallue) \u003cspan\u003e(Details : {SNOMED CT code '385219001' = 'Injection solution', given as 'Injection solution (qualifier vallue)'})\u003c/span\u003e\u003c/p\u003e\u003cblockquote\u003e\u003cp\u003e\u003cb\u003eingredient\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eitem\u003c/b\u003e: Piperacillin Sodium \u003cspan\u003e(Details : {RxNorm code '203134' = '203134', given as 'Piperacillin Sodium'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eamount\u003c/b\u003e: 4 g\u003cspan\u003e (Details: UCUM code g = 'g')\u003c/span\u003e/20 mL\u003cspan\u003e (Details: UCUM code mL = 'mL')\u003c/span\u003e\u003c/p\u003e\u003c/blockquote\u003e\u003cblockquote\u003e\u003cp\u003e\u003cb\u003eingredient\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eitem\u003c/b\u003e: Tazobactam Sodium \u003cspan\u003e(Details : {RxNorm code '221167' = '221167', given as 'Tazobactam Sodium'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eamount\u003c/b\u003e: 0.5 g\u003cspan\u003e (Details: UCUM code g = 'g')\u003c/span\u003e/20 mL\u003cspan\u003e (Details: UCUM code mL = 'mL')\u003c/span\u003e\u003c/p\u003e\u003c/blockquote\u003e\u003c/div\u003e",
+    "status": "generated"
+  }
+}

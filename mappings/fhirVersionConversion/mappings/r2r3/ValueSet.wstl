@@ -1,0 +1,138 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def ValueSetBase(valueSet) {
+  resourcebase::ResourceBase(valueSet)
+  url: valueSet.url
+  version: valueSet.version
+  name: valueSet.name
+  date: valueSet.date
+  publisher: valueSet.publisher
+  immutable: valueSet.immutable
+  extensible: valueSet.extensible
+}
+
+def R2ValueSetToR3(valueSet) {
+  ValueSetBase(valueSet)
+  contained: datatypes::R2ResourceToR3(valueSet.contained[])
+  identifier: valueSet.identifier
+  title: extension::fetchString("https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.title", valueSet.extension)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.status", valueSet.extension)
+  status: if status? then status else valueSet.status
+  experimental: valueSet.experimental
+  contact: extension::fetchContactDetailArray("https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.contact", valueSet.extension)
+  description: valueSet.description
+  useContext: extension::fetchUsageContextArray("https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.useContext", valueSet.extension)
+  jurisdiction: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.jurisdiction", valueSet.extension)
+  purpose: valueSet.requirements
+  copyright: valueSet.copyright
+  compose: R2ValueSet_ComposeToR3(valueSet.compose, valueSet.lockedDate)
+  expansion: R2ValueSet_ExpansionToR3(valueSet.expansion)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/valueset-definitions.html#ValueSet.status", valueSet.status)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/valueset-definitions.html#ValueSet.useContext", valueSet.useContext[])
+}
+
+def R3ValueSetToR2(valueSet) {
+  ValueSetBase(valueSet)
+  contained: datatypes::R3ResourceToR2(valueSet.contained[])
+  identifier: valueSet.identifier[0]
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/valueset-definitions.html#ValueSet.status", valueSet.extension)
+  status: if status? then status else valueSet.status
+  experimental: valueSet.experimental
+  description: valueSet.description
+  useContext: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/DSTU2/valueset-definitions.html#ValueSet.useContext", valueSet.extension)
+  requirements: valueSet.purpose
+  copyright: valueSet.copyright
+  compose: R3ValueSet_ComposeToR2(valueSet.compose)
+  expansion: R3ValueSet_ExpansionToR2(valueSet.expansion)
+  lockedDate: valueSet.compose.lockedDate
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.title", valueSet.title)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.status", valueSet.status)
+  extension[]: extension::BuildContactDetail("https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.contact", valueSet.contact[])
+  extension[]: extension::BuildBase64BinaryExtension("https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.useContext", valueSet.useContext[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.jurisdiction", valueSet.jurisdiction[])
+}
+
+def R2ValueSet_ComposeToR3(data, lockedDate) {
+  lockedDate: lockedDate
+  inactive: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.compose.inactive", data.extension)
+  include: R2ValueSet_Compose_IncludeToR3(data.include[])
+  exclude: data.exclude
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/DSTU2/valueset-definitions.html#ValueSet.compose.import", data.'import'[])
+}
+
+def R3ValueSet_ComposeToR2(data) {
+  'import': extension::fetchUriArray("https://www.hl7.org/fhir/DSTU2/valueset-definitions.html#ValueSet.compose.import", data.extension)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.compose.inactive", data.inactive)
+  include: R3ValueSet_Compose_IncludeToR2(data.include[])
+  exclude: data.exclude
+}
+
+def R2ValueSet_Compose_IncludeToR3(data) {
+  system: data.system
+  version: data.version
+  concept: data.concept
+  filter: R2ValueSet_Compose_Include_FilterToR3(data.filter[])
+  valueSet: extension::fetchUriArray("https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.compose.include.valueSet", data.extension)
+}
+
+def R3ValueSet_Compose_IncludeToR2(data) {
+  system: data.system
+  version: data.version
+  concept: data.concept
+  filter: R3ValueSet_Compose_Include_FilterToR2(data.filter[])
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.compose.include.valueSet", data.valueSet[])
+}
+
+def R2ValueSet_Compose_Include_FilterToR3(data) {
+  property: data.property
+  op: extension::fetchCode("https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.compose.include.filter.op", data.extension)
+  value: data.value
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/valueset-definitions.html#ValueSet.compose.include.filter.op", data.op)
+}
+
+def R3ValueSet_Compose_Include_FilterToR2(data) {
+  property: data.property
+  op: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/valueset-definitions.html#ValueSet.compose.include.filter.op", data.extension)
+  value: data.value
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.compose.include.filter.op", data.op)
+}
+
+def R2ValueSet_ExpansionToR3(data) {
+  identifier: data.identifier
+  timestamp: data.timestamp
+  total: data.total
+  offset: data.offset
+  parameter: data.parameter
+  contains: R2ValueSet_Expansion_ContainsToR3(data.contains[])
+}
+
+def R3ValueSet_ExpansionToR2(data) {
+  identifier: data.identifier
+  timestamp: data.timestamp
+  total: data.total
+  offset: data.offset
+  parameter: data.parameter
+  contains: R3ValueSet_Expansion_ContainsToR2(data.contains[])
+}
+
+def R2ValueSet_Expansion_ContainsToR3(data) {
+  system: data.system
+  abstract: data.abstract
+  inactive: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.expansion.contains.inactive", data.extension)
+  version: data.version
+  code: data.code
+  display: data.display
+  contains: data.contains
+}
+
+def R3ValueSet_Expansion_ContainsToR2(data) {
+  system: data.system
+  abstract: data.abstract
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/valueset-definitions.html#ValueSet.expansion.contains.inactive", data.inactive)
+  version: data.version
+  code: data.code
+  display: data.display
+  contains: data.contains
+}

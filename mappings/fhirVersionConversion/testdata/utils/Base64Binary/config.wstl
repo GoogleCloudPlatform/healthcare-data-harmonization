@@ -1,0 +1,5 @@
+// store to extension
+extension[]: addBase64Binary("test_url", $root.data)
+
+// fetch from extension
+age: fetchBase64Binary("test_url", $root.extension)

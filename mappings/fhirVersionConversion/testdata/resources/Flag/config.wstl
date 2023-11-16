@@ -1,0 +1,11 @@
+// R3 Flag To R4
+$this: R3FlagToR4($root)
+
+// R4 Flag To R3
+$this: R4FlagToR3($root)
+
+// R2 Flag To R3
+$this: R2FlagToR3($root)
+
+// R3 Flag To R2
+$this: R3FlagToR2($root)

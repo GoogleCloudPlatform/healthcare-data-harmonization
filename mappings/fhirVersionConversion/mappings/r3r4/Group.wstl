@@ -1,0 +1,94 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   group : FHIR Group resource
+//
+// Output(s):
+//   FHIR Group Resource
+//
+def GroupBase(group) {
+  resourcebase::ResourceBase(group)
+  identifier: group.identifier
+  actual: group.actual
+  code: group.code
+  name: group.name
+  quantity: group.quantity
+}
+
+// Description: Converts a FHIR STU3 Group resource to FHIR R4 Group resource.
+//
+// Argument(s):
+//   group : FHIR STU3 Group resource https://www.hl7.org/fhir/stu3/group.html
+//
+// Output(s):
+//   FHIR R4 Group Resource https://www.hl7.org/fhir/r4/group.html
+//
+def R3GroupToR4(group) {
+  GroupBase(group)
+  contained: datatypes::R3ResourceToR4(group.contained[])
+  active: group.active
+  type: group.type
+  managingEntity: extension::fetchReference("https://www.hl7.org/fhir/R4/group-definitions.html#Group.managingEntity", group.extension)
+  characteristic: R3Group_CharacteristicToR4(group.characteristic[])
+  member: group.member
+}
+
+// Description: Converts a FHIR R4 Group resource to FHIR STU3 Group resource.
+//
+// Argument(s):
+//   group : FHIR R4 Group resource https://www.hl7.org/fhir/r4/group.html
+//
+// Output(s):
+//   FHIR STU3 Group Resource https://www.hl7.org/fhir/stu3/group.html
+//
+def R4GroupToR3(group) {
+  GroupBase(group)
+  contained: datatypes::R4ResourceToR3(group.contained[])
+  active: group.active
+  type: group.type
+  characteristic: R4Group_CharacteristicToR3(group.characteristic[])
+  member: group.member
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/group-definitions.html#Group.managingEntity", group.managingEntity)
+}
+
+// Description: Converts a FHIR STU3 Group.Characteristic to FHIR R4 Group.Characteristic.
+//
+// Argument(s):
+//   data : FHIR STU3 Group.Characteristic http://hl7.org/fhir/STU3/group-definitions.html#Group.characteristic
+//
+// Output(s):
+//   FHIR R4 Group.Characteristic http://hl7.org/fhir/R4/group-definitions.html#Group.characteristic
+//
+def R3Group_CharacteristicToR4(data) {
+  code: data.code
+  valueCodeableConcept: data.valueCodeableConcept
+  valueBoolean: data.valueBoolean
+  valueQuantity: data.valueQuantity
+  valueRange: data.valueRange
+  valueReference: extension::fetchReference("https://www.hl7.org/fhir/R4/group-definitions.html#Group.characteristic.valueReference", data.extension)
+  exclude: data.exclude
+  period: data.period
+}
+
+// Description: Converts a FHIR R4 Group.Characteristic to FHIR STU3 Group.Characteristic.
+//
+// Argument(s):
+//   data : FHIR R4 Group.Characteristic http://hl7.org/fhir/R4/group-definitions.html#Group.characteristic
+//
+// Output(s):
+//   FHIR STU3 Group.Characteristic http://hl7.org/fhir/STU3/group-definitions.html#Group.characteristic
+//
+def R4Group_CharacteristicToR3(data) {
+  code: data.code
+  valueCodeableConcept: data.valueCodeableConcept
+  valueBoolean: data.valueBoolean
+  valueQuantity: data.valueQuantity
+  valueRange: data.valueRange
+  exclude: data.exclude
+  period: data.period
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/group-definitions.html#Group.characteristic.valueReference", data.valueReference)
+}

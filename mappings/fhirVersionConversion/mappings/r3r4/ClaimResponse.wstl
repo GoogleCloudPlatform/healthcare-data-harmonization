@@ -1,0 +1,616 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   claimResponse : FHIR ClaimResponse resource
+//
+// Output(s):
+//   FHIR ClaimResponse Resource
+//
+def ClaimResponseBase(claimResponse) {
+  resourcebase::ResourceBase(claimResponse)
+  identifier: claimResponse.identifier
+  disposition: claimResponse.disposition
+  payeeType: claimResponse.payeeType
+}
+
+// Description: Converts a FHIR STU3 ClaimResponse resource to FHIR R4 ClaimResponse resource.
+//
+// Argument(s):
+//   claimResponse : FHIR STU3 ClaimResponse resource https://www.hl7.org/fhir/stu3/claimResponse.html
+//
+// Output(s):
+//   FHIR R4 ClaimResponse Resource https://www.hl7.org/fhir/r4/claimResponse.html
+//
+def R3ClaimResponseToR4(claimResponse) {
+  ClaimResponseBase(claimResponse)
+  contained: datatypes::R3ResourceToR4(claimResponse.contained[])
+  request: datatypes::R3ReferenceToR4(claimResponse.request)
+  communicationRequest: datatypes::R3ReferenceToR4(claimResponse.communicationRequest[])
+  status: claimResponse.status
+  status: utilities::defaultIfNull($this.status, "entered-in-error")
+  type: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.type", claimResponse.extension)
+  type.text: utilities::defaultIfNull($this.type, "unknown")
+  subType: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.subType", claimResponse.extension)
+  use: extension::fetchCode("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.use", claimResponse.extension)
+  use: utilities::defaultIfNull($this.use, "claim")
+  patient: datatypes::R3ReferenceToR4(claimResponse.patient)
+  patient.display: utilities::defaultIfNull($this.patient, "Patient")
+  created: claimResponse.created
+  created: utilities::defaultIfNull($this.created, currentTime("yyyy-MM-dd"))
+  insurer: datatypes::R3ReferenceToR4(claimResponse.insurer)
+  insurer.display: utilities::defaultIfNull($this.insurer, "Organization")
+  requestor: datatypes::R3ReferenceToR4(claimResponse.requestProvider)
+  outcome: R3ClaimResponse_OutcomeToR4("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.outcome", claimResponse.extension, claimResponse.outcome)
+  outcome: utilities::defaultIfNull($this.outcome, "error")
+  preAuthRef: R3ClaimResponse_PreAuthRefToR4("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.preAuthRef", claimResponse.extension, claimResponse.insurance)
+  preAuthPeriod: extension::fetchPeriod("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.preAuthPeriod", claimResponse.extension)
+  item: R3ClaimResponse_ItemToR4(claimResponse.item[])
+  addItem: R3ClaimResponse_AddItemToR4(claimResponse.addItem[])
+  adjudication[]: BuildR4_ClaimResponse_Adjudication(claimResponse.extension)
+  total[]: R3ClaimResponse_TotalR4(claimResponse.extension, claimResponse.totalCost, claimResponse.totalBenefit, claimResponse.unallocDeductable)
+  payment: R3ClaimResponse_PaymentToR4(claimResponse.payment)
+  fundsReserve: datatypes::CodingToCodeableConcept(claimResponse.reserved)
+  formCode: R3ClaimResponse_FormCodeToR4("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.formCode", claimResponse.extension, claimResponse.form)
+  form: extension::fetchAttachment("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.form", claimResponse.extension)
+  processNote: R3ClaimResponse_ProcessNoteToR4(claimResponse.processNote[])
+  error: R3ClaimResponse_ErrorToR4(claimResponse.error[])
+  insurance: R3ClaimResponse_InsuranceToR4(claimResponse.insurance[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.requestOrganization", claimResponse.requestOrganization)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.outcome", claimResponse.outcome)
+  extension[]: extension::BuildMoneyExtension("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.totalCost", claimResponse.totalCost)
+  extension[]: extension::BuildMoneyExtension("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.unallocDeductable", claimResponse.unallocDeductable)
+  extension[]: extension::BuildMoneyExtension("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.totalBenefit", claimResponse.totalBenefit)
+}
+
+// Description: Converts a FHIR R4 ClaimResponse resource to FHIR STU3 ClaimResponse resource.
+//
+// Argument(s):
+//   claimResponse : FHIR R4 ClaimResponse resource https://www.hl7.org/fhir/r4/claimResponse.html
+//
+// Output(s):
+//   FHIR STU3 ClaimResponse Resource https://www.hl7.org/fhir/stu3/claimResponse.html
+//
+def R4ClaimResponseToR3(claimResponse) {
+  ClaimResponseBase(claimResponse)
+  contained: datatypes::R4ResourceToR3(claimResponse.contained[])
+  request: datatypes::R4ReferenceToR3(claimResponse.request)
+  communicationRequest: datatypes::R4ReferenceToR3(claimResponse.communicationRequest[])
+  status: claimResponse.status
+  patient: datatypes::R4ReferenceToR3(claimResponse.patient)
+  created: claimResponse.created
+  insurer: datatypes::R4ReferenceToR3(claimResponse.insurer)
+  requestProvider: datatypes::R4ReferenceToR3(claimResponse.requestor)
+  requestOrganization: extension::fetchReference("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.requestOrganization", claimResponse.extension)
+  outcome: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.outcome", claimResponse.extension)
+  item: R4ClaimResponse_ItemToR3(claimResponse.item[])
+  addItem: R4ClaimResponse_AddItemToR3(claimResponse.addItem[])
+  totalCost: extension::fetchMoney("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.totalCost", claimResponse.extension)
+  unallocDeductable: extension::fetchMoney("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.unallocDeductable", claimResponse.extension)
+  totalBenefit: extension::fetchMoney("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.totalBenefit", claimResponse.extension)
+  payment: claimResponse.payment
+  reserved: claimResponse.fundsReserve
+  form: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.form", claimResponse.extension)
+  processNote: R4ClaimResponse_ProcessNoteToR3(claimResponse.processNote[])
+  error: R4ClaimResponse_ErrorToR3(claimResponse.error[])
+  insurance: R4ClaimResponse_InsuranceToR3(claimResponse.insurance[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.type", claimResponse.type)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.subType", claimResponse.subType)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.use", claimResponse.use)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.outcome", claimResponse.outcome)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.preAuthRef", claimResponse.preAuthRef)
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.preAuthPeriod", claimResponse.preAuthPeriod)
+  extension[]: extension::BuildAttachmentExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.form", claimResponse.form)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.formCode", claimResponse.formCode)
+}
+
+// Description: Converts a FHIR STU3 ClaimResponse.TotalCost to FHIR R4 ClaimResponse.Total.
+//
+// Argument(s):
+//   data : FHIR STU3 ClaimResponse.TotalCost http://hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.totalCost
+//
+// Output(s):
+//   FHIR R4 ClaimResponse.Total http://hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.total
+//
+def R3ClaimResponse_TotalCostToR4(required cost) {
+  category.text: "Submitted Amount"
+  var coding.code: "submitted"
+  var coding.system: "http://terminology.hl7.org/CodeSystem/adjudication"
+  category.coding[]: coding
+  amount: datatypes::R3MoneyToR4(cost)
+}
+
+// Description: Converts a FHIR STU3 ClaimResponse.TotalBenefit to FHIR R4 ClaimResponse.Total.
+//
+// Argument(s):
+//   data : FHIR STU3 ClaimResponse.TotalBenefit http://hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.totalBenefit
+//
+// Output(s):
+//   FHIR R4 ClaimResponse.Total http://hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.total
+//
+def R3ClaimResponse_TotalBenefitToR4(required benefit) {
+  category.text: "Benefit Amount"
+  var coding.code: "benefit"
+  var coding.system: "http://terminology.hl7.org/CodeSystem/adjudication"
+  category.coding[]: coding
+  amount: datatypes::R3MoneyToR4(benefit)
+}
+
+// Description: Converts a FHIR STU3 ClaimResponse.UnallocDeductable to FHIR R4 ClaimResponse.Total.
+//
+// Argument(s):
+//   data : FHIR STU3 ClaimResponse.UnallocDeductable http://hl7.org/fhir/STU3/claimresponse-definitions.html#claimResponse.unallocDeductable
+//
+// Output(s):
+//   FHIR R4 ClaimResponse.Total http://hl7.org/fhir/R4/claimresponse-definitions.html#claimResponse.total
+//
+def R3ClaimResponse_UnallocDeductableToR4(required unallocDeductable) {
+  category.text: "Unallocated Deductible"
+  var coding.code: "unallocdeduct"
+  var coding.system: "http://terminology.hl7.org/CodeSystem/adjudication"
+  category.coding[]: coding
+  amount: datatypes::R3MoneyToR4(unallocDeductable)
+}
+
+// Description: Converts a FHIR STU3 ClaimResponse.Item to FHIR R4 ClaimResponse.Item.
+//
+// Argument(s):
+//   data : FHIR STU3 ClaimResponse.Item http://hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.item
+//
+// Output(s):
+//   FHIR R4 ClaimResponse.Item http://hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.item
+//
+def R3ClaimResponse_ItemToR4(data) {
+  itemSequence: data.sequenceLinkId
+  noteNumber: data.noteNumber
+  adjudication: R3ClaimResponse_Item_AdjudicationToR4(data.adjudication[])
+  detail: R3ClaimResponse_Item_DetailToR4(data.detail[])
+}
+
+// Description: Converts a FHIR R4 ClaimResponse.Item to FHIR STU3 ClaimResponse.Item.
+//
+// Argument(s):
+//   data : FHIR R4 ClaimResponse.Item http://hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.item
+//
+// Output(s):
+//   FHIR STU3 ClaimResponse.Item http://hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.item
+//
+def R4ClaimResponse_ItemToR3(data) {
+  sequenceLinkId: data.itemSequence
+  noteNumber: data.noteNumber
+  adjudication: data.adjudication
+  detail: R4ClaimResponse_Item_DetailToR3(data.detail[])
+}
+
+// Description: Converts a FHIR STU3 ClaimResponse.Item.Detail to FHIR R4 ClaimResponse.Item.Detail.
+//
+// Argument(s):
+//   data : FHIR STU3 ClaimResponse.Item.Detail http://hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.Item.detail
+//
+// Output(s):
+//   FHIR R4 ClaimResponse.Item.Detail http://hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.Item.detail
+//
+def R3ClaimResponse_Item_DetailToR4(data) {
+  detailSequence: data.sequenceLinkId
+  noteNumber: data.noteNumber
+  adjudication: R3ClaimResponse_Item_AdjudicationToR4(data.adjudication[])
+  subDetail: R3ClaimResponse_Item_Detail_SubDetailToR4(data.subDetail[])
+}
+
+// Description: Converts a FHIR R4 ClaimResponse.Item.Detail to FHIR STU3 ClaimResponse.Item.Detail.
+//
+// Argument(s):
+//   data : FHIR R4 ClaimResponse.Item.Detail http://hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.Item.detail
+//
+// Output(s):
+//   FHIR STU3 ClaimResponse.Item.Detail http://hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.Item.detail
+//
+def R4ClaimResponse_Item_DetailToR3(data) {
+  sequenceLinkId: data.detailSequence
+  noteNumber: data.noteNumber
+  adjudication: data.adjudication
+  subDetail: R4ClaimResponse_Item_Detail_SubDetailToR3(data.subDetail[])
+}
+
+// Description: Converts a FHIR STU3 ClaimResponse.Item.Detail.SubDetail to FHIR R4 ClaimResponse.Item.Detail.SubDetail.
+//
+// Argument(s):
+//   data : FHIR STU3 ClaimResponse.Item.Detail.SubDetail http://hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.Item.detail.subDetail
+//
+// Output(s):
+//   FHIR R4 ClaimResponse.Item.Detail.SubDetail http://hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.Item.detail.subDetail
+//
+def R3ClaimResponse_Item_Detail_SubDetailToR4(data) {
+  subDetailSequence: data.sequenceLinkId
+  noteNumber: data.noteNumber
+  adjudication: R3ClaimResponse_Item_AdjudicationToR4(data.adjudication[])
+}
+
+// Description: Converts a FHIR R4 ClaimResponse.Item.Detail.SubDetail to FHIR STU3 ClaimResponse.Item.Detail.SubDetail.
+//
+// Argument(s):
+//   data : FHIR R4 ClaimResponse.Item.Detail.SubDetail http://hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.Item.detail.subDetail
+//
+// Output(s):
+//   FHIR STU3 ClaimResponse.Item.Detail.SubDetail http://hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.Item.detail.subDetail
+//
+def R4ClaimResponse_Item_Detail_SubDetailToR3(data) {
+  sequenceLinkId: data.subDetailSequence
+  noteNumber: data.noteNumber
+  adjudication: data.adjudication
+}
+
+// Description: Converts a FHIR STU3 ClaimResponse.AddItem to FHIR R4 ClaimResponse.AddItem.
+//
+// Argument(s):
+//   data : FHIR STU3 ClaimResponse.AddItem http://hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.addItem
+//
+// Output(s):
+//   FHIR R4 ClaimResponse.AddItem http://hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem
+//
+def R3ClaimResponse_AddItemToR4(data) {
+  itemSequence: data.sequenceLinkId
+  detailSequence: extension::fetchPositiveIntArray("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.detailSequence", data.extension)
+  subdetailSequence: extension::fetchPositiveIntArray("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.subdetailSequence", data.extension)
+  provider: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.provider", data.extension)
+  productOrService: data.service
+  productOrService.text: utilities::defaultIfNull($this.productOrService, "unknown")
+  modifier: data.modifier
+  programCode: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.programCode", data.extension)
+  servicedDate: extension::fetchDate("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.servicedDate", data.extension)
+  servicedPeriod: extension::fetchPeriod("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.servicedPeriod", data.extension)
+  locationCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.locationCodeableConcept", data.extension)
+  locationAddress: extension::fetchAddress("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.locationAddress", data.extension)
+  locationReference: extension::fetchReference("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.locationReference", data.extension)
+  quantity: extension::fetchQuantity("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.quantity", data.extension)
+  unitPrice: extension::fetchMoney("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.unitPrice", data.extension)
+  factor: extension::fetchDecimal("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.factor", data.extension)
+  net: extension::fetchMoney("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.net", data.extension)
+  bodySite: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.bodySite", data.extension)
+  subSite: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.subSite", data.extension)
+  noteNumber: data.noteNumber
+  adjudication: R3ClaimResponse_Item_AdjudicationToR4(data.adjudication[])
+  detail: R3ClaimResponse_AddItem_DetailToR4(data.detail[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.addItem.revenue", data.revenue)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.addItem.category", data.category)
+  extension[]: extension::BuildMoneyExtension("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.addItem.fee", data.fee)
+}
+
+// Description: Converts a FHIR R4 ClaimResponse.AddItem to FHIR STU3 ClaimResponse.AddItem.
+//
+// Argument(s):
+//   data : FHIR R4 ClaimResponse.AddItem http://hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem
+//
+// Output(s):
+//   FHIR STU3 ClaimResponse.AddItem http://hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.addItem
+//
+def R4ClaimResponse_AddItemToR3(data) {
+  itemSequence: data.sequenceLinkId
+  extension[]: extension::BuildPositiveIntExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.detailSequence", data.detailSequence[])
+  extension[]: extension::BuildPositiveIntExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.subdetailSequence", data.subdetailSequence[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.provider", data.provider[])
+  service: data.productOrService
+  modifier: data.modifier
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.programCode", data.programCode[])
+  extension[]: extension::BuildDateExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.servicedDate", data.servicedDate)
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.servicedPeriod", data.servicedPeriod)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.locationCodeableConcept", data.locationCodeableConcept)
+  extension[]: extension::BuildAddressExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.locationAddress", data.locationAddress)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.locationReference", data.locationReference)
+  extension[]: extension::BuildQuantityExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.quantity", data.quantity)
+  extension[]: extension::BuildMoneyExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.unitPrice", data.unitPrice)
+  extension[]: extension::BuildDecimalExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.factor", data.factor)
+  extension[]: extension::BuildMoneyExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.net", data.net)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.bodySite", data.bodySite)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.subSite", data.subSite[])
+  noteNumber: data.noteNumber
+  adjudication: data.adjudication
+  detail: R4ClaimResponse_AddItem_DetailToR3(data.detail[])
+  revenue: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.addItem.revenue", data.extension)
+  category: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.addItem.category", data.extension)
+  fee: extension::fetchMoney("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.addItem.fee", data.extension)
+}
+
+// Description: Converts a FHIR STU3 ClaimResponse.AddItem.Detail to FHIR R4 ClaimResponse.AddItem.Detail.
+//
+// Argument(s):
+//   data : FHIR STU3 ClaimResponse.AddItem.Detail http://hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.addItem.detail
+//
+// Output(s):
+//   FHIR R4 ClaimResponse.AddItem.Detail http://hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.detail
+//
+def R3ClaimResponse_AddItem_DetailToR4(data) {
+  productOrService: data.service
+  productOrService.text: utilities::defaultIfNull($this.productOrService, "unknown")
+  modifier: data.modifier
+  quantity: extension::fetchQuantity("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.detail.quantity", data.extension)
+  unitPrice: extension::fetchMoney("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.detail.unitPrice", data.extension)
+  factor: extension::fetchDecimal("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.detail.factor", data.extension)
+  net: extension::fetchMoney("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.detail.net", data.extension)
+  noteNumber: data.noteNumber
+  adjudication: R3ClaimResponse_Item_AdjudicationToR4(data.adjudication[])
+  subDetail[]: BuildR4_ClaimResponse_AddItem_Detail_SubDetail(data.extension)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.addItem.detail.revenue", data.revenue)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.addItem.detail.category", data.category)
+  extension[]: extension::BuildMoneyExtension("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.addItem.detail.fee", data.fee)
+}
+
+// Description: Converts a FHIR R4 ClaimResponse.AddItem.Detail to FHIR STU3 ClaimResponse.AddItem.Detail.
+//
+// Argument(s):
+//   data : FHIR R4 ClaimResponse.AddItem.Detail http://hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.detail
+//
+// Output(s):
+//   FHIR STU3 ClaimResponse.AddItem.Detail http://hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.addItem.detail
+//
+def R4ClaimResponse_AddItem_DetailToR3(data) {
+  productOrService: data.service
+  modifier: data.modifier
+  extension[]: extension::BuildQuantityExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.detail.quantity", data.quantity)
+  extension[]: extension::BuildMoneyExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.detail.unitPrice", data.unitPrice)
+  extension[]: extension::BuildDecimalExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.detail.factor", data.factor)
+  extension[]: extension::BuildMoneyExtension("https://www.hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.detail.net", data.net)
+  noteNumber: data.noteNumber
+  adjudication: data.adjudication
+  revenue: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.addItem.detail.revenue", data.extension)
+  category: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.addItem.detail.category", data.extension)
+  fee: extension::fetchMoney("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.addItem.detail.fee", data.extension)
+}
+
+// Description: Converts a FHIR STU3 ClaimResponse.ProcessNote to FHIR R4 ClaimResponse.ProcessNote.
+//
+// Argument(s):
+//   data : FHIR STU3 ClaimResponse.ProcessNote http://hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.processNote
+//
+// Output(s):
+//   FHIR R4 ClaimResponse.ProcessNote http://hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.processNote
+//
+def R3ClaimResponse_ProcessNoteToR4(data) {
+  number: data.number
+  type: datatypes::CodeableConceptToCode(data.type)
+  text: data.text
+  text: utilities::defaultIfNull($this.text, "unknown")
+}
+
+// Description: Converts a FHIR R4 ClaimResponse.ProcessNote to FHIR STU3 ClaimResponse.ProcessNote.
+//
+// Argument(s):
+//   data : FHIR R4 ClaimResponse.ProcessNote http://hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.processNote
+//
+// Output(s):
+//   FHIR STU3 ClaimResponse.ProcessNote http://hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.processNote
+//
+def R4ClaimResponse_ProcessNoteToR3(data) {
+  number: data.number
+  type: datatypes::CodeToCodeableConcept(data.type)
+  text: data.text
+  language: data.language
+}
+
+// Description: Converts a FHIR STU3 ClaimResponse.Error to FHIR R4 ClaimResponse.Error.
+//
+// Argument(s):
+//   data : FHIR STU3 ClaimResponse.Error http://hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.error
+//
+// Output(s):
+//   FHIR R4 ClaimResponse.Error http://hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.error
+//
+def R3ClaimResponse_ErrorToR4(data) {
+  itemSequence: data.sequenceLinkId
+  detailSequence: data.detailSequenceLinkId
+  subDetailSequence: data.subdetailSequenceLinkId
+  code: data.code
+}
+
+// Description: Converts a FHIR R4 ClaimResponse.Error to FHIR STU3 ClaimResponse.Error.
+//
+// Argument(s):
+//   data : FHIR R4 ClaimResponse.Error http://hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.error
+//
+// Output(s):
+//   FHIR STU3 ClaimResponse.Error http://hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.error
+//
+def R4ClaimResponse_ErrorToR3(data) {
+  sequenceLinkId: data.itemSequence
+  detailSequenceLinkId: data.detailSequence
+  subdetailSequenceLinkId: data.subDetailSequence
+  code: data.code
+}
+
+// Description: Converts a FHIR STU3 ClaimResponse.Insurance to FHIR R4 ClaimResponse.Insurance.
+//
+// Argument(s):
+//   data : FHIR STU3 ClaimResponse.Insurance http://hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.insurance
+//
+// Output(s):
+//   FHIR R4 ClaimResponse.Insurance http://hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.insurance
+//
+def R3ClaimResponse_InsuranceToR4(data) {
+  sequence: data.sequence
+  focal: data.focal
+  coverage: datatypes::R3ReferenceToR4(data.coverage)
+  businessArrangement: data.businessArrangement
+  claimResponse: datatypes::R3ReferenceToR4(data.claimResponse)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.insurance.preAuthRef", data.preAuthRef[])
+}
+
+// Description: Converts a FHIR R4 ClaimResponse.Insurance to FHIR STU3 ClaimResponse.Insurance.
+//
+// Argument(s):
+//   data : FHIR R4 ClaimResponse.Insurance http://hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.insurance
+//
+// Output(s):
+//   FHIR STU3 ClaimResponse.Insurance http://hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.insurance
+//
+def R4ClaimResponse_InsuranceToR3(data) {
+  sequence: data.sequence
+  focal: data.focal
+  coverage: datatypes::R4ReferenceToR3(data.coverage)
+  businessArrangement: data.businessArrangement
+  claimResponse: datatypes::R4ReferenceToR3(data.claimResponse)
+  preAuthRef: extension::fetchStringArray("https://www.hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.insurance.preAuthRef", data.extension)
+}
+
+// Description: Converts a FHIR STU3 ClaimResponse.OutCome to FHIR R4 ClaimResponse.OutCome.
+//
+// Argument(s):
+//   data : FHIR STU3 ClaimResponse.OutCome http://hl7.org/fhir/STU3/claimresponse.html#ClaimResponse.outcome
+//   url : FHIR R4 Extension.url http://hl7.org/fhir/R4/extensibility-definitions.html#Extension.url
+//   extension : FHIR R4 DomainResource.Extension http://hl7.org/fhir/R4/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 ClaimResponse.OutCome http://hl7.org/fhir/R4/claimresponse.html#ClaimResponse.outcome
+//
+def R3ClaimResponse_OutcomeToR4(url, extension, data) {
+  var outcome: extension::fetchCode(url, extension)
+  if outcome then {
+    outcome
+  } else {
+    data
+  }
+}
+
+// Description: Converts a FHIR STU3 ClaimResponse.Form to FHIR R4 ClaimResponse.FormCode.
+//
+// Argument(s):
+//   data : FHIR STU3 ClaimResponse.Form http://hl7.org/fhir/STU3/claimresponse.html#ClaimResponse.form
+//   url : FHIR R4 Extension.url http://hl7.org/fhir/R4/extensibility-definitions.html#Extension.url
+//   extension : FHIR R4 DomainResource.Extension http://hl7.org/fhir/R4/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 ClaimResponse.FormCode http://hl7.org/fhir/R4/claimresponse.html#ClaimResponse.formCode
+//
+def R3ClaimResponse_FormCodeToR4(url, extension, data) {
+  var formCode: extension::fetchCodeableConcept(url, extension)
+  if formCode then {
+    formCode
+  } else {
+    data
+  }
+}
+
+// Description: Converts a FHIR STU3 ClaimResponse.Insurance.PreAuthRef to FHIR R4 ClaimResponse.PreAuthRef.
+//
+// Argument(s):
+//   data : FHIR STU3 ClaimResponse.Insurance.PreAuthRef http://hl7.org/fhir/STU3/claimresponse.html#ClaimResponse.insurance.preAuthRef
+//   url : FHIR R4 Extension.url http://hl7.org/fhir/R4/extensibility-definitions.html#Extension.url
+//   extension : FHIR R4 DomainResource.Extension http://hl7.org/fhir/R4/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 ClaimResponse.PreAuthRef http://hl7.org/fhir/R4/claimresponse.html#ClaimResponse.preAuthRef
+//
+def R3ClaimResponse_PreAuthRefToR4(url, extension, data) {
+  var PreAuthRef: extension::fetchString(url, extension)
+  if PreAuthRef then {
+    PreAuthRef
+  } else if listLen(data) == 1 then {
+    if listLen(data[0].preAuthRef) == 1 then data[0].preAuthRef[0]
+  }
+}
+
+// Description: Converts a FHIR STU3 ClaimResponse.Item.Adjudication to FHIR R4 ClaimResponse.Item.Adjudication.
+//
+// Argument(s):
+//   data : FHIR STU3 ClaimResponse.Item.Adjudication http://hl7.org/fhir/STU3/claimresponse.html#ClaimResponse.item.adjudication
+//
+// Output(s):
+//   FHIR R4 ClaimResponse.Item.Adjudication http://hl7.org/fhir/R4/claimresponse.html#ClaimResponse.item.adjudication
+//
+def R3ClaimResponse_Item_AdjudicationToR4(data) {
+  category: data.category
+  reason: data.reason
+  amount: datatypes::R3MoneyToR4(data.amount)
+  value: data.value
+}
+
+// Description: Constructs a FHIR R4 ClaimResponse.Adjudication
+//
+// Argument(s):
+//   data : FHIR STU3 ClaimResponse.extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 ClaimResponse.Adjudication https://www.hl7.org/fhir/stu3/claimresponse.html#ClaimResponse.adjudication
+//
+def BuildR4_ClaimResponse_Adjudication(Extension) {
+  category: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/claimresponse.html#ClaimResponse.adjudication.category", Extension)
+  reason: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/claimresponse.html#ClaimResponse.adjudication.reason", Extension)
+  amount: extension::fetchMoney("https://www.hl7.org/fhir/R4/claimresponse.html#ClaimResponse.adjudication.amount", Extension)
+  value: extension::fetchDecimal("https://www.hl7.org/fhir/R4/claimresponse.html#ClaimResponse.adjudication.value", Extension)
+}
+
+// Description: Constructs a FHIR R4 ClaimResponse.AddItem.Detail.SubDetail
+//
+// Argument(s):
+//   Extension : FHIR R4 ClaimResponse.AddItem.Detail.extension http://hl7.org/fhir/STU3/element-definitions.html#Element.extension
+//
+// Output(s):
+//   FHIR R4 ClaimResponse.SubDetail http://hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.addItem.detail.subDetail
+//
+def BuildR4_ClaimResponse_AddItem_Detail_SubDetail(Extension) {
+  productOrService: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/claimresponse.html#ClaimResponse.addItem.detail.subDetail.productOrService", Extension)
+  modifier: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/claimresponse.html#ClaimResponse.addItem.detail.subDetail.modifier", Extension)
+  quantity: extension::fetchQuantity("https://www.hl7.org/fhir/R4/claimresponse.html#ClaimResponse.addItem.detail.subDetail.quantity", Extension)
+  unitPrice: extension::fetchMoney("https://www.hl7.org/fhir/R4/claimresponse.html#ClaimResponse.addItem.detail.subDetail.unitPrice", Extension)
+  factor: extension::fetchDecimal("https://www.hl7.org/fhir/R4/claimresponse.html#ClaimResponse.addItem.detail.subDetail.factor", Extension)
+  net: extension::fetchMoney("https://www.hl7.org/fhir/R4/claimresponse.html#ClaimResponse.addItem.detail.subDetail.net", Extension)
+  noteNumber: extension::fetchPositiveIntArray("https://www.hl7.org/fhir/R4/claimresponse.html#ClaimResponse.addItem.detail.subDetail.noteNumber", Extension)
+  adjudication[]: BuildR4_ClaimResponse_AddItem_Detail_SubDetail_Adjudication(Extension)
+}
+
+// Description: Constructs a FHIR R4 ClaimResponse.ClaimResponse.AddItem.Detail.SubDetail.Adjudication
+//
+// Argument(s):
+//   Extension : FHIR R4 ClaimResponse.AddItem.Detail.extension http://hl7.org/fhir/STU3/element-definitions.html#Element.extension
+//
+// Output(s):
+//   FHIR R4 ClaimResponse.AddItem.Detail.SubDetail.Adjudication https://www.hl7.org/fhir/stu3/claimresponse.html#ClaimResponse.addItem.detail.subDetail.adjudication
+//
+def BuildR4_ClaimResponse_AddItem_Detail_SubDetail_Adjudication(Extension) {
+  category: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/claimresponse.html#ClaimResponse.addItem.detail.subDetail.adjudication.category", Extension)
+  reason: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/claimresponse.html#ClaimResponse.addItem.detail.subDetail.adjudication.reason", Extension)
+  amount: extension::fetchMoney("https://www.hl7.org/fhir/R4/claimresponse.html#ClaimResponse.addItem.detail.subDetail.adjudication.amount", Extension)
+  value: extension::fetchDecimal("https://www.hl7.org/fhir/R4/claimresponse.html#ClaimResponse.addItem.detail.subDetail.adjudication.value", Extension)
+}
+
+// Description: Converts a FHIR STU3 ClaimResponse.Total to FHIR R4 ClaimResponse.Total.
+//
+// Argument(s):
+//   TotalCost : FHIR STU3 ClaimResponse.TotalCost http://hl7.org/fhir/STU3/claimresponse.html#ClaimResponse.totalCost
+//   TotalBenefit : FHIR STU3 ClaimResponse.TotalBenefit http://hl7.org/fhir/STU3/claimresponse.html#ClaimResponse.totalBenefit
+//   UnallocDeductable : FHIR STU3 ClaimResponse.UnallocDeductable http://hl7.org/fhir/STU3/claimresponse.html#ClaimResponse.unallocDeductable
+//   Extension : FHIR R4 DomainResource.Extension http://hl7.org/fhir/R4/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 ClaimResponse.Total http://hl7.org/fhir/R4/claimresponse.html#ClaimResponse.total
+//
+def R3ClaimResponse_TotalR4(Extension, TotalCost, TotalBenefit, UnallocDeductable) {
+  var total.category: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/claimresponse.html#ClaimResponse.total.category", Extension)
+  var total.amount: extension::fetchMoney("https://www.hl7.org/fhir/R4/claimresponse.html#ClaimResponse.total.amount", Extension)
+  var Total[]: total
+  var Total[]: R3ClaimResponse_TotalCostToR4(TotalCost)
+  var Total[]: R3ClaimResponse_TotalBenefitToR4(TotalBenefit)
+  var Total[]: R3ClaimResponse_UnallocDeductableToR4(UnallocDeductable)
+  Total
+}
+
+// Description: Converts a FHIR STU3 ClaimResponse.Payment to FHIR R4 ClaimResponse.Payment.
+//
+// Argument(s):
+//   data : FHIR STU3 ClaimResponse.Payment http://hl7.org/fhir/STU3/claimresponse-definitions.html#ClaimResponse.payment
+//
+// Output(s):
+//   FHIR R4 ClaimResponse.Payment http://hl7.org/fhir/R4/claimresponse-definitions.html#ClaimResponse.payment
+//
+def R3ClaimResponse_PaymentToR4(data) {
+  type: data.type
+  type.text: utilities::defaultIfNull($this.type, "unknown")
+  adjustment: datatypes::R3MoneyToR4(data.adjustment)
+  adjustmentReason: data.adjustmentReason
+  date: data.date
+  amount: datatypes::R3MoneyToR4(data.amount)
+  amount.currency: utilities::defaultIfNull($this.amount, "USD")
+  identifier: data. identifier
+}

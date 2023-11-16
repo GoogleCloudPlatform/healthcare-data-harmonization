@@ -1,0 +1,53 @@
+{
+  "basedOn": [
+    {
+      "reference": "SupplyRequest/simpleorder"
+    }
+  ],
+  "destination": {
+    "display": "Location 1"
+  },
+  "id": "simpledelivery",
+  "identifier": [
+    {
+      "value": "Order10284"
+    }
+  ],
+  "occurrenceDateTime": "2016-12-31",
+  "partOf": [
+    {
+      "display": "Central Supply Restock"
+    }
+  ],
+  "resourceType": "SupplyDelivery",
+  "status": "completed",
+  "suppliedItem": {
+    "itemCodeableConcept": {
+      "coding": [
+        {
+          "code": "BlueTubes",
+          "display": "Blood collect tubes blue cap"
+        }
+      ]
+    },
+    "quantity": {
+      "value": 10
+    }
+  },
+  "supplier": {
+    "display": "Vendor1"
+  },
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\u003cp\u003e\u003cb\u003eGenerated Narrative with Details\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eid\u003c/b\u003e: simpledelivery\u003c/p\u003e\u003cp\u003e\u003cb\u003eidentifier\u003c/b\u003e: Order10284\u003c/p\u003e\u003cp\u003e\u003cb\u003ebasedOn\u003c/b\u003e: \u003ca\u003eSupplyRequest/simpleorder\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003epartOf\u003c/b\u003e: Central Supply Restock\u003c/p\u003e\u003cp\u003e\u003cb\u003estatus\u003c/b\u003e: completed\u003c/p\u003e\u003cp\u003e\u003cb\u003etype\u003c/b\u003e: Blood collect tubes blue cap \u003cspan\u003e(Details : {http://terminology.hl7.org/CodeSystem/supply-item-type code 'device' = 'Device)\u003c/span\u003e\u003c/p\u003e\u003ch3\u003eSuppliedItems\u003c/h3\u003e\u003ctable\u003e\u003ctr\u003e\u003ctd\u003e-\u003c/td\u003e\u003ctd\u003e\u003cb\u003eQuantity\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eItem[x]\u003c/b\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e*\u003c/td\u003e\u003ctd\u003e10\u003c/td\u003e\u003ctd\u003eBlood collect tubes blue cap \u003cspan\u003e(Details : {[not stated] code 'BlueTubes' = 'BlueTubes', given as 'Blood collect tubes blue cap'})\u003c/span\u003e\u003c/td\u003e\u003c/tr\u003e\u003c/table\u003e\u003cp\u003e\u003cb\u003eoccurrence\u003c/b\u003e: 31/12/2016\u003c/p\u003e\u003cp\u003e\u003cb\u003esupplier\u003c/b\u003e: Vendor1\u003c/p\u003e\u003cp\u003e\u003cb\u003edestination\u003c/b\u003e: Location 1\u003c/p\u003e\u003c/div\u003e",
+    "status": "generated"
+  },
+  "type": {
+    "coding": [
+      {
+        "code": "device",
+        "system": "http://terminology.hl7.org/CodeSystem/supply-item-type"
+      }
+    ],
+    "text": "Blood collect tubes blue cap"
+  }
+}

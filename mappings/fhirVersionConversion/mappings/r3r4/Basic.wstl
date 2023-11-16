@@ -1,0 +1,48 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   basic : FHIR Basic resource
+//
+// Output(s):
+//   FHIR Basic Resource
+//
+def BasicBase(basic) {
+  resourcebase::ResourceBase(basic)
+  identifier: basic.identifier
+  code: basic.code
+  created: basic.created
+}
+
+// Description: Converts a FHIR STU3 Basic resource to FHIR R4 Basic resource.
+//
+// Argument(s):
+//   basic : FHIR STU3 Basic resource https://www.hl7.org/fhir/stu3/basic.html
+//
+// Output(s):
+//   FHIR R4 Basic Resource https://www.hl7.org/fhir/r4/basic.html
+//
+def R3BasicToR4(basic) {
+  BasicBase(basic)
+  contained: datatypes::R3ResourceToR4(basic.contained[])
+  subject: datatypes::R3ReferenceToR4(basic.subject)
+  author: datatypes::R3ReferenceToR4(basic.author)
+}
+
+// Description: Converts a FHIR R4 Basic resource to FHIR STU3 Basic resource.
+//
+// Argument(s):
+//   basic : FHIR R4 Basic resource https://www.hl7.org/fhir/r4/basic.html
+//
+// Output(s):
+//   FHIR STU3 Basic Resource https://www.hl7.org/fhir/stu3/basic.html
+//
+def R4BasicToR3(basic) {
+  BasicBase(basic)
+  contained: datatypes::R4ResourceToR3(basic.contained[])
+  subject: datatypes::R4ReferenceToR3(basic.subject)
+  author: datatypes::R4ReferenceToR3(basic.author)
+}

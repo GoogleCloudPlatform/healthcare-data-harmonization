@@ -1,0 +1,50 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def SubscriptionBase(subscription) {
+  resourcebase::ResourceBase(subscription)
+  status: subscription.status
+  contact: subscription.contact
+  end: subscription.end
+  reason: subscription.reason
+  criteria: subscription.criteria
+  error: subscription.error
+  tag: subscription.tag
+}
+
+def R2SubscriptionToR3(subscription) {
+  resourcebase::ResourceBase(subscription)
+  contained: datatypes::R2ResourceToR3(subscription.contained[])
+  channel: R2Subscription_ChannelToR3(subscription.channel)
+}
+
+def R3SubscriptionToR2(subscription) {
+  resourcebase::ResourceBase(subscription)
+  contained: datatypes::R3ResourceToR2(subscription.contained[])
+  channel: R3Subscription_ChannelToR2(subscription.channel)
+}
+
+def R2Subscription_ChannelToR3(data) {
+  type: data.type
+  endpoint: data.endpoint
+  payload: data.payload
+  header: R2Subscription_Channel_HeaderToR3("https://www.hl7.org/fhir/STU3/subscription-definitions.html#Subscription.channel.header", data.extension, data.header)
+}
+
+def R3Subscription_ChannelToR2(data) {
+  type: data.type
+  endpoint: data.endpoint
+  payload: data.payload
+  header: data.header[0]
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/subscription-definitions.html#Subscription.channel.header", data.header[])
+}
+
+def R2Subscription_Channel_HeaderToR3(url, extension, data) {
+  var header: extension::fetchStringArray(url, extension)
+  if header then {
+    header
+  } else {
+    arrayOf(data)
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "contact": [
+    {
+      "system": "phone",
+      "value": "ext 4352"
+    }
+  ],
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/device-definitions.html#Device.status",
+      "valueCode": "active"
+    }
+  ],
+  "id": "example",
+  "identifier": [
+    {
+      "system": "http://goodcare.org/devices/id",
+      "value": "345675"
+    },
+    {
+      "type": {
+        "coding": [
+          {
+            "code": "SNO",
+            "system": "http://hl7.org/fhir/identifier-type"
+          }
+        ],
+        "text": "Serial Number"
+      },
+      "value": "AMID-342135-8464"
+    }
+  ],
+  "lotNumber": "43453424",
+  "manufacturer": "Acme Devices, Inc",
+  "model": "AB 45-J",
+  "note": [
+    {
+      "authorReference": {
+        "reference": "Practitioner/xcda-author"
+      },
+      "text": "QA Checked",
+      "time": "2015-06-28T14:03:32+10:00"
+    }
+  ],
+  "resourceType": "Device",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\u003cp\u003e\u003cb\u003eGenerated Narrative with Details\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eid\u003c/b\u003e: example\u003c/p\u003e\u003cp\u003e\u003cb\u003eidentifier\u003c/b\u003e: 345675, Serial Number = AMID-342135-8464\u003c/p\u003e\u003cp\u003e\u003cb\u003estatus\u003c/b\u003e: active\u003c/p\u003e\u003cp\u003e\u003cb\u003etype\u003c/b\u003e: ECG \u003cspan\u003e(Details : {SNOMED CT code '86184003' = 'Electrocardiographic monitor and recorder', given as 'Electrocardiographic monitor and recorder'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003elotNumber\u003c/b\u003e: 43453424\u003c/p\u003e\u003cp\u003e\u003cb\u003emanufacturer\u003c/b\u003e: Acme Devices, Inc\u003c/p\u003e\u003cp\u003e\u003cb\u003emodel\u003c/b\u003e: AB 45-J\u003c/p\u003e\u003cp\u003e\u003cb\u003econtact\u003c/b\u003e: ph: ext 4352\u003c/p\u003e\u003cp\u003e\u003cb\u003enote\u003c/b\u003e: QA Checked\u003c/p\u003e\u003c/div\u003e",
+    "status": "generated"
+  },
+  "type": {
+    "coding": [
+      {
+        "code": "86184003",
+        "display": "Electrocardiographic monitor and recorder",
+        "system": "http://snomed.info/sct"
+      }
+    ],
+    "text": "ECG"
+  }
+}

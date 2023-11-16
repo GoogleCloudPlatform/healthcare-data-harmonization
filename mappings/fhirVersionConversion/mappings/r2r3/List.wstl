@@ -1,0 +1,51 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def ListBase(list) {
+  resourcebase::ResourceBase(list)
+  identifier: list.identifier
+  status: list.status
+  mode: list.mode
+  title: list.title
+  code: list.code
+  date: list.date
+  orderedBy: list.orderedBy
+  emptyReason: list.emptyReason
+}
+
+def R2ListToR3(list) {
+  ListBase(list)
+  contained: datatypes::R2ResourceToR3(list.contained[])
+  entry: R2List_EntryToR3(list.entry[])
+  source: datatypes::R2ReferenceToR3(list.source)
+  subject: datatypes::R2ReferenceToR3(list.subject)
+  encounter: datatypes::R2ReferenceToR3(list.encounter)
+  note: extension::fetchAnnotationArray("https://www.hl7.org/fhir/STU3/list-definitions.html#List.note", list.extension)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/DSTU2/list-definitions.html#List.note", list.note)
+}
+
+def R3ListToR2(list) {
+  ListBase(list)
+  contained: datatypes::R3ResourceToR2(list.contained[])
+  entry: R3List_EntryToR2(list.entry[])
+  source: datatypes::R3ReferenceToR2(list.source)
+  subject: datatypes::R3ReferenceToR2(list.subject)
+  encounter: datatypes::R3ReferenceToR2(list.encounter)
+  note: extension::fetchString("https://www.hl7.org/fhir/DSTU2/list-definitions.html#List.note", list.extension)
+  extension[]: extension::BuildAnnotationExtension("https://www.hl7.org/fhir/STU3/list-definitions.html#List.note", list.note[])
+}
+
+def R2List_EntryToR3(data) {
+  flag: data.flag
+  deleted: data.deleted
+  date: data.date
+  item: datatypes::R2ReferenceToR3(data.item)
+}
+
+def R3List_EntryToR2(data) {
+  flag: data.flag
+  deleted: data.deleted
+  date: data.date
+  item: datatypes::R3ReferenceToR2(data.item)
+}

@@ -1,0 +1,24 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def BasicBase(basic) {
+  resourcebase::ResourceBase(basic)
+  identifier: basic.identifier
+  code: basic.code
+  created: basic.created
+}
+
+def R2BasicToR3(basic) {
+  BasicBase(basic)
+  contained: datatypes::R2ResourceToR3(basic.contained[])
+  subject: datatypes::R2ReferenceToR3(basic.subject)
+  author: datatypes::R2ReferenceToR3(basic.author)
+}
+
+def R3BasicToR2(basic) {
+  BasicBase(basic)
+  contained: datatypes::R3ResourceToR2(basic.contained[])
+  subject: datatypes::R3ReferenceToR2(basic.subject)
+  author: datatypes::R3ReferenceToR2(basic.author)
+}

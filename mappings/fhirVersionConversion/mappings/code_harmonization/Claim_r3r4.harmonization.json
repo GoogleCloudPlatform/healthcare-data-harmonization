@@ -1,0 +1,51 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "complete",
+          "display": "Complete",
+          "target": [
+            {
+              "code": "claim",
+              "display": "Claim",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "proposed",
+          "display": "Proposed",
+          "target": [
+            {
+              "code": "preauthorization",
+              "display": "Preauthorization",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "exploratory",
+          "display": "Exploratory",
+          "target": [
+            {
+              "code": "predetermination",
+              "display": "Predetermination",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "STU3ClaimUse",
+      "target": "http://hl7.org/fhir/claim-use",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "claim",
+        "display": "Claim"
+      }
+    }
+  ],
+  "id": "Claim",
+  "resourceType": "ConceptMap",
+  "version": "v2"
+}

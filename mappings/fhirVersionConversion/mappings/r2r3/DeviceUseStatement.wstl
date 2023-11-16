@@ -1,0 +1,37 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def DeviceUseStatementBase(deviceUseStatement) {
+  resourcebase::ResourceBase(deviceUseStatement)
+  identifier: deviceUseStatement.identifier
+  whenUsed: deviceUseStatement.whenUsed
+  timingTiming: deviceUseStatement.timingTiming
+  timingPeriod: deviceUseStatement.timingPeriod
+  timingDateTime: deviceUseStatement.timingDateTime
+  recordedOn: deviceUseStatement.recordedOn
+  indication: deviceUseStatement.indication
+}
+
+def R2DeviceUseStatementToR3(deviceUseStatement) {
+  DeviceUseStatementBase(deviceUseStatement)
+  contained: datatypes::R2ResourceToR3(deviceUseStatement.contained[])
+  device: datatypes::R2ReferenceToR3(deviceUseStatement.device)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/deviceusestatement-definitions.html#DeviceUseStatement.status", deviceUseStatement.extension)
+  status: if status? then status else deviceUseStatement.status
+  subject: datatypes::R2ReferenceToR3(deviceUseStatement.subject)
+  source: extension::fetchReference("https://www.hl7.org/fhir/STU3/deviceusestatement-definitions.html#DeviceUseStatement.source", deviceUseStatement.extension)
+  bodySite: deviceUseStatement.bodySiteCodeableConcept
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/deviceusestatement-definitions.html#DeviceUseStatement.bodySiteReference", deviceUseStatement.bodySiteReference)
+}
+
+def R3DeviceUseStatementToR2(deviceUseStatement) {
+  DeviceUseStatementBase(deviceUseStatement)
+  contained: datatypes::R3ResourceToR2(deviceUseStatement.contained[])
+  device: datatypes::R3ReferenceToR2(deviceUseStatement.device)
+  subject: datatypes::R3ReferenceToR2(deviceUseStatement.subject)
+  bodySiteCodeableConcept: deviceUseStatement.bodySite
+  bodySiteReference: extension::fetchReference("https://www.hl7.org/fhir/DSTU2/deviceusestatement-definitions.html#DeviceUseStatement.bodySiteReference", deviceUseStatement.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/deviceusestatement-definitions.html#DeviceUseStatement.status", deviceUseStatement.status)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/deviceusestatement-definitions.html#DeviceUseStatement.source", deviceUseStatement.source)
+}

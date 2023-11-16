@@ -1,0 +1,5 @@
+// store to extension
+extension[]: addOid("test_url", $root.data)
+
+// fetch from extension
+data: fetchOid("test_url", $root.extension)

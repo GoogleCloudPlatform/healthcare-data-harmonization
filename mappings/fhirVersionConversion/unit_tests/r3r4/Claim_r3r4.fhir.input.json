@@ -1,0 +1,292 @@
+{
+  "careTeam": [
+    {
+      "provider": {
+        "reference": "Practitioner/example"
+      },
+      "sequence": 1
+    }
+  ],
+  "created": "2014-08-16",
+  "diagnosis": [
+    {
+      "diagnosisCodeableConcept": {
+        "coding": [
+          {
+            "code": "123456"
+          }
+        ]
+      },
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/R4/claim-definitions.html#Claim.diagnosis.onAdmission",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "123456"
+              }
+            ]
+          }
+        }
+      ],
+      "sequence": 1
+    }
+  ],
+  "id": "100151",
+  "identifier": [
+    {
+      "system": "http://happyvalley.com/claim",
+      "value": "12346"
+    }
+  ],
+  "information": [
+    {
+      "category": {
+        "coding": [
+          {
+            "code": "missingtooth",
+            "system": "http://hl7.org/fhir/claiminformationcategory"
+          }
+        ]
+      },
+      "code": {
+        "coding": [
+          {
+            "code": "15",
+            "system": "http://hl7.org/fhir/ex-tooth"
+          }
+        ]
+      },
+      "reason": {
+        "coding": [
+          {
+            "code": "e",
+            "system": "http://hl7.org/fhir/missingtoothreason"
+          }
+        ]
+      },
+      "sequence": 1,
+      "timingDate": "2012-04-07"
+    },
+    {
+      "category": {
+        "coding": [
+          {
+            "code": "exception",
+            "system": "http://hl7.org/fhir/claiminformationcategory"
+          }
+        ]
+      },
+      "code": {
+        "coding": [
+          {
+            "code": "student",
+            "system": "http://hl7.org/fhir/claim-exception"
+          }
+        ]
+      },
+      "sequence": 2,
+      "valueString": "Happy Valley Community College"
+    }
+  ],
+  "insurance": [
+    {
+      "coverage": {
+        "reference": "Coverage/9876B1"
+      },
+      "focal": true,
+      "sequence": 1
+    }
+  ],
+  "insurer": {
+    "reference": "Organization/2"
+  },
+  "item": [
+    {
+      "careTeamLinkId": [
+        1
+      ],
+      "net": {
+        "code": "USD",
+        "system": "urn:iso:std:iso:4217",
+        "value": 135.57
+      },
+      "sequence": 1,
+      "service": {
+        "coding": [
+          {
+            "code": "1200",
+            "system": "http://example.org/fhir/oralservicecodes"
+          }
+        ]
+      },
+      "servicedDate": "2014-08-16",
+      "unitPrice": {
+        "code": "USD",
+        "system": "urn:iso:std:iso:4217",
+        "value": 135.57
+      }
+    },
+    {
+      "bodySite": {
+        "coding": [
+          {
+            "code": "21",
+            "system": "http://fdi.org/fhir/oraltoothcodes"
+          }
+        ]
+      },
+      "careTeamLinkId": [
+        1
+      ],
+      "net": {
+        "code": "USD",
+        "system": "urn:iso:std:iso:4217",
+        "value": 105.00
+      },
+      "sequence": 2,
+      "service": {
+        "coding": [
+          {
+            "code": "21211",
+            "system": "http://example.org/fhir/oralservicecodes"
+          }
+        ]
+      },
+      "servicedDate": "2014-08-16",
+      "subSite": [
+        {
+          "coding": [
+            {
+              "code": "L",
+              "system": "http://fdi.org/fhir/oralsurfacecodes"
+            }
+          ]
+        }
+      ],
+      "unitPrice": {
+        "code": "USD",
+        "system": "urn:iso:std:iso:4217",
+        "value": 105.00
+      }
+    },
+    {
+      "bodySite": {
+        "coding": [
+          {
+            "code": "36",
+            "system": "http://fdi.org/fhir/oraltoothcodes"
+          }
+        ]
+      },
+      "careTeamLinkId": [
+        1
+      ],
+      "detail": [
+        {
+          "factor": 0.75,
+          "net": {
+            "code": "USD",
+            "system": "urn:iso:std:iso:4217",
+            "value": 750.00
+          },
+          "sequence": 1,
+          "service": {
+            "coding": [
+              {
+                "code": "27211",
+                "system": "http://example.org/fhir/oralservicecodes"
+              }
+            ]
+          },
+          "unitPrice": {
+            "code": "USD",
+            "system": "urn:iso:std:iso:4217",
+            "value": 1000.00
+          }
+        },
+        {
+          "net": {
+            "code": "USD",
+            "system": "urn:iso:std:iso:4217",
+            "value": 350.00
+          },
+          "sequence": 2,
+          "service": {
+            "coding": [
+              {
+                "code": "lab",
+                "system": "http://example.org/fhir/oralservicecodes"
+              }
+            ]
+          },
+          "unitPrice": {
+            "code": "USD",
+            "system": "urn:iso:std:iso:4217",
+            "value": 350.00
+          }
+        }
+      ],
+      "net": {
+        "code": "USD",
+        "system": "urn:iso:std:iso:4217",
+        "value": 1100.00
+      },
+      "sequence": 3,
+      "service": {
+        "coding": [
+          {
+            "code": "27211",
+            "system": "http://example.org/fhir/oralservicecodes"
+          }
+        ]
+      },
+      "servicedDate": "2014-08-16",
+      "unitPrice": {
+        "code": "USD",
+        "system": "urn:iso:std:iso:4217",
+        "value": 1100.00
+      }
+    }
+  ],
+  "organization": {
+    "reference": "Organization/1"
+  },
+  "patient": {
+    "reference": "Patient/1"
+  },
+  "payee": {
+    "type": {
+      "coding": [
+        {
+          "code": "provider"
+        }
+      ]
+    }
+  },
+  "priority": {
+    "coding": [
+      {
+        "code": "normal"
+      }
+    ]
+  },
+  "provider": {
+    "reference": "Practitioner/1"
+  },
+  "resourceType": "Claim",
+  "status": "active",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003eA human-readable rendering of the Oral Health Claim\u003c/div\u003e",
+    "status": "generated"
+  },
+  "type": {
+    "coding": [
+      {
+        "code": "oral",
+        "system": "http://hl7.org/fhir/ex-claimtype"
+      }
+    ]
+  },
+  "use": "complete"
+}

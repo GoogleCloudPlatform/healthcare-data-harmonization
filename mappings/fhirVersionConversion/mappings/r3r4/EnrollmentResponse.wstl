@@ -1,0 +1,58 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   enrollmentResponse : FHIR EnrollmentResponse resource
+//
+// Output(s):
+//   FHIR EnrollmentResponse Resource
+//
+def EnrollmentResponseBase(enrollmentResponse) {
+  resourcebase::ResourceBase(enrollmentResponse)
+  identifier: enrollmentResponse.identifier
+  disposition: enrollmentResponse.disposition
+  created: enrollmentResponse.created
+}
+
+// Description: Converts a FHIR STU3 EnrollmentResponse resource to FHIR R4 EnrollmentResponse resource.
+//
+// Argument(s):
+//   enrollmentResponse : FHIR STU3 EnrollmentResponse resource https://www.hl7.org/fhir/stu3/enrollmentresponse.html
+//
+// Output(s):
+//   FHIR R4 EnrollmentResponse Resource https://www.hl7.org/fhir/r4/enrollmentresponse.html
+//
+def R3EnrollmentResponseToR4(enrollmentResponse) {
+  EnrollmentResponseBase(enrollmentResponse)
+  contained: datatypes::R3ResourceToR4(enrollmentResponse.contained[])
+  organization: datatypes::R3ReferenceToR4(enrollmentResponse.organization)
+  request: datatypes::R3ReferenceToR4(enrollmentResponse.request)
+  status: enrollmentResponse.status
+  outcome: datatypes::CodeableConceptToCode(enrollmentResponse.outcome)
+  requestProvider: datatypes::R3ReferenceToR4(enrollmentResponse.requestProvider)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/enrollmentresponse-definitions.html#EnrollmentResponse.requestOrganization", enrollmentResponse.requestOrganization)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/enrollmentresponse-definitions.html#EnrollmentResponse.outcome", enrollmentResponse.outcome)
+}
+
+// Description: Converts a FHIR R4 EnrollmentResponse resource to FHIR STU3 EnrollmentResponse resource.
+//
+// Argument(s):
+//   enrollmentResponse : FHIR R4 EnrollmentResponse resource https://www.hl7.org/fhir/r4/enrollmentresponse.html
+//
+// Output(s):
+//   FHIR STU3 EnrollmentResponse Resource https://www.hl7.org/fhir/stu3/enrollmentresponse.html
+//
+def R4EnrollmentResponseToR3(enrollmentResponse) {
+  EnrollmentResponseBase(enrollmentResponse)
+  contained: datatypes::R4ResourceToR3(enrollmentResponse.contained[])
+  organization: datatypes::R4ReferenceToR3(enrollmentResponse.organization)
+  request: datatypes::R4ReferenceToR3(enrollmentResponse.request)
+  status: enrollmentResponse.status
+  outcome: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/enrollmentresponse-definitions.html#EnrollmentResponse.outcome", enrollmentResponse.extension)
+  requestProvider: datatypes::R4ReferenceToR3(enrollmentResponse.requestProvider)
+  requestOrganization: extension::fetchReference("https://www.hl7.org/fhir/STU3/enrollmentresponse-definitions.html#EnrollmentResponse.requestOrganization", enrollmentResponse.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/enrollmentresponse-definitions.html#EnrollmentResponse.outcome", enrollmentResponse.outcome)
+}

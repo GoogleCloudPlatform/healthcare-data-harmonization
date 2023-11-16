@@ -1,0 +1,26 @@
+{
+  "contact": [
+  {
+    "name": "ONC",
+    "telecom": [
+      {
+        "system": "url",
+        "value": "http://www.healthit.gov"
+      },
+      {
+        "system": "url",
+        "value": "http://www.healthit.gov2"
+      }
+    ]
+  },
+  {
+    "name": "HL7",
+    "telecom": [
+      {
+        "system": "url",
+        "value": "http://hl7.org/fhir"
+      }
+    ]
+  }
+]
+}

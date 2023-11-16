@@ -1,0 +1,13 @@
+package datatypes
+
+// Description: Converts a Uri datatype to CodeableConcept datatype
+//
+// Argument(s):
+//   uri: FHIR Uri datatype https://www.hl7.org/fhir/datatypes.html#uri
+//
+// Output(s):
+//   FHIR CodeableConcept datatype https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def UriToCodeableConcept(uri) {
+  coding[0].system: uri
+}

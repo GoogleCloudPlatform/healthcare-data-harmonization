@@ -1,0 +1,161 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   chargeItem : FHIR AuditEvent resource
+//
+// Output(s):
+//   FHIR ChargeItem Resource
+//
+def ChargeItemBase(chargeItem) {
+  resourcebase::ResourceBase(chargeItem)
+  code: chargeItem.code
+  occurrenceDateTime: chargeItem.occurrenceDateTime
+  occurrencePeriod: chargeItem.occurrencePeriod
+  occurrenceTiming: chargeItem.occurrenceTiming
+  quantity: chargeItem.quantity
+  bodysite: chargeItem.bodysite
+  factorOverride: chargeItem.factorOverride
+  overrideReason: chargeItem.overrideReason
+  enteredDate: chargeItem.enteredDate
+  reason: chargeItem.reason
+  note: chargeItem.note
+}
+
+// Description: Converts a FHIR STU3 ChargeItem resource to FHIR R4 ChargeItem resource.
+//
+// Argument(s):
+//   chargeItem : FHIR STU3 ChargeItem resource https://www.hl7.org/fhir/stu3/chargeItem.html
+//
+// Output(s):
+//   FHIR R4 ChargeItem Resource https://www.hl7.org/fhir/r4/chargeItem.html
+//
+def R3ChargeItemToR4(chargeItem) {
+  ChargeItemBase(chargeItem)
+  contained: datatypes::R3ResourceToR4(chargeItem.contained[])
+  supportingInformation: datatypes::R3ReferenceToR4(chargeItem.supportingInformation[])
+  account: datatypes::R3ReferenceToR4(chargeItem.account[])
+  service: datatypes::R3ReferenceToR4(chargeItem.service[])
+  performingOrganization: datatypes::R3ReferenceToR4(chargeItem.performingOrganization)
+  requestingOrganization: datatypes::R3ReferenceToR4(chargeItem.requestingOrganization)
+  partOf: datatypes::R3ReferenceToR4(chargeItem.partOf[])
+  subject: datatypes::R3ReferenceToR4(chargeItem.subject)
+  context: datatypes::R3ReferenceToR4(chargeItem.context)
+  identifier: R3ChargeItem_IdentifierToR4("https://www.hl7.org/fhir/R4/chargeitem-definitions.html#ChargeItem.identifier", chargeItem.extension, chargeItem.identifier)
+  definitionUri: chargeItem.definition
+  definitionCanonical: extension::fetchCanonicalArray("https://www.hl7.org/fhir/R4/chargeitem-definitions.html#ChargeItem.definitionCanonical", chargeItem.extension)
+  status: chargeItem.status
+  performer: R3ChargeItem_ParticipantToR4(chargeItem.participant[])
+  costCenter: extension::fetchReference("https://www.hl7.org/fhir/R4/chargeitem-definitions.html#ChargeItem.costCenter", chargeItem.extension)
+  enterer: datatypes::R3ReferenceToR4(chargeItem.enterer)
+  productReference: extension::fetchReference("https://www.hl7.org/fhir/R4/chargeitem-definitions.html#ChargeItem.productReference", chargeItem.extension)
+  productCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/chargeitem-definitions.html#ChargeItem.productCodeableConcept", chargeItem.extension)
+  priceOverride: R3ChargeItem_PriceOverrideToR4(chargeItem.priceOverride)
+}
+
+// Description: Converts a FHIR R4 ChargeItem resource to FHIR STU3 ChargeItem resource.
+//
+// Argument(s):
+//   chargeItem : FHIR R4 ChargeItem resource https://www.hl7.org/fhir/r4/chargeItem.html
+//
+// Output(s):
+//   FHIR STU3 ChargeItem Resource https://www.hl7.org/fhir/stu3/chargeItem.html
+//
+def R4ChargeItemToR3(chargeItem) {
+  ChargeItemBase(chargeItem)
+  contained: datatypes::R4ResourceToR3(chargeItem.contained[])
+  supportingInformation: datatypes::R4ReferenceToR3(chargeItem.supportingInformation[])
+  account: datatypes::R4ReferenceToR3(chargeItem.account[])
+  service: datatypes::R4ReferenceToR3(chargeItem.service[])
+  performingOrganization: datatypes::R4ReferenceToR3(chargeItem.performingOrganization)
+  requestingOrganization: datatypes::R4ReferenceToR3(chargeItem.requestingOrganization)
+  partOf: datatypes::R4ReferenceToR3(chargeItem.partOf[])
+  subject: datatypes::R4ReferenceToR3(chargeItem.subject)
+  context: datatypes::R4ReferenceToR3(chargeItem.context)
+  identifier: chargeItem.identifier[0]
+  definition: chargeItem.definition
+  status: chargeItem.status
+  participant: R4ChargeItem_PerformerToR3(chargeItem.performer[])
+  enterer: datatypes::R4ReferenceToR3(chargeItem.enterer)
+  priceOverride: R4ChargeItem_PriceOverrideToR3(chargeItem.priceOverride)
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/R4/R4/chargeitem-definitions.html#ChargeItem.identifier", chargeItem.identifier[])
+  extension[]: extension::BuildCanonicalExtension("https://www.hl7.org/fhir/R4/chargeitem-definitions.html#ChargeItem.definitionCanonical", chargeItem.definitionCanonical[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/chargeitem-definitions.html#ChargeItem.costCenter", chargeItem.costCenter)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/chargeitem-definitions.html#ChargeItem.productReference", chargeItem.productReference)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/chargeitem-definitions.html#ChargeItem.productCodeableConcept", chargeItem.productCodeableConcept)
+}
+
+// Description: Converts a FHIR STU3 ChargeItem.Identifier to FHIR R4 ChargeItem.Identifier.
+//
+// Argument(s):
+//   data : FHIR STU3 ChargeItem.Identifier http://hl7.org/fhir/STU3/chargeItem-definitions.html#ChargeItem.identifier
+//   url : FHIR STU3 Extension.url http://hl7.org/fhir/STU3/extensibility-definitions.html#Extension.url
+//   extension : FHIR STU3 DomainResource.Extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 ChargeItem.Identifier http://hl7.org/fhir/STU3/chargeItem-definitions.html#ChargeItem.identifier
+//
+def R3ChargeItem_IdentifierToR4(url, extension, data) {
+  var identifier: extension::fetchIdentifierArray(url, extension)
+  if identifier then {
+    identifier
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 ChargeItem.Performer to FHIR R4 ChargeItem.Participant.
+//
+// Argument(s):
+//   data : FHIR STU3 ChargeItem.Performer http://hl7.org/fhir/STU3/chargeItem-definitions.html#ChargeItem.performer
+//
+// Output(s):
+//   FHIR R4 ChargeItem.Participant http://hl7.org/fhir/R4/chargeItem-definitions.html#ChargeItem.participant
+//
+def R3ChargeItem_ParticipantToR4(data) {
+  function: data.role
+  actor: datatypes::R3ReferenceToR4(data.actor)
+}
+
+// Description: Converts a FHIR R4 ChargeItem.Participant to FHIR STU3 ChargeItem.Performer.
+//
+// Argument(s):
+//   data : FHIR R4 ChargeItem.Participant http://hl7.org/fhir/R4/chargeItem-definitions.html#ChargeItem.participant
+//
+// Output(s):
+//   FHIR STU3 ChargeItem.Performer http://hl7.org/fhir/STU3/chargeItem-definitions.html#ChargeItem.performer
+//
+def R4ChargeItem_PerformerToR3(data) {
+  role: data.function
+  actor: datatypes::R4ReferenceToR3(data.actor)
+}
+
+// Description: Converts a FHIR STU3 ChargeItem.PriceOverride to FHIR R4 ChargeItem.Participant.
+//
+// Argument(s):
+//   data : FHIR STU3 ChargeItem.PriceOverride http://hl7.org/fhir/STU3/chargeItem-definitions.html#ChargeItem.priceOverride
+//
+// Output(s):
+//   FHIR R4 ChargeItem.PriceOverride http://hl7.org/fhir/R4/chargeItem-definitions.html#ChargeItem.priceOverride
+//
+def R3ChargeItem_PriceOverrideToR4(data) {
+  value: data.value
+  currency: data.code
+}
+
+// Description: Converts a FHIR STU3 ChargeItem.PriceOverride to FHIR R4 ChargeItem.Participant.
+//
+// Argument(s):
+//   data : FHIR STU3 ChargeItem.PriceOverride http://hl7.org/fhir/STU3/chargeItem-definitions.html#ChargeItem.priceOverride
+//
+// Output(s):
+//   FHIR R4 ChargeItem.PriceOverride http://hl7.org/fhir/STU3/chargeItem-definitions.html#ChargeItem.priceOverride
+//
+def R4ChargeItem_PriceOverrideToR3(data) {
+  value: data.value
+  code: data.currency
+  system: "urn:iso:std:iso:4217"
+}

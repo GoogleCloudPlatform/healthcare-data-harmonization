@@ -1,0 +1,37 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def NutritionOrderBase(nutritionOrder) {
+  resourcebase::ResourceBase(nutritionOrder)
+  identifier: nutritionOrder.identifier
+  patient: nutritionOrder.patient
+  dateTime: nutritionOrder.dateTime
+  foodPreferenceModifier: nutritionOrder.foodPreferenceModifier
+  excludeFoodModifier: nutritionOrder.excludeFoodModifier
+  oralDiet: nutritionOrder.oralDiet
+  supplement: nutritionOrder.supplement
+  enteralFormula: nutritionOrder.enteralFormula
+}
+
+def R2NutritionOrderToR3(nutritionOrder) {
+  NutritionOrderBase(nutritionOrder)
+  contained: datatypes::R2ResourceToR3(nutritionOrder.contained[])
+  allergyIntolerance: datatypes::R2ReferenceToR3(nutritionOrder.allergyIntolerance[])
+  encounter: datatypes::R2ReferenceToR3(nutritionOrder.encounter)
+  orderer: datatypes::R2ReferenceToR3(nutritionOrder.orderer)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/nutritionorder-definitions.html#NutritionOrder.status", nutritionOrder.extension)
+  status: if status? then status else nutritionOrder.status
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/nutritionorder-definitions.html#NutritionOrder.status", nutritionOrder.status)
+}
+
+def R3NutritionOrderToR2(nutritionOrder) {
+  NutritionOrderBase(nutritionOrder)
+  contained: datatypes::R3ResourceToR2(nutritionOrder.contained[])
+  allergyIntolerance: datatypes::R3ReferenceToR2(nutritionOrder.allergyIntolerance[])
+  encounter: datatypes::R3ReferenceToR2(nutritionOrder.encounter)
+  orderer: datatypes::R3ReferenceToR2(nutritionOrder.orderer)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/nutritionorder-definitions.html#NutritionOrder.status", nutritionOrder.extension)
+  status: if status? then status else nutritionOrder.status
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/nutritionorder-definitions.html#NutritionOrder.status", nutritionOrder.status)
+}

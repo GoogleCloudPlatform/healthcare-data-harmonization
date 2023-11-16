@@ -1,0 +1,15 @@
+{
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.status",
+      "valueCode": "completed"
+    }
+  ],
+  "id": "example",
+  "resourceType": "ResearchStudy",
+  "status": "completed",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e[Put rendering here]\u003c/div\u003e",
+    "status": "generated"
+  }
+}

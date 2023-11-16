@@ -1,0 +1,66 @@
+{
+  "contained": [
+    {
+      "id": "org-1",
+      "identifier": [
+        {
+          "system": "http://nationalidentifiers.org/insurers",
+          "value": "52345"
+        }
+      ],
+      "resourceType": "Organization"
+    }
+  ],
+  "content": [
+    {
+      "pAttachment": {
+        "contentType": "application/pdf",
+        "creation": "2010-02-01T11:50:23-05:00",
+        "data": "SGVsbG8=",
+        "title": "accident notes 20100201.pdf"
+      }
+    },
+    {
+      "pAttachment": {
+        "contentType": "application/pdf",
+        "creation": "2010-02-01T10:57:34+01:00",
+        "hash": "SGVsbG8gdGhlcmU=",
+        "size": 104274,
+        "url": "http://happyvalley.com/docs/AB12345"
+      }
+    }
+  ],
+  "created": "2014-09-21T11:50:23-05:00",
+  "id": "654789",
+  "identifier": [
+    {
+      "system": "http://happyvalley.com/supportingdocumentation",
+      "value": "52345"
+    }
+  ],
+  "recipient": [
+    {
+      "reference": "#org-1"
+    }
+  ],
+  "related": [
+    {
+      "identifier": {
+        "system": "http://happyvalley.com/claim",
+        "value": "12345"
+      }
+    },
+    {
+      "identifier": {
+        "system": "http://www.BenefitsInc.com/fhir/remittance",
+        "value": "R3500"
+      }
+    }
+  ],
+  "resourceType": "DocumentManifest",
+  "status": "current",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003eA Financial Management Attachment example\u003c/div\u003e",
+    "status": "generated"
+  }
+}

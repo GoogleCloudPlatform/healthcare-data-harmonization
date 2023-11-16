@@ -1,0 +1,19 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def OperationOutcomeBase(operationOutcome) {
+  resourcebase::ResourceBase(operationOutcome)
+}
+
+def R3OperationOutcomeToR4(operationOutcome) {
+  OperationOutcomeBase(operationOutcome)
+  contained: datatypes::R3ResourceToR4(operationOutcome.contained[])
+  issue: operationOutcome.issue
+}
+
+def R4OperationOutcomeToR3(operationOutcome) {
+  OperationOutcomeBase(operationOutcome)
+  contained: datatypes::R4ResourceToR3(operationOutcome.contained[])
+  issue: operationOutcome.issue
+}

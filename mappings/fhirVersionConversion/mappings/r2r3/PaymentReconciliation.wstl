@@ -1,0 +1,80 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def PaymentReconciliationBase(paymentReconciliation) {
+  PaymentReconciliationBase(paymentReconciliation)
+  identifier: paymentReconciliation.identifier
+  period: paymentReconciliation.period
+  created: paymentReconciliation.created
+  disposition: paymentReconciliation.disposition
+}
+
+def R2PaymentReconciliationToR3(paymentReconciliation) {
+  PaymentReconciliationBase(paymentReconciliation)
+  contained: datatypes::R2ResourceToR3(paymentReconciliation.contained[])
+  requestProvider: datatypes::R2ReferenceToR3(paymentReconciliation.requestProvider)
+  requestOrganization: datatypes::R2ReferenceToR3(paymentReconciliation.requestOrganization)
+  request: datatypes::R2ReferenceToR3(paymentReconciliation.request)
+  organization: datatypes::R2ReferenceToR3(paymentReconciliation.organization)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/paymentreconciliation-definitions.html#PaymentReconciliation.status", paymentReconciliation.extension)
+  status: if status? then status else paymentReconciliation.status
+  outcome: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/paymentreconciliation-definitions.html#PaymentReconciliation.outcome", paymentReconciliation.extension)
+  detail: R2PaymentReconciliation_DetailToR3(paymentReconciliation.detail[])
+  form: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/paymentreconciliation-definitions.html#PaymentReconciliation.form", paymentReconciliation.extension)
+  total: datatypes::QuantityToMoney(paymentReconciliation.total)
+  processNote: R2PaymentReconciliation_NoteToR3(paymentReconciliation.note[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/paymentreconciliation-definitions.html#PaymentReconciliation.outcome", paymentReconciliation.outcome)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/paymentreconciliation-definitions.html#PaymentReconciliation.form", paymentReconciliation.form)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/paymentreconciliation-definitions.html#PaymentReconciliation.ruleset", paymentReconciliation.ruleset)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/paymentreconciliation-definitions.html#PaymentReconciliation.originalRuleset", paymentReconciliation.originalRuleset)
+}
+
+def R3PaymentReconciliationToR2(paymentReconciliation) {
+  PaymentReconciliationBase(paymentReconciliation)
+  contained: datatypes::R3ResourceToR2(paymentReconciliation.contained[])
+  requestProvider: datatypes::R3ReferenceToR2(paymentReconciliation.requestProvider)
+  requestOrganization: datatypes::R3ReferenceToR2(paymentReconciliation.requestOrganization)
+  request: datatypes::R3ReferenceToR2(paymentReconciliation.request)
+  organization: datatypes::R3ReferenceToR2(paymentReconciliation.organization)
+  outcome: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/paymentreconciliation-definitions.html#PaymentReconciliation.outcome", paymentReconciliation.extension)
+  detail: R3PaymentReconciliation_DetailToR2(paymentReconciliation.detail[])
+  form: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/paymentreconciliation-definitions.html#PaymentReconciliation.form", paymentReconciliation.extension)
+  total: datatypes::MoneyToQuantity(paymentReconciliation.total)
+  ruleset: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/paymentreconciliation-definitions.html#PaymentReconciliation.ruleset", paymentReconciliation.extension)
+  originalRuleset: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/paymentreconciliation-definitions.html#PaymentReconciliation.originalRuleset", paymentReconciliation.extension)
+  note: R3PaymentReconciliation_NoteToR2(paymentReconciliation.processNote[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/paymentreconciliation-definitions.html#PaymentReconciliation.status", paymentReconciliation.status)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/paymentreconciliation-definitions.html#PaymentReconciliation.outcome", paymentReconciliation.outcome)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/paymentreconciliation-definitions.html#PaymentReconciliation.form", paymentReconciliation.form)
+}
+
+def R2PaymentReconciliation_DetailToR3(data) {
+  type: datatypes::CodingToCodeableConcept(data.type)
+  request: datatypes::R2ReferenceToR3(data.request)
+  response: extension::fetchReference("https://www.hl7.org/fhir/STU3/paymentreconciliation-definitions.html#PaymentReconciliation.detail.response", data.extension)
+  submitter: datatypes::R2ReferenceToR3(data.submitter)
+  payee: datatypes::R2ReferenceToR3(data.payee)
+  date: data.date
+  amount: datatypes::QuantityToMoney(data.amount)
+}
+
+def R3PaymentReconciliation_DetailToR2(data) {
+  type: datatypes::CodingToCodeableConcept(data.type)
+  request: datatypes::R3ReferenceToR2(data.request)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/paymentreconciliation-definitions.html#PaymentReconciliation.detail.response", data.response)
+  submitter: datatypes::R3ReferenceToR2(data.submitter)
+  payee: datatypes::R3ReferenceToR2(data.payee)
+  date: data.date
+  amount: datatypes::MoneyToQuantity(data.amount)
+}
+
+def R2PaymentReconciliation_NoteToR3(data) {
+  type: datatypes::CodingToCodeableConcept(data.type)
+  text: data.text
+}
+
+def R3PaymentReconciliation_NoteToR2(data) {
+  type: datatypes::CodeableConceptToCoding(data.type)
+  text: data.text
+}

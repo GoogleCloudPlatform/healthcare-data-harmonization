@@ -1,0 +1,107 @@
+package datatypes
+
+// Description: Converts a FHIR STU3 Reference to FHIR R4 Reference.
+//
+// Argument(s):
+//   reference : FHIR STU3 Reference https://hl7.org/fhir/STU3/references.html#Reference
+//
+// Output(s):
+//   FHIR R4 Reference https://hl7.org/fhir/R4/references.html#Reference
+//
+def R3ReferenceToR4(required reference) {
+  reference: reference.reference
+  type: extension::fetchUri("https://www.hl7.org/fhir/references-definitions.html#Reference.type", reference.extension)
+  identifier: reference.identifier
+  display: reference.display
+}
+
+// Description: Converts a FHIR R4 Reference to FHIR STU3 Reference.
+//
+// Argument(s):
+//   reference : FHIR R4 Reference https://hl7.org/fhir/R4/references.html#Reference
+//
+// Output(s):
+//   FHIR STU3 Reference https://hl7.org/fhir/STU3/references.html#Reference
+//
+def R4ReferenceToR3(required reference) {
+  reference: reference.reference
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/references-definitions.html#Reference.type", reference.type)
+  identifier: reference.identifier
+  display: reference.display
+}
+
+// Description: Converts a FHIR DSTU2 Reference to FHIR STU3 Reference.
+//
+// Argument(s):
+//   reference : FHIR DSTU2 Reference https://hl7.org/fhir/DSTU2/references.html#Reference
+//
+// Output(s):
+//   FHIR STU3 Reference https://hl7.org/fhir/STU3/references.html#Reference
+//
+def R2ReferenceToR3(required reference) {
+  reference: reference.reference
+  identifier: extension::fetchIdentifier("https://www.hl7.org/fhir/STU3/references-definitions.html#Reference.identifier", reference.extension)
+  display: reference.display
+}
+
+// Description: Converts a FHIR STU3 Reference to FHIR DSTU2 Reference.
+//
+// Argument(s):
+//   reference : FHIR STU3 Reference https://hl7.org/fhir/STU3/references.html#Reference
+//
+// Output(s):
+//   FHIR DSTU2 Reference https://hl7.org/fhir/DSTU2/references.html#Reference
+//
+def R3ReferenceToR2(required reference) {
+  reference: reference.reference
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/STU3/references-definitions.html#Reference.identifier", reference.identifier)
+  display: reference.display
+}
+
+// Description: Converts a Reference datatype to Identifier datatype
+//
+// Argument(s):
+//   reference: FHIR Reference datatype https://www.hl7.org/fhir/references.html#Reference
+//
+// Output(s):
+//   FHIR Identifier datatype https://www.hl7.org/fhir/datatypes.html#Identifier
+//
+def ReferenceToIdentifier(required reference) {
+  reference.identifier
+}
+
+// Description: Converts a Reference datatype to Canonical datatype
+//
+// Argument(s):
+//   reference: FHIR Reference datatype https://www.hl7.org/fhir/references.html#Reference
+//
+// Output(s):
+//   FHIR Canonical datatype https://www.hl7.org/fhir/datatypes.html#canonical
+//
+def ReferenceToCanonical(required reference) {
+  if is(reference, "Primitive") then {
+    reference
+  } else if reference.reference then {
+    reference.reference
+  } else if reference.display then {
+    StringToCanonical(reference.display)
+  } else {
+    reference.type
+  }
+}
+
+// Description: Converts a Reference datatype to CodeableConcept datatype
+//
+// Argument(s):
+//   reference: FHIR Reference datatype https://www.hl7.org/fhir/references.html#Reference
+//
+// Output(s):
+//   FHIR CodeableConcept datatype https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def ReferenceToCodeableConcept(required reference) {
+  if reference.reference then {
+    text: reference.reference
+  } else if reference.display then {
+    text: reference.display
+  }
+}

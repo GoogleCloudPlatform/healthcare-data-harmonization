@@ -1,0 +1,96 @@
+{
+  "category": [
+    {
+      "coding": [
+        {
+          "code": "59284-0",
+          "system": "http://loinc.org"
+        }
+      ]
+    }
+  ],
+  "dateTime": "2015-11-18",
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/R4/consent-definitions.html#Consent.scope",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "patient-privacy",
+            "system": "http://terminology.hl7.org/CodeSystem/consentscope"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/consent-definitions.html#Consent.actor.role",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "CST",
+            "system": "http://hl7.org/fhir/v3/ParticipationType"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/consent-definitions.html#Consent.actor.reference",
+      "valueReference": {
+        "display": "Good Health Psychiatric Hospital",
+        "reference": "Organization/2.16.840.1.113883.19.6"
+      }
+    }
+  ],
+  "id": "consent-example-Out",
+  "organization": [
+    {
+      "reference": "Organization/f001"
+    }
+  ],
+  "patient": {
+    "display": "P. van de Heuvel",
+    "reference": "Patient/f001"
+  },
+  "policyRule": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/ConsentPolicy/opt-out"
+      }
+    ]
+  },
+  "provision": {
+    "actor": [
+      {
+        "reference": {
+          "reference": "Organization/f001"
+        },
+        "role": {
+          "coding": [
+            {
+              "code": "CST",
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+            }
+          ]
+        }
+      }
+    ],
+    "type": "deny"
+  },
+  "resourceType": "Consent",
+  "scope": {
+    "coding": [
+      {
+        "code": "patient-privacy",
+        "system": "http://terminology.hl7.org/CodeSystem/consentscope"
+      }
+    ]
+  },
+  "sourceAttachment": {
+    "title": "The terms of the consent in lawyer speak."
+  },
+  "status": "active",
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">The following scenario is based on existing jurisdictional policy and are realized in existing systems in Canada. \n\tThe default policy is one of implied consent for the provision of care, so these scenarios all deal with withdrawal or withholding consent for that purpose. \n\tIn other jurisdictions, where an express consent model is used (Opt-In), these would examples would contain the phrase &quot;consent to&quot; rather \n\tthan &quot;withhold&quot; or &quot;withdraw&quot; consent for.\n    <p>\n\tSpecific to use-case 0) Withhold Authorization of sharing data for Treatment\n\t</p><p>\n    Patient &quot;P. van de Heuvel&quot; wishes to have no data at the Good Health Psychiatric Hospital \n   available for normal treatment use.\n   </p>\n   </div>",
+    "status": "generated"
+  }
+}

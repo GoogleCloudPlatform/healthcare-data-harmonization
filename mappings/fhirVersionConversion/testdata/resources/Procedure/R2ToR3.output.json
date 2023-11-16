@@ -1,0 +1,97 @@
+{
+  "basedOn": [
+    null
+  ],
+  "bodySite": [
+    {
+      "coding": [
+        {
+          "code": "368225008",
+          "display": "Entire Left Forearm",
+          "system": "http://snomed.info/sct"
+        }
+      ],
+      "text": "Left forearm"
+    }
+  ],
+  "category": {
+    "coding": [
+      {
+        "code": "103693007",
+        "display": "Diagnostic procedure (procedure)",
+        "system": "http://snomed.info/sct"
+      }
+    ],
+    "text": "Diagnostic procedure"
+  },
+  "code": {
+    "coding": [
+      {
+        "code": "90105005",
+        "display": "Biopsy of soft tissue of forearm (Procedure)",
+        "system": "http://snomed.info/sct"
+      }
+    ],
+    "text": "Biopsy of suspected melanoma L) arm"
+  },
+  "complication": [
+    {
+      "coding": [
+        {
+          "code": "67750007",
+          "display": "Ineffective airway clearance (finding)",
+          "system": "http://snomed.info/sct"
+        }
+      ],
+      "text": "Ineffective airway clearance"
+    }
+  ],
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.status",
+      "valueCode": "completed"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/DSTU2/procedure-definitions.html#Procedure.code",
+      "valueCode": {
+        "coding": [
+          {
+            "code": "90105005",
+            "display": "Biopsy of soft tissue of forearm (Procedure)",
+            "system": "http://snomed.info/sct"
+          }
+        ],
+        "text": "Biopsy of suspected melanoma L) arm"
+      }
+    }
+  ],
+  "followUp": [
+    {
+      "text": "Review in clinic"
+    }
+  ],
+  "id": "biopsy",
+  "note": [
+    {
+      "text": "Standard Biopsy"
+    }
+  ],
+  "performedDateTime": "2014-02-03",
+  "performer": [
+    {
+      "actor": {
+        "display": "Dr Bert Biopser",
+        "reference": "Practitioner/example"
+      }
+    }
+  ],
+  "resourceType": "Procedure",
+  "status": "completed",
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003eBiopsy of suspected melanoma L) arm\u003c/div\u003e",
+    "status": "generated"
+  }
+}

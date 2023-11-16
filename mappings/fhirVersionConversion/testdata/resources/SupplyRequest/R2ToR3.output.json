@@ -1,0 +1,129 @@
+{
+  "authoredOn": "2016-12-31",
+  "category": {
+    "coding": [
+      {
+        "code": "central",
+        "display": "Central Stock Resupply"
+      }
+    ]
+  },
+  "deliverFrom": {
+    "display": "Location 1"
+  },
+  "deliverTo": {
+    "display": "GoodHealth Clinic Receiving"
+  },
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/supplyrequest-definitions.html#SupplyRequest.deliverFrom",
+      "valueReference": {
+        "display": "Location 1"
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/supplyrequest-definitions.html#SupplyRequest.deliverTo",
+      "valueReference": {
+        "display": "GoodHealth Clinic Receiving"
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/supplyrequest-definitions.html#SupplyRequest.status",
+      "valueCode": "active"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/supplyrequest-definitions.html#SupplyRequest.category",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "central",
+            "display": "Central Stock Resupply"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/supplyrequest-definitions.html#SupplyRequest.priority",
+      "valueCode": "asap"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/supplyrequest-definitions.html#SupplyRequest.occurrenceDateTime",
+      "valueDateTime": "2016-12-31"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/supplyrequest-definitions.html#SupplyRequest.orderedItem.quantity",
+      "valueQuantity": {
+        "value": 10
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/supplyrequest-definitions.html#SupplyRequest.orderedItem.itemCodeableConcept",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "BlueTubes",
+            "display": "Blood collect tubes blue cap"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/supplyrequest-definitions.html#SupplyRequest.requester.agent",
+      "valueReference": {
+        "display": "Henry Seven"
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/supplyrequest-definitions.html#SupplyRequest.requester.onBehalfOf",
+      "valueReference": {
+        "display": "Purchasing Dept"
+      }
+    }
+  ],
+  "id": "simpleorder",
+  "identifier": {
+    "value": "Order10284"
+  },
+  "occurrenceDateTime": "2016-12-31",
+  "orderedItem": {
+    "itemCodeableConcept": {
+      "coding": [
+        {
+          "code": "BlueTubes",
+          "display": "Blood collect tubes blue cap"
+        }
+      ]
+    },
+    "quantity": {
+      "value": 10
+    }
+  },
+  "priority": "asap",
+  "reasonCodeableConcept": {
+    "coding": [
+      {
+        "code": "stock_low",
+        "display": "Refill due to low stock"
+      }
+    ]
+  },
+  "requester": {
+    "agent": {
+      "display": "Henry Seven"
+    },
+    "onBehalfOf": {
+      "display": "Purchasing Dept"
+    }
+  },
+  "resourceType": "SupplyRequest",
+  "status": "active",
+  "supplier": [
+    {
+      "display": "Vendor1"
+    }
+  ],
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\u003cp\u003e\u003cb\u003eGenerated Narrative with Details\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eid\u003c/b\u003e: simpleorder\u003c/p\u003e\u003cp\u003e\u003cb\u003eidentifier\u003c/b\u003e: Order10284\u003c/p\u003e\u003cp\u003e\u003cb\u003estatus\u003c/b\u003e: active\u003c/p\u003e\u003cp\u003e\u003cb\u003ecategory\u003c/b\u003e: Central Stock Resupply \u003cspan\u003e(Details : {[not stated] code 'central' = 'central', given as 'Central Stock Resupply'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003epriority\u003c/b\u003e: asap\u003c/p\u003e\u003ch3\u003eOrderedItems\u003c/h3\u003e\u003ctable\u003e\u003ctr\u003e\u003ctd\u003e-\u003c/td\u003e\u003ctd\u003e\u003cb\u003eQuantity\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eItem[x]\u003c/b\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e*\u003c/td\u003e\u003ctd\u003e10\u003c/td\u003e\u003ctd\u003eBlood collect tubes blue cap \u003cspan\u003e(Details : {[not stated] code 'BlueTubes' = 'BlueTubes', given as 'Blood collect tubes blue cap'})\u003c/span\u003e\u003c/td\u003e\u003c/tr\u003e\u003c/table\u003e\u003cp\u003e\u003cb\u003eoccurrence\u003c/b\u003e: 31/12/2016\u003c/p\u003e\u003cp\u003e\u003cb\u003eauthoredOn\u003c/b\u003e: 31/12/2016\u003c/p\u003e\u003ch3\u003eRequesters\u003c/h3\u003e\u003ctable\u003e\u003ctr\u003e\u003ctd\u003e-\u003c/td\u003e\u003ctd\u003e\u003cb\u003eAgent\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eOnBehalfOf\u003c/b\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e*\u003c/td\u003e\u003ctd\u003eHenry Seven\u003c/td\u003e\u003ctd\u003ePurchasing Dept\u003c/td\u003e\u003c/tr\u003e\u003c/table\u003e\u003cp\u003e\u003cb\u003esupplier\u003c/b\u003e: Vendor1\u003c/p\u003e\u003cp\u003e\u003cb\u003ereason\u003c/b\u003e: Refill due to low stock \u003cspan\u003e(Details : {[not stated] code 'stock_low' = 'stock_low', given as 'Refill due to low stock'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003edeliverFrom\u003c/b\u003e: Location 1\u003c/p\u003e\u003cp\u003e\u003cb\u003edeliverTo\u003c/b\u003e: GoodHealth Clinic Receiving\u003c/p\u003e\u003c/div\u003e",
+    "status": "generated"
+  }
+}

@@ -1,0 +1,52 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   subscription : FHIR Subscription resource
+//
+// Output(s):
+//   FHIR Subscription Resource
+//
+def SubscriptionBase(subscription) {
+  resourcebase::ResourceBase(subscription)
+  contact: subscription.contact
+  end: subscription.end
+  reason: subscription.reason
+  criteria: subscription.criteria
+  error: subscription.error
+}
+
+// Description: Converts a FHIR STU3 Subscription resource to FHIR R4 Subscription resource.
+//
+// Argument(s):
+//   subscription : FHIR STU3 Subscription resource https://www.hl7.org/fhir/stu3/subscription.html
+//
+// Output(s):
+//   FHIR R4 Subscription Resource https://www.hl7.org/fhir/r4/subscription.html
+//
+def R3SubscriptionToR4(subscription) {
+  SubscriptionBase(subscription)
+  contained: datatypes::R3ResourceToR4(subscription.contained[])
+  status: subscription.status
+  channel: subscription.channel
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/STU3/subscription-definitions.html#Subscription.tag", subscription.tag[])
+}
+
+// Description: Converts a FHIR R4 Subscription resource to FHIR STU3 Subscription resource.
+//
+// Argument(s):
+//   subscription : FHIR R4 Subscription resource https://www.hl7.org/fhir/r4/subscription.html
+//
+// Output(s):
+//   FHIR STU3 Subscription Resource https://www.hl7.org/fhir/stu3/subscription.html
+//
+def R4SubscriptionToR3(subscription) {
+  SubscriptionBase(subscription)
+  contained: datatypes::R4ResourceToR3(subscription.contained[])
+  status: subscription.status
+  channel: subscription.channel
+  tag: extension::fetchCodingArray("https://www.hl7.org/fhir/STU3/subscription-definitions.html#Subscription.tag", subscription.extension)
+}

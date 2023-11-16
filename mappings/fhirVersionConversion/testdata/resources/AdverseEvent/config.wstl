@@ -1,0 +1,5 @@
+// R3 AdverseEvent To R4
+$this: R3AdverseEventToR4($root)
+
+// R4 AdverseEvent To R3
+$this: R4AdverseEventToR3($root)

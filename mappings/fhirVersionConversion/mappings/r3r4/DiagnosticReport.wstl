@@ -1,0 +1,142 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   diagnosticReport : FHIR DiagnosticReport resource
+//
+// Output(s):
+//   FHIR DiagnosticReport Resource
+//
+def DiagnosticReportBase(diagnosticReport) {
+  resourcebase::ResourceBase(diagnosticReport)
+  identifier: diagnosticReport.identifier
+  code: diagnosticReport.code
+  effectiveDateTime: diagnosticReport.effectiveDateTime
+  effectivePeriod: diagnosticReport.effectivePeriod
+  issued: diagnosticReport.issued
+  conclusion: diagnosticReport.conclusion
+  presentedForm: diagnosticReport.presentedForm
+}
+
+// Description: Converts a FHIR STU3 DiagnosticReport resource to FHIR R4 DiagnosticReport resource.
+//
+// Argument(s):
+//   diagnosticReport : FHIR STU3 DiagnosticReport resource https://www.hl7.org/fhir/stu3/diagnosticReport.html
+//
+// Output(s):
+//   FHIR R4 DiagnosticReport Resource https://www.hl7.org/fhir/r4/diagnosticReport.html
+//
+def R3DiagnosticReportToR4(diagnosticReport) {
+  DiagnosticReportBase(diagnosticReport)
+  contained: datatypes::R3ResourceToR4(diagnosticReport.contained[])
+  result: datatypes::R3ReferenceToR4(diagnosticReport.result[])
+  specimen: datatypes::R3ReferenceToR4(diagnosticReport.specimen[])
+  subject: datatypes::R3ReferenceToR4(diagnosticReport.subject)
+  basedOn: datatypes::R3ReferenceToR4(diagnosticReport.basedOn[where !matchesRegex($.reference, "^ProcedureRequest.*|^ReferralRequest.*")][])
+  status: diagnosticReport.status
+  category: R3DiagnosticReport_CategoryToR4("https://www.hl7.org/fhir/R4/diagnosticreport-definitions.html#DiagnosticReport.category", diagnosticReport.extension, diagnosticReport.category)
+  encounter: if matchesRegex(diagnosticReport.context.reference, "^Encounter.*") then datatypes::R3ReferenceToR4(diagnosticReport.context)
+  performer: R3DiagnosticReport_PerformerToR4(diagnosticReport.performer[])
+  resultsInterpreter: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/diagnosticreport-definitions.html#DiagnosticReport.resultsInterpreter", diagnosticReport.extension)
+  imagingStudy: datatypes::R3ReferenceToR4(diagnosticReport.imagingStudy[])
+  media: R3DiagnosticReport_MediaToR4(diagnosticReport.image[])
+  conclusionCode: diagnosticReport.codedDiagnosis
+  extension[]: if !$this.encounter then extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/diagnosticreport-definitions.html#DiagnosticReport.context", diagnosticReport.context)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/diagnosticreport-definitions.html#DiagnosticReport.performer.role", diagnosticReport.performer[*].role[])
+}
+
+// Description: Converts a FHIR R4 DiagnosticReport resource to FHIR STU3 DiagnosticReport resource.
+//
+// Argument(s):
+//   diagnosticReport : FHIR R4 DiagnosticReport resource https://www.hl7.org/fhir/r4/diagnosticReport.html
+//
+// Output(s):
+//   FHIR STU3 DiagnosticReport Resource https://www.hl7.org/fhir/stu3/diagnosticReport.html
+//
+def R4DiagnosticReportToR3(diagnosticReport) {
+  DiagnosticReportBase(diagnosticReport)
+  contained: datatypes::R4ResourceToR3(diagnosticReport.contained[])
+  result: datatypes::R4ReferenceToR3(diagnosticReport.result[])
+  specimen: datatypes::R4ReferenceToR3(diagnosticReport.specimen[])
+  subject: datatypes::R4ReferenceToR3(diagnosticReport.subject)
+  basedOn: datatypes::R4ReferenceToR3(diagnosticReport.basedOn[])
+  status: diagnosticReport.status
+  category: diagnosticReport.category[0]
+  context: datatypes::R4ReferenceToR3(diagnosticReport.encounter)
+  performer: R4DiagnosticReport_PerformerToR3(diagnosticReport.performer[])
+  imagingStudy: datatypes::R4ReferenceToR3(diagnosticReport.imagingStudy[])
+  image: R4DiagnosticReport_MediaToR3(diagnosticReport.media[])
+  codedDiagnosis: diagnosticReport.conclusionCode
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/diagnosticreport-definitions.html#DiagnosticReport.category", diagnosticReport.category)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/diagnosticreport-definitions.html#DiagnosticReport.resultsInterpreter", diagnosticReport.resultsInterpreter[])
+}
+
+// Description: Converts a FHIR STU3 DiagnosticReport.Category to FHIR R4 DiagnosticReport.Category.
+//
+// Argument(s):
+//   data : FHIR STU3 DiagnosticReport.Category http://hl7.org/fhir/STU3/diagnosticReport-definitions.html#DiagnosticReport.category
+//
+// Output(s):
+//   FHIR R4 DiagnosticReport.Category http://hl7.org/fhir/R4/diagnosticReport-definitions.html#DiagnosticReport.category
+//
+def R3DiagnosticReport_CategoryToR4(url, extension, data) {
+  var category: extension::fetchCodeableConceptArray(url, extension)
+  if category then {
+    category
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 DiagnosticReport.Performer to FHIR R4 DiagnosticReport.Performer.
+//
+// Argument(s):
+//   data : FHIR STU3 DiagnosticReport.Performer http://hl7.org/fhir/STU3/diagnosticReport-definitions.html#DiagnosticReport.performer
+//
+// Output(s):
+//   FHIR R4 DiagnosticReport.Performer http://hl7.org/fhir/R4/diagnosticReport-definitions.html#DiagnosticReport.performer
+//
+def R3DiagnosticReport_PerformerToR4(data) {
+  datatypes::R3ReferenceToR4(data.actor)
+}
+
+// Description: Converts a FHIR R4 DiagnosticReport.Performer to FHIR STU3 DiagnosticReport.Performer.
+//
+// Argument(s):
+//   data : FHIR R4 DiagnosticReport.Performer http://hl7.org/fhir/R4/diagnosticReport-definitions.html#DiagnosticReport.performer
+//
+// Output(s):
+//   FHIR STU3 DiagnosticReport.Performer http://hl7.org/fhir/STU3/diagnosticReport-definitions.html#DiagnosticReport.performer
+//
+def R4DiagnosticReport_PerformerToR3(data) {
+  actor: datatypes::R4ReferenceToR3(data)
+}
+
+// Description: Converts a FHIR STU3 DiagnosticReport.Media to FHIR R4 DiagnosticReport.Media.
+//
+// Argument(s):
+//   data : FHIR STU3 DiagnosticReport.Media http://hl7.org/fhir/STU3/diagnosticReport-definitions.html#DiagnosticReport.media
+//
+// Output(s):
+//   FHIR R4 DiagnosticReport.Media http://hl7.org/fhir/R4/diagnosticReport-definitions.html#DiagnosticReport.media
+//
+def R3DiagnosticReport_MediaToR4(data) {
+  comment: data.comment
+  link: datatypes::R3ReferenceToR4(data.link)
+}
+
+// Description: Converts a FHIR R4 DiagnosticReport.Media to FHIR STU3 DiagnosticReport.Media.
+//
+// Argument(s):
+//   data : FHIR R4 DiagnosticReport.Media http://hl7.org/fhir/R4/diagnosticReport-definitions.html#DiagnosticReport.media
+//
+// Output(s):
+//   FHIR STU3 DiagnosticReport.Media http://hl7.org/fhir/STU3/diagnosticReport-definitions.html#DiagnosticReport.media
+//
+def R4DiagnosticReport_MediaToR3(data) {
+  comment: data.comment
+  link: datatypes::R4ReferenceToR3(data.link)
+}

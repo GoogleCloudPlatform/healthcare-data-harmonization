@@ -1,0 +1,51 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "draft",
+          "display": "In progress",
+          "target": [
+            {
+              "code": "in-progress",
+              "display": "In progress",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "completed",
+          "display": "Completed",
+          "target": [
+            {
+              "code": "completed",
+              "display": "Completed",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "entered-in-error",
+          "display": "Entered in Error",
+          "target": [
+            {
+              "code": "entered-in-error",
+              "display": "Entered in Error",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/clinical-impression-status",
+      "target": "http://hl7.org/fhir/event-status",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "entered-in-error",
+        "display": "Entered in Error"
+      }
+    }
+  ],
+  "id": "Clinical_Impression_Status_r3r4",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

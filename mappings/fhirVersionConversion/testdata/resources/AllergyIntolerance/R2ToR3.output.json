@@ -1,0 +1,54 @@
+{
+  "assertedDate": "2014-10-09T14:58:00+11:00",
+  "asserter": {
+    "reference": "Patient/example"
+  },
+  "clinicalStatus": "active",
+  "code": {
+    "coding": [
+      {
+        "code": "227493005",
+        "display": "Cashew nuts",
+        "system": "http://snomed.info/sct"
+      }
+    ]
+  },
+  "criticality": "high",
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/allergyintolerance-definitions.html#AllergyIntolerance.clinicalStatus",
+      "valueCode": "active"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/allergyintolerance-definitions.html#AllergyIntolerance.verificationStatus",
+      "valueCode": "confirmed"
+    }
+  ],
+  "id": "example",
+  "identifier": [
+    {
+      "system": "http://acme.com/ids/patients/risks",
+      "value": "49476534"
+    }
+  ],
+  "lastOccurrence": "2012-06",
+  "note": [
+    {
+      "text": "The criticality is high becasue of the observed anaphylactic reaction when challenged with cashew extract."
+    }
+  ],
+  "onsetDateTime": "2004",
+  "patient": {
+    "reference": "Patient/example"
+  },
+  "recorder": {
+    "reference": "Practitioner/example"
+  },
+  "resourceType": "AllergyIntolerance",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\u003cp\u003e\u003cb\u003eGenerated Narrative with Details\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eid\u003c/b\u003e: example\u003c/p\u003e\u003cp\u003e\u003cb\u003eidentifier\u003c/b\u003e: 49476534\u003c/p\u003e\u003cp\u003e\u003cb\u003eclinicalStatus\u003c/b\u003e: active\u003c/p\u003e\u003cp\u003e\u003cb\u003everificationStatus\u003c/b\u003e: confirmed\u003c/p\u003e\u003cp\u003e\u003cb\u003etype\u003c/b\u003e: allergy\u003c/p\u003e\u003cp\u003e\u003cb\u003ecategory\u003c/b\u003e: food\u003c/p\u003e\u003cp\u003e\u003cb\u003ecriticality\u003c/b\u003e: high\u003c/p\u003e\u003cp\u003e\u003cb\u003ecode\u003c/b\u003e: Cashew nuts \u003cspan\u003e(Details : {SNOMED CT code '227493005' = 'Cashew nuts', given as 'Cashew nuts'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003epatient\u003c/b\u003e: \u003ca\u003ePatient/example\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eonset\u003c/b\u003e: 01/01/2004\u003c/p\u003e\u003cp\u003e\u003cb\u003eassertedDate\u003c/b\u003e: 09/10/2014 2:58:00 PM\u003c/p\u003e\u003cp\u003e\u003cb\u003erecorder\u003c/b\u003e: \u003ca\u003ePractitioner/example\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003easserter\u003c/b\u003e: \u003ca\u003ePatient/example\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003elastOccurrence\u003c/b\u003e: 01/06/2012\u003c/p\u003e\u003cp\u003e\u003cb\u003enote\u003c/b\u003e: The criticality is high becasue of the observed anaphylactic reaction when challenged with cashew extract.\u003c/p\u003e\u003cblockquote\u003e\u003cp\u003e\u003cb\u003ereaction\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003esubstance\u003c/b\u003e: cashew nut allergenic extract Injectable Product \u003cspan\u003e(Details : {RxNorm code '1160593' = '1160593', given as 'cashew nut allergenic extract Injectable Product'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003emanifestation\u003c/b\u003e: Anaphylactic reaction \u003cspan\u003e(Details : {SNOMED CT code '39579001' = 'Anaphylaxis', given as 'Anaphylactic reaction'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003edescription\u003c/b\u003e: Challenge Protocol. Severe reaction to subcutaneous cashew extract. Epinephrine administered\u003c/p\u003e\u003cp\u003e\u003cb\u003eonset\u003c/b\u003e: 12/06/2012\u003c/p\u003e\u003cp\u003e\u003cb\u003eseverity\u003c/b\u003e: severe\u003c/p\u003e\u003cp\u003e\u003cb\u003eexposureRoute\u003c/b\u003e: Subcutaneous route \u003cspan\u003e(Details : {SNOMED CT code '34206005' = 'Subcutaneous route', given as 'Subcutaneous route'})\u003c/span\u003e\u003c/p\u003e\u003c/blockquote\u003e\u003cblockquote\u003e\u003cp\u003e\u003cb\u003ereaction\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003emanifestation\u003c/b\u003e: Urticaria \u003cspan\u003e(Details : {SNOMED CT code '64305001' = 'Urticaria', given as 'Urticaria'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eonset\u003c/b\u003e: 01/01/2004\u003c/p\u003e\u003cp\u003e\u003cb\u003eseverity\u003c/b\u003e: moderate\u003c/p\u003e\u003cp\u003e\u003cb\u003enote\u003c/b\u003e: The patient reports that the onset of urticaria was within 15 minutes of eating cashews.\u003c/p\u003e\u003c/blockquote\u003e\u003c/div\u003e",
+    "status": "generated"
+  },
+  "type": "allergy",
+  "verificationStatus": "confirmed"
+}

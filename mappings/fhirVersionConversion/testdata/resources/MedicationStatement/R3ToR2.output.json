@@ -1,0 +1,54 @@
+{
+  "contained": [
+    {
+      "code": {
+        "coding": [
+          {
+            "code": "358793",
+            "display": "Mometasone Furoate 0.05mg/Actuat",
+            "system": "http://www.nlm.nih.gov/research/umls/rxnorm"
+          }
+        ]
+      },
+      "form": {
+        "coding": [
+          {
+            "code": "385157007",
+            "display": "Nasal Spray",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "id": "med0315",
+      "isBrand": false,
+      "resourceType": "Medication"
+    }
+  ],
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.status",
+      "valueCode": "intended"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.taken",
+      "valueCode": "y"
+    }
+  ],
+  "id": "example007",
+  "informationSource": {
+    "display": "Donald Duck",
+    "reference": "Patient/pat1"
+  },
+  "medicationReference": {
+    "reference": "#med0315"
+  },
+  "patient": {
+    "display": "Donald Duck",
+    "reference": "Patient/pat1"
+  },
+  "resourceType": "MedicationStatement",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\u003cp\u003e\u003cb\u003eGenerated Narrative with Details\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eid\u003c/b\u003e: example007\u003c/p\u003e\u003cp\u003e\u003cb\u003econtained\u003c/b\u003e: \u003c/p\u003e\u003cp\u003e\u003cb\u003estatus\u003c/b\u003e: intended\u003c/p\u003e\u003cp\u003e\u003cb\u003emedication\u003c/b\u003e: id: med0315; Mometasone Furoate 0.05mg/Actuat \u003cspan\u003e(Details : {RxNorm code '358793' = '358793', given as 'Mometasone Furoate 0.05mg/Actuat'})\u003c/span\u003e; Nasal Spray \u003cspan\u003e(Details : {SNOMED CT code '385157007' = 'Nasal spray', given as 'Nasal Spray'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003einformationSource\u003c/b\u003e: \u003ca\u003eDonald Duck\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003esubject\u003c/b\u003e: \u003ca\u003eDonald Duck\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003etaken\u003c/b\u003e: y\u003c/p\u003e\u003cp\u003e\u003cb\u003enote\u003c/b\u003e: patient plans to start using for seasonal allergies in the Spring when pollen is in the air\u003c/p\u003e\u003c/div\u003e",
+    "status": "generated"
+  }
+}

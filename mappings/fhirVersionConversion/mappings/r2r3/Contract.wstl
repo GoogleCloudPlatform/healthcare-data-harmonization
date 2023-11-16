@@ -1,0 +1,180 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def ContractBase(contract) {
+  resourcebase::ResourceBase(contract)
+  identifier: contract.identifier
+  issued: contract.issued
+  applies: contract.applies
+  type: contract.type
+  subType: contract.subType
+  action: contract.action
+  actionReason: contract.actionReason
+  bindingAttachment: contract.bindingAttachment
+}
+
+def R2ContractToR3(contract) {
+  ContractBase(contract)
+  contained: datatypes::R2ResourceToR3(contract.contained[])
+  friendly: R2Contract_FriendlyToR3(contract.friendly[])
+  legal: R2Contract_FriendlyToR3(contract.legal[])
+  rule: R2Contract_FriendlyToR3(contract.rule[])
+  bindingReference: datatypes::R2ReferenceToR3(contract.bindingReference)
+  domain: datatypes::R2ReferenceToR3(contract.domain[])
+  authority: datatypes::R2ReferenceToR3(contract.authority[])
+  subject: datatypes::R2ReferenceToR3(contract.subject[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.status", contract.extension)
+  status: if status? then status else contract.status
+  topic: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.topic", contract.extension)
+  decisionType: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.decisionType", contract.extension)
+  contentDerivative: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.contentDerivative", contract.extension)
+  securityLabel: extension::fetchCodingArray("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.securityLabel", contract.extension)
+  agent: R2Contract_AgentToR3(contract.actor[])
+  signer: R2Contract_SignerToR3(contract.signer[])
+  valuedItem: R2Contract_ValuedItemToR3(contract.valuedItem[])
+  term: R2Contract_TermToR3(contract.term[])
+}
+
+def R3ContractToR2(contract) {
+  ContractBase(contract)
+  contained: datatypes::R3ResourceToR2(contract.contained[])
+  friendly: R3Contract_FriendlyToR2(contract.friendly[])
+  legal: R3Contract_FriendlyToR2(contract.legal[])
+  rule: R3Contract_FriendlyToR2(contract.rule[])
+  bindingReference: datatypes::R3ReferenceToR2(contract.bindingReference)
+  domain: datatypes::R3ReferenceToR2(contract.domain[])
+  authority: datatypes::R3ReferenceToR2(contract.authority[])
+  subject: datatypes::R3ReferenceToR2(contract.subject[])
+  actor: R3Contract_AgentToR2(contract.agent[])
+  signer: R3Contract_SignerToR2(contract.signer[])
+  valuedItem: R3Contract_ValuedItemToR2(contract.valuedItem[])
+  term: R3Contract_TermToR2(contract.term[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.status", contract.status)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.topic", contract.topic[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.decisionType", contract.decisionType)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.contentDerivative", contract.contentDerivative)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.securityLabel", contract.securityLabel[])
+}
+
+def R2Contract_AgentToR3(data) {
+  actor: datatypes::R2ReferenceToR3(data.entity)
+  role: data.role
+}
+
+def R3Contract_AgentToR2(data) {
+  entity: datatypes::R3ReferenceToR2(data.actor)
+  role: data.role
+}
+
+def R2Contract_SignerToR3(data) {
+  type: data.type
+  party: datatypes::R2ReferenceToR3(data.party)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/DSTU2/contract-definitions.html#Contract.signer.signature", data.signature)
+}
+
+def R3Contract_SignerToR2(data) {
+  type: data.type
+  party: datatypes::R3ReferenceToR2(data.party)
+  signature: extension::fetchString("https://www.hl7.org/fhir/DSTU2/contract-definitions.html#Contract.signer.signature", data.extension)
+}
+
+def R2Contract_ValuedItemToR3(data) {
+  entityCodeableConcept: data.entityCodeableConcept
+  entityReference: datatypes::R2ReferenceToR3(data.entityReference)
+  identifier: data.identifier
+  effectiveTime: data.effectiveTime
+  quantity: data.quantity
+  unitPrice: datatypes::QuantityToMoney(data.unitPrice)
+  factor: data.factor
+  points: data.points
+  net: datatypes::QuantityToMoney(data.net)
+}
+
+def R3Contract_ValuedItemToR2(data) {
+  entityCodeableConcept: data.entityCodeableConcept
+  entityReference: datatypes::R3ReferenceToR2(data.entityReference)
+  identifier: data.identifier
+  effectiveTime: data.effectiveTime
+  quantity: data.quantity
+  unitPrice: datatypes::MoneyToQuantity(data.unitPrice)
+  factor: data.factor
+  points: data.points
+  net: datatypes::MoneyToQuantity(data.net)
+}
+
+def R2Contract_TermToR3(data) {
+  identifier: data.identifier
+  issued: data.issued
+  applies: data.applies
+  type: data.type
+  subType: data.subType
+  topic: R2Contract_Term_TopicToR3("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.term.topic", data.extension, datatypes::R2ReferenceToR3(data.subject))
+  action: data.action
+  actionReason: data.actionReason
+  securityLabel: extension::fetchCodingArray("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.term.securityLabel", data.extension)
+  agent: R2Contract_AgentToR3(data.actor[])
+  text: data.text
+  valuedItem: R2Contract_Term_ValuedItemToR3(data.valuedItem[])
+  group: data.group
+}
+
+def R3Contract_TermToR2(data) {
+  identifier: data.identifier
+  issued: data.issued
+  applies: data.applies
+  type: data.type
+  subType: data.subType
+  subject: datatypes::R3ReferenceToR2(data.topic[0])
+  action: data.action
+  actionReason: data.actionReason
+  actor: R3Contract_AgentToR2(data.agent[])
+  text: data.text
+  valuedItem: R3Contract_Term_ValuedItemToR2(data.valuedItem[])
+  group: data.group
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.term.securityLabel", data.securityLabel[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.term.topic", data.topic[])
+}
+
+def R2Contract_Term_TopicToR3(url, extension, data) {
+  var topic: extension::fetchReferenceArray(url, extension)
+  if topic then {
+    topic
+  } else {
+    arrayOf(data)
+  }
+}
+
+def R2Contract_Term_ValuedItemToR3(data) {
+  entityCodeableConcept: data.entityCodeableConcept
+  entityReference: datatypes::R2ReferenceToR3(data.entityReference)
+  identifier: data.identifier
+  effectiveTime: data.effectiveTime
+  quantity: data.quantity
+  unitPrice: datatypes::QuantityToMoney(data.unitPrice)
+  factor: data.factor
+  points: data.points
+  net: datatypes::QuantityToMoney(data.net)
+}
+
+def R3Contract_Term_ValuedItemToR2(data) {
+  entityCodeableConcept: data.entityCodeableConcept
+  entityReference: datatypes::R3ReferenceToR2(data.entityReference)
+  identifier: data.identifier
+  effectiveTime: data.effectiveTime
+  quantity: data.quantity
+  unitPrice: datatypes::MoneyToQuantity(data.unitPrice)
+  factor: data.factor
+  points: data.points
+  net: datatypes::MoneyToQuantity(data.net)
+}
+
+def R2Contract_FriendlyToR3(data) {
+  contentAttachment: data.contentAttachment
+  contentReference: datatypes::R2ReferenceToR3(data.contentReference)
+}
+
+def R3Contract_FriendlyToR2(data) {
+  contentAttachment: data.contentAttachment
+  contentReference: datatypes::R3ReferenceToR2(data.contentReference)
+}

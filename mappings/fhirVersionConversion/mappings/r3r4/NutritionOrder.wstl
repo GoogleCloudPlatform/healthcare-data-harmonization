@@ -1,0 +1,49 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def NutritionOrderBase(nutritionOrder) {
+  resourcebase::ResourceBase(nutritionOrder)
+  identifier: nutritionOrder.identifier
+  dateTime: nutritionOrder.dateTime
+  foodPreferenceModifier: nutritionOrder.foodPreferenceModifier
+  excludeFoodModifier: nutritionOrder.excludeFoodModifier
+  oralDiet: nutritionOrder.oralDiet
+  supplement: nutritionOrder.supplement
+}
+
+def R3NutritionOrderToR4(nutritionOrder) {
+  NutritionOrderBase(nutritionOrder)
+  contained: datatypes::R3ResourceToR4(nutritionOrder.contained[])
+  allergyIntolerance: datatypes::R3ReferenceToR4(nutritionOrder.allergyIntolerance[])
+  patient: datatypes::R3ReferenceToR4(nutritionOrder.patient)
+  encounter: datatypes::R3ReferenceToR4(nutritionOrder.encounter)
+  instantiatesCanonical: extension::fetchCanonicalArray("https://www.hl7.org/fhir/R4/nutritionorder-definitions.html#NutritionOrder.instantiatesCanonical", nutritionOrder.extension)
+  instantiatesUri: extension::fetchUriArray("https://www.hl7.org/fhir/R4/nutritionorder-definitions.html#NutritionOrder.instantiatesUri", nutritionOrder.extension)
+  instantiates: extension::fetchUriArray("https://www.hl7.org/fhir/R4/nutritionorder-definitions.html#NutritionOrder.instantiates", nutritionOrder.extension)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/R4/nutritionorder-definitions.html#NutritionOrder.status", nutritionOrder.extension)
+  status: if status? then status else nutritionOrder.status
+  intent: extension::fetchCode("https://www.hl7.org/fhir/R4/nutritionorder-definitions.html#NutritionOrder.intent", nutritionOrder.extension)
+  orderer: datatypes::R3ReferenceToR4(nutritionOrder.orderer)
+  enteralFormula: nutritionOrder.enteralFormula
+  note: extension::fetchAnnotationArray("https://www.hl7.org/fhir/R4/nutritionorder-definitions.html#NutritionOrder.note", nutritionOrder.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/nutritionorder-definitions.html#NutritionOrder.status", nutritionOrder.status)
+}
+
+def R4NutritionOrderToR3(nutritionOrder) {
+  NutritionOrderBase(nutritionOrder)
+  contained: datatypes::R4ResourceToR3(nutritionOrder.contained[])
+  allergyIntolerance: datatypes::R4ReferenceToR3(nutritionOrder.allergyIntolerance[])
+  patient: datatypes::R4ReferenceToR3(nutritionOrder.patient)
+  encounter: datatypes::R4ReferenceToR3(nutritionOrder.encounter)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/nutritionorder-definitions.html#NutritionOrder.status", nutritionOrder.extension)
+  status: if status? then status else nutritionOrder.status
+  orderer: datatypes::R4ReferenceToR3(nutritionOrder.orderer)
+  enteralFormula: nutritionOrder.enteralFormula
+  extension[]: extension::BuildCanonicalExtension("https://www.hl7.org/fhir/R4/nutritionorder-definitions.html#NutritionOrder.instantiatesCanonical", nutritionOrder.instantiatesCanonical[])
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/R4/nutritionorder-definitions.html#NutritionOrder.instantiatesUri", nutritionOrder.instantiatesUri[])
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/R4/nutritionorder-definitions.html#NutritionOrder.instantiates", nutritionOrder.instantiates[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/nutritionorder-definitions.html#NutritionOrder.intent", nutritionOrder.intent)
+  extension[]: extension::BuildAnnotationExtension("https://www.hl7.org/fhir/R4/nutritionorder-definitions.html#NutritionOrder.note", nutritionOrder.note[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/nutritionorder-definitions.html#NutritionOrder.status", nutritionOrder.status)
+}

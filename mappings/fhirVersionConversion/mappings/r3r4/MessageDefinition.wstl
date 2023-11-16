@@ -1,0 +1,104 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def MessageDefinitionBase(messageDefinition) {
+  resourcebase::ResourceBase(messageDefinition)
+  url: messageDefinition.url
+  version: messageDefinition.version
+  name: messageDefinition.name
+  title: messageDefinition.title
+  date: messageDefinition.date
+  publisher: messageDefinition.publisher
+  contact: messageDefinition.contact
+  description: messageDefinition.description
+  useContext: messageDefinition.useContext
+  jurisdiction: messageDefinition.jurisdiction
+  purpose: messageDefinition.purpose
+  copyright: messageDefinition.copyright
+}
+
+def R3MessageDefinitionToR4(messageDefinition) {
+  MessageDefinitionBase(messageDefinition)
+  contained: datatypes::R3ResourceToR4(messageDefinition.contained[])
+  identifier: R3MessageDefinition_IdentifierToR4("https://www.hl7.org/fhir/R4/messagedefinition-definitions.html#MessageDefinition.identifier", messageDefinition.extension, messageDefinition.identifier)
+  status: messageDefinition.status
+  experimental: messageDefinition.experimental
+  base: datatypes::ReferenceToCanonical(messageDefinition.base)
+  parent: datatypes::ReferenceToCanonical(messageDefinition.parent[])
+  replaces: datatypes::ReferenceToCanonical(messageDefinition.replaces[])
+  eventCoding: messageDefinition.event
+  eventUri: extension::fetchUri("https://www.hl7.org/fhir/R4/messagedefinition-definitions.html#MessageDefinition.eventUri", messageDefinition.extension)
+  category: messageDefinition.category
+  focus: R3MessageDefinition_FocusToR4(messageDefinition.focus[])
+  responseRequired: R3MessageDefinition_ResponseRequiredToR4(messageDefinition.responseRequired)
+  allowedResponse: R3MessageDefinition_AllowedResponseToR4(messageDefinition.allowedResponse[])
+  graph: extension::fetchCanonicalArray("https://www.hl7.org/fhir/R4/messagedefinition-definitions.html#MessageDefinition.graph", messageDefinition.extension)
+}
+
+def R4MessageDefinitionToR3(messageDefinition) {
+  MessageDefinitionBase(messageDefinition)
+  contained: datatypes::R4ResourceToR3(messageDefinition.contained[])
+  identifier: messageDefinition.identifier[0]
+  status: messageDefinition.status
+  experimental: messageDefinition.experimental
+  base: datatypes::CanonicalToReference(messageDefinition.base)
+  parent: datatypes::CanonicalToReference(messageDefinition.parent[])
+  replaces: datatypes::CanonicalToReference(messageDefinition.replaces[])
+  event: messageDefinition.eventCoding
+  category: messageDefinition.category
+  focus: R4MessageDefinition_FocusToR3(messageDefinition.focus[])
+  responseRequired: R4MessageDefinition_ResponseRequiredToR3(messageDefinition.responseRequired)
+  allowedResponse: R4MessageDefinition_AllowedResponseToR3(messageDefinition.allowedResponse[])
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/R4/messagedefinition-definitions.html#MessageDefinition.identifier", messageDefinition.identifier[])
+  extension[]: extension::BuildCanonicalExtension("https://www.hl7.org/fhir/R4/messagedefinition-definitions.html#MessageDefinition.graph", messageDefinition.graph[])
+}
+
+def R3MessageDefinition_IdentifierToR4(url, extension, data) {
+  var identifier: extension::fetchIdentifierArray(url, extension)
+  if identifier then {
+    identifier
+  } else {
+    arrayOf(data)
+  }
+}
+
+def R3MessageDefinition_FocusToR4(data) {
+  code: utilities::Convert_TerminologyCode(data.code, "http://hl7.org/fhir/resource-types", "ResourceTypes_r3r4")
+  profile: datatypes::ReferenceToCanonical(data.profile)
+  min: data.min
+  max: data.max
+}
+
+def R4MessageDefinition_FocusToR3(data) {
+  code: data.code
+  profile: datatypes::CanonicalToReference(data.profile)
+  min: data.min
+  max: data.max
+}
+
+def R3MessageDefinition_ResponseRequiredToR4(data) {
+  if data then {
+    "always"
+  } else {
+    "never"
+  }
+}
+
+def R4MessageDefinition_ResponseRequiredToR3(data) {
+  if data == "always" then {
+    true
+  } else {
+    false
+  }
+}
+
+def R3MessageDefinition_AllowedResponseToR4(data) {
+  message: datatypes::ReferenceToCanonical(data.message)
+  situation: data.situation
+}
+
+def R4MessageDefinition_AllowedResponseToR3(data) {
+  message: datatypes::CanonicalToReference(data.message)
+  situation: data.situation
+}

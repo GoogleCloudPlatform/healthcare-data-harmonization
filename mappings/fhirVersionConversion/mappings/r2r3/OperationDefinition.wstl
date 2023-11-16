@@ -1,0 +1,93 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def OperationDefinitionBase(operationDefinition) {
+  resourcebase::ResourceBase(operationDefinition)
+  url: operationDefinition.url
+  version: operationDefinition.version
+  name: operationDefinition.name
+  kind: operationDefinition.kind
+  date: operationDefinition.date
+  publisher: operationDefinition.publisher
+  idempotent: operationDefinition.idempotent
+  code: operationDefinition.code
+  system: operationDefinition.system
+  instance: operationDefinition.instance
+}
+
+def R2OperationDefinitionToR3(operationDefinition) {
+  OperationDefinitionBase(operationDefinition)
+  contained: datatypes::R2ResourceToR3(operationDefinition.contained[])
+  base: datatypes::R2ReferenceToR3(operationDefinition.base)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/operationdefinition-definitions.html#OperationDefinition.status", operationDefinition.extension)
+  status: if status? then status else operationDefinition.status
+  experimental: operationDefinition.experimental
+  contact: extension::fetchContactDetailArray("https://www.hl7.org/fhir/STU3/operationdefinition-definitions.html#OperationDefinition.contact", operationDefinition.extension)
+  description: operationDefinition.description
+  useContext: extension::fetchUsageContextArray("https://www.hl7.org/fhir/STU3/operationdefinition-definitions.html#OperationDefinition.useContext", operationDefinition.extension)
+  jurisdiction: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/operationdefinition-definitions.html#OperationDefinition.jurisdiction", operationDefinition.extension)
+  purpose: operationDefinition.requirements
+  comment: operationDefinition.notes
+  resource: operationDefinition.type
+  type: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/operationdefinition-definitions.html#OperationDefinition.type", operationDefinition.extension)
+  parameter: R2OperationDefinition_ParameterToR3(operationDefinition.parameter[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/operationdefinition-definitions.html#OperationDefinition.status", operationDefinition.status)
+}
+
+def R3OperationDefinitionToR2(operationDefinition) {
+  OperationDefinitionBase(operationDefinition)
+  contained: datatypes::R3ResourceToR2(operationDefinition.contained[])
+  base: datatypes::R3ReferenceToR2(operationDefinition.base)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/operationdefinition-definitions.html#OperationDefinition.status", operationDefinition.extension)
+  status: if status? then status else operationDefinition.status
+  experimental: operationDefinition.experimental
+  description: operationDefinition.description
+  requirements: operationDefinition.purpose
+  notes: operationDefinition.comment
+  type: operationDefinition.resource
+  parameter: R3OperationDefinition_ParameterToR2(operationDefinition.parameter[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/operationdefinition-definitions.html#OperationDefinition.status", operationDefinition.status)
+  extension[]: extension::BuildContactDetail("https://www.hl7.org/fhir/STU3/operationdefinition-definitions.html#OperationDefinition.contact", operationDefinition.contact[])
+  extension[]: extension::BuildBase64BinaryExtension("https://www.hl7.org/fhir/STU3/operationdefinition-definitions.html#OperationDefinition.useContext", operationDefinition.useContext[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/operationdefinition-definitions.html#OperationDefinition.jurisdiction", operationDefinition.jurisdiction[])
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/operationdefinition-definitions.html#OperationDefinition.type", operationDefinition.type)
+}
+
+def R2OperationDefinition_ParameterToR3(data) {
+  name: data.name
+  use: data.use
+  min: data.min
+  max: data.max
+  documentation: data.documentation
+  type: extension::fetchCode("https://www.hl7.org/fhir/STU3/operationdefinition-definitions.html#OperationDefinition.parameter.type", data.extension)
+  searchType: extension::fetchCode("https://www.hl7.org/fhir/STU3/operationdefinition-definitions.html#OperationDefinition.parameter.searchType", data.extension)
+  profile: datatypes::R2ReferenceToR3(data.profile)
+  binding: R2OperationDefinition_Parameter_BindingToR3(data.binding)
+  part: data.part
+}
+
+def R3OperationDefinition_ParameterToR2(data) {
+  name: data.name
+  use: data.use
+  min: data.min
+  max: data.max
+  documentation: data.documentation
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/operationdefinition-definitions.html#OperationDefinition.parameter.type", data.type)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/operationdefinition-definitions.html#OperationDefinition.parameter.searchType", data.searchType)
+  profile: datatypes::R3ReferenceToR2(data.profile)
+  binding: R3OperationDefinition_Parameter_BindingToR2(data.binding)
+  part: data.part
+}
+
+def R2OperationDefinition_Parameter_BindingToR3(data) {
+  strength: data.strength
+  valueSetUri: data.valueSetUri
+  valueSetReference: datatypes::R2ReferenceToR3(data.valueSetReference)
+}
+
+def R3OperationDefinition_Parameter_BindingToR2(data) {
+  strength: data.strength
+  valueSetUri: data.valueSetUri
+  valueSetReference: datatypes::R3ReferenceToR2(data.valueSetReference)
+}

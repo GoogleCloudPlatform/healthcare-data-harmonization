@@ -1,0 +1,64 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def MedicationBase(medication) {
+  resourcebase::ResourceBase(medication)
+  code: medication.code
+  isBrand: medication.isBrand
+}
+
+def R2MedicationToR3(medication) {
+  MedicationBase(medication)
+  contained: datatypes::R2ResourceToR3(medication.contained[])
+  manufacturer: datatypes::R2ReferenceToR3(medication.manufacturer)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/medication-definitions.html#Medication.status", medication.extension)
+  status: if status? then status else medication.status
+  isOverTheCounter: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/medication-definitions.html#Medication.isOverTheCounter", medication.extension)
+  form: medication.product.form
+  ingredient: R2Medication_IngredientToR3(medication.product.ingredient[])
+  'package'.container: medication.'package'.container
+  'package'.content: R2Medication_package_ContentToR3(medication.'package'.content[])
+  'package'.batch: medication.product.batch
+  image: extension::fetchAttachmentArray("https://www.hl7.org/fhir/STU3/medication-definitions.html#Medication.image", medication.extension)
+}
+
+def R3MedicationToR2(medication) {
+  MedicationBase(medication)
+  contained: datatypes::R3ResourceToR2(medication.contained[])
+  manufacturer: datatypes::R3ReferenceToR2(medication.manufacturer)
+  product.form: medication.form
+  product.ingredient: R3Medication_IngredientToR2(medication.ingredient[])
+  product.batch: medication.'package'.batch
+  'package'.container: medication.'package'.container
+  'package'.content: R3Medication_Package_ContentToR2(medication.'package'.content[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/medication-definitions.html#Medication.status", medication.status)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/medication-definitions.html#Medication.isOverTheCounter", medication.isOverTheCounter)
+  extension[]: extension::BuildAttachmentExtension("https://www.hl7.org/fhir/STU3/medication-definitions.html#Medication.image", medication.image[])
+}
+
+def R2Medication_IngredientToR3(data) {
+  itemCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/medication-definitions.html#Medication.ingredient.itemCodeableConcept", data.extension)
+  itemReference: datatypes::R2ReferenceToR3(data.item)
+  isActive: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/medication-definitions.html#Medication.ingredient.isActive", data.extension)
+  amount: data.amount
+}
+
+def R3Medication_IngredientToR2(data) {
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/medication-definitions.html#Medication.ingredient.itemCodeableConcept", data.itemCodeableConcept)
+  item: datatypes::R3ReferenceToR2(data.itemReference)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/medication-definitions.html#Medication.ingredient.isActive", data.isActive)
+  amount: data.amount
+}
+
+def R2Medication_Package_ContentToR3(data) {
+  itemCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/medication-definitions.html#Medication.package.content.itemCodeableConcept", data.extension)
+  itemReference: datatypes::R2ReferenceToR3(data.item)
+  amount: data.amount
+}
+
+def R3Medication_Package_ContentToR2(data) {
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/medication-definitions.html#Medication.package.content.itemCodeableConcept", data.itemCodeableConcept)
+  item: datatypes::R3ReferenceToR2(data.itemReference)
+  amount: data.amount
+}

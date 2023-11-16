@@ -1,0 +1,62 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def HealthcareServiceBase(healthcareService) {
+  resourcebase::ResourceBase(healthcareService)
+  identifier: healthcareService.identifier
+  comment: healthcareService.comment
+  extraDetails: healthcareService.extraDetails
+  photo: healthcareService.photo
+  telecom: healthcareService.telecom
+  serviceProvisionCode: healthcareService.serviceProvisionCode
+  eligibility: healthcareService.eligibility
+  eligibilityNote: healthcareService.eligibilityNote
+  programName: healthcareService.programName
+  characteristic: healthcareService.characteristic
+  referralMethod: healthcareService.referralMethod
+  appointmentRequired: healthcareService.appointmentRequired
+  availableTime: healthcareService.availableTime
+  notAvailable: healthcareService.notAvailable
+  availabilityExceptions: healthcareService.availabilityExceptions
+}
+
+def R2HealthcareServiceToR3(healthcareService) {
+  HealthcareServiceBase(healthcareService)
+  contained: datatypes::R2ResourceToR3(healthcareService.contained[])
+  coverageArea: datatypes::R2ReferenceToR3(healthcareService.coverageArea[])
+  providedBy: datatypes::R2ReferenceToR3(healthcareService.providedBy)
+  active: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/healthcareservice-definitions.html#HealthcareService.active", healthcareService.extension)
+  category: healthcareService.serviceCategory
+  type: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/healthcareservice-definitions.html#HealthcareService.type", healthcareService.extension)
+  specialty: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/healthcareservice-definitions.html#HealthcareService.specialty", healthcareService.extension)
+  location: R2HealthcareService_LocationToR3("https://www.hl7.org/fhir/STU3/healthcareservice-definitions.html#HealthcareService.location", healthcareService.extension, datatypes::R2ReferenceToR3(healthcareService.location))
+  name: healthcareService.serviceName
+  endpoint: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/healthcareservice-definitions.html#HealthcareService.endpoint", healthcareService.extension)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/DSTU2/healthcareservice-definitions.html#HealthcareService.publicKey", healthcareService.publicKey)
+}
+
+def R3HealthcareServiceToR2(healthcareService) {
+  HealthcareServiceBase(healthcareService)
+  contained: datatypes::R3ResourceToR2(healthcareService.contained[])
+  coverageArea: datatypes::R3ReferenceToR2(healthcareService.coverageArea[])
+  providedBy: datatypes::R3ReferenceToR2(healthcareService.providedBy)
+  serviceCategory: healthcareService.category
+  location: datatypes::R3ReferenceToR2(healthcareService.location[0])
+  serviceName: healthcareService.name
+  publicKey: extension::fetchString("https://www.hl7.org/fhir/DSTU2/healthcareservice-definitions.html#HealthcareService.publicKey", healthcareService.extension)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/healthcareservice-definitions.html#HealthcareService.active", healthcareService.active)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/healthcareservice-definitions.html#HealthcareService.type", healthcareService.type[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/healthcareservice-definitions.html#HealthcareService.specialty", healthcareService.specialty[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/healthcareservice-definitions.html#HealthcareService.endpoint", healthcareService.endpoint[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/healthcareservice-definitions.html#HealthcareService.location", healthcareService.location[])
+}
+
+def R2HealthcareService_LocationToR3(url, extension, data) {
+  var location: extension::fetchReferenceArray(url, extension)
+  if location then {
+    location
+  } else {
+    arrayOf(data)
+  }
+}

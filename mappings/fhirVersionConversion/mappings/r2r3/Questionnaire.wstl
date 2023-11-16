@@ -1,0 +1,93 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def QuestionnaireBase(questionnaire) {
+  resourcebase::ResourceBase(questionnaire)
+  identifier: questionnaire.identifier
+  version: questionnaire.version
+  date: questionnaire.date
+  publisher: questionnaire.publisher
+  subjectType: questionnaire.subjectType
+}
+
+def R2QuestionnaireToR3(questionnaire) {
+  QuestionnaireBase(questionnaire)
+  contained: datatypes::R2ResourceToR3(questionnaire.contained[])
+  url: extension::fetchUri("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.url", questionnaire.extension)
+  name: extension::fetchString("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.name", questionnaire.extension)
+  title: extension::fetchString("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.title", questionnaire.extension)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.status", questionnaire.extension)
+  status: if status? then status else questionnaire.status
+  experimental: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.experimental", questionnaire.extension)
+  description: extension::fetchMarkdown("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.description", questionnaire.extension)
+  purpose: extension::fetchMarkdown("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.purpose", questionnaire.extension)
+  approvalDate: extension::fetchDate("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.approvalDate", questionnaire.extension)
+  lastReviewDate: extension::fetchDate("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.lastReviewDate", questionnaire.extension)
+  effectivePeriod: extension::fetchPeriod("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.effectivePeriod", questionnaire.extension)
+  useContext: extension::fetchUsageContextArray("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.useContext", questionnaire.extension)
+  jurisdiction: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.jurisdiction", questionnaire.extension)
+  contact: extension::fetchContactDetailArray("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.contact", questionnaire.extension)
+  copyright: extension::fetchMarkdown("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.copyright", questionnaire.extension)
+  code: extension::fetchCodingArray("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.code", questionnaire.extension)
+  item[]: R2Questionnaire_ItemToR3(questionnaire.group)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/questionnaire-definitions.html#Questionnaire.status", questionnaire.status)
+  extension[]: extension::BuildContactPointExtension("https://www.hl7.org/fhir/DSTU2/questionnaire-definitions.html#Questionnaire.telecom", questionnaire.telecom[])
+}
+
+def R3QuestionnaireToR2(questionnaire) {
+  QuestionnaireBase(questionnaire)
+  contained: datatypes::R3ResourceToR2(questionnaire.contained[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/questionnaire-definitions.html#Questionnaire.status", questionnaire.extension)
+  status: if status? then status else questionnaire.status
+  telecom: extension::fetchContactPointArray("https://www.hl7.org/fhir/DSTU2/questionnaire-definitions.html#Questionnaire.telecom", questionnaire.extension)
+  group: R3Questionnaire_ItemToR2(questionnaire.item[0])
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/STU3/ques
+  tionnaire-definitions.html#Questionnaire.url", questionnaire.url)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.name", questionnaire.name)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.title", questionnaire.title)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.status", questionnaire.status)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.experimental", questionnaire.experimental)
+  extension[]: extension::BuildMarkdownExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.description", questionnaire.description)
+  extension[]: extension::BuildMarkdownExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.purpose", questionnaire.purpose)
+  extension[]: extension::BuildDateExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.approvalDate", questionnaire.approvalDate)
+  extension[]: extension::BuildDateExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.lastReviewDate", questionnaire.lastReviewDate)
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.effectivePeriod", questionnaire.effectivePeriod)
+  extension[]: extension::BuildUsageContextExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.useContext", questionnaire.useContext[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.jurisdiction", questionnaire.jurisdiction[])
+  extension[]: extension::BuildContactDetailExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.contact", questionnaire.contact[])
+  extension[]: extension::BuildMarkdownExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.copyright", questionnaire.copyright)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.code", questionnaire.code[])
+}
+
+def R2Questionnaire_ItemToR3(data) {
+  linkId: data.linkId
+  definition: extension::fetchUri("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.definition", data.extension)
+  code: data.concept
+  prefix: extension::fetchString("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.prefix", data.extension)
+  text: data.text
+  type: extension::fetchCode("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.type", data.extension)
+  'required': data.'required'
+  repeats: data.repeats
+  readOnly: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.readOnly", data.extension)
+  maxLength: extension::fetchInteger("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.maxLength", data.extension)
+  options: datatypes::R2ReferenceToR3(data.options)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/questionnaire-definitions.html#Questionnaire.group.question.type", data.type)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/questionnaire-definitions.html#Questionnaire.group.question.option", data.'option'[])
+}
+
+def R3Questionnaire_ItemToR2(data) {
+  linkId: data.linkId
+  concept: data.code
+  text: data.text
+  type: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/questionnaire-definitions.html#Questionnaire.group.question.type", data.extension)
+  'required': data.'required'
+  repeats: data.repeats
+  options: datatypes::R3ReferenceToR2(data.options)
+  'option': extension::fetchCodingArray("https://www.hl7.org/fhir/DSTU2/questionnaire-definitions.html#Questionnaire.group.question.option", data.extension)
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.definition", data.definition)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.prefix", data.prefix)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.type", data.type)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.readOnly", data.readOnly)
+  extension[]: extension::BuildIntegerExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.maxLength", data.maxLength)
+}

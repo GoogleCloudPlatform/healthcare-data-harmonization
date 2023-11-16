@@ -1,0 +1,90 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   list : FHIR List resource
+//
+// Output(s):
+//   FHIR List Resource
+//
+def ListBase(list) {
+  resourcebase::ResourceBase(list)
+  identifier: list.identifier
+  title: list.title
+  code: list.code
+  date: list.date
+  orderedBy: list.orderedBy
+  note: list.note
+  emptyReason: list.emptyReason
+}
+
+// Description: Converts a FHIR STU3 List resource to FHIR R4 List resource.
+//
+// Argument(s):
+//   list : FHIR STU3 List resource https://www.hl7.org/fhir/stu3/list.html
+//
+// Output(s):
+//   FHIR R4 List Resource https://www.hl7.org/fhir/r4/list.html
+//
+def R3ListToR4(list) {
+  ListBase(list)
+  contained: datatypes::R3ResourceToR4(list.contained[])
+  subject: datatypes::R3ReferenceToR4(list.subject)
+  encounter: datatypes::R3ReferenceToR4(list.encounter)
+  status: list.status
+  mode: list.mode
+  source: datatypes::R3ReferenceToR4(list.source)
+  entry: R3List_EntryToR4(list.entry[])
+}
+
+// Description: Converts a FHIR R4 List resource to FHIR STU3 List resource.
+//
+// Argument(s):
+//   list : FHIR R4 List resource https://www.hl7.org/fhir/r4/list.html
+//
+// Output(s):
+//   FHIR STU3 List Resource https://www.hl7.org/fhir/stu3/list.html
+//
+def R4ListToR3(list) {
+  ListBase(list)
+  contained: datatypes::R4ResourceToR3(list.contained[])
+  subject: datatypes::R4ReferenceToR3(list.subject)
+  encounter: datatypes::R4ReferenceToR3(list.encounter)
+  status: list.status
+  mode: list.mode
+  source: datatypes::R4ReferenceToR3(list.source)
+  entry: R4List_EntryToR3(list.entry[])
+}
+
+// Description: Converts a FHIR STU3 List.Entry to FHIR R4 List.Entry.
+//
+// Argument(s):
+//   data : FHIR STU3 List.Entry http://hl7.org/fhir/STU3/list-definitions.html#List.entry
+//
+// Output(s):
+//   FHIR R4 List.Entry http://hl7.org/fhir/R4/list-definitions.html#List.entry
+//
+def R3List_EntryToR4(data) {
+  flag: data.flag
+  deleted: data.deleted
+  date: data.date
+  item: datatypes::R3ReferenceToR4(data.item)
+}
+
+// Description: Converts a FHIR R4 List.Entry to FHIR STU3 List.Entry.
+//
+// Argument(s):
+//   data : FHIR R4 List.Entry http://hl7.org/fhir/R4/list-definitions.html#List.entry
+//
+// Output(s):
+//   FHIR STU3 List.Entry http://hl7.org/fhir/STU3/list-definitions.html#List.entry
+//
+def R4List_EntryToR3(data) {
+  flag: data.flag
+  deleted: data.deleted
+  date: data.date
+  item: datatypes::R4ReferenceToR3(data.item)
+}

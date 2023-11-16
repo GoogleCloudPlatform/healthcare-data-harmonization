@@ -1,0 +1,36 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def DeviceComponentBase(deviceComponent) {
+  resourcebase::ResourceBase(deviceComponent)
+  identifier: deviceComponent.identifier
+  type: deviceComponent.type
+  measurementPrinciple: deviceComponent.measurementPrinciple
+}
+
+def R2DeviceComponentToR3(deviceComponent) {
+  DeviceComponentBase(deviceComponent)
+  contained: datatypes::R2ResourceToR3(deviceComponent.contained[])
+  source: datatypes::R2ReferenceToR3(deviceComponent.source)
+  parent: datatypes::R2ReferenceToR3(deviceComponent.parent)
+  lastSystemChange: deviceComponent.lastSystemChange
+  operationalStatus: deviceComponent.operationalStatus
+  parameterGroup: deviceComponent.parameterGroup
+  productionSpecification: deviceComponent.productionSpecification
+  languageCode: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/devicecomponent-definitions.html#DeviceComponent.languageCode", deviceComponent.extension)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/devicecomponent-definitions.html#DeviceComponent.languageCode", deviceComponent.languageCode)
+}
+
+def R3DeviceComponentToR2(deviceComponent) {
+  DeviceComponentBase(deviceComponent)
+  contained: datatypes::R3ResourceToR2(deviceComponent.contained[])
+  source: datatypes::R3ReferenceToR2(deviceComponent.source)
+  parent: datatypes::R3ReferenceToR2(deviceComponent.parent)
+  lastSystemChange: deviceComponent.lastSystemChange
+  operationalStatus: deviceComponent.operationalStatus
+  parameterGroup: deviceComponent.parameterGroup
+  productionSpecification: deviceComponent.productionSpecification
+  languageCode: extension::fetchCodeableConcept("https://www.hl7.org/fhir/DSTU2/devicecomponent-definitions.html#DeviceComponent.languageCode", deviceComponent.extension)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/devicecomponent-definitions.html#DeviceComponent.languageCode", deviceComponent.languageCode)
+}

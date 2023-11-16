@@ -1,0 +1,55 @@
+{
+  "active": true,
+  "actor": [
+    {
+      "display": "Burgers UMC, South Wing, second floor",
+      "reference": "Location/1"
+    }
+  ],
+  "comment": "The slots attached to this schedule should be specialized to cover immunizations within the clinic",
+  "id": "example",
+  "identifier": [
+    {
+      "system": "http://example.org/scheduleid",
+      "use": "usual",
+      "value": "45"
+    }
+  ],
+  "planningHorizon": {
+    "end": "2013-12-25T09:30:00Z",
+    "start": "2013-12-25T09:15:00Z"
+  },
+  "resourceType": "Schedule",
+  "serviceCategory": {
+    "coding": [
+      {
+        "code": "17",
+        "display": "General Practice"
+      }
+    ]
+  },
+  "serviceType": [
+    {
+      "coding": [
+        {
+          "code": "57",
+          "display": "Immunization"
+        }
+      ]
+    }
+  ],
+  "specialty": [
+    {
+      "coding": [
+        {
+          "code": "408480009",
+          "display": "Clinical immunology"
+        }
+      ]
+    }
+  ],
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\n      Burgers UMC, South Wing, second floor Physiotherapy Schedule\n    \u003c/div\u003e",
+    "status": "generated"
+  }
+}

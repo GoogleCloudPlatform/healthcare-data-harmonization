@@ -1,0 +1,171 @@
+{
+  "category": {
+    "coding": [
+      {
+        "code": "inpatient",
+        "display": "Inpatient",
+        "system": "http://hl7.org/fhir/medication-admin-category"
+      }
+    ]
+  },
+  "contained": [
+    {
+      "form": {
+        "coding": [
+          {
+            "code": "385219001",
+            "display": "Injection Solution (qualifier value)",
+            "system": "http://snomed.info/sct"
+          }
+        ],
+        "text": "Injection Solution (qualifier value)"
+      },
+      "id": "med0317",
+      "ingredient": [
+        {
+          "amount": {
+            "denominator": {
+              "code": "mL",
+              "system": "http://unitsofmeasure.org",
+              "value": 1
+            },
+            "numerator": {
+              "code": "mEq",
+              "system": "http://unitsofmeasure.org",
+              "value": 2
+            }
+          },
+          "itemCodeableConcept": {
+            "coding": [
+              {
+                "code": "204520",
+                "display": "Potassium Chloride",
+                "system": "http://www.nlm.nih.gov/research/umls/rxnorm"
+              }
+            ]
+          }
+        },
+        {
+          "amount": {
+            "denominator": {
+              "code": "mL",
+              "system": "http://unitsofmeasure.org",
+              "value": 100
+            },
+            "numerator": {
+              "code": "g",
+              "system": "http://unitsofmeasure.org",
+              "value": 0.9
+            }
+          },
+          "itemCodeableConcept": {
+            "coding": [
+              {
+                "code": "313002",
+                "display": "Sodium Chloride 0.9% injectable solution",
+                "system": "http://www.nlm.nih.gov/research/umls/rxnorm"
+              }
+            ]
+          }
+        }
+      ],
+      "resourceType": "Medication"
+    }
+  ],
+  "context": {
+    "display": "encounter who leads to this prescription",
+    "reference": "Encounter/f001"
+  },
+  "dosage": {
+    "dose": {
+      "code": "mEq",
+      "system": "http://unitsofmeasure.org",
+      "unit": "mEq",
+      "value": 20
+    },
+    "method": {
+      "text": "Continuous infusion"
+    },
+    "rateRatio": {
+      "denominator": {
+        "code": "h",
+        "system": "http://unitsofmeasure.org",
+        "value": 1
+      },
+      "numerator": {
+        "code": "mL",
+        "system": "http://unitsofmeasure.org",
+        "value": 100
+      }
+    },
+    "route": {
+      "coding": [
+        {
+          "code": "47625008",
+          "display": "Intravenous route (qualifier value)",
+          "system": "http://snomed.info/sct"
+        }
+      ]
+    },
+    "site": {
+      "coding": [
+        {
+          "code": "6073002",
+          "display": "Structure of ligament of left superior vena cava",
+          "system": "http://snomed.info/sct"
+        }
+      ]
+    },
+    "text": "KCl 20 mEq in 1 L 0.9%NS IV at 100 ml/hr"
+  },
+  "effectivePeriod": {
+    "end": "2015-01-15T14:30:00+01:00",
+    "start": "2015-01-15T04:30:00+01:00"
+  },
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.category",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "inpatient",
+            "display": "Inpatient",
+            "system": "http://hl7.org/fhir/medication-admin-category"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/medicationadministration-definitions.html#MedicationAdministration.status",
+      "valueCode": "completed"
+    }
+  ],
+  "id": "medadmin0302",
+  "medicationReference": {
+    "reference": "#med0317"
+  },
+  "prescription": {
+    "reference": "MedicationRequest/medrx0322"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "code": "b",
+          "display": "Given as Ordered",
+          "system": "http://hl7.org/fhir/reason-medication-given"
+        }
+      ]
+    }
+  ],
+  "resourceType": "MedicationAdministration",
+  "status": "completed",
+  "subject": {
+    "display": "Donald Duck",
+    "reference": "Patient/pat1"
+  },
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\u003cp\u003e\u003cb\u003eGenerated Narrative with Details\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eid\u003c/b\u003e: medadmin0302\u003c/p\u003e\u003cp\u003e\u003cb\u003econtained\u003c/b\u003e: \u003c/p\u003e\u003cp\u003e\u003cb\u003edefinition\u003c/b\u003e: \u003ca\u003ePlanDefinition/KDN5\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003epartOf\u003c/b\u003e: \u003ca\u003eProcedure/biopsy\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003estatus\u003c/b\u003e: completed\u003c/p\u003e\u003cp\u003e\u003cb\u003ecategory\u003c/b\u003e: Inpatient \u003cspan\u003e(Details : {http://hl7.org/fhir/medication-admin-category code 'inpatient' = 'Inpatient', given as 'Inpatient'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003emedication\u003c/b\u003e: id: med0317; Injection Solution (qualifier value) \u003cspan\u003e(Details : {SNOMED CT code '385219001' = 'Injection solution', given as 'Injection Solution (qualifier value)'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003esubject\u003c/b\u003e: \u003ca\u003eDonald Duck\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003econtext\u003c/b\u003e: \u003ca\u003eencounter who leads to this prescription\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eeffective\u003c/b\u003e: 15/01/2015 4:30:00 AM --\u0026gt; 15/01/2015 2:30:00 PM\u003c/p\u003e\u003ch3\u003ePerformers\u003c/h3\u003e\u003ctable\u003e\u003ctr\u003e\u003ctd\u003e-\u003c/td\u003e\u003ctd\u003e\u003cb\u003eActor\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eOnBehalfOf\u003c/b\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e*\u003c/td\u003e\u003ctd\u003e\u003ca\u003ePatrick Pump\u003c/a\u003e\u003c/td\u003e\u003ctd\u003e\u003ca\u003eOrganization/f002\u003c/a\u003e\u003c/td\u003e\u003c/tr\u003e\u003c/table\u003e\u003cp\u003e\u003cb\u003ereasonCode\u003c/b\u003e: Given as Ordered \u003cspan\u003e(Details : {http://hl7.org/fhir/reason-medication-given code 'b' = 'Given as Ordered', given as 'Given as Ordered'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eprescription\u003c/b\u003e: \u003ca\u003eMedicationRequest/medrx0322\u003c/a\u003e\u003c/p\u003e\u003ch3\u003eDosages\u003c/h3\u003e\u003ctable\u003e\u003ctr\u003e\u003ctd\u003e-\u003c/td\u003e\u003ctd\u003e\u003cb\u003eText\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eSite\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eRoute\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eMethod\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eDose\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eRate[x]\u003c/b\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e*\u003c/td\u003e\u003ctd\u003eKCl 20 mEq in 1 L 0.9%NS IV at 100 ml/hr\u003c/td\u003e\u003ctd\u003eStructure of ligament of left superior vena cava \u003cspan\u003e(Details : {SNOMED CT code '6073002' = 'Ligament of left superior vena cava', given as 'Structure of ligament of left superior vena cava'})\u003c/span\u003e\u003c/td\u003e\u003ctd\u003eIntravenous route (qualifier value) \u003cspan\u003e(Details : {SNOMED CT code '47625008' = 'Intravenous route', given as 'Intravenous route (qualifier value)'})\u003c/span\u003e\u003c/td\u003e\u003ctd\u003eContinuous infusion \u003cspan\u003e(Details )\u003c/span\u003e\u003c/td\u003e\u003ctd\u003e20 mEq\u003cspan\u003e (Details: UCUM code mEq = 'mEq')\u003c/span\u003e\u003c/td\u003e\u003ctd\u003e100 mL\u003cspan\u003e (Details: UCUM code mL = 'mL')\u003c/span\u003e/1 h\u003cspan\u003e (Details: UCUM code h = 'h')\u003c/span\u003e\u003c/td\u003e\u003c/tr\u003e\u003c/table\u003e\u003c/div\u003e",
+    "status": "generated"
+  }
+}

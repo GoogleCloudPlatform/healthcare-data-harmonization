@@ -1,0 +1,161 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "proposed",
+          "display": "Proposed",
+          "target": [
+            {
+              "code": "proposed",
+              "display": "Proposed",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "accepted",
+          "display": "Accepted",
+          "target": [
+            {
+              "code": "accepted",
+              "display": "Accepted",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "planned",
+          "display": "Planned",
+          "target": [
+            {
+              "code": "planned",
+              "display": "Planned",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "in-progress",
+          "display": "In Progress",
+          "target": [
+            {
+              "code": "active",
+              "display": "Active",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "sustaining",
+          "display": "Sustaining",
+          "target": [
+            {
+              "code": "active",
+              "display": "Active",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "on-target",
+          "display": "On Target",
+          "target": [
+            {
+              "code": "active",
+              "display": "Active",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ahead-of-target",
+          "display": "Ahead of Target",
+          "target": [
+            {
+              "code": "active",
+              "display": "Active",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "behind-target",
+          "display": "Behind Target",
+          "target": [
+            {
+              "code": "active",
+              "display": "Active",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "on-hold",
+          "display": "On Hold",
+          "target": [
+            {
+              "code": "on-hold",
+              "display": "On Hold",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "achieved",
+          "display": "Achieved",
+          "target": [
+            {
+              "code": "completed",
+              "display": "Completed",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "cancelled",
+          "display": "Cancelled",
+          "target": [
+            {
+              "code": "cancelled",
+              "display": "Cancelled",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "entered-in-error",
+          "display": "Entered in Error",
+          "target": [
+            {
+              "code": "entered-in-error",
+              "display": "Entered in Error",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "rejected",
+          "display": "Rejected",
+          "target": [
+            {
+              "code": "rejected",
+              "display": "Rejected",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/goal-status",
+      "target": "http://hl7.org/fhir/goal-status",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "entered-in-error",
+        "display": "Entered in Error"
+      }
+    }
+  ],
+  "id": "Goal_LifeCycleStatus",
+  "resourceType": "ConceptMap",
+  "version": "v2"
+}

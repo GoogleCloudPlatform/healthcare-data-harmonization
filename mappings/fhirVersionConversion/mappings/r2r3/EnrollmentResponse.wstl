@@ -1,0 +1,37 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def EnrollmentResponseBase(enrollmentResponse) {
+  resourcebase::ResourceBase(enrollmentResponse)
+  identifier: enrollmentResponse.identifier
+  disposition: enrollmentResponse.disposition
+  created: enrollmentResponse.created
+}
+
+def R2EnrollmentResponseToR3(enrollmentResponse) {
+  EnrollmentResponseBase(enrollmentResponse)
+  contained: datatypes::R2ResourceToR3(enrollmentResponse.contained[])
+  organization: datatypes::R2ReferenceToR3(enrollmentResponse.organization)
+  requestProvider: datatypes::R2ReferenceToR3(enrollmentResponse.requestProvider)
+  requestOrganization: datatypes::R2ReferenceToR3(enrollmentResponse.requestOrganization)
+  request: datatypes::R2ReferenceToR3(enrollmentResponse.request)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/enrollmentresponse-definitions.html#EnrollmentResponse.status", enrollmentResponse.extension)
+  status: if status? then status else enrollmentResponse.status
+  outcome: datatypes::CodeToCodeableConcept(enrollmentResponse.outcome)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/enrollmentresponse-definitions.html#EnrollmentResponse.ruleset", enrollmentResponse.ruleset)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/enrollmentresponse-definitions.html#EnrollmentResponse.originalRuleset", enrollmentResponse.originalRuleset)
+}
+
+def R3EnrollmentResponseToR2(enrollmentResponse) {
+  EnrollmentResponseBase(enrollmentResponse)
+  contained: datatypes::R3ResourceToR2(enrollmentResponse.contained[])
+  organization: datatypes::R3ReferenceToR2(enrollmentResponse.organization)
+  requestProvider: datatypes::R3ReferenceToR2(enrollmentResponse.requestProvider)
+  requestOrganization: datatypes::R3ReferenceToR2(enrollmentResponse.requestOrganization)
+  request: datatypes::R3ReferenceToR2(enrollmentResponse.request)
+  outcome: datatypes::CodeableConceptToCode(enrollmentResponse.outcome)
+  ruleset: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/enrollmentresponse-definitions.html#EnrollmentResponse.ruleset", enrollmentResponse.extension)
+  originalRuleset: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/enrollmentresponse-definitions.html#EnrollmentResponse.originalRuleset", enrollmentResponse.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/enrollmentresponse-definitions.html#EnrollmentResponse.status", enrollmentResponse.status)
+}

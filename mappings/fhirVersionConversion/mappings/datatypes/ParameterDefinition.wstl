@@ -1,0 +1,19 @@
+package datatypes
+
+// Description: Converts a FHIR STU3 ParameterDefinition to FHIR R4 ParameterDefinition.
+//
+// Argument(s):
+//   parameterDefinition : FHIR STU3 ParameterDefinition https://hl7.org/fhir/STU3/metadatatypes.html#ParameterDefinition
+//
+// Output(s):
+//   FHIR R4 ParameterDefinition https://hl7.org/fhir/R4/metadatatypes.html#ParameterDefinition
+//
+def R3ParameterDefinitionToR4(required parameterDefinition) {
+  name: parameterDefinition.name
+  use: parameterDefinition.use
+  min: parameterDefinition.min
+  max: parameterDefinition.max
+  documentation: parameterDefinition.documentation
+  type: utilities::Convert_TerminologyCode(parameterDefinition.type, "http://hl7.org/fhir/ValueSet/all-types", "FhirTypes_r3r4")
+  profile: datatypes::ReferenceToCanonical(parameterDefinition.profile)
+}

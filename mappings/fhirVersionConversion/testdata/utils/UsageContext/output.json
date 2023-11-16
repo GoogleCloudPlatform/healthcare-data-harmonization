@@ -1,0 +1,52 @@
+{
+  "extension": [
+    {
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#UsageContext.code",
+          "valueCoding": {
+            "code": "species",
+            "system": "http://hl7.org/fhir/usage-context-type"
+          }
+        },
+        {
+          "url": "https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#UsageContext.valueCodeableConcept",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "337915000",
+                "display": "Homo sapiens",
+                "system": "http://snomed.info/sct"
+              }
+            ]
+          }
+        }
+      ],
+      "url": "test_url"
+    },
+    {
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#UsageContext.code",
+          "valueCoding": {
+            "code": "species2",
+            "system": "http://hl7.org/fhir/usage-context-type"
+          }
+        },
+        {
+          "url": "https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#UsageContext.valueCodeableConcept",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "337915000",
+                "display": "Homo sapiens2",
+                "system": "http://snomed.info/sct"
+              }
+            ]
+          }
+        }
+      ],
+      "url": "test_url"
+    }
+  ]
+}

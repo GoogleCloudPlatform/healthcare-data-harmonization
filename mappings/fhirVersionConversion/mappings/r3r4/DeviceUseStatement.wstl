@@ -1,0 +1,66 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   deviceUseStatement : FHIR DeviceUseStatement resource
+//
+// Output(s):
+//   FHIR DeviceUseStatement Resource
+//
+def DeviceUseStatementBase(deviceUseStatement) {
+  resourcebase::ResourceBase(deviceUseStatement)
+  identifier: deviceUseStatement.identifier
+  timingTiming: deviceUseStatement.timingTiming
+  timingPeriod: deviceUseStatement.timingPeriod
+  timingDateTime: deviceUseStatement.timingDateTime
+  recordedOn: deviceUseStatement.recordedOn
+  bodySite: deviceUseStatement.bodySite
+  note: deviceUseStatement.note
+}
+
+// Description: Converts a FHIR STU3 DeviceUseStatement resource to FHIR R4 DeviceUseStatement resource.
+//
+// Argument(s):
+//   deviceUseStatement : FHIR STU3 DeviceUseStatement resource https://www.hl7.org/fhir/stu3/deviceUseStatement.html
+//
+// Output(s):
+//   FHIR R4 DeviceUseStatement Resource https://www.hl7.org/fhir/r4/deviceUseStatement.html
+//
+def R3DeviceUseStatementToR4(deviceUseStatement) {
+  DeviceUseStatementBase(deviceUseStatement)
+  contained: datatypes::R3ResourceToR4(deviceUseStatement.contained[])
+  device: datatypes::R3ReferenceToR4(deviceUseStatement.device)
+  subject: datatypes::R3ReferenceToR4(deviceUseStatement.subject)
+  basedOn: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/deviceusestatement-definitions.html#DeviceUseStatement.basedOn", deviceUseStatement.extension)
+  status: deviceUseStatement.status
+  derivedFrom: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/deviceusestatement-definitions.html#DeviceUseStatement.derivedFrom", deviceUseStatement.extension)
+  source: datatypes::R3ReferenceToR4(deviceUseStatement.source)
+  reasonCode: deviceUseStatement.indication
+  reasonReference: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/deviceusestatement-definitions.html#DeviceUseStatement.reasonReference", deviceUseStatement.extension)
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/STU3/deviceusestatement-definitions.html#DeviceUseStatement.whenUsed", deviceUseStatement.whenUsed)
+}
+
+// Description: Converts a FHIR R4 DeviceUseStatement resource to FHIR STU3 DeviceUseStatement resource.
+//
+// Argument(s):
+//   deviceUseStatement : FHIR R4 DeviceUseStatement resource https://www.hl7.org/fhir/r4/deviceUseStatement.html
+//
+// Output(s):
+//   FHIR STU3 DeviceUseStatement Resource https://www.hl7.org/fhir/stu3/deviceUseStatement.html
+//
+def R4DeviceUseStatementToR3(deviceUseStatement) {
+  DeviceUseStatementBase(deviceUseStatement)
+  contained: datatypes::R4ResourceToR3(deviceUseStatement.contained[])
+  device: datatypes::R4ReferenceToR3(deviceUseStatement.device)
+  subject: datatypes::R4ReferenceToR3(deviceUseStatement.subject)
+  status: deviceUseStatement.status
+  whenUsed: extension::fetchPeriod("https://www.hl7.org/fhir/STU3/deviceusestatement-definitions.html#DeviceUseStatement.whenUsed", deviceUseStatement.extension)
+  source: datatypes::R4ReferenceToR3(deviceUseStatement.source)
+  indication: deviceUseStatement.reasonCode
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/deviceusestatement-definitions.html#DeviceUseStatement.basedOn", deviceUseStatement.basedOn[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/deviceusestatement-definitions.html#DeviceUseStatement.derivedFrom", deviceUseStatement.basedOn[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/deviceusestatement-definitions.html#DeviceUseStatement.reasonReference", deviceUseStatement.reasonReference[])
+}

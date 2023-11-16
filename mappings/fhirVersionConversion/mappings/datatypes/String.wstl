@@ -1,0 +1,36 @@
+package datatypes
+
+// Description: Converts a String datatype to Canonical datatype
+//
+// Argument(s):
+//   string: FHIR String datatype https://www.hl7.org/fhir/datatypes.html#string
+//
+// Output(s):
+//   FHIR Canonical datatype https://www.hl7.org/fhir/datatypes.html#canonical
+//
+def StringToCanonical(required string) strJoin("-", split(string, " "))
+
+// Description: Converts a String datatype to CodeableConcept datatype
+//
+// Argument(s):
+//   string: FHIR String datatype https://www.hl7.org/fhir/datatypes.html#string
+//
+// Output(s):
+//   FHIR CodeableConcept datatype https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def StringToCodeableConcept(string) {
+  text: string
+}
+
+// Description: Converts a String datatype to Expression datatype
+//
+// Argument(s):
+//   string: FHIR String datatype https://www.hl7.org/fhir/datatypes.html#string
+//
+// Output(s):
+//   FHIR Expression datatype https://www.hl7.org/fhir/datatypes.html#expression
+//
+def StringToExpression(string) {
+  expression: string
+  language: "text/cql"
+}

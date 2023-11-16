@@ -1,0 +1,11 @@
+{
+  "extension": [
+    {
+      "url": "test_url",
+      "valueIdentifier": {
+        "use": "usual",
+        "system": "test_uri"
+      }
+    }
+  ]
+}

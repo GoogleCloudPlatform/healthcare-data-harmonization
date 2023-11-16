@@ -1,0 +1,251 @@
+import "test"
+import "./../mappings/r3r4/fhir_r3r4.wstl"
+
+// Runs all Test Functions in the current package.
+//
+// A Test Function is a function whose name starts with test_.
+// It must take no parameters. Upon failure, this method throws an exception.
+// Test functions loads input and output files and asserts the mappings output
+// (actualOutput) with the loaded output (expectedOutput).
+//
+test::runAll()
+
+// Tests fhir_r3r4::R3AccountToR4() function.
+def test_R3AccountToR4() testR3ResourceToR4("Account")
+
+// Tests fhir_r3r4::R3ActivityDefinitionToR4() function.
+def test_R3ActivityDefinitionToR4() testR3ResourceToR4("ActivityDefinition")
+
+// Tests fhir_r3r4::R3AdverseEventToR4() function.
+def test_R3AdverseEventToR4() testR3ResourceToR4("AdverseEvent")
+
+// Tests fhir_r3r4::R3AllergyIntoleranceToR4() function.
+def test_R3AllergyIntoleranceToR4() testR3ResourceToR4("AllergyIntolerance")
+
+// Tests fhir_r3r4::R3AppointmentToR4() function.
+def test_R3AppointmentToR4() testR3ResourceToR4("Appointment")
+
+// Tests fhir_r3r4::R3AppointmentResponseToR4() function.
+def test_R3AppointmentResponseToR4() testR3ResourceToR4("AppointmentResponse")
+
+// Tests fhir_r3r4::R3AuditEventToR4() function.
+def test_R3AuditEventToR4() testR3ResourceToR4("AuditEvent")
+
+// Tests fhir_r3r4::R3BasicToR4() function.
+def test_R3BasicToR4() testR3ResourceToR4("Basic")
+
+// Tests fhir_r3r4::R3BinaryToR4() function.
+def test_R3BinaryToR4() testR3ResourceToR4("Binary")
+
+// Tests fhir_r3r4::R3BodySiteToR4() function (converting from R3 BodySite to R4 BodyStructure resource).
+def test_R3BodySiteToR4() testR3ResourceToR4("BodySite")
+
+// Tests fhir_r3r4::R3BundleToR4() function.
+def test_R3BundleToR4() testR3ResourceToR4("Bundle")
+
+// Tests fhir_r3r4::R3CapabilityStatementToR4() function.
+def test_R3CapabilityStatementToR4() testR3ResourceToR4("CapabilityStatement")
+
+// Tests fhir_r3r4::R3CarePlanToR4() function.
+def test_R3CarePlanToR4() testR3ResourceToR4("CarePlan")
+
+// Tests fhir_r3r4::R3CareTeamToR4() function.
+def test_R3CareTeamToR4() testR3ResourceToR4("CareTeam")
+
+// Tests fhir_r3r4::R3ChargeItemToR4() function.
+def test_R3ChargeItemToR4() testR3ResourceToR4("ChargeItem")
+
+// Tests fhir_r3r4::R3ClaimToR4() function.
+def test_R3ClaimToR4() testR3ResourceToR4("Claim")
+
+// Tests fhir_r3r4::R3ClaimResponseToR4() function.
+def test_R3ClaimResponseToR4() testR3ResourceToR4("ClaimResponse")
+
+// Tests fhir_r3r4::R3ClinicalImpressionToR4() function.
+def test_R3ClinicalImpressionToR4() testR3ResourceToR4("ClinicalImpression")
+
+// Tests fhir_r3r4::R3CodeSystemToR4() function.
+def test_R3CodeSystemToR4() testR3ResourceToR4("CodeSystem")
+
+// Tests fhir_r3r4::R3CommunicationToR4() function.
+def test_R3CommunicationToR4() testR3ResourceToR4("Communication")
+
+// Tests fhir_r3r4::R3CommunicationRequestToR4() function.
+def test_R3CommunicationRequestToR4() testR3ResourceToR4("CommunicationRequest")
+
+// Tests fhir_r3r4::R3CompartmentDefinitionToR4() function.
+def test_R3CompartmentDefinitionToR4() testR3ResourceToR4("CompartmentDefinition")
+
+// Tests fhir_r3r4::R3CompositionToR4() function.
+def test_R3CompositionToR4() testR3ResourceToR4("Composition")
+
+// Tests fhir_r3r4::R3ConceptMapToR4() function.
+def test_R3ConceptMapToR4() testR3ResourceToR4("ConceptMap")
+
+// Tests fhir_r3r4::R3ConditionToR4() function.
+def test_R3ConditionToR4() testR3ResourceToR4("Condition")
+
+// Tests fhir_r3r4::R3ConsentToR4() function.
+def test_R3ConsentToR4() testR3ResourceToR4("Consent")
+
+// Tests fhir_r3r4::R3ContractToR4() function.
+def test_R3ContractToR4() testR3ResourceToR4("Contract")
+
+// Tests fhir_r3r4::R3CoverageToR4() function.
+def test_R3CoverageToR4() testR3ResourceToR4("Coverage")
+
+// Tests fhir_r3r4::R3DetectedIssueToR4() function.
+def test_R3DetectedIssueToR4() testR3ResourceToR4("DetectedIssue")
+
+// Tests fhir_r3r4::R3DeviceToR4() function.
+def test_R3DeviceToR4() testR3ResourceToR4("Device")
+
+// Tests fhir_r3r4::R3DeviceMetricToR4() function.
+def test_R3DeviceMetricToR4() testR3ResourceToR4("DeviceMetric")
+
+// Tests fhir_r3r4::R3DeviceRequestToR4() function.
+def test_R3DeviceRequestToR4() testR3ResourceToR4("DeviceRequest")
+
+// Tests fhir_r3r4::R3DeviceUseStatementToR4() function.
+def test_R3DeviceUseStatementToR4() testR3ResourceToR4("DeviceUseStatement")
+
+// Tests fhir_r3r4::R3DiagnosticReportToR4() function.
+def test_R3DiagnosticReportToR4() testR3ResourceToR4("DiagnosticReport")
+
+// Tests fhir_r3r4::R3DocumentManifestToR4() function.
+def test_R3DocumentManifestToR4() testR3ResourceToR4("DocumentManifest")
+
+// Tests fhir_r3r4::R3DocumentReferenceToR4() function.
+def test_R3DocumentReferenceToR4() testR3ResourceToR4("DocumentReference")
+
+// Tests fhir_r3r4::R3EncounterToR4() function.
+def test_R3EncounterToR4() testR3ResourceToR4("Encounter")
+
+// Tests fhir_r3r4::R3EndpointToR4() function.
+def test_R3EndpointToR4() testR3ResourceToR4("Endpoint")
+
+// Tests fhir_r3r4::R3EnrollmentRequestToR4() function.
+def test_R3EnrollmentRequestToR4() testR3ResourceToR4("EnrollmentRequest")
+
+// Tests fhir_r3r4::R3EnrollmentResponseToR4() function.
+def test_R3EnrollmentResponseToR4() testR3ResourceToR4("EnrollmentResponse")
+
+// Tests fhir_r3r4::R3EpisodeOfCareToR4() function.
+def test_R3EpisodeOfCareToR4() testR3ResourceToR4("EpisodeOfCare")
+
+// Tests fhir_r3r4::R3ExplanationOfBenefitToR4() function.
+def test_R3ExplanationOfBenefitToR4() testR3ResourceToR4("ExplanationOfBenefit")
+
+// Tests fhir_r3r4::R3FamilyMemberHistoryToR4() function.
+def test_R3FamilyMemberHistoryToR4() testR3ResourceToR4("FamilyMemberHistory")
+
+// Tests fhir_r3r4::R3FlagToR4() function.
+def test_R3FlagToR4() testR3ResourceToR4("Flag")
+
+// Tests fhir_r3r4::R3GoalToR4() function.
+def test_R3GoalToR4() testR3ResourceToR4("Goal")
+
+// Tests fhir_r3r4::R3GraphDefinitionToR4() function.
+def test_R3GraphDefinitionToR4() testR3ResourceToR4("GraphDefinition")
+
+// Tests fhir_r3r4::R3GroupToR4() function.
+def test_R3GroupToR4() testR3ResourceToR4("Group")
+
+// Tests fhir_r3r4::R3GuidanceResponseToR4() function.
+def test_R3GuidanceResponseToR4() testR3ResourceToR4("GuidanceResponse")
+
+// Tests fhir_r3r4::R3HealthcareServiceToR4() function.
+def test_R3HealthcareServiceToR4() testR3ResourceToR4("HealthcareService")
+
+// Tests fhir_r3r4::R3ImagingStudyToR4() function.
+def test_R3ImagingStudyToR4() testR3ResourceToR4("ImagingStudy")
+
+// Tests fhir_r3r4::R3ImmunizationToR4() function.
+def test_R3ImmunizationToR4() testR3ResourceToR4("Immunization")
+
+// Tests fhir_r3r4::R3ImmunizationRecommendationToR4() function.
+def test_R3ImmunizationRecommendationToR4() testR3ResourceToR4("ImmunizationRecommendation")
+
+// Tests fhir_r3r4::R3ImplementationGuideToR4() function.
+def test_R3ImplementationGuideToR4() testR3ResourceToR4("ImplementationGuide")
+
+// Tests fhir_r3r4::R3LibraryToR4() function.
+def test_R3LibraryToR4() testR3ResourceToR4("Library")
+
+// Tests fhir_r3r4::R3LinkageToR4() function.
+def test_R3LinkageToR4() testR3ResourceToR4("Linkage")
+
+// Tests fhir_r3r4::R3ListToR4() function.
+def test_R3ListToR4() testR3ResourceToR4("List")
+
+// Tests fhir_r3r4::R3LocationToR4() function.
+def test_R3LocationToR4() testR3ResourceToR4("Location")
+
+// Tests fhir_r3r4::R3MeasureToR4() function.
+def test_R3MeasureToR4() testR3ResourceToR4("Measure")
+
+// Tests fhir_r3r4::R3MeasureReportToR4() function.
+def test_R3MeasureReportToR4() testR3ResourceToR4("MeasureReport")
+
+// Tests fhir_r3r4::R3MediaToR4() function.
+def test_R3MediaToR4() testR3ResourceToR4("Media")
+
+// Tests fhir_r3r4::R3MedicationAdministrationToR4() function.
+def test_R3MedicationAdministrationToR4() testR3ResourceToR4("MedicationAdministration")
+
+// Tests fhir_r3r4::R3MedicationRequestToR4() function.
+def test_R3MedicationRequestToR4() testR3ResourceToR4("MedicationRequest")
+
+// Tests fhir_r3r4::R3OrganizationToR4() function.
+def test_R3OrganizationToR4() testR3ResourceToR4("Organization")
+
+// Tests fhir_r3r4::R3PatientToR4() function.
+def test_R3PatientToR4() testR3ResourceToR4("Patient")
+
+// Tests fhir_r3r4::R3PersonToR4() function.
+def test_R3PersonToR4() testR3ResourceToR4("Person")
+
+// Tests fhir_r3r4::R3ProcedureRequestToR4() function.
+def test_R3ProcedureRequestToR4() testR3ResourceToR4("ProcedureRequest")
+
+// Tests fhir_r3r4::R3SubscriptionToR4() function.
+def test_R3SubscriptionToR4() testR3ResourceToR4("Subscription")
+
+// Tests fhir_r3r4::R3SubstanceToR4() function.
+def test_R3SubstanceToR4() testR3ResourceToR4("Substance")
+
+// Tests fhir_r3r4::R3SupplyDeliveryToR4() function.
+def test_R3SupplyDeliveryToR4() testR3ResourceToR4("SupplyDelivery")
+
+// Tests fhir_r3r4::R3SupplyRequestToR4() function.
+def test_R3SupplyRequestToR4() testR3ResourceToR4("SupplyRequest")
+
+// Tests fhir_r3r4::R3TaskToR4() function.
+def test_R3TaskToR4() testR3ResourceToR4("Task")
+
+// Tests fhir_r3r4::R3TestReportToR4() function.
+def test_R3TestReportToR4() testR3ResourceToR4("TestReport")
+
+// Tests fhir_r3r4::R3SequenceToR4() function (converting from R3 Sequence to R4 MolecularSequence resource).
+def test_R3SequenceToR4() testR3ResourceToR4("Sequence")
+
+// Tests fhir_r3r4::R3TestScriptToR4() function.
+def test_R3TestScriptToR4() testR3ResourceToR4("TestScript")
+
+// Tests fhir_r3r4::R3ValueSetToR4() function.
+def test_R3ValueSetToR4() testR3ResourceToR4("ValueSet")
+
+// Tests fhir_r3r4::R3VisionPrescriptionToR4() function.
+def test_R3VisionPrescriptionToR4() testR3ResourceToR4("VisionPrescription")
+
+// Generic function for testing FHIR R3 to FHIR R4 transformation functions in the
+// fhir_r3r4 package based on the resourceType.
+def testR3ResourceToR4(resourceType) {
+  var input: loadJson(joinPath(testdir(), "{resourceType}_r3r4.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "{resourceType}_r3r4.fhir.output.json"))
+  var actualOutput: callPackageFn("fhir_r3r4", "R3{resourceType}ToR4", input)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Path for input and output files.
+def testdir() "./r3r4/"

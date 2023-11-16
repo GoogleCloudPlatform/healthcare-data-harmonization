@@ -1,0 +1,13 @@
+package datatypes
+
+// Description: Converts a Oid datatype to Id datatype
+//
+// Argument(s):
+//   oid: FHIR Oid datatype https://www.hl7.org/fhir/datatypes.html#oid
+//
+// Output(s):
+//   FHIR Id datatype https://www.hl7.org/fhir/datatypes.html#id
+//
+def OidToId(oid) {
+  split(oid, ":")[2]
+}

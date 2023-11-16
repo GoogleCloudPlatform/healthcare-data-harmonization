@@ -1,0 +1,111 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   documentmanifest : FHIR DocumentManifest resource
+//
+// Output(s):
+//   FHIR DocumentManifest Resource
+//
+def DocumentManifestBase(documentManifest) {
+  resourcebase::ResourceBase(documentManifest)
+  masterIdentifier: documentManifest.masterIdentifier
+  identifier: documentManifest.identifier
+  type: documentManifest.type
+  created: documentManifest.created
+  source: documentManifest.source
+  description: documentManifest.description
+}
+
+// Description: Converts a FHIR STU3 DocumentManifest resource to FHIR R4 DocumentManifest resource.
+//
+// Argument(s):
+//   documentmanifest : FHIR STU3 DocumentManifest resource https://www.hl7.org/fhir/stu3/documentmanifest.html
+//
+// Output(s):
+//   FHIR R4 DocumentManifest Resource https://www.hl7.org/fhir/r4/documentmanifest.html
+//
+def R3DocumentManifestToR4(documentManifest) {
+  DocumentManifestBase(documentManifest)
+  contained: datatypes::R3ResourceToR4(documentManifest.contained[])
+  related: R3DocumentManifest_RelatedToR4(documentManifest.related[])
+  subject: datatypes::R3ReferenceToR4(documentManifest.subject)
+  status: documentManifest.status
+  author: datatypes::R3ReferenceToR4(documentManifest.author[])
+  recipient: datatypes::R3ReferenceToR4(documentManifest.recipient[])
+  content: R3DocumentManifest_ContentToR4(documentManifest.content[])
+  content[0].display: utilities::defaultIfNull($this.content, "Unknown")
+  extension[]: extension::BuildAttachmentExtension("https://hl7.org/fhir/STU3/documentmanifest-definitions.html#DocumentManifest.content.pAttachment", documentManifest.content[*].pAttachment[])
+}
+
+// Description: Converts a FHIR R4 DocumentManifest resource to FHIR STU3 DocumentManifest resource.
+//
+// Argument(s):
+//   documentmanifest : FHIR R4 DocumentManifest resource https://www.hl7.org/fhir/r4/documentmanifest.html
+//
+// Output(s):
+//   FHIR STU3 DocumentManifest Resource https://www.hl7.org/fhir/stu3/documentmanifest.html
+//
+def R4DocumentManifestToR3(documentManifest) {
+  DocumentManifestBase(documentManifest)
+  contained: datatypes::R4ResourceToR3(documentManifest.contained[])
+  related: R4DocumentManifest_RelatedToR3(documentManifest.related[])
+  subject: datatypes::R4ReferenceToR3(documentManifest.subject)
+  status: documentManifest.status
+  author: datatypes::R4ReferenceToR3(documentManifest.author[])
+  recipient: datatypes::R4ReferenceToR3(documentManifest.recipient[])
+  content: R4DocumentManifest_ContentToR3(documentManifest.content[])
+}
+
+// Description: Converts a FHIR STU3 DocumentManifest.Content to FHIR R4 DocumentManifest.Content.
+//
+// Argument(s):
+//   data : FHIR STU3 DocumentManifest.Content http://hl7.org/fhir/STU3/documentmanifest-definitions.html#DocumentManifest.content
+//
+// Output(s):
+//   FHIR R4 DocumentManifest.Content http://hl7.org/fhir/R4/documentmanifest-definitions.html#DocumentManifest.content
+//
+def R3DocumentManifest_ContentToR4(data) {
+  datatypes::R3ReferenceToR4(data.pReference)
+}
+
+// Description: Converts a FHIR R4 DocumentManifest.Content to FHIR STU3 DocumentManifest.Content.
+//
+// Argument(s):
+//   data : FHIR R4 DocumentManifest.Content http://hl7.org/fhir/R4/documentmanifest-definitions.html#DocumentManifest.content
+//
+// Output(s):
+//   FHIR STU3 DocumentManifest.Content http://hl7.org/fhir/STU3/documentmanifest-definitions.html#DocumentManifest.content
+//
+def R4DocumentManifest_ContentToR3(data) {
+  pReference: datatypes::R4ReferenceToR3(data)
+}
+
+// Description: Converts a FHIR STU3 DocumentManifest.Related to FHIR R4 DocumentManifest.Related.
+//
+// Argument(s):
+//   data : FHIR STU3 DocumentManifest.Related http://hl7.org/fhir/STU3/documentmanifest-definitions.html#DocumentManifest.related
+//
+// Output(s):
+//   FHIR R4 DocumentManifest.Related http://hl7.org/fhir/R4/documentmanifest-definitions.html#DocumentManifest.related
+//
+def R3DocumentManifest_RelatedToR4(data) {
+  identifier: data.identifier
+  ref: datatypes::R3ReferenceToR4(data.ref)
+}
+
+// Description: Converts a FHIR R4 DocumentManifest.Related to FHIR STU3 DocumentManifest.Related.
+//
+// Argument(s):
+//   data : FHIR R4 DocumentManifest.Related http://hl7.org/fhir/R4/documentmanifest-definitions.html#DocumentManifest.related
+//
+// Output(s):
+//   FHIR STU3 DocumentManifest.Related http://hl7.org/fhir/STU3/documentmanifest-definitions.html#DocumentManifest.related
+//
+def R4DocumentManifest_RelatedToR3(data) {
+  identifier: data.identifier
+  ref: datatypes::R4ReferenceToR3(data.ref)
+}

@@ -1,0 +1,74 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   linkage : FHIR Linkage resource
+//
+// Output(s):
+//   FHIR Linkage Resource
+//
+def LinkageBase(linkage) {
+  resourcebase::ResourceBase(linkage)
+  modifierExtension: linkage.modifierExtension
+}
+
+// Description: Converts a FHIR STU3 Linkage resource to FHIR R4 Linkage resource.
+//
+// Argument(s):
+//   linkage : FHIR STU3 Linkage resource https://www.hl7.org/fhir/stu3/linkage.html
+//
+// Output(s):
+//   FHIR R4 Linkage Resource https://www.hl7.org/fhir/r4/linkage.html
+//
+def R3LinkageToR4(linkage) {
+  LinkageBase(linkage)
+  contained: datatypes::R3ResourceToR4(linkage.contained[])
+  active: linkage.active
+  author: datatypes::R3ReferenceToR4(linkage.author)
+  item: R3Linkage_ItemToR4(linkage.item[])
+}
+
+// Description: Converts a FHIR R4 Linkage resource to FHIR STU3 Linkage resource.
+//
+// Argument(s):
+//   linkage : FHIR R4 Linkage resource https://www.hl7.org/fhir/r4/linkage.html
+//
+// Output(s):
+//   FHIR STU3 Linkage Resource https://www.hl7.org/fhir/stu3/linkage.html
+//
+def R4LinkageToR3(linkage) {
+  LinkageBase(linkage)
+  contained: datatypes::R4ResourceToR3(linkage.contained[])
+  active: linkage.active
+  author: datatypes::R4ReferenceToR3(linkage.author)
+  item: R4Linkage_ItemToR3(linkage.item[])
+}
+
+// Description: Converts a FHIR STU3 Linkage.Item to FHIR R4 Linkage.Item.
+//
+// Argument(s):
+//   data : FHIR STU3 Linkage.Item http://hl7.org/fhir/STU3/linkage-definitions.html#Linkage.Item
+//
+// Output(s):
+//   FHIR R4 Linkage.Item http://hl7.org/fhir/R4/linkage-definitions.html#Linkage.Item
+//
+def R3Linkage_ItemToR4(data) {
+  type: data.type
+  resource: datatypes::R3ReferenceToR4(data.resource)
+}
+
+// Description: Converts a FHIR R4 Linkage.Item to FHIR STU3 Linkage.Item.
+//
+// Argument(s):
+//   data : FHIR R4 Linkage.Item http://hl7.org/fhir/R4/linkage-definitions.html#Linkage.Item
+//
+// Output(s):
+//   FHIR STU3 Linkage.Item http://hl7.org/fhir/STU3/linkage-definitions.html#Linkage.Item
+//
+def R4Linkage_ItemToR3(data) {
+  type: data.type
+  resource: datatypes::R4ReferenceToR3(data.resource)
+}

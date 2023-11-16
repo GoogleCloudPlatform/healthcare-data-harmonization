@@ -1,0 +1,41 @@
+{
+  "actor": {
+    "display": "Dr Adam Careful",
+    "reference": "Practitioner/example"
+  },
+  "appointment": {
+    "display": "Brian MRI results discussion",
+    "reference": "Appointment/examplereq"
+  },
+  "comment": "can't we try for this time, can't do mornings",
+  "end": "2013-12-25T13:30:00Z",
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/appointmentresponse-definitions.html#AppointmentResponse.participantStatus",
+      "valueCode": "tentative"
+    }
+  ],
+  "id": "exampleresp",
+  "identifier": [
+    {
+      "system": "http://example.org/sampleappointmentresponse-identifier",
+      "value": "response123"
+    }
+  ],
+  "participantType": [
+    {
+      "coding": [
+        {
+          "code": "ATND",
+          "system": "http://hl7.org/fhir/v3/ParticipationType"
+        }
+      ]
+    }
+  ],
+  "resourceType": "AppointmentResponse",
+  "start": "2013-12-25T13:15:00Z",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003eAccept Brian MRI results discussion\u003c/div\u003e",
+    "status": "generated"
+  }
+}

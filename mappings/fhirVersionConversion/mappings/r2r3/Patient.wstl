@@ -1,0 +1,111 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def PatientBase(patient) {
+  resourcebase::ResourceBase(patient)
+  identifier: patient.identifier
+  active: patient.active
+  telecom: patient.telecom
+  gender: patient.gender
+  birthDate: patient.birthDate
+  deceasedBoolean: patient.deceasedBoolean
+  deceasedDateTime: patient.deceasedDateTime
+  address: patient.address
+  multipleBirthBoolean: patient.multipleBirthBoolean
+  multipleBirthInteger: patient.multipleBirthInteger
+  photo: patient.photo
+  animal: patient.animal
+}
+
+def R2PatientToR3(patient) {
+  PatientBase(patient)
+  contained: datatypes::R2ResourceToR3(patient.contained[])
+  name: R2Patient_NameToR3(patient.name[])
+  managingOrganization: datatypes::R2ReferenceToR3(patient.managingOrganization)
+  maritalStatus: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/patient-definitions.html#Patient.maritalStatus", patient.extension)
+  contact: R2Patient_ContactToR3(patient.contact[])
+  communication: R2Patient_CommunicationToR3(patient.communication[])
+  generalPractitioner: datatypes::R2ReferenceToR3(patient.careProvider)
+  link: R2Patient_LinkToR3(patient.link[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/patient-definitions.html#Patient.maritalStatus", patient.maritalStatus)
+}
+
+def R3PatientToR2(patient) {
+  PatientBase(patient)
+  contained: datatypes::R3ResourceToR2(patient.contained[])
+  name: R3Patient_NameToR2(patient.name[])
+  managingOrganization: datatypes::R3ReferenceToR2(patient.managingOrganization)
+  maritalStatus: extension::fetchCodeableConcept("https://www.hl7.org/fhir/DSTU2/patient-definitions.html#Patient.maritalStatus", patient.extension)
+  contact: R3Patient_ContactToR2(patient.contact[])
+  communication: R3Patient_CommunicationToR2(patient.communication[])
+  careProvider: datatypes::R3ReferenceToR2(patient.generalPractitioner)
+  link: R3Patient_LinkToR2(patient.link[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/patient-definitions.html#Patient.maritalStatus", patient.maritalStatus)
+}
+
+def R2Patient_NameToR3(data) {
+  extension: data.extension
+  use: data.use
+  text: data.text
+  if data.family? then {
+    family: data.family[0]
+  }
+  given: data.given
+  prefix: data.prefix
+  suffix: data.suffix
+  period: data.period
+}
+
+def R3Patient_NameToR2(data) {
+  extension: data.extension
+  use: data.use
+  text: data.text
+  family[]: data.family
+  given: data.given
+  prefix: data.prefix
+  suffix: data.suffix
+  period: data.period
+}
+
+def R2Patient_ContactToR3(data) {
+  relationship: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/patient-definitions.html#Patient.contact.relationship", data.extension)
+  name: data.name
+  telecom: data.telecom
+  address: data.address
+  gender: data.gender
+  organization: datatypes::R2ReferenceToR3(data.organization)
+  period: data.period
+}
+
+def R3Patient_ContactToR2(data) {
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/patient-definitions.html#Patient.contact.relationship", data.relationship[])
+  name: data.name
+  telecom: data.telecom
+  address: data.address
+  gender: data.gender
+  organization: datatypes::R3ReferenceToR2(data.organization)
+  period: data.period
+}
+
+def R2Patient_CommunicationToR3(data) {
+  language: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/patient-definitions.html#Patient.communication.language", data.extension)
+  preferred: data.preferred
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/patient-definitions.html#Patient.communication.language", data.language)
+}
+
+def R3Patient_CommunicationToR2(data) {
+  language: extension::fetchCodeableConcept("https://www.hl7.org/fhir/DSTU2/patient-definitions.html#Patient.communication.language", data.extension)
+  preferred: data.preferred
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/patient-definitions.html#Patient.communication.language", data.language)
+}
+
+def R2Patient_LinkToR3(data) {
+  other: datatypes::R2ReferenceToR3(data.other)
+  type: data.type
+}
+
+def R3Patient_LinkToR2(data) {
+  other: datatypes::R3ReferenceToR2(data.other)
+  type: data.type
+}

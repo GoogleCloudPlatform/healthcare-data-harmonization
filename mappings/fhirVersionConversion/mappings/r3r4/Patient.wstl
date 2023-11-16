@@ -1,0 +1,134 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   patient : FHIR Patient resource
+//
+// Output(s):
+//   FHIR Patient Resource
+//
+def PatientBase(patient) {
+  resourcebase::ResourceBase(patient)
+  identifier: patient.identifier
+  name: patient.name
+  telecom: patient.telecom
+  birthDate: patient.birthDate
+  deceasedBoolean: patient.deceasedBoolean
+  deceasedDateTime: patient.deceasedDateTime
+  address: patient.address
+  maritalStatus: patient.maritalStatus
+  multipleBirthBoolean: patient.multipleBirthBoolean
+  multipleBirthInteger: patient.multipleBirthInteger
+  photo: patient.photo
+}
+
+// Description: Converts a FHIR STU3 Patient resource to FHIR R4 Patient resource.
+//
+// Argument(s):
+//   patient : FHIR STU3 Patient resource https://www.hl7.org/fhir/stu3/patient.html
+//
+// Output(s):
+//   FHIR R4 Patient Resource https://www.hl7.org/fhir/r4/patient.html
+//
+def R3PatientToR4(patient) {
+  PatientBase(patient)
+  contained: datatypes::R3ResourceToR4(patient.contained[])
+  managingOrganization: datatypes::R3ReferenceToR4(patient.managingOrganization)
+  active: patient.active
+  gender: patient.gender
+  contact: R3Patient_ContactToR4(patient.contact[])
+  communication: patient.communication
+  generalPractitioner: datatypes::R3ReferenceToR4(patient.generalPractitioner[])
+  link: R3Patient_LinkToR4(patient.link[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/patient-definitions.html#Patient.animal.species", patient.animal.species)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/patient-definitions.html#Patient.animal.breed", patient.animal.breed)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/patient-definitions.html#Patient.animal.genderStatus", patient.animal.genderStatus)
+}
+
+// Description: Converts a FHIR R4 Patient resource to FHIR STU3 Patient resource.
+//
+// Argument(s):
+//   patient : FHIR R4 Patient resource https://www.hl7.org/fhir/r4/patient.html
+//
+// Output(s):
+//   FHIR STU3 Patient Resource https://www.hl7.org/fhir/stu3/patient.html
+//
+def R4PatientToR3(patient) {
+  PatientBase(patient)
+  contained: datatypes::R4ResourceToR3(patient.contained[])
+  managingOrganization: datatypes::R4ReferenceToR3(patient.managingOrganization)
+  active: patient.active
+  gender: patient.gender
+  contact: R4Patient_ContactToR3(patient.contact[])
+  animal.species: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/patient-definitions.html#Patient.animal.species", patient.extension)
+  animal.breed: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/patient-definitions.html#Patient.animal.breed", patient.extension)
+  animal.genderStatus: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/patient-definitions.html#Patient.animal.genderStatus", patient.extension)
+  communication: patient.communication
+  generalPractitioner: datatypes::R4ReferenceToR3(patient.generalPractitioner[])
+  link: R4Patient_LinkToR3(patient.link[])
+}
+
+// Description: Converts a FHIR STU3 Patient.Link to FHIR R4 Patient.Link.
+//
+// Argument(s):
+//   data : FHIR STU3 Patient.Link http://hl7.org/fhir/STU3/patient-definitions.html#Patient.link
+//
+// Output(s):
+//   FHIR R4 Patient.Link http://hl7.org/fhir/R4/patient-definitions.html#Patient.link
+//
+def R3Patient_LinkToR4(data) {
+  other: datatypes::R3ReferenceToR4(data.other)
+  type: data.type
+}
+
+// Description: Converts a FHIR R4 Patient.Link to FHIR STU3 Patient.Link.
+//
+// Argument(s):
+//   data : FHIR R4 Patient.Link http://hl7.org/fhir/R4/patient-definitions.html#Patient.link
+//
+// Output(s):
+//   FHIR STU3 Patient.Link Resource http://hl7.org/fhir/STU3/patient-definitions.html#Patient.link
+//
+def R4Patient_LinkToR3(data) {
+  other: datatypes::R4ReferenceToR3(data.other)
+  type: data.type
+}
+
+// Description: Converts a FHIR STU3 Patient.Contact to FHIR R4 Patient.Contact.
+//
+// Argument(s):
+//   data : FHIR STU3 Patient.Contact http://hl7.org/fhir/STU3/patient-definitions.html#Patient.contact
+//
+// Output(s):
+//   FHIR R4 Patient.Contact http://hl7.org/fhir/R4/patient-definitions.html#Patient.contact
+//
+def R3Patient_ContactToR4(data) {
+  relationship: data.relationship
+  name: data.name
+  telecom: data.telecom
+  address: data.address
+  gender: data.gender
+  organization: datatypes::R3ReferenceToR4(data.organization)
+  period: data.period
+}
+
+// Description: Converts a FHIR R4 Patient.Contact to FHIR STU3 Patient.Contact.
+//
+// Argument(s):
+//   data : FHIR R4 Patient.Contact http://hl7.org/fhir/R4/patient-definitions.html#Patient.contact
+//
+// Output(s):
+//   FHIR STU3 Patient.Contact http://hl7.org/fhir/STU3/patient-definitions.html#Patient.contact
+//
+def R4Patient_ContactToR3(data) {
+  relationship: data.relationship
+  name: data.name
+  telecom: data.telecom
+  address: data.address
+  gender: data.gender
+  organization: datatypes::R4ReferenceToR3(data.organization)
+  period: data.period
+}

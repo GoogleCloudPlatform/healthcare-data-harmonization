@@ -1,0 +1,33 @@
+{
+  "extension": [
+    {
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/datatypes-definitions.html#Age.id",
+          "valueString": "test_id"
+        },
+        {
+          "url": "https://www.hl7.org/fhir/datatypes-definitions.html#Age.value",
+          "valueDecimal": 1
+        },
+        {
+          "url": "https://www.hl7.org/fhir/datatypes-definitions.html#Age.comparator",
+          "valueCode": "\u003c"
+        },
+        {
+          "url": "https://www.hl7.org/fhir/datatypes-definitions.html#Age.unit",
+          "valueString": "test_unit"
+        },
+        {
+          "url": "https://www.hl7.org/fhir/datatypes-definitions.html#Age.system",
+          "valueUri": "test_system"
+        },
+        {
+          "url": "https://www.hl7.org/fhir/datatypes-definitions.html#Age.code",
+          "valueCode": "test_code"
+        }
+      ],
+      "url": "test_url"
+    }
+  ]
+}

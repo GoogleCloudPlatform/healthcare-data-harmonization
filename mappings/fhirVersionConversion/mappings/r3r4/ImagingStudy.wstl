@@ -1,0 +1,235 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   imagingStudy : FHIR ImagingStudy resource
+//
+// Output(s):
+//   FHIR ImagingStudy Resource
+//
+def ImagingStudyBase(imagingStudy) {
+  resourcebase::ResourceBase(imagingStudy)
+  identifier: imagingStudy.identifier
+  started: imagingStudy.started
+  numberOfSeries: imagingStudy.numberOfSeries
+  numberOfInstances: imagingStudy.numberOfInstances
+  description: imagingStudy.description
+}
+
+// Description: Converts a FHIR STU3 ImagingStudy resource to FHIR R4 ImagingStudy resource.
+//
+// Argument(s):
+//   imagingStudy : FHIR STU3 ImagingStudy resource https://www.hl7.org/fhir/stu3/imagingstudy.html
+//
+// Output(s):
+//   FHIR R4 ImagingStudy Resource https://www.hl7.org/fhir/r4/imagingstudy.html
+//
+def R3ImagingStudyToR4(imagingStudy) {
+  ImagingStudyBase(imagingStudy)
+  contained: datatypes::R3ResourceToR4(imagingStudy.contained[])
+  endpoint: datatypes::R3ReferenceToR4(imagingStudy.endpoint[])
+  status: utilities::Convert_TerminologyCode(imagingStudy.availability, "http://dicom.nema.org/resources/ontology/DCM", "ImagingStudy_Status_r3r4")
+  status: utilities::defaultIfNull($this.status, "unknown")
+  modality: imagingStudy.modalityList
+  subject: datatypes::R3ReferenceToR4(imagingStudy.patient)
+  encounter: if matchesRegex(imagingStudy.context.reference, "^Encounter.*") then datatypes::R3ReferenceToR4(imagingStudy.context)
+  basedOn: datatypes::R3ReferenceToR4(imagingStudy.basedOn[where matchesRegex($.reference, "^CarePlan.*")][])
+  referrer: datatypes::R3ReferenceToR4(imagingStudy.referrer)
+  interpreter: datatypes::R3ReferenceToR4(imagingStudy.interpreter[])
+  procedureReference: datatypes::R3ReferenceToR4(imagingStudy.procedureReference[0])
+  procedureCode: imagingStudy.procedureCode
+  location: extension::fetchReference("https://www.hl7.org/fhir/R4/imagingstudy-definitions.html#ImagingStudy.location", imagingStudy.extension)
+  reasonCode: R3ImagingStudy_ReasonToR4("https://www.hl7.org/fhir/R4/imagingstudy-definitions.html#ImagingStudy.reasonCode", imagingStudy.extension, imagingStudy.reason)
+  reasonReference: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/imagingstudy-definitions.html#ImagingStudy.reasonReference", imagingStudy.extension)
+  note: extension::fetchAnnotationArray("https://www.hl7.org/fhir/R4/imagingstudy-definitions.html#ImagingStudy.note", imagingStudy.extension)
+  series: R3ImagingStudy_SeriesToR4(imagingStudy.series[])
+  extension[]: extension::BuildOidExtension("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.uid", imagingStudy.uid)
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.accession", imagingStudy.accession)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.procedureReference", imagingStudy.procedureReference[])
+  extension[]: if !$this.encounter then extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.context", imagingStudy.context)
+}
+
+// Description: Converts a FHIR R4 ImagingStudy resource to FHIR STU3 ImagingStudy resource.
+//
+// Argument(s):
+//   imagingStudy : FHIR R4 ImagingStudy resource https://www.hl7.org/fhir/r4/imagingstudy.html
+//
+// Output(s):
+//   FHIR STU3 ImagingStudy Resource https://www.hl7.org/fhir/stu3/imagingstudy.html
+//
+def R4ImagingStudyToR3(imagingStudy) {
+  ImagingStudyBase(imagingStudy)
+  contained: datatypes::R4ResourceToR3(imagingStudy.contained[])
+  endpoint: datatypes::R4ReferenceToR3(imagingStudy.endpoint[])
+  uid: extension::fetchOid("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.uid", imagingStudy.extension)
+  accession: extension::fetchIdentifier("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.accession", imagingStudy.extension)
+  modalityList: imagingStudy.modality
+  patient: datatypes::R4ReferenceToR3(imagingStudy.subject)
+  availability: R4ImagingStudy_StatusToR3(imagingStudy.status)
+  context: datatypes::R4ReferenceToR3(imagingStudy.encounter)
+  basedOn: datatypes::R4ReferenceToR3(imagingStudy.basedOn[])
+  referrer: datatypes::R4ReferenceToR3(imagingStudy.referrer)
+  interpreter: datatypes::R4ReferenceToR3(imagingStudy.interpreter[])
+  procedureReference: R4ImagingStudy_ProcedureReferenceToR3("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.procedureReference", imagingStudy.extension, datatypes::R4ReferenceToR3(imagingStudy.procedureReference))
+  procedureCode: imagingStudy.procedureCode
+  reason: imagingStudy.reasonCode[0]
+  series: R4ImagingStudy_SeriesToR3(imagingStudy.series[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/imagingstudy-definitions.html#ImagingStudy.location", imagingStudy.location)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/imagingstudy-definitions.html#ImagingStudy.reasonReference", imagingStudy.reasonReference[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/imagingstudy-definitions.html#ImagingStudy.reasonCode", imagingStudy.reasonCode[])
+  extension[]: extension::BuildAnnotationExtension("https://www.hl7.org/fhir/R4/imagingstudy-definitions.html#ImagingStudy.note", imagingStudy.note[])
+}
+
+// Description: Converts a FHIR R4 ImagingStudy.Status to FHIR STU3 ImagingStudy.Status.
+//
+// Argument(s):
+//   data : FHIR R4 ImagingStudy.Status http://hl7.org/fhir/R4/imagingstudy-definitions.html#ImagingStudy.status
+//
+// Output(s):
+//   FHIR STU3 ImagingStudy.Status http://hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.status
+//
+def R4ImagingStudy_StatusToR3(data) {
+  if data == "registered" then {
+    "OFFLINE"
+  }
+  if data == "available" then {
+    "ONLINE"
+  }
+}
+
+// Description: Converts a FHIR R4 ImagingStudy.ProcedureReference to FHIR STU3 ImagingStudy.ProcedureReference.
+//
+// Argument(s):
+//   data : FHIR R4 ImagingStudy.ProcedureReference http://hl7.org/fhir/R4/imagingstudy-definitions.html#ImagingStudy.procedureReference
+//   url : FHIR R4 Extension.url http://hl7.org/fhir/R4/extensibility-definitions.html#Extension.url
+//   extension : FHIR R4 DomainResource.Extension http://hl7.org/fhir/R4/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR STU3 ImagingStudy.ProcedureReference http://hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.procedureReference
+//
+def R4ImagingStudy_ProcedureReferenceToR3(url, extension, data) {
+  var procedureReference: extension::fetchReferenceArray(url, extension)
+  if procedureReference then {
+    procedureReference
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 ImagingStudy.Reason to FHIR R4 ImagingStudy.Reason.
+//
+// Argument(s):
+//   data : FHIR STU3 ImagingStudy.Reason http://hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.reason
+//   url : FHIR STU3 Extension.url http://hl7.org/fhir/STU3/extensibility-definitions.html#Extension.url
+//   extension : FHIR STU3 DomainResource.Extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 ImagingStudy.Reason http://hl7.org/fhir/R4/imagingstudy-definitions.html#ImagingStudy.reason
+//
+def R3ImagingStudy_ReasonToR4(url, extension, data) {
+  var reason: extension::fetchCodeableConceptArray(url, extension)
+  if reason then {
+    reason
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 ImagingStudy.Series to FHIR R4 ImagingStudy.Series.
+//
+// Argument(s):
+//   data : FHIR STU3 ImagingStudy.Series http://hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.series
+//   url : FHIR STU3 Extension.url http://hl7.org/fhir/STU3/extensibility-definitions.html#Extension.url
+//   extension : FHIR STU3 DomainResource.Extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 ImagingStudy.Series http://hl7.org/fhir/R4/imagingstudy-definitions.html#ImagingStudy.series
+//
+def R3ImagingStudy_SeriesToR4(data) {
+  uid: datatypes::OidToId(data.uid)
+  number: data.number
+  modality: data.modality
+  description: data.description
+  numberOfInstances: data.numberOfInstances
+  endpoint: datatypes::R3ReferenceToR4(data.endpoint[])
+  bodySite: data.bodySite
+  laterality: data.laterality
+  specimen: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/imagingstudy-definitions.html#ImagingStudy.series.specimen", data.extension)
+  started: data.started
+  performer[]: R3ImagingStudy_Series_PerformerToR4(data.performer[])
+  instance: R3ImagingStudy_Series_InstanceToR4(data.instance[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.series.availability", data.availability)
+}
+
+// Description: Converts a FHIR R4 ImagingStudy.Series to FHIR STU3 ImagingStudy.Series.
+//
+// Argument(s):
+//   data : FHIR R4 ImagingStudy.Series http://hl7.org/fhir/R4/imagingstudy-definitions.html#ImagingStudy.series
+//   url : FHIR R4 Extension.url http://hl7.org/fhir/R4/extensibility-definitions.html#Extension.url
+//   extension : FHIR R4 DomainResource.Extension http://hl7.org/fhir/R4/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR STU3 ImagingStudy.Series http://hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.series
+//
+def R4ImagingStudy_SeriesToR3(data) {
+  uid: datatypes::OidToId(data.uid)
+  number: data.number
+  modality: data.modality
+  description: data.description
+  numberOfInstances: data.numberOfInstances
+  availability: extension::fetchCode("https://www.hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.series.availability", data.extension)
+  endpoint: datatypes::R4ReferenceToR3(data.endpoint[])
+  bodySite: data.bodySite
+  laterality: data.laterality
+  started: data.started
+  performer[]: datatypes::R4ReferenceToR3(data.performer[0].actor)
+  instance: R4ImagingStudy_Series_InstanceToR3(data.instance[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/imagingstudy-definitions.html#ImagingStudy.series.specimen", data.specimen)
+}
+
+// Description: Converts a FHIR STU3 ImagingStudy.Series.Instance to FHIR R4 ImagingStudy.Series.Instance.
+//
+// Argument(s):
+//   data : FHIR STU3 ImagingStudy.Series.Instance http://hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.series.instance
+//
+// Output(s):
+//   FHIR R4 ImagingStudy.Series.Instance http://hl7.org/fhir/R4/imagingstudy-definitions.html#ImagingStudy.series.instance
+//
+def R3ImagingStudy_Series_InstanceToR4(data) {
+  uid: datatypes::OidToId(data.uid)
+  number: data.number
+  sopClass.system: "urn:ietf:rfc:3986"
+  sopClass.code: data.sopClass
+  title: data.title
+}
+
+// Description: Converts a FHIR R4 ImagingStudy.Series.Instance to FHIR STU3 ImagingStudy.Series.Instance.
+//
+// Argument(s):
+//   data : FHIR R4 ImagingStudy.Series.Instance http://hl7.org/fhir/R4/imagingstudy-definitions.html#ImagingStudy.series.instance
+//
+// Output(s):
+//   FHIR STU3 ImagingStudy.Series.Instance http://hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.series.instance
+//
+def R4ImagingStudy_Series_InstanceToR3(data) {
+  uid: data.uid
+  number: data.number
+  sopClass: datatypes::CodingToString(data.sopClass)
+  title: data.title
+}
+
+// Description: Converts a FHIR STU3 ImagingStudy.Series.Performer to FHIR R4 ImagingStudy.Series.Performer.
+//
+// Argument(s):
+//   data : FHIR STU3 ImagingStudy.Series.Performer http://hl7.org/fhir/STU3/imagingstudy-definitions.html#ImagingStudy.series.performer
+//
+// Output(s):
+//   FHIR R4 ImagingStudy.Series.Performer http://hl7.org/fhir/R4/imagingstudy-definitions.html#ImagingStudy.series.performer
+//
+def R3ImagingStudy_Series_PerformerToR4(data) {
+  function: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/imagingstudy-definitions.html#ImagingStudy.series.performer", data.extension)
+  actor: datatypes::R3ReferenceToR4(data)
+}

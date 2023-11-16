@@ -1,0 +1,87 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def CompositionBase(composition) {
+  resourcebase::ResourceBase(composition)
+  identifier: composition.identifier
+  status: composition.status
+  type: composition.type
+  class: composition.class
+  date: composition.date
+  title: composition.title
+}
+
+def R2CompositionToR3(composition) {
+  CompositionBase(composition)
+  contained: datatypes::R2ResourceToR3(composition.contained[])
+  event: R2Composition_EventToR3(composition.event[])
+  section: R2Composition_SectionToR3(composition.section[])
+  custodian: datatypes::R2ReferenceToR3(composition.custodian)
+  attester: R2Composition_AttesterToR3(composition.attester[])
+  author: datatypes::R2ReferenceToR3(composition.author[])
+  subject: datatypes::R2ReferenceToR3(composition.subject)
+  encounter: datatypes::R2ReferenceToR3(composition.encounter)
+  confidentiality: extension::fetchCode("https://www.hl7.org/fhir/STU3/composition-definitions.html#Composition.confidentiality", composition.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/composition-definitions.html#Composition.confidentiality", composition.confidentiality)
+}
+
+def R3CompositionToR2(composition) {
+  CompositionBase(composition)
+  contained: datatypes::R3ResourceToR2(composition.contained[])
+  event: R3Composition_EventToR2(composition.event[])
+  section: R3Composition_SectionToR2(composition.section[])
+  custodian: datatypes::R3ReferenceToR2(composition.custodian)
+  attester: R3Composition_AttesterToR2(composition.attester[])
+  author: datatypes::R3ReferenceToR2(composition.author[])
+  subject: datatypes::R3ReferenceToR2(composition.subject)
+  encounter: datatypes::R3ReferenceToR2(composition.encounter)
+  confidentiality: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/composition-definitions.html#Composition.confidentiality", composition.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/composition-definitions.html#Composition.confidentiality", composition.confidentiality)
+}
+
+def R2Composition_AttesterToR3(data) {
+  mode: data.mode
+  time: data.time
+  party: datatypes::R2ReferenceToR3(data.party)
+}
+
+def R3Composition_AttesterToR2(data) {
+  mode: data.mode
+  time: data.time
+  party: datatypes::R3ReferenceToR2(data.party)
+}
+
+def R2Composition_EventToR3(data) {
+  code: data.code
+  period: data.period
+  detail: datatypes::R2ReferenceToR3(data.detail[])
+}
+
+def R3Composition_EventToR2(data) {
+  code: data.code
+  period: data.period
+  detail: datatypes::R3ReferenceToR2(data.detail[])
+}
+
+def R2Composition_SectionToR3(data) {
+  title: data.title
+  code: data.code
+  text: data.text
+  mode: data.mode
+  orderedBy: data.orderedBy
+  entry: datatypes::R2ReferenceToR3(data.entry[])
+  emptyReason: data.emptyReason
+  section: data.section
+}
+
+def R3Composition_SectionToR2(data) {
+  title: data.title
+  code: data.code
+  text: data.text
+  mode: data.mode
+  orderedBy: data.orderedBy
+  entry: datatypes::R3ReferenceToR2(data.entry[])
+  emptyReason: data.emptyReason
+  section: data.section
+}

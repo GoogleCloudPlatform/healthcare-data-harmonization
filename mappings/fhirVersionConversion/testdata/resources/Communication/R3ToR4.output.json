@@ -1,0 +1,33 @@
+{
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/R4/codesystem-definitions.html#CodeSystem.identifier",
+      "valueIdentifier": [
+        {
+          "system": "http://acme.com/identifiers/codesystems",
+          "value": "internal-cholesterol-inl"
+        }
+      ]
+    },
+    {
+      "url": "https://www.hl7.org/fhir/R4/codesystem-definitions.html#CodeSystem.content",
+      "valueCode": "complete"
+    }
+  ],
+  "id": "example",
+  "identifier": {
+    "system": "http://acme.com/identifiers/codesystems",
+    "value": "internal-cholesterol-inl"
+  },
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/StructureDefinition/shareablecodesystem"
+    ]
+  },
+  "resourceType": "CodeSystem",
+  "status": "not-done",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\n      \u003cp\u003eCodeSystem \u0026quot;ACME Codes for Cholesterol\u0026quot;: This is an example code system that includes \n        all the codes for serum cholesterol defined by ACME inc.\u003c/p\u003e\n      \u003cp\u003eDeveloped by: FHIR project team (example)\u003c/p\u003e\n      \u003cp\u003ePublished for testing on 28-Jan 2016\u003c/p\u003e\n      \u003cp\u003eThis code system defines all the ACME codes for serum cholesterol:\u003c/p\u003e\n      \u003ctable class=\"grid\"\u003e\n        \u003ctr\u003e\n          \u003ctd\u003e\n            \u003cb\u003eCode\u003c/b\u003e\n          \u003c/td\u003e\n          \u003ctd\u003e\n            \u003cb\u003eDisplay\u003c/b\u003e\n          \u003c/td\u003e\n          \u003ctd\u003e\n            \u003cb\u003eDefinition\u003c/b\u003e\n          \u003c/td\u003e\n        \u003c/tr\u003e\n        \u003ctr\u003e\n          \u003ctd\u003echol-mmol\u003c/td\u003e\n          \u003ctd\u003eSChol (mmol/L)\u003c/td\u003e\n          \u003ctd\u003eSerum Cholesterol, in mmol/L\u003c/td\u003e\n        \u003c/tr\u003e\n        \u003ctr\u003e\n          \u003ctd\u003echol-mass\u003c/td\u003e\n          \u003ctd\u003eSChol (mg/L)\u003c/td\u003e\n          \u003ctd\u003eSerum Cholesterol, in mg/L\u003c/td\u003e\n        \u003c/tr\u003e\n        \u003ctr\u003e\n          \u003ctd\u003echol\u003c/td\u003e\n          \u003ctd\u003eSChol\u003c/td\u003e\n          \u003ctd\u003eSerum Cholesterol\u003c/td\u003e\n        \u003c/tr\u003e\n      \u003c/table\u003e\n    \u003c/div\u003e",
+    "status": "generated"
+  }
+}

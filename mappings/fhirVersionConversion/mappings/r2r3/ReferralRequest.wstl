@@ -1,0 +1,82 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def ReferralRequestBase(referralRequest) {
+  resourcebase::ResourceBase(referralRequest)
+  identifier: referralRequest.identifier
+  type: referralRequest.type
+  serviceRequested: referralRequest.serviceRequested
+  specialty: referralRequest.specialty
+  description: referralRequest.description
+}
+
+def R2ReferralRequestToR3(referralRequest) {
+  ReferralRequestBase(referralRequest)
+  contained: datatypes::R2ResourceToR3(referralRequest.contained[])
+  definition: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.definition", referralRequest.extension)
+  basedOn: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.basedOn", referralRequest.extension)
+  replaces: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.replaces", referralRequest.extension)
+  groupIdentifier: extension::fetchIdentifier("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.groupIdentifier", referralRequest.extension)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.status", referralRequest.extension)
+  status: if status? then status else referralRequest.status
+  intent: extension::fetchCode("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.intent", referralRequest.extension)
+  priority: extension::fetchCode("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.priority", referralRequest.extension)
+  subject: datatypes::R2ReferenceToR3(referralRequest.patient)
+  context: datatypes::R2ReferenceToR3(referralRequest.encounter)
+  occurrenceDateTime: extension::fetchDateTime("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.occurrenceDateTime", referralRequest.extension)
+  occurrencePeriod: extension::fetchPeriod("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.occurrencePeriod", referralRequest.extension)
+  authoredOn: referralRequest.date
+  requester.agent: datatypes::R2ReferenceToR3(referralRequest.requester)
+  requester.onBehalfOf: extension::fetchReference("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.requester.onBehalfOf", referralRequest.extension)
+  recipient: datatypes::R2ReferenceToR3(referralRequest.recipient[])
+  reasonCode: R2ReferralRequest_ReasonCodeToR3("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.reasonCode", referralRequest.extension, referralRequest.reason)
+  reasonReference: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.reasonReference", referralRequest.extension)
+  supportingInfo: datatypes::R2ReferenceToR3(referralRequest.supportingInformation[])
+  note: extension::fetchAnnotationArray("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.note", referralRequest.extension)
+  relevantHistory: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.relevantHistory", referralRequest.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/referralrequest-definitions.html#ReferralRequest.status", referralRequest.status)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/referralrequest-definitions.html#ReferralRequest.priority", referralRequest.priority)
+  extension[]: extension::BuildDateTimeExtension("https://www.hl7.org/fhir/DSTU2/referralrequest-definitions.html#ReferralRequest.dateSent", referralRequest.dateSent)
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/DSTU2/referralrequest-definitions.html#ReferralRequest.fulfillmentTime", referralRequest.fulfillmentTime)
+}
+
+def R3ReferralRequestToR2(referralRequest) {
+  ReferralRequestBase(referralRequest)
+  contained: datatypes::R3ResourceToR2(referralRequest.contained[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/referralrequest-definitions.html#ReferralRequest.status", referralRequest.extension)
+  status: if status? then status else referralRequest.status
+  priority: extension::fetchCodeableConcept("https://www.hl7.org/fhir/DSTU2/referralrequest-definitions.html#ReferralRequest.priority", referralRequest.extension)
+  patient: datatypes::R3ReferenceToR2(referralRequest.subject)
+  encounter: datatypes::R3ReferenceToR2(referralRequest.context)
+  date: referralRequest.authoredOn
+  requester: datatypes::R3ReferenceToR2(referralRequest.requester.agent)
+  recipient: datatypes::R3ReferenceToR2(referralRequest.recipient[])
+  reason: referralRequest.reasonCode[0]
+  supportingInformation: datatypes::R3ReferenceToR2(referralRequest.supportingInfo[])
+  dateSent: extension::fetchDateTime("https://www.hl7.org/fhir/DSTU2/referralrequest-definitions.html#ReferralRequest.dateSent", referralRequest.extension)
+  fulfillmentTime: extension::fetchPeriod("https://www.hl7.org/fhir/DSTU2/referralrequest-definitions.html#ReferralRequest.fulfillmentTime", referralRequest.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.definition", referralRequest.definition[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.basedOn", referralRequest.basedOn[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.replaces", referralRequest.replaces[])
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.groupIdentifier", referralRequest.groupIdentifier)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.status", referralRequest.status)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.intent", referralRequest.intent)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.priority", referralRequest.priority)
+  extension[]: extension::BuildDateTimeExtension("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.occurrenceDateTime", referralRequest.occurrenceDateTime)
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.occurrencePeriod", referralRequest.occurrencePeriod)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.reasonReference", referralRequest.reasonReference[])
+  extension[]: extension::BuildAnnotationExtension("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.note", referralRequest.note[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.relevantHistory", referralRequest.relevantHistory[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.requester.onBehalfOf", referralRequest.requester.onBehalfOf)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.reasonCode", referralRequest.reasonCode[])
+}
+
+def R2ReferralRequest_ReasonCodeToR3(url, extension, data) {
+  var reasonCode: extension::fetchCodeableConceptArray(url, extension)
+  if reasonCode then {
+    reasonCode
+  } else {
+    arrayOf(data)
+  }
+}

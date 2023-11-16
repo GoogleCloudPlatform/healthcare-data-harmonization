@@ -1,0 +1,70 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def ResearchStudyBase(researchStudy) {
+  resourcebase::ResourceBase(researchStudy)
+  identifier: researchStudy.identifier
+  title: researchStudy.title
+  category: researchStudy.category
+  focus: researchStudy.focus
+  contact: researchStudy.contact
+  relatedArtifact: researchStudy.relatedArtifact
+  keyword: researchStudy.keyword
+  description: researchStudy.description
+  period: researchStudy.period
+  reasonStopped: researchStudy.reasonStopped
+  note: researchStudy.note
+}
+
+def R3ResearchStudyToR4(researchStudy) {
+  ResearchStudyBase(researchStudy)
+  contained: datatypes::R3ResourceToR4(researchStudy.contained[])
+  site: datatypes::R3ReferenceToR4(researchStudy.site[])
+  sponsor: datatypes::R3ReferenceToR4(researchStudy.sponsor)
+  enrollment: datatypes::R3ReferenceToR4(researchStudy.enrollment[])
+  protocol: datatypes::R3ReferenceToR4(researchStudy.protocol[])
+  partOf: datatypes::R3ReferenceToR4(researchStudy.partOf[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.status", researchStudy.extension)
+  status: if status? then status else researchStudy.status
+  primaryPurposeType: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.primaryPurposeType", researchStudy.extension)
+  phase: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.phase", researchStudy.extension)
+  condition: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.condition", researchStudy.extension)
+  location: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.location", researchStudy.extension)
+  principalInvestigator: datatypes::R3ReferenceToR4(researchStudy.principalInvestigator)
+  arm: R3ResearchStudy_ArmToR4(researchStudy.arm[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/researchstudy-definitions.html#ResearchStudy.jurisdiction", researchStudy.jurisdiction[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/researchstudy-definitions.html#ResearchStudy.status", researchStudy.status)
+}
+
+def R4ResearchStudyToR3(researchStudy) {
+  ResearchStudyBase(researchStudy)
+  contained: datatypes::R4ResourceToR3(researchStudy.contained[])
+  site: datatypes::R4ReferenceToR3(researchStudy.site[])
+  sponsor: datatypes::R4ReferenceToR3(researchStudy.sponsor)
+  enrollment: datatypes::R4ReferenceToR3(researchStudy.enrollment[])
+  protocol: datatypes::R4ReferenceToR3(researchStudy.protocol[])
+  partOf: datatypes::R4ReferenceToR3(researchStudy.partOf[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/researchstudy-definitions.html#ResearchStudy.status", researchStudy.extension)
+  status: if status? then status else researchStudy.status
+  jurisdiction: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/researchstudy-definitions.html#ResearchStudy.jurisdiction", researchStudy.extension)
+  principalInvestigator: datatypes::R4ReferenceToR3(researchStudy.principalInvestigator)
+  arm: R4ResearchStudy_ArmToR3(researchStudy.arm[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.primaryPurposeType", researchStudy.primaryPurposeType)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.phase", researchStudy.phase)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.condition", researchStudy.condition[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.location", researchStudy.location[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.status", researchStudy.status)
+}
+
+def R3ResearchStudy_ArmToR4(data) {
+  name: data.name
+  type: data.code
+  description: data.description
+}
+
+def R4ResearchStudy_ArmToR3(data) {
+  name: data.name
+  code: data.type
+  description: data.description
+}

@@ -1,0 +1,78 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   compartmentDefinition : FHIR CompartmentDefinition resource
+//
+// Output(s):
+//   FHIR CompartmentDefinition Resource
+//
+def CompartmentDefinitionBase(compartmentDefinition) {
+  resourcebase::ResourceBase(compartmentDefinition)
+  url: compartmentDefinition.url
+  name: compartmentDefinition.name
+  date: compartmentDefinition.date
+  publisher: compartmentDefinition.publisher
+  contact: compartmentDefinition.contact
+  description: compartmentDefinition.description
+  useContext: compartmentDefinition.useContext
+  purpose: compartmentDefinition.purpose
+  search: compartmentDefinition.search
+}
+
+// Description: Converts a FHIR STU3 CompartmentDefinition resource to FHIR R4 CompartmentDefinition resource.
+//
+// Argument(s):
+//   compartmentDefinition : FHIR STU3 CompartmentDefinition resource https://www.hl7.org/fhir/stu3/compartmentDefinition.html
+//
+// Output(s):
+//   FHIR R4 CompartmentDefinition Resource https://www.hl7.org/fhir/r4/compartmentDefinition.html
+//
+def R3CompartmentDefinitionToR4(compartmentDefinition) {
+  CompartmentDefinitionBase(compartmentDefinition)
+  contained: datatypes::R3ResourceToR4(compartmentDefinition.contained[])
+  version: extension::fetchString("https://www.hl7.org/fhir/R4/compartmentdefinition-definitions.html#CompartmentDefinition.version", compartmentDefinition.extension)
+  status: compartmentDefinition.status
+  experimental: compartmentDefinition.experimental
+  code: compartmentDefinition.code
+  resource: R3CompartmentDefinition_ResourceToR4(compartmentDefinition.resource[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/compartmentdefinition-definitions.html#CompartmentDefinition.title", compartmentDefinition.title)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/compartmentdefinition-definitions.html#CompartmentDefinition.jurisdiction", compartmentDefinition.jurisdiction[])
+}
+
+// Description: Converts a FHIR R4 CompartmentDefinition resource to FHIR STU3 CompartmentDefinition resource.
+//
+// Argument(s):
+//   compartmentDefinition : FHIR R4 CompartmentDefinition resource https://www.hl7.org/fhir/r4/compartmentDefinition.html
+//
+// Output(s):
+//   FHIR STU3 CompartmentDefinition Resource https://www.hl7.org/fhir/stu3/compartmentDefinition.html
+//
+def R4CompartmentDefinitionToR3(compartmentDefinition) {
+  CompartmentDefinitionBase(compartmentDefinition)
+  contained: datatypes::R4ResourceToR3(compartmentDefinition.contained[])
+  title: extension::fetchString("https://www.hl7.org/fhir/STU3/compartmentdefinition-definitions.html#CompartmentDefinition.title", compartmentDefinition.extension)
+  status: compartmentDefinition.status
+  experimental: compartmentDefinition.experimental
+  jurisdiction: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/compartmentdefinition-definitions.html#CompartmentDefinition.jurisdiction", compartmentDefinition.extension)
+  code: compartmentDefinition.code
+  resource: compartmentDefinition.resource
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/compartmentdefinition-definitions.html#CompartmentDefinition.version", compartmentDefinition.version)
+}
+
+// Description: Converts a FHIR STU3 CompartmentDefinition.Resource to FHIR R4 CompartmentDefinition.Resource.
+//
+// Argument(s):
+//   data : FHIR STU3 CompartmentDefinition.Resource http://hl7.org/fhir/STU3/compartmentdefinition-definitions.html#CompartmentDefinition.resource
+//
+// Output(s):
+//   FHIR R4 CompartmentDefinition.Resource http://hl7.org/fhir/R4/compartmentdefinition-definitions.html#CompartmentDefinition.resource
+//
+def R3CompartmentDefinition_ResourceToR4(data) {
+  code: utilities::Convert_TerminologyCode(data.code, "http://hl7.org/fhir/resource-types", "ResourceTypes_r3r4")
+  param: data.param
+  documentation: data.documentation
+}

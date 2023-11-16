@@ -1,0 +1,85 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   location : FHIR Location resource
+//
+// Output(s):
+//   FHIR Location Resource
+//
+def LocationBase(location) {
+  resourcebase::ResourceBase(location)
+  identifier: location.identifier
+  operationalStatus: location.operationalStatus
+  name: location.name
+  alias: location.alias
+  description: location.description
+  telecom: location.telecom
+  address: location.address
+  physicalType: location.physicalType
+  position: location.position
+}
+
+// Description: Converts a FHIR STU3 Location resource to FHIR R4 Location resource.
+//
+// Argument(s):
+//   location : FHIR STU3 Location resource https://www.hl7.org/fhir/stu3/location.html
+//
+// Output(s):
+//   FHIR R4 Location Resource https://www.hl7.org/fhir/r4/location.html
+//
+def R3LocationToR4(location) {
+  LocationBase(location)
+  contained: datatypes::R3ResourceToR4(location.contained[])
+  endpoint: datatypes::R3ReferenceToR4(location.endpoint[])
+  managingOrganization: datatypes::R3ReferenceToR4(location.managingOrganization)
+  partOf: datatypes::R3ReferenceToR4(location.partOf)
+  status: location.status
+  mode: location.mode
+  type: R3Location_TypeToR4("https://www.hl7.org/fhir/R4/location-definitions.html#Location.type", location.extension, location.type)
+  hoursOfOperation: location.hoursOfOperation
+  availabilityExceptions: extension::fetchString("https://www.hl7.org/fhir/R4/location-definitions.html#Location.availabilityExceptions", location.extension)
+}
+
+// Description: Converts a FHIR R4 Location resource to FHIR STU3 Location resource.
+//
+// Argument(s):
+//   location : FHIR R4 Location resource https://www.hl7.org/fhir/r4/location.html
+//
+// Output(s):
+//   FHIR STU3 Location Resource https://www.hl7.org/fhir/stu3/location.html
+//
+def R4LocationToR3(location) {
+  LocationBase(location)
+  contained: datatypes::R4ResourceToR3(location.contained[])
+  endpoint: datatypes::R4ReferenceToR3(location.endpoint[])
+  managingOrganization: datatypes::R4ReferenceToR3(location.managingOrganization)
+  partOf: datatypes::R4ReferenceToR3(location.partOf)
+  status: location.status
+  mode: location.mode
+  type: location.type[0]
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/location-definitions.html#Location.type", location.type[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/location-definitions.html#Location.availabilityExceptions", location.availabilityExceptions)
+}
+
+// Description: Converts a FHIR STU3 Location.Type to FHIR R4 Location.Type.
+//
+// Argument(s):
+//   data : FHIR STU3 Location.Type http://hl7.org/fhir/STU3/location-definitions.html#Location.type
+//   url : FHIR STU3 Extension.url http://hl7.org/fhir/STU3/extensibility-definitions.html#Extension.url
+//   extension : FHIR STU3 DomainResource.Extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 Location.Type http://hl7.org/fhir/R4/location-definitions.html#Location.type
+//
+def R3Location_TypeToR4(url, extension, data) {
+  var type: extension::fetchCodeableConceptArray(url, extension)
+  if type then {
+    type
+  } else {
+    arrayOf(data)
+  }
+}

@@ -1,0 +1,325 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   capabilityStatement : FHIR CapabilityStatement resource
+//
+// Output(s):
+//   FHIR CapabilityStatement Resource
+//
+def CapabilityStatementBase(capabilityStatement) {
+  resourcebase::ResourceBase(capabilityStatement)
+  url: capabilityStatement.url
+  version: capabilityStatement.version
+  name: capabilityStatement.name
+  title: capabilityStatement.title
+  date: capabilityStatement.date
+  publisher: capabilityStatement.publisher
+  contact: capabilityStatement.contact
+  description: capabilityStatement.description
+  useContext: capabilityStatement.useContext
+  jurisdiction: capabilityStatement.jurisdiction
+  purpose: capabilityStatement.purpose
+  copyright: capabilityStatement.copyright
+  software: capabilityStatement.software
+}
+
+// Description: Converts a FHIR STU3 CapabilityStatement resource to FHIR R4 CapabilityStatement resource.
+//
+// Argument(s):
+//   capabilityStatement : FHIR STU3 CapabilityStatement resource https://www.hl7.org/fhir/stu3/capabilityStatement.html
+//
+// Output(s):
+//   FHIR R4 CapabilityStatement Resource https://www.hl7.org/fhir/r4/capabilityStatement.html
+//
+def R3CapabilityStatementToR4(capabilityStatement) {
+  CapabilityStatementBase(capabilityStatement)
+  contained: datatypes::R3ResourceToR4(capabilityStatement.contained[])
+  status: capabilityStatement.status
+  experimental: capabilityStatement.experimental
+  kind: capabilityStatement.kind
+  instantiates: capabilityStatement.instantiates
+  imports: extension::fetchCanonicalArray("https://www.hl7.org/fhir/R4/capabilitystatement-definitions.html#CapabilityStatement.imports", capabilityStatement.extension)
+  implementation: R3CapabilityStatement_ImplementationToR4(capabilityStatement.implementation)
+  fhirVersion: capabilityStatement.fhirVersion
+  format: capabilityStatement.format
+  patchFormat: capabilityStatement.patchFormat
+  implementationGuide: capabilityStatement.implementationGuide
+  rest: R3CapabilityStatement_RestToR4(capabilityStatement.rest[])
+  messaging: R3CapabilityStatement_MessagingToR4(capabilityStatement.messaging[])
+  document: R3CapabilityStatement_DocumentToR4(capabilityStatement.document[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/capabilitystatement-definitions.html#CapabilityStatement.acceptUnknown", capabilityStatement.acceptUnknown)
+}
+
+// Description: Converts a FHIR R4 CapabilityStatement resource to FHIR STU3 CapabilityStatement resource.
+//
+// Argument(s):
+//   capabilityStatement : FHIR R4 CapabilityStatement resource https://www.hl7.org/fhir/r4/capabilityStatement.html
+//
+// Output(s):
+//   FHIR STU3 CapabilityStatement Resource https://www.hl7.org/fhir/stu3/capabilityStatement.html
+//
+def R4CapabilityStatementToR3(capabilityStatement) {
+  CapabilityStatementBase(capabilityStatement)
+  contained: datatypes::R4ResourceToR3(capabilityStatement.contained[])
+  profile: datatypes::CanonicalToReference(capabilityStatement.rest[0].resource[0].supportedProfile[])
+  status: capabilityStatement.status
+  experimental: capabilityStatement.experimental
+  kind: capabilityStatement.kind
+  instantiates: capabilityStatement.instantiates
+  implementation: R4CapabilityStatement_ImplementationToR3(capabilityStatement.implementation)
+  fhirVersion: capabilityStatement.fhirVersion
+  acceptUnknown: extension::fetchCode("https://www.hl7.org/fhir/STU3/capabilitystatement-definitions.html#CapabilityStatement.acceptUnknown", capabilityStatement.extension)
+  format: capabilityStatement.format
+  patchFormat: capabilityStatement.patchFormat
+  implementationGuide: capabilityStatement.implementationGuide
+  rest: capabilityStatement.rest
+  messaging: capabilityStatement.messaging
+  document: capabilityStatement.document
+  extension[]: extension::BuildCanonicalExtension("https://www.hl7.org/fhir/R4/capabilitystatement-definitions.html#CapabilityStatement.imports", capabilityStatement.imports[])
+}
+
+// Description: Converts a FHIR STU3 CapabilityStatement.Implementation to FHIR R4 CapabilityStatement.Implementation.
+//
+// Argument(s):
+//   data : FHIR STU3 CapabilityStatement.Implementation https://www.hl7.org/fhir/stu3/capabilitystatement-definitions.html#CapabilityStatement.implementation
+//
+// Output(s):
+//   FHIR R4 CapabilityStatement.Implementation https://www.hl7.org/fhir/r4/capabilitystatement-definitions.html#CapabilityStatement.implementation
+//
+def R3CapabilityStatement_ImplementationToR4(data) {
+  description: data.description
+  url: data.url
+  custodian: extension::fetchReference("https://www.hl7.org/fhir/R4/capabilitystatement-definitions.html#CapabilityStatement.implementation.custodian", data.extension)
+}
+
+// Description: Converts a FHIR R4 CapabilityStatement.Implementation to FHIR STU3 CapabilityStatement.Implementation.
+//
+// Argument(s):
+//   data : FHIR R4 CapabilityStatement.Implementation https://www.hl7.org/fhir/r4/capabilitystatement-definitions.html#CapabilityStatement.implementation
+//
+// Output(s):
+//   FHIR STU3 CapabilityStatement.Implementation https://www.hl7.org/fhir/stu3/capabilitystatement-definitions.html#CapabilityStatement.implementation
+//
+def R4CapabilityStatement_ImplementationToR3(data) {
+  description: data.description
+  url: data.url
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/capabilitystatement-definitions.html#CapabilityStatement.implementation.custodian", data.custodian)
+}
+
+// Description: Converts a FHIR STU3 CapabilityStatement.Rest to FHIR R4 CapabilityStatement.Rest.
+//
+// Argument(s):
+//   data : FHIR STU3 CapabilityStatement.Rest https://www.hl7.org/fhir/stu3/capabilitystatement-definitions.html#CapabilityStatement.rest
+//
+// Output(s):
+//   FHIR R4 CapabilityStatement.Rest https://www.hl7.org/fhir/r4/capabilitystatement-definitions.html#CapabilityStatement.rest
+//
+def R3CapabilityStatement_RestToR4(data) {
+  mode: data.mode
+  documentation: data.documentation
+  security: R3CapabilityStatement_Rest_SecurityToR4(data.security)
+  resource: R3CapabilityStatement_Rest_ResourceToR4(data.resource[])
+  interaction: data.interaction
+  searchParam: data.searchParam
+  operation: R3CapabilityStatement_Rest_OperationToR4(data.operation[])
+  compartment: data.compartment
+}
+
+// Description: Converts a FHIR R4 CapabilityStatement.Rest to FHIR STU3 CapabilityStatement.Rest.
+//
+// Argument(s):
+//   data : FHIR R4 CapabilityStatement.Rest https://www.hl7.org/fhir/r4/capabilitystatement-definitions.html#CapabilityStatement.rest
+//
+// Output(s):
+//   FHIR STU3 CapabilityStatement.Rest https://www.hl7.org/fhir/stu3/capabilitystatement-definitions.html#CapabilityStatement.rest
+//
+def R4CapabilityStatement_RestToR3(data) {
+  mode: data.mode
+  documentation: data.documentation
+  security: data.security
+  resource: R4CapabilityStatement_Rest_ResourceToR3(data.resource[])
+  interaction: data.interaction
+  searchParam: data.searchParam
+  operation: data.operation
+  compartment: data.compartment
+}
+
+// Description: Converts a FHIR STU3 CapabilityStatement.Rest.Resource to FHIR R4 CapabilityStatement.Rest.Resource.
+//
+// Argument(s):
+//   data : FHIR STU3 CapabilityStatement.Rest.Resource https://www.hl7.org/fhir/stu3/capabilitystatement-definitions.html#CapabilityStatement.rest.resource
+//
+// Output(s):
+//   FHIR R4 CapabilityStatement.Rest.Resource https://www.hl7.org/fhir/r4/capabilitystatement-definitions.html#CapabilityStatement.rest.resource
+//
+def R3CapabilityStatement_Rest_ResourceToR4(data) {
+  type: utilities::Convert_TerminologyCode(data.type, "http://hl7.org/fhir/resource-types", "ResourceTypes_r3r4")
+  profile: datatypes::ReferenceToCanonical(data.profile)
+  documentation: data.documentation
+  interaction: data.interaction
+  versioning: data.versioning
+  readHistory: data.readHistory
+  updateCreate: data.updateCreate
+  conditionalCreate: data.conditionalCreate
+  conditionalRead: data.conditionalRead
+  conditionalUpdate: data.conditionalUpdate
+  conditionalDelete: data.conditionalDelete
+  referencePolicy: data.referencePolicy
+  searchInclude: data.searchInclude
+  searchRevInclude: data.searchRevInclude
+  searchParam: data.searchParam
+  operation[].name: extension::fetchString("https://www.hl7.org/fhir/R4/capabilitystatement-definitions.html#CapabilityStatement.rest.resource.operation.name", data.extension)
+  operation[].definition: extension::fetchCanonical("https://www.hl7.org/fhir/R4/capabilitystatement-definitions.html#CapabilityStatement.rest.resource.operation.definition", data.extension)
+  operation[].documentation: extension::fetchMarkdown("https://www.hl7.org/fhir/R4/capabilitystatement-definitions.html#CapabilityStatement.rest.resource.operation.documentation", data.extension)
+}
+
+// Description: Converts a FHIR R4 CapabilityStatement.Rest.Resource to FHIR STU3 CapabilityStatement.Rest.Resource.
+//
+// Argument(s):
+//   data : FHIR R4 CapabilityStatement.Rest.Resource https://www.hl7.org/fhir/r4/capabilitystatement-definitions.html#CapabilityStatement.rest.resource
+//
+// Output(s):
+//   FHIR STU3 CapabilityStatement.Rest.Resource https://www.hl7.org/fhir/stu3/capabilitystatement-definitions.html#CapabilityStatement.rest.resource
+//
+def R4CapabilityStatement_Rest_ResourceToR3(data) {
+  type: data.type
+  profile: datatypes::CanonicalToReference(data.profile)
+  documentation: data.documentation
+  interaction: data.interaction
+  versioning: data.versioning
+  readHistory: data.readHistory
+  updateCreate: data.updateCreate
+  conditionalCreate: data.conditionalCreate
+  conditionalRead: data.conditionalRead
+  conditionalUpdate: data.conditionalUpdate
+  conditionalDelete: data.conditionalDelete
+  referencePolicy: data.referencePolicy
+  searchInclude: data.searchInclude
+  searchRevInclude: data.searchRevInclude
+  searchParam: data.searchParam
+}
+
+// Description: Converts a FHIR STU3 CapabilityStatement.Messaging to FHIR R4 CapabilityStatement.Messaging.
+//
+// Argument(s):
+//   data : FHIR STU3 CapabilityStatement.Messaging https://www.hl7.org/fhir/stu3/capabilitystatement-definitions.html#CapabilityStatement.messaging
+//
+// Output(s):
+//   FHIR R4 CapabilityStatement.Messaging https://www.hl7.org/fhir/r4/capabilitystatement-definitions.html#CapabilityStatement.messaging
+//
+def R3CapabilityStatement_MessagingToR4(data) {
+  endpoint: data.endpoint
+  reliableCache: data.reliableCache
+  documentation: data.documentation
+  supportedMessage: R3CapabilityStatement_Messaging_SupportedMessageToR4(data.supportedMessage[])
+  extension[]: extension::BuildCodingExtension("http://www.hl7.org/fhir/STU3/capabilitystatement-definitions.html#CapabilityStatement.messaging.event.code", data.event[*].code[])
+  extension[]: extension::BuildCodeExtension("http://www.hl7.org/fhir/STU3/capabilitystatement-definitions.html#CapabilityStatement.messaging.event.category", data.event[*].category[])
+  extension[]: extension::BuildCodeExtension("http://www.hl7.org/fhir/STU3/capabilitystatement-definitions.html#CapabilityStatement.messaging.event.mode", data.event[*].mode[])
+  extension[]: extension::BuildCodeExtension("http://www.hl7.org/fhir/STU3/capabilitystatement-definitions.html#CapabilityStatement.messaging.event.focus", data.event[*].focus[])
+  extension[]: extension::BuildReferenceExtension("http://www.hl7.org/fhir/STU3/capabilitystatement-definitions.html#CapabilityStatement.messaging.event.request", data.event[*].request[])
+  extension[]: extension::BuildReferenceExtension("http://www.hl7.org/fhir/STU3/capabilitystatement-definitions.html#CapabilityStatement.messaging.event.response", data.event[*].response[])
+  extension[]: extension::BuildStringExtension("http://www.hl7.org/fhir/STU3/capabilitystatement-definitions.html#CapabilityStatement.messaging.event.documentation", data.event[*].documentation[])
+}
+
+// Description: Converts a FHIR R4 CapabilityStatement.Messaging to FHIR STU3 CapabilityStatement.Messaging.
+//
+// Argument(s):
+//   data : FHIR R4 CapabilityStatement.Messaging https://www.hl7.org/fhir/r4/capabilitystatement-definitions.html#CapabilityStatement.messaging
+//
+// Output(s):
+//   FHIR STU3 CapabilityStatement.Messaging https://www.hl7.org/fhir/stu3/capabilitystatement-definitions.html#CapabilityStatement.messaging
+//
+def R4CapabilityStatement_MessagingToR3(data) {
+  endpoint: data.endpoint
+  reliableCache: data.reliableCache
+  documentation: data.documentation
+  supportedMessage: R4CapabilityStatement_Messaging_SupportedMessageToR3(data.supportedMessage[])
+}
+
+// Description: Converts a FHIR STU3 CapabilityStatement.Messaging.SupportedMessage to FHIR R4 CapabilityStatement.Messaging.SupportedMessage.
+//
+// Argument(s):
+//   data : FHIR STU3 CapabilityStatement.Messaging.SupportedMessage https://www.hl7.org/fhir/stu3/capabilitystatement-definitions.html#CapabilityStatement.messaging.supportedMessage
+//
+// Output(s):
+//   FHIR R4 CapabilityStatement.Messaging.SupportedMessage https://www.hl7.org/fhir/r4/capabilitystatement-definitions.html#CapabilityStatement.messaging.supportedMessage
+//
+def R3CapabilityStatement_Messaging_SupportedMessageToR4(data) {
+  mode: data.mode
+  definition: datatypes::ReferenceToCanonical(data.definition)
+}
+
+// Description: Converts a FHIR R4 CapabilityStatement.Messaging.SupportedMessage to FHIR STU3 CapabilityStatement.Messaging.SupportedMessage.
+//
+// Argument(s):
+//   data : FHIR R4 CapabilityStatement.Messaging.SupportedMessage https://www.hl7.org/fhir/r4/capabilitystatement-definitions.html#CapabilityStatement.messaging.supportedMessage
+//
+// Output(s):
+//   FHIR STU3 CapabilityStatement.Messaging.SupportedMessage https://www.hl7.org/fhir/stu3/capabilitystatement-definitions.html#CapabilityStatement.messaging.supportedMessage
+//
+def R4CapabilityStatement_Messaging_SupportedMessageToR3(data) {
+  mode: data.mode
+  definition: datatypes::CanonicalToReference(data.definition)
+}
+
+// Description: Converts a FHIR STU3 CapabilityStatement.Document to FHIR R4 CapabilityStatement.Document.
+//
+// Argument(s):
+//   data : FHIR STU3 CapabilityStatement.Document https://www.hl7.org/fhir/stu3/capabilitystatement-definitions.html#CapabilityStatement.document
+//
+// Output(s):
+//   FHIR R4 CapabilityStatement.Document https://www.hl7.org/fhir/r4/capabilitystatement-definitions.html#CapabilityStatement.document
+//
+def R3CapabilityStatement_DocumentToR4(data) {
+  mode: data.mode
+  documentation: datatypes::ReferenceToCanonical(data.documentation)
+  profile: datatypes::ReferenceToCanonical(data.profile)
+}
+
+// Description: Converts a FHIR R4 CapabilityStatement.Document to FHIR STU3 CapabilityStatement.Document.
+//
+// Argument(s):
+//   data : FHIR R4 CapabilityStatement.Document https://www.hl7.org/fhir/r4/capabilitystatement-definitions.html#CapabilityStatement.document
+//
+// Output(s):
+//   FHIR STU3 CapabilityStatement.Document https://www.hl7.org/fhir/stu3/capabilitystatement-definitions.html#CapabilityStatement.document
+//
+def R4CapabilityStatement_DocumentToR3(data) {
+  mode: data.mode
+  documentation: datatypes::CanonicalToReference(data.documentation)
+  profile: datatypes::CanonicalToReference(data.profile)
+}
+
+// Description: Converts a FHIR STU3 CapabilityStatement.Rest.Security to FHIR R4 CapabilityStatement.Rest.Security.
+//
+// Argument(s):
+//   data : FHIR STU3 CapabilityStatement.Rest.Security https://www.hl7.org/fhir/stu3/capabilitystatement-definitions.html#CapabilityStatement.rest.security
+//
+// Output(s):
+//   FHIR R4 CapabilityStatement.Rest.Security https://www.hl7.org/fhir/r4/capabilitystatement-definitions.html#CapabilityStatement.rest.security
+//
+def R3CapabilityStatement_Rest_SecurityToR4(data) {
+  cors: data.cors
+  service: data.service
+  description: data.description
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/stu3/capabilitystatement-definitions.html#CapabilityStatement.rest.security.certificate.type", data.certificate[*].type[])
+  extension[]: extension::BuildBase64BinaryExtension("https://www.hl7.org/fhir/stu3/capabilitystatement-definitions.html#CapabilityStatement.rest.security.certificate.blob", data.certificate[*].blob[])
+}
+
+// Description: Converts a FHIR STU3 CapabilityStatement.Rest.Operation to FHIR R4 CapabilityStatement.Rest.Operation.
+//
+// Argument(s):
+//   data : FHIR STU3 CapabilityStatement.Rest.Operation https://www.hl7.org/fhir/stu3/capabilitystatement-definitions.html#CapabilityStatement.rest.operation
+//
+// Output(s):
+//   FHIR R4 CapabilityStatement.Rest.Operation https://www.hl7.org/fhir/r4/capabilitystatement-definitions.html#CapabilityStatement.rest.operation
+//
+def R3CapabilityStatement_Rest_OperationToR4(data) {
+  name: data.name
+  definition: datatypes::ReferenceToCanonical(data.definition)
+  documentation: extension::fetchMarkdown("https://www.hl7.org/fhir/R4/capabilitystatement-definitions.html#CapabilityStatement.rest.operation.documentation", data.extension)
+}

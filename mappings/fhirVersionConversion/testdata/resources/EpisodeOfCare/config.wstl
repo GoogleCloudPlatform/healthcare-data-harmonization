@@ -1,0 +1,11 @@
+// R3 EpisodeOfCare To R4
+$this: R3EpisodeOfCareToR4($root)
+
+// R4 EpisodeOfCare To R3
+$this: R4EpisodeOfCareToR3($root)
+
+// R2 EpisodeOfCare To R3
+$this: R2EpisodeOfCareToR3($root)
+
+// R3 EpisodeOfCare To R2
+$this: R3EpisodeOfCareToR2($root)

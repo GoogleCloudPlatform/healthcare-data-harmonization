@@ -1,0 +1,95 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "preparation",
+          "display": "Preparation",
+          "target": [
+            {
+              "code": "preparation",
+              "display": "Preparation",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "in-progress",
+          "display": "In Progress",
+          "target": [
+            {
+              "code": "in-progress",
+              "display": "In progress",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "aborted",
+          "display": "Aborted",
+          "target": [
+            {
+              "code": "stopped",
+              "display": "Stopped",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "suspended",
+          "display": "Suspended",
+          "target": [
+            {
+              "code": "on-hold",
+              "display": "On Hold",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "completed",
+          "display": "Completed",
+          "target": [
+            {
+              "code": "completed",
+              "display": "Completed",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "entered-in-error",
+          "display": "Entered In Error",
+          "target": [
+            {
+              "code": "entered-in-error",
+              "display": "Entered In Error",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "unknown",
+          "display": "Unknown",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "Unknown",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/event-status",
+      "target": "http://hl7.org/fhir/event-status",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "unknown",
+        "display": "Unknown"
+      }
+    }
+  ],
+  "id": "Event_Status_r3r4",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

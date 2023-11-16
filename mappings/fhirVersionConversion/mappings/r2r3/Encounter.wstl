@@ -1,0 +1,126 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def EncounterBase(encounter) {
+  resourcebase::ResourceBase(encounter)
+  identifier: encounter.identifier
+  type: encounter.type
+  priority: encounter.priority
+  period: encounter.period
+  reason: encounter.reason
+}
+
+def R2EncounterToR3(encounter) {
+  EncounterBase(encounter)
+  contained: datatypes::R2ResourceToR3(encounter.contained[])
+  serviceProvider: datatypes::R2ReferenceToR3(encounter.serviceProvider)
+  partOf: datatypes::R2ReferenceToR3(encounter.partOf)
+  location: R2Encounter_LocationToR3(encounter.location[])
+  appointment: datatypes::R2ReferenceToR3(encounter.appointment)
+  participant: R2Encounter_ParticipantToR3(encounter.participant[])
+  incomingReferral: datatypes::R2ReferenceToR3(encounter.incomingReferral[])
+  episodeOfCare: datatypes::R2ReferenceToR3(encounter.episodeOfCare[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/encounter-definitions.html#Encounter.status", encounter.extension)
+  status: if status? then status else encounter.status
+  statusHistory: R2Encounter_StatusHistoryToR3(encounter.statusHistory[])
+  class: extension::fetchCoding("https://www.hl7.org/fhir/STU3/encounter-definitions.html#Encounter.class", encounter.extension)
+  subject: datatypes::R2ReferenceToR3(encounter.patient)
+  length: extension::fetchAge("https://www.hl7.org/fhir/STU3/encounter-definitions.html#Encounter.length", encounter.extension)
+  account: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/encounter-definitions.html#Encounter.account", encounter.extension)
+  hospitalization: R2Encounter_HospitalizationToR3(encounter.hospitalization)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/encounter-definitions.html#Encounter.status", encounter.status)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/encounter-definitions.html#Encounter.class", encounter.class)
+  extension[]: extension::BuildQuantityExtension("https://www.hl7.org/fhir/DSTU2/encounter-definitions.html#Encounter.length", encounter.length)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/encounter-definitions.html#Encounter.indication", encounter.indication)
+}
+
+def R3EncounterToR2(encounter) {
+  EncounterBase(encounter)
+  contained: datatypes::R3ResourceToR2(encounter.contained[])
+  serviceProvider: datatypes::R3ReferenceToR2(encounter.serviceProvider)
+  partOf: datatypes::R3ReferenceToR2(encounter.partOf)
+  location: R3Encounter_LocationToR2(encounter.location[])
+  appointment: datatypes::R3ReferenceToR2(encounter.appointment)
+  participant: R3Encounter_ParticipantToR2(encounter.participant[])
+  incomingReferral: datatypes::R3ReferenceToR2(encounter.incomingReferral[])
+  episodeOfCare: datatypes::R3ReferenceToR2(encounter.episodeOfCare[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/encounter-definitions.html#Encounter.status", encounter.extension)
+  status: if status? then status else encounter.status
+  statusHistory: R3Encounter_StatusHistoryToR2(encounter.statusHistory[])
+  class: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/encounter-definitions.html#Encounter.class", encounter.extension)
+  patient: datatypes::R3ReferenceToR2(encounter.subject)
+  length: extension::fetchQuantity("https://www.hl7.org/fhir/DSTU2/encounter-definitions.html#Encounter.length", encounter.extension)
+  indication: extension::fetchReferenceArray("https://www.hl7.org/fhir/DSTU2/encounter-definitions.html#Encounter.indication", encounter.extension)
+  hospitalization: R3Encounter_HospitalizationToR2(encounter.hospitalization)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/encounter-definitions.html#Encounter.status", encounter.status)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/STU3/encounter-definitions.html#Encounter.class", encounter.class)
+  extension[]: extension::BuildAgeExtension("https://www.hl7.org/fhir/STU3/encounter-definitions.html#Encounter.length", encounter.length)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/encounter-definitions.html#Encounter.account", encounter.account[])
+}
+
+def R2Encounter_StatusHistoryToR3(data) {
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/encounter-definitions.html#Encounter.statusHistory.status", data.extension)
+  status: if status? then status else data.status
+  period: data.period
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/encounter-definitions.html#Encounter.statusHistory.status", data.status)
+}
+
+def R3Encounter_StatusHistoryToR2(data) {
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/encounter-definitions.html#Encounter.statusHistory.status", data.extension)
+  status: if status? then status else data.status
+  period: data.period
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/encounter-definitions.html#Encounter.statusHistory.status", data.status)
+}
+
+def R2Encounter_HospitalizationToR3(data) {
+  preAdmissionIdentifier: data.preAdmissionIdentifier
+  origin: datatypes::R2ReferenceToR3(data.origin)
+  admitSource: data.admitSource
+  reAdmission: data.reAdmission
+  dietPreference: data.dietPreference
+  specialCourtesy: data.specialCourtesy
+  specialArrangement: data.specialArrangement
+  destination: datatypes::R2ReferenceToR3(data.destination)
+  dischargeDisposition: data.dischargeDisposition
+  admittingDiagnosis: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/encounter-definitions.html#Encounter.hospitalization.admittingDiagnosis", data.admittingDiagnosis[])
+  dischargeDiagnosis: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/encounter-definitions.html#Encounter.hospitalization.dischargeDiagnosis", data.dischargeDiagnosis[])
+}
+
+def R3Encounter_HospitalizationToR2(data) {
+  preAdmissionIdentifier: data.preAdmissionIdentifier
+  origin: datatypes::R3ReferenceToR2(data.origin)
+  admitSource: data.admitSource
+  reAdmission: data.reAdmission
+  dietPreference: data.dietPreference
+  specialCourtesy: data.specialCourtesy
+  specialArrangement: data.specialArrangement
+  destination: datatypes::R3ReferenceToR2(data.destination)
+  dischargeDisposition: data.dischargeDisposition
+  admittingDiagnosis: extension::fetchReferenceArray("https://www.hl7.org/fhir/DSTU2/encounter-definitions.html#Encounter.hospitalization.admittingDiagnosis", data.extension)
+  dischargeDiagnosis: extension::fetchReferenceArray("https://www.hl7.org/fhir/DSTU2/encounter-definitions.html#Encounter.hospitalization.dischargeDiagnosis", data.extension)
+}
+
+def R2Encounter_ParticipantToR3(data) {
+  type: data.type
+  period: data.period
+  individual: datatypes::R2ReferenceToR3(data.individual)
+}
+
+def R3Encounter_ParticipantToR2(data) {
+  type: data.type
+  period: data.period
+  individual: datatypes::R3ReferenceToR2(data.individual)
+}
+
+def R2Encounter_LocationToR3(data) {
+  location: datatypes::R2ReferenceToR3(data.location)
+  status: data.status
+  period: data.period
+}
+
+def R3Encounter_LocationToR2(data) {
+  location: datatypes::R3ReferenceToR2(data.location)
+  status: data.status
+  period: data.period
+}

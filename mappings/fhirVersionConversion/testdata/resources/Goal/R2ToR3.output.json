@@ -1,0 +1,110 @@
+{
+  "addresses": [
+    {
+      "display": "obesity condition"
+    }
+  ],
+  "category": [
+    {
+      "coding": [
+        {
+          "code": "dietary",
+          "system": "http://hl7.org/fhir/goal-category"
+        }
+      ]
+    }
+  ],
+  "description": {
+    "text": "Target weight is 160 to 180 lbs."
+  },
+  "expressedBy": {
+    "display": "Peter James Chalmers",
+    "reference": "Patient/example"
+  },
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/goal-definitions.html#Goal.target.measure",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "3141-9",
+            "display": "Weight Measured",
+            "system": "http://loinc.org"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/goal-definitions.html#Goal.target.detailRange",
+      "valueRange": {
+        "high": {
+          "code": "[lb_av]",
+          "system": "http://unitsofmeasure.org",
+          "unit": "lbs",
+          "value": 180
+        },
+        "low": {
+          "code": "[lb_av]",
+          "system": "http://unitsofmeasure.org",
+          "unit": "lbs",
+          "value": 160
+        }
+      }
+    }
+  ],
+  "id": "example",
+  "identifier": [
+    {
+      "value": "123"
+    }
+  ],
+  "priority": {
+    "coding": [
+      {
+        "code": "high-priority",
+        "display": "High Priority",
+        "system": "http://hl7.org/fhir/goal-priority"
+      }
+    ],
+    "text": "high"
+  },
+  "resourceType": "Goal",
+  "startDate": "2015-04-05",
+  "status": "on-hold",
+  "statusDate": "2016-02-14",
+  "statusReason": "Patient wants to defer weight loss until after honeymoon.",
+  "subject": {
+    "display": "Peter James Chalmers",
+    "reference": "Patient/example"
+  },
+  "target": {
+    "detailRange": {
+      "high": {
+        "code": "[lb_av]",
+        "system": "http://unitsofmeasure.org",
+        "unit": "lbs",
+        "value": 180
+      },
+      "low": {
+        "code": "[lb_av]",
+        "system": "http://unitsofmeasure.org",
+        "unit": "lbs",
+        "value": 160
+      }
+    },
+    "dueDate": "2016-04-05",
+    "measure": {
+      "coding": [
+        {
+          "code": "3141-9",
+          "display": "Weight Measured",
+          "system": "http://loinc.org"
+        }
+      ]
+    }
+  },
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\n\t\t\t\u003cp\u003e A simple care goal for a patient to lose weight due to obesity.\u003c/p\u003e\n\t\t\u003c/div\u003e",
+    "status": "additional"
+  }
+}

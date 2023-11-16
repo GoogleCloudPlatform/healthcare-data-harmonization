@@ -1,0 +1,316 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   contract : FHIR Contract resource
+//
+// Output(s):
+//   FHIR Contract Resource
+//
+def ContractBase(contract) {
+  resourcebase::ResourceBase(contract)
+  contentDerivative: contract.contentDerivative
+  issued: contract.issued
+  applies: contract.applies
+  type: contract.type
+  subType: contract.subType
+}
+
+// Description: Converts a FHIR STU3 Contract resource to FHIR R4 Contract resource.
+//
+// Argument(s):
+//   contract : FHIR STU3 Contract resource https://www.hl7.org/fhir/stu3/contract.html
+//
+// Output(s):
+//   FHIR R4 Contract Resource https://www.hl7.org/fhir/r4/contract.html
+//
+def R3ContractToR4(contract) {
+  ContractBase(contract)
+  contained: datatypes::R3ResourceToR4(contract.contained[])
+  subject: datatypes::R3ReferenceToR4(contract.subject[])
+  authority: datatypes::R3ReferenceToR4(contract.authority[])
+  domain: datatypes::R3ReferenceToR4(contract.domain[])
+  identifier: R3Contract_IdentifierToR4("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.identifier", contract.extension, contract.identifier)
+  url: extension::fetchUrl("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.url", contract.extension)
+  version: extension::fetchString("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.version", contract.extension)
+  status: contract.status
+  legalState: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.legalState", contract.extension)
+  instantiatesCanonical: extension::fetchReference("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.instantiatesCanonical", contract.extension)
+  instantiatesUri: extension::fetchUri("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.instantiatesUri", contract.extension)
+  expirationType: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.expirationType", contract.extension)
+  site: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.site", contract.extension)
+  name: extension::fetchString("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.name", contract.extension)
+  title: extension::fetchString("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.title", contract.extension)
+  subtitle: extension::fetchString("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.subtitle", contract.extension)
+  alias: extension::fetchStringArray("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.alias", contract.extension)
+  author: extension::fetchReference("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.author", contract.extension)
+  scope: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.scope", contract.extension)
+  topicCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.topicCodeableConcept", contract.extension)
+  topicReference: extension::fetchReference("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.topicReference", contract.extension)
+  contentDefinition.type: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.contentDefinition.type", contract.extension)
+  contentDefinition.subType: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.contentDefinition.subType", contract.extension)
+  contentDefinition.publisher: extension::fetchReference("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.contentDefinition.publisher", contract.extension)
+  contentDefinition.publicationDate: extension::fetchDateTime("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.contentDefinition.publicationDate", contract.extension)
+  contentDefinition.publicationStatus: extension::fetchCode("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.contentDefinition.publicationStatus", contract.extension)
+  contentDefinition.copyright: extension::fetchMarkdown("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.contentDefinition.copyright", contract.extension)
+  term: R3Contract_TermToR4(contract.term[])
+  supportingInfo: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.supportingInfo", contract.extension)
+  relevantHistory: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.relevantHistory", contract.extension)
+  signer: R3Contract_SignerToR4(contract.signer[])
+  friendly: R3Contract_FriendlyToR4(contract.friendly[])
+  legal: R3Contract_FriendlyToR4(contract.legal[])
+  rule: R3Contract_FriendlyToR4(contract.rule[])
+  legallyBindingAttachment: contract.bindingAttachment
+  legallyBindingReference: datatypes::R3ReferenceToR4(contract.bindingReference)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.topic", contract.topic[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.action", contract.action[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.actionReason", contract.actionReason[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.decisionType", contract.decisionType)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.securityLabel", contract.securityLabel[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.agent.actor", contract.agent[*].actor[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.agent.role", contract.agent[*].role[*][])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.valuedItem.entityCodeableConcept", contract.valuedItem[*].entityCodeableConcept[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.valuedItem.entityReference", contract.valuedItem[*].entityReference[])
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.valuedItem.identifier", contract.valuedItem[*].identifier[])
+  extension[]: extension::BuildDateTimeExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.valuedItem.effectiveTime", contract.valuedItem[*].effectiveTime[])
+  extension[]: extension::BuildQuantityExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.valuedItem.quantity", contract.valuedItem[*].quantity[])
+  extension[]: extension::BuildMoneyExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.valuedItem.unitPrice", contract.valuedItem[*].unitPrice[])
+  extension[]: extension::BuildMoneyExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.valuedItem.net", contract.valuedItem[*].net[])
+  extension[]: extension::BuildDecimalExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.valuedItem.factor", contract.valuedItem[*].factor[])
+  extension[]: extension::BuildDecimalExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.valuedItem.points", contract.valuedItem[*].points[])
+}
+
+// Description: Converts a FHIR R4 Contract resource to FHIR STU3 Contract resource.
+//
+// Argument(s):
+//   contract : FHIR R4 Contract resource https://www.hl7.org/fhir/r4/contract.html
+//
+// Output(s):
+//   FHIR STU3 Contract Resource https://www.hl7.org/fhir/stu3/contract.html
+//
+def R4ContractToR3(contract) {
+  ContractBase(contract)
+  contained: datatypes::R4ResourceToR3(contract.contained[])
+  subject: datatypes::R4ReferenceToR3(contract.subject[])
+  authority: datatypes::R4ReferenceToR3(contract.authority[])
+  domain: datatypes::R4ReferenceToR3(contract.domain[])
+  identifier: contract.identifier[0]
+  status: contract.status
+  topic: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.topic", contract.extension)
+  action: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.action", contract.extension)
+  actionReason: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.actionReason", contract.extension)
+  decisionType: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.decisionType", contract.extension)
+  securityLabel: extension::fetchCodingArray("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.securityLabel", contract.extension)
+  signer: R4Contract_SignerToR3(contract.signer[])
+  friendly: R4Contract_FriendlyToR3(contract.friendly[])
+  legal: R4Contract_FriendlyToR3(contract.legal[])
+  rule: R4Contract_FriendlyToR3(contract.rule[])
+  term: R4Contract_TermToR3(contract.term[])
+  bindingAttachment: contract.legallyBindingAttachment
+  bindingReference: datatypes::R4ReferenceToR3(contract.legallyBindingReference)
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.identifier", contract.identifier[])
+  extension[]: extension::BuildUrlExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.url", contract.url)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.version", contract.version)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.legalState", contract.legalState)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.instantiatesCanonical", contract.instantiatesCanonical)
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.instantiatesUri", contract.instantiatesUri)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.expirationType", contract.expirationType)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.site", contract.site[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.name", contract.name)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.title", contract.title)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.subtitle", contract.subtitle)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.alias", contract.alias[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.author", contract.author)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.scope", contract.scope)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.topicCodeableConcept", contract.topicCodeableConcept)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.topicReference", contract.topicReference)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.contentDefinition.type", contract.contentDefinition.type)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.contentDefinition.subType", contract.contentDefinition.subType)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.contentDefinition.publisher", contract.contentDefinition.publisher)
+  extension[]: extension::BuildDateTimeExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.contentDefinition.publicationDate", contract.contentDefinition.publicationDate)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.contentDefinition.publicationStatus", contract.contentDefinition.publicationStatus)
+  extension[]: extension::BuildMarkdownExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.contentDefinition.copyright", contract.contentDefinition.copyright)
+}
+
+// Description: Converts a FHIR STU3 Contract.Signer to FHIR R4 Contract.Signer.
+//
+// Argument(s):
+//   data : FHIR STU3 Contract.Signer http://hl7.org/fhir/STU3/contract-definitions.html#Contract.signer
+//
+// Output(s):
+//   FHIR R4 Contract.Signer http://hl7.org/fhir/R4/contract-definitions.html#Contract.signer
+//
+def R3Contract_SignerToR4(data) {
+  type: data.type
+  party: datatypes::R3ReferenceToR4(data.party)
+  signature: datatypes::R3SignatureToR4(data.signature[])
+}
+
+// Description: Converts a FHIR R4 Contract.Signer to FHIR STU3 Contract.Signer.
+//
+// Argument(s):
+//   data : FHIR R4 Contract.Signer http://hl7.org/fhir/R4/contract-definitions.html#Contract.signer
+//
+// Output(s):
+//   FHIR STU3 Contract.Signer http://hl7.org/fhir/STU3/contract-definitions.html#Contract.signer
+//
+def R4Contract_SignerToR3(data) {
+  type: data.type
+  party: datatypes::R4ReferenceToR3(data.party)
+  signature: data.signature
+}
+
+// Description: Converts a FHIR STU3 Contract.Friendly to FHIR R4 Contract.Friendly.
+//
+// Argument(s):
+//   data : FHIR STU3 Contract.Friendly http://hl7.org/fhir/STU3/contract-definitions.html#Contract.friendly
+//
+// Output(s):
+//   FHIR R4 Contract.Friendly http://hl7.org/fhir/R4/contract-definitions.html#Contract.friendly
+//
+def R3Contract_FriendlyToR4(data) {
+  contentAttachment: data.contentAttachment
+  contentReference: datatypes::R3ReferenceToR4(data.contentReference)
+}
+
+// Description: Converts a FHIR R4 Contract.Friendly to FHIR STU3 Contract.Friendly.
+//
+// Argument(s):
+//   data : FHIR R4 Contract.Friendly http://hl7.org/fhir/R4/contract-definitions.html#Contract.friendly
+//
+// Output(s):
+//   FHIR STU3 Contract.Friendly http://hl7.org/fhir/STU3/contract-definitions.html#Contract.friendly
+//
+def R4Contract_FriendlyToR3(data) {
+  contentAttachment: data.contentAttachment
+  contentReference: datatypes::R4ReferenceToR3(data.contentReference)
+}
+
+// Description: Converts a FHIR STU3 Contract.Identifier to FHIR R4 Contract.Identifier.
+//
+// Argument(s):
+//   data : FHIR STU3 Contract.Identifier http://hl7.org/fhir/STU3/contract-definitions.html#Contract.identifier
+//
+// Output(s):
+//   FHIR R4 Contract.Identifier http://hl7.org/fhir/R4/contract-definitions.html#Contract.identifier
+//
+def R3Contract_IdentifierToR4(url, extension, data) {
+  var identifier: extension::fetchIdentifierArray(url, extension)
+  if identifier then {
+    identifier
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 Contract.Term to FHIR R4 Contract.Term.
+//
+// Argument(s):
+//   data : FHIR STU3 Contract.Term http://hl7.org/fhir/STU3/contract-definitions.html#Contract.term
+//
+// Output(s):
+//   FHIR R4 Contract.Term http://hl7.org/fhir/R4/contract-definitions.html#Contract.term
+//
+def R3Contract_TermToR4(data) {
+  identifier: data.identifier
+  issued: data.issued
+  applies: data.applies
+  topicCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.topicCodeableConcept", data.extension)
+  topicReference: extension::fetchReference("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.topicReference", data.extension)
+  type: data.type
+  subType: data.subType
+  text: data.text
+  offer: BuildR4_Contract_Term_Offer(data.extension)
+  offer.text: utilities::defaultIfNull($this.offer, "Unknown")
+  group: R3Contract_TermToR4(data.group[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.term.topic", data.topic[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.term.action", data.action[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.term.actionReason", data.actionReason[])
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.term.securityLabel", data.securityLabel[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.term.agent.actor", data.agent[*].actor[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.term.agent.role", data.agent[*].role[*][])
+}
+
+// Description: Converts a FHIR R4 Contract.Term to FHIR STU3 Contract.Term.
+//
+// Argument(s):
+//   data : FHIR R4 Contract.Term http://hl7.org/fhir/R4/contract-definitions.html#Contract.term
+//
+// Output(s):
+//   FHIR STU3 Contract.Term http://hl7.org/fhir/STU3/contract-definitions.html#Contract.term
+//
+def R4Contract_TermToR3(data) {
+  identifier: data.identifier
+  issued: data.issued
+  applies: data.applies
+  type: data.type
+  subType: data.subType
+  topic: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.term.topic", data.extension)
+  action: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.term.action", data.extension)
+  actionReason: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.term.actionReason", data.extension)
+  securityLabel: extension::fetchCodingArray("https://www.hl7.org/fhir/STU3/contract-definitions.html#Contract.term.securityLabel", data.extension)
+  text: data.text
+  group: data.group
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.topicCodeableConcept", data.topicCodeableConcept)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.topicReference", data.topicReference)
+}
+
+// Description: Constructs a FHIR R4 Contract.Term.Offer
+//
+// Argument(s):
+//   Extension : FHIR STU3 Contract.Term.extension http://hl7.org/fhir/STU3/element-definitions.html#Element.extension
+//
+// Output(s):
+//   FHIR R4 Contract.Term.Offer https://www.hl7.org/fhir/r4/contract-definitions.html#Contract.term.offer
+//
+def BuildR4_Contract_Term_Offer(Extension) {
+  identifier: extension::fetchIdentifierArray("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.identifier", Extension)
+  party: BuildR4_Contract_Term_Offer_Party(Extension.extension)
+  topic: extension::fetchReference("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.topic", Extension)
+  type: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.type", Extension)
+  decision: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.decision", Extension)
+  decisionMode: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.decisionMode", Extension)
+  answer: BuildR4_Contract_Term_Offer_Answer(Extension.extension)
+  text: extension::fetchString("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.text", Extension)
+  linkId: extension::fetchStringArray("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.linkId", Extension)
+  securityLabelNumber: extension::fetchUnsignedIntArray("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.securityLabelNumber", Extension)
+}
+
+// Description: Constructs a FHIR R4 Contract.Term.Offer.Party
+//
+// Argument(s):
+//   Extension : FHIR STU3 Contract.Term.Offer.extension http://hl7.org/fhir/STU3/element-definitions.html#Element.extension
+//
+// Output(s):
+//   FHIR R4 Contract.Term.Offer.Party https://www.hl7.org/fhir/r4/contract-definitions.html#Contract.term.offer.party
+//
+def BuildR4_Contract_Term_Offer_Party(Extension) {
+  reference: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.party.reference", Extension)
+  role: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.party.role", Extension)
+}
+
+// Description: Constructs a FHIR R4 Contract.Term.Offer.Answer
+//
+// Argument(s):
+//   Extension : FHIR STU3 Contract.Term.Offer.extension http://hl7.org/fhir/STU3/element-definitions.html#Element.extension
+//
+// Output(s):
+//   FHIR R4 Contract.Term.Offer.Answer https://www.hl7.org/fhir/r4/contract-definitions.html#Contract.term.offer.answer
+//
+def BuildR4_Contract_Term_Offer_Answer(Extension) {
+  valueBoolean: extension::fetchBoolean("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.answer.valueBoolean", Extension)
+  valueDecimal: extension::fetchDecimal("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.answer.valueDecimal", Extension)
+  valueInteger: extension::fetchInteger("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.answer.valueInteger", Extension)
+  valueDate: extension::fetchDate("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.answer.valueDate", Extension)
+  valueDateTime: extension::fetchDateTime("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.answer.valueDateTime", Extension)
+  valueTime: extension::fetchTime("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.answer.valueTime", Extension)
+  valueString: extension::fetchString("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.answer.valueString", Extension)
+  valueUri: extension::fetchUri("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.answer.valueUri", Extension)
+  valueAttachment: extension::fetchAttachment("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.answer.valueAttachment", Extension)
+  valueCoding: extension::fetchCoding("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.answer.valueCoding", Extension)
+  valueQuantity: extension::fetchQuantity("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.answer.valueQuantity", Extension)
+  valueReference: extension::fetchReference("https://www.hl7.org/fhir/R4/contract-definitions.html#Contract.term.offer.answer.valueReference", Extension)
+}

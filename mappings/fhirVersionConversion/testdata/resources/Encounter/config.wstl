@@ -1,0 +1,11 @@
+// R3 Encounter To R4
+$this: R3EncounterToR4($root)
+
+// R4 Encounter To R3
+$this: R4EncounterToR3($root)
+
+// R2 Encounter To R3
+$this: R2EncounterToR3($root)
+
+// R3 Encounter To R2
+$this: R3EncounterToR2($root)

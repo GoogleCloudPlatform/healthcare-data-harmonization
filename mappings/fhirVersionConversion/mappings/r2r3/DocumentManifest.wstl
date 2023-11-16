@@ -1,0 +1,54 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def DocumentManifestBase(documentManifest) {
+  resourcebase::ResourceBase(documentManifest)
+  masterIdentifier: documentManifest.masterIdentifier
+  identifier: documentManifest.identifier
+  status: documentManifest.status
+  type: documentManifest.type
+  created: documentManifest.created
+  source: documentManifest.source
+  description: documentManifest.description
+}
+
+def R2DocumentManifestToR3(documentManifest) {
+  DocumentManifestBase(documentManifest)
+  contained: datatypes::R2ResourceToR3(documentManifest.contained[])
+  content: R2DocumentManifest_ContentToR3(documentManifest.content[])
+  related: R2DocumentManifest_RelatedToR3(documentManifest.related[])
+  subject: datatypes::R2ReferenceToR3(documentManifest.subject)
+  author: datatypes::R2ReferenceToR3(documentManifest.author[])
+  recipient: datatypes::R2ReferenceToR3(documentManifest.recipient[])
+}
+
+def R3DocumentManifestToR2(documentManifest) {
+  DocumentManifestBase(documentManifest)
+  contained: datatypes::R3ResourceToR2(documentManifest.contained[])
+  content: R3DocumentManifest_ContentToR2(documentManifest.content[])
+  related: R3DocumentManifest_RelatedToR2(documentManifest.related[])
+  subject: datatypes::R3ReferenceToR2(documentManifest.subject)
+  author: datatypes::R3ReferenceToR2(documentManifest.author[])
+  recipient: datatypes::R3ReferenceToR2(documentManifest.recipient[])
+}
+
+def R2DocumentManifest_ContentToR3(data) {
+  pAttachment: data.pAttachment
+  pReference: datatypes::R2ReferenceToR3(data.pReference)
+}
+
+def R3DocumentManifest_ContentToR2(data) {
+  pAttachment: data.pAttachment
+  pReference: datatypes::R3ReferenceToR2(data.pReference)
+}
+
+def R2DocumentManifest_RelatedToR3(data) {
+  identifier: data.identifier
+  ref: datatypes::R2ReferenceToR3(data.ref)
+}
+
+def R3DocumentManifest_RelatedToR2(data) {
+  identifier: data.identifier
+  ref: datatypes::R3ReferenceToR2(data.ref)
+}

@@ -1,0 +1,169 @@
+{
+  "activity": [
+    {
+      "detail": {
+        "code": {
+          "coding": [
+            {
+              "code": "3141-9",
+              "display": "Weight Measured",
+              "system": "http://loinc.org"
+            },
+            {
+              "code": "27113001",
+              "display": "Body weight",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        },
+        "doNotPerform": false,
+        "location": {
+          "display": "Patient's home"
+        },
+        "performer": [
+          {
+            "display": "Peter James Chalmers",
+            "reference": "Patient/example"
+          }
+        ],
+        "scheduledTiming": {
+          "repeat": {
+            "frequency": 1,
+            "period": 1,
+            "periodUnit": "d"
+          }
+        },
+        "status": "completed",
+        "statusReason": {
+          "text": "Achieved weight loss to mitigate diabetes risk."
+        }
+      },
+      "outcomeCodeableConcept": [
+        {
+          "coding": [
+            {
+              "code": "161832001",
+              "display": "Progressive weight loss",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ],
+      "outcomeReference": [
+        {
+          "display": "Weight Measured",
+          "reference": "Observation/example"
+        }
+      ]
+    }
+  ],
+  "addresses": [
+    {
+      "display": "obesity",
+      "reference": "#p1"
+    }
+  ],
+  "author": {
+    "display": "Dr Adam Careful",
+    "reference": "Practitioner/example"
+  },
+  "basedOn": [
+    {
+      "display": "Management of Type 2 Diabetes"
+    }
+  ],
+  "careTeam": [
+    {
+      "reference": "CareTeam/example"
+    }
+  ],
+  "category": [
+    {
+      "text": "Weight management plan"
+    }
+  ],
+  "contained": [
+    {
+      "clinicalStatus": {
+        "coding": [
+          {
+            "code": "active",
+            "system": "http://terminology.hl7.org/CodeSystem/condition-clinical"
+          }
+        ]
+      },
+      "code": {
+        "text": "Obesity"
+      },
+      "id": "p1",
+      "resourceType": "Condition",
+      "subject": {
+        "display": "Peter James Chalmers",
+        "reference": "Patient/example"
+      },
+      "verificationStatus": {
+        "coding": [
+          {
+            "code": "confirmed",
+            "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status"
+          }
+        ]
+      }
+    }
+  ],
+  "created": "2016-01-01",
+  "description": "Manage obesity and weight loss",
+  "encounter": {
+    "reference": "Encounter/home"
+  },
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/R4/careplan-definitions.html#CarePlan.created",
+      "valueDateTime": "2016-01-01"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/careplan-definitions.html#CarePlan.author",
+      "valueReference": [
+        {
+          "display": "Dr Adam Careful",
+          "reference": "Practitioner/example"
+        }
+      ]
+    }
+  ],
+  "goal": [
+    {
+      "reference": "Goal/example"
+    }
+  ],
+  "id": "example",
+  "identifier": [
+    {
+      "value": "12345"
+    }
+  ],
+  "intent": "plan",
+  "partOf": [
+    {
+      "display": "Overall wellness plan"
+    }
+  ],
+  "period": {
+    "end": "2017-06-01"
+  },
+  "replaces": [
+    {
+      "display": "Plan from urgent care clinic"
+    }
+  ],
+  "resourceType": "CarePlan",
+  "status": "active",
+  "subject": {
+    "display": "Peter James Chalmers",
+    "reference": "Patient/example"
+  },
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\n      \u003cp\u003e A simple care plan to indicate a patient taking their weight once a day because of obesity.\u003c/p\u003e\n    \u003c/div\u003e",
+    "status": "additional"
+  }
+}

@@ -1,0 +1,5 @@
+// store to extension
+extension[]: addReference("test_url", $root.data)
+
+// fetch from extension
+data: fetchReference("test_url", $root.extension)

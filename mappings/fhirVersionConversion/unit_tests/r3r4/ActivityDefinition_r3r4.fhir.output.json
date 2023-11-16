@@ -1,0 +1,269 @@
+{
+  "approvalDate": "2017-03-01",
+  "author": [
+    {
+      "name": "Motive Medical Intelligence",
+      "telecom": [
+        {
+          "system": "phone",
+          "use": "work",
+          "value": "415-362-4007"
+        },
+        {
+          "system": "email",
+          "use": "work",
+          "value": "info@motivemi.com"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "code": "306206005",
+        "system": "http://snomed.info/sct"
+      }
+    ],
+    "text": "Referral to service (procedure)"
+  },
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "phone",
+          "use": "work",
+          "value": "415-362-4007"
+        },
+        {
+          "system": "email",
+          "use": "work",
+          "value": "info@motivemi.com"
+        }
+      ]
+    }
+  ],
+  "copyright": "© Copyright 2016 Motive Medical Intelligence. All rights reserved.",
+  "date": "2017-03-03T14:06:00Z",
+  "description": "refer to primary care mental-health integrated care program for evaluation and treatment of mental health conditions now",
+  "dynamicValue": [
+    {
+      "expression": {
+        "language": "text"
+      },
+      "path": "ActivityDefinition"
+    }
+  ],
+  "effectivePeriod": {
+    "end": "2017-12-31",
+    "start": "2017-03-01"
+  },
+  "experimental": true,
+  "extension": [
+    {
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#ContactDetail.name",
+          "valueString": "Motive Medical Intelligence"
+        },
+        {
+          "url": "https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#ContactDetail.telecom",
+          "valueContactPoint": {
+            "system": "phone",
+            "use": "work",
+            "value": "415-362-4007"
+          }
+        },
+        {
+          "url": "https://www.hl7.org/fhir/STU3/metadatatypes-definitions.html#ContactDetail.telecom",
+          "valueContactPoint": {
+            "system": "email",
+            "use": "work",
+            "value": "info@motivemi.com"
+          }
+        }
+      ],
+      "url": "https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.author"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/R4/activitydefinition-definitions.html#ActivityDefinition.kind",
+      "valueCode": "ServiceRequest"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/activitydefinition-definitions.html#ActivityDefinition.kind",
+      "valueCode": "ReferralRequest"
+    }
+  ],
+  "id": "referralPrimaryCareMentalHealth",
+  "identifier": [
+    {
+      "system": "http://motivemi.com/artifacts",
+      "use": "official",
+      "value": "referralPrimaryCareMentalHealth"
+    }
+  ],
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "code": "US",
+          "system": "urn:iso:std:iso:3166"
+        }
+      ]
+    }
+  ],
+  "kind": "Task",
+  "lastReviewDate": "2017-03-01",
+  "name": "ReferralPrimaryCareMentalHealth",
+  "participant": [
+    {
+      "type": "practitioner"
+    }
+  ],
+  "publisher": "Motive Medical Intelligence",
+  "purpose": "Defines a referral to a mental-health integrated care program for use in suicide risk order sets. The definition is independent of the order set in which it appears to allow reuse of the general definition of the referrral.",
+  "relatedArtifact": [
+    {
+      "display": "Practice Guideline for the Treatment of Patients with Major Depressive Disorder",
+      "type": "citation",
+      "url": "http://psychiatryonline.org/pb/assets/raw/sitewide/practice_guidelines/guidelines/mdd.pdf"
+    },
+    {
+      "resource": "ActivityDefinition/referralPrimaryCareMentalHealth-initial",
+      "type": "predecessor"
+    }
+  ],
+  "resourceType": "ActivityDefinition",
+  "status": "active",
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Id: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">ActivityDefinition/referralPrimaryCareMentalHealth</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Status: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">draft</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Description: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">refer to primary care mental-health integrated care program for evaluation and treatment of mental health conditions now</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Category: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">referral</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Code: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-right: 25px;\">\n                  <span style=\"padding-left: 25px;\">\n                     <b>text: </b>\n                     <span>Referral to service (procedure)</span>\n                     <br/>\n                  </span>\n                  <span>\n                     <span>\n                        <span style=\"padding-left: 25px;\">\n                           <b>system: </b>\n                           <span>http://snomed.info/sct</span>\n                           <br/>\n                        </span>\n                        <span style=\"padding-left: 25px;\">\n                           <b>code: </b>\n                           <span>306206005</span>\n                           <br/>\n                        </span>\n                     </span>\n                  </span>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Participant: </b>\n               </td>\n            </tr>\n            <tr style=\"vertical-align: top;\">\n               <td style=\"padding-left: 25px; padding-right: 25px;\">practitioner</td>\n            </tr>\n         </table>\n      </div>",
+    "status": "generated"
+  },
+  "timingTiming": {
+    "_event": [
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/cqif-cqlExpression",
+            "valueString": "Now()"
+          }
+        ]
+      }
+    ]
+  },
+  "title": "Referral to Primary Care Mental Health",
+  "topic": [
+    {
+      "text": "Mental Health Referral"
+    }
+  ],
+  "url": "http://motivemi.com/artifacts/ActivityDefinition/referralPrimaryCareMentalHealth",
+  "usage": "This activity definition is used as the definition of a referral request within various suicide risk order sets. Elements that apply universally are defined here, while elements that apply to the specific setting of a referral within a particular order set are defined in the order set.",
+  "useContext": [
+    {
+      "code": {
+        "code": "age",
+        "system": "http://terminology.hl7.org/CodeSystem/usage-context-type"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "D000328",
+            "display": "Adult",
+            "system": "https://meshb.nlm.nih.gov"
+          }
+        ]
+      }
+    },
+    {
+      "code": {
+        "code": "focus",
+        "system": "http://terminology.hl7.org/CodeSystem/usage-context-type"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "87512008",
+            "display": "Mild major depression",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      }
+    },
+    {
+      "code": {
+        "code": "focus",
+        "system": "http://terminology.hl7.org/CodeSystem/usage-context-type"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "40379007",
+            "display": "Major depression, recurrent, mild",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      }
+    },
+    {
+      "code": {
+        "code": "focus",
+        "system": "http://terminology.hl7.org/CodeSystem/usage-context-type"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "225444004",
+            "display": "At risk for suicide (finding)",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      }
+    },
+    {
+      "code": {
+        "code": "focus",
+        "system": "http://terminology.hl7.org/CodeSystem/usage-context-type"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "306206005",
+            "display": "Referral to service (procedure)",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      }
+    },
+    {
+      "code": {
+        "code": "user",
+        "system": "http://terminology.hl7.org/CodeSystem/usage-context-type"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "309343006",
+            "display": "Physician",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      }
+    },
+    {
+      "code": {
+        "code": "venue",
+        "system": "http://terminology.hl7.org/CodeSystem/usage-context-type"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "440655000",
+            "display": "Outpatient environment",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      }
+    }
+  ],
+  "version": "1.1.0"
+}

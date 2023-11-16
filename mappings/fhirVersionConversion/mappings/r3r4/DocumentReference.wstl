@@ -1,0 +1,154 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   documentreference : FHIR DocumentReference resource
+//
+// Output(s):
+//   FHIR DocumentReference Resource
+//
+def DocumentReferenceBase(documentReference) {
+  resourcebase::ResourceBase(documentReference)
+  masterIdentifier: documentReference.masterIdentifier
+  identifier: documentReference.identifier
+  description: documentReference.description
+  securityLabel: documentReference.securityLabel
+  content: documentReference.content
+}
+
+// Description: Converts a FHIR STU3 DocumentReference resource to FHIR R4 DocumentReference resource.
+//
+// Argument(s):
+//   documentreference : FHIR STU3 DocumentReference resource https://www.hl7.org/fhir/stu3/documentreference.html
+//
+// Output(s):
+//   FHIR R4 DocumentReference Resource https://www.hl7.org/fhir/r4/documentreference.html
+//
+def R3DocumentReferenceToR4(documentReference) {
+  DocumentReferenceBase(documentReference)
+  contained: datatypes::R3ResourceToR4(documentReference.contained[])
+  custodian: datatypes::R3ReferenceToR4(documentReference.custodian)
+  subject: datatypes::R3ReferenceToR4(documentReference.subject)
+  status: documentReference.status
+  docStatus: documentReference.docStatus
+  type: documentReference.type
+  category: R3DocumentReference_ClassToR4("https://www.hl7.org/fhir/R4/documentreference-definitions.html#DocumentReference.category", documentReference.extension, documentReference.class)
+  date: documentReference.indexed
+  author: datatypes::R3ReferenceToR4(documentReference.author[])
+  authenticator: datatypes::R3ReferenceToR4(documentReference.authenticator)
+  relatesTo: R3DocumentReference_RelatesToToR4(documentReference.relatesTo[])
+  context: R3DocumentReference_ContextToR4(documentReference.context)
+  extension[]: extension::BuildDateTimeExtension("https://www.hl7.org/fhir/STU3/documentreference-definitions.html#DocumentReference.created", documentReference.created)
+}
+
+// Description: Converts a FHIR R4 DocumentReference resource to FHIR STU3 DocumentReference resource.
+//
+// Argument(s):
+//   documentreference : FHIR R4 DocumentReference resource https://www.hl7.org/fhir/r4/documentreference.html
+//
+// Output(s):
+//   FHIR STU3 DocumentReference Resource https://www.hl7.org/fhir/stu3/documentreference.html
+//
+def R4DocumentReferenceToR3(documentReference) {
+  DocumentReferenceBase(documentReference)
+  contained: datatypes::R4ResourceToR3(documentReference.contained[])
+  custodian: datatypes::R4ReferenceToR3(documentReference.custodian)
+  subject: datatypes::R4ReferenceToR3(documentReference.subject)
+  status: documentReference.status
+  docStatus: documentReference.docStatus
+  type: documentReference.type
+  class: documentReference.category[0]
+  created: extension::fetchDateTime("https://www.hl7.org/fhir/STU3/documentreference-definitions.html#DocumentReference.created", documentReference.extension)
+  indexed: documentReference.date
+  author: datatypes::R4ReferenceToR3(documentReference.author[])
+  authenticator: datatypes::R4ReferenceToR3(documentReference.authenticator)
+  relatesTo: R4DocumentReference_RelatesToToR3(documentReference.relatesTo[])
+  context: R4DocumentReference_ContextToR3(documentReference.context)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/documentreference-definitions.html#DocumentReference.category", documentReference.category[])
+}
+
+// Description: Converts a FHIR R4 DocumentReference.Class to FHIR STU3 DocumentReference.Class.
+//
+// Argument(s):
+//   data : FHIR R4 DocumentReference.Class http://hl7.org/fhir/R4/documentreference-definitions.html#DocumentReference.class
+//   url : FHIR R4 Extension.url http://hl7.org/fhir/R4/extensibility-definitions.html#Extension.url
+//   extension : FHIR R4 DomainResource.Extension http://hl7.org/fhir/R4/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR STU3 DocumentReference.Class http://hl7.org/fhir/STU3/documentreference-definitions.html#DocumentReference.class
+//
+def R3DocumentReference_ClassToR4(url, extension, data) {
+  var category: extension::fetchCodeableConceptArray(url, extension)
+  if category then {
+    category
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR STU3 DocumentReference.Context to FHIR R4 DocumentReference.Context.
+//
+// Argument(s):
+//   data : FHIR STU3 DocumentReference.Context http://hl7.org/fhir/STU3/documentreference-definitions.html#DocumentReference.context
+//
+// Output(s):
+//   FHIR R4 DocumentReference.Context http://hl7.org/fhir/R4/documentreference-definitions.html#DocumentReference.context
+//
+def R3DocumentReference_ContextToR4(data) {
+  encounter: arrayOf(data.encounter)
+  event: data.event
+  period: data.period
+  facilityType: data.facilityType
+  practiceSetting: data.practiceSetting
+  sourcePatientInfo: datatypes::R3ReferenceToR4(data.sourcePatientInfo)
+  related[]: datatypes::R3ReferenceToR4(data.related[*].ref[])
+  extension[]: extension::BuildIdentifierExtension("https://hl7.org/fhir/STU3/documentreference-definitions.html#DocumentReference.context.related.identifier", data.related[*].identifier[])
+}
+
+// Description: Converts a FHIR R4 DocumentReference.Context to FHIR STU3 DocumentReference.Context.
+//
+// Argument(s):
+//   data : FHIR R4 DocumentReference.Context http://hl7.org/fhir/R4/documentreference-definitions.html#DocumentReference.context
+//
+// Output(s):
+//   FHIR STU3 DocumentReference.Context http://hl7.org/fhir/STU3/documentreference-definitions.html#DocumentReference.context
+//
+def R4DocumentReference_ContextToR3(data) {
+  encounter: datatypes::R4ReferenceToR3(data.encounter[0])
+  event: data.event
+  period: data.period
+  facilityType: data.facilityType
+  practiceSetting: data.practiceSetting
+  sourcePatientInfo: datatypes::R4ReferenceToR3(data.sourcePatientInfo)
+  related[].ref: datatypes::R4ReferenceToR3(data.related[0])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/documentreference-definitions.html#DocumentReference.context.encounter", data.encounter[])
+}
+
+// Description: Converts a FHIR STU3 DocumentReference.RelatesTo to FHIR R4 DocumentReference.RelatesTo.
+//
+// Argument(s):
+//   data : FHIR STU3 DocumentReference.RelatesTo http://hl7.org/fhir/STU3/documentreference-definitions.html#DocumentReference.relatesto
+//
+// Output(s):
+//   FHIR R4 DocumentReference.RelatesTo http://hl7.org/fhir/R4/documentreference-definitions.html#DocumentReference.relatesto
+//
+def R3DocumentReference_RelatesToToR4(data) {
+  code: data.code
+  target: datatypes::R3ReferenceToR4(data.target)
+}
+
+// Description: Converts a FHIR R4 DocumentReference.RelatesTo to FHIR STU3 DocumentReference.RelatesTo.
+//
+// Argument(s):
+//   data : FHIR R4 DocumentReference.RelatesTo http://hl7.org/fhir/R4/documentreference-definitions.html#DocumentReference.relatesto
+//
+// Output(s):
+//   FHIR STU3 DocumentReference.RelatesTo http://hl7.org/fhir/STU3/documentreference-definitions.html#DocumentReference.relatesto
+//
+def R4DocumentReference_RelatesToToR3(data) {
+  code: data.code
+  target: datatypes::R4ReferenceToR3(data.target)
+}

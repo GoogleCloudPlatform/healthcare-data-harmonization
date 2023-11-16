@@ -1,0 +1,5 @@
+// R3 ExplanationOfBenefit To R4
+$this: R3ExplanationOfBenefitToR4($root)
+
+// R4 ExplanationOfBenefit To R3
+$this: R4ExplanationOfBenefitToR3($root)

@@ -1,0 +1,77 @@
+{
+  "amount": {
+    "currency": "USD",
+    "value": 12500
+  },
+  "created": "2014-08-16",
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/R4/paymentnotice-definitions.html#PaymentNotice.payment",
+      "valueReference": {
+        "reference": "PaymentReconciliation/ER2500"
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/R4/paymentnotice-definitions.html#PaymentNotice.payee",
+      "valueReference": {
+        "reference": "Organization/1"
+      }
+    },
+    {
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/datatypes-definitions.html#Money.value",
+          "valueDecimal": 12500
+        },
+        {
+          "url": "https://www.hl7.org/fhir/datatypes-definitions.html#Money.currency",
+          "valueCode": "USD"
+        }
+      ],
+      "url": "https://www.hl7.org/fhir/R4/paymentnotice-definitions.html#PaymentNotice.amount"
+    }
+  ],
+  "id": "77654",
+  "identifier": [
+    {
+      "system": "http://benefitsinc.com/paymentnotice",
+      "value": "776543"
+    }
+  ],
+  "payee": {
+    "reference": "Organization/1"
+  },
+  "payment": {
+    "reference": "PaymentReconciliation/ER2500"
+  },
+  "paymentDate": "2014-08-15",
+  "paymentStatus": {
+    "coding": [
+      {
+        "code": "paid",
+        "system": "http://terminology.hl7.org/CodeSystem/paymentstatus"
+      }
+    ]
+  },
+  "provider": {
+    "reference": "Organization/1"
+  },
+  "recipient": {
+    "identifier": {
+      "system": "http://regulators.gov",
+      "value": "AB123"
+    }
+  },
+  "request": {
+    "reference": "http://benefitsinc.com/fhir/claim/12345"
+  },
+  "resourceType": "PaymentNotice",
+  "response": {
+    "reference": "http://benefitsinc.com/fhir/claimresponse/CR12345"
+  },
+  "status": "active",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003eA human-readable rendering of the PaymentNotice\u003c/div\u003e",
+    "status": "generated"
+  }
+}

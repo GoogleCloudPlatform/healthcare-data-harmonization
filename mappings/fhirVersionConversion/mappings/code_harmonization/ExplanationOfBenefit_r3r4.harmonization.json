@@ -1,0 +1,51 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "complete",
+          "display": "Processing Complete",
+          "target": [
+            {
+              "code": "complete",
+              "display": "Processing Complete",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "error",
+          "display": "Error",
+          "target": [
+            {
+              "code": "error",
+              "display": "Error",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "partial",
+          "display": "Partial Processing",
+          "target": [
+            {
+              "code": "partial",
+              "display": "Partial Processing",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "STU3ExplanationOfBenefitOutcome",
+      "target": "http://hl7.org/fhir/remittance-outcome",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "queued",
+        "display": "Queued"
+      }
+    }
+  ],
+  "id": "ExplanationOfBenefit",
+  "resourceType": "ConceptMap",
+  "version": "v2"
+}

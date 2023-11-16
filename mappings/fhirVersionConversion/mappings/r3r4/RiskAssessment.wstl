@@ -1,0 +1,73 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def RiskAssessmentBase(riskAssessment) {
+  resourcebase::ResourceBase(riskAssessment)
+  method: riskAssessment.method
+  code: riskAssessment.code
+  occurrenceDateTime: riskAssessment.occurrenceDateTime
+  occurrencePeriod: riskAssessment.occurrencePeriod
+  mitigation: riskAssessment.mitigation
+}
+
+def R3RiskAssessmentToR4(riskAssessment) {
+  RiskAssessmentBase(riskAssessment)
+  contained: datatypes::R3ResourceToR4(riskAssessment.contained[])
+  basis: datatypes::R3ReferenceToR4(riskAssessment.basis[])
+  condition: datatypes::R3ReferenceToR4(riskAssessment.condition)
+  basedOn: datatypes::R3ReferenceToR4(riskAssessment.basedOn)
+  parent: datatypes::R3ReferenceToR4(riskAssessment.parent)
+  identifier: R3RiskAssessment_IdentifierToR4("https://www.hl7.org/fhir/R4/riskassessment-definitions.html#RiskAssessment.identifier", riskAssessment.extension, riskAssessment.identifier)
+  status: riskAssessment.status
+  subject: datatypes::R3ReferenceToR4(riskAssessment.subject)
+  encounter: datatypes::R3ReferenceToR4(riskAssessment.context)
+  performer: datatypes::R3ReferenceToR4(riskAssessment.performer)
+  reasonCode: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/riskassessment-definitions.html#RiskAssessment.reasonCode", riskAssessment.extension)
+  reasonReference: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/riskassessment-definitions.html#RiskAssessment.reasonReference", riskAssessment.extension)
+  prediction: riskAssessment.prediction
+  note: R3RiskAssessment_NoteToR4("https://www.hl7.org/fhir/R4/riskassessment-definitions.html#RiskAssessment.note", riskAssessment.extension, riskAssessment.comment)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/riskassessment-definitions.html#RiskAssessment.reasonCodeableConcept", riskAssessment.reasonCodeableConcept)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/riskassessment-definitions.html#RiskAssessment.reasonReference", riskAssessment.reasonReference)
+}
+
+def R4RiskAssessmentToR3(riskAssessment) {
+  RiskAssessmentBase(riskAssessment)
+  contained: datatypes::R4ResourceToR3(riskAssessment.contained[])
+  basis: datatypes::R4ReferenceToR3(riskAssessment.basis[])
+  condition: datatypes::R4ReferenceToR3(riskAssessment.condition)
+  basedOn: datatypes::R4ReferenceToR3(riskAssessment.basedOn)
+  parent: datatypes::R4ReferenceToR3(riskAssessment.parent)
+  identifier: riskAssessment.identifier[0]
+  status: riskAssessment.status
+  subject: datatypes::R4ReferenceToR3(riskAssessment.subject)
+  context: datatypes::R4ReferenceToR3(riskAssessment.encounter)
+  performer: datatypes::R4ReferenceToR3(riskAssessment.performer)
+  reasonCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/riskassessment-definitions.html#RiskAssessment.reasonCodeableConcept", riskAssessment.extension)
+  reasonReference: extension::fetchReference("https://www.hl7.org/fhir/STU3/riskassessment-definitions.html#RiskAssessment.reasonReference", riskAssessment.extension)
+  prediction: riskAssessment.prediction
+  comment: riskAssessment.note[0].text
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/R4/riskassessment-definitions.html#RiskAssessment.identifier", riskAssessment.identifier[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/riskassessment-definitions.html#RiskAssessment.reasonCode", riskAssessment.reasonCode[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/riskassessment-definitions.html#RiskAssessment.reasonReference", riskAssessment.reasonReference[])
+  extension[]: extension::BuildAnnotationExtension("https://www.hl7.org/fhir/R4/riskassessment-definitions.html#RiskAssessment.note", riskAssessment.note[])
+}
+
+def R3RiskAssessment_IdentifierToR4(url, extension, data) {
+  var identifier: extension::fetchIdentifierArray(url, extension)
+  if identifier then {
+    identifier
+  } else {
+    arrayOf(data)
+  }
+}
+
+def R3RiskAssessment_NoteToR4(url, extension, data) {
+  var note: extension::fetchAnnotationArray(url, extension)
+  if note then {
+    note
+  } else {
+    var noteObject.text: data
+    arrayOf(noteObject)
+  }
+}

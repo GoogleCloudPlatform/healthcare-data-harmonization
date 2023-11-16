@@ -1,0 +1,28 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def FlagBase(flag) {
+  resourcebase::ResourceBase(flag)
+  identifier: flag.identifier
+  status: flag.status
+  category: flag.category
+  code: flag.code
+  period: flag.period
+}
+
+def R2FlagToR3(flag) {
+  FlagBase(flag)
+  contained: datatypes::R2ResourceToR3(flag.contained[])
+  subject: datatypes::R2ReferenceToR3(flag.subject)
+  encounter: datatypes::R2ReferenceToR3(flag.encounter)
+  author: datatypes::R2ReferenceToR3(flag.author)
+}
+
+def R3FlagToR2(flag) {
+  FlagBase(flag)
+  contained: datatypes::R3ResourceToR2(flag.contained[])
+  subject: datatypes::R3ReferenceToR2(flag.subject)
+  encounter: datatypes::R3ReferenceToR2(flag.encounter)
+  author: datatypes::R3ReferenceToR2(flag.author)
+}

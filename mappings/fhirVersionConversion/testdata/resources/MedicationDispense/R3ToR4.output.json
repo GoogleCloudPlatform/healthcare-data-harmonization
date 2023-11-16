@@ -1,0 +1,138 @@
+{
+  "authorizingPrescription": [
+    {
+      "reference": "MedicationRequest/medrx0305"
+    }
+  ],
+  "contained": [
+    {
+      "code": {
+        "coding": [
+          {
+            "code": "562721",
+            "display": "Alprazolam 0.25mg (Xanax)",
+            "system": "http://www.nlm.nih.gov/research/umls/rxnorm"
+          }
+        ]
+      },
+      "id": "med0314",
+      "resourceType": "Medication"
+    }
+  ],
+  "daysSupply": {
+    "code": "d",
+    "system": "http://unitsofmeasure.org",
+    "unit": "Day",
+    "value": 10
+  },
+  "dosageInstruction": [
+    {
+      "additionalInstruction": [
+        {
+          "coding": [
+            {
+              "code": "418914006",
+              "display": "Warning. May cause drowsiness. If affected do not drive or operate machinery. Avoid alcoholic drink (qualifier value)",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ],
+      "asNeededCodeableConcept": {
+        "coding": [
+          {
+            "code": "266599000",
+            "display": "Dysmenorrhea (disorder)",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "doseAndRate": [
+        {
+          "doseQuantity": {
+            "code": "TAB",
+            "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+            "unit": "TAB",
+            "value": 1
+          },
+          "type": {
+            "coding": [
+              {
+                "code": "ordered",
+                "display": "Ordered",
+                "system": "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+              }
+            ]
+          }
+        }
+      ],
+      "route": {
+        "coding": [
+          {
+            "code": "26643006",
+            "display": "Oral Route",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "sequence": 1,
+      "text": "0.25mg PO every 6-12 hours as needed for menses from Jan 15-20, 2015.  Do not exceed more than 4mg per day",
+      "timing": {
+        "repeat": {
+          "boundsPeriod": {
+            "end": "2015-01-20",
+            "start": "2015-01-15"
+          },
+          "frequency": 1,
+          "period": 6,
+          "periodMax": 12,
+          "periodUnit": "h"
+        }
+      }
+    }
+  ],
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/R4/medicationdispense-definitions.html#MedicationDispense.status",
+      "valueCode": "in-progress"
+    }
+  ],
+  "id": "meddisp0315",
+  "medicationReference": {
+    "display": "Alprazolam 0.25mg (Xanax)",
+    "reference": "#med0314"
+  },
+  "performer": [
+    {
+      "actor": {
+        "reference": "Practitioner/f006"
+      }
+    }
+  ],
+  "quantity": {
+    "code": "TAB",
+    "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+    "value": 30
+  },
+  "resourceType": "MedicationDispense",
+  "status": "in-progress",
+  "subject": {
+    "display": "Donald Duck",
+    "reference": "Patient/pat1"
+  },
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\u003cp\u003e\u003cb\u003eGenerated Narrative with Details\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eid\u003c/b\u003e: meddisp0315\u003c/p\u003e\u003cp\u003e\u003cb\u003econtained\u003c/b\u003e: \u003c/p\u003e\u003cp\u003e\u003cb\u003estatus\u003c/b\u003e: in-progress\u003c/p\u003e\u003cp\u003e\u003cb\u003emedication\u003c/b\u003e: Alprazolam 0.25mg (Xanax). Generated Summary: id: med0314; Alprazolam 0.25mg (Xanax) \u003cspan\u003e(Details : {RxNorm code '562721' = 'Amylases / CELLULASE / Endopeptidases / Hyoscyamine / Lipase / phenyltoloxamine Oral Capsule', given as 'Alprazolam 0.25mg (Xanax)'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003esubject\u003c/b\u003e: \u003ca\u003eDonald Duck \u003c/a\u003e\u003c/p\u003e\u003ch3\u003ePerformers\u003c/h3\u003e\u003ctable\u003e\u003ctr\u003e\u003ctd\u003e-\u003c/td\u003e\u003ctd\u003e\u003cb\u003eActor\u003c/b\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003e*\u003c/td\u003e\u003ctd\u003e\u003ca\u003ePractitioner/f006\u003c/a\u003e\u003c/td\u003e\u003c/tr\u003e\u003c/table\u003e\u003cp\u003e\u003cb\u003eauthorizingPrescription\u003c/b\u003e: \u003ca\u003eMedicationRequest/medrx0305\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003etype\u003c/b\u003e: Refill - Part Fill \u003cspan\u003e(Details : {http://terminology.hl7.org/CodeSystem/v3-ActCode code 'RFP' = 'Refill - Part Fill', given as 'Refill - Part Fill'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003equantity\u003c/b\u003e: 30 TAB\u003cspan\u003e (Details: http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm code TAB = 'Tablet')\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003edaysSupply\u003c/b\u003e: 10 Day\u003cspan\u003e (Details: UCUM code d = 'd')\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003ewhenPrepared\u003c/b\u003e: 25/06/2015 7:13:00 AM\u003c/p\u003e\u003cp\u003e\u003cb\u003ewhenHandedOver\u003c/b\u003e: 26/06/2015 7:13:00 AM\u003c/p\u003e\u003cp\u003e\u003cb\u003edosageInstruction\u003c/b\u003e: \u003c/p\u003e\u003c/div\u003e",
+    "status": "generated"
+  },
+  "type": {
+    "coding": [
+      {
+        "code": "RFP",
+        "display": "Refill - Part Fill",
+        "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+      }
+    ]
+  },
+  "whenHandedOver": "2015-06-26T07:13:00+05:00",
+  "whenPrepared": "2015-06-25T07:13:00+05:00"
+}

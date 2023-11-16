@@ -1,0 +1,5 @@
+// store to extension
+extension[]: addUsageContext("test_url", $root.useContext[])
+
+// fetch from extension
+useContext: fetchUsageContextArray("test_url", $root.extension)

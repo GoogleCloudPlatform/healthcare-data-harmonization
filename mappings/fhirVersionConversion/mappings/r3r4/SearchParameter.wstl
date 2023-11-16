@@ -1,0 +1,65 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def SearchParameterBase(searchParameter) {
+  resourcebase::ResourceBase(searchParameter)
+  url: searchParameter.url
+  version: searchParameter.version
+  name: searchParameter.name
+  date: searchParameter.date
+  publisher: searchParameter.publisher
+  contact: searchParameter.contact
+  description: searchParameter.description
+  useContext: searchParameter.useContext
+  jurisdiction: searchParameter.jurisdiction
+  purpose: searchParameter.purpose
+  code: searchParameter.code
+  expression: searchParameter.expression
+  xpath: searchParameter.xpath
+  chain: searchParameter.chain
+}
+
+def R3SearchParameterToR4(searchParameter) {
+  SearchParameterBase(searchParameter)
+  contained: datatypes::R3ResourceToR4(searchParameter.contained[])
+  derivedFrom: searchParameter.derivedFrom
+  status: searchParameter.status
+  experimental: searchParameter.experimental
+  base: utilities::Convert_TerminologyCode(searchParameter.base[], "http://hl7.org/fhir/resource-types", "ResourceTypes_r3r4")
+  type: searchParameter.type
+  xpathUsage: searchParameter.xpathUsage
+  target: utilities::Convert_TerminologyCode(searchParameter.target[], "http://hl7.org/fhir/resource-types", "ResourceTypes_r3r4")
+  multipleOr: extension::fetchBoolean("https://www.hl7.org/fhir/R4/searchparameter-definitions.html#SearchParameter.multipleOr", searchParameter.extension)
+  multipleAnd: extension::fetchBoolean("https://www.hl7.org/fhir/R4/searchparameter-definitions.html#SearchParameter.multipleAnd", searchParameter.extension)
+  comparator: searchParameter.comparator
+  modifier: searchParameter.modifier
+  component: R3SearchParameter_ComponentToR4(searchParameter.component)
+}
+
+def R4SearchParameterToR3(searchParameter) {
+  SearchParameterBase(searchParameter)
+  contained: datatypes::R4ResourceToR3(searchParameter.contained[])
+  status: searchParameter.status
+  experimental: searchParameter.experimental
+  base: searchParameter.base
+  type: searchParameter.type
+  derivedFrom: searchParameter.derivedFrom
+  xpathUsage: searchParameter.xpathUsage
+  target: searchParameter.target
+  comparator: searchParameter.comparator
+  modifier: searchParameter.modifier
+  component: R4SearchParameter_ComponentToR3(searchParameter.component)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/R4/searchparameter-definitions.html#SearchParameter.multipleOr", searchParameter.multipleOr)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/R4/searchparameter-definitions.html#SearchParameter.multipleAnd", searchParameter.multipleAnd)
+}
+
+def R3SearchParameter_ComponentToR4(data) {
+  definition: datatypes::ReferenceToCanonical(data.definition)
+  expression: data.expression
+}
+
+def R4SearchParameter_ComponentToR3(data) {
+  definition: datatypes::CanonicalToReference(data.definition)
+  expression: data.expression
+}

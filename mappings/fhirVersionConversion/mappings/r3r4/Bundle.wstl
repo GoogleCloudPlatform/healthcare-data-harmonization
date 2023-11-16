@@ -1,0 +1,122 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   bundle : FHIR Bundle resource
+//
+// Output(s):
+//   FHIR Bundle Resource
+//
+def BundleBase(bundle) {
+  resourceType: bundle.resourceType
+  id: bundle.id
+  meta: bundle.meta
+  implicitRules: bundle.implicitRules
+  language: bundle.language
+  identifier: bundle.identifier
+  total: bundle.total
+  link: bundle.link
+}
+
+// Description: Converts a FHIR STU3 Bundle resource to FHIR R4 Bundle resource.
+//
+// Argument(s):
+//   bundle : FHIR STU3 Bundle resource https://www.hl7.org/fhir/stu3/bundle.html
+//
+// Output(s):
+//   FHIR R4 Bundle Resource https://www.hl7.org/fhir/r4/bundle.html
+//
+def R3BundleToR4(bundle) {
+  BundleBase(bundle)
+  type: bundle.type
+  timestamp: extension::fetchInstant("https://www.hl7.org/fhir/R4/bundle-definitions.html#Bundle.timestamp", bundle.extension)
+  entry: R3Bundle_EntryToR4(bundle.entry[])
+  signature: datatypes::R3SignatureToR4(bundle.signature)
+}
+
+// Description: Converts a FHIR R4 Bundle resource to FHIR STU3 Bundle resource.
+//
+// Argument(s):
+//   bundle : FHIR R4 Bundle resource https://www.hl7.org/fhir/r4/bundle.html
+//
+// Output(s):
+//   FHIR STU3 Bundle Resource https://www.hl7.org/fhir/stu3/bundle.html
+//
+def R4BundleToR3(bundle) {
+  BundleBase(bundle)
+  type: bundle.type
+  entry: R4Bundle_EntryToR3(bundle.entry[])
+  extension[]: extension::BuildInstantExtension("https://www.hl7.org/fhir/R4/bundle-definitions.html#Bundle.timestamp", bundle.timestamp)
+}
+
+// Description: Converts a FHIR R4 Bundle.Entry to FHIR STU3 Bundle.Entry.
+//
+// Argument(s):
+//   data : FHIR R4 Bundle.Entry https://www.hl7.org/fhir/r4/bundle-definitions.html#Bundle.entry
+//
+// Output(s):
+//   FHIR STU3 Bundle.Entry https://www.hl7.org/fhir/stu3/bundle-definitions.html#Bundle.entry
+//
+def R3Bundle_EntryToR4(data) {
+  link: data.link
+  fullUrl: data.fullUrl
+  resource: datatypes::R3ResourceToR4(data.resource)
+  search: data.search
+  request: R3Bundle_Entry_RequestToR4(data.request)
+  response: data.response
+}
+
+// Description: Converts a FHIR STU3 Bundle.Entry to FHIR R4 Bundle.Entry.
+//
+// Argument(s):
+//   data : FHIR STU3 Bundle.Entry https://www.hl7.org/fhir/stu3/bundle-definitions.html#Bundle.entry
+//
+// Output(s):
+//   FHIR R4 Bundle.Entry https://www.hl7.org/fhir/r4/bundle-definitions.html#Bundle.entry
+//
+def R4Bundle_EntryToR3(data) {
+  link: data.link
+  fullUrl: data.fullUrl
+  resource: datatypes::R4ResourceToR3(data.resource)
+  search: data.search
+  request: R4Bundle_Entry_RequestToR3(data.request)
+  response: data.response
+}
+
+// Description: Converts a FHIR R4 Bundle.Entry.Request to FHIR STU3 Bundle.Entry.Request.
+//
+// Argument(s):
+//   data : FHIR R4 Bundle.Entry.Request https://www.hl7.org/fhir/r4/bundle-definitions.html#Bundle.entry.request
+//
+// Output(s):
+//   FHIR STU3 Bundle.Entry.Request https://www.hl7.org/fhir/stu3/bundle-definitions.html#Bundle.entry.request
+//
+def R3Bundle_Entry_RequestToR4(data) {
+  method: data.method
+  url: data.url
+  ifNoneMatch: data.ifNoneMatch
+  ifModifiedSince: data.ifModifiedSince
+  ifMatch: data.ifMatch
+  ifNoneExist: data.ifNoneExist
+}
+
+// Description: Converts a FHIR STU3 Bundle.Entry.Request to FHIR R4 Bundle.Entry.Request.
+//
+// Argument(s):
+//   data : FHIR STU3 Bundle.Entry.Request https://www.hl7.org/fhir/stu3/bundle-definitions.html#Bundle.entry.request
+//
+// Output(s):
+//   FHIR R4 Bundle.Entry.Request https://www.hl7.org/fhir/r4/bundle-definitions.html#Bundle.entry.request
+//
+def R4Bundle_Entry_RequestToR3(data) {
+  method: extension::fetchCode("https://www.hl7.org/fhir/STU3/bundle-definitions.html#Bundle.entry.request.method", data.extension)
+  url: data.url
+  ifNoneMatch: data.ifNoneMatch
+  ifModifiedSince: data.ifModifiedSince
+  ifMatch: data.ifMatch
+  ifNoneExist: data.ifNoneExist
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/bundle-definitions.html#Bundle.entry.request.method", data.method)
+}

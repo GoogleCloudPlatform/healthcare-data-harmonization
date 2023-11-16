@@ -1,0 +1,22 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def ExplanationOfBenefitBase(explanationOfBenefit) {
+  resourcebase::ResourceBase(explanationOfBenefit)
+  identifier: explanationOfBenefit.identifier
+  disposition: explanationOfBenefit.disposition
+  created: explanationOfBenefit.created
+}
+
+def R2ExplanationOfBenefitToR3(explanationOfBenefit) {
+  ExplanationOfBenefitBase(explanationOfBenefit)
+  contained: datatypes::R2ResourceToR3(explanationOfBenefit.contained[])
+  claim: datatypes::R2ReferenceToR3(explanationOfBenefit.request)
+  outcome: datatypes::CodeToCodeableConcept(explanationOfBenefit.outcome)
+  insurer: datatypes::R2ReferenceToR3(explanationOfBenefit.organization)
+  provider: datatypes::R2ReferenceToR3(explanationOfBenefit.requestProvider)
+  organization: datatypes::R2ReferenceToR3(explanationOfBenefit.requestOrganization)
+  extension: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/explanationofbenefit-definitions.html#ExplanationOfBenefit.ruleset", explanationOfBenefit.ruleset)
+  extension: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/explanationofbenefit-definitions.html#ExplanationOfBenefit.originalRuleset", explanationOfBenefit.originalRuleset)
+}

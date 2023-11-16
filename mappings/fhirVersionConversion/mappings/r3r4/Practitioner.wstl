@@ -1,0 +1,45 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def PractitionerBase(practitioner) {
+  resourcebase::ResourceBase(practitioner)
+  identifier: practitioner.identifier
+  name: practitioner.name
+  telecom: practitioner.telecom
+  address: practitioner.address
+  birthDate: practitioner.birthDate
+  photo: practitioner.photo
+}
+
+def R3PractitionerToR4(practitioner) {
+  PractitionerBase(practitioner)
+  contained: datatypes::R3ResourceToR4(practitioner.contained[])
+  qualification: R3Practitioner_QualificationToR4(practitioner.qualification[])
+  active: practitioner.active
+  gender: practitioner.gender
+  communication: practitioner.communication
+}
+
+def R4PractitionerToR3(practitioner) {
+  PractitionerBase(practitioner)
+  contained: datatypes::R4ResourceToR3(practitioner.contained[])
+  qualification: R4Practitioner_QualificationToR3(practitioner.qualification[])
+  active: practitioner.active
+  gender: practitioner.gender
+  communication: practitioner.communication
+}
+
+def R3Practitioner_QualificationToR4(data) {
+  identifier: data.identifier
+  code: data.code
+  period: data.period
+  issuer: datatypes::R3ReferenceToR4(data.issuer)
+}
+
+def R4Practitioner_QualificationToR3(data) {
+  identifier: data.identifier
+  code: data.code
+  period: data.period
+  issuer: datatypes::R4ReferenceToR3(data.issuer)
+}

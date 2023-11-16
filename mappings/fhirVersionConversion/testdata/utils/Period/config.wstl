@@ -1,0 +1,5 @@
+// store to extension
+extension[]: addPeriod("test_url", $root.data)
+
+// fetch from extension
+data: fetchPeriod("test_url", $root.extension)

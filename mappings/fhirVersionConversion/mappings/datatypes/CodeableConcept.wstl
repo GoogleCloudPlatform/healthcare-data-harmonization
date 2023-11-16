@@ -1,0 +1,37 @@
+package datatypes
+
+// Description: Converts a CodeableConcept datatype to code datatype
+//
+// Argument(s):
+//   codeableConcept: FHIR CodeableConcept datatype https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+// Output(s):
+//   FHIR Code datatype https://www.hl7.org/fhir/datatypes.html#code
+//
+def CodeableConceptToCode(codeableConcept) {
+  codeableConcept.coding[0].code
+}
+
+// Description: Converts a CodeableConcept datatype to String datatype
+//
+// Argument(s):
+//   codeableConcept: FHIR CodeableConcept datatype https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+// Output(s):
+//   FHIR String datatype https://www.hl7.org/fhir/datatypes.html#string
+//
+def CodeableConceptToString(codeableConcept) {
+  codeableConcept.text
+}
+
+// Description: Converts a CodeableConcept datatype to Coding datatype
+//
+// Argument(s):
+//   codeableConcept: FHIR CodeableConcept datatype https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+// Output(s):
+//   FHIR Coding datatype https://www.hl7.org/fhir/datatypes.html#Coding
+//
+def CodeableConceptToCoding(codeableConcept) {
+  codeableConcept.coding[0]
+}

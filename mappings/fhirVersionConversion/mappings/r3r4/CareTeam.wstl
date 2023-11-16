@@ -1,0 +1,110 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   careTeam : FHIR CareTeam resource
+//
+// Output(s):
+//   FHIR CareTeam Resource
+//
+def CareTeamBase(careTeam) {
+  resourcebase::ResourceBase(careTeam)
+  identifier: careTeam.identifier
+  category: careTeam.category
+  name: careTeam.name
+  period: careTeam.period
+  reasonCode: careTeam.reasonCode
+  note: careTeam.note
+}
+
+// Description: Converts a FHIR STU3 CareTeam resource to FHIR R4 CareTeam resource.
+//
+// Argument(s):
+//   careTeam : FHIR STU3 CareTeam resource https://www.hl7.org/fhir/stu3/careTeam.html
+//
+// Output(s):
+//   FHIR R4 CareTeam Resource https://www.hl7.org/fhir/r4/careTeam.html
+//
+def R3CareTeamToR4(careTeam) {
+  CareTeamBase(careTeam)
+  contained: datatypes::R3ResourceToR4(careTeam.contained[])
+  subject: datatypes::R3ReferenceToR4(careTeam.subject)
+  reasonReference: datatypes::R3ReferenceToR4(careTeam.reasonReference[])
+  managingOrganization: datatypes::R3ReferenceToR4(careTeam.managingOrganization[])
+  status: careTeam.status
+  encounter: if matchesRegex(careTeam.context.reference, "^Encounter.*") then datatypes::R3ReferenceToR4(careTeam.context)
+  participant: R3CareTeam_ParticipantToR4(careTeam.participant[])
+  telecom: extension::fetchContactPointArray("https://www.hl7.org/fhir/R4/careteam-definitions.html#CareTeam.telecom", careTeam.extension)
+  extension[]: if !$this.encounter then extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/careTeam-definitions.html#CareTeam.context", careTeam.context)
+}
+
+// Description: Converts a FHIR R4 CareTeam resource to FHIR STU3 CareTeam resource.
+//
+// Argument(s):
+//   careTeam : FHIR R4 CareTeam resource https://www.hl7.org/fhir/r4/careTeam.html
+//
+// Output(s):
+//   FHIR STU3 CareTeam Resource https://www.hl7.org/fhir/stu3/careTeam.html
+//
+def R4CareTeamToR3(careTeam) {
+  CareTeamBase(careTeam)
+  contained: datatypes::R4ResourceToR3(careTeam.contained[])
+  subject: datatypes::R4ReferenceToR3(careTeam.subject)
+  reasonReference: datatypes::R4ReferenceToR3(careTeam.reasonReference[])
+  managingOrganization: datatypes::R4ReferenceToR3(careTeam.managingOrganization[])
+  status: careTeam.status
+  context: datatypes::R4ReferenceToR3(careTeam.encounter)
+  participant: R4CareTeam_ParticipantToR3(careTeam.participant[])
+  extension[]: extension::BuildContactPointExtension("https://www.hl7.org/fhir/R4/careteam-definitions.html#CareTeam.telecom", careTeam.telecom[])
+}
+
+// Description: Converts a FHIR STU3 CareTeam.Participant to FHIR R4 CareTeam.Participant.
+//
+// Argument(s):
+//   data : FHIR STU3 CareTeam.Participant http://hl7.org/fhir/STU3/careTeam-definitions.html#CareTeam.participant
+//
+// Output(s):
+//   FHIR R4 CareTeam.Participant http://hl7.org/fhir/R4/careTeam-definitions.html#CareTeam.participant
+//
+def R3CareTeam_ParticipantToR4(data) {
+  role: R3CareTeam_Participant_RoleToR4("https://www.hl7.org/fhir/R4/careteam-definitions.html#CareTeam.participant.role", data.extension, data.role)
+  member: datatypes::R3ReferenceToR4(data.member)
+  onBehalfOf: datatypes::R3ReferenceToR4(data.onBehalfOf)
+  period: data.period
+}
+
+// Description: Converts a FHIR STU3 CareTeam.Participant.Role to FHIR R4 CareTeam.Participant.Role.
+//
+// Argument(s):
+//   data : FHIR STU3 CareTeam.Participant.Role http://hl7.org/fhir/STU3/careTeam-definitions.html#CareTeam.participant.role
+//
+// Output(s):
+//   FHIR R4 CareTeam.Participant.Role http://hl7.org/fhir/R4/careTeam-definitions.html#CareTeam.participant.role
+//
+def R3CareTeam_Participant_RoleToR4(url, extension, data) {
+  var role: extension::fetchCodeableConceptArray(url, extension)
+  if role then {
+    role
+  } else {
+    arrayOf(data)
+  }
+}
+
+// Description: Converts a FHIR R4 CareTeam.Participant to FHIR STU3 CareTeam.Participant.
+//
+// Argument(s):
+//   data : FHIR R4 CareTeam.Participant http://hl7.org/fhir/R4/careTeam-definitions.html#CareTeam.participant
+//
+// Output(s):
+//   FHIR STU3 CareTeam.Participant http://hl7.org/fhir/STU3/careTeam-definitions.html#CareTeam.participant
+//
+def R4CareTeam_ParticipantToR3(data) {
+  role: data.role[0]
+  member: datatypes::R4ReferenceToR3(data.member)
+  onBehalfOf: datatypes::R4ReferenceToR3(data.onBehalfOf)
+  period: data.period
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/careteam-definitions.html#CareTeam.participant.role", data.role)
+}

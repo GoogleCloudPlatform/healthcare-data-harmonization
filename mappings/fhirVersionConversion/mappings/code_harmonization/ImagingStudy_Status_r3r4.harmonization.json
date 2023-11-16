@@ -1,0 +1,62 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "ONLINE",
+          "display": "online",
+          "target": [
+            {
+              "code": "available",
+              "display": "Available",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "NEARLINE",
+          "display": "nearline",
+          "target": [
+            {
+              "code": "available",
+              "display": "Available",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "OFFLINE",
+          "display": "offline",
+          "target": [
+            {
+              "code": "registered",
+              "display": "Registered",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "UNAVAILABLE",
+          "display": "UNAVAILABLE",
+          "target": [
+            {
+              "code": "registered",
+              "display": "Registered",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://dicom.nema.org/resources/ontology/DCM",
+      "target": "http://hl7.org/fhir/imagingstudy-status",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "unknown",
+        "display": "Unknown"
+      }
+    }
+  ],
+  "id": "ImagingStudy_Status_r3r4",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

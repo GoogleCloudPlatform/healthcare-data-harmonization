@@ -1,0 +1,134 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def ObservationBase(observation) {
+  resourcebase::ResourceBase(observation)
+  identifier: observation.identifier
+  status: observation.status
+  code: observation.code
+  effectiveDateTime: observation.effectiveDateTime
+  effectivePeriod: observation.effectivePeriod
+  issued: observation.issued
+  dataAbsentReason: observation.dataAbsentReason
+  interpretation: observation.interpretation
+  bodySite: observation.bodySite
+  method: observation.method
+  valueQuantity: observation.valueQuantity
+  valueCodeableConcept: observation.valueCodeableConcept
+  valueString: observation.valueString
+  valueRange: observation.valueRange
+  valueRatio: observation.valueRatio
+  valueSampledData: observation.valueSampledData
+  valueAttachment: observation.valueAttachment
+  valueTime: observation.valueTime
+  valueDateTime: observation.valueDateTime
+  valuePeriod: observation.valuePeriod
+}
+
+def R2ObservationToR3(observation) {
+  ObservationBase(observation)
+  contained: datatypes::R2ResourceToR3(observation.contained[])
+  specimen: datatypes::R2ReferenceToR3(observation.specimen)
+  device: datatypes::R2ReferenceToR3(observation.device)
+  performer: datatypes::R2ReferenceToR3(observation.performer[])
+  subject: datatypes::R2ReferenceToR3(observation.subject)
+  basedOn: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/observation-definitions.html#Observation.basedOn", observation.extension)
+  category: R2Observation_CategoryToR3("https://www.hl7.org/fhir/STU3/observation-definitions.html#Observation.category", observation.extension, observation.category)
+  context: datatypes::R2ReferenceToR3(observation.encounter)
+  valueBoolean: observation.valueBoolean
+  comment: observation.comments
+  referenceRange: R2Observation_ReferenceRangeToR3(observation.referenceRange[])
+  related: R2Observation_RelatedToR3(observation.related[])
+  component: R2Observation_ComponentToR3(observation.component[])
+}
+
+def R3ObservationToR2(observation) {
+  ObservationBase(observation)
+  contained: datatypes::R3ResourceToR2(observation.contained[])
+  specimen: datatypes::R3ReferenceToR2(observation.specimen)
+  device: datatypes::R3ReferenceToR2(observation.device)
+  performer: datatypes::R3ReferenceToR2(observation.performer[])
+  subject: datatypes::R3ReferenceToR2(observation.subject)
+  basedOn: observation.basedOn
+  category: observation.category[0]
+  encounter: datatypes::R3ReferenceToR2(observation.context)
+  comments: observation.comment
+  referenceRange: R3Observation_ReferenceRangeToR2(observation.referenceRange[])
+  related: R3Observation_RelatedToR2(observation.related[])
+  component: R3Observation_ComponentToR2(observation.component[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/observation-definitions.html#Observation.basedOn", observation.basedOn[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/observation-definitions.html#Observation.category", observation.category[])
+}
+
+def R2Observation_CategoryToR3(url, extension, data) {
+  var category: extension::fetchCodeableConceptArray(url, extension)
+  if category then {
+    category
+  } else {
+    arrayOf(data)
+  }
+}
+
+def R2Observation_ReferenceRangeToR3(data) {
+  low: data.low
+  high: data.high
+  type: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/observation-definitions.html#Observation.referenceRange.type", data.extension)
+  appliesTo: R2Observation_CategoryToR3("https://www.hl7.org/fhir/STU3/observation-definitions.html#Observation.referenceRange.appliesTo", data.extension, data.meaning)
+  age: data.age
+  text: data.text
+}
+
+def R3Observation_ReferenceRangeToR2(data) {
+  low: data.low
+  high: data.high
+  meaning: data.appliesTo[0]
+  age: data.age
+  text: data.text
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/observation-definitions.html#Observation.referenceRange.type", data.type)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/observation-definitions.html#Observation.referenceRange.appliesTo", data.appliesTo[])
+}
+
+def R2Observation_ComponentToR3(data) {
+  code: data.code
+  valueQuantity: data.valueQuantity
+  valueCodeableConcept: data.valueCodeableConcept
+  valueString: data.valueString
+  valueRange: data.valueRange
+  valueRatio: data.valueRatio
+  valueSampledData: data.valueSampledData
+  valueAttachment: data.valueAttachment
+  valueTime: data.valueTime
+  valueDateTime: data.valueDateTime
+  valuePeriod: data.valuePeriod
+  dataAbsentReason: data.dataAbsentReason
+  interpretation: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/observation-definitions.html#Observation.component.interpretation", data.extension)
+  referenceRange: datatypes::R2ReferenceToR3(data.referenceRange[])
+}
+
+def R3Observation_ComponentToR2(data) {
+  code: data.code
+  valueQuantity: data.valueQuantity
+  valueCodeableConcept: data.valueCodeableConcept
+  valueString: data.valueString
+  valueRange: data.valueRange
+  valueRatio: data.valueRatio
+  valueSampledData: data.valueSampledData
+  valueAttachment: data.valueAttachment
+  valueTime: data.valueTime
+  valueDateTime: data.valueDateTime
+  valuePeriod: data.valuePeriod
+  dataAbsentReason: data.dataAbsentReason
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/observation-definitions.html#Observation.component.interpretation", data.interpretation)
+  referenceRange: datatypes::R3ReferenceToR2(data.referenceRange[])
+}
+
+def R2Observation_RelatedToR3(data) {
+  type: data.type
+  target: datatypes::R2ReferenceToR3(data.target)
+}
+
+def R3Observation_RelatedToR2(data) {
+  type: data.type
+  target: datatypes::R3ReferenceToR2(data.target)
+}

@@ -1,0 +1,40 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def PaymentNoticeBase(paymentNotice) {
+  resourcebase::ResourceBase(paymentNotice)
+  identifier: paymentNotice.identifier
+  created: paymentNotice.created
+}
+
+def R2PaymentNoticeToR3(paymentNotice) {
+  PaymentNoticeBase(paymentNotice)
+  contained: datatypes::R2ResourceToR3(paymentNotice.contained[])
+  organization: datatypes::R2ReferenceToR3(paymentNotice.organization)
+  provider: datatypes::R2ReferenceToR3(paymentNotice.provider)
+  target: datatypes::R2ReferenceToR3(paymentNotice.target)
+  request: datatypes::R2ReferenceToR3(paymentNotice.request)
+  response: datatypes::R2ReferenceToR3(paymentNotice.response)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/paymentnotice-definitions.html#PaymentNotice.status", paymentNotice.extension)
+  status: if status? then status else paymentNotice.status
+  statusDate: extension::fetchDate("https://www.hl7.org/fhir/STU3/paymentnotice-definitions.html#PaymentNotice.statusDate", paymentNotice.extension)
+  paymentStatus: datatypes::CodingToCodeableConcept(paymentNotice.paymentStatus)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/paymentnotice-definitions.html#PaymentNotice.ruleset", paymentNotice.ruleset)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/paymentnotice-definitions.html#PaymentNotice.originalRuleset", paymentNotice.originalRuleset)
+}
+
+def R3PaymentNoticeToR2(paymentNotice) {
+  PaymentNoticeBase(paymentNotice)
+  contained: datatypes::R3ResourceToR2(paymentNotice.contained[])
+  organization: datatypes::R3ReferenceToR2(paymentNotice.organization)
+  provider: datatypes::R3ReferenceToR2(paymentNotice.provider)
+  target: datatypes::R3ReferenceToR2(paymentNotice.target)
+  request: datatypes::R3ReferenceToR2(paymentNotice.request)
+  response: datatypes::R3ReferenceToR2(paymentNotice.response)
+  ruleset: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/paymentnotice-definitions.html#PaymentNotice.ruleset", paymentNotice.extension)
+  originalRuleset: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/paymentnotice-definitions.html#PaymentNotice.originalRuleset", paymentNotice.extension)
+  paymentStatus: datatypes::CodeableConceptToCoding(paymentNotice.paymentStatus)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/paymentnotice-definitions.html#PaymentNotice.status", paymentNotice.status)
+  extension[]: extension::BuildDateExtension("https://www.hl7.org/fhir/STU3/paymentnotice-definitions.html#PaymentNotice.statusDate", paymentNotice.statusDate)
+}

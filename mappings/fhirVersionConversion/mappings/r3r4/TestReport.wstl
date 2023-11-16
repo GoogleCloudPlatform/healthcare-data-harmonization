@@ -1,0 +1,58 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   testReport: FHIR TestReport resource
+//
+// Output(s):
+//   FHIR TestReport Resource
+//
+def TestReportBase(testReport) {
+  resourcebase::ResourceBase(testReport)
+  identifier: testReport.identifier
+  name: testReport.name
+  score: testReport.score
+  tester: testReport.tester
+  issued: testReport.issued
+  test: testReport.test
+  teardown: testReport.teardown
+}
+
+// Description: Converts a FHIR STU3 TestReport resource to FHIR R4 TestReport resource.
+//
+// Argument(s):
+//   testReport : FHIR STU3 TestReport resource https://www.hl7.org/fhir/stu3/testreport.html
+//
+// Output(s):
+//   FHIR R4 TestReport Resource https://www.hl7.org/fhir/r4/testreport.html
+//
+def R3TestReportToR4(testReport) {
+  TestReportBase(testReport)
+  contained: datatypes::R3ResourceToR4(testReport.contained[])
+  testScript: datatypes::R3ReferenceToR4(testReport.testScript)
+  status: testReport.status
+  result: testReport.result
+  participant: testReport.participant
+  setup: testReport.setup
+}
+
+// Description: Converts a FHIR R4 TestReport resource to FHIR STU3 TestReport resource.
+//
+// Argument(s):
+//   testReport : FHIR R4 TestReport resource https://www.hl7.org/fhir/r4/testreport.html
+//
+// Output(s):
+//   FHIR STU3 TestReport Resource https://www.hl7.org/fhir/stu3/testreport.html
+//
+def R4TestReportToR3(testReport) {
+  TestReportBase(testReport)
+  contained: datatypes::R4ResourceToR3(testReport.contained[])
+  testScript: datatypes::R4ReferenceToR3(testReport.testScript)
+  status: testReport.status
+  result: testReport.result
+  participant: testReport.participant
+  setup: testReport.setup
+}

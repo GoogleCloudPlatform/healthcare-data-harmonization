@@ -1,0 +1,59 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def ProcessResponseBase(processResponse) {
+  resourcebase::ResourceBase(processResponse)
+  identifier: processResponse.identifier
+  created: processResponse.created
+  disposition: processResponse.disposition
+}
+
+def R2ProcessResponseToR3(processResponse) {
+  ProcessResponseBase(processResponse)
+  contained: datatypes::R2ResourceToR3(processResponse.contained[])
+  requestProvider: datatypes::R2ReferenceToR3(processResponse.requestProvider)
+  requestOrganization: datatypes::R2ReferenceToR3(processResponse.requestOrganization)
+  organization: datatypes::R2ReferenceToR3(processResponse.organization)
+  request: datatypes::R2ReferenceToR3(processResponse.request)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/processresponse-definitions.html#ProcessResponse.status", processResponse.extension)
+  status: if status? then status else processResponse.status
+  outcome: datatypes::CodingToCodeableConcept(processResponse.outcome)
+  form: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/processresponse-definitions.html#ProcessResponse.form", processResponse.extension)
+  error: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/processresponse-definitions.html#ProcessResponse.error", processResponse.extension)
+  communicationRequest: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/processresponse-definitions.html#ProcessResponse.communicationRequest", processResponse.extension)
+  processNote: R2ProcessResponse_ProcessNoteToR3(processResponse.notes[])
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/processresponse-definitions.html#ProcessResponse.form", processResponse.form)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/processresponse-definitions.html#ProcessResponse.error", processResponse.error[])
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/processresponse-definitions.html#ProcessResponse.ruleset", processResponse.ruleset)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/processresponse-definitions.html#ProcessResponse.originalRuleset", processResponse.originalRuleset)
+}
+
+def R3ProcessResponseToR2(processResponse) {
+  ProcessResponseBase(processResponse)
+  contained: datatypes::R3ResourceToR2(processResponse.contained[])
+  requestProvider: datatypes::R3ReferenceToR2(processResponse.requestProvider)
+  requestOrganization: datatypes::R3ReferenceToR2(processResponse.requestOrganization)
+  organization: datatypes::R3ReferenceToR2(processResponse.organization)
+  request: datatypes::R3ReferenceToR2(processResponse.request)
+  outcome: datatypes::CodeableConceptToCoding(processResponse.outcome)
+  form: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/processresponse-definitions.html#ProcessResponse.form", processResponse.extension)
+  error: extension::fetchCodingArray("https://www.hl7.org/fhir/DSTU2/processresponse-definitions.html#ProcessResponse.error", processResponse.extension)
+  ruleset: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/processresponse-definitions.html#ProcessResponse.ruleset", processResponse.extension)
+  originalRuleset: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/processresponse-definitions.html#ProcessResponse.originalRuleset", processResponse.extension)
+  notes: R3ProcessResponse_ProcessNoteToR2(processResponse.processNote[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/processresponse-definitions.html#ProcessResponse.status", processResponse.status)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/processresponse-definitions.html#ProcessResponse.form", processResponse.form)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/processresponse-definitions.html#ProcessResponse.error", processResponse.error[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/processresponse-definitions.html#ProcessResponse.communicationRequest", processResponse.communicationRequest[])
+}
+
+def R2ProcessResponse_ProcessNoteToR3(data) {
+  type: datatypes::CodingToCodeableConcept(data.type)
+  text: data.text
+}
+
+def R3ProcessResponse_ProcessNoteToR2(data) {
+  type: datatypes::CodeableConceptToCoding(data.type)
+  text: data.text
+}

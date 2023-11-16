@@ -1,0 +1,13 @@
+package datatypes
+
+// Description: Converts a canonical datatype to reference datatype
+//
+// Argument(s):
+//   canonical: FHIR canonical datatype https://www.hl7.org/fhir/datatypes.html#canonical
+//
+// Output(s):
+//   FHIR Reference datatype https://www.hl7.org/fhir/references.html#Reference
+//
+def CanonicalToReference(canonical) {
+  reference: canonical
+}

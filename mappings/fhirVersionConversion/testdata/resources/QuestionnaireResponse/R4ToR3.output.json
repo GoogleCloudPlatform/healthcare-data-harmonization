@@ -1,0 +1,138 @@
+{
+  "author": {
+    "reference": "#questauth"
+  },
+  "authored": "2013-02-19T14:15:00-05:00",
+  "basedOn": [
+    {
+      "reference": "#order"
+    }
+  ],
+  "contained": [
+    {
+      "birthDate": "1972-11-30",
+      "gender": "male",
+      "id": "patsub",
+      "identifier": [
+        {
+          "system": "http://cancer.questionnaire.org/systems/id/patientnr",
+          "value": "A34442332"
+        },
+        {
+          "system": "urn:oid:2.16.840.1.113883.2.4.6.3",
+          "type": {
+            "text": "Dutch BSN"
+          },
+          "value": "188912345"
+        }
+      ],
+      "resourceType": "Patient"
+    },
+    {
+      "id": "order",
+      "intent": "order",
+      "requester": {
+        "reference": "Practitioner/example"
+      },
+      "resourceType": "ServiceRequest",
+      "status": "unknown",
+      "subject": {
+        "reference": "#patsub"
+      }
+    },
+    {
+      "id": "questauth",
+      "identifier": [
+        {
+          "system": "http://cancer.questionnaire.org/systems/id/org",
+          "type": {
+            "text": "AUMC, Den Helder"
+          },
+          "value": "AUMC"
+        }
+      ],
+      "resourceType": "Practitioner"
+    }
+  ],
+  "context": {
+    "reference": "Encounter/example"
+  },
+  "id": "3141",
+  "identifier": {
+    "system": "http://example.org/fhir/NamingSystem/questionnaire-ids",
+    "value": "Q12349876"
+  },
+  "item": [
+    {
+      "item": [
+        {
+          "answer": [
+            {
+              "item": [
+                {
+                  "item": [
+                    {
+                      "answer": [
+                        {
+                          "valueCoding": {
+                            "code": "1",
+                            "system": "http://cancer.questionnaire.org/system/code/yesno"
+                          }
+                        }
+                      ],
+                      "linkId": "1.1.1.1"
+                    },
+                    {
+                      "answer": [
+                        {
+                          "valueCoding": {
+                            "code": "1",
+                            "system": "http://cancer.questionnaire.org/system/code/yesno"
+                          }
+                        }
+                      ],
+                      "linkId": "1.1.1.2"
+                    },
+                    {
+                      "answer": [
+                        {
+                          "valueCoding": {
+                            "code": "0",
+                            "system": "http://cancer.questionnaire.org/system/code/yesno"
+                          }
+                        }
+                      ],
+                      "linkId": "1.1.1.3"
+                    }
+                  ],
+                  "linkId": "1.1.1"
+                }
+              ],
+              "valueCoding": {
+                "code": "1",
+                "display": "Yes",
+                "system": "http://cancer.questionnaire.org/system/code/yesno"
+              }
+            }
+          ],
+          "linkId": "1.1"
+        }
+      ],
+      "linkId": "1"
+    }
+  ],
+  "parent": [
+    {
+      "reference": "Procedure/f201"
+    }
+  ],
+  "resourceType": "QuestionnaireResponse",
+  "status": "completed",
+  "subject": {
+    "reference": "#patsub"
+  },
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\n      \u003cpre\u003e\n            Comorbidity? YES\n              Cardial Comorbidity? YES\n                Angina? YES\n                MI? NO\n              Vascular Comorbidity?\n                (no answers)\n              ...\n            Histopathology\n              Abdominal\n                pT category: 1a\n              ...\n          \u003c/pre\u003e\n    \u003c/div\u003e",
+    "status": "generated"
+  }
+}

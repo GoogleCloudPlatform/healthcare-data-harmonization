@@ -1,0 +1,89 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def CommunicationBase(communication) {
+  resourcebase::ResourceBase(communication)
+  identifier: communication.identifier
+  medium: communication.medium
+  sent: communication.sent
+  received: communication.received
+}
+
+def R2CommunicationToR3(communication) {
+  CommunicationBase(communication)
+  contained: datatypes::R2ResourceToR3(communication.contained[])
+  payload: R2Communication_PayloadToR3(communication.payload[])
+  sender: datatypes::R2ReferenceToR3(communication.sender)
+  recipient: datatypes::R2ReferenceToR3(communication.recipient[])
+  definition: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/communication-definitions.html#Communication.definition", communication.extension)
+  basedOn: R2Communication_BasedOnToR3("https://www.hl7.org/fhir/STU3/communication-definitions.html#Communication.basedOn", communication.extension, datatypes::R2ReferenceToR3(communication.requestDetail))
+  partOf: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/communication-definitions.html#Communication.partOf", communication.extension)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/communication-definitions.html#Communication.status", communication.extension)
+  status: if status? then status else communication.status
+  notDone: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/communication-definitions.html#Communication.notDone", communication.extension)
+  notDoneReason: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/communication-definitions.html#Communication.notDoneReason", communication.extension)
+  category: R2Communication_CategoryToR3("https://www.hl7.org/fhir/STU3/communication-definitions.html#Communication.category", communication.extension, communication.category)
+  subject: datatypes::R2ReferenceToR3(communication.subject)
+  topic: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/communication-definitions.html#Communication.topic", communication.extension)
+  context: datatypes::R2ReferenceToR3(communication.encounter)
+  reasonCode: communication.reason
+  reasonReference: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/communication-definitions.html#Communication.reasonReference", communication.extension)
+  note: extension::fetchAnnotationArray("https://www.hl7.org/fhir/STU3/communication-definitions.html#Communication.note", communication.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/communication-definitions.html#Communication.status", communication.status)
+}
+
+def R3CommunicationToR2(communication) {
+  CommunicationBase(communication)
+  contained: datatypes::R3ResourceToR2(communication.contained[])
+  payload: R3Communication_PayloadToR2(communication.payload[])
+  sender: datatypes::R3ReferenceToR2(communication.sender)
+  recipient: datatypes::R3ReferenceToR2(communication.recipient[])
+  requestDetail: datatypes::R3ReferenceToR2(communication.basedOn[0])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/communication-definitions.html#Communication.status", communication.extension)
+  status: if status? then status else communication.status
+  category: communication.category[0]
+  subject: datatypes::R3ReferenceToR2(communication.subject)
+  encounter: datatypes::R3ReferenceToR2(communication.context)
+  reason: communication.reasonCode
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/communication-definitions.html#Communication.definition", communication.definition[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/communication-definitions.html#Communication.partOf", communication.partOf[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/communication-definitions.html#Communication.status", communication.status)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/communication-definitions.html#Communication.notDone", communication.notDone)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/communication-definitions.html#Communication.notDoneReason", communication.notDoneReason)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/communication-definitions.html#Communication.topic", communication.topic[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/communication-definitions.html#Communication.reasonReference", communication.reasonReference[])
+  extension[]: extension::BuildAnnotationExtension("https://www.hl7.org/fhir/STU3/communication-definitions.html#Communication.note", communication.note[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/communication-definitions.html#Communication.basedOn", communication.basedOn[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/communication-definitions.html#Communication.category", communication.category[])
+}
+
+def R2Communication_BasedOnToR3(url, extension, data) {
+  var basedOn: extension::fetchReferenceArray(url, extension)
+  if basedOn then {
+    basedOn
+  } else {
+    arrayOf(data)
+  }
+}
+
+def R2Communication_CategoryToR3(url, extension, data) {
+  var category: extension::fetchCodeableConceptArray(url, extension)
+  if category then {
+    category
+  } else {
+    arrayOf(data)
+  }
+}
+
+def R2Communication_PayloadToR3(data) {
+  contentString: data.contentString
+  contentAttachment: data.contentAttachment
+  contentReference: datatypes::R2ReferenceToR3(data.contentReference)
+}
+
+def R3Communication_PayloadToR2(data) {
+  contentString: data.contentString
+  contentAttachment: data.contentAttachment
+  contentReference: datatypes::R3ReferenceToR2(data.contentReference)
+}

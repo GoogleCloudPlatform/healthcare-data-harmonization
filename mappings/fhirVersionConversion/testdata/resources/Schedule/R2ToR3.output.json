@@ -1,0 +1,62 @@
+{
+  "active": true,
+  "actor": [
+    {
+      "display": "Burgers UMC, South Wing, second floor",
+      "reference": "Location/1"
+    }
+  ],
+  "comment": "The slots attached to this schedule should be specialized to cover immunizations within the clinic",
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/schedule-definitions.html#Schedule.active",
+      "valueBoolean": true
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/schedule-definitions.html#Schedule.serviceCategory",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "17",
+            "display": "General Practice"
+          }
+        ]
+      }
+    }
+  ],
+  "id": "example",
+  "identifier": [
+    {
+      "system": "http://example.org/scheduleid",
+      "use": "usual",
+      "value": "45"
+    }
+  ],
+  "planningHorizon": {
+    "end": "2013-12-25T09:30:00Z",
+    "start": "2013-12-25T09:15:00Z"
+  },
+  "resourceType": "Schedule",
+  "serviceCategory": {
+    "coding": [
+      {
+        "code": "17",
+        "display": "General Practice"
+      }
+    ]
+  },
+  "serviceType": [
+    {
+      "coding": [
+        {
+          "code": "57",
+          "display": "Immunization"
+        }
+      ]
+    }
+  ],
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\n      Burgers UMC, South Wing, second floor Physiotherapy Schedule\n    \u003c/div\u003e",
+    "status": "generated"
+  }
+}

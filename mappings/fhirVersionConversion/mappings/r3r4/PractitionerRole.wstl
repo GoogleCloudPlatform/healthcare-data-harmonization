@@ -1,0 +1,38 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+def PractitionerRoleBase(practitionerRole) {
+  resourcebase::ResourceBase(practitionerRole)
+  identifier: practitionerRole.identifier
+  period: practitionerRole.period
+  code: practitionerRole.code
+  specialty: practitionerRole.specialty
+  telecom: practitionerRole.telecom
+  notAvailable: practitionerRole.notAvailable
+  availabilityExceptions: practitionerRole.availabilityExceptions
+}
+
+def R3PractitionerRoleToR4(practitionerRole) {
+  PractitionerRoleBase(practitionerRole)
+  contained: datatypes::R3ResourceToR4(practitionerRole.contained[])
+  endpoint: datatypes::R3ReferenceToR4(practitionerRole.endpoint[])
+  healthcareService: datatypes::R3ReferenceToR4(practitionerRole.healthcareService[])
+  location: datatypes::R3ReferenceToR4(practitionerRole.location[])
+  practitioner: datatypes::R3ReferenceToR4(practitionerRole.practitioner)
+  organization: datatypes::R3ReferenceToR4(practitionerRole.organization)
+  active: practitionerRole.active
+  availableTime: practitionerRole.availableTime
+}
+
+def R4PractitionerRoleToR3(practitionerRole) {
+  PractitionerRoleBase(practitionerRole)
+  contained: datatypes::R4ResourceToR3(practitionerRole.contained[])
+  endpoint: datatypes::R4ReferenceToR3(practitionerRole.endpoint[])
+  healthcareService: datatypes::R4ReferenceToR3(practitionerRole.healthcareService[])
+  location: datatypes::R4ReferenceToR3(practitionerRole.location[])
+  practitioner: datatypes::R4ReferenceToR3(practitionerRole.practitioner)
+  organization: datatypes::R4ReferenceToR3(practitionerRole.organization)
+  active: practitionerRole.active
+  availableTime: practitionerRole.availableTime
+}

@@ -1,0 +1,44 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def ProcessRequestBase(processRequest) {
+  resourcebase::ResourceBase(processRequest)
+  identifier: processRequest.identifier
+  created: processRequest.created
+  nullify: processRequest.nullify
+  reference: processRequest.reference
+  item: processRequest.item
+  include: processRequest.include
+  exclude: processRequest.exclude
+  period: processRequest.period
+}
+
+def R2ProcessRequestToR3(processRequest) {
+  ProcessRequestBase(processRequest)
+  contained: datatypes::R2ResourceToR3(processRequest.contained[])
+  request: datatypes::R2ReferenceToR3(processRequest.request)
+  response: datatypes::R2ReferenceToR3(processRequest.response)
+  organization: datatypes::R2ReferenceToR3(processRequest.organization)
+  provider: datatypes::R2ReferenceToR3(processRequest.provider)
+  target: datatypes::R2ReferenceToR3(processRequest.target)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/processrequest-definitions.html#ProcessRequest.status", processRequest.extension)
+  status: if status? then status else processRequest.status
+  action: processRequest.action
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/processrequest-definitions.html#ProcessRequest.ruleset", processRequest.ruleset)
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/processrequest-definitions.html#ProcessRequest.originalRuleset", processRequest.originalRuleset)
+}
+
+def R3ProcessRequestToR2(processRequest) {
+  ProcessRequestBase(processRequest)
+  contained: datatypes::R3ResourceToR2(processRequest.contained[])
+  request: datatypes::R3ReferenceToR2(processRequest.request)
+  response: datatypes::R3ReferenceToR2(processRequest.response)
+  organization: datatypes::R3ReferenceToR2(processRequest.organization)
+  provider: datatypes::R3ReferenceToR2(processRequest.provider)
+  target: datatypes::R3ReferenceToR2(processRequest.target)
+  action: processRequest.action
+  ruleset: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/processrequest-definitions.html#ProcessRequest.ruleset", processRequest.extension)
+  originalRuleset: extension::fetchCoding("https://www.hl7.org/fhir/DSTU2/processrequest-definitions.html#ProcessRequest.originalRuleset", processRequest.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/processrequest-definitions.html#ProcessRequest.status", processRequest.status)
+}

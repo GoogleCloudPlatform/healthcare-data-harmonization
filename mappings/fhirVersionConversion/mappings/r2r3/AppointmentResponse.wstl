@@ -1,0 +1,31 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def AppointmentResponseBase(appointmentResponse) {
+  resourcebase::ResourceBase(appointmentResponse)
+  identifier: appointmentResponse.identifier
+  start: appointmentResponse.start
+  end: appointmentResponse.end
+  comment: appointmentResponse.comment
+}
+
+def R2AppointmentResponseToR3(appointmentResponse) {
+  AppointmentResponseBase(appointmentResponse)
+  contained: datatypes::R2ResourceToR3(appointmentResponse.contained[])
+  actor: datatypes::R2ReferenceToR3(appointmentResponse.actor)
+  appointment: datatypes::R2ReferenceToR3(appointmentResponse.appointment)
+  participantType: appointmentResponse.participantType
+  participantStatus: extension::fetchCode("https://www.hl7.org/fhir/STU3/appointmentresponse-definitions.html#AppointmentResponse.participantStatus", appointmentResponse.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/appointmentresponse-definitions.html#AppointmentResponse.participantStatus", appointmentResponse.participantStatus)
+}
+
+def R3AppointmentResponseToR2(appointmentResponse) {
+  AppointmentResponseBase(appointmentResponse)
+  contained: datatypes::R3ResourceToR2(appointmentResponse.contained[])
+  actor: datatypes::R3ReferenceToR2(appointmentResponse.actor)
+  appointment: datatypes::R3ReferenceToR2(appointmentResponse.appointment)
+  participantType: appointmentResponse.participantType
+  participantStatus: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/appointmentresponse-definitions.html#AppointmentResponse.participantStatus", appointmentResponse.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/appointmentresponse-definitions.html#AppointmentResponse.participantStatus", appointmentResponse.participantStatus)
+}

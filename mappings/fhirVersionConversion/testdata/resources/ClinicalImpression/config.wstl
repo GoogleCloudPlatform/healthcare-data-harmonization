@@ -1,0 +1,11 @@
+// R3 ClinicalImpression To R4
+$this: R3ClinicalImpressionToR4($root)
+
+// R4 ClinicalImpression To R3
+$this: R4ClinicalImpressionToR3($root)
+
+// R2 ClinicalImpression To R3
+$this: R2ClinicalImpressionToR3($root)
+
+// R3 ClinicalImpression To R2
+$this: R3ClinicalImpressionToR2($root)

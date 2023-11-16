@@ -1,0 +1,48 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def MediaBase(media) {
+  resourcebase::ResourceBase(media)
+  identifier: media.identifier
+  type: media.type
+  subtype: media.subtype
+  view: media.view
+  height: media.height
+  width: media.width
+  frames: media.frames
+  duration: media.duration
+  content: media.content
+}
+
+def R2MediaToR3(media) {
+  MediaBase(media)
+  contained: datatypes::R2ResourceToR3(media.contained[])
+  operator: datatypes::R2ReferenceToR3(media.operator)
+  subject: datatypes::R2ReferenceToR3(media.subject)
+  basedOn: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/media-definitions.html#Media.basedOn", media.extension)
+  context: extension::fetchReference("https://www.hl7.org/fhir/STU3/media-definitions.html#Media.context", media.extension)
+  occurrenceDateTime: extension::fetchDateTime("https://www.hl7.org/fhir/STU3/media-definitions.html#Media.occurrenceDateTime", media.extension)
+  occurrencePeriod: extension::fetchPeriod("https://www.hl7.org/fhir/STU3/media-definitions.html#Media.occurrencePeriod", media.extension)
+  reasonCode: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/media-definitions.html#Media.reasonCode", media.extension)
+  bodySite: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/media-definitions.html#Media.bodySite", media.extension)
+  device: extension::fetchReference("https://www.hl7.org/fhir/STU3/media-definitions.html#Media.device", media.extension)
+  note: extension::fetchAnnotationArray("https://www.hl7.org/fhir/STU3/media-definitions.html#Media.note", media.extension)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/DSTU2/media-definitions.html#Media.deviceName", media.deviceName)
+}
+
+def R3MediaToR2(media) {
+  MediaBase(media)
+  contained: datatypes::R3ResourceToR2(media.contained[])
+  operator: datatypes::R3ReferenceToR2(media.operator)
+  subject: datatypes::R3ReferenceToR2(media.subject)
+  deviceName: extension::fetchString("https://www.hl7.org/fhir/DSTU2/media-definitions.html#Media.deviceName", media.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/media-definitions.html#Media.basedOn", media.basedOn)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/media-definitions.html#Media.context", media.context)
+  extension[]: extension::BuildDateTimeExtension("https://www.hl7.org/fhir/STU3/media-definitions.html#Media.occurrenceDateTime", media.occurrenceDateTime)
+  extension[]: extension::BuildPeriodExtension("https://www.hl7.org/fhir/STU3/media-definitions.html#Media.occurrencePeriod", media.occurrencePeriod)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/media-definitions.html#Media.reasonCode", media.reasonCode[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/media-definitions.html#Media.bodySite", media.bodySite)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/media-definitions.html#Media.device", media.device)
+  extension[]: extension::BuildAnnotationExtension("https://www.hl7.org/fhir/STU3/media-definitions.html#Media.note", media.note[])
+}

@@ -1,0 +1,24 @@
+{
+  "contained": [
+    {
+      "id": "test_id"
+    }
+  ],
+  "extension": [
+    {
+      "url": "test_url"
+    }
+  ],
+  "id": "test_id",
+  "implicitRules": "test_implicitRules",
+  "language": "test_language",
+  "meta": {
+    "versionId": "test_id"
+  },
+  "modifierExtension": [
+    {
+      "url": "test_url"
+    }
+  ],
+  "text": "test_text"
+}

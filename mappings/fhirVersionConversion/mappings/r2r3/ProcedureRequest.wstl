@@ -1,0 +1,82 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def ProcedureRequestBase(procedureRequest) {
+  resourcebase::ResourceBase(procedureRequest)
+  identifier: procedureRequest.identifier
+  code: procedureRequest.code
+  asNeededBoolean: procedureRequest.asNeededBoolean
+  asNeededCodeableConcept: procedureRequest.asNeededCodeableConcept
+  bodySite: procedureRequest.bodySite
+}
+
+def R2ProcedureRequestToR3(procedureRequest) {
+  ProcedureRequestBase(procedureRequest)
+  contained: datatypes::R2ResourceToR3(procedureRequest.contained[])
+  definition: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.definition", procedureRequest.extension)
+  basedOn: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.basedOn", procedureRequest.extension)
+  replaces: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.replaces", procedureRequest.extension)
+  requisition: extension::fetchIdentifier("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.requisition", procedureRequest.extension)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.status", procedureRequest.extension)
+  status: if status? then status else procedureRequest.status
+  intent: extension::fetchCode("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.intent", procedureRequest.extension)
+  priority: procedureRequest.priority
+  doNotPerform: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.doNotPerform", procedureRequest.extension)
+  category: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.category", procedureRequest.extension)
+  subject: datatypes::R2ReferenceToR3(procedureRequest.subject)
+  context: datatypes::R2ReferenceToR3(procedureRequest.encounter)
+  occurrenceDateTime: procedureRequest.scheduledDateTime
+  occurrencePeriod: procedureRequest.scheduledPeriod
+  occurrenceTiming: procedureRequest.scheduledTiming
+  authoredOn: procedureRequest.orderedOn
+  requester.agent: extension::fetchReference("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.requester.agent", procedureRequest.extension)
+  requester.onBehalfOf: extension::fetchReference("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.requester.onBehalfOf", procedureRequest.extension)
+  performerType: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.performerType", procedureRequest.extension)
+  performer: procedureRequest.performer
+  reasonCode: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.reasonCode", procedureRequest.extension)
+  reasonReference: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.reasonReference", procedureRequest.extension)
+  supportingInfo: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.supportingInfo", procedureRequest.extension)
+  specimen: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.specimen", procedureRequest.extension)
+  note: procedureRequest.notes
+  relevantHistory: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.relevantHistory", procedureRequest.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/procedurerequest-definitions.html#ProcedureRequest.status", procedureRequest.status)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/procedurerequest-definitions.html#ProcedureRequest.orderer", procedureRequest.orderer)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/DSTU2/procedurerequest-definitions.html#ProcedureRequest.reasonCodeableConcept", procedureRequest.reasonCodeableConcept)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/DSTU2/procedurerequest-definitions.html#ProcedureRequest.reasonReference", procedureRequest.reasonReference)
+}
+
+def R3ProcedureRequestToR2(procedureRequest) {
+  ProcedureRequestBase(procedureRequest)
+  contained: datatypes::R3ResourceToR2(procedureRequest.contained[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/procedurerequest-definitions.html#ProcedureRequest.status", procedureRequest.extension)
+  status: if status? then status else procedureRequest.status
+  priority: procedureRequest.priority
+  subject: datatypes::R3ReferenceToR2(procedureRequest.subject)
+  encounter: datatypes::R3ReferenceToR2(procedureRequest.context)
+  scheduledDateTime: procedureRequest.occurrenceDateTime
+  scheduledPeriod: procedureRequest.occurrencePeriod
+  scheduledTiming: procedureRequest.occurrenceTiming
+  orderedOn: procedureRequest.authoredOn
+  performer: procedureRequest.performer
+  notes: procedureRequest.note
+  orderer: extension::fetchReference("https://www.hl7.org/fhir/DSTU2/procedurerequest-definitions.html#ProcedureRequest.orderer", procedureRequest.extension)
+  reasonCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/DSTU2/procedurerequest-definitions.html#ProcedureRequest.reasonCodeableConcept", procedureRequest.extension)
+  reasonReference: extension::fetchReference("https://www.hl7.org/fhir/DSTU2/procedurerequest-definitions.html#ProcedureRequest.reasonReference", procedureRequest.extension)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.definition", procedureRequest.definition[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.basedOn", procedureRequest.basedOn[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.replaces", procedureRequest.replaces[])
+  extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.requisition", procedureRequest.requisition)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.status", procedureRequest.status)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.intent", procedureRequest.intent)
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.doNotPerform", procedureRequest.doNotPerform)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.category", procedureRequest.category[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.requester.agent", procedureRequest.requester.agent)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.requester.onBehalfOf", procedureRequest.requester.onBehalfOf)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.performerType", procedureRequest.performerType)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.reasonCode", procedureRequest.reasonCode[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.reasonReference", procedureRequest.reasonReference[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.supportingInfo", procedureRequest.supportingInfo[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.specimen", procedureRequest.specimen[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/procedurerequest-definitions.html#ProcedureRequest.relevantHistory", procedureRequest.relevantHistory[])
+}

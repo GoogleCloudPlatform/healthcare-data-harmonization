@@ -1,0 +1,40 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def ScheduleBase(schedule) {
+  resourcebase::ResourceBase(schedule)
+  identifier: schedule.identifier
+  planningHorizon: schedule.planningHorizon
+  comment: schedule.comment
+}
+
+def R2ScheduleToR3(schedule) {
+  ScheduleBase(schedule)
+  contained: datatypes::R2ResourceToR3(schedule.contained[])
+  active: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/schedule-definitions.html#Schedule.active", schedule.extension)
+  serviceCategory: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/schedule-definitions.html#Schedule.serviceCategory", schedule.extension)
+  serviceType: schedule.type
+  specialty: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/schedule-definitions.html#Schedule.specialty", schedule.extension)
+  actor: R2Schedule_ActorToR3("https://www.hl7.org/fhir/STU3/schedule-definitions.html#Schedule.actor", schedule.extension, datatypes::R2ReferenceToR3(schedule.actor))
+}
+
+def R3ScheduleToR2(schedule) {
+  ScheduleBase(schedule)
+  contained: datatypes::R3ResourceToR2(schedule.contained[])
+  type: schedule.serviceType
+  actor: datatypes::R3ReferenceToR2(schedule.actor[0])
+  extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/schedule-definitions.html#Schedule.active", schedule.active)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/schedule-definitions.html#Schedule.serviceCategory", schedule.serviceCategory)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/schedule-definitions.html#Schedule.specialty", schedule.specialty[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/schedule-definitions.html#Schedule.actor", schedule.actor[])
+}
+
+def R2Schedule_ActorToR3(url, extension, data) {
+  var actor: extension::fetchReferenceArray(url, extension)
+  if actor then {
+    actor
+  } else {
+    arrayOf(data)
+  }
+}

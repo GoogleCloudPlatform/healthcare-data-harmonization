@@ -1,0 +1,102 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def DocumentReferenceBase(documentReference) {
+  resourcebase::ResourceBase(documentReference)
+  masterIdentifier: documentReference.masterIdentifier
+  identifier: documentReference.identifier
+  status: documentReference.status
+  type: documentReference.type
+  class: documentReference.class
+  created: documentReference.created
+  indexed: documentReference.indexed
+  description: documentReference.description
+  securityLabel: documentReference.securityLabel
+}
+
+def R2DocumentReferenceToR3(documentReference) {
+  DocumentReferenceBase(documentReference)
+  contained: datatypes::R2ResourceToR3(documentReference.contained[])
+  context: R2DocumentReference_ContextToR3(documentReference.context)
+  relatesTo: R2DocumentReference_RelatesToToR3(documentReference.relatesTo[])
+  custodian: datatypes::R2ReferenceToR3(documentReference.custodian)
+  authenticator: datatypes::R2ReferenceToR3(documentReference.authenticator)
+  author: datatypes::R2ReferenceToR3(documentReference.author[])
+  subject: datatypes::R2ReferenceToR3(documentReference.subject)
+  docStatus: datatypes::CodeableConceptToCode(documentReference.docStatus)
+  content: R2DocumentReference_ContentToR3(documentReference.content[])
+}
+
+def R3DocumentReferenceToR2(documentReference) {
+  DocumentReferenceBase(documentReference)
+  contained: datatypes::R3ResourceToR2(documentReference.contained[])
+  context: R3DocumentReference_ContextToR2(documentReference.context)
+  relatesTo: R3DocumentReference_RelatesToToR2(documentReference.relatesTo[])
+  custodian: datatypes::R3ReferenceToR2(documentReference.custodian)
+  authenticator: datatypes::R3ReferenceToR2(documentReference.authenticator)
+  author: datatypes::R3ReferenceToR2(documentReference.author[])
+  subject: datatypes::R3ReferenceToR2(documentReference.subject)
+  docStatus: datatypes::CodeToCodeableConcept(documentReference.docStatus)
+  content: R3DocumentReference_ContentToR2(documentReference.content[])
+}
+
+def R2DocumentReference_ContentToR3(data) {
+  attachment: data.attachment
+  format: data.format[0]
+  extension[]: extension::BuildCodingExtension("https://www.hl7.org/fhir/DSTU2/documentreference-definitions.html#DocumentReference.content.format", data.format[])
+}
+
+def R3DocumentReference_ContentToR2(data) {
+  attachment: data.attachment
+  format: R3DocumentReference_Content_FormatToR2("https://www.hl7.org/fhir/DSTU2/documentreference-definitions.html#DocumentReference.content.format", data.extension, data.format)
+}
+
+def R3DocumentReference_Content_FormatToR2(url, extension, data) {
+  var format: extension::fetchCodingArray(url, extension)
+  if format then {
+    format
+  } else {
+    arrayOf(data)
+  }
+}
+
+def R2DocumentReference_RelatesToToR3(data) {
+  code: data.code
+  target: datatypes::R2ReferenceToR3(data.target)
+}
+
+def R3DocumentReference_RelatesToToR2(data) {
+  code: data.code
+  target: datatypes::R3ReferenceToR2(data.target)
+}
+
+def R2DocumentReference_ContextToR3(data) {
+  encounter: datatypes::R2ReferenceToR3(data.encounter)
+  event: data.event
+  period: data.period
+  facilityType: data.facilityType
+  practiceSetting: data.practiceSetting
+  sourcePatientInfo: datatypes::R2ReferenceToR3(data.sourcePatientInfo)
+  related: R2DocumentReference_Context_RelatedToR3(data.related[])
+}
+
+def R3DocumentReference_ContextToR2(data) {
+  encounter: datatypes::R3ReferenceToR2(data.encounter)
+  event: data.event
+  period: data.period
+  facilityType: data.facilityType
+  practiceSetting: data.practiceSetting
+  sourcePatientInfo: datatypes::R3ReferenceToR2(data.sourcePatientInfo)
+  related: R3DocumentReference_Context_RelatedToR2(data.related[])
+}
+
+def R2DocumentReference_Context_RelatedToR3(data) {
+  identifier: data.identifier
+  ref: datatypes::R2ReferenceToR3(data.ref)
+}
+
+def R3DocumentReference_Context_RelatedToR2(data) {
+  identifier: data.identifier
+  ref: datatypes::R3ReferenceToR2(data.ref)
+}

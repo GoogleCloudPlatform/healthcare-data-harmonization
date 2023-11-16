@@ -1,0 +1,165 @@
+{
+  "authoredOn": "2015-01-15",
+  "contained": [
+    {
+      "form": {
+        "coding": [
+          {
+            "code": "385219001",
+            "display": "Injection Solution (qualifier value)",
+            "system": "http://snomed.info/sct"
+          }
+        ],
+        "text": "Injection Solution (qualifier value)"
+      },
+      "id": "med0317",
+      "ingredient": [
+        {
+          "itemCodeableConcept": {
+            "coding": [
+              {
+                "code": "204520",
+                "display": "Potassium Chloride",
+                "system": "http://www.nlm.nih.gov/research/umls/rxnorm"
+              }
+            ]
+          },
+          "strength": {
+            "denominator": {
+              "code": "mL",
+              "system": "http://unitsofmeasure.org",
+              "value": 1
+            },
+            "numerator": {
+              "code": "mEq",
+              "system": "http://unitsofmeasure.org",
+              "value": 2
+            }
+          }
+        },
+        {
+          "itemCodeableConcept": {
+            "coding": [
+              {
+                "code": "313002",
+                "display": "Sodium Chloride 0.9% injectable solution",
+                "system": "http://www.nlm.nih.gov/research/umls/rxnorm"
+              }
+            ]
+          },
+          "strength": {
+            "denominator": {
+              "code": "mL",
+              "system": "http://unitsofmeasure.org",
+              "value": 100
+            },
+            "numerator": {
+              "code": "g",
+              "system": "http://unitsofmeasure.org",
+              "value": 0.9
+            }
+          }
+        }
+      ],
+      "resourceType": "Medication"
+    }
+  ],
+  "dosageInstruction": [
+    {
+      "doseAndRate": [
+        {
+          "doseQuantity": {
+            "code": "mEq",
+            "system": "http://unitsofmeasure.org",
+            "unit": "mEq",
+            "value": 20
+          },
+          "rateRatio": {
+            "denominator": {
+              "code": "h",
+              "system": "http://unitsofmeasure.org",
+              "value": 1
+            },
+            "numerator": {
+              "code": "mL",
+              "system": "http://unitsofmeasure.org",
+              "value": 100
+            }
+          },
+          "type": {
+            "coding": [
+              {
+                "code": "ordered",
+                "display": "Ordered",
+                "system": "http://terminology.hl7.org/CodeSystem/dose-rate-type"
+              }
+            ]
+          }
+        }
+      ],
+      "route": {
+        "coding": [
+          {
+            "code": "47625008",
+            "display": "Intravenous route (qualifier value)",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "sequence": 1,
+      "text": "KCl 20 mEq in 1 L 0.9%NS IV at 100 ml/hr",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 1,
+          "periodUnit": "h"
+        }
+      }
+    }
+  ],
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.intent",
+      "valueCode": "order"
+    }
+  ],
+  "id": "medrx0322",
+  "identifier": [
+    {
+      "system": "http://www.bmc.nl/portal/prescriptions",
+      "use": "official",
+      "value": "12345689"
+    }
+  ],
+  "medicationReference": {
+    "display": "Potassium Chloride 20mEq in 1L Normal Saline",
+    "reference": "#med0317"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "code": "237840007",
+          "display": "Disorder of Electrolytes (disorder)",
+          "system": "http://snomed.info/sct"
+        }
+      ]
+    }
+  ],
+  "requester": {
+    "agent": {
+      "display": "Patrick Pump",
+      "reference": "Practitioner/f007"
+    }
+  },
+  "resourceType": "MedicationRequest",
+  "status": "completed",
+  "subject": {
+    "display": "Donald Duck",
+    "reference": "Patient/pat1"
+  },
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\u003cp\u003e\u003cb\u003eGenerated Narrative with Details\u003c/b\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eid\u003c/b\u003e: medrx0322\u003c/p\u003e\u003cp\u003e\u003cb\u003econtained\u003c/b\u003e: \u003c/p\u003e\u003cp\u003e\u003cb\u003eidentifier\u003c/b\u003e: 12345689 (OFFICIAL)\u003c/p\u003e\u003cp\u003e\u003cb\u003estatus\u003c/b\u003e: completed\u003c/p\u003e\u003cp\u003e\u003cb\u003eintent\u003c/b\u003e: order\u003c/p\u003e\u003cp\u003e\u003cb\u003emedication\u003c/b\u003e: Potassium Chloride 20mEq in 1L Normal Saline. Generated Summary: id: med0317; Injection Solution (qualifier value) \u003cspan\u003e(Details : {SNOMED CT code '385219001' = 'Injection solution', given as 'Injection Solution (qualifier value)'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003esubject\u003c/b\u003e: \u003ca\u003eDonald Duck\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eauthoredOn\u003c/b\u003e: 15/01/2015\u003c/p\u003e\u003cp\u003e\u003cb\u003erequester\u003c/b\u003e: \u003ca\u003ePatrick Pump\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003ereasonCode\u003c/b\u003e: Disorder of Electrolytes (disorder) \u003cspan\u003e(Details : {SNOMED CT code '237840007' = 'Disorder of electrolytes', given as 'Disorder of Electrolytes (disorder)'})\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003edosageInstruction\u003c/b\u003e: \u003c/p\u003e\u003c/div\u003e",
+    "status": "generated"
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "actuality": "actual",
+  "category": [
+    {
+      "coding": [
+        {
+          "code": "AE"
+        }
+      ]
+    }
+  ],
+  "date": "2017-01-29T12:34:56+00:00",
+  "event": {
+    "coding": [
+      {
+        "code": "304386008",
+        "display": "O/E - itchy rash",
+        "system": "http://snomed.info/sct"
+      }
+    ]
+  },
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/R4/adverseevent-definitions.html#AdverseEvent.actuality",
+      "valueCode": "actual"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/R4/adverseevent-definitions.html#AdverseEvent.severity",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "mild",
+            "display": "Mild",
+            "system": "http://terminology.hl7.org/CodeSystem/adverse-event-severity"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/adverseevent-definitions.html#AdverseEvent.description",
+      "valueString": "This was a mild rash on the left forearm"
+    }
+  ],
+  "id": "example",
+  "identifier": {
+    "system": "http://acme.com/ids/patients/risks",
+    "value": "49476534"
+  },
+  "recorder": {
+    "reference": "Practitioner/example"
+  },
+  "resourceType": "AdverseEvent",
+  "seriousness": {
+    "coding": [
+      {
+        "code": "Non-serious",
+        "display": "Non-serious",
+        "system": "http://terminology.hl7.org/CodeSystem/adverse-event-seriousness"
+      }
+    ]
+  },
+  "severity": {
+    "coding": [
+      {
+        "code": "mild",
+        "display": "Mild",
+        "system": "http://terminology.hl7.org/CodeSystem/adverse-event-severity"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "suspectEntity": [
+    {
+      "instance": {
+        "reference": "Medication/example"
+      }
+    }
+  ],
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>identifier</b>: 49476534</p><p><b>actuality</b>: actual</p><p><b>category</b>: Product Use Error <span>(Details : {http://terminology.hl7.org/CodeSystem/adverse-event-category code 'product-use-error' = 'Product Use Error', given as 'Product Use Error'})</span></p><p><b>event</b>: This was a mild rash on the left forearm <span>(Details : {SNOMED CT code '304386008' = 'O/E - itchy rash', given as 'O/E - itchy rash'})</span></p><p><b>subject</b>: <a>Patient/example</a></p><p><b>date</b>: 29/01/2017 12:34:56 PM</p><p><b>seriousness</b>: Non-serious <span>(Details : {http://terminology.hl7.org/CodeSystem/adverse-event-seriousness code 'Non-serious' = 'Non-serious', given as 'Non-serious'})</span></p><p><b>severity</b>: Mild <span>(Details : {http://terminology.hl7.org/CodeSystem/adverse-event-severity code 'mild' = 'Mild', given as 'Mild'})</span></p><p><b>recorder</b>: <a>Practitioner/example</a></p><h3>SuspectEntities</h3><table><tr><td>-</td><td><b>Instance</b></td></tr><tr><td>*</td><td><a>Medication/example</a></td></tr></table></div>",
+    "status": "generated"
+  }
+}

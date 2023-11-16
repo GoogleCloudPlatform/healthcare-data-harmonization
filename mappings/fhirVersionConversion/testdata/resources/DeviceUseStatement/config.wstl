@@ -1,0 +1,11 @@
+// R3 DeviceUseStatement To R4
+$this: R3DeviceUseStatementToR4($root)
+
+// R4 DeviceUseStatement To R3
+$this: R4DeviceUseStatementToR3($root)
+
+// R2 DeviceUseStatement To R3
+$this: R2DeviceUseStatementToR3($root)
+
+// R3 DeviceUseStatement To R2
+$this: R3DeviceUseStatementToR2($root)

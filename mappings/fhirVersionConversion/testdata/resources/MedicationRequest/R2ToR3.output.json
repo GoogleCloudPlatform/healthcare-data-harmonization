@@ -1,0 +1,100 @@
+{
+  "authoredOn": "2015-01-15",
+  "dispenseRequest": {
+    "expectedSupplyDuration": {
+      "code": "d",
+      "system": "http://unitsofmeasure.org",
+      "unit": "days",
+      "value": 30
+    },
+    "numberOfRepeatsAllowed": 3,
+    "quantity": {
+      "code": "ml",
+      "system": "http://unitsofmeasure.org",
+      "unit": "ml",
+      "value": 10
+    },
+    "validityPeriod": {
+      "end": "2016-01-15",
+      "start": "2015-01-15"
+    }
+  },
+  "dosageInstruction": [
+    {
+      "doseQuantity": {
+        "code": "U",
+        "system": "http://unitsofmeasure.org",
+        "unit": "U",
+        "value": 10
+      },
+      "sequence": 2,
+      "text": "inject 10 units subcut 10 minutes before breakfast",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "offset": 10,
+          "period": 1,
+          "periodUnit": "d",
+          "when": [
+            "ACM"
+          ]
+        }
+      }
+    },
+    {
+      "additionalInstruction": [
+        {
+          "text": "Before Lunch"
+        }
+      ],
+      "doseQuantity": {
+        "code": "U",
+        "system": "http://unitsofmeasure.org",
+        "unit": "U",
+        "value": 15
+      },
+      "sequence": 2,
+      "text": "15 units before lunch",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      }
+    },
+    {
+      "additionalInstruction": [
+        {
+          "text": "Before Dinner"
+        }
+      ],
+      "doseQuantity": {
+        "code": "U",
+        "system": "http://unitsofmeasure.org",
+        "unit": "U",
+        "value": 20
+      },
+      "sequence": 1,
+      "text": "20 units before dinner",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      }
+    }
+  ],
+  "intent": "order",
+  "medicationReference": {
+    "display": "Novolog 100u/ml",
+    "reference": "#med0307"
+  },
+  "resourceType": "MedicationRequest",
+  "status": "active",
+  "subject": {
+    "display": "Donald Duck",
+    "reference": "Patient/pat1"
+  }
+}

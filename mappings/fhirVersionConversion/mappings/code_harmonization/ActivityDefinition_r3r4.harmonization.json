@@ -1,0 +1,183 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "Appointment",
+          "display": "Appointment",
+          "target": [
+            {
+              "code": "Appointment",
+              "display": "Appointment",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "AppointmentResponse",
+          "display": "AppointmentResponse",
+          "target": [
+            {
+              "code": "AppointmentResponse",
+              "display": "AppointmentResponse",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "CarePlan",
+          "display": "CarePlan",
+          "target": [
+            {
+              "code": "CarePlan",
+              "display": "CarePlan",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Claim",
+          "display": "Claim",
+          "target": [
+            {
+              "code": "Claim",
+              "display": "Claim",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "CommunicationRequest",
+          "display": "CommunicationRequest",
+          "target": [
+            {
+              "code": "CommunicationRequest",
+              "display": "CommunicationRequest",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Contract",
+          "display": "Contract",
+          "target": [
+            {
+              "code": "Contract",
+              "display": "Contract",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "DeviceRequest",
+          "display": "DeviceRequest",
+          "target": [
+            {
+              "code": "DeviceRequest",
+              "display": "DeviceRequest",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "EnrollmentRequest",
+          "display": "EnrollmentRequest",
+          "target": [
+            {
+              "code": "EnrollmentRequest",
+              "display": "EnrollmentRequest",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ImmunizationRecommendation",
+          "display": "ImmunizationRecommendation",
+          "target": [
+            {
+              "code": "ImmunizationRecommendation",
+              "display": "ImmunizationRecommendation",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "MedicationRequest",
+          "display": "MedicationRequest",
+          "target": [
+            {
+              "code": "MedicationRequest",
+              "display": "MedicationRequest",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "NutritionOrder",
+          "display": "NutritionOrder",
+          "target": [
+            {
+              "code": "NutritionOrder",
+              "display": "NutritionOrder",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ServiceRequest",
+          "display": "ServiceRequest",
+          "target": [
+            {
+              "code": "ServiceRequest",
+              "display": "ServiceRequest",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "SupplyRequest",
+          "display": "SupplyRequest",
+          "target": [
+            {
+              "code": "SupplyRequest",
+              "display": "SupplyRequest",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Task",
+          "display": "Task",
+          "target": [
+            {
+              "code": "Task",
+              "display": "Task",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "VisionPrescription",
+          "display": "VisionPrescription",
+          "target": [
+            {
+              "code": "VisionPrescription",
+              "display": "VisionPrescription",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/resource-types",
+      "target": "http://hl7.org/fhir/request-resource-types",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "Task",
+        "display": "Task"
+      }
+    }
+  ],
+  "id": "ActivityDefinition",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

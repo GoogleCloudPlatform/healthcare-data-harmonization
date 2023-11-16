@@ -1,0 +1,21 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def BinaryBase(binary) {
+  resourcebase::ResourceBase(binary)
+  contentType: binary.contentType
+  content: binary.content
+}
+
+def R2BinaryToR3(binary) {
+  BinaryBase(binary)
+  contained: datatypes::R2ResourceToR3(binary.contained[])
+  securityContext: extension::fetchReference("https://www.hl7.org/fhir/STU3/binary-definitions.html#Binary.securityContext", binary.extension)
+}
+
+def R3BinaryToR2(binary) {
+  BinaryBase(binary)
+  contained: datatypes::R3ResourceToR2(binary.contained[])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/binary-definitions.html#Binary.securityContext", binary.securityContext)
+}

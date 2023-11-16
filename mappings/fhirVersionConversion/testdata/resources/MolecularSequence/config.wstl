@@ -1,0 +1,5 @@
+// R3 MolecularSequence To R4
+$this: R3MolecularSequenceToR4($root)
+
+// R4 MolecularSequence To R3
+$this: R4MolecularSequenceToR3($root)

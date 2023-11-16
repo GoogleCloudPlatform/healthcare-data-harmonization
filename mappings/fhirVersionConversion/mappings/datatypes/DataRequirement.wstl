@@ -1,0 +1,52 @@
+package datatypes
+
+// Description: Converts a FHIR STU3 DataRequirement datatype to FHIR R4 DataRequirement.
+//
+// Argument(s):
+//   dataRequirement : FHIR STU3 DataRequirement https://hl7.org/fhir/STU3/metadatatypes.html#DataRequirement
+//
+// Output(s):
+//   FHIR R4 DataRequirement https://hl7.org/fhir/R4/metadatatypes.html#DataRequirement
+//
+def R3DataRequirementToR4(required dataRequirement) {
+  type: utilities::Convert_TerminologyCode(dataRequirement.type, "http://hl7.org/fhir/ValueSet/all-types", "FhirTypes_r3r4")
+  profile: dataRequirement.profile
+  subjectCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/r4/datarequirement-definitions.html#DataRequirement.subjectCodeableConcept", dataRequirement.extension)
+  subjectReference: extension::fetchReference("https://www.hl7.org/fhir/r4/datarequirement-definitions.html#DataRequirement.subjectReference", dataRequirement.extension)
+  mustSupport: dataRequirement.mustSupport
+  codeFilter: R3DataRequirement_CodeFilterToR4(dataRequirement.codeFilter[])
+  dateFilter: R3DataRequirement_dateFilterToR4(dataRequirement.dateFilter[])
+}
+
+// Description: Converts a FHIR STU3 DataRequirement.CodeFilter datatype to FHIR R4 DataRequirement.CodeFilter.
+//
+// Argument(s):
+//   codeFilter : FHIR STU3 DataRequirement.CodeFilter https://hl7.org/fhir/STU3/metadatatypes-definitions.html#DataRequirement.codeFilter
+//
+// Output(s):
+//   FHIR R4 DataRequirement.CodeFilter https://hl7.org/fhir/R4/metadatatypes-definitions.html#DataRequirement.codeFilter
+//
+def R3DataRequirement_CodeFilterToR4(required codeFilter) {
+  path: codeFilter.path
+  searchParam: codeFilter.valueSetString
+  valueSet: datatypes::ReferenceToCanonical(codeFilter.valueSetReference)
+  code: codeFilter.valueCoding
+  extension[]: extension::BuildCodeExtension("https://hl7.org/fhir/STU3/metadatatypes-definitions.html#DataRequirement.codeFilter.valueCode", codeFilter.valueCode)
+  extension[]: extension::BuildCodeableConceptExtension("https://hl7.org/fhir/STU3/metadatatypes-definitions.html#DataRequirement.codeFilter.valueCodeableConcept", codeFilter.valueCodeableConcept)
+}
+
+// Description: Converts a FHIR STU3 DataRequirement.DateFilter datatype to FHIR R4 DataRequirement.DateFilter.
+//
+// Argument(s):
+//   dateFilter : FHIR STU3 DataRequirement.DateFilter https://hl7.org/fhir/STU3/metadatatypes-definitions.html#DataRequirement.dateFilter
+//
+// Output(s):
+//   FHIR R4 DataRequirement.DateFilter https://hl7.org/fhir/R4/metadatatypes-definitions.html#DataRequirement.dateFilter
+//
+def R3DataRequirement_dateFilterToR4(required dateFilter) {
+  path: dateFilter.path
+  searchParam: extension::fetchString("https://hl7.org/fhir/R4/metadatatypes-definitions.html#DataRequirement.dateFilter.searchParam", dateFilter.extension)
+  valueDateTime: dateFilter.valueDateTime
+  valuePeriod: dateFilter.valuePeriod
+  valueDuration: dateFilter.valueDuration
+}

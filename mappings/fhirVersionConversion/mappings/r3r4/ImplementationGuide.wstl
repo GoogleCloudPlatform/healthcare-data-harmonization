@@ -1,0 +1,242 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   implementationGuide : FHIR ImplementationGuide resource
+//
+// Output(s):
+//   FHIR ImplementationGuide Resource
+//
+def ImplementationGuideBase(implementationGuide) {
+  resourcebase::ResourceBase(implementationGuide)
+  url: implementationGuide.url
+  version: implementationGuide.version
+  name: implementationGuide.name
+  date: implementationGuide.date
+  publisher: implementationGuide.publisher
+  contact: implementationGuide.contact
+  description: implementationGuide.description
+  useContext: implementationGuide.useContext
+  jurisdiction: implementationGuide.jurisdiction
+  copyright: implementationGuide.copyright
+}
+
+// Description: Converts a FHIR STU3 ImplementationGuide resource to FHIR R4 ImplementationGuide resource.
+//
+// Argument(s):
+//   implementationGuide : FHIR STU3 ImplementationGuide resource https://www.hl7.org/fhir/stu3/implementationguide.html
+//
+// Output(s):
+//   FHIR R4 ImplementationGuide Resource https://www.hl7.org/fhir/r4/implementationguide.html
+//
+def R3ImplementationGuideToR4(implementationGuide) {
+  ImplementationGuideBase(implementationGuide)
+  contained: datatypes::R3ResourceToR4(implementationGuide.contained[])
+  title: extension::fetchString("https://www.hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.title", implementationGuide.extension)
+  status: implementationGuide.status
+  experimental: implementationGuide.experimental
+  packageId: extension::fetchId("https://www.hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.packageId", implementationGuide.extension)
+  packageId: utilities::defaultIfNull($this.packageId, "Unknown")
+  license: extension::fetchCode("https://www.hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.license", implementationGuide.extension)
+  fhirVersion: extension::fetchCodeArray("https://www.hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.fhirVersion", implementationGuide.extension)
+  fhirVersion[]: utilities::defaultIfNull($this.fhirVersion, "4.0.0")
+  dependsOn: R3ImplementationGuide_DependsOnToR4(implementationGuide.dependency[])
+  'global': R3ImplementationGuide_GlobalToR4(implementationGuide.'global'[])
+  definition: R3ImplementationGuide_DefinitionToR4(implementationGuide.'package', implementationGuide.page)
+  extension[]: extension::BuildIdExtension("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.fhirVersion", implementationGuide.fhirVersion)
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.binary", implementationGuide.binary[])
+}
+
+// Description: Converts a FHIR R4 ImplementationGuide resource to FHIR STU3 ImplementationGuide resource.
+//
+// Argument(s):
+//   implementationGuide : FHIR R4 ImplementationGuide resource https://www.hl7.org/fhir/r4/implementationguide.html
+//
+// Output(s):
+//   FHIR STU3 ImplementationGuide Resource https://www.hl7.org/fhir/stu3/implementationguide.html
+//
+def R4ImplementationGuideToR3(implementationGuide) {
+  ImplementationGuideBase(implementationGuide)
+  contained: datatypes::R4ResourceToR3(implementationGuide.contained[])
+  status: implementationGuide.status
+  experimental: implementationGuide.experimental
+  fhirVersion: extension::fetchId("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.fhirVersion", implementationGuide.extension)
+  dependency: R4ImplementationGuide_DependsOnToR3(implementationGuide.dependsOn[])
+  'package'[]: R4ImplementationGuide_PackageToR3(implementationGuide.definition)
+  binary: extension::fetchUriArray("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.binary", implementationGuide.extension)
+  page: R4ImplementationGuide_PageToR3(implementationGuide.definition.page)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.title", implementationGuide.title)
+  extension[]: extension::BuildIdExtension("https://www.hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.packageId", implementationGuide.packageId)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.license", implementationGuide.license)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.fhirVersion", implementationGuide.fhirVersion[])
+}
+
+// Description: Converts a FHIR STU3 ImplementationGuide.Dependency to FHIR R4 ImplementationGuide.DependsOn.
+//
+// Argument(s):
+//   data : FHIR STU3 ImplementationGuide.Dependency http://hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.dependency
+//
+// Output(s):
+//   FHIR R4 ImplementationGuide.DependsOn http://hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.dependsOn
+//
+def R3ImplementationGuide_DependsOnToR4(data) {
+  uri: data.uri
+  packageId: extension::fetchId("https://www.hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.dependsOn.packageId", data.extension)
+  version: extension::fetchString("https://www.hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.dependsOn.version", data.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.dependency.type", data.type)
+}
+
+// Description: Converts a FHIR R4 ImplementationGuide.DependsOn to FHIR STU3 ImplementationGuide.Dependency.
+//
+// Argument(s):
+//   data : FHIR R4 ImplementationGuide.DependsOn http://hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.dependsOn
+//
+// Output(s):
+//   FHIR STU3 ImplementationGuide.Dependency http://hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.dependency
+//
+def R4ImplementationGuide_DependsOnToR3(data) {
+  uri: data.uri
+  type: extension::fetchCode("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.dependency.type", data.extension)
+  extension[]: extension::BuildIdExtension("https://www.hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.dependsOn.packageId", data.packageId)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.dependsOn.version", data.version)
+}
+
+// Description: Converts a FHIR STU3 ImplementationGuide.Package and ImplementationGuide.Page to FHIR R4 ImplementationGuide.Definition.
+//
+// Argument(s):
+//   Package : FHIR STU3 ImplementationGuide.Package http://hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.package
+//   page : FHIR STU3 ImplementationGuide.Page http://hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.page
+//
+// Output(s):
+//   FHIR R4 ImplementationGuide.Definition http://hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.Definition
+//
+def R3ImplementationGuide_DefinitionToR4(Package, page) {
+  grouping: R3ImplementationGuide_Definition_GroupingToR4(Package[])
+  resource: R3ImplementationGuide_Definition_ResourceToR4(Package[0].resource[])
+  page: R3ImplementationGuide_Definition_PageToR4(page)
+}
+
+// Description: Converts a FHIR STU3 ImplementationGuide.Package to FHIR R4 ImplementationGuide.Definition.Grouping.
+//
+// Argument(s):
+//   data : FHIR STU3 ImplementationGuide.Package http://hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.package
+//
+// Output(s):
+//   FHIR R4 ImplementationGuide.Definition.Grouping http://hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.definition.grouping
+//
+def R3ImplementationGuide_Definition_GroupingToR4(data) {
+  name: data.name
+  description: data.description
+}
+
+// Description: Converts a FHIR STU3 ImplementationGuide.Package.Resource to FHIR R4 ImplementationGuide.Definition.Resource.
+//
+// Argument(s):
+//   data : FHIR STU3 ImplementationGuide.Package.Resource http://hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.package.resource
+//
+// Output(s):
+//   FHIR R4 ImplementationGuide.Definition.Resource http://hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.definition.resource
+//
+def R3ImplementationGuide_Definition_ResourceToR4(data) {
+  reference: datatypes::R3ReferenceToR4(data.sourceReference)
+  reference.display: utilities::defaultIfNull($this.reference, "Unknown")
+  fhirVersion: extension::fetchCodeArray("https://www.hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.definition.resource.fhirVersion", data.extension)
+  name: data.name
+  description: data.description
+  exampleBoolean: data.example
+  exampleCanonical: datatypes::ReferenceToCanonical(data.exampleFor)
+  groupingId: extension::fetchId("https://www.hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.definition.resource.groupingId", data.extension)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.package.resource.acronym", data.acronym)
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.package.resource.sourceUri", data.sourceUri)
+}
+
+// Description: Converts a FHIR STU3 ImplementationGuide.Page to FHIR R4 ImplementationGuide.Definition.Page.
+//
+// Argument(s):
+//   data : FHIR STU3 ImplementationGuide.Page http://hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.page
+//
+// Output(s):
+//   FHIR R4 ImplementationGuide.Definition.Page http://hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.definition.page
+//
+def R3ImplementationGuide_Definition_PageToR4(data) {
+  nameUrl: data.source
+  nameReference: extension::fetchReference("https://www.hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.definition.page.nameReference", data.extension)
+  title: data.title
+  generation: extension::fetchCode("https://www.hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.definition.page.generation", data.extension)
+  generation: utilities::defaultIfNull($this.generation, "html")
+  page: R3ImplementationGuide_Definition_PageToR4(data.page[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.page.kind", data.kind)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.page.type", data.type[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.page.package", data.'package'[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.page.format", data.format)
+}
+
+// Description: Converts a FHIR R4 ImplementationGuide.Definition.Grouping to FHIR STU3 ImplementationGuide.Package.
+//
+// Argument(s):
+//   data : FHIR R4 ImplementationGuide.Definition.Grouping http://hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.definition.grouping
+//
+// Output(s):
+//   FHIR STU3 ImplementationGuide.Package http://hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.package
+//
+def R4ImplementationGuide_PackageToR3(data) {
+  name: data.grouping[0].name
+  description: data.grouping[0].description
+  resource: R4ImplementationGuide_Package_ResourceToR3(data.resource[])
+}
+
+// Description: Converts a FHIR R4 ImplementationGuide.Definition.Resource to FHIR STU3 ImplementationGuide.Package.Resource.
+//
+// Argument(s):
+//   data : FHIR R4 ImplementationGuide.Definition.Resource http://hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.definition.resource
+//
+// Output(s):
+//   FHIR STU3 ImplementationGuide.Package.Resource http://hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.package.resource
+//
+def R4ImplementationGuide_Package_ResourceToR3(data) {
+  sourceReference: datatypes::R4ReferenceToR3(data.reference)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.definition.resource.fhirVersion", data.fhirVersion[])
+  name: data.name
+  description: data.description
+  example: data.exampleBoolean
+  sourceUri: data.exampleCanonical
+  extension[]: extension::BuildIdExtension("https://www.hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.definition.resource.groupingId", data.groupingId)
+  acronym: extension::fetchString("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.package.resource.acronym", data.extension)
+  exampleFor: extension::fetchReference("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.package.resource.exampleFor", data.extension)
+}
+
+// Description: Converts a FHIR R4 ImplementationGuide.Definition.Page to FHIR STU3 ImplementationGuide.Page.
+//
+// Argument(s):
+//   data : FHIR R4 ImplementationGuide.Definition.Page http://hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.definition.page
+//
+// Output(s):
+//   FHIR STU3 ImplementationGuide.Page http://hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.page
+//
+def R4ImplementationGuide_PageToR3(data) {
+  source: data.nameUrl
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.definition.page.nameReference", data.nameReference)
+  title: data.title
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.definition.page.generation", data.generation)
+  page: data.page
+  kind: extension::fetchCode("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.page.kind", data.extension)
+  type: extension::fetchCodeArray("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.page.type", data.extension)
+  'package': extension::fetchStringArray("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.page.package", data.extension)
+  format: extension::fetchCode("https://www.hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.page.format", data.extension)
+}
+
+// Description: Converts a FHIR STU3 ImplementationGuide.Global to FHIR R4 ImplementationGuide.Global.
+//
+// Argument(s):
+//   data : FHIR STU3 ImplementationGuide.Global http://hl7.org/fhir/STU3/implementationguide-definitions.html#ImplementationGuide.global
+//
+// Output(s):
+//   FHIR R4 ImplementationGuide.Global http://hl7.org/fhir/R4/implementationguide-definitions.html#ImplementationGuide.global
+//
+def R3ImplementationGuide_GlobalToR4(data) {
+  type: utilities::Convert_TerminologyCode(data.type, "http://hl7.org/fhir/resource-types", "ResourceTypes_r3r4")
+  profile: datatypes::ReferenceToCanonical(data.profile)
+}

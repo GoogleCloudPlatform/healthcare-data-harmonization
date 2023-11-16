@@ -1,0 +1,51 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def SupplyDeliveryBase(supplyDelivery) {
+  resourcebase::ResourceBase(supplyDelivery)
+  identifier: supplyDelivery.identifier
+  type: supplyDelivery.type
+}
+
+def R2SupplyDeliveryToR3(supplyDelivery) {
+  SupplyDeliveryBase(supplyDelivery)
+  contained: datatypes::R2ResourceToR3(supplyDelivery.contained[])
+  destination: datatypes::R2ReferenceToR3(supplyDelivery.destination)
+  receiver: datatypes::R2ReferenceToR3(supplyDelivery.receiver[])
+  patient: datatypes::R2ReferenceToR3(supplyDelivery.patient)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/supplydelivery-definitions.html#SupplyDelivery.status", supplyDelivery.extension)
+  status: if status? then status else supplyDelivery.status
+  basedOn: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/supplydelivery-definitions.html#SupplyDelivery.basedOn", supplyDelivery.extension)
+  partOf: extension::fetchReferenceArray("https://www.hl7.org/fhir/STU3/supplydelivery-definitions.html#SupplyDelivery.partOf", supplyDelivery.extension)
+  suppliedItem.itemReference: datatypes::R2ReferenceToR3(supplyDelivery.suppliedItem)
+  suppliedItem.itemCodeableConcept: extension::fetchCodeableConcept("https://www.hl7.org/fhir/STU3/supplydelivery-definitions.html#SupplyDelivery.suppliedItem.itemCodeableConcept", supplyDelivery.extension)
+  suppliedItem.quantity: supplyDelivery.quantity
+  occurrenceDateTime: extension::fetchDateTime("https://www.hl7.org/fhir/STU3/supplydelivery-definitions.html#SupplyDelivery.occurrenceDateTime", supplyDelivery.extension)
+  occurrencePeriod: extension::fetchPeriod("https://www.hl7.org/fhir/STU3/supplydelivery-definitions.html#SupplyDelivery.occurrencePeriod", supplyDelivery.extension)
+  supplier: datatypes::R2ReferenceToR3(supplyDelivery.supplier)
+  status: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/supplydelivery-definitions.html#SupplyDelivery.status", supplyDelivery.status)
+  whenPrepared: extension::BuildPeriodExtension("https://www.hl7.org/fhir/DSTU2/supplydelivery-definitions.html#SupplyDelivery.whenPrepared", supplyDelivery.whenPrepared)
+  time: extension::BuildDateTimeExtension("https://www.hl7.org/fhir/DSTU2/supplydelivery-definitions.html#SupplyDelivery.time", supplyDelivery.time)
+}
+
+def R3SupplyDeliveryToR2(supplyDelivery) {
+  SupplyDeliveryBase(supplyDelivery)
+  contained: datatypes::R3ResourceToR2(supplyDelivery.contained[])
+  destination: datatypes::R3ReferenceToR2(supplyDelivery.destination)
+  receiver: datatypes::R3ReferenceToR2(supplyDelivery.receiver[])
+  patient: datatypes::R3ReferenceToR2(supplyDelivery.patient)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/supplydelivery-definitions.html#SupplyDelivery.status", supplyDelivery.extension)
+  status: if status? then status else supplyDelivery.status
+  suppliedItem: datatypes::R3ReferenceToR2(supplyDelivery.suppliedItem.itemReference)
+  supplier: datatypes::R3ReferenceToR2(supplyDelivery.supplier)
+  quantity: supplyDelivery.suppliedItem.quantity
+  whenPrepared: extension::fetchPeriod("https://www.hl7.org/fhir/DSTU2/supplydelivery-definitions.html#SupplyDelivery.whenPrepared", supplyDelivery.extension)
+  time: extension::fetchDateTime("https://www.hl7.org/fhir/DSTU2/supplydelivery-definitions.html#SupplyDelivery.time", supplyDelivery.extension)
+  status: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/supplydelivery-definitions.html#SupplyDelivery.status", supplyDelivery.status)
+  basedOn: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/supplydelivery-definitions.html#SupplyDelivery.basedOn", supplyDelivery.basedOn[])
+  partOf: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/supplydelivery-definitions.html#SupplyDelivery.partOf", supplyDelivery.partOf[])
+  occurrenceDateTime: extension::BuildDateTimeExtension("https://www.hl7.org/fhir/STU3/supplydelivery-definitions.html#SupplyDelivery.occurrenceDateTime", supplyDelivery.occurrenceDateTime)
+  occurrencePeriod: extension::BuildPeriodExtension("https://www.hl7.org/fhir/STU3/supplydelivery-definitions.html#SupplyDelivery.occurrencePeriod", supplyDelivery.occurrencePeriod)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/supplydelivery-definitions.html#SupplyDelivery.suppliedItem.itemCodeableConcept", supplyDelivery.suppliedItem.itemCodeableConcept)
+}

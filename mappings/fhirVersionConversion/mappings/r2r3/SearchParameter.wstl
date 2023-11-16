@@ -1,0 +1,69 @@
+package fhir_r2r3
+
+import "../ResourceBase.wstl"
+
+def SearchParameterBase(searchParameter) {
+  resourcebase::ResourceBase(searchParameter)
+  url: searchParameter.url
+  name: searchParameter.name
+  date: searchParameter.date
+  publisher: searchParameter.publisher
+  code: searchParameter.code
+  type: searchParameter.type
+  xpath: searchParameter.xpath
+  xpathUsage: searchParameter.xpathUsage
+  target: searchParameter.target
+}
+
+def R2SearchParameterToR3(searchParameter) {
+  SearchParameterBase(searchParameter)
+  contained: datatypes::R2ResourceToR3(searchParameter.contained[])
+  version: extension::fetchString("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.version", searchParameter.extension)
+  var status: extension::fetchCode("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.status", searchParameter.extension)
+  status: if status? then status else searchParameter.status
+  experimental: searchParameter.experimental
+  contact: extension::fetchContactDetailArray("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.contact", searchParameter.extension)
+  useContext: extension::fetchUsageContextArray("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.useContext", searchParameter.extension)
+  jurisdiction: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.jurisdiction", searchParameter.extension)
+  purpose: searchParameter.requirements
+  base: R2SearchParameter_BaseToR3("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.base", searchParameter.extension, searchParameter.base)
+  derivedFrom: extension::fetchUri("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.derivedFrom", searchParameter.extension)
+  description: searchParameter.description
+  expression: extension::fetchString("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.expression", searchParameter.extension)
+  comparator: extension::fetchCodeArray("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.comparator", searchParameter.extension)
+  modifier: extension::fetchCodeArray("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.modifier", searchParameter.extension)
+  chain: extension::fetchStringArray("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.chain", searchParameter.extension)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/DSTU2/searchparameter-definitions.html#SearchParameter.status", searchParameter.status)
+}
+
+def R3SearchParameterToR2(searchParameter) {
+  SearchParameterBase(searchParameter)
+  contained: datatypes::R3ResourceToR2(searchParameter.contained[])
+  var status: extension::fetchCode("https://www.hl7.org/fhir/DSTU2/searchparameter-definitions.html#SearchParameter.status", searchParameter.extension)
+  status: if status? then status else searchParameter.status
+  experimental: searchParameter.experimental
+  requirements: searchParameter.purpose
+  base: searchParameter.base[0]
+  description: searchParameter.description
+  component: searchParameter.component
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.version", searchParameter.version)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.status", searchParameter.status)
+  extension[]: extension::BuildContactDetailExtension("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.contact", searchParameter.contact[])
+  extension[]: extension::BuildUsageContextExtension("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.useContext", searchParameter.useContext[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.jurisdiction", searchParameter.jurisdiction[])
+  extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.derivedFrom", searchParameter.derivedFrom)
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.expression", searchParameter.expression)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.comparator", searchParameter.comparator[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.modifier", searchParameter.modifier[])
+  extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.chain", searchParameter.chain[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/searchparameter-definitions.html#SearchParameter.base", searchParameter.base[])
+}
+
+def R2SearchParameter_BaseToR3(url, extension, data) {
+  var base: extension::fetchCodeArray(url, extension)
+  if base then {
+    base
+  } else {
+    arrayOf(data)
+  }
+}

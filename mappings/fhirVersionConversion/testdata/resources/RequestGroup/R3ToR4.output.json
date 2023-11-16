@@ -1,0 +1,130 @@
+{
+  "action": [
+    {
+      "action": [
+        {
+          "description": "Administer medication 1",
+          "id": "medication-action-1",
+          "resource": {
+            "reference": "#medicationrequest-1"
+          },
+          "type": {
+            "coding": [
+              {
+                "code": "create"
+              }
+            ]
+          }
+        },
+        {
+          "description": "Administer medication 2",
+          "id": "medication-action-2",
+          "relatedAction": [
+            {
+              "actionId": "medication-action-1",
+              "offsetDuration": {
+                "unit": "h",
+                "value": 1
+              },
+              "relationship": "after-end"
+            }
+          ],
+          "resource": {
+            "reference": "#medicationrequest-2"
+          },
+          "type": {
+            "coding": [
+              {
+                "code": "create"
+              }
+            ]
+          }
+        }
+      ],
+      "cardinalityBehavior": "single",
+      "description": "Administer medications at the appropriate time",
+      "groupingBehavior": "logical-group",
+      "participant": [
+        {
+          "reference": "Practitioner/1"
+        }
+      ],
+      "precheckBehavior": "yes",
+      "prefix": "1",
+      "requiredBehavior": "must",
+      "selectionBehavior": "all",
+      "textEquivalent": "Administer medication 1, followed an hour later by medication 2",
+      "timingDateTime": "2017-03-06T19:00:00Z",
+      "title": "Administer Medications"
+    }
+  ],
+  "author": {
+    "reference": "Practitioner/1"
+  },
+  "authoredOn": "2017-03-06T17:31:00Z",
+  "contained": [
+    {
+      "id": "medicationrequest-1",
+      "intent": "proposal",
+      "medicationCodeableConcept": {
+        "text": "Medication 1"
+      },
+      "resourceType": "MedicationRequest",
+      "status": "unknown",
+      "subject": {
+        "reference": "Patient/example"
+      }
+    },
+    {
+      "id": "medicationrequest-2",
+      "intent": "proposal",
+      "medicationCodeableConcept": {
+        "text": "Medication 2"
+      },
+      "resourceType": "MedicationRequest",
+      "status": "unknown",
+      "subject": {
+        "reference": "Patient/example"
+      }
+    }
+  ],
+  "encounter": {
+    "reference": "Encounter/example"
+  },
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.status",
+      "valueCode": "draft"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.intent",
+      "valueCode": "plan"
+    }
+  ],
+  "groupIdentifier": {
+    "system": "http://example.org/treatment-group",
+    "value": "00001"
+  },
+  "id": "example",
+  "identifier": [
+    {
+      "value": "requestgroup-1"
+    }
+  ],
+  "intent": "plan",
+  "note": [
+    {
+      "text": "Additional notes about the request group"
+    }
+  ],
+  "priority": "routine",
+  "resourceType": "RequestGroup",
+  "status": "draft",
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003eExample RequestGroup illustrating related actions to administer medications in sequence with time delay.\u003c/div\u003e",
+    "status": "generated"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "actual": true,
+  "characteristic": [
+    {
+      "code": {
+        "text": "gender"
+      },
+      "exclude": false,
+      "valueCodeableConcept": {
+        "text": "mixed"
+      }
+    },
+    {
+      "code": {
+        "text": "owner"
+      },
+      "exclude": false,
+      "valueCodeableConcept": {
+        "text": "John Smith"
+      }
+    }
+  ],
+  "code": {
+    "text": "Horse"
+  },
+  "id": "101",
+  "identifier": [
+    {
+      "system": "http://someveterinarianclinic.org/fhir/NamingSystem/herds",
+      "value": "12345"
+    }
+  ],
+  "name": "John's herd",
+  "quantity": 25,
+  "resourceType": "Group",
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Herd of 25 horses</p>\n      <p>Gender: mixed</p>\n      <p>Owner: John Smith</p>\n    </div>",
+    "status": "additional"
+  },
+  "type": "animal"
+}

@@ -1,0 +1,124 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   task : FHIR Task resource
+//
+// Output(s):
+//   FHIR Task Resource
+//
+def TaskBase(task) {
+  resourcebase::ResourceBase(task)
+  identifier: task.identifier
+  groupIdentifier: task.groupIdentifier
+  statusReason: task.statusReason
+  businessStatus: task.businessStatus
+  code: task.code
+  description: task.description
+  executionPeriod: task.executionPeriod
+  authoredOn: task.authoredOn
+  lastModified: task.lastModified
+  performerType: task.performerType
+  note: task.note
+}
+
+// Description: Converts a FHIR STU3 Task resource to FHIR R4 Task resource.
+//
+// Argument(s):
+//   task : FHIR STU3 Task resource https://www.hl7.org/fhir/stu3/task.html
+//
+// Output(s):
+//   FHIR R4 Task Resource https://www.hl7.org/fhir/r4/task.html
+//
+def R3TaskToR4(task) {
+  TaskBase(task)
+  contained: datatypes::R3ResourceToR4(task.contained[])
+  relevantHistory: datatypes::R3ReferenceToR4(task.relevantHistory[])
+  focus: datatypes::R3ReferenceToR4(task.focus)
+  for: datatypes::R3ReferenceToR4(task.for)
+  basedOn: datatypes::R3ReferenceToR4(task.basedOn[])
+  partOf: datatypes::R3ReferenceToR4(task.partOf[])
+  instantiatesCanonical: datatypes::ReferenceToCanonical(task.definitionReference)
+  instantiatesUri: task.definitionUri
+  status: task.status
+  var intent: extension::fetchCode("https://www.hl7.org/fhir/R4/task-definitions.html#Task.intent", task.extension)
+  intent: if intent? then intent else task.intent
+  priority: task.priority
+  encounter: datatypes::R3ReferenceToR4(task.context)
+  requester: datatypes::R3ReferenceToR4(task.requester.agent)
+  owner: datatypes::R3ReferenceToR4(task.owner)
+  location: extension::fetchReference("https://www.hl7.org/fhir/R4/task-definitions.html#Task.location", task.extension)
+  reasonCode: task.reason
+  reasonReference: extension::fetchReference("https://www.hl7.org/fhir/R4/task-definitions.html#Task.reasonReference", task.extension)
+  insurance: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/task-definitions.html#Task.insurance", task.extension)
+  restriction: R3Task_RestrictionToR4(task.restriction)
+  input: task.input
+  output: task.output
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/task-definitions.html#Task.requester.onBehalfOf", task.requester.onBehalfOf)
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/task-definitions.html#Task.intent", task.intent)
+}
+
+// Description: Converts a FHIR R4 Task resource to FHIR STU3 Task resource.
+//
+// Argument(s):
+//   task : FHIR R4 Task resource https://www.hl7.org/fhir/r4/task.html
+//
+// Output(s):
+//   FHIR STU3 Task Resource https://www.hl7.org/fhir/stu3/task.html
+//
+def R4TaskToR3(task) {
+  TaskBase(task)
+  contained: datatypes::R4ResourceToR3(task.contained[])
+  relevantHistory: datatypes::R4ReferenceToR3(task.relevantHistory[])
+  focus: datatypes::R4ReferenceToR3(task.focus)
+  for: datatypes::R4ReferenceToR3(task.for)
+  basedOn: datatypes::R4ReferenceToR3(task.basedOn[])
+  partOf: datatypes::R4ReferenceToR3(task.partOf[])
+  definitionUri: task.instantiatesUri
+  definitionReference: datatypes::CanonicalToReference(task.instantiatesCanonical)
+  status: task.status
+  var intent: extension::fetchCode("https://www.hl7.org/fhir/STU3/task-definitions.html#Task.intent", task.extension)
+  intent: if intent? then intent else task.intent
+  priority: task.priority
+  context: datatypes::R4ReferenceToR3(task.encounter)
+  requester.onBehalfOf: extension::fetchReference("https://www.hl7.org/fhir/STU3/task-definitions.html#Task.requester.onBehalfOf", task.extension)
+  requester.agent: datatypes::R4ReferenceToR3(task.requester)
+  owner: datatypes::R4ReferenceToR3(task.owner)
+  reason: task.reasonCode
+  restriction: R4Task_RestrictionToR3(task.restriction)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/task-definitions.html#Task.location", task.location)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/task-definitions.html#Task.reasonReference", task.reasonReference)
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/task-definitions.html#Task.insurance", task.insurance[])
+  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/task-definitions.html#Task.intent", task.intent)
+}
+
+// Description: Converts a FHIR STU3 Task.restriction to FHIR R4 Task.restriction.
+//
+// Argument(s):
+//   data : FHIR STU3 Task.restriction https://www.hl7.org/fhir/stu3/task-definitions.html#Task.restriction
+//
+// Output(s):
+//   FHIR R4 Task.restriction https://www.hl7.org/fhir/r4/task-definitions.html#Task.restriction
+//
+def R3Task_RestrictionToR4(data) {
+  repetitions: data.repetitions
+  period: data.period
+  recipient: datatypes::R3ReferenceToR4(data.recipient[])
+}
+
+// Description: Converts a FHIR R4 Task.restriction to FHIR STU3 Task.restriction.
+//
+// Argument(s):
+//   data : FHIR R4 Task.restriction https://www.hl7.org/fhir/r4/task-definitions.html#Task.restriction
+//
+// Output(s):
+//   FHIR STU3 Task.restriction https://www.hl7.org/fhir/stu3/task-definitions.html#Task.restriction
+//
+def R4Task_RestrictionToR3(data) {
+  repetitions: data.repetitions
+  period: data.period
+  recipient: datatypes::R4ReferenceToR3(data.recipient[])
+}
