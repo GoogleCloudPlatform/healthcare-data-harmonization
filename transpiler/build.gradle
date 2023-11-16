@@ -18,7 +18,7 @@ dependencies {
 
     testImplementation project(":testutil")
     testImplementation group: 'junit', name: 'junit', version: '4.13'
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.2.0'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.7.7'
     testImplementation group: 'com.google.truth.extensions', name: 'truth-proto-extension', version: '1.0.1'
 }
 

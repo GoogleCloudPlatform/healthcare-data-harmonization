@@ -15,6 +15,6 @@ dependencies {
 
     testImplementation group: "com.google.cloud.verticals.foundations.dataharmonization", name: "testutil"
     testImplementation group: 'junit', name: 'junit', version: '4.13'
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.2.0'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.7.7'
     testImplementation group: 'com.google.truth', name: 'truth', version: '1.1.3'
 }
