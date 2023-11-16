@@ -1,0 +1,40 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "source_code10",
+          "display": "source_display10",
+          "target": [
+            {
+              "code": "target_code10_xy",
+              "display": "target_display10_xy",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "source_code20",
+          "display": "source_display20",
+          "target": [
+            {
+              "code": "target_code20_xy",
+              "display": "target_display20_xy",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "source_system_x",
+      "target": "target_system_y",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "unmapped_code_xy",
+        "display": "unmapped_display_xy"
+      }
+    }
+  ],
+  "id": "conceptmap_id2",
+  "resourceType": "ConceptMap",
+  "version": "v1.1"
+}

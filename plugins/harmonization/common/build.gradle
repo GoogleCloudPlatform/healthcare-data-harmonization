@@ -1,0 +1,23 @@
+plugins {
+    id "java-library"
+}
+
+group 'com.google.cloud.verticals.foundations.dataharmonization.plugins.harmonization'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // TODO(): Set up versioning
+    api group: "com.google.cloud.verticals.foundations.dataharmonization", name: "runtime"
+
+    implementation group: "com.google.auto.value", name: "auto-value-annotations", version: "1.7.4"
+    annotationProcessor group: "com.google.auto.value", name: "auto-value", version: "1.7.4"
+
+    // TODO(): Set up versioning
+    testImplementation group: "com.google.cloud.verticals.foundations.dataharmonization", name: "testutil"
+    testImplementation "junit:junit:4.13"
+    testImplementation group: "org.mockito", name: "mockito-core", version: "3.7.7"
+    testImplementation group: 'com.google.truth', name: 'truth', version: '1.0.1'
+}

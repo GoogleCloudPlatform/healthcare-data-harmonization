@@ -47,6 +47,7 @@ with external services, and otherwise extend the engine functionality.
         *   `example` - Example Plugin showcasing the plugin APIs
         *   `logging` - Simple logging functions implementation
         *   `test` - Unit Testing Plugin enabling writing unit tests in Whistle
+        *   `harmonization` - FHIR code translation support
 
 ## Coming Soon to this repository
 

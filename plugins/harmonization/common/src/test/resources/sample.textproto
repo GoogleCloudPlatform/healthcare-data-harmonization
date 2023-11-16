@@ -1,0 +1,34 @@
+package_name: "test"
+root_block {
+  name: "testFunc"
+  mapping {
+    value {
+      function_call {
+        reference {
+          package: "dataflow"
+          name: "read"
+        }
+        args {
+          const_string: "gs://dh-elp/recon/*.ndjson"
+        }
+      }
+    }
+    var {
+      name: "patientIds"
+    }
+  }
+  mapping {
+    value {
+      from_local: "patientIds"
+    }
+    custom_sink {
+      reference {
+        package: "dataflow"
+        name: "TextIO"
+      }
+      args {
+        const_string: "gs://dh-elp/test.json"
+      }
+    }
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "source_code1",
+          "display": "source_display1",
+          "target": [
+            {
+              "code": "target_code11_ab",
+              "display": "target_display11_ab",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "source_code2",
+          "display": "source_display2",
+          "target": [
+            {
+              "code": "target_code21_ab",
+              "display": "target_display21_ab",
+              "equivalence": "equivalent"
+            },
+            {
+              "code": "target_code22_ab",
+              "display": "target_display22_ab",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "source_code3",
+          "display": "source_display3",
+          "target": [
+            {
+              "code": "target_code31_ab",
+              "display": "target_display31_ab",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "source_system_a",
+      "target": "target_system_b",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "unmapped_code_ab",
+        "display": "unmapped_display_ab"
+      }
+    },
+    {
+      "element": [
+        {
+          "code": "source_code1",
+          "display": "source_display1",
+          "target": [
+            {
+              "code": "target_code11_ac",
+              "display": "target_display11_ac",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "source_code2",
+          "display": "source_display2",
+          "target": [
+            {
+              "code": "target_code21_ac",
+              "display": "target_display21_ac",
+              "equivalence": "equivalent"
+            },
+            {
+              "code": "target_code22_ac",
+              "display": "target_display22_ac",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "source_system_a",
+      "target": "target_system_c",
+      "unmapped": {
+        "mode": "provided"
+      }
+    },
+    {
+      "element": [
+        {
+          "code": "source_code1",
+          "display": "source_display1",
+          "target": [
+            {
+              "code": "target_code11_db",
+              "display": "target_display11_db",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "source_code2",
+          "display": "source_display2",
+          "target": [
+            {
+              "code": "target_code21_db",
+              "display": "target_display21_db",
+              "equivalence": "equivalent"
+            },
+            {
+              "code": "target_code22_db",
+              "display": "target_display22_db",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "source_system_d",
+      "target": "target_system_b",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "unmapped_code_db",
+        "display": "unmapped_display_db"
+      }
+    },
+    {
+      "element": [
+        {
+          "code": "source_code1",
+          "display": "source_display1",
+          "target": [
+            {
+              "code": "target_code11_ef",
+              "display": "target_display11_ef",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "source_system_e",
+      "target": "target_system_f"
+    }
+  ],
+  "id": "conceptmap_id1",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

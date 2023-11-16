@@ -1,0 +1,6 @@
+rootProject.name = 'harmonization'
+
+include("common")
+include("hdev2")
+
+includeBuild("../../")
