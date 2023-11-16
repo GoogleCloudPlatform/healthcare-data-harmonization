@@ -1,0 +1,18 @@
+plugins {
+    id 'application'
+    id 'idea'
+}
+
+repositories {
+     mavenCentral()
+ }
+
+mainClassName = 'com.google.cloud.verticals.foundations.dataharmonization.Main'
+
+dependencies {
+    runtimeOnly group: 'com.google.cloud.verticals.foundations.dataharmonization', name: 'runtime'
+    runtimeOnly group: 'com.google.cloud.verticals.foundations.dataharmonization.plugins', name: 'test'
+    runtimeOnly group: 'com.google.cloud.verticals.foundations.dataharmonization.plugins', name: 'example'
+    runtimeOnly group: 'com.google.cloud.verticals.foundations.dataharmonization.plugins', name: 'logging'
+    runtimeOnly group: 'com.google.cloud.verticals.foundations.dataharmonization.plugins.harmonization', name: 'hdev2'
+}

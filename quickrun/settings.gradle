@@ -1,0 +1,7 @@
+rootProject.name = 'runner'
+
+includeBuild('../')
+includeBuild('../plugins/test')
+includeBuild('../plugins/example')
+includeBuild('../plugins/logging')
+includeBuild('../plugins/harmonization')

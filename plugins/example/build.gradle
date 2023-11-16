@@ -3,7 +3,7 @@ plugins {
     id 'idea'
 }
 
-group 'com.google.cloud.verticals.foundations.dataharmonization'
+group 'com.google.cloud.verticals.foundations.dataharmonization.plugins'
 
 repositories {
     mavenCentral()
