@@ -208,6 +208,9 @@ def test_R3PersonToR4() testR3ResourceToR4("Person")
 // Tests fhir_r3r4::R3ProcedureRequestToR4() function.
 def test_R3ProcedureRequestToR4() testR3ResourceToR4("ProcedureRequest")
 
+// Tests fhir_r3r4::R3ReferralRequestToR4() function.
+def test_R3ReferralRequestToR4() testR3ResourceToR4("ReferralRequest")
+
 // Tests fhir_r3r4::R3SubscriptionToR4() function.
 def test_R3SubscriptionToR4() testR3ResourceToR4("Subscription")
 

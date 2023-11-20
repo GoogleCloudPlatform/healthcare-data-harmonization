@@ -1,0 +1,69 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields of ReferralRequest in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   referralRequest : FHIR ReferralRequest resource
+//
+// Output(s):
+//   FHIR ReferralRequest Resource
+//
+def ReferralRequestBase(referralRequest) {
+  resourcebase::ResourceBase(referralRequest)
+  identifier: referralRequest.identifier
+  intent: referralRequest.intent
+  priority: referralRequest.priority
+  occurrenceDateTime: referralRequest.occurrenceDateTime
+  occurrencePeriod: referralRequest.occurrencePeriod
+  reasonCode: referralRequest.reasonCode
+  authoredOn: referralRequest.authoredOn
+  note: referralRequest.note
+}
+
+// Description: Converts a FHIR STU3 ReferralRequest resource to FHIR R4 ReferralRequest resource.
+//
+// Argument(s):
+//   referralRequest : FHIR STU3 ReferralRequest resource https://www.hl7.org/fhir/stu3/referralRequest.html
+//
+// Output(s):
+//   FHIR R4 ReferralRequest Resource https://www.hl7.org/fhir/r4/referralRequest.html
+//
+def R3ReferralRequestToR4(referralRequest) {
+  ReferralRequestBase(referralRequest)
+  resourceType: "ServiceRequest"
+  instantiatesCanonical: datatypes::ReferenceToCanonical(referralRequest.definition[])
+  instantiatesUri: extension::fetchUri("https://www.hl7.org/fhir/R4/servicerequest-definitions.html#Servicerequest.instantiatesUri", referralRequest.extension)
+  basedOn: datatypes::R3ReferenceToR4(referralRequest.basedOn[where !matchesRegex($.reference, "^ProcedureRequest.*|^ReferralRequest.*")][])
+  requisition: referralRequest.groupIdentifier
+  status: utilities::Convert_TerminologyCode(referralRequest.status, "http://hl7.org/fhir/request-status", "Request_Status_r3r4")
+  category: extension::fetchCodeableConceptArray("https://hl7.org/fhir/R4/servicerequest-definitions.html#ServiceRequest.category", referralRequest.extension)
+  doNotPerform: extension::fetchBoolean("https://hl7.org/fhir/R4/servicerequest-definitions.html#ServiceRequest.doNotPerform", referralRequest.extension)
+  code: extension::fetchCodeableConcept("https://hl7.org/fhir/R4/servicerequest-definitions.html#ServiceRequest.code", referralRequest.extension)
+  orderDetail: extension::fetchCodeableConceptArray("https://hl7.org/fhir/R4/servicerequest-definitions.html#ServiceRequest.orderDetail", referralRequest.extension)
+  quantityQuantity: extension::fetchQuantity("https://hl7.org/fhir/R4/servicerequest-definitions.html#ServiceRequest.quantityQuantity", referralRequest.extension)
+  quantityRatio: extension::fetchRatio("https://hl7.org/fhir/R4/servicerequest-definitions.html#ServiceRequest.quantityRatio", referralRequest.extension)
+  quantityRange: extension::fetchRange("https://hl7.org/fhir/R4/servicerequest-definitions.html#ServiceRequest.quantityRange", referralRequest.extension)
+  subject: datatypes::R3ReferenceToR4(referralRequest.subject)
+  encounter: if matchesRegex(referralRequest.context.reference, "^Encounter.*") then datatypes::R3ReferenceToR4(referralRequest.context)
+  occurrenceTiming: extension::fetchTiming("https://hl7.org/fhir/R4/servicerequest-definitions.html#ServiceRequest.occurrenceTiming", referralRequest.extension)
+  asNeededBoolean: extension::fetchBoolean("https://hl7.org/fhir/R4/servicerequest-definitions.html#ServiceRequest.asNeededBoolean", referralRequest.extension)
+  asNeededCodeableConcept: extension::fetchCodeableConcept("https://hl7.org/fhir/R4/servicerequest-definitions.html#ServiceRequest.asNeededCodeableConcept", referralRequest.extension)
+  requester: referralRequest.requester.agent
+  performerType: referralRequest.specialty
+  performer: datatypes::R3ReferenceToR4(referralRequest.recipient[])
+  locationCode: extension::fetchCodeableConceptArray("https://hl7.org/fhir/R4/servicerequest-definitions.html#ServiceRequest.locationCode", referralRequest.extension)
+  locationReference: extension::fetchReferenceArray("https://hl7.org/fhir/R4/servicerequest-definitions.html#ServiceRequest.locationReference", referralRequest.extension)
+  reasonReference: datatypes::R3ReferenceToR4(referralRequest.reasonReference[])
+  insurance: extension::fetchReferenceArray("https://hl7.org/fhir/R4/servicerequest-definitions.html#ServiceRequest.insurance", referralRequest.extension)
+  supportingInfo: datatypes::R3ReferenceToR4(referralRequest.supportingInfo[])
+  specimen: extension::fetchReferenceArray("https://hl7.org/fhir/R4/servicerequest-definitions.html#ServiceRequest.specimen", referralRequest.extension)
+  bodySite: extension::fetchCodeableConceptArray("https://hl7.org/fhir/R4/servicerequest-definitions.html#ServiceRequest.bodySite", referralRequest.extension)
+  patientInstruction: extension::fetchString("https://hl7.org/fhir/R4/servicerequest-definitions.html#ServiceRequest.patientInstruction", referralRequest.extension)
+  relevantHistory: datatypes::R3ReferenceToR4(referralRequest.relevantHistory[])
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/referralRequest-definitions.html#ReferralRequest.type", referralRequest.type)
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/referralRequest-definitions.html#ReferralRequest.serviceRequested", referralRequest.serviceRequested)
+  extension[]: extension::BuildReferenceExtension("https://hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.requester.onBehalfOf", referralRequest.requester.onBehalfOf)
+  extension[]: extension::BuildStringExtension("https://hl7.org/fhir/STU3/referralrequest-definitions.html#ReferralRequest.description", referralRequest.description)
+}
