@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   structureMap : FHIR StructureMap resource
+//
+// Output(s):
+//   FHIR StructureMap Resource
+//
 def StructureMapBase(structureMap) {
   resourcebase::ResourceBase(structureMap)
   url: structureMap.url
@@ -19,6 +27,14 @@ def StructureMapBase(structureMap) {
   copyright: structureMap.copyright
 }
 
+// Description: Converts a FHIR STU3 StructureMap resource to FHIR R4 StructureMap resource.
+//
+// Argument(s):
+//   structureMap : FHIR STU3 StructureMap resource https://www.hl7.org/fhir/stu3/structuremap.html
+//
+// Output(s):
+//   FHIR R4 StructureMap Resource https://www.hl7.org/fhir/r4/structuremap.html
+//
 def R3StructureMapToR4(structureMap) {
   StructureMapBase(structureMap)
   contained: datatypes::R3ResourceToR4(structureMap.contained[])
@@ -29,6 +45,14 @@ def R3StructureMapToR4(structureMap) {
   group: R3StructureMap_GroupToR4(structureMap.group[])
 }
 
+// Description: Converts a FHIR R4 StructureMap resource to FHIR STU3 StructureMap resource.
+//
+// Argument(s):
+//   structureMap : FHIR R4 StructureMap resource https://www.hl7.org/fhir/r4/structuremap.html
+//
+// Output(s):
+//   FHIR STU3 StructureMap Resource https://www.hl7.org/fhir/stu3/structuremap.html
+//
 def R4StructureMapToR3(structureMap) {
   StructureMapBase(structureMap)
   contained: datatypes::R4ResourceToR3(structureMap.contained[])
@@ -39,6 +63,14 @@ def R4StructureMapToR3(structureMap) {
   group: R4StructureMap_GroupToR3(structureMap.group[])
 }
 
+// Description: Converts a FHIR STU3 StructureMap.group to FHIR R4 StructureMap.group.
+//
+// Argument(s):
+//   data : FHIR STU3 StructureMap.group https://www.hl7.org/fhir/stu3/structuremap-definitions.html#StructureMap.group
+//
+// Output(s):
+//   FHIR R4 StructureMap.group https://www.hl7.org/fhir/r4/structuremap-definitions.html#StructureMap.group
+//
 def R3StructureMap_GroupToR4(data) {
   name: data.name
   extends: data.extends
@@ -48,6 +80,14 @@ def R3StructureMap_GroupToR4(data) {
   rule: R3StructureMap_Group_RuleToR4(data.rule[])
 }
 
+// Description: Converts a FHIR R4 StructureMap.group to FHIR STU3 StructureMap.group.
+//
+// Argument(s):
+//   data : FHIR R4 StructureMap.group https://www.hl7.org/fhir/r4/structuremap-definitions.html#StructureMap.group
+//
+// Output(s):
+//   FHIR STU3 StructureMap.group https://www.hl7.org/fhir/stu3/structuremap-definitions.html#StructureMap.group
+//
 def R4StructureMap_GroupToR3(data) {
   name: data.name
   extends: data.extends
@@ -57,6 +97,14 @@ def R4StructureMap_GroupToR3(data) {
   rule: R4StructureMap_Group_RuleToR3(data.rule[])
 }
 
+// Description: Converts a FHIR STU3 StructureMap.group.rule to FHIR R4 StructureMap.group.rule.
+//
+// Argument(s):
+//   data : FHIR STU3 StructureMap.group.rule https://www.hl7.org/fhir/stu3/structuremap-definitions.html#StructureMap.group.rule
+//
+// Output(s):
+//   FHIR R4 StructureMap.group.rule https://www.hl7.org/fhir/r4/structuremap-definitions.html#StructureMap.group.rule
+//
 def R3StructureMap_Group_RuleToR4(data) {
   name: data.name
   source: R3StructureMap_Group_Rule_SourceToR4(data.source[])
@@ -66,6 +114,14 @@ def R3StructureMap_Group_RuleToR4(data) {
   documentation: data.documentation
 }
 
+// Description: Converts a FHIR R4 StructureMap.group.rule to FHIR STU3 StructureMap.group.rule.
+//
+// Argument(s):
+//   data : FHIR R4 StructureMap.group.rule https://www.hl7.org/fhir/r4/structuremap-definitions.html#StructureMap.group.rule
+//
+// Output(s):
+//   FHIR STU3 StructureMap.group.rule https://www.hl7.org/fhir/stu3/structuremap-definitions.html#StructureMap.group.rule
+//
 def R4StructureMap_Group_RuleToR3(data) {
   name: data.name
   source: R4StructureMap_Group_Rule_SourceToR3(data.source[])
@@ -75,6 +131,14 @@ def R4StructureMap_Group_RuleToR3(data) {
   documentation: data.documentation
 }
 
+// Description: Converts a FHIR STU3 StructureMap.group.rule.source to FHIR R4 StructureMap.group.rule.source.
+//
+// Argument(s):
+//   data : FHIR STU3 StructureMap.group.rule.source https://www.hl7.org/fhir/stu3/structuremap-definitions.html#StructureMap.group.rule.source
+//
+// Output(s):
+//   FHIR R4 StructureMap.group.rule.source https://www.hl7.org/fhir/r4/structuremap-definitions.html#StructureMap.group.rule.source
+//
 def R3StructureMap_Group_Rule_SourceToR4(data) {
   context: data.context
   min: data.min
@@ -126,6 +190,14 @@ def R3StructureMap_Group_Rule_SourceToR4(data) {
   logMessage: extension::fetchString("https://www.hl7.org/fhir/R4/structuremap-definitions.html#StructureMap.group.rule.source.logMessage", data.extension)
 }
 
+// Description: Converts a FHIR R4 StructureMap.group.rule.source to FHIR STU3 StructureMap.group.rule.source.
+//
+// Argument(s):
+//   data : FHIR R4 StructureMap.group.rule.source https://www.hl7.org/fhir/r4/structuremap-definitions.html#StructureMap.group.rule.source
+//
+// Output(s):
+//   FHIR STU3 StructureMap.group.rule.source https://www.hl7.org/fhir/stu3/structuremap-definitions.html#StructureMap.group.rule.source
+//
 def R4StructureMap_Group_Rule_SourceToR3(data) {
   context: data.context
   min: data.min

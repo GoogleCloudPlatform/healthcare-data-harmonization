@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   specimen : FHIR Specimen resource
+//
+// Output(s):
+//   FHIR Specimen Resource
+//
 def SpecimenBase(specimen) {
   resourcebase::ResourceBase(specimen)
   identifier: specimen.identifier
@@ -11,6 +19,14 @@ def SpecimenBase(specimen) {
   note: specimen.note
 }
 
+// Description: Converts a FHIR STU3 Specimen resource to FHIR R4 Specimen resource.
+//
+// Argument(s):
+//   specimen : FHIR STU3 Specimen resource https://www.hl7.org/fhir/stu3/specimen.html
+//
+// Output(s):
+//   FHIR R4 Specimen Resource https://www.hl7.org/fhir/r4/specimen.html
+//
 def R3SpecimenToR4(specimen) {
   SpecimenBase(specimen)
   contained: datatypes::R3ResourceToR4(specimen.contained[])
@@ -19,11 +35,19 @@ def R3SpecimenToR4(specimen) {
   parent: datatypes::R3ReferenceToR4(specimen.parent[])
   status: specimen.status
   subject: datatypes::R3ReferenceToR4(specimen.subject)
-  request: datatypes::R3ReferenceToR4(specimen.request[])
+  extension[] : extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/specimen-definitions.html#Specimen.request", specimen.request[])
   collection: R3Specimen_CollectionToR4(specimen.collection)
   condition: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/specimen-definitions.html#Specimen.https://www.hl7.org/fhir/R4/specimen-definitions.html#Specimen.condition", specimen.extension)
 }
 
+// Description: Converts a FHIR R4 Specimen resource to FHIR STU3 Specimen resource.
+//
+// Argument(s):
+//   specimen : FHIR R4 Specimen resource https://www.hl7.org/fhir/r4/specimen.html
+//
+// Output(s):
+//   FHIR STU3 Specimen Resource https://www.hl7.org/fhir/stu3/specimen.html
+//
 def R4SpecimenToR3(specimen) {
   SpecimenBase(specimen)
   contained: datatypes::R4ResourceToR3(specimen.contained[])
@@ -37,6 +61,14 @@ def R4SpecimenToR3(specimen) {
   extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/specimen-definitions.html#Specimen.https://www.hl7.org/fhir/R4/specimen-definitions.html#Specimen.condition", specimen.condition[])
 }
 
+// Description: Converts a FHIR STU3 Specimen.collection to FHIR R4 Specimen.collection.
+//
+// Argument(s):
+//   data : FHIR STU3 Specimen.collection https://www.hl7.org/fhir/stu3/specimen-definitions.html#Specimen.collection
+//
+// Output(s):
+//   FHIR R4 Specimen.collection https://www.hl7.org/fhir/r4/specimen-definitions.html#Specimen.collection
+//
 def R3Specimen_CollectionToR4(data) {
   collector: datatypes::R3ReferenceToR4(data.collector)
   collectedDateTime: data.collectedDateTime
@@ -49,6 +81,14 @@ def R3Specimen_CollectionToR4(data) {
   fastingStatusDuration: extension::fetchReference("https://www.hl7.org/fhir/R4/specimen-definitions.html#Specimen.collection.fastingStatusDuration", data.extension)
 }
 
+// Description: Converts a FHIR R4 Specimen.collection to FHIR STU3 Specimen.collection.
+//
+// Argument(s):
+//   data : FHIR R4 Specimen.collection https://www.hl7.org/fhir/r4/specimen-definitions.html#Specimen.collection
+//
+// Output(s):
+//   FHIR STU3 Specimen.collection https://www.hl7.org/fhir/stu3/specimen-definitions.html#Specimen.collection
+//
 def R4Specimen_CollectionToR3(data) {
   collector: datatypes::R4ReferenceToR3(data.collector)
   collectedDateTime: data.collectedDateTime
@@ -61,6 +101,14 @@ def R4Specimen_CollectionToR3(data) {
   extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/specimen-definitions.html#Specimen.collection.fastingStatusDuration", data.fastingStatusDuration)
 }
 
+// Description: Converts a FHIR STU3 Specimen.processing to FHIR R4 Specimen.processing.
+//
+// Argument(s):
+//   data : FHIR STU3 Specimen.processing https://www.hl7.org/fhir/stu3/specimen-definitions.html#Specimen.processing
+//
+// Output(s):
+//   FHIR R4 Specimen.processing https://www.hl7.org/fhir/r4/specimen-definitions.html#Specimen.processing
+//
 def R3Specimen_ProcessingToR4(data) {
   description: data.description
   procedure: data.procedure
@@ -69,6 +117,14 @@ def R3Specimen_ProcessingToR4(data) {
   timePeriod: data.timePeriod
 }
 
+// Description: Converts a FHIR R4 Specimen.processing to FHIR STU3 Specimen.processing.
+//
+// Argument(s):
+//   data : FHIR R4 Specimen.processing https://www.hl7.org/fhir/r4/specimen-definitions.html#Specimen.processing
+//
+// Output(s):
+//   FHIR STU3 Specimen.processing https://www.hl7.org/fhir/stu3/specimen-definitions.html#Specimen.processing
+//
 def R4Specimen_ProcessingToR3(data) {
   description: data.description
   procedure: data.procedure
@@ -77,6 +133,14 @@ def R4Specimen_ProcessingToR3(data) {
   timePeriod: data.timePeriod
 }
 
+// Description: Converts a FHIR STU3 Specimen.container to FHIR R4 Specimen.container.
+//
+// Argument(s):
+//   data : FHIR STU3 Specimen.container https://www.hl7.org/fhir/stu3/specimen-definitions.html#Specimen.container
+//
+// Output(s):
+//   FHIR R4 Specimen.container https://www.hl7.org/fhir/r4/specimen-definitions.html#Specimen.container
+//
 def R3Specimen_ContainerToR4(data) {
   identifier: data.identifier
   description: data.description
@@ -87,6 +151,14 @@ def R3Specimen_ContainerToR4(data) {
   additiveReference: datatypes::R3ReferenceToR4(data.additiveReference)
 }
 
+// Description: Converts a FHIR R4 Specimen.container to FHIR STU3 Specimen.container.
+//
+// Argument(s):
+//   data : FHIR R4 Specimen.container https://www.hl7.org/fhir/r4/specimen-definitions.html#Specimen.container
+//
+// Output(s):
+//   FHIR STU3 Specimen.container https://www.hl7.org/fhir/stu3/specimen-definitions.html#Specimen.container
+//
 def R4Specimen_ContainerToR3(data) {
   identifier: data.identifier
   description: data.description

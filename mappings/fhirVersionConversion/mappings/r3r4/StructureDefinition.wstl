@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   structureDefinition : FHIR StructureDefinition resource
+//
+// Output(s):
+//   FHIR StructureDefinition Resource
+//
 def StructureDefinitionBase(structureDefinition) {
   resourcebase::ResourceBase(structureDefinition)
   url: structureDefinition.url
@@ -24,6 +32,14 @@ def StructureDefinitionBase(structureDefinition) {
   differential: structureDefinition.differential
 }
 
+// Description: Converts a FHIR STU3 StructureDefinition resource to FHIR R4 StructureDefinition resource.
+//
+// Argument(s):
+//   structureDefinition : FHIR STU3 StructureDefinition resource https://www.hl7.org/fhir/stu3/structuredefinition.html
+//
+// Output(s):
+//   FHIR R4 StructureDefinition Resource https://www.hl7.org/fhir/r4/structuredefinition.html
+//
 def R3StructureDefinitionToR4(structureDefinition) {
   StructureDefinitionBase(structureDefinition)
   contained: datatypes::R3ResourceToR4(structureDefinition.contained[])
@@ -38,8 +54,17 @@ def R3StructureDefinitionToR4(structureDefinition) {
   extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.fhirVersion", structureDefinition.fhirVersion)
   extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.type", structureDefinition.type)
   extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/structuredefinition-definitions.html#StructureDefinition.contextType", structureDefinition.contextType)
+  context: R3StructureDefinition_ContextToR4(extension::fetchCode("https://www.hl7.org/fhir/R4/structuredefinition-definitions.html#StructureDefinition.context.type", structureDefinition.extension), structureDefinition.context[])
 }
 
+// Description: Converts a FHIR R4 StructureDefinition resource to FHIR STU3 StructureDefinition resource.
+//
+// Argument(s):
+//   structureDefinition : FHIR R4 StructureDefinition resource https://www.hl7.org/fhir/r4/structuredefinition.html
+//
+// Output(s):
+//   FHIR STU3 StructureDefinition Resource https://www.hl7.org/fhir/stu3/structuredefinition.html
+//
 def R4StructureDefinitionToR3(structureDefinition) {
   StructureDefinitionBase(structureDefinition)
   contained: datatypes::R4ResourceToR3(structureDefinition.contained[])
@@ -54,4 +79,18 @@ def R4StructureDefinitionToR3(structureDefinition) {
   derivation: structureDefinition.derivation
   extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/structuredefinition-definitions.html#StructureDefinition.fhirVersion", structureDefinition.fhirVersion)
   extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/R4/structuredefinition-definitions.html#StructureDefinition.type", structureDefinition.type)
+}
+
+// Description:  Constructs a FHIR R4 StructureDefinition.Context
+//
+// Argument(s):
+//   contextType : FHIR STU3 StructureDefinition.contextType https://www.hl7.org/fhir/stu3/structuredefinition-definitions.html#StructureDefinition.contextType
+//   context : FHIR STU3 StructureDefinition.context https://www.hl7.org/fhir/stu3/structuredefinition-definitions.html#StructureDefinition.context
+//
+// Output(s):
+//   FHIR R4 StructureDefinition.context https://www.hl7.org/fhir/r4/structuredefinition-definitions.html#StructureDefinition.context
+//
+def R3StructureDefinition_ContextToR4(required contextType, required context) {
+  type: contextType
+  expression: context
 }
