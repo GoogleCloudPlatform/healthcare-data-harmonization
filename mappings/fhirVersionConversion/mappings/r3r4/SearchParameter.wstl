@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   searchParameter : FHIR SearchParameter resource
+//
+// Output(s):
+//   FHIR SearchParameter Resource
+//
 def SearchParameterBase(searchParameter) {
   resourcebase::ResourceBase(searchParameter)
   url: searchParameter.url
@@ -20,6 +28,14 @@ def SearchParameterBase(searchParameter) {
   chain: searchParameter.chain
 }
 
+// Description: Converts a FHIR STU3 SearchParameter resource to FHIR R4 SearchParameter resource.
+//
+// Argument(s):
+//   searchParameter : FHIR STU3 SearchParameter resource https://www.hl7.org/fhir/stu3/searchparameter.html
+//
+// Output(s):
+//   FHIR R4 SearchParameter Resource https://www.hl7.org/fhir/r4/searchparameter.html
+//
 def R3SearchParameterToR4(searchParameter) {
   SearchParameterBase(searchParameter)
   contained: datatypes::R3ResourceToR4(searchParameter.contained[])
@@ -37,6 +53,14 @@ def R3SearchParameterToR4(searchParameter) {
   component: R3SearchParameter_ComponentToR4(searchParameter.component)
 }
 
+// Description: Converts a FHIR R4 SearchParameter resource to FHIR STU3 SearchParameter resource.
+//
+// Argument(s):
+//   searchParameter : FHIR R4 SearchParameter resource https://www.hl7.org/fhir/r4/searchparameter.html
+//
+// Output(s):
+//   FHIR STU3 SearchParameter Resource https://www.hl7.org/fhir/stu3/searchparameter.html
+//
 def R4SearchParameterToR3(searchParameter) {
   SearchParameterBase(searchParameter)
   contained: datatypes::R4ResourceToR3(searchParameter.contained[])
@@ -54,11 +78,27 @@ def R4SearchParameterToR3(searchParameter) {
   extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/R4/searchparameter-definitions.html#SearchParameter.multipleAnd", searchParameter.multipleAnd)
 }
 
+// Description: Converts a FHIR STU3 SearchParameter.component to FHIR R4 SearchParameter.component.
+//
+// Argument(s):
+//   data : FHIR STU3 SearchParameter.component https://www.hl7.org/fhir/stu3/searchparameter-definitions.html#SearchParameter.component
+//
+// Output(s):
+//   FHIR R4 SearchParameter.component https://www.hl7.org/fhir/r4/searchparameter-definitions.html#SearchParameter.component
+//
 def R3SearchParameter_ComponentToR4(data) {
   definition: datatypes::ReferenceToCanonical(data.definition)
   expression: data.expression
 }
 
+// Description: Converts a FHIR R4 SearchParameter.component to FHIR STU3 SearchParameter.component.
+//
+// Argument(s):
+//   data : FHIR R4 SearchParameter.component https://www.hl7.org/fhir/r4/searchparameter-definitions.html#SearchParameter.component
+//
+// Output(s):
+//   FHIR STU3 SearchParameter.component https://www.hl7.org/fhir/stu3/searchparameter-definitions.html#SearchParameter.component
+//
 def R4SearchParameter_ComponentToR3(data) {
   definition: datatypes::CanonicalToReference(data.definition)
   expression: data.expression

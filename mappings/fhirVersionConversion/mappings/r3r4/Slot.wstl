@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   slot : FHIR Slot resource
+//
+// Output(s):
+//   FHIR Slot Resource
+//
 def SlotBase(slot) {
   resourcebase::ResourceBase(slot)
   identifier: slot.identifier
@@ -14,6 +22,14 @@ def SlotBase(slot) {
   comment: slot.comment
 }
 
+// Description: Converts a FHIR STU3 Slot resource to FHIR R4 Slot resource.
+//
+// Argument(s):
+//   slot : FHIR STU3 Slot resource https://www.hl7.org/fhir/stu3/slot.html
+//
+// Output(s):
+//   FHIR R4 Slot Resource https://www.hl7.org/fhir/r4/slot.html
+//
 def R3SlotToR4(slot) {
   SlotBase(slot)
   contained: datatypes::R3ResourceToR4(slot.contained[])
@@ -22,6 +38,14 @@ def R3SlotToR4(slot) {
   serviceCategory: R3Slot_ServiceCategoryToR4("https://www.hl7.org/fhir/R4/slot-definitions.html#Slot.serviceCategory", slot.extension, slot.serviceCategory)
 }
 
+// Description: Converts a FHIR R4 Slot resource to FHIR STU3 Slot resource.
+//
+// Argument(s):
+//   slot : FHIR R4 Slot resource https://www.hl7.org/fhir/r4/slot.html
+//
+// Output(s):
+//   FHIR STU3 Slot Resource https://www.hl7.org/fhir/stu3/slot.html
+//
 def R4SlotToR3(slot) {
   SlotBase(slot)
   contained: datatypes::R4ResourceToR3(slot.contained[])
@@ -31,6 +55,14 @@ def R4SlotToR3(slot) {
   extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/slot-definitions.html#Slot.serviceCategory", slot.serviceCategory[])
 }
 
+// Description: Converts a FHIR STU3 Slot.serviceCategory to FHIR R4 Slot.serviceCategory.
+//
+// Argument(s):
+//   data : FHIR STU3 Slot.serviceCategory https://www.hl7.org/fhir/stu3/slot-definitions.html#Slot.serviceCategory
+//
+// Output(s):
+//   FHIR R4 Slot.serviceCategory https://www.hl7.org/fhir/r4/slot-definitions.html#Slot.serviceCategory
+//
 def R3Slot_ServiceCategoryToR4(url, extension, data) {
   var serviceCategory: extension::fetchCodeableConceptArray(url, extension)
   if serviceCategory then {

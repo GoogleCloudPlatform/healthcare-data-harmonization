@@ -211,6 +211,18 @@ def test_R3ProcedureRequestToR4() testR3ResourceToR4("ProcedureRequest")
 // Tests fhir_r3r4::R3ReferralRequestToR4() function.
 def test_R3ReferralRequestToR4() testR3ResourceToR4("ReferralRequest")
 
+// Tests fhir_r3r4::R3RiskAssessmentToR4() function.
+def test_R3RiskAssessmentToR4() testR3ResourceToR4("RiskAssessment")
+
+// Tests fhir_r3r4::R3ScheduleToR4() function.
+def test_R3ScheduleToR4() testR3ResourceToR4("Schedule")
+
+// Tests fhir_r3r4::R3SearchParameterToR4() function.
+def test_R3SearchParameterToR4() testR3ResourceToR4("SearchParameter")
+
+// Tests fhir_r3r4::R3SlotToR4() function.
+def test_R3SlotToR4() testR3ResourceToR4("Slot")
+
 // Tests fhir_r3r4::R3SpecimenToR4() function.
 def test_R3SpecimenToR4() testR3ResourceToR4("Specimen")
 

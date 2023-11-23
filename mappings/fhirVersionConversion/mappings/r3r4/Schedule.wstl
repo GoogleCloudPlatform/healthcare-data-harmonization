@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   schedule : FHIR Schedule resource
+//
+// Output(s):
+//   FHIR Schedule Resource
+//
 def ScheduleBase(schedule) {
   resourcebase::ResourceBase(schedule)
   identifier: schedule.identifier
@@ -11,6 +19,14 @@ def ScheduleBase(schedule) {
   comment: schedule.comment
 }
 
+// Description: Converts a FHIR STU3 Schedule resource to FHIR R4 Schedule resource.
+//
+// Argument(s):
+//   schedule : FHIR STU3 Schedule resource https://www.hl7.org/fhir/stu3/schedule.html
+//
+// Output(s):
+//   FHIR R4 Schedule Resource https://www.hl7.org/fhir/r4/schedule.html
+//
 def R3ScheduleToR4(schedule) {
   ScheduleBase(schedule)
   contained: datatypes::R3ResourceToR4(schedule.contained[])
@@ -19,6 +35,14 @@ def R3ScheduleToR4(schedule) {
   serviceCategory: R3Schedule_ServiceCategoryToR4("https://www.hl7.org/fhir/R4/schedule-definitions.html#schedule.serviceCategory", schedule.extension, schedule.serviceCategory)
 }
 
+// Description: Converts a FHIR R4 Schedule resource to FHIR STU3 Schedule resource.
+//
+// Argument(s):
+//   schedule : FHIR R4 Schedule resource https://www.hl7.org/fhir/r4/schedule.html
+//
+// Output(s):
+//   FHIR STU3 Schedule Resource https://www.hl7.org/fhir/stu3/schedule.html
+//
 def R4ScheduleToR3(schedule) {
   scheduleBase(schedule)
   contained: datatypes::R4ResourceToR3(schedule.contained[])
@@ -28,6 +52,14 @@ def R4ScheduleToR3(schedule) {
   extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/schedule-definitions.html#schedule.serviceCategory", schedule.serviceCategory[])
 }
 
+// Description: Converts a FHIR STU3 Schedule.serviceCategory to FHIR R4 Schedule.serviceCategory.
+//
+// Argument(s):
+//   data : FHIR STU3 Schedule.serviceCategory https://www.hl7.org/fhir/stu3/schedule-definitions.html#Schedule.serviceCategory
+//
+// Output(s):
+//   FHIR R4 Schedule.serviceCategory https://www.hl7.org/fhir/r4/schedule-definitions.html#Schedule.serviceCategory
+//
 def R3Schedule_ServiceCategoryToR4(url, extension, data) {
   var serviceCategory: extension::fetchCodeableConceptArray(url, extension)
   if serviceCategory then {
