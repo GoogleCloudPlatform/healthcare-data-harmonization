@@ -1,0 +1,84 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "candidate",
+          "display": "Candidate",
+          "target": [
+            {
+              "code": "candidate",
+              "display": "Candidate",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "enrolled",
+          "display": "Enrolled",
+          "target": [
+            {
+              "code": "on-study",
+              "display": "On-study",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "active",
+          "display": "Active",
+          "target": [
+            {
+              "code": "on-study-intervention",
+              "display": "On-study-intervention",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "suspended",
+          "display": "Suspended",
+          "target": [
+            {
+              "code": "on-study-observation",
+              "display": "On-study-observation",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "withdrawn",
+          "display": "Withdrawn",
+          "target": [
+            {
+              "code": "withdrawn",
+              "display": "Withdrawn",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "completed",
+          "display": "Completed",
+          "target": [
+            {
+              "code": "off-study",
+              "display": "Off-study",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/research-subject-status",
+      "target": "http://hl7.org/fhir/research-subject-status",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "on-study",
+        "display": "On-study"
+      }
+    }
+  ],
+  "id": "Research_Subject_Status_r3r4",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

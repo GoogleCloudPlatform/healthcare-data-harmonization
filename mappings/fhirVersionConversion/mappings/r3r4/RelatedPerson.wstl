@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   relatedPerson : FHIR RelatedPerson resource
+//
+// Output(s):
+//   FHIR RelatedPerson Resource
+//
 def RelatedPersonBase(relatedPerson) {
   resourcebase::ResourceBase(relatedPerson)
   identifier: relatedPerson.identifier
@@ -13,6 +21,14 @@ def RelatedPersonBase(relatedPerson) {
   period: relatedPerson.period
 }
 
+// Description: Converts a FHIR STU3 RelatedPerson resource to FHIR R4 RelatedPerson resource.
+//
+// Argument(s):
+//   relatedPerson : FHIR STU3 RelatedPerson resource https://www.hl7.org/fhir/stu3/relatedperson.html
+//
+// Output(s):
+//   FHIR R4 RelatedPerson Resource https://www.hl7.org/fhir/r4/relatedperson.html
+//
 def R3RelatedPersonToR4(relatedPerson) {
   RelatedPersonBase(relatedPerson)
   contained: datatypes::R3ResourceToR4(relatedPerson.contained[])
@@ -20,8 +36,17 @@ def R3RelatedPersonToR4(relatedPerson) {
   active: relatedPerson.active
   relationship: R3RelatedPerson_RelationshipToR4("https://www.hl7.org/fhir/R4/relatedperson-definitions.html#RelatedPerson.relationship", relatedPerson.extension, relatedPerson.relationship)
   gender: relatedPerson.gender
+  communication[]: BuildR4_RelatedPerson_Communication(relatedPerson.extension)
 }
 
+// Description: Converts a FHIR R4 RelatedPerson resource to FHIR STU3 RelatedPerson resource.
+//
+// Argument(s):
+//   relatedPerson : FHIR R4 RelatedPerson resource https://www.hl7.org/fhir/r4/relatedperson.html
+//
+// Output(s):
+//   FHIR STU3 RelatedPerson Resource https://www.hl7.org/fhir/stu3/relatedperson.html
+//
 def R4RelatedPersonToR3(relatedPerson) {
   RelatedPersonBase(relatedPerson)
   contained: datatypes::R4ResourceToR3(relatedPerson.contained[])
@@ -32,6 +57,14 @@ def R4RelatedPersonToR3(relatedPerson) {
   extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/R4/relatedperson-definitions.html#RelatedPerson.relationship", relatedPerson.relationship[])
 }
 
+// Description: Converts a FHIR STU3 RelatedPerson.relationship to FHIR R4 RelatedPerson.relationship.
+//
+// Argument(s):
+//   data : FHIR STU3 RelatedPerson.relationship https://www.hl7.org/fhir/stu3/relatedperson-definitions.html#RelatedPerson.relationship
+//
+// Output(s):
+//   FHIR R4 RelatedPerson.relationship https://www.hl7.org/fhir/r4/relatedperson-definitions.html#RelatedPerson.relationship
+//
 def R3RelatedPerson_RelationshipToR4(url, extension, data) {
   var relationship: extension::fetchCodeableConceptArray(url, extension)
   if relationship then {
@@ -39,4 +72,17 @@ def R3RelatedPerson_RelationshipToR4(url, extension, data) {
   } else {
     arrayOf(data)
   }
+}
+
+// Description: Constructs a FHIR R4 RelatedPerson.communication
+//
+// Argument(s):
+//   extension : FHIR STU3 RelatedPerson.extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 RelatedPerson.communication https://www.hl7.org/fhir/r4/relatedperson-definitions.html#RelatedPerson.communication
+//
+def BuildR4_RelatedPerson_Communication(extension) {
+  language: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/relatedperson-definitions.html#RelatedPerson.communication.language", extension)
+  preferred: if $this.language then extension::fetchBoolean("https://www.hl7.org/fhir/R4/relatedperson-definitions.html#RelatedPerson.communication.preferred", extension)
 }

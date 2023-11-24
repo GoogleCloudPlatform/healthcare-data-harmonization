@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   researchStudy : FHIR ResearchStudy resource
+//
+// Output(s):
+//   FHIR ResearchStudy Resource
+//
 def ResearchStudyBase(researchStudy) {
   resourcebase::ResourceBase(researchStudy)
   identifier: researchStudy.identifier
@@ -17,6 +25,14 @@ def ResearchStudyBase(researchStudy) {
   note: researchStudy.note
 }
 
+// Description: Converts a FHIR STU3 ResearchStudy resource to FHIR R4 ResearchStudy resource.
+//
+// Argument(s):
+//   researchStudy : FHIR STU3 ResearchStudy resource https://www.hl7.org/fhir/stu3/researchstudy.html
+//
+// Output(s):
+//   FHIR R4 ResearchStudy Resource https://www.hl7.org/fhir/r4/researchstudy.html
+//
 def R3ResearchStudyToR4(researchStudy) {
   ResearchStudyBase(researchStudy)
   contained: datatypes::R3ResourceToR4(researchStudy.contained[])
@@ -26,17 +42,25 @@ def R3ResearchStudyToR4(researchStudy) {
   protocol: datatypes::R3ReferenceToR4(researchStudy.protocol[])
   partOf: datatypes::R3ReferenceToR4(researchStudy.partOf[])
   var status: extension::fetchCode("https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.status", researchStudy.extension)
-  status: if status? then status else researchStudy.status
+  status: if status? then status else utilities::Convert_TerminologyCode(researchStudy.status, "http://hl7.org/fhir/research-study-status", "Research_Study_Status_r3r4")
   primaryPurposeType: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.primaryPurposeType", researchStudy.extension)
   phase: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.phase", researchStudy.extension)
   condition: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.condition", researchStudy.extension)
   location: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.location", researchStudy.extension)
   principalInvestigator: datatypes::R3ReferenceToR4(researchStudy.principalInvestigator)
   arm: R3ResearchStudy_ArmToR4(researchStudy.arm[])
+  objective[]: BuildR4_ResearchStudy_Objective(researchStudy.extension)
   extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/researchstudy-definitions.html#ResearchStudy.jurisdiction", researchStudy.jurisdiction[])
-  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/researchstudy-definitions.html#ResearchStudy.status", researchStudy.status)
 }
 
+// Description: Converts a FHIR R4 ResearchStudy resource to FHIR STU3 ResearchStudy resource.
+//
+// Argument(s):
+//   researchStudy : FHIR R4 ResearchStudy resource https://www.hl7.org/fhir/r4/researchstudy.html
+//
+// Output(s):
+//   FHIR STU3 ResearchStudy Resource https://www.hl7.org/fhir/stu3/researchstudy.html
+//
 def R4ResearchStudyToR3(researchStudy) {
   ResearchStudyBase(researchStudy)
   contained: datatypes::R4ResourceToR3(researchStudy.contained[])
@@ -57,14 +81,43 @@ def R4ResearchStudyToR3(researchStudy) {
   extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.status", researchStudy.status)
 }
 
+// Description: Converts a FHIR STU3 ResearchStudy.arm to FHIR R4 ResearchStudy.arm.
+//
+// Argument(s):
+//   data : FHIR STU3 ResearchStudy.arm https://www.hl7.org/fhir/stu3/researchstudy-definitions.html#ResearchStudy.arm
+//
+// Output(s):
+//   FHIR R4 ResearchStudy.arm https://www.hl7.org/fhir/r4/researchstudy-definitions.html#ResearchStudy.arm
+//
 def R3ResearchStudy_ArmToR4(data) {
   name: data.name
   type: data.code
   description: data.description
 }
 
+// Description: Converts a FHIR R4 ResearchStudy.arm to FHIR STU3 ResearchStudy.arm.
+//
+// Argument(s):
+//   data : FHIR R4 ResearchStudy.arm https://www.hl7.org/fhir/r4/researchstudy-definitions.html#ResearchStudy.arm
+//
+// Output(s):
+//   FHIR STU3 ResearchStudy.arm https://www.hl7.org/fhir/stu3/researchstudy-definitions.html#ResearchStudy.arm
+//
 def R4ResearchStudy_ArmToR3(data) {
   name: data.name
   code: data.type
   description: data.description
+}
+
+// Description: Constructs a FHIR R4 ResearchStudy.objective
+//
+// Argument(s):
+//   extension : FHIR STU3 RelatedPerson.extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 ResearchStudy.objective https://www.hl7.org/fhir/r4/relatedperson-definitions.html#ResearchStudy.objective
+//
+def BuildR4_ResearchStudy_Objective(extension) {
+  name: extension::fetchString("https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.objective.name", extension)
+  type: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.objective.type", extension)
 }

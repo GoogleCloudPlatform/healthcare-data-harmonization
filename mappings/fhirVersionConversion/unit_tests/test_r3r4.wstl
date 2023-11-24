@@ -211,6 +211,18 @@ def test_R3ProcedureRequestToR4() testR3ResourceToR4("ProcedureRequest")
 // Tests fhir_r3r4::R3ReferralRequestToR4() function.
 def test_R3ReferralRequestToR4() testR3ResourceToR4("ReferralRequest")
 
+// Tests fhir_r3r4::R3RelatedPersonToR4() function.
+def test_R3RelatedPersonToR4() testR3ResourceToR4("RelatedPerson")
+
+// Tests fhir_r3r4::R3RequestGroupToR4() function.
+def test_R3RequestGroupToR4() testR3ResourceToR4("RequestGroup")
+
+// Tests fhir_r3r4::R3ResearchStudyToR4() function.
+def test_R3ResearchStudyToR4() testR3ResourceToR4("ResearchStudy")
+
+// Tests fhir_r3r4::R3ResearchSubjectToR4() function.
+def test_R3ResearchSubjectToR4() testR3ResourceToR4("ResearchSubject")
+
 // Tests fhir_r3r4::R3RiskAssessmentToR4() function.
 def test_R3RiskAssessmentToR4() testR3ResourceToR4("RiskAssessment")
 

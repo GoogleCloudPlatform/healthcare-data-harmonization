@@ -92,7 +92,7 @@
       "element": [
         {
           "code": "draft",
-          "display": "Draft",
+          "display": "Pending",
           "target": [
             {
               "code": "draft",
@@ -179,5 +179,5 @@
   ],
   "id": "Request_Status_r3r4",
   "resourceType": "ConceptMap",
-  "version": "v1"
+  "version": "v2"
 }

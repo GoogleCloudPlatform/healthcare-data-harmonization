@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   researchSubject : FHIR ResearchSubject resource
+//
+// Output(s):
+//   FHIR ResearchSubject Resource
+//
 def ResearchSubjectBase(researchSubject) {
   resourcebase::ResourceBase(researchSubject)
   period: researchSubject.period
@@ -9,6 +17,14 @@ def ResearchSubjectBase(researchSubject) {
   actualArm: researchSubject.actualArm
 }
 
+// Description: Converts a FHIR STU3 ResearchSubject resource to FHIR R4 ResearchSubject resource.
+//
+// Argument(s):
+//   researchSubject : FHIR STU3 ResearchSubject resource https://www.hl7.org/fhir/stu3/researchsubject.html
+//
+// Output(s):
+//   FHIR R4 ResearchSubject Resource https://www.hl7.org/fhir/r4/researchsubject.html
+//
 def R3ResearchSubjectToR4(researchSubject) {
   ResearchSubjectBase(researchSubject)
   contained: datatypes::R3ResourceToR4(researchSubject.contained[])
@@ -17,10 +33,17 @@ def R3ResearchSubjectToR4(researchSubject) {
   individual: datatypes::R3ReferenceToR4(researchSubject.individual)
   identifier: R3ResearchSubject_IdentifierToR4("https://www.hl7.org/fhir/R4/researchsubject-definitions.html#ResearchSubject.identifier", researchSubject.extension, researchSubject.identifier)
   var status: extension::fetchCode("https://www.hl7.org/fhir/R4/researchsubject-definitions.html#ResearchSubject.status", researchSubject.extension)
-  status: if status? then status else researchSubject.status
-  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/researchsubject-definitions.html#ResearchSubject.status", researchSubject.status)
+  status: if status? then status else utilities::Convert_TerminologyCode(researchSubject.status, "http://hl7.org/fhir/research-subject-status", "Research_Subject_Status_r3r4")
 }
 
+// Description: Converts a FHIR R4 ResearchSubject resource to FHIR STU3 ResearchSubject resource.
+//
+// Argument(s):
+//   researchSubject : FHIR R4 ResearchSubject resource https://www.hl7.org/fhir/r4/researchsubject.html
+//
+// Output(s):
+//   FHIR STU3 ResearchSubject Resource https://www.hl7.org/fhir/stu3/researchsubject.html
+//
 def R4ResearchSubjectToR3(researchSubject) {
   ResearchSubjectBase(researchSubject)
   contained: datatypes::R4ResourceToR3(researchSubject.contained[])
@@ -34,6 +57,14 @@ def R4ResearchSubjectToR3(researchSubject) {
   extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/researchsubject-definitions.html#ResearchSubject.status", researchSubject.status)
 }
 
+// Description: Converts a FHIR STU3 ResearchSubject.identifier to FHIR R4 ResearchSubject.identifier.
+//
+// Argument(s):
+//   data : FHIR STU3 ResearchSubject.identifier https://www.hl7.org/fhir/stu3/researchsubject-definitions.html#ResearchSubject.identifier
+//
+// Output(s):
+//   FHIR R4 ResearchSubject.identifier https://www.hl7.org/fhir/r4/researchsubject-definitions.html#ResearchSubject.identifier
+//
 def R3ResearchSubject_IdentifierToR4(url, extension, data) {
   var identifier: extension::fetchIdentifierArray(url, extension)
   if identifier then {

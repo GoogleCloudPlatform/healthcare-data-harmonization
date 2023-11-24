@@ -1,0 +1,84 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "draft",
+          "display": "Draft",
+          "target": [
+            {
+              "code": "in-review",
+              "display": "In Review",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "in-progress",
+          "display": "In-progress",
+          "target": [
+            {
+              "code": "active",
+              "display": "Active",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "suspended",
+          "display": "Suspended",
+          "target": [
+            {
+              "code": "disapproved",
+              "display": "Disapproved",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "stopped",
+          "display": "Stopped",
+          "target": [
+            {
+              "code": "withdrawn",
+              "display": "Withdrawn",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "completed",
+          "display": "Completed",
+          "target": [
+            {
+              "code": "administratively-completed",
+              "display": "Administratively Completed",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "entered-in-error",
+          "display": "Entered in error",
+          "target": [
+            {
+              "code": "withdrawn",
+              "display": "Withdrawn",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://hl7.org/fhir/research-study-status",
+      "target": "http://hl7.org/fhir/research-study-status",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "active",
+        "display": "Active"
+     }
+    }
+  ],
+  "id": "Research_Study_Status_r3r4",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   requestGroup : FHIR RequestGroup resource
+//
+// Output(s):
+//   FHIR RequestGroup Resource
+//
 def RequestGroupBase(requestGroup) {
   resourcebase::ResourceBase(requestGroup)
   identifier: requestGroup.identifier
@@ -10,6 +18,14 @@ def RequestGroupBase(requestGroup) {
   note: requestGroup.note
 }
 
+// Description: Converts a FHIR STU3 RequestGroup resource to FHIR R4 RequestGroup resource.
+//
+// Argument(s):
+//   requestGroup : FHIR STU3 RequestGroup resource https://www.hl7.org/fhir/stu3/requestgroup.html
+//
+// Output(s):
+//   FHIR R4 RequestGroup Resource https://www.hl7.org/fhir/r4/requestgroup.html
+//
 def R3RequestGroupToR4(requestGroup) {
   RequestGroupBase(requestGroup)
   contained: datatypes::R3ResourceToR4(requestGroup.contained[])
@@ -19,7 +35,7 @@ def R3RequestGroupToR4(requestGroup) {
   instantiatesCanonical: datatypes::ReferenceToCanonical(requestGroup.definition[])
   instantiatesUri: extension::fetchUriArray("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.instantiatesUri", requestGroup.extension)
   var status: extension::fetchCode("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.status", requestGroup.extension)
-  status: if status? then status else requestGroup.status
+  status: if status? then status else utilities::Convert_TerminologyCode(requestGroup.status, "http://hl7.org/fhir/request-status", "Request_Status_r3r4")
   var intent: extension::fetchCode("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.intent", requestGroup.extension)
   intent: if intent? then intent else requestGroup.intent
   priority: requestGroup.priority
@@ -31,10 +47,17 @@ def R3RequestGroupToR4(requestGroup) {
   action: R3RequestGroup_ActionToR4(requestGroup.action[])
   extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.reasonCodeableConcept", requestGroup.reasonCodeableConcept)
   extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.reasonReference", requestGroup.reasonReference)
-  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.status", requestGroup.status)
   extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.intent", requestGroup.intent)
 }
 
+// Description: Converts a FHIR R4 RequestGroup resource to FHIR STU3 RequestGroup resource.
+//
+// Argument(s):
+//   requestGroup : FHIR R4 RequestGroup resource https://www.hl7.org/fhir/r4/requestgroup.html
+//
+// Output(s):
+//   FHIR STU3 RequestGroup Resource https://www.hl7.org/fhir/stu3/requestgroup.html
+//
 def R4RequestGroupToR3(requestGroup) {
   RequestGroupBase(requestGroup)
   contained: datatypes::R4ResourceToR3(requestGroup.contained[])
@@ -60,7 +83,15 @@ def R4RequestGroupToR3(requestGroup) {
   extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.intent", requestGroup.intent)
 }
 
-def R3RequestGroup_ActionToR4(data) {
+// Description: Converts a FHIR STU3 RequestGroup.action to FHIR R4 RequestGroup.action.
+//
+// Argument(s):
+//   data : FHIR STU3 RequestGroup.action https://www.hl7.org/fhir/stu3/requestgroup-definitions.html#RequestGroup.action
+//
+// Output(s):
+//   FHIR R4 RequestGroup.action https://www.hl7.org/fhir/r4/requestgroup-definitions.html#RequestGroup.action
+//
+def R3RequestGroup_ActionToR4(required data) {
   prefix: extension::fetchString("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.action.prefix", data.extension)
   title: data.title
   description: data.description
@@ -76,7 +107,8 @@ def R3RequestGroup_ActionToR4(data) {
   timingDuration: data.timingDuration
   timingRange: data.timingRange
   timingTiming: data.timingTiming
-  participant: datatypes::R3ReferenceToR4(data.participant[])
+  participant: datatypes::R3ReferenceToR4(data.participant[where !matchesRegex($.reference, "^Person.*")][])
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.action.participant", data.participant[where matchesRegex($.reference, "^Person.*")][])
   type: datatypes::CodingToCodeableConcept(data.type)
   groupingBehavior: data.groupingBehavior
   selectionBehavior: data.selectionBehavior
@@ -84,10 +116,18 @@ def R3RequestGroup_ActionToR4(data) {
   precheckBehavior: data.precheckBehavior
   cardinalityBehavior: data.cardinalityBehavior
   resource: datatypes::R3ReferenceToR4(data.resource)
-  action: data.action
+  action: R3RequestGroup_ActionToR4(data.action[])
   extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.action.label", data.label)
 }
 
+// Description: Converts a FHIR R4 RequestGroup.action to FHIR STU3 RequestGroup.action.
+//
+// Argument(s):
+//   data : FHIR R4 RequestGroup.action https://www.hl7.org/fhir/r4/requestgroup-definitions.html#RequestGroup.action
+//
+// Output(s):
+//   FHIR STU3 RequestGroup.action https://www.hl7.org/fhir/stu3/requestgroup-definitions.html#RequestGroup.action
+//
 def R4RequestGroup_ActionToR3(data) {
   label: extension::fetchString("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.action.label", data.extension)
   title: data.title
@@ -116,13 +156,29 @@ def R4RequestGroup_ActionToR3(data) {
   extension[]: extension::BuildAgeExtension("https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.action.timingAge", data.timingAge)
 }
 
+// Description: Converts a FHIR STU3 RequestGroup.action.condition to FHIR R4 RequestGroup.action.condition.
+//
+// Argument(s):
+//   data : FHIR STU3 RequestGroup.action.condition https://www.hl7.org/fhir/stu3/requestgroup-definitions.html#RequestGroup.action.condition
+//
+// Output(s):
+//   FHIR R4 RequestGroup.action.condition https://www.hl7.org/fhir/r4/requestgroup-definitions.html#RequestGroup.action.condition
+//
 def R3RequestGroup_Action_CondtionToR4(data) {
   kind: data.kind
-  expression.expression: data.expression
+  expression: datatypes::StringToExpression(data.expression)
   extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.action.condition.description", data.description)
   extension[]: extension::BuildStringExtension("https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.action.condition.language", data.language)
 }
 
+// Description: Converts a FHIR R4 RequestGroup.action.condition to FHIR STU3 RequestGroup.action.condition.
+//
+// Argument(s):
+//   data : FHIR R4 RequestGroup.action.condition https://www.hl7.org/fhir/r4/requestgroup-definitions.html#RequestGroup.action.condition
+//
+// Output(s):
+//   FHIR STU3 RequestGroup.action.condition https://www.hl7.org/fhir/stu3/requestgroup-definitions.html#RequestGroup.action.condition
+//
 def R4RequestGroup_Action_CondtionToR3(data) {
   kind: data.kind
   expression: data.expression.expression

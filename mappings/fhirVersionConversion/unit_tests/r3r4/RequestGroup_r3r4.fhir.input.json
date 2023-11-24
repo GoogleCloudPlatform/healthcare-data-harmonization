@@ -1,0 +1,126 @@
+{
+  "resourceType": "RequestGroup",
+  "id": "kdn5-example",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Administer gemcitabine and carboplatin.</div>"
+  },
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.status",
+      "valueCode": "draft"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.intent",
+      "valueCode": "plan"
+    }
+  ],
+  "identifier": [
+    {
+      "value": "requestgroup-kdn5"
+    }
+  ],
+  "definition": [
+    {
+      "reference": "PlanDefinition/KDN5"
+    }
+  ],
+  "status": "draft",
+  "intent": "plan",
+  "priority": "routine",
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "context": {
+    "reference": "Encounter/example"
+  },
+  "authoredOn": "2017-03-06T17:31:00Z",
+  "author": {
+    "reference": "Practitioner/1"
+  },
+  "action": [
+    {
+      "selectionBehavior": "exactly-one",
+      "participant": [
+        {
+          "reference": "Person/123"
+        },
+        {
+          "reference": "Practitioner/234"
+        }
+      ],
+      "action": [
+        {
+          "selectionBehavior": "all",
+          "action": [
+            {
+              "groupingBehavior": "sentence-group",
+              "selectionBehavior": "exactly-one",
+              "action": [
+                {
+                  "id": "cycle-definition-1",
+                  "textEquivalent": "21-day cycle for 6 cycles",
+                  "timingTiming": {
+                    "repeat": {
+                      "count": 6,
+                      "duration": 21,
+                      "durationUnit": "d"
+                    }
+                  },
+                  "action": [
+                    {
+                      "id": "action-1",
+                      "extension": [
+                        {
+                          "url": "http://hl7.org/fhir/StructureDefinition/timing-daysOfCycle",
+                          "extension": [
+                            {
+                              "url": "day",
+                              "valueInteger": 1
+                            },
+                            {
+                              "url": "day",
+                              "valueInteger": 8
+                            }
+                          ]
+                        }
+                      ],
+                      "textEquivalent": "Gemcitabine 1250 mg/m² IV over 30 minutes on days 1 and 8",
+                      "resource": {
+                        "reference": "#1111"
+                      }
+                    },
+                    {
+                      "id": "action-2",
+                      "extension": [
+                        {
+                          "url": "http://hl7.org/fhir/StructureDefinition/timing-daysOfCycle",
+                          "extension": [
+                            {
+                              "url": "day",
+                              "valueInteger": 1
+                            }
+                          ]
+                        }
+                      ],
+                      "textEquivalent": "CARBOplatin AUC 5 IV over 30 minutes on Day 1",
+                      "relatedAction": [
+                        {
+                          "actionId": "action-1",
+                          "relationship": "concurrent-with-start"
+                        }
+                      ],
+                      "resource": {
+                        "reference": "#2222"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.status",
+      "valueCode": "completed"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.objective.name",
+      "valueString": "sample"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/R4/researchstudy-definitions.html#ResearchStudy.objective.type",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "primary",
+            "display": "Primary",
+            "system": "http://terminology.hl7.org/CodeSystem/research-study-objective-type"
+          }
+        ]
+      }
+    }
+  ],
+  "id": "example",
+  "objective": [
+    {
+      "name": "sample",
+      "type": {
+        "coding": [
+          {
+            "code": "primary",
+            "display": "Primary",
+            "system": "http://terminology.hl7.org/CodeSystem/research-study-objective-type"
+          }
+        ]
+      }
+    }
+  ],
+  "resourceType": "ResearchStudy",
+  "status": "completed",
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">[Put rendering here]</div>",
+    "status": "generated"
+  }
+}

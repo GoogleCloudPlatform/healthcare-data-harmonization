@@ -1,0 +1,107 @@
+{
+  "active": true,
+  "address": [
+    {
+      "city": "Paris",
+      "country": "FRA",
+      "line": [
+        "43, Place du Marché Sainte Catherine"
+      ],
+      "postalCode": "75004"
+    }
+  ],
+  "communication": [
+    {
+      "language": {
+        "coding": [
+          {
+            "code": "en",
+            "display": "English",
+            "system": "urn:ietf:bcp:47"
+          }
+        ]
+      },
+      "preferred": true
+    }
+  ],
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/R4/relatedperson-definitions.html#RelatedPerson.communication.language",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "en",
+            "display": "English",
+            "system": "urn:ietf:bcp:47"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/R4/relatedperson-definitions.html#RelatedPerson.communication.preferred",
+      "valueBoolean": true
+    }
+  ],
+  "gender": "female",
+  "id": "benedicte",
+  "identifier": [
+    {
+      "system": "urn:oid:1.2.250.1.61",
+      "type": {
+        "text": "INSEE"
+      },
+      "use": "usual",
+      "value": "272117510400399"
+    }
+  ],
+  "name": [
+    {
+      "_family": {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/humanname-own-prefix",
+            "valueString": "VV"
+          }
+        ]
+      },
+      "family": "du Marché",
+      "given": [
+        "Bénédicte"
+      ]
+    }
+  ],
+  "patient": {
+    "reference": "Patient/example"
+  },
+  "photo": [
+    {
+      "contentType": "image/jpeg",
+      "url": "Binary/f016"
+    }
+  ],
+  "relationship": [
+    {
+      "coding": [
+        {
+          "code": "N",
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0131"
+        },
+        {
+          "code": "WIFE",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-RoleCode"
+        }
+      ]
+    }
+  ],
+  "resourceType": "RelatedPerson",
+  "telecom": [
+    {
+      "system": "phone",
+      "value": "+33 (237) 998327"
+    }
+  ],
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <table>\n        <tbody>\n          <tr>\n            <td>Name</td>\n            <td>Bénédicte du Marché</td>\n          </tr>\n          <tr>\n            <td>Address</td>\n            <td>43, Place du Marché Sainte Catherine, 75004 Paris, France</td>\n          </tr>\n          <tr>\n            <td>Contacts</td>\n            <td>Phone: +33 (237) 998327</td>\n          </tr>\n        </tbody>\n      </table>\n    </div>",
+    "status": "generated"
+  }
+}

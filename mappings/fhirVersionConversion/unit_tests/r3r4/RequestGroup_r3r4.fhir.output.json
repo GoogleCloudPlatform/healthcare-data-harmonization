@@ -1,0 +1,104 @@
+{
+  "action": [
+    {
+      "action": [
+        {
+          "action": [
+            {
+              "action": [
+                {
+                  "action": [
+                    {
+                      "resource": {
+                        "reference": "#1111"
+                      },
+                      "textEquivalent": "Gemcitabine 1250 mg/m² IV over 30 minutes on days 1 and 8"
+                    },
+                    {
+                      "relatedAction": [
+                        {
+                          "actionId": "action-1",
+                          "relationship": "concurrent-with-start"
+                        }
+                      ],
+                      "resource": {
+                        "reference": "#2222"
+                      },
+                      "textEquivalent": "CARBOplatin AUC 5 IV over 30 minutes on Day 1"
+                    }
+                  ],
+                  "textEquivalent": "21-day cycle for 6 cycles",
+                  "timingTiming": {
+                    "repeat": {
+                      "count": 6,
+                      "duration": 21,
+                      "durationUnit": "d"
+                    }
+                  }
+                }
+              ],
+              "groupingBehavior": "sentence-group",
+              "selectionBehavior": "exactly-one"
+            }
+          ],
+          "selectionBehavior": "all"
+        }
+      ],
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.action.participant",
+          "valueReference": {
+            "reference": "Person/123"
+          }
+        }
+      ],
+      "participant": [
+        {
+          "reference": "Practitioner/234"
+        }
+      ],
+      "selectionBehavior": "exactly-one"
+    }
+  ],
+  "author": {
+    "reference": "Practitioner/1"
+  },
+  "authoredOn": "2017-03-06T17:31:00Z",
+  "encounter": {
+    "reference": "Encounter/example"
+  },
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.status",
+      "valueCode": "draft"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/R4/requestgroup-definitions.html#RequestGroup.intent",
+      "valueCode": "plan"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/requestgroup-definitions.html#RequestGroup.intent",
+      "valueCode": "plan"
+    }
+  ],
+  "id": "kdn5-example",
+  "identifier": [
+    {
+      "value": "requestgroup-kdn5"
+    }
+  ],
+  "instantiatesCanonical": [
+    "PlanDefinition/KDN5"
+  ],
+  "intent": "plan",
+  "priority": "routine",
+  "resourceType": "RequestGroup",
+  "status": "draft",
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Administer gemcitabine and carboplatin.</div>",
+    "status": "generated"
+  }
+}

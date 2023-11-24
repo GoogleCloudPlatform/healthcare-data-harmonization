@@ -45,6 +45,8 @@ import "../code_harmonization/Goal_LifeCycleStatus_r3r4.harmonization.json"
 import "../code_harmonization/Goal_AchievementStatus_r3r4.harmonization.json"
 import "../code_harmonization/ImagingStudy_Status_r3r4.harmonization.json"
 import "../code_harmonization/Request_Status_r3r4.harmonization.json"
+import "../code_harmonization/Research_Study_Status_r3r4.harmonization.json"
+import "../code_harmonization/Research_Subject_Status_r3r4.harmonization.json"
 import "../code_harmonization/ResourceTypes_r3r4.harmonization.json"
 
 // Description: Converts a FHIR STU3 Resource to FHIR R4 Resource.
