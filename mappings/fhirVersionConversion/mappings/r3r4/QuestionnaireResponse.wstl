@@ -2,17 +2,33 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   questionnaireResponse : FHIR QuestionnaireResponse resource
+//
+// Output(s):
+//   FHIR QuestionnaireResponse Resource
+//
 def QuestionnaireResponseBase(questionnaireResponse) {
   resourcebase::ResourceBase(questionnaireResponse)
   identifier: questionnaireResponse.identifier
   authored: questionnaireResponse.authored
 }
 
+// Description: Converts a FHIR STU3 QuestionnaireResponse resource to FHIR R4 QuestionnaireResponse resource.
+//
+// Argument(s):
+//   questionnaire : FHIR STU3 QuestionnaireResponse resource https://www.hl7.org/fhir/stu3/questionnaireresponse.html
+//
+// Output(s):
+//   FHIR R4 QuestionnaireResponse Resource https://www.hl7.org/fhir/r4/questionnaireresponse.html
+//
 def R3QuestionnaireResponseToR4(questionnaireResponse) {
   QuestionnaireResponseBase(questionnaireResponse)
   contained: datatypes::R3ResourceToR4(questionnaireResponse.contained[])
   subject: datatypes::R3ReferenceToR4(questionnaireResponse.subject)
-  basedOn: datatypes::R3ReferenceToR4(questionnaireResponse.basedOn[])
+  basedOn: datatypes::R3ReferenceToR4(questionnaireResponse.basedOn[where matchesRegex($.reference, "^CarePlan.*")][])
   partOf: datatypes::R3ReferenceToR4(questionnaireResponse.parent[])
   questionnaire: datatypes::ReferenceToCanonical(questionnaireResponse.questionnaire)
   status: questionnaireResponse.status
@@ -22,6 +38,14 @@ def R3QuestionnaireResponseToR4(questionnaireResponse) {
   item: R3QuestionnaireResponse_ItemToR4(questionnaireResponse.item[])
 }
 
+// Description: Converts a FHIR R4 QuestionnaireResponse resource to FHIR STU3 QuestionnaireResponse resource.
+//
+// Argument(s):
+//   questionnaireResponse : FHIR R4 QuestionnaireResponse resource https://www.hl7.org/fhir/r4/questionnaireresponse.html
+//
+// Output(s):
+//   FHIR STU3 QuestionnaireResponse Resource https://www.hl7.org/fhir/stu3/questionnaireresponse.html
+//
 def R4QuestionnaireResponseToR3(questionnaireResponse) {
   QuestionnaireResponseBase(questionnaireResponse)
   contained: datatypes::R4ResourceToR3(questionnaireResponse.contained[])
@@ -36,6 +60,14 @@ def R4QuestionnaireResponseToR3(questionnaireResponse) {
   item: R4QuestionnaireResponse_ItemToR3(questionnaireResponse.item[])
 }
 
+// Description: Converts a FHIR STU3 QuestionnaireResponse.item to FHIR R4 QuestionnaireResponse.item.
+//
+// Argument(s):
+//   data : FHIR STU3 QuestionnaireResponse.item https://www.hl7.org/fhir/stu3/questionnaireresponse-definitions.html#QuestionnaireResponse.item
+//
+// Output(s):
+//   FHIR R4 QuestionnaireResponse.item https://www.hl7.org/fhir/r4/questionnaireresponse-definitions.html#QuestionnaireResponse.item
+//
 def R3QuestionnaireResponse_ItemToR4(data) {
   linkId: data.linkId
   definition: data.definition
@@ -45,6 +77,14 @@ def R3QuestionnaireResponse_ItemToR4(data) {
   extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/questionnaireresponse-definitions.html#QuestionnaireResponse.item.subject", data.subject)
 }
 
+// Description: Converts a FHIR R4 QuestionnaireResponse.item to FHIR STU3 QuestionnaireResponse.item.
+//
+// Argument(s):
+//   data : FHIR R4 QuestionnaireResponse.item https://www.hl7.org/fhir/r4/questionnaireresponse-definitions.html#QuestionnaireResponse.item
+//
+// Output(s):
+//   FHIR STU3 QuestionnaireResponse.item https://www.hl7.org/fhir/stu3/questionnaireresponse-definitions.html#QuestionnaireResponse.item
+//
 def R4QuestionnaireResponse_ItemToR3(data) {
   linkId: data.linkId
   definition: data.definition
@@ -54,6 +94,14 @@ def R4QuestionnaireResponse_ItemToR3(data) {
   item: data.item
 }
 
+// Description: Converts a FHIR STU3 QuestionnaireResponse.item.answer to FHIR R4 QuestionnaireResponse.item.answer.
+//
+// Argument(s):
+//   data : FHIR STU3 QuestionnaireResponse.item.answer https://www.hl7.org/fhir/stu3/questionnaireresponse-definitions.html#QuestionnaireResponse.item.answer
+//
+// Output(s):
+//   FHIR R4 QuestionnaireResponse.item.answer https://www.hl7.org/fhir/r4/questionnaireresponse-definitions.html#QuestionnaireResponse.item.answer
+//
 def R3QuestionnaireResponse_Item_AnswerToR4(data) {
   valueBoolean: data.valueBoolean
   valueDecimal: data.valueDecimal
@@ -70,6 +118,14 @@ def R3QuestionnaireResponse_Item_AnswerToR4(data) {
   item: data.item
 }
 
+// Description: Converts a FHIR R4 QuestionnaireResponse.item.answer to FHIR STU3 QuestionnaireResponse.item.answer.
+//
+// Argument(s):
+//   data : FHIR R4 QuestionnaireResponse.item.answer https://www.hl7.org/fhir/r4/questionnaireresponse-definitions.html#QuestionnaireResponse.item.answer
+//
+// Output(s):
+//   FHIR STU3 QuestionnaireResponse.item.answer https://www.hl7.org/fhir/stu3/questionnaireresponse-definitions.html#QuestionnaireResponse.item.answer
+//
 def R4QuestionnaireResponse_Item_AnswerToR3(data) {
   valueBoolean: data.valueBoolean
   valueDecimal: data.valueDecimal

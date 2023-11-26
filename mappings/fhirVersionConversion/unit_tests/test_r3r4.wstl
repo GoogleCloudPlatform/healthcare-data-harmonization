@@ -205,8 +205,20 @@ def test_R3PatientToR4() testR3ResourceToR4("Patient")
 // Tests fhir_r3r4::R3PersonToR4() function.
 def test_R3PersonToR4() testR3ResourceToR4("Person")
 
+// Tests fhir_r3r4::R3ProcedureToR4() function.
+def test_R3ProcedureToR4() testR3ResourceToR4("Procedure")
+
 // Tests fhir_r3r4::R3ProcedureRequestToR4() function.
 def test_R3ProcedureRequestToR4() testR3ResourceToR4("ProcedureRequest")
+
+// Tests fhir_r3r4::R3ProvenanceToR4() function.
+def test_R3ProvenanceToR4() testR3ResourceToR4("Provenance")
+
+// Tests fhir_r3r4::R3QuestionnaireToR4() function.
+def test_R3QuestionnaireToR4() testR3ResourceToR4("Questionnaire")
+
+// Tests fhir_r3r4::R3QuestionnaireResponseToR4() function.
+def test_R3QuestionnaireResponseToR4() testR3ResourceToR4("QuestionnaireResponse")
 
 // Tests fhir_r3r4::R3ReferralRequestToR4() function.
 def test_R3ReferralRequestToR4() testR3ResourceToR4("ReferralRequest")

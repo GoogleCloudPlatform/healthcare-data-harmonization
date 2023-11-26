@@ -1,0 +1,157 @@
+{
+  "date": "2012-01",
+  "id": "3141",
+  "item": [
+    {
+      "code": [
+        {
+          "code": "COMORBIDITY",
+          "system": "http://example.org/system/code/sections"
+        }
+      ],
+      "item": [
+        {
+          "answerValueSet": "ValueSet/123",
+          "code": [
+            {
+              "code": "COMORB",
+              "system": "http://example.org/system/code/questions"
+            }
+          ],
+          "item": [
+            {
+              "code": [
+                {
+                  "code": "CARDIAL",
+                  "system": "http://example.org/system/code/sections"
+                }
+              ],
+              "enableWhen": [
+                {
+                  "answerCoding": {
+                    "code": "Y",
+                    "system": "http://terminology.hl7.org/CodeSystem/v2-0136"
+                  },
+                  "operator": "exists",
+                  "question": "1.1"
+                }
+              ],
+              "item": [
+                {
+                  "answerValueSet": "ValueSet/123",
+                  "code": [
+                    {
+                      "code": "COMORBCAR",
+                      "system": "http://example.org/system/code/questions"
+                    }
+                  ],
+                  "item": [
+                    {
+                      "answerValueSet": "ValueSet/123",
+                      "code": [
+                        {
+                          "code": "COMCAR00",
+                          "display": "Angina Pectoris",
+                          "system": "http://example.org/system/code/questions"
+                        },
+                        {
+                          "code": "194828000",
+                          "display": "Angina (disorder)",
+                          "system": "http://snomed.info/sct"
+                        }
+                      ],
+                      "linkId": "1.1.1.1.1",
+                      "prefix": "1.1.1",
+                      "type": "choice"
+                    },
+                    {
+                      "answerValueSet": "ValueSet/123",
+                      "code": [
+                        {
+                          "code": "22298006",
+                          "display": "Myocardial infarction (disorder)",
+                          "system": "http://snomed.info/sct"
+                        }
+                      ],
+                      "linkId": "1.1.1.1.2",
+                      "prefix": "1.1.2",
+                      "type": "choice"
+                    }
+                  ],
+                  "linkId": "1.1.1.1",
+                  "prefix": "1.1",
+                  "type": "choice"
+                },
+                {
+                  "answerValueSet": "ValueSet/123",
+                  "code": [
+                    {
+                      "code": "COMORBVAS",
+                      "system": "http://example.org/system/code/questions"
+                    }
+                  ],
+                  "linkId": "1.1.1.2",
+                  "prefix": "1.2",
+                  "type": "choice"
+                }
+              ],
+              "linkId": "1.1.1",
+              "type": "group"
+            }
+          ],
+          "linkId": "1.1",
+          "prefix": "1",
+          "type": "choice"
+        }
+      ],
+      "linkId": "1",
+      "type": "group"
+    },
+    {
+      "code": [
+        {
+          "code": "HISTOPATHOLOGY",
+          "system": "http://example.org/system/code/sections"
+        }
+      ],
+      "item": [
+        {
+          "code": [
+            {
+              "code": "ABDOMINAL",
+              "system": "http://example.org/system/code/sections"
+            }
+          ],
+          "item": [
+            {
+              "code": [
+                {
+                  "code": "STADPT",
+                  "display": "pT category",
+                  "system": "http://example.org/system/code/questions"
+                }
+              ],
+              "linkId": "2.1.2",
+              "type": "choice"
+            }
+          ],
+          "linkId": "2.1",
+          "type": "group"
+        }
+      ],
+      "linkId": "2",
+      "type": "group"
+    }
+  ],
+  "resourceType": "Questionnaire",
+  "status": "draft",
+  "subjectType": [
+    "Patient"
+  ],
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <pre>\n            1.Comorbidity?\n              1.1 Cardial Comorbidity\n                1.1.1 Angina?\n                1.1.2 MI?\n              1.2 Vascular Comorbidity?\n              ...\n            Histopathology\n              Abdominal\n                pT category?\n              ...\n          </pre>\n    </div>",
+    "status": "generated"
+  },
+  "title": "Cancer Quality Forum Questionnaire 2012",
+  "url": "http://hl7.org/fhir/Questionnaire/3141"
+}

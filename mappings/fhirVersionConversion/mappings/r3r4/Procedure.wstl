@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   procedure : FHIR Procedure resource
+//
+// Output(s):
+//   FHIR Procedure Resource
+//
 def ProcedureBase(procedure) {
   resourcebase::ResourceBase(procedure)
   identifier: procedure.identifier
@@ -18,6 +26,14 @@ def ProcedureBase(procedure) {
   performedPeriod: procedure.performedPeriod
 }
 
+// Description: Converts a FHIR STU3 Procedure resource to FHIR R4 Procedure resource.
+//
+// Argument(s):
+//   procedure : FHIR STU3 Procedure resource https://www.hl7.org/fhir/stu3/procedure.html
+//
+// Output(s):
+//   FHIR R4 Procedure Resource https://www.hl7.org/fhir/r4/procedure.html
+//
 def R3ProcedureToR4(procedure) {
   ProcedureBase(procedure)
   contained: datatypes::R3ResourceToR4(procedure.contained[])
@@ -29,9 +45,9 @@ def R3ProcedureToR4(procedure) {
   partOf: datatypes::R3ReferenceToR4(procedure.partOf[])
   instantiatesCanonical: extension::fetchCanonicalArray("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.instantiatesCanonical", procedure.extension)
   instantiatesUri: extension::fetchUriArray("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.instantiatesUri", procedure.extension)
-  basedOn: datatypes::R3ReferenceToR4(procedure.basedOn[])
+  basedOn: datatypes::R3ReferenceToR4(procedure.basedOn[where matchesRegex($.reference, "^CarePlan.*")][])
   var status: extension::fetchCode("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.status", procedure.extension)
-  status: if status? then status else procedure.status
+  status: if status? then status else utilities::Convert_TerminologyCode(procedure.status, "http://hl7.org/fhir/event-status", "Event_Status_r3r4")
   statusReason: procedure.notDoneReason
   encounter: datatypes::R3ReferenceToR4(procedure.context)
   performedString: extension::fetchString("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.performedString", procedure.extension)
@@ -47,6 +63,14 @@ def R3ProcedureToR4(procedure) {
   extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.status", procedure.status)
 }
 
+// Description: Converts a FHIR R4 Procedure resource to FHIR STU3 Procedure resource.
+//
+// Argument(s):
+//   procedure : FHIR R4 Procedure resource https://www.hl7.org/fhir/r4/procedure.html
+//
+// Output(s):
+//   FHIR STU3 Procedure Resource https://www.hl7.org/fhir/stu3/procedure.html
+//
 def R4ProcedureToR3(procedure) {
   ProcedureBase(procedure)
   contained: datatypes::R4ResourceToR3(procedure.contained[])
@@ -76,23 +100,55 @@ def R4ProcedureToR3(procedure) {
   extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.status", procedure.status)
 }
 
+// Description: Converts a FHIR STU3 Procedure.performer to FHIR R4 Procedure.performer.
+//
+// Argument(s):
+//   data : FHIR STU3 Procedure.performer https://www.hl7.org/fhir/stu3/procedure-definitions.html#Procedure.performer
+//
+// Output(s):
+//   FHIR R4 Procedure.performer https://www.hl7.org/fhir/r4/procedure-definitions.html#Procedure.performer
+//
 def R3Procedure_PerformerToR4(data) {
   function: data.role
   actor: datatypes::R3ReferenceToR4(data.actor)
   onBehalfOf: datatypes::R3ReferenceToR4(data.onBehalfOf)
 }
 
+// Description: Converts a FHIR R4 Procedure.performer to FHIR STU3 Procedure.performer.
+//
+// Argument(s):
+//   data : FHIR R4 Procedure.performer https://www.hl7.org/fhir/r4/procedure-definitions.html#Procedure.performer
+//
+// Output(s):
+//   FHIR STU3 Procedure.performer https://www.hl7.org/fhir/stu3/procedure-definitions.html#Procedure.performer
+//
 def R4Procedure_PerformerToR3(data) {
   role: data.function
   actor: datatypes::R4ReferenceToR3(data.actor)
   onBehalfOf: datatypes::R4ReferenceToR3(data.onBehalfOf)
 }
 
+// Description: Converts a FHIR STU3 Procedure.focalDevice to FHIR R4 Procedure.focalDevice.
+//
+// Argument(s):
+//   data : FHIR STU3 Procedure.focalDevice https://www.hl7.org/fhir/stu3/procedure-definitions.html#Procedure.focalDevice
+//
+// Output(s):
+//   FHIR R4 Procedure.focalDevice https://www.hl7.org/fhir/r4/procedure-definitions.html#Procedure.focalDevice
+//
 def R3Procedure_FocalDeviceToR4(data) {
   action: data.action
   manipulated: datatypes::R3ReferenceToR4(data.manipulated)
 }
 
+// Description: Converts a FHIR R4 Procedure.focalDevice to FHIR STU3 Procedure.focalDevice.
+//
+// Argument(s):
+//   data : FHIR R4 Procedure.focalDevice https://www.hl7.org/fhir/r4/procedure-definitions.html#Procedure.focalDevice
+//
+// Output(s):
+//   FHIR STU3 Procedure.focalDevice https://www.hl7.org/fhir/stu3/procedure-definitions.html#Procedure.focalDevice
+//
 def R4Procedure_FocalDeviceToR3(data) {
   action: data.action
   manipulated: datatypes::R4ReferenceToR3(data.manipulated)

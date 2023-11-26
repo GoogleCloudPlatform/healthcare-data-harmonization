@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   questionnaire : FHIR Questionnaire resource
+//
+// Output(s):
+//   FHIR Questionnaire Resource
+//
 def QuestionnaireBase(questionnaire) {
   resourcebase::ResourceBase(questionnaire)
   url: questionnaire.url
@@ -23,6 +31,14 @@ def QuestionnaireBase(questionnaire) {
   code: questionnaire.code
 }
 
+// Description: Converts a FHIR STU3 Questionnaire resource to FHIR R4 Questionnaire resource.
+//
+// Argument(s):
+//   questionnaire : FHIR STU3 Questionnaire resource https://www.hl7.org/fhir/stu3/questionnaire.html
+//
+// Output(s):
+//   FHIR R4 Questionnaire Resource https://www.hl7.org/fhir/r4/questionnaire.html
+//
 def R3QuestionnaireToR4(questionnaire) {
   QuestionnaireBase(questionnaire)
   contained: datatypes::R3ResourceToR4(questionnaire.contained[])
@@ -33,6 +49,14 @@ def R3QuestionnaireToR4(questionnaire) {
   item: R3Questionnaire_ItemToR4(questionnaire.item[])
 }
 
+// Description: Converts a FHIR R4 Questionnaire resource to FHIR STU3 Questionnaire resource.
+//
+// Argument(s):
+//   questionnaire : FHIR R4 Questionnaire resource https://www.hl7.org/fhir/r4/questionnaire.html
+//
+// Output(s):
+//   FHIR STU3 Questionnaire Resource https://www.hl7.org/fhir/stu3/questionnaire.html
+//
 def R4QuestionnaireToR3(questionnaire) {
   QuestionnaireBase(questionnaire)
   contained: datatypes::R4ResourceToR3(questionnaire.contained[])
@@ -43,7 +67,15 @@ def R4QuestionnaireToR3(questionnaire) {
   extension[]: extension::BuildCanonicalExtension("https://www.hl7.org/fhir/R4/questionnaire-definitions.html#Questionnaire.derivedFrom", questionnaire.derivedFrom[])
 }
 
-def R3Questionnaire_ItemToR4(data) {
+// Description: Converts a FHIR STU3 Questionnaire.item to FHIR R4 Questionnaire.item.
+//
+// Argument(s):
+//   data : FHIR STU3 Questionnaire.item https://www.hl7.org/fhir/stu3/questionnaire-definitions.html#Questionnaire.item
+//
+// Output(s):
+//   FHIR R4 Questionnaire.item https://www.hl7.org/fhir/r4/questionnaire-definitions.html#Questionnaire.item
+//
+def R3Questionnaire_ItemToR4(required data) {
   linkId: data.linkId
   definition: data.definition
   code: data.code
@@ -71,9 +103,17 @@ def R3Questionnaire_ItemToR4(data) {
   var initialObject.valueQuantity: data.initialQuantity
   var initialObject.valueReference: datatypes::R3ReferenceToR4(data.initialReference)
   initial[]: initialObject
-  item: data.item
+  item: R3Questionnaire_ItemToR4(data.item[])
 }
 
+// Description: Converts a FHIR R4 Questionnaire.item to FHIR STU3 Questionnaire.item.
+//
+// Argument(s):
+//   data : FHIR R4 Questionnaire.item https://www.hl7.org/fhir/r4/questionnaire-definitions.html#Questionnaire.item
+//
+// Output(s):
+//   FHIR STU3 Questionnaire.item https://www.hl7.org/fhir/stu3/questionnaire-definitions.html#Questionnaire.item
+//
 def R4Questionnaire_ItemToR3(data) {
   linkId: data.linkId
   definition: data.definition
@@ -104,9 +144,18 @@ def R4Questionnaire_ItemToR3(data) {
   extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/questionnaire-definitions.html#Questionnaire.item.enableBehavior", data.enableBehavior)
 }
 
-def R3Questionnaire_Item_EnableWhenToR4(data) {
+// Description: Converts a FHIR STU3 Questionnaire.item.enableWhen to FHIR R4 Questionnaire.item.enableWhen.
+//
+// Argument(s):
+//   data : FHIR STU3 Questionnaire.item.enableWhen https://www.hl7.org/fhir/stu3/questionnaire-definitions.html#Questionnaire.item.enableWhen
+//
+// Output(s):
+//   FHIR R4 Questionnaire.item.enableWhen https://www.hl7.org/fhir/r4/questionnaire-definitions.html#Questionnaire.item.enableWhen
+//
+def R3Questionnaire_Item_EnableWhenToR4(required data) {
   question: data.question
   operator: extension::fetchCode("https://www.hl7.org/fhir/R4/questionnaire-definitions.html#Questionnaire.item.enableWhen.operator", data.extension)
+  operator: utilities::defaultIfNull($this.operator, "exists")
   answerBoolean: data.answerBoolean
   answerDecimal: data.answerDecimal
   answerInteger: data.answerInteger
@@ -117,11 +166,21 @@ def R3Questionnaire_Item_EnableWhenToR4(data) {
   answerCoding: data.answerCoding
   answerQuantity: data.answerQuantity
   answerReference: datatypes::R3ReferenceToR4(data.answerReference)
+  // place-holder for 1..1 cardinality
+  answerString: if !fields($this)[where matchesRegex($, "^answer.*")] then "unknown";
   extension[]: extension::BuildBooleanExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.enableWhen.hasAnswer", data.hasAnswer)
   extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.enableWhen.answerUri", data.answerUri)
   extension[]: extension::BuildAttachmentExtension("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.enableWhen.answerAttachment", data.answerAttachment)
 }
 
+// Description: Converts a FHIR R4 Questionnaire.item.enableWhen to FHIR STU3 Questionnaire.item.enableWhen.
+//
+// Argument(s):
+//   data : FHIR R4 Questionnaire.item.enableWhen https://www.hl7.org/fhir/r4/questionnaire-definitions.html#Questionnaire.item.enableWhen
+//
+// Output(s):
+//   FHIR STU3 Questionnaire.item.enableWhen https://www.hl7.org/fhir/stu3/questionnaire-definitions.html#Questionnaire.item.enableWhen
+//
 def R4Questionnaire_Item_EnableWhenToR3(data) {
   question: data.question
   hasAnswer: extension::fetchBoolean("https://www.hl7.org/fhir/STU3/questionnaire-definitions.html#Questionnaire.item.enableWhen.hasAnswer", data.extension)
@@ -140,6 +199,14 @@ def R4Questionnaire_Item_EnableWhenToR3(data) {
   extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/questionnaire-definitions.html#Questionnaire.item.enableWhen.operator", data.operator)
 }
 
+// Description: Converts a FHIR STU3 Questionnaire.item.answerOption to FHIR R4 Questionnaire.item.answerOption.
+//
+// Argument(s):
+//   data : FHIR STU3 Questionnaire.item.answerOption https://www.hl7.org/fhir/stu3/questionnaire-definitions.html#Questionnaire.item.answerOption
+//
+// Output(s):
+//   FHIR R4 Questionnaire.item.answerOption https://www.hl7.org/fhir/r4/questionnaire-definitions.html#Questionnaire.item.answerOption
+//
 def R3Questionnaire_Item_AnswerOptionToR4(data) {
   valueInteger: data.valueInteger
   valueDate: data.valueDate
@@ -150,6 +217,14 @@ def R3Questionnaire_Item_AnswerOptionToR4(data) {
   initialSelected: extension::fetchBoolean("https://www.hl7.org/fhir/R4/questionnaire-definitions.html#Questionnaire.item.answerOption.initialSelected", data.extension)
 }
 
+// Description: Converts a FHIR R4 Questionnaire.item.answerOption to FHIR STU3 Questionnaire.item.answerOption.
+//
+// Argument(s):
+//   data : FHIR R4 Questionnaire.item.answerOption https://www.hl7.org/fhir/r4/questionnaire-definitions.html#Questionnaire.item.answerOption
+//
+// Output(s):
+//   FHIR STU3 Questionnaire.item.answerOption https://www.hl7.org/fhir/stu3/questionnaire-definitions.html#Questionnaire.item.answerOption
+//
 def R4Questionnaire_Item_AnswerOptionToR3(data) {
   valueInteger: data.valueInteger
   valueDate: data.valueDate

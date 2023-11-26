@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   provenance : FHIR Provenance resource
+//
+// Output(s):
+//   FHIR Provenance Resource
+//
 def ProvenanceBase(provenance) {
   resourcebase::ResourceBase(provenance)
   recorded: provenance.recorded
@@ -9,6 +17,14 @@ def ProvenanceBase(provenance) {
   signature: provenance.signature
 }
 
+// Description: Converts a FHIR STU3 Provenance resource to FHIR R4 Provenance resource.
+//
+// Argument(s):
+//   provenance : FHIR STU3 Provenance resource https://www.hl7.org/fhir/stu3/provenance.html
+//
+// Output(s):
+//   FHIR R4 Provenance Resource https://www.hl7.org/fhir/r4/provenance.html
+//
 def R3ProvenanceToR4(provenance) {
   ProvenanceBase(provenance)
   contained: datatypes::R3ResourceToR4(provenance.contained[])
@@ -22,6 +38,14 @@ def R3ProvenanceToR4(provenance) {
   entity: R3Provenance_EntityToR4(provenance.entity[])
 }
 
+// Description: Converts a FHIR R4 Provenance resource to FHIR STU3 Provenance resource.
+//
+// Argument(s):
+//   provenance : FHIR R4 Provenance resource https://www.hl7.org/fhir/r4/provenance.html
+//
+// Output(s):
+//   FHIR STU3 Provenance Resource https://www.hl7.org/fhir/stu3/provenance.html
+//
 def R4ProvenanceToR3(provenance) {
   ProvenanceBase(provenance)
   contained: datatypes::R4ResourceToR3(provenance.contained[])
@@ -35,6 +59,14 @@ def R4ProvenanceToR3(provenance) {
   extension[]: extension::BuildDateTimeExtension("https://www.hl7.org/fhir/R4/provenance-definitions.html#Provenance.occurredDateTime", provenance.occurredDateTime)
 }
 
+// Description: Converts a FHIR STU3 Provenance.agent to FHIR R4 Provenance.agent.
+//
+// Argument(s):
+//   data : FHIR STU3 Provenance.agent https://www.hl7.org/fhir/stu3/provenance-definitions.html#Provenance.agent
+//
+// Output(s):
+//   FHIR R4 Provenance.agent https://www.hl7.org/fhir/r4/provenance-definitions.html#Provenance.agent
+//
 def R3Provenance_AgentToR4(data) {
   type: data.relatedAgentType
   role: data.role
@@ -44,6 +76,14 @@ def R3Provenance_AgentToR4(data) {
   extension[]: extension::BuildUriExtension("https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.agent.onBehalfOfUri", data.onBehalfOfUri)
 }
 
+// Description: Converts a FHIR R4 Provenance.agent to FHIR STU3 Provenance.agent.
+//
+// Argument(s):
+//   data : FHIR R4 Provenance.agent https://www.hl7.org/fhir/r4/provenance-definitions.html#Provenance.agent
+//
+// Output(s):
+//   FHIR STU3 Provenance.agent https://www.hl7.org/fhir/stu3/provenance-definitions.html#Provenance.agent
+//
 def R4Provenance_AgentToR3(data) {
   role: data.role
   whoReference: datatypes::R4ReferenceToR3(data.who)
@@ -53,6 +93,14 @@ def R4Provenance_AgentToR3(data) {
   relatedAgentType: data.type
 }
 
+// Description: Converts a FHIR STU3 Provenance.entity to FHIR R4 Provenance.entity.
+//
+// Argument(s):
+//   data : FHIR STU3 Provenance.entity https://www.hl7.org/fhir/stu3/provenance-definitions.html#Provenance.entity
+//
+// Output(s):
+//   FHIR R4 Provenance.entity https://www.hl7.org/fhir/r4/provenance-definitions.html#Provenance.entity
+//
 def R3Provenance_EntityToR4(data) {
   role: data.role
   what: datatypes::R3ReferenceToR4(data.whatReference)
@@ -61,6 +109,14 @@ def R3Provenance_EntityToR4(data) {
   extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/STU3/provenance-definitions.html#Provenance.entity.whatIdentifier", data.whatIdentifier)
 }
 
+// Description: Converts a FHIR R4 Provenance.entity to FHIR STU3 Provenance.entity.
+//
+// Argument(s):
+//   data : FHIR R4 Provenance.entity https://www.hl7.org/fhir/r4/provenance-definitions.html#Provenance.entity
+//
+// Output(s):
+//   FHIR STU3 Provenance.entity https://www.hl7.org/fhir/stu3/provenance-definitions.html#Provenance.entity
+//
 def R4Provenance_EntityToR3(data) {
   role: data.role
   whatReference: datatypes::R4ReferenceToR3(data.what)

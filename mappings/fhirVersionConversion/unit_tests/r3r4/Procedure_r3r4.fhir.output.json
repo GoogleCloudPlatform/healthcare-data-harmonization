@@ -1,0 +1,81 @@
+{
+  "basedOn": [
+    {
+      "display": "Maternity care plan",
+      "reference": "CarePlan/preg"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "code": "62013009",
+        "display": "Ambulating patient (procedure)",
+        "system": "http://snomed.info/sct"
+      }
+    ],
+    "text": "Ambulation"
+  },
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.definition",
+      "valueReference": {
+        "display": "Protocol for hypertension during pregnancy"
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.notDone",
+      "valueBoolean": true
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/procedure-definitions.html#Procedure.status",
+      "valueCode": "completed"
+    }
+  ],
+  "id": "ambulation",
+  "identifier": [
+    {
+      "value": "12345"
+    }
+  ],
+  "location": {
+    "display": "Burgers University Medical Center, South Wing, second floor",
+    "reference": "Location/1"
+  },
+  "performer": [
+    {
+      "actor": {
+        "display": "Carla Espinosa",
+        "reference": "Practitioner/f204"
+      },
+      "onBehalfOf": {
+        "display": "University Medical Hospital",
+        "reference": "Organization/f001"
+      }
+    }
+  ],
+  "reasonReference": [
+    {
+      "display": "Blood Pressure",
+      "reference": "Observation/blood-pressure"
+    }
+  ],
+  "resourceType": "Procedure",
+  "status": "completed",
+  "statusReason": {
+    "coding": [
+      {
+        "code": "398254007",
+        "display": "  Pre-eclampsia (disorder)",
+        "system": "http://snomed.info/sct"
+      }
+    ],
+    "text": "Pre-eclampsia"
+  },
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Ambulation procedure was not done</div>",
+    "status": "generated"
+  }
+}
