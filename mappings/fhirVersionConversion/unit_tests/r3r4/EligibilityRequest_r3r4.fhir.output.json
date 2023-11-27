@@ -1,0 +1,84 @@
+{
+  "created": "2014-08-16",
+  "enterer": {
+    "identifier": {
+      "system": "http://happyvalleyclinic.com/staff",
+      "value": "14"
+    }
+  },
+  "extension": [
+    {
+      "url": "https://hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.organization",
+      "valueReference": {
+        "reference": "Organization/1"
+      }
+    }
+  ],
+  "facility": {
+    "identifier": {
+      "system": "http://statecliniclicensor.com/clinicid",
+      "value": "G35B9"
+    }
+  },
+  "id": "52346",
+  "identifier": [
+    {
+      "system": "http://happyvalley.com/elegibilityrequest",
+      "value": "52346"
+    }
+  ],
+  "insurance": [
+    {
+      "businessArrangement": "NB8742",
+      "coverage": {
+        "reference": "Coverage/9876B1"
+      }
+    }
+  ],
+  "insurer": {
+    "reference": "Organization/2"
+  },
+  "item": [
+    {
+      "category": {
+        "coding": [
+          {
+            "code": "medical",
+            "system": "http://hl7.org/fhir/benefit-category"
+          },
+          {
+            "code": "69",
+            "display": "Maternity",
+            "system": "http://hl7.org/fhir/benefit-subcategory"
+          }
+        ]
+      }
+    }
+  ],
+  "patient": {
+    "reference": "Patient/pat1"
+  },
+  "priority": {
+    "coding": [
+      {
+        "code": "normal"
+      }
+    ]
+  },
+  "provider": {
+    "identifier": {
+      "system": "http://happyvalleyclinic.com/staff",
+      "value": "18"
+    }
+  },
+  "purpose": [
+    "benefits"
+  ],
+  "resourceType": "CoverageEligibilityRequest",
+  "servicedDate": "2014-09-17",
+  "status": "active",
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the EligibilityRequest</div>",
+    "status": "generated"
+  }
+}

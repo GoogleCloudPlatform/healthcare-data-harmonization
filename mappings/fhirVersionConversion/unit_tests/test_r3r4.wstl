@@ -118,6 +118,9 @@ def test_R3DocumentManifestToR4() testR3ResourceToR4("DocumentManifest")
 // Tests fhir_r3r4::R3DocumentReferenceToR4() function.
 def test_R3DocumentReferenceToR4() testR3ResourceToR4("DocumentReference")
 
+// Tests fhir_r3r4::R3EligibilityRequestToR4() function.
+def test_R3EligibilityRequestToR4() testR3ResourceToR4("EligibilityRequest")
+
 // Tests fhir_r3r4::R3EncounterToR4() function.
 def test_R3EncounterToR4() testR3ResourceToR4("Encounter")
 

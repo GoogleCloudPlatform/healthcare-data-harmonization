@@ -1,0 +1,98 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   eligibilityRequest : FHIR EligibilityRequest resource
+//
+// Output(s):
+//   FHIR CoverageEligibilityRequest Resource
+//
+def EligibilityRequestBase(eligibilityRequest) {
+  resourcebase::ResourceBase(eligibilityRequest)
+  identifier: eligibilityRequest.identifier
+  priority: eligibilityRequest.priority
+  servicedDate: eligibilityRequest.servicedDate
+  servicedPeriod: eligibilityRequest.servicedPeriod
+}
+
+// Description: Converts a FHIR STU3 EligibilityRequest resource to FHIR R4 EligibilityRequest resource.
+//
+// Argument(s):
+//   eligibilityRequest : FHIR STU3 EligibilityRequest resource https://www.hl7.org/fhir/stu3/eligibilityRequest.html
+//
+// Output(s):
+//   FHIR R4 CoverageEligibilityRequest Resource https://www.hl7.org/fhir/r4/coverageeligibilityrequest.html
+//
+def R3EligibilityRequestToR4(eligibilityRequest) {
+  EligibilityRequestBase(eligibilityRequest)
+  resourceType: "CoverageEligibilityRequest"
+  status: eligibilityRequest.status
+  status: utilities::defaultIfNull($this.status, "active")
+  purpose[]: "benefits"
+  patient: datatypes::R3ReferenceToR4(eligibilityRequest.patient)
+  patient.display: utilities::defaultIfNull($this.patient, "Patient")
+  created: eligibilityRequest.created
+  created: utilities::defaultIfNull($this.created, currentTime("yyyy-MM-dd"))
+  enterer: datatypes::R3ReferenceToR4(eligibilityRequest.enterer)
+  provider: datatypes::R3ReferenceToR4(eligibilityRequest.provider)
+  provider: if !eligibilityRequest.provider then datatypes::R3ReferenceToR4(eligibilityRequest.organization)
+  extension[]: if eligibilityRequest.provider then extension::BuildReferenceExtension("https://hl7.org/fhir/STU3/eligibilityrequest-definitions.html#EligibilityRequest.organization", eligibilityRequest.organization)
+  insurer: datatypes::R3ReferenceToR4(eligibilityRequest.insurer)
+  insurer.display: utilities::defaultIfNull($this.insurer, "Insurer")
+  facility: datatypes::R3ReferenceToR4(eligibilityRequest.facility)
+  supportingInfo: BuildR4_eligibilityRequest_supportingInfo(eligibilityRequest.extension)
+  insurance[]: R3EligibilityRequest_InsuranceToR4(eligibilityRequest.coverage, eligibilityRequest.businessArrangement, eligibilityRequest.extension)
+  item[]: R3EligibilityRequest_ItemToR4(eligibilityRequest.benefitCategory, eligibilityRequest.benefitSubCategory, eligibilityRequest.extension)
+}
+
+// Description: Constructs a FHIR R4 EligibilityRequest.SupportingInfo
+//
+// Argument(s):
+//   data : FHIR STU3 EligibilityRequest.extension http://hl7.org/fhir/STU3/domainresource-definitions.html#DomainResource.extension
+//
+// Output(s):
+//   FHIR R4 EligibilityRequest.SupportingInfo https://www.hl7.org/fhir/stu3/eligibilityRequest.html#EligibilityRequest.supportingInfo
+//
+def BuildR4_eligibilityRequest_supportingInfo(Extension) {
+  sequence: extension::fetchPositiveInt("https://hl7.org/fhir/R4/coverageeligibilityrequest-definitions.html#CoverageEligibilityRequest.supportingInfo.sequence", Extension)
+  information: extension::fetchReference("https://hl7.org/fhir/R4/coverageeligibilityrequest-definitions.html#CoverageEligibilityRequest.supportingInfo.information", Extension)
+  appliesToAll: extension::fetchReference("https://hl7.org/fhir/R4/coverageeligibilityrequest-definitions.html#CoverageEligibilityRequest.supportingInfo.appliesToAll", Extension)
+}
+
+// Description: Converts a FHIR STU3 EligibilityRequest.insurance to FHIR R4 CoverageEligibilityResponse.insurance.
+//
+// Argument(s):
+//   data : FHIR STU3 EligibilityRequest.insurance http://hl7.org/fhir/STU3/eligibilityRequest-definitions.html#EligibilityRequest.insurance
+//
+// Output(s):
+//   FHIR R4 CoverageEligibilityRequest.insurance https://hl7.org/fhir/R4/coverageeligibilityrequest-definitions.html#CoverageEligibilityRequest.insurance
+//
+def R3EligibilityRequest_InsuranceToR4(required Coverage, BusinessArrangement, Extension) {
+  focal: extension::fetchBoolean("https://hl7.org/fhir/R4/coverageeligibilityrequest-definitions.html#CoverageEligibilityRequest.insurance.focal", Extension)
+  coverage: datatypes::R3ReferenceToR4(Coverage)
+  businessArrangement: BusinessArrangement
+}
+
+// Description: Converts a FHIR STU3 EligibilityRequest.item to FHIR R4 CoverageEligibilityResponse.item.
+//
+// Argument(s):
+//   data : FHIR STU3 EligibilityRequest.item http://hl7.org/fhir/STU3/eligibilityRequest-definitions.html#EligibilityRequest.item
+//
+// Output(s):
+//   FHIR R4 CoverageEligibilityRequest.item https://hl7.org/fhir/R4/coverageeligibilityrequest-definitions.html#CoverageEligibilityRequest.item
+//
+def R3EligibilityRequest_ItemToR4(Category, SubCategory, Extension) {
+  supportingInfoSequence[]: extension::fetchPositiveIntArray("https://hl7.org/fhir/R4/coverageeligibilityrequest-definitions.html#CoverageEligibilityRequest.item.supportingInfoSequence", Extension)
+  category: Category
+  category.coding[]: SubCategory.coding
+  productOrService: extension::fetchCodeableConcept("https://hl7.org/fhir/R4/coverageeligibilityrequest-definitions.html#CoverageEligibilityRequest.item.productOrService", Extension)
+  modifier: extension::fetchCodeableConceptArray("https://hl7.org/fhir/R4/coverageeligibilityrequest-definitions.html#CoverageEligibilityRequest.item.modifier", Extension)
+  provider: extension::fetchReference("https://hl7.org/fhir/R4/coverageeligibilityrequest-definitions.html#CoverageEligibilityRequest.item.provider", Extension)
+  quantity: extension::fetchQuantity("https://hl7.org/fhir/R4/coverageeligibilityrequest-definitions.html#CoverageEligibilityRequest.item.quantity", Extension)
+  unitPrice: extension::fetchMoney("https://hl7.org/fhir/R4/coverageeligibilityrequest-definitions.html#CoverageEligibilityRequest.item.unitPrice", Extension)
+  facility: extension::fetchReference("https://hl7.org/fhir/R4/coverageeligibilityrequest-definitions.html#CoverageEligibilityRequest.item.facility", Extension)
+  detail: extension::fetchReference("https://hl7.org/fhir/R4/coverageeligibilityrequest-definitions.html#CoverageEligibilityRequest.item.detail", Extension)
+}
