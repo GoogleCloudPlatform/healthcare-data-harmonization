@@ -208,6 +208,15 @@ def test_R3PatientToR4() testR3ResourceToR4("Patient")
 // Tests fhir_r3r4::R3PersonToR4() function.
 def test_R3PersonToR4() testR3ResourceToR4("Person")
 
+// Tests fhir_r3r4::R3PlanDefinitionToR4() function.
+def test_R3PlanDefinitionToR4() testR3ResourceToR4("PlanDefinition")
+
+// Tests fhir_r3r4::R3PractitionerToR4() function.
+def test_R3PractitionerToR4() testR3ResourceToR4("Practitioner")
+
+// Tests fhir_r3r4::R3PractitionerRoleToR4() function.
+def test_R3PractitionerRoleToR4() testR3ResourceToR4("PractitionerRole")
+
 // Tests fhir_r3r4::R3ProcedureToR4() function.
 def test_R3ProcedureToR4() testR3ResourceToR4("Procedure")
 

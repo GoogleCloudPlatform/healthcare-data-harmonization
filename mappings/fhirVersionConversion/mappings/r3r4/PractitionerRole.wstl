@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   practitionerRole : FHIR PractitionerRole resource
+//
+// Output(s):
+//   FHIR PractitionerRole Resource
+//
 def PractitionerRoleBase(practitionerRole) {
   resourcebase::ResourceBase(practitionerRole)
   identifier: practitionerRole.identifier
@@ -13,6 +21,14 @@ def PractitionerRoleBase(practitionerRole) {
   availabilityExceptions: practitionerRole.availabilityExceptions
 }
 
+// Description: Converts a FHIR STU3 PractitionerRole resource to FHIR R4 PractitionerRole resource.
+//
+// Argument(s):
+//   practitionerRole : FHIR STU3 PractitionerRole resource https://www.hl7.org/fhir/stu3/practitionerrole.html
+//
+// Output(s):
+//   FHIR R4 PractitionerRole Resource https://www.hl7.org/fhir/r4/practitionerrole.html
+//
 def R3PractitionerRoleToR4(practitionerRole) {
   PractitionerRoleBase(practitionerRole)
   contained: datatypes::R3ResourceToR4(practitionerRole.contained[])
@@ -25,6 +41,14 @@ def R3PractitionerRoleToR4(practitionerRole) {
   availableTime: practitionerRole.availableTime
 }
 
+// Description: Converts a FHIR R4 PractitionerRole resource to FHIR STU3 PractitionerRole resource.
+//
+// Argument(s):
+//   practitionerRole : FHIR R4 PractitionerRole resource https://www.hl7.org/fhir/r4/practitionerrole.html
+//
+// Output(s):
+//   FHIR STU3 PractitionerRole Resource https://www.hl7.org/fhir/stu3/practitionerrole.html
+//
 def R4PractitionerRoleToR3(practitionerRole) {
   PractitionerRoleBase(practitionerRole)
   contained: datatypes::R4ResourceToR3(practitionerRole.contained[])

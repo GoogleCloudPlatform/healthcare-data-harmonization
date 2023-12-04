@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   practitioner : FHIR Practitioner resource
+//
+// Output(s):
+//   FHIR Practitioner Resource
+//
 def PractitionerBase(practitioner) {
   resourcebase::ResourceBase(practitioner)
   identifier: practitioner.identifier
@@ -12,6 +20,14 @@ def PractitionerBase(practitioner) {
   photo: practitioner.photo
 }
 
+// Description: Converts a FHIR STU3 Practitioner resource to FHIR R4 Practitioner resource.
+//
+// Argument(s):
+//   practitioner : FHIR STU3 Practitioner resource https://www.hl7.org/fhir/stu3/practitioner.html
+//
+// Output(s):
+//   FHIR R4 Practitioner Resource https://www.hl7.org/fhir/r4/practitioner.html
+//
 def R3PractitionerToR4(practitioner) {
   PractitionerBase(practitioner)
   contained: datatypes::R3ResourceToR4(practitioner.contained[])
@@ -21,6 +37,14 @@ def R3PractitionerToR4(practitioner) {
   communication: practitioner.communication
 }
 
+// Description: Converts a FHIR R4 Practitioner resource to FHIR STU3 Practitioner resource.
+//
+// Argument(s):
+//   practitioner : FHIR R4 Practitioner resource https://www.hl7.org/fhir/r4/practitioner.html
+//
+// Output(s):
+//   FHIR STU3 Practitioner Resource https://www.hl7.org/fhir/stu3/practitioner.html
+//
 def R4PractitionerToR3(practitioner) {
   PractitionerBase(practitioner)
   contained: datatypes::R4ResourceToR3(practitioner.contained[])
@@ -30,6 +54,14 @@ def R4PractitionerToR3(practitioner) {
   communication: practitioner.communication
 }
 
+// Description: Converts a FHIR STU3 Practitioner.qualification to FHIR R4 Practitioner.qualification.
+//
+// Argument(s):
+//   data : FHIR STU3 Practitioner.qualification https://www.hl7.org/fhir/stu3/practitioner-definitions.html#Practitioner.qualification
+//
+// Output(s):
+//   FHIR R4 Practitioner.qualification https://www.hl7.org/fhir/r4/practitioner-definitions.html#Practitioner.qualification
+//
 def R3Practitioner_QualificationToR4(data) {
   identifier: data.identifier
   code: data.code
@@ -37,6 +69,14 @@ def R3Practitioner_QualificationToR4(data) {
   issuer: datatypes::R3ReferenceToR4(data.issuer)
 }
 
+// Description: Converts a FHIR R4 Practitioner.qualification to FHIR STU3 Practitioner.qualification.
+//
+// Argument(s):
+//   data : FHIR R4 Practitioner.qualification https://www.hl7.org/fhir/r4/practitioner-definitions.html#Practitioner.qualification
+//
+// Output(s):
+//   FHIR STU3 Practitioner.qualification https://www.hl7.org/fhir/stu3/practitioner-definitions.html#Practitioner.qualification
+//
 def R4Practitioner_QualificationToR3(data) {
   identifier: data.identifier
   code: data.code
