@@ -1,0 +1,92 @@
+{
+  "resources": [
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "category": [
+        {
+          "coding": [
+            {
+              "code": "LP29684-5",
+              "display": "Radiology",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Radiology"
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "30746-2",
+            "display": "Portable XR Chest Views",
+            "system": "http://loinc.org"
+          }
+        ],
+        "text": "Portable XR Chest Views"
+      },
+      "conclusion": "Pufferfish are interesting",
+      "effectiveDateTime": "2011-05-23T10:30:25.000Z",
+      "encounter": {
+        "display": "Pufferfish Encounter 1",
+        "reference": "Encounter/example-encounter1"
+      },
+      "issued": "2005-07-06T11:45:33+11:00",
+      "resourceType": "DiagnosticReport",
+      "status": "registered",
+      "subject": {
+        "reference": "Patient/example-fromIR-patient"
+      }
+    },
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "category": [
+        {
+          "coding": [
+            {
+              "code": "LP29684-5",
+              "display": "Radiology",
+              "system": "http://loinc.org"
+            }
+          ],
+          "text": "Radiology"
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "30746-2",
+            "display": "Portable XR Chest Views",
+            "system": "http://loinc.org"
+          }
+        ],
+        "text": "Portable XR Chest Views"
+      },
+      "conclusion": "Pufferfish are dangerous",
+      "effectiveDateTime": "2011-05-23T10:30:25.000Z",
+      "encounter": {
+        "display": "Pufferfish Encounter 2",
+        "reference": "Encounter/example-encounter2"
+      },
+      "issued": "2010-06-23T10:30:30+11:00",
+      "resourceType": "DiagnosticReport",
+      "status": "preliminary",
+      "subject": {
+        "reference": "Patient/example-fromIR-patient"
+      }
+    }
+  ],
+  "resourceInfo": {
+    "resourceType": "DiagnosticReport",
+    "stableId": "1234"
+  }
+}

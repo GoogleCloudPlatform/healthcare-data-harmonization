@@ -1,0 +1,64 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the Condition resource.
+def ConditionRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for Condition resource.
+def ConditionMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  // To ensure fhirpath-constraint-violation-Condition: "verificationStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/condition-ver-status' and code='entered-in-error').empty() or clinicalStatus.empty()"
+  clinicalStatus: if inbound.verificationStatus.coding[0].code == "entered-in-error" then {
+    recon::forceInbound(existing.clinicalStatus, inbound.clinicalStatus)
+  } else {
+    recon::preferInbound(existing.clinicalStatus, inbound.clinicalStatus)
+  }
+
+  // To ensure fhirpath-constraint-violation-Condition: "verificationStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/condition-ver-status' and code='entered-in-error').empty() or clinicalStatus.empty()"
+  verificationStatus: if existing.verificationStatus.coding[0].code == "entered-in-error" and inbound.clinicalStatus then {
+    recon::forceInbound(existing.verificationStatus, inbound.verificationStatus)
+  } else {
+    recon::preferInbound(existing.verificationStatus, inbound.verificationStatus)
+  }
+
+  category: recon::union(existing.category, inbound.category)
+
+  severity: recon::preferInbound(existing.severity, inbound.severity)
+
+  code: recon::forceInbound(existing.code, inbound.code)
+
+  bodySite: recon::union(existing.bodySite, inbound.bodySite)
+
+  subject: recon::forceInbound(existing.subject, inbound.subject)
+
+  encounter: recon::preferInbound(existing.encounter, inbound.encounter)
+
+  recon::choiceField(existing, inbound, "preferInbound",
+    "onsetDateTime", "onsetAge", "onsetPeriod",
+    "onsetRange", "onsetString"
+  )
+
+  // To ensure fhirpath-constraint-violation-Condition: "abatement.empty() or clinicalStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/condition-clinical' and (code='resolved' or code='remission' or code='inactive')).exists()"
+  var abatementInboundType: if matchesRegex($this.clinicalStatus.coding[0].code, "inactive|resolved|remission") then "preferInbound" else "forceInbound"
+  recon::choiceField(existing, inbound, abatementInboundType,
+    "abatementDateTime", "abatementAge", "abatementPeriod",
+    "abatementRange", "abatementString"
+  )
+
+  recordedDate: recon::preferInbound(existing.recordedDate, inbound.recordedDate)
+
+  recorder: recon::preferInbound(existing.recorder, inbound.recorder)
+
+  asserter: recon::preferInbound(existing.asserter, inbound.asserter)
+
+  stage: recon::union(existing.stage, inbound.stage)
+
+  evidence: recon::union(existing.evidence, inbound.evidence)
+
+  note: recon::union(existing.note, inbound.note)
+
+}

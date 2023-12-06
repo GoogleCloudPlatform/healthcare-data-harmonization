@@ -1,0 +1,53 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the Immunization resource.
+def MedicationAdministrationRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for MedicationAdministration resource.
+def MedicationAdministrationMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  instantiates: recon::union(existing.instantiates, inbound.instantiates)
+
+  partOf: recon::preferInbound(existing.partOf, inbound.partOf)
+
+  status: recon::forceInbound(existing.status, inbound.status)
+
+  statusReason: recon::preferInbound(existing.statusReason, inbound.statusReason)
+
+  category: recon::preferInbound(existing.category, inbound.category)
+
+  recon::choiceField(existing, inbound, "preferInbound",
+    "medicationCodeableConcept", "medicationReference"
+  )
+
+  subject: recon::forceInbound(existing.subject, inbound.subject)
+
+  context: recon::preferInbound(existing.context, inbound.context)
+
+  supportingInformation: recon::union(existing.supportingInformation, inbound.supportingInformation)
+
+  recon::choiceField(existing, inbound, "preferInbound",
+    "effectiveDateTime", "effectivePeriod"
+  )
+
+  performer: recon::union(existing.performer, inbound.performer)
+
+  reasonCode: recon::union(existing.reasonCode, inbound.reasonCode)
+
+  reasonReference: recon::union(existing.reasonReference, inbound.reasonReference)
+
+  request: recon::preferInbound(existing.request, inbound.request)
+
+  device: recon::union(existing.device, inbound.device)
+
+  note: recon::union(existing.note, inbound.note)
+
+  dosage: recon::preferInbound(existing.dosage, inbound.dosage)
+
+  eventHistory: recon::union(existing.eventHistory, inbound.eventHistory)
+}

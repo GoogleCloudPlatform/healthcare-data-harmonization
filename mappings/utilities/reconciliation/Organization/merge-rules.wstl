@@ -1,0 +1,32 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the Organization resource.
+def OrganizationRule() {
+  "merge"; // alternatively, "latest"
+}
+
+
+// Per-field merge rules for Organization resource.
+def OrganizationMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  active: recon::preferInbound(existing.active, inbound.active)
+
+  type: recon::union(existing.type, inbound.type)
+
+  name: recon::preferInbound(existing.name, inbound.name)
+
+  alias: recon::union(existing.alias, inbound.alias)
+
+  telecom: recon::union(existing.telecom, inbound.telecom)
+
+  address: recon::union(existing.address, inbound.address)
+
+  partOf: recon::preferInbound(existing.partOf, inbound.partOf)
+
+  contact: recon::union(existing.contact, inbound.contact)
+
+  endpoint: recon::union(existing.endpoint, inbound.endpoint)
+}

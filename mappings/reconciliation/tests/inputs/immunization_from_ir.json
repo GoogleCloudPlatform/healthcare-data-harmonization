@@ -1,0 +1,183 @@
+{
+  "resources": [
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "doseQuantity": {
+        "code": "ml",
+        "system": "http://unitsofmeasure.org",
+        "value": 0.5
+      },
+      "encounter": {
+        "reference": "Encounter/example-encounter"
+      },
+      "expirationDate": "2011-03-01",
+      "fundingSource": {
+        "coding": [
+          {
+            "code": "public",
+            "system": "http://terminology.hl7.org/CodeSystem/immunization-funding-source"
+          }
+        ]
+      },
+      "isSubpotent": true,
+      "location": {
+        "reference": "Location/example-location1"
+      },
+      "lotNumber": "13245675645342",
+      "manufacturer": {
+        "reference": "Organization/example-organization2"
+      },
+      "occurrenceDateTime": "2013-12-27",
+      "patient": {
+        "display": "Amy Shaw",
+        "reference": "Patient/example-fromIR-patient"
+      },
+      "primarySource": false,
+      "recorded": "2011-03-01T10:34:30.000Z",
+      "reportOrigin": {
+        "coding": [
+          {
+            "code": "record",
+            "system": "http://terminology.hl7.org/CodeSystem/immunization-origin"
+          }
+        ],
+        "text": "Written Record"
+      },
+      "resourceType": "Immunization",
+      "site": {
+        "coding": [
+          {
+            "code": "LA",
+            "display": "left arm",
+            "system": "http://terminology.hl7.org/CodeSystem/v3-ActSite"
+          }
+        ]
+      },
+      "status": "completed",
+      "statusReason": {
+        "coding": [
+          {
+            "code": "MEDPREC",
+            "display": "medical precaution",
+            "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+          }
+        ]
+      },
+      "vaccineCode": {
+        "coding": [
+          {
+            "code": "158",
+            "display": "influenza, injectable, quadrivalent",
+            "system": "http://hl7.org/fhir/sid/cvx"
+          },
+          {
+            "code": "49281-0631-15",
+            "display": "FLUZONE QUADRIVALENT",
+            "system": "http://hl7.org/fhir/sid/ndc"
+          }
+        ]
+      }
+    },
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "doseQuantity": {
+        "code": "mg",
+        "system": "http://unitsofmeasure.org",
+        "value": 5
+      },
+      "encounter": {
+        "reference": "Encounter/example-encounter"
+      },
+      "expirationDate": "2011-01-01",
+      "fundingSource": {
+        "coding": [
+          {
+            "code": "private",
+            "system": "http://terminology.hl7.org/CodeSystem/immunization-funding-source"
+          }
+        ]
+      },
+      "isSubpotent": false,
+      "location": {
+        "reference": "Location/example-location2"
+      },
+      "lotNumber": "13245675645342A",
+      "manufacturer": {
+        "reference": "Organization/example-organization2"
+      },
+      "occurrenceDateTime": "2013-12-27",
+      "patient": {
+        "display": "Amy Shaw",
+        "reference": "Patient/example-fromIR-patient"
+      },
+      "primarySource": true,
+      "recorded": "2011-01-01T21:39:30.000Z",
+      "reportOrigin": {
+        "coding": [
+          {
+            "code": "provider",
+            "system": "http://terminology.hl7.org/CodeSystem/immunization-origin"
+          }
+        ],
+        "text": "Other Provider"
+      },
+      "resourceType": "Immunization",
+      "route": {
+        "coding": [
+          {
+            "code": "NASINHLC",
+            "display": "Inhalation, nasal",
+            "system": "http://terminology.hl7.org/CodeSystem/v3-RouteOfAdministration"
+          }
+        ]
+      },
+      "site": {
+        "coding": [
+          {
+            "code": "RA",
+            "display": "Right arm",
+            "system": "http://terminology.hl7.org/CodeSystem/v3-ActSite"
+          }
+        ]
+      },
+      "status": "not-done",
+      "statusReason": {
+        "coding": [
+          {
+            "code": "IMMUNE",
+            "display": "Immunity",
+            "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+          }
+        ]
+      },
+      "vaccineCode": {
+        "coding": [
+          {
+            "code": "158",
+            "display": "influenza, injectable, quadrivalent",
+            "system": "http://hl7.org/fhir/sid/cvx"
+          },
+          {
+            "code": "49281-0631-15",
+            "display": "FLUZONE QUADRIVALENT",
+            "system": "http://hl7.org/fhir/sid/ndc"
+          }
+        ]
+      }
+    }
+  ],
+  "resourceInfo": {
+    "resourceType": "Immunization",
+    "stableId": "1234"
+  }
+}

@@ -1,0 +1,45 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the Location resource.
+def LocationRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for Location resource.
+def LocationMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  status: recon::preferInbound(existing.status, inbound.status)
+
+  operationalStatus: recon::preferInbound(existing.operationalStatus, inbound.operationalStatus)
+
+  name: recon::preferInbound(existing.name, inbound.name)
+
+  alias: recon::union(existing.alias, inbound.alias)
+
+  description: recon::preferInbound(existing.description, inbound.description)
+
+  mode: recon::preferInbound(existing.mode, inbound.mode)
+
+  type: recon::union(existing.type, inbound.type)
+
+  telecom: recon::union(existing.telecom, inbound.telecom)
+
+  address: recon::preferInbound(existing.address, inbound.address)
+
+  physicalType: recon::preferInbound(existing.physicalType, inbound.physicalType)
+
+  position: recon::preferInbound(existing.position, inbound.position)
+
+  managingOrganization: recon::preferInbound(existing.managingOrganization, inbound.managingOrganization)
+
+  partOf: recon::preferInbound(existing.partOf, inbound.partOf)
+
+  hoursOfOperation: recon::union(existing.hoursOfOperation, inbound.hoursOfOperation)
+
+  availabilityExceptions: recon::preferInbound(existing.availabilityExceptions, inbound.availabilityExceptions)
+
+  endpoint: recon::union(existing.endpoint, inbound.endpoint)
+}

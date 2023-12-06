@@ -1,0 +1,48 @@
+package matching_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// TODO(): Add dateTime matching once supported.
+def ObservationConfig() {
+  recon::anyOf(
+    recon::anyIdentifier(),
+    recon::allOf(
+      recon::primitive("status"),
+      recon::pathTo("code", recon::anyCoding()),
+      recon::arrayAnyOf("category", recon::anyCoding()),
+      recon::primitive("effectiveDateTime"),
+      recon::anyOf(
+        recon::anyOf(
+          matchValue(),
+          recon::arrayAnyOf("component", matchValue())
+        ),
+        recon::pathTo("dataAbsentReason", recon::anyCoding())
+      ),
+      recon::referenceFor("subject")
+    )
+  )
+}
+
+def matchValue() {
+  recon::anyOf(
+    recon::primitive("valueString"),
+    recon::pathTo("valueQuantity", recon::primitive("value")),
+    recon::pathTo("valueCodeableConcept", recon::anyCoding()),
+    recon::primitive("valueDateTime"),
+    recon::pathTo("valueRange", recon::anyOf(
+        recon::pathTo("low", recon::primitive("value")),
+        recon::pathTo("high", recon::primitive("value"))
+      )
+    ),
+    recon::pathTo("valueRatio", recon::anyOf(
+        recon::pathTo("numerator", recon::primitive("value")),
+        recon::pathTo("denominator", recon::primitive("value"))
+      )
+    ),
+    recon::pathTo("valuePeriod", recon::anyOf(
+        recon::primitive("start"),
+        recon::primitive("end")
+      )
+    )
+  )
+}

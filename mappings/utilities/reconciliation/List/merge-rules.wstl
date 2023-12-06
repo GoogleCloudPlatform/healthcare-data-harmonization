@@ -1,0 +1,18 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin";
+
+// Resource-level merge rule for the AllergyIntoleranceList resource.
+def ListRule() {
+  "merge"; // alternatively, "latest"
+}
+
+def ListMerge(existing, inbound) {
+  if inbound.mode == "snapshot" and inbound.meta.extension[where $.url == "list-purpose"][0].valueString == "urn:oid:google/hl7v2/allergy-intolerance-list" then {
+    subject: recon::preferInbound(existing.subject, inbound.subject)
+    // When list is in snapshot mode for allergy intolerance purpose, we will
+    // always take the final entry as the latest version, and mark all other
+    // allergy intolerances we see during reconciliation process as inactive.
+    entry: inbound.entry
+  }
+}

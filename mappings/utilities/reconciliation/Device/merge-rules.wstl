@@ -1,0 +1,63 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the Device resource.
+def DeviceRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for Device resource.
+def DeviceMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  definition: recon::preferInbound(existing.definition, inbound.definition)
+
+  udiCarrier: recon::preferInbound(existing.udiCarrier, inbound.udiCarrier)
+
+  status: recon::preferInbound(existing.status, inbound.status)
+
+  statusReason: recon::union(existing.statusReason, inbound.statusReason)
+
+  distinctIdentifier: recon::preferInbound(existing.distinctIdentifier, inbound.distinctIdentifier)
+
+  manufacturer: recon::preferInbound(existing.manufacturer, inbound.manufacturer)
+
+  manufactureDate: recon::preferInbound(existing.manufactureDate, inbound.manufactureDate)
+
+  expirationDate: recon::preferInbound(existing.expirationDate, inbound.expirationDate)
+
+  lotNumber: recon::preferInbound(existing.lotNumber, inbound.lotNumber)
+
+  serialNumber: recon::preferInbound(existing.serialNumber, inbound.serialNumber)
+
+  deviceName: recon::union(existing.deviceName, inbound.deviceName)
+
+  modelNumber: recon::preferInbound(existing.modelNumber, inbound.modelNumber)
+
+  partNumber: recon::preferInbound(existing.partNumber, inbound.partNumber)
+
+  type: recon::forceInbound(existing.type, inbound.type)
+
+  specialization: recon::union(existing.specialization, inbound.specialization)
+
+  version: recon::union(existing.version, inbound.version)
+
+  property: recon::union(existing.property, inbound.property)
+
+  patient: recon::forceInbound(existing.patient, inbound.patient)
+
+  owner: recon::preferInbound(existing.owner, inbound.owner)
+
+  contact: recon::union(existing.contact, inbound.contact)
+
+  location: recon::preferInbound(existing.location, inbound.location)
+
+  url: recon::preferInbound(existing.url, inbound.url)
+
+  note: recon::union(existing.note, inbound.note)
+
+  safety: recon::union(existing.safety, inbound.safety)
+
+  parent: recon::preferInbound(existing.parent, inbound.parent)
+}

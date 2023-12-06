@@ -1,0 +1,26 @@
+package matching_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+def PatientConfig() {
+  recon::anyOf(
+    recon::anyIdentifier(),
+    recon::allOf(
+      recon::arrayAnyOf("name", recon::anyOf(
+          recon::allOf(
+            recon::primitive("family"),
+            recon::arrayAnyOf("given", recon::primitive(""))
+          ),
+          recon::primitive("text")
+        )
+      ),
+      recon::primitive("gender"),
+      recon::primitive("birthDate"),
+      recon::arrayAnyOf("address", recon::allOf(
+          recon::arrayAllOf("line", recon::primitive("")),
+          recon::primitive("city")
+        )
+      )
+    )
+  )
+}

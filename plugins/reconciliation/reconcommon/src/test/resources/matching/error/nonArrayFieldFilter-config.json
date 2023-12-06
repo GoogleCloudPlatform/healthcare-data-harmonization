@@ -1,0 +1,24 @@
+{
+  "field": "identifier",
+  "fieldType": "array",
+  "pathOperator": "OR",
+  "paths":
+  [
+    {
+      "field": "identifier",
+      "fieldType": "container",
+      "pathOperator": "OR",
+      "paths": [
+        {
+          "field": "system",
+          "fieldType": "primitive",
+          "fieldFilter": "ssn"
+        },
+        {
+          "field": "value",
+          "fieldType": "primitive"
+        }
+      ]
+    }
+  ]
+}

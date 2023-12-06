@@ -1,0 +1,82 @@
+{
+  "resources": [
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "clinicalStatus": {
+        "coding": [
+          {
+            "code": "active",
+            "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical"
+          }
+        ]
+      },
+      "code": {
+        "coding": [
+          {
+            "code": "10600",
+            "display": "Timolol",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "note": [
+        {
+          "text": "The criticality is high becasue of the observed anaphylactic reaction when challenged with cashew extract."
+        },
+        {
+          "text": "The patient reports that the onset of urticaria was within 15 minutes of eating cashews."
+        }
+      ],
+      "patient": {
+        "reference": "Patient/example-union-patient"
+      },
+      "resourceType": "AllergyIntolerance"
+    },
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "clinicalStatus": {
+        "coding": [
+          {
+            "code": "active",
+            "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical"
+          }
+        ]
+      },
+      "code": {
+        "coding": [
+          {
+            "code": "10600",
+            "display": "Timolol",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "note": [
+        {
+          "text": "HELLO!"
+        },
+        {
+          "text": "I hope you have a good day!"
+        }
+      ],
+      "patient": {
+        "reference": "Patient/example-union-patient"
+      },
+      "resourceType": "AllergyIntolerance"
+    }
+  ],
+  "resourceInfo": {
+    "resourceType": "AllergyIntolerance",
+    "stableId": "1234"
+  }
+}

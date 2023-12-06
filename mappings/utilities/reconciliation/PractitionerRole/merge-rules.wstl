@@ -1,0 +1,39 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the PractitionerRole resource.
+def PractitionerRoleRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for PractitionerRole resource.
+def PractitionerRoleMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  active: recon::preferInbound(existing.active, inbound.active)
+
+  period: recon::preferInbound(existing.period, inbound.period)
+
+  practitioner: recon::preferInbound(existing.practitioner, inbound.practitioner)
+
+  organization: recon::preferInbound(existing.organization, inbound.organization)
+
+  code: recon::union(existing.code, inbound.code)
+
+  specialty: recon::union(existing.specialty, inbound.specialty)
+
+  location: recon::union(existing.location, inbound.location)
+
+  healthcareService: recon::union(existing.healthcareService, inbound.healthcareService)
+
+  telecom: recon::union(existing.telecom, inbound.telecom)
+
+  availableTime: recon::union(existing.availableTime, inbound.availableTime)
+
+  notAvailable: recon::union(existing.notAvailable, inbound.notAvailable)
+
+  availabilityExceptions: recon::preferInbound(existing.availabilityExceptions, inbound.availabilityExceptions)
+
+  endpoint: recon::union(existing.endpoint, inbound.endpoint)
+}

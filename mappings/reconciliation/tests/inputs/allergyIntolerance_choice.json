@@ -1,0 +1,175 @@
+{
+  "resources": [
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "clinicalStatus": {
+        "coding": [
+          {
+            "code": "active",
+            "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical"
+          }
+        ]
+      },
+      "code": {
+        "coding": [
+          {
+            "code": "10493",
+            "display": "Thiopental",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "onsetDateTime": "2004",
+      "patient": {
+        "reference": "Patient/example-choice-patient"
+      },
+      "resourceType": "AllergyIntolerance"
+    },
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "clinicalStatus": {
+        "coding": [
+          {
+            "code": "active",
+            "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical"
+          }
+        ]
+      },
+      "code": {
+        "coding": [
+          {
+            "code": "10493",
+            "display": "Thiopental",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "onsetAge": {
+        "code": "a",
+        "system": "http://unitsofmeasure.org",
+        "unit": "years",
+        "value": 52
+      },
+      "patient": {
+        "reference": "Patient/example-choice-patient"
+      },
+      "resourceType": "AllergyIntolerance"
+    },
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "clinicalStatus": {
+        "coding": [
+          {
+            "code": "active",
+            "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical"
+          }
+        ]
+      },
+      "code": {
+        "coding": [
+          {
+            "code": "10493",
+            "display": "Thiopental",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "onsetPeriod": {
+        "end": "2020-05-23",
+        "start": "2005-05-23"
+      },
+      "patient": {
+        "reference": "Patient/example-choice-patient"
+      },
+      "resourceType": "AllergyIntolerance"
+    },
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "clinicalStatus": {
+        "coding": [
+          {
+            "code": "active",
+            "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical"
+          }
+        ]
+      },
+      "code": {
+        "coding": [
+          {
+            "code": "10493",
+            "display": "Thiopental",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "onsetRange": {
+        "high": {
+          "unit": "minutes",
+          "value": 2.0
+        },
+        "low": {
+          "unit": "minutes",
+          "value": 1.0
+        }
+      },
+      "patient": {
+        "reference": "Patient/example-choice-patient"
+      },
+      "resourceType": "AllergyIntolerance"
+    },
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "clinicalStatus": {
+        "coding": [
+          {
+            "code": "active",
+            "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical"
+          }
+        ]
+      },
+      "code": {
+        "coding": [
+          {
+            "code": "10493",
+            "display": "Thiopental",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "onsetString": "You should only see me!",
+      "patient": {
+        "reference": "Patient/example-choice-patient"
+      },
+      "resourceType": "AllergyIntolerance"
+    }
+  ],
+  "resourceInfo": {
+    "resourceType": "AllergyIntolerance",
+    "stableId": "1234"
+  }
+}

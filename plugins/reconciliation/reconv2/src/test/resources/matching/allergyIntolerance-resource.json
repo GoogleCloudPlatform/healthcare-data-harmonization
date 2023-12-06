@@ -1,0 +1,32 @@
+{
+  "resourceType": "AllergyIntolerance",
+  "id": "1",
+  "identifier": [
+    {
+      "system": "not-a-unique-id",
+      "value": "123"
+    },
+    {
+      "system": "unique-id",
+      "value": "456"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "763875007",
+        "display": "Product containing sulfonamide (product)"
+      },
+      {
+        "system": "http://snomed.info/sct",
+        "code": "227493005"
+      }
+    ],
+    "text": "sulfonamide antibacterial"
+  },
+  "patient": {
+    "reference": "Patient/example",
+    "display": "Amy V. Shaw"
+  }
+}

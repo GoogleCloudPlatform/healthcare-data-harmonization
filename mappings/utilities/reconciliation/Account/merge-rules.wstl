@@ -1,0 +1,34 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the Account resource.
+def AccountRule() {
+  "merge"; // alternatively, "latest"
+}
+
+//TODO(): Add integration test-cases for FHIR reconciliation merge rules
+// Per-field merge rules for Account resource.
+def AccountMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  status: recon::forceInbound(existing.status, inbound.status)
+
+  type: recon::preferInbound(existing.type, inbound.type)
+
+  name: recon::preferInbound(existing.name, inbound.name)
+
+  subject: recon::union(existing.subject, inbound.subject)
+
+  servicePeriod: recon::preferInbound(existing.servicePeriod, inbound.servicePeriod)
+
+  coverage: recon::union(existing.coverage, inbound.coverage)
+
+  owner: recon::preferInbound(existing.owner, inbound.owner)
+
+  description: recon::preferInbound(existing.description, inbound.description)
+
+  guarantor: recon::union(existing.guarantor, inbound.guarantor)
+
+  partOf: recon::preferInbound(existing.partOf, inbound.partOf)
+}

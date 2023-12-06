@@ -1,0 +1,119 @@
+{
+  "resources": [
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "definition": {
+        "reference": "DeviceDefinition/example-devicedefinition1",
+        "type": "DeviceDefinition"
+      },
+      "distinctIdentifier": "I am a distinct identifier",
+      "expirationDate": "2021-01-01",
+      "location": {
+        "reference": "Location/example-location1"
+      },
+      "lotNumber": "35",
+      "manufactureDate": "2019-03-04",
+      "manufacturer": "Fun Device LTD",
+      "modelNumber": "35",
+      "owner": {
+        "reference": "Organization/example-organization1"
+      },
+      "parent": {
+        "reference": "Device/example-device1"
+      },
+      "partNumber": "35",
+      "patient": {
+        "display": "Amy Shaw",
+        "reference": "Patient/example-patient-fromIR",
+        "type": "Patient"
+      },
+      "resourceType": "Device",
+      "serialNumber": "35",
+      "status": "inactive",
+      "type": {
+        "coding": [
+          {
+            "code": "40519001",
+            "display": "Binder, device",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "udiCarrier": [
+        {
+          "carrierHRF": "(01)09504000059118(17)141120(10)7654321D(21)10987654d321",
+          "deviceIdentifier": "19088",
+          "entryType": "barcode",
+          "id": "deviceId07",
+          "issuer": "http://hl7.org/fhir/NamingSystem/gs1-di",
+          "jurisdiction": "http://hl7.org/fhir/NamingSystem/fda-udi"
+        }
+      ],
+      "url": "https://url-0.com"
+    },
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "definition": {
+        "reference": "DeviceDefinition/example-devicedefinition2",
+        "type": "DeviceDefinition"
+      },
+      "distinctIdentifier": "I am an even more distinct identifier",
+      "expirationDate": "2021-06-01",
+      "location": {
+        "reference": "Location/example-location2"
+      },
+      "lotNumber": "73",
+      "manufactureDate": "2021-01-03",
+      "manufacturer": "Funner Device LTD",
+      "modelNumber": "73",
+      "owner": {
+        "reference": "Organization/example-organization2"
+      },
+      "parent": {
+        "reference": "Device/example-device2"
+      },
+      "partNumber": "73",
+      "patient": {
+        "display": "Amy Shaw",
+        "reference": "Patient/example-patient-fromIR"
+      },
+      "resourceType": "Device",
+      "serialNumber": "73",
+      "status": "active",
+      "type": {
+        "coding": [
+          {
+            "code": "8170008",
+            "display": "Adhesive",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "udiCarrier": [
+        {
+          "carrierHRF": "(01)09504300059118(17)1412334(10)7654321D(21)10987654d321",
+          "deviceIdentifier": "19088",
+          "entryType": "manual",
+          "id": "deviceId2007",
+          "issuer": "http://hl7.org/fhir/NamingSystem/hibcc-dI",
+          "jurisdiction": "http://hl7.org/fhir/NamingSystem/fda-udi"
+        }
+      ],
+      "url": "https://url-1.com"
+    }
+  ],
+  "resourceInfo": {
+    "resourceType": "Device",
+    "stableId": "1234"
+  }
+}

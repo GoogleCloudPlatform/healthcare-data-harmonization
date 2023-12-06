@@ -1,0 +1,18 @@
+{
+  "resourceType": "Patient",
+  "id": "1",
+  "age": [
+    {
+      "unit": "years",
+      "value": 1.1
+    },
+    {
+      "unit": "months",
+      "value": 13.4
+    },
+    {
+      "unit": "seconds",
+      "value": 35238596.4
+    }
+  ]
+}

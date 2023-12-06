@@ -1,0 +1,15 @@
+package matching_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+def ServiceRequestConfig() {
+  recon::anyOf(
+    recon::anyIdentifier(),
+    recon::allOf(
+      recon::primitive("status"),
+      recon::primitive("intent"),
+      recon::pathTo("code", recon::anyCoding()),
+      recon::referenceFor("subject")
+    )
+  )
+}

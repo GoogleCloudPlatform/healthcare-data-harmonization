@@ -1,0 +1,16 @@
+package matching_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// TODO(): Add dateTime matching once supported.
+def DiagnosticReportConfig() {
+  recon::anyOf(
+    recon::anyIdentifier(),
+    recon::allOf(
+      recon::primitive("status"),
+      recon::pathTo("code", recon::anyCoding()),
+      recon::arrayAnyOf("category", recon::anyCoding()),
+      recon::referenceFor("subject")
+    )
+  )
+}

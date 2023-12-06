@@ -1,0 +1,13 @@
+package matching_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+def PractitionerRoleConfig() {
+  recon::anyOf(
+    recon::anyIdentifier(),
+    recon::allOf(
+      recon::referenceFor("practitioner"),
+      recon::arrayAnyOf("code", recon::anyCoding())
+    )
+  )
+}

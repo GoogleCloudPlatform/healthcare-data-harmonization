@@ -1,0 +1,15 @@
+package matching_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+def AccountConfig() {
+  recon::anyOf(
+    recon::anyIdentifier(),
+    recon::allOf(
+      recon::primitive("status"),
+      recon::arrayAllOf("subject", recon::referenceFor("")),
+      recon::arrayAllOf("coverage", recon::referenceFor("coverage")),
+      recon::arrayAllOf("guarantor", recon::referenceFor("party"))
+    )
+  )
+}

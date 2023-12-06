@@ -1,0 +1,55 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the Appointment resource.
+def AppointmentRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for Appointment resource.
+def AppointmentMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  status: recon::forceInbound(existing.status, inbound.status)
+
+  cancelationReason: recon::preferInbound(existing.cancelationReason, inbound.cancelationReason)
+
+  serviceCategory: recon::union(existing.serviceCategory, inbound.serviceCategory)
+
+  serviceType: recon::union(existing.serviceType, inbound.serviceType)
+
+  specialty: recon::union(existing.specialty, inbound.specialty)
+
+  appointmentType: recon::preferInbound(existing.appointmentType, inbound.appointmentType)
+
+  reasonCode: recon::union(existing.reasonCode, inbound.reasonCode)
+
+  reasonReference: recon::union(existing.reasonReference, inbound.reasonReference)
+
+  priority: recon::preferInbound(existing.priority, inbound.priority)
+
+  description: recon::preferInbound(existing.description, inbound.description)
+
+  supportingInformation: recon::union(existing.supportingInformation, inbound.supportingInformation)
+
+  start: recon::preferInbound(existing.minutesDuration, inbound.minutesDuration)
+
+  end: recon::preferInbound(existing.minutesDuration, inbound.minutesDuration)
+
+  minutesDuration: recon::preferInbound(existing.minutesDuration, inbound.minutesDuration)
+
+  slot: recon::union(existing.reasonReference, inbound.reasonReference)
+
+  created: recon::preferInbound(existing.created, inbound.created)
+
+  comment: recon::preferInbound(existing.comment, inbound.comment)
+
+  patientInstruction: recon::preferInbound(existing.patientInstruction, inbound.patientInstruction)
+
+  basedOn: recon::union(existing.basedOn, inbound.basedOn)
+
+  participant: recon::union(existing.participant, inbound.participant)
+
+  requestedPeriod: recon::union(existing.requestedPeriod, inbound.requestedPeriod)
+}

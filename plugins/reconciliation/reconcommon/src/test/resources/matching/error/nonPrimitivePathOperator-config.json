@@ -1,0 +1,26 @@
+{
+  "field": "identifier",
+  "fieldType": "array",
+  "pathOperator": "OR",
+  "paths":
+  [
+    {
+      "field": "identifier",
+      "fieldType": "container",
+      "pathOperator": [
+        "AND",
+        "OR"
+      ],
+      "paths": [
+        {
+          "field": "system",
+          "fieldType": "primitive"
+        },
+        {
+          "field": "value",
+          "fieldType": "primitive"
+        }
+      ]
+    }
+  ]
+}

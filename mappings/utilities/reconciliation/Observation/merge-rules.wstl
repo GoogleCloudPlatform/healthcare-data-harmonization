@@ -1,0 +1,106 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the Observation resource type.
+def ObservationRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for Observation resource types.
+def ObservationMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  basedOn: recon::union(existing.basedOn, inbound.basedOn)
+
+  partOf: recon::union(existing.partOf, inbound.partOf)
+
+  status: recon::forceInbound(existing.status, inbound.status)
+
+  category: recon::union(existing.category, inbound.category)
+
+  if inbound.status == "cancelled" and inbound.code.coding[where $.system == "urn:oid:google/synthetic-resource-purpose"] then {
+    code: existing.code
+
+    subject: existing.subject
+  } else {
+    code: recon::forceInbound(existing.code, inbound.code)
+
+    subject: recon::forceInbound(existing.subject, inbound.subject)
+  }
+
+  focus: recon::union(existing.focus, inbound.focus)
+
+  encounter: recon::preferInbound(existing.encounter, inbound.encounter)
+
+  // effective[x] field is populated by the choiceField builtin that returns a
+  // container, rather than simply the field value, since the field name isn't
+  // known at compile time. The preferInbound merge rule is used to merge
+  // fields:
+  // {"effectiveDateTime", "effectivePeriod", "effectiveTiming",
+  //  "effectiveInstant"},
+  // where at most one of these fields may appear in each of the existing and
+  // inbound resources.
+  recon::choiceField(existing, inbound, "preferInbound",
+    "effectiveDateTime", "effectivePeriod", "effectiveTiming",
+    "effectiveInstant"
+  )
+
+  issued: recon::preferInbound(existing.issued, inbound.issued)
+
+  performer: recon::union(existing.performer, inbound.performer)
+
+  // To ensure fhirpath-constraint-violation-Observation: "value.empty() or component.code.where(coding.intersect(%resource.code.coding).exists()).empty()"
+  var valueMergeRule: if inbound.component[where $.code.coding[0].code == inbound.code.coding[0].code] or inbound.dataAbsentReason then "forceInbound" else "preferInbound"
+  // value[x] field is populated by the choiceField builtin that returns a
+  // container, rather than simply the field value, since the field name isn't
+  // known at compile time. The preferInbound merge rule is used to merge
+  // fields:
+  // {"dataAbsentReason", "valueQuantity", "valueCodeableConcept",
+  //  "valueString", "valueBoolean", "valueInteger", "valueRange", "valueRatio",
+  //  "valueSampledData", "valueTime", "valueDateTime", "valuePeriod"},
+  // where at most one of these fields may appear in each of the existing and
+  // inbound resources.
+  recon::choiceField(existing, inbound, valueMergeRule,
+    "valueQuantity", "valueCodeableConcept", "valueString",
+    "valueBoolean", "valueInteger", "valueRange", "valueRatio",
+    "valueSampledData", "valueTime", "valueDateTime", "valuePeriod"
+  )
+
+  interpretation: recon::union(existing.interpretation, inbound.interpretation)
+
+  note: recon::union(existing.note, inbound.note)
+
+  bodySite: recon::preferInbound(existing.bodySite, inbound.bodySite)
+
+  method: recon::preferInbound(existing.method, inbound.method)
+
+  specimen: recon::preferInbound(existing.specimen, inbound.specimen)
+
+  device: recon::preferInbound(existing.device, inbound.device)
+
+  referenceRange: recon::union(existing.referenceRange, inbound.referenceRange)
+
+  hasMember: recon::union(existing.hasMember, inbound.hasMember)
+
+  derivedFrom: recon::union(existing.derivedFrom, inbound.derivedFrom)
+
+  // To ensure fhirpath-constraint-violation-Observation: "value.empty() or component.code.where(coding.intersect(%resource.code.coding).exists()).empty()"
+  // and fhirpath-constraint-violation-Observation: "dataAbsentReason.empty() or value.empty()"
+  if exist(inbound, "value") or  exist(existing, "value") and valueMergeRule == "preferInbound" then {
+    component: recon::union(existing.component, inbound.component)[where $.code.coding[0].code != inbound.code.coding[0].code]
+    dataAbsentReason: recon::forceInbound(existing.dataAbsentReason, inbound.dataAbsentReason)
+  } else {
+    component: recon::union(existing.component, inbound.component)
+    dataAbsentReason: recon::preferInbound(existing.dataAbsentReason, inbound.dataAbsentReason)
+  }
+}
+
+// Checks if the given choice field exist in the container
+def exist(container, field) {
+  if fields(container)[where matchesRegex($, "{field}.*")] then {
+    true
+  } else {
+    false
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "fieldType": "array",
+  "pathOperator": "OR",
+  "paths":
+  ["invalid", "paths"]
+}

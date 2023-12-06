@@ -1,0 +1,168 @@
+{
+  "resources": [
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "bodySite": [
+        {
+          "coding": [
+            {
+              "code": "51185008",
+              "display": "Thorax",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ],
+      "category": [
+        {
+          "coding": [
+            {
+              "code": "encounter-diagnosis",
+              "display": "Encounter Diagnosis",
+              "system": "http://terminology.hl7.org/CodeSystem/condition-category"
+            },
+            {
+              "code": "439401001",
+              "display": "Diagnosis",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "254637007",
+            "display": "NSCLC - Non-small cell lung cancer",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "code": [
+            {
+              "coding": [
+                {
+                  "code": "258710007",
+                  "display": "degrees C",
+                  "system": "http://snomed.info/sct"
+                }
+              ]
+            }
+          ],
+          "detail": [
+            {
+              "display": "Temperature",
+              "reference": "Observation/f202"
+            }
+          ]
+        }
+      ],
+      "note": [
+        {
+          "text": "I am a note."
+        }
+      ],
+      "resourceType": "Condition",
+      "stage": [
+        {
+          "assessment": [
+            {
+              "display": "Genetic analysis panel"
+            }
+          ],
+          "summary": {
+            "coding": [
+              {
+                "code": "14803004",
+                "display": "Temporary",
+                "system": "http://snomed.info/sct"
+              }
+            ]
+          }
+        }
+      ],
+      "subject": {
+        "reference": "Patient/example-patient-union"
+      }
+    },
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "bodySite": [
+        {
+          "coding": [
+            {
+              "code": "49521004",
+              "display": "Left external ear structure",
+              "system": "http://snomed.info/sct"
+            }
+          ],
+          "text": "Left Ear"
+        },
+        {
+          "coding": [
+            {
+              "code": "38266002",
+              "display": "Entire body as a whole",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ],
+      "category": [
+        {
+          "coding": [
+            {
+              "code": "439401001",
+              "display": "diagnosis",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "254637007",
+            "display": "NSCLC - Non-small cell lung cancer",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "detail": [
+            {
+              "display": "Erasmus' diagnostic report of Roel's tumor",
+              "reference": "DiagnosticReport/f201"
+            }
+          ]
+        }
+      ],
+      "note": [
+        {
+          "text": "Am I a note?"
+        }
+      ],
+      "resourceType": "Condition",
+      "subject": {
+        "reference": "Patient/example-patient-union"
+      }
+    }
+  ],
+  "resourceInfo": {
+    "resourceType": "Condition",
+    "stableId": "1234"
+  }
+}

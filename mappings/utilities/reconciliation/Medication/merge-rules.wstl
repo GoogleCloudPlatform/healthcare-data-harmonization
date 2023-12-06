@@ -1,0 +1,27 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the Medication resource.
+def MedicationRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for Medication resource.
+def MedicationMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  code: recon::forceInbound(existing.code, inbound.code)
+
+  status: recon::forceInbound(existing.status, inbound.status)
+
+  manufacturer: recon::preferInbound(existing.manufacturer, inbound.manufacturer)
+
+  form: recon::preferInbound(existing.form, inbound.form)
+
+  amount: recon::preferInbound(existing.amount, inbound.amount)
+
+  ingredient: recon::union(existing.ingredient, inbound.ingredient)
+
+  batch: recon::preferInbound(existing.batch, inbound.batch)
+}

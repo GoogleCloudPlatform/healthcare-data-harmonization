@@ -1,0 +1,10 @@
+{
+  "field": "containerField",
+  "fieldType": "container",
+  "paths": [
+    {
+      "field": "key",
+      "fieldType": "primitive"
+    }
+  ]
+}

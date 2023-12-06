@@ -1,0 +1,79 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the MedicationRequest resource.
+def MedicationRequestRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for MedicationRequest resource.
+def MedicationRequestMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  status: recon::forceInbound(existing.status, inbound.status)
+
+  statusReason: recon::preferInbound(existing.statusReason, inbound.statusReason)
+
+  intent: recon::forceInbound(existing.intent, inbound.intent)
+
+  category: recon::union(existing.category, inbound.category)
+
+  priority: recon::preferInbound(existing.priority, inbound.priority)
+
+  doNotPerform: recon::preferInbound(existing.doNotPerform, inbound.doNotPerform)
+
+  recon::choiceField(existing, inbound, "preferInbound",
+    "reportedBoolean", "reportedReference"
+  )
+
+  recon::choiceField(existing, inbound, "forceInbound",
+    "medicationCodeableConcept", "medicationReference"
+  )
+
+  subject: recon::forceInbound(existing.subject, inbound.subject)
+
+  encounter: recon::preferInbound(existing.encounter, inbound.encounter)
+
+  supportingInformation: recon::union(existing.supportingInformation, inbound.supportingInformation)
+
+  authoredOn: recon::forceInbound(existing.authoredOn, inbound.authoredOn)
+
+  requester: recon::forceInbound(existing.requester, inbound.requester)
+
+  performer: recon::preferInbound(existing.performer, inbound.performer)
+
+  performerType: recon::preferInbound(existing.performerType, inbound.performerType)
+
+  recorder: recon::preferInbound(existing.recorder, inbound.recorder)
+
+  reasonCode: recon::union(existing.reasonCode, inbound.reasonCode)
+
+  reasonReference: recon::union(existing.reasonReference, inbound.reasonReference)
+
+  instantiatesCanonical: recon::union(existing.instantiatesCanonical, inbound.instantiatesCanonical)
+
+  instantiatesUri: recon::union(existing.instantiatesUri, inbound.instantiatesUri)
+
+  basedOn: recon::union(existing.basedOn, inbound.basedOn)
+
+  groupIdentifier: recon::preferInbound(existing.groupIdentifier, inbound.groupIdentifier)
+
+  courseOfTherapyType: recon::preferInbound(existing.courseOfTherapyType, inbound.courseOfTherapyType)
+
+  insurance: recon::union(existing.insurance, inbound.insurance)
+
+  note: recon::union(existing.note, inbound.note)
+
+  dosageInstruction: recon::union(existing.dosageInstruction, inbound.dosageInstruction)
+
+  dispenseRequest: recon::preferInbound(existing.dispenseRequest, inbound.dispenseRequest)
+
+  substitution: recon::preferInbound(existing.substitution, inbound.substitution)
+
+  priorPrescription: recon::preferInbound(existing.priorPrescription, inbound.priorPrescription)
+
+  detectedIssue: recon::union(existing.detectedIssue, inbound.detectedIssue)
+
+  eventHistory: recon::union(existing.eventHistory, inbound.eventHistory)
+}

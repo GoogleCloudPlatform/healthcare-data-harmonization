@@ -1,0 +1,69 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the Immunization resource.
+def ImmunizationRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for Immunization resource.
+def ImmunizationMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  status: recon::forceInbound(existing.status, inbound.status)
+
+  statusReason: recon::preferInbound(existing.statusReason, inbound.statusReason)
+
+  vaccineCode: recon::forceInbound(existing.vaccineCode, inbound.vaccineCode)
+
+  patient: recon::forceInbound(existing.patient, inbound.patient)
+
+  encounter: recon::preferInbound(existing.encounter, inbound.encounter)
+
+  recon::choiceField(existing, inbound, "forceInbound",
+    "occurrenceDateTime", "occurrenceString"
+  )
+
+  recorded: recon::preferInbound(existing.recorded, inbound.recorded)
+
+  primarySource: recon::forceInbound(existing.primarySource, inbound.primarySource)
+
+  reportOrigin: recon::preferInbound(existing.reportOrigin, inbound.reportOrigin)
+
+  location: recon::preferInbound(existing.location, inbound.location)
+
+  manufacturer: recon::preferInbound(existing.manufacturer, inbound.manufacturer)
+
+  lotNumber: recon::preferInbound(existing.lotNumber, inbound.lotNumber)
+
+  expirationDate: recon::preferInbound(existing.expirationDate, inbound.expirationDate)
+
+  site: recon::preferInbound(existing.site, inbound.site)
+
+  route: recon::preferInbound(existing.route, inbound.route)
+
+  doseQuantity: recon::preferInbound(existing.doseQuantity, inbound.doseQuantity)
+
+  performer: recon::union(existing.performer, inbound.performer)
+
+  note: recon::union(existing.note, inbound.note)
+
+  reasonCode: recon::union(existing.reasonCode, inbound.reasonCode)
+
+  reasonReference: recon::union(existing.reasonReference, inbound.reasonReference)
+
+  isSubpotent: recon::preferInbound(existing.isSubpotent, inbound.isSubpotent)
+
+  subpotentReason: recon::union(existing.subpotentReason, inbound.subpotentReason)
+
+  education: recon::union(existing.education, inbound.education)
+
+  programEligibility: recon::union(existing.programEligibility, inbound.programEligibility)
+
+  fundingSource: recon::preferInbound(existing.fundingSource, inbound.fundingSource)
+
+  reaction: recon::union(existing.reaction, inbound.reaction)
+
+  protocolApplied: recon::union(existing.protocolApplied, inbound.protocolApplied)
+}

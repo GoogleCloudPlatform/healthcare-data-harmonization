@@ -1,0 +1,18 @@
+package matching_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+def MedicationRequestConfig() {
+  recon::anyOf(
+    recon::anyIdentifier(),
+    recon::allOf(
+      recon::primitive("status"),
+      recon::primitive("intent"),
+      recon::anyOf(
+        recon::referenceFor("medicationReference"),
+        recon::pathTo("medicationCodeableConcept", recon::anyCoding())
+      ),
+      recon::referenceFor("subject")
+    )
+  )
+}

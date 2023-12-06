@@ -1,0 +1,15 @@
+package matching_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+def GoalConfig() {
+  recon::anyOf(
+    recon::anyIdentifier(),
+    recon::allOf(
+      recon::primitive("lifecycleStatus"),
+      recon::pathTo("description", recon::anyCoding()),
+      recon::arrayAllOf("addresses", recon::referenceFor("")),
+      recon::referenceFor("subject")
+    )
+  )
+}

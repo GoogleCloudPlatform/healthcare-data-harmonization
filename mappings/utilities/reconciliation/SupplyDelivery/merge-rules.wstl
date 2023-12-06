@@ -1,0 +1,35 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the ServiceRequest resource type.
+def SupplyDeliveryRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for SupplyDelivery resource types.
+def SupplyDeliveryMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  basedOn: recon::union(existing.basedOn, inbound.basedOn)
+
+  partOf: recon::union(existing.partOf, inbound.partOf)
+
+  status: recon::preferInbound(existing.status, inbound.status)
+
+  patient: recon::forceInbound(existing.patient, inbound.patient)
+
+  type: recon::preferInbound(existing.type, inbound.type)
+
+  suppliedItem: recon::preferInbound(existing.suppliedItem, inbound.parent)
+
+  recon::choiceField(existing, inbound, "preferInbound",
+    "occurrenceDateTime", "occurrencePeriod", "occurrenceTiming"
+  )
+
+  supplier: recon::preferInbound(existing.supplier, inbound.supplier)
+
+  destination: recon::preferInbound(existing.destination, inbound.destination)
+
+  receiver: recon::union(existing.receiver, inbound.receiver)
+}

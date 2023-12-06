@@ -1,0 +1,49 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the MedicationStatement resource.
+def MedicationStatementRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for MedicationStatement resource.
+def MedicationStatementMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  basedOn: recon::union(existing.basedOn, inbound.basedOn)
+
+  partOf: recon::union(existing.partOf, inbound.partOf)
+
+  status: recon::forceInbound(existing.status, inbound.status)
+
+  statusReason: recon::union(existing.statusReason, inbound.statusReason)
+
+  category: recon::preferInbound(existing.category, inbound.category)
+
+  recon::choiceField(existing, inbound, "forceInbound",
+    "medicationReference", "medicationCodeableConcept"
+  )
+
+  subject: recon::forceInbound(existing.subject, inbound.subject)
+
+  context: recon::preferInbound(existing.context, inbound.context)
+
+  recon::choiceField(existing, inbound, "preferInbound",
+    "effectiveDateTime", "effectivePeriod"
+  )
+
+  dateAsserted: recon::preferInbound(existing.dateAsserted, inbound.dateAsserted)
+
+  informationSource: recon::preferInbound(existing.informationSource, inbound.informationSource)
+
+  derivedFrom: recon::union(existing.derivedFrom, inbound.derivedFrom)
+
+  reasonCode: recon::union(existing.reasonCode, inbound.reasonCode)
+
+  reasonReference: recon::union(existing.reasonReference, inbound.reasonReference)
+
+  note: recon::union(existing.note, inbound.note)
+
+  dosage: recon::union(existing.dosage, inbound.dosage)
+}

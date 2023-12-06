@@ -1,0 +1,30 @@
+{
+  "resources": [
+    {
+      "identifier": [
+        {
+          "system": "urn:oid:google/reconciliation-stable-id",
+          "value": "1234"
+        }
+      ],
+      "active": false,
+      "name": "Bubble Tea Corp",
+      "resourceType": "Organization"
+    },
+    {
+      "identifier": [
+        {
+          "system": "urn:oid:google/reconciliation-stable-id",
+          "value": "1234"
+        }
+      ],
+      "active": true,
+      "name": "Bubble Tea Corp",
+      "resourceType": "Organization"
+    }
+  ],
+  "resourceInfo": {
+    "resourceType": "Organization",
+    "stableId": "1234"
+  }
+}

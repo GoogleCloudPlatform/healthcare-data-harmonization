@@ -1,0 +1,122 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the Encounter resource.
+def EncounterRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for Encounter resource.
+def EncounterMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  status: recon::forceInbound(existing.status, inbound.status)
+
+  statusHistory: recon::union(existing.statusHistory, inbound.statusHistory)
+
+  class: recon::forceInbound(existing.class, inbound.class)
+
+  classHistory: recon::union(existing.classHistory, inbound.classHistory)
+
+  type: recon::union(existing.type, inbound.type)
+
+  serviceType: recon::preferInbound(existing.serviceType, inbound.serviceType)
+
+  priority: recon::preferInbound(existing.priority, inbound.priority)
+
+  subject: recon::forceInbound(existing.subject, inbound.subject)
+
+  episodeOfCare: recon::union(existing.episodeOfCare, inbound.episodeOfCare)
+
+  basedOn: recon::union(existing.basedOn, inbound.basedOn)
+
+  participant: recon::union(existing.participant, inbound.participant)
+
+  appointment: recon::union(existing.appointment, inbound.appointment)
+
+  period: recon::preferInbound(existing.period, inbound.period)
+
+  length: recon::preferInbound(existing.length, inbound.length)
+
+  reasonCode: recon::union(existing.reasonCode, inbound.reasonCode)
+
+  reasonReference: recon::union(existing.reasonReference, inbound.reasonReference)
+
+  diagnosis: recon::union(existing.diagnosis, inbound.diagnosis)
+
+  account: recon::union(existing.account, inbound.account)
+
+  hospitalization: recon::preferInbound(existing.hospitalization, inbound.hospitalization)
+
+  var locationArray[]: existing.location[]
+  var locationArray[]: inbound.location[]
+  location: unique(merge_LocationArray(locationArray[], locationArray)[*][*])
+
+  serviceProvider: recon::preferInbound(existing.serviceProvider, inbound.serviceProvider)
+
+  partOf: recon::preferInbound(existing.partOf, inbound.partOf)
+}
+
+// Merges elements of locationArray based on same location field
+def merge_LocationArray(location, locationArray) {
+  var matchingLocations: locationArray[where $.location == location.location]
+  if listLen(matchingLocations) > 1 then {
+    // Merges locations with same reference until status is "completed".
+    // Once "completed", rest of locations merges into another location with same reference.
+    // Location that is once "completed" would not be updated again.
+    var output: ReduceLocations(matchingLocations)
+    var reducedLocations[]: output.completed[]
+    var reducedLocations[]: output.rest
+    reducedLocations
+  } else {
+    [location]
+  }
+}
+
+// Merges two Encounter.location array elements.
+def merge_Location(existingLocation, inboundLocation) {
+  location: inboundLocation.location
+  status: recon::preferInbound(existingLocation.status, inboundLocation.status)
+  physicalType: recon::preferInbound(existingLocation.physicalType, inboundLocation.physicalType)
+  period.start: EarliestNonNull(existingLocation.period.start, inboundLocation.period.start)
+  period.end: LatestNonNull(existingLocation.period.end, inboundLocation.period.end)
+}
+
+// Reduces locations by merging until a location.status == "completed"
+def ReduceLocations(required locations) reduce(locations, {}, {
+    completed: $acc.completed
+    var next: merge_Location($acc.rest, $cur)
+    if $cur.status == "completed" then {
+      completed[]: next
+    } else {
+      rest: next
+    }
+  }
+)
+
+// Compares two dateTimes and returns the earlier one
+def EarliestNonNull(existingDateTime, inboundDateTime) {
+  if !existingDateTime then {
+    inboundDateTime
+  } else if !inboundDateTime then {
+    existingDateTime
+  } else if getEpochMillis(existingDateTime) < getEpochMillis(inboundDateTime) then {
+    existingDateTime
+  } else {
+    inboundDateTime
+  }
+}
+
+// Compares two dateTimes and returns the later one
+def LatestNonNull(existingDateTime, inboundDateTime) {
+  if !existingDateTime then {
+    inboundDateTime
+  } else if !inboundDateTime then {
+    existingDateTime
+  } else if getEpochMillis(existingDateTime) > getEpochMillis(inboundDateTime) then {
+    existingDateTime
+  } else {
+    inboundDateTime
+  }
+}

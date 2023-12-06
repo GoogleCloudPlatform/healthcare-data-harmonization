@@ -1,0 +1,36 @@
+{
+  "resourceType": "MedicationRequest",
+  "identifier": [
+    {
+      "system": "idtype1",
+      "value": "123"
+    },
+    {
+      "system": "idtype2",
+      "value": "456"
+    }
+  ],
+  "subject": {
+    "reference": "Patient/example",
+    "display": "Amy V. Shaw"
+  },
+  "medication": {
+    "medicationCodeableConcept": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "763875007"
+        },
+        {
+          "system": "http://snomed.info/sct",
+          "code": "227493005"
+        }
+      ],
+      "text": "Some medication"
+    },
+    "medicationReference": {
+      "reference": "Medication/example",
+      "display": "Another medication"
+    }
+  }
+}

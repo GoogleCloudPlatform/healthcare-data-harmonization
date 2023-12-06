@@ -1,0 +1,21 @@
+// A whistle entry point for testing merge rules.
+// This is intended to be invoked by the Jupyter IDE with an input file of the following form:
+//
+// {
+//    "resources": [
+//      list of sorted resources of the same type and stable id go here
+//    ],
+//    "resourceInfo": {
+//      "resourceType: "Patent", // Could be any supported type
+//      "stableId":    "1234"
+//    }
+// }
+package reconciliation
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+import "utilities/reconciliation/merge.wstl"
+
+// Run the configured merge rules on the input. The result is output
+// to the Jupyter console.
+recon::mergeResources($root.resources, $root.resourceInfo).resource

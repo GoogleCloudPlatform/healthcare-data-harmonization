@@ -1,0 +1,10 @@
+package matching_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+def DeviceConfig() {
+  recon::anyOf(
+    recon::anyIdentifier(),
+    recon::arrayAnyOf("udiCarrier", recon::primitive("deviceIdentifier"))
+  )
+}

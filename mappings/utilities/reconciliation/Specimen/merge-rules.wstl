@@ -1,0 +1,37 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the ServiceRequest resource type.
+def SpecimenRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for Specimen resource types.
+def SpecimenMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  accessionIdentifier: recon::preferInbound(existing.accessionIdentifier, inbound.accessionIdentifier)
+
+  status: recon::forceInbound(existing.status, inbound.status)
+
+  type: recon::preferInbound(existing.type, inbound.type)
+
+  subject: recon::forceInbound(existing.subject, inbound.subject)
+
+  receivedTime: recon::preferInbound(existing.receivedTime, inbound.receivedTime)
+
+  parent: recon::union(existing.parent, inbound.parent)
+
+  request: recon::union(existing.request, inbound.request)
+
+  collection: recon::preferInbound(existing.collection, inbound.collection)
+
+  processing: recon::union(existing.processing, inbound.processing)
+
+  container: recon::union(existing.container, inbound.container)
+
+  condition: recon::union(existing.condition, inbound.condition)
+
+  note: recon::union(existing.note, inbound.note)
+}

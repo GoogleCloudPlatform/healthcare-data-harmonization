@@ -1,0 +1,15 @@
+{
+  "field": "arrayField",
+  "fieldType": "array",
+  "paths": [
+    {
+      "fieldType": "container",
+      "paths": [
+        {
+          "field" : "key",
+          "fieldType" : "primitive"
+        }
+      ]
+    }
+  ]
+}

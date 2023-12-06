@@ -1,0 +1,43 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the Coverage resource.
+def CoverageRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for Coverage resource.
+def CoverageMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  status: recon::forceInbound(existing.status, inbound.status)
+
+  type: recon::preferInbound(existing.type, inbound.type)
+
+  policyHolder: recon::preferInbound(existing.policyHolder, inbound.policyHolder)
+
+  subscriber: recon::preferInbound(existing.subscriber, inbound.subscriber)
+
+  subscriberId: recon::preferInbound(existing.subscriberId, inbound.subscriberId)
+
+  beneficiary: recon::forceInbound(existing.beneficiary, inbound.beneficiary)
+
+  dependent: recon::preferInbound(existing.dependent, inbound.dependent)
+
+  period: recon::preferInbound(existing.period, inbound.period)
+
+  payor: recon::union(existing.payor, inbound.payor)
+
+  class: recon::union(existing.class, inbound.class)
+
+  order: recon::preferInbound(existing.order, inbound.order)
+
+  network: recon::preferInbound(existing.network, inbound.network)
+
+  costToBeneficiary: recon::union(existing.costToBeneficiary, inbound.costToBeneficiary)
+
+  subrogation: recon::preferInbound(existing.subrogation, inbound.subrogation)
+
+  contract: recon::union(existing.contract, inbound.contract)
+}

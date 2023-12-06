@@ -1,0 +1,57 @@
+package merge_rules
+
+// Default resource-level merge rule.
+def DefaultRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Default per-field merge rules.
+def DefaultFieldRules() {
+  Array: {
+    rule: "union"
+  }
+  Container: {
+    rule: "preferInbound"
+  }
+  Primitive: {
+    rule: "preferInbound"
+  }
+  meta: {
+    rule: "forceInbound"
+  }
+  implicitRules: {
+    rule: "forceInbound"
+  }
+  language: {
+    rule: "forceInbound"
+  }
+  text: {
+    rule: "forceInbound"
+  }
+  contained: {
+    rule: "union"
+  }
+  extension: {
+    rule: "unionByField"
+    path: "url"
+  }
+  modifierExtension: {
+    rule: "unionByField"
+    path: "url"
+  }
+  subject: {
+    rule: "forceInbound"
+  }
+  patient: {
+    rule: "forceInbound"
+  }
+  code: {
+    rule: "forceInbound"
+  }
+  class: {
+    rule: "forceInbound"
+  }
+  intent: {
+    rule: "forceInbound"
+  }
+}

@@ -1,0 +1,19 @@
+package matching_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// TODO(): Add dateTime matching once supported.
+def ImmunizationConfig() {
+  recon::anyOf(
+    recon::anyIdentifier(),
+    recon::allOf(
+      recon::primitive("status"),
+      recon::pathTo("vaccineCode", recon::anyCoding()),
+      recon::anyOf(
+        recon::primitive("occurrenceDateTime"),
+        recon::primitive("occurrenceString")
+      ),
+      recon::referenceFor("patient")
+    )
+  )
+}

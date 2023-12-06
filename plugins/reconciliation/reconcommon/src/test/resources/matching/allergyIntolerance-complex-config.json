@@ -1,0 +1,73 @@
+{
+  "fieldType": "container",
+  "pathOperator": "OR",
+  "paths": [
+    {
+      "field": "identifier",
+      "fieldType": "array",
+      "pathOperator": "OR",
+      "paths": [
+        {
+          "fieldType": "container",
+          "pathOperator": "AND",
+          "paths": [
+            {
+              "field": "system",
+              "fieldType": "primitive",
+              "fieldFilter": [
+                "unique-id"
+              ]
+            },
+            {
+              "field": "value",
+              "fieldType": "primitive"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "fieldType": "container",
+      "pathOperator": "AND",
+      "paths": [
+        {
+          "field": "patient",
+          "fieldType": "container",
+          "paths": [
+            {
+              "field": "reference",
+              "fieldType": "primitive"
+            }
+          ]
+        },
+        {
+          "field": "code",
+          "fieldType": "container",
+          "paths": [
+            {
+              "field": "coding",
+              "fieldType": "array",
+              "pathOperator": "OR",
+              "paths": [
+                {
+                  "fieldType": "container",
+                  "pathOperator": "AND",
+                  "paths": [
+                    {
+                      "field": "system",
+                      "fieldType": "primitive"
+                    },
+                    {
+                      "field": "code",
+                      "fieldType": "primitive"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

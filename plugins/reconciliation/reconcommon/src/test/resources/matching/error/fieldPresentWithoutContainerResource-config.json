@@ -1,0 +1,10 @@
+{
+  "field": "arrayField",
+  "fieldType": "array",
+  "paths": [
+    {
+      "field": "key",
+      "fieldType": "primitive"
+    }
+  ]
+}

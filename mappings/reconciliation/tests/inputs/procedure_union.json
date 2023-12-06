@@ -1,0 +1,329 @@
+{
+  "resources": [
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "basedOn": [
+        {
+          "reference": "CarePlan/example-careplan"
+        }
+      ],
+      "bodySite": [
+        {
+          "coding": [
+            {
+              "code": "344001",
+              "display": "Ankle",
+              "system": "http://snomed.info/sct"
+            }
+          ],
+          "text": "Ankle"
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "71388002",
+            "display": "Procedure",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "complication": [
+        {
+          "coding": [
+            {
+              "code": "165002",
+              "display": "Accident-prone",
+              "system": "http://snomed.info/sct"
+            }
+          ],
+          "text": "Accident-prone"
+        }
+      ],
+      "complicationDetail": [
+        {
+          "reference": "Condition/example-condition1"
+        }
+      ],
+      "extension": [
+        {
+          "url": "urn:oid:google/reconciliation-create-timestamp",
+          "valueInstant": "2020-11-26T15:52:18.053659+00:00"
+        }
+      ],
+      "focalDevice": [
+        {
+          "manipulated": {
+            "reference": "Device/example-device1"
+          }
+        }
+      ],
+      "followUp": [
+        {
+          "coding": [
+            {
+              "code": "18949003",
+              "display": "Change of dressing",
+              "system": "http://snomed.info/sct"
+            }
+          ],
+          "text": "Change of dressing"
+        }
+      ],
+      "instantiatesCanonical": [
+        "PlanDefinition/example-plandefinition"
+      ],
+      "instantiatesUri": [
+        "http://helpimonfhir.org"
+      ],
+      "note": [
+        {
+          "text": "Routine Appendectomy. Appendix was inflamed and in retro-caecal position"
+        }
+      ],
+      "partOf": [
+        {
+          "reference": "Procedure/example-procedure"
+        }
+      ],
+      "performedPeriod": {
+        "end": "2020-06-23",
+        "start": "2020-05-23"
+      },
+      "performer": [
+        {
+          "actor": {
+            "reference": "Practitioner/example-practitioner1"
+          }
+        }
+      ],
+      "reasonCode": [
+        {
+          "coding": [
+            {
+              "code": "109006",
+              "display": "Anxiety disorder of childhood OR adolescence",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ],
+      "reasonReference": [
+        {
+          "reference": "Condition/example-condition"
+        },
+        {
+          "reference": "DiagnosticReport/diagnostic-report"
+        }
+      ],
+      "report": [
+        {
+          "display": "Lab results blood test",
+          "reference": "DiagnosticReport/example-diagnosticreport"
+        }
+      ],
+      "resourceType": "Procedure",
+      "status": "not-done",
+      "subject": {
+        "reference": "Patient/example-union-patient"
+      },
+      "usedCode": [
+        {
+          "coding": [
+            {
+              "code": "79068005",
+              "display": "Needle, device (physical object)",
+              "system": "http://snomed.info/sct"
+            }
+          ],
+          "text": "30-guage needle"
+        }
+      ],
+      "usedReference": [
+        {
+          "reference": "Medication/example-medication"
+        }
+      ]
+    },
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "basedOn": [
+        {
+          "reference": "ServiceRequest/example-servicerequest"
+        }
+      ],
+      "bodySite": [
+        {
+          "coding": [
+            {
+              "code": "661005",
+              "display": "Jaw region",
+              "system": "http://snomed.info/sct"
+            }
+          ],
+          "text": "Jaw region"
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "71388002",
+            "display": "Procedure",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "complication": [
+        {
+          "coding": [
+            {
+              "code": "177007",
+              "display": "Poisoning by sawfly larvae",
+              "system": "http://snomed.info/sct"
+            }
+          ],
+          "text": "Poisoning by sawfly larvae"
+        }
+      ],
+      "complicationDetail": [
+        {
+          "reference": "Condition/example-condition2"
+        }
+      ],
+      "extension": [
+        {
+          "url": "urn:oid:google/reconciliation-create-timestamp",
+          "valueInstant": "2020-11-26T15:55:18.053659+00:00"
+        }
+      ],
+      "focalDevice": [
+        {
+          "action": {
+            "coding": [
+              {
+                "code": "129272000",
+                "display": "Stimulation - action",
+                "system": "http://snomed.info/sct"
+              }
+            ]
+          },
+          "manipulated": {
+            "reference": "Device/example-device2"
+          }
+        }
+      ],
+      "followUp": [
+        {
+          "coding": [
+            {
+              "code": "30549001",
+              "display": "Removal of suture",
+              "system": "http://snomed.info/sct"
+            }
+          ],
+          "text": "Removal of suture"
+        }
+      ],
+      "instantiatesCanonical": [
+        "ActivityDefinition/example-activitydefinition",
+        "OperationDefinition/example-operationdefinition"
+      ],
+      "instantiatesUri": [
+        "http://example.org/protocol-for-hypertension-during-pregnancy"
+      ],
+      "note": [
+        {
+          "text": "Standard Biopsy"
+        }
+      ],
+      "partOf": [
+        {
+          "reference": "Observation/example-observation"
+        }
+      ],
+      "performedPeriod": {
+        "end": "2020-06-23",
+        "start": "2020-05-23"
+      },
+      "performer": [
+        {
+          "actor": {
+            "reference": "Device/example-device"
+          },
+          "function": {
+            "coding": [
+              {
+                "code": "1421009",
+                "display": "Specialized surgeon",
+                "system": "http://snomed.info/sct"
+              }
+            ]
+          },
+          "id": "did-i-id",
+          "onBehalfOf": {
+            "reference": "Organization/example-organization"
+          }
+        }
+      ],
+      "reasonCode": [
+        {
+          "coding": [
+            {
+              "code": "134006",
+              "display": "Decreased hair growth",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ],
+      "reasonReference": [
+        {
+          "reference": "Procedure/example-procedure"
+        },
+        {
+          "reference": "Observation/example-observation"
+        }
+      ],
+      "report": [
+        {
+          "reference": "DocumentReference/example-documentreference"
+        }
+      ],
+      "resourceType": "Procedure",
+      "status": "not-done",
+      "subject": {
+        "reference": "Patient/example-union-patient"
+      },
+      "usedCode": [
+        {
+          "coding": [
+            {
+              "code": "78641001",
+              "display": "Nylon suture",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ],
+      "usedReference": [
+        {
+          "reference": "Device/example-device"
+        }
+      ]
+    }
+  ],
+  "resourceInfo": {
+    "resourceType": "Procedure",
+    "stableId": "1234"
+  }
+}

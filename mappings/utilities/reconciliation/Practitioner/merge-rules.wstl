@@ -1,0 +1,31 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the Practitioner resource.
+def PractitionerRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for Practitioner resource.
+def PractitionerMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  active: recon::preferInbound(existing.active, inbound.active)
+
+  name: recon::union(existing.name, inbound.name)
+
+  telecom: recon::union(existing.telecom, inbound.telecom)
+
+  address: recon::union(existing.address, inbound.address)
+
+  gender: recon::preferInbound(existing.gender, inbound.gender)
+
+  birthDate: recon::preferInbound(existing.birthDate, inbound.birthDate)
+
+  photo: recon::union(existing.photo, inbound.photo)
+
+  qualification: recon::union(existing.qualification, inbound.qualification)
+
+  communication: recon::union(existing.communication, inbound.communication)
+}

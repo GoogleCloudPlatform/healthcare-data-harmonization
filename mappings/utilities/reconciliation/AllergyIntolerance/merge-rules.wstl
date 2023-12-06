@@ -1,0 +1,66 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the AllergyIntolerance resource type.
+def AllergyIntoleranceRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for AllergyIntolerance resource.
+def AllergyIntoleranceMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  // To ensure fhirpath-constraint-violation-AllergyIntolerance: "(verificationStatus.exists() and verificationStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/allergyintolerance-verification' and code='entered-in-error').exists().not()) implies clinicalStatus.exists()"
+  // and fhirpath-constraint-violation-AllergyIntolerance: "(verificationStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/allergyintolerance-verification' and code='entered-in-error').exists()) implies clinicalStatus.exists().not()"
+  clinicalStatus: if inbound.verificationStatus.coding[0].code == "entered-in-error" then {
+    recon::forceInbound(existing.clinicalStatus, inbound.clinicalStatus)
+  } else {
+    recon::preferInbound(existing.clinicalStatus, inbound.clinicalStatus)
+  }
+
+  // To ensure fhirpath-constraint-violation-AllergyIntolerance: "(verificationStatus.exists() and verificationStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/allergyintolerance-verification' and code='entered-in-error').exists().not()) implies clinicalStatus.exists()"
+  // and fhirpath-constraint-violation-AllergyIntolerance: "(verificationStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/allergyintolerance-verification' and code='entered-in-error').exists()) implies clinicalStatus.exists().not()"
+  verificationStatus: if existing.verificationStatus.coding[0].code == "entered-in-error" and inbound.clinicalStatus then {
+    recon::forceInbound(existing.verificationStatus, inbound.verificationStatus)
+  } else {
+    recon::preferInbound(existing.verificationStatus, inbound.verificationStatus)
+  }
+
+  type: recon::preferInbound(existing.type, inbound.type)
+
+  category: recon::union(existing.category, inbound.category)
+
+  criticality: recon::preferInbound(existing.criticality, inbound.criticality)
+
+  if inbound.meta.tag[where $.system == "urn:oid:google/synthetic-resource-purpose"] then {
+    code: recon::preferInbound(existing.code, inbound.code)
+
+    patient: recon::preferInbound(existing.patient, inbound.patient)
+
+    meta: existing.meta
+  } else {
+    code: recon::forceInbound(existing.code, inbound.code)
+
+    patient: recon::forceInbound(existing.patient, inbound.patient)
+  }
+
+  encounter: recon::preferInbound(existing.encounter, inbound.encounter)
+
+  recon::choiceField(existing, inbound, "preferInbound",
+    "onsetDateTime", "onsetAge", "onsetPeriod",
+    "onsetRange", "onsetString"
+  )
+
+  recordedDate: recon::preferInbound(existing.recordedDate, inbound.recordedDate)
+
+  recorder: recon::preferInbound(existing.recorder, inbound.recorder)
+
+  asserter: recon::preferInbound(existing.asserter, inbound.asserter)
+
+  lastOccurence: recon::preferInbound(existing.lastOccurence, inbound.lastOccurence)
+
+  note: recon::union(existing.note, inbound.note)
+
+  reaction: recon::union(existing.reaction, inbound.reaction)
+}

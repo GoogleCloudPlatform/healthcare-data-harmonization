@@ -1,0 +1,20 @@
+package matching_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+
+def OrganizationConfig() {
+  recon::anyOf(
+    recon::anyIdentifier(),
+    recon::allOf(
+      recon::primitive("active"),
+      recon::primitive("name"),
+      recon::arrayAnyOf("address", recon::allOf(
+          recon::arrayAllOf("line", recon::primitive("")),
+          recon::primitive("city"),
+          recon::primitive("postalCode")
+        )
+      )
+    )
+  )
+}

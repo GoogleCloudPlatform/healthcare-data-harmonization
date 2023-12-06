@@ -1,0 +1,21 @@
+package matching_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+def MedicationAdministrationConfig() {
+  recon::anyOf(
+    recon::anyIdentifier(),
+    recon::allOf(
+      recon::primitive("status"),
+      recon::anyOf(
+        recon::referenceFor("medicationReference"),
+        recon::pathTo("medicationCodeableConcept", recon::anyCoding())
+      ),
+      recon::anyOf(
+        recon::primitive("effectiveDateTime"),
+        recon::pathTo("effectivePeriod", recon::primitive("start"))
+      ),
+      recon::referenceFor("subject")
+    )
+  )
+}

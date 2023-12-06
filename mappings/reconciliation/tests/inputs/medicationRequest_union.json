@@ -1,0 +1,199 @@
+{
+  "resources": [
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "authoredOn": "2019-06-24",
+      "basedOn": [
+        {
+          "reference": "CarePlan/example-careplan"
+        }
+      ],
+      "category": [
+        {
+          "coding": [
+            {
+              "code": "inpatient",
+              "display": "Inpatient",
+              "system": "http://terminology.hl7.org/CodeSystem/medicationrequest-category"
+            }
+          ]
+        }
+      ],
+      "detectedIssue": [
+        {
+          "reference": "DetectedIssue/example-detectedissue1"
+        }
+      ],
+      "dosageInstruction": [
+        {
+          "text": "Takes 1-2 tablets once daily at bedtime as needed for restless legs"
+        }
+      ],
+      "eventHistory": [
+        {
+          "display": "Author's Signature",
+          "reference": "Provenance/example-provenance1"
+        }
+      ],
+      "instantiatesCanonical": [
+        "http://hl7.org/fhir/ValueSet/example-valueset1"
+      ],
+      "instantiatesUri": [
+        "http://www.bccancer.bc.ca/chemotherapy-protocols-site/Documents/Lymphoma-Myeloma/ULYBRENTUX%20Protocol_1Jun2017.pdf"
+      ],
+      "insurance": [
+        {
+          "reference": "Coverage/example-coverage"
+        }
+      ],
+      "intent": "plan",
+      "medicationReference": {
+        "display": "prescribed medication",
+        "reference": "Medication/example-union-medication"
+      },
+      "note": [
+        {
+          "text": "Patient told to take with food"
+        }
+      ],
+      "reasonCode": [
+        {
+          "coding": [
+            {
+              "code": "144008",
+              "display": "Normal peripheral vision",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ],"resourceType": "MedicationRequest",
+      "reasonReference": [
+        {
+          "reference": "Observation/example-observation"
+        }
+      ],
+      "requester": {
+        "reference": "Patient/example-union-patient"
+      },
+      "resourceType": "MedicationRequest",
+      "status": "active",
+      "subject": {
+        "display": "Amy V. Shaw",
+        "reference": "Patient/example-union-patient"
+      },
+      "supportingInformation": [
+        {
+          "reference": "Procedure/example-procedure"
+        }
+      ]
+    },
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "authoredOn": "2019-06-24",
+      "basedOn": [
+        {
+          "reference": "ServiceRequest/example-servicerequest"
+        }
+      ],
+      "category": [
+        {
+          "coding": [
+            {
+              "code": "outpatient",
+              "display": "Outpatient",
+              "system": "http://terminology.hl7.org/CodeSystem/medicationrequest-category"
+            }
+          ]
+        }
+      ],
+      "detectedIssue": [
+        {
+          "reference": "DetectedIssue/example-detectedissue2"
+        }
+      ],
+      "dosageInstruction": [
+        {
+          "text": "10 mL bid",
+          "timing": {
+            "repeat": {
+              "boundsPeriod": {
+                "start": "2008-04-05"
+              }
+            }
+          }
+        }
+      ],
+      "eventHistory": [
+        {
+          "reference": "Provenance/example-provenance2"
+        }
+      ],
+      "instantiatesCanonical": [
+        "http://hl7.org/fhir/ValueSet/example-valueset2"
+      ],
+      "instantiatesUri": [
+        "http://www.uri.com"
+      ],
+      "insurance": [
+        {
+          "reference": "ClaimResponse/example-claimresponse"
+        }
+      ],
+      "intent": "plan",
+      "medicationReference": {
+        "display": "prescribed medication",
+        "reference": "Medication/example-union-medication"
+      },
+      "note": [
+        {
+          "text": "Chlorthalidone increases urniation so take it in the morning"
+        }
+      ],
+      "reasonCode": [
+        {
+          "coding": [
+            {
+              "code": "129007",
+              "display": "Homoiothermia",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ],
+      "reasonReference": [
+        {
+          "display": "condition for prescribing this medication",
+          "reference": "Condition/example-condition"
+        }
+      ],
+      "requester": {
+        "reference": "Patient/example-union-patient"
+      },
+      "resourceType": "MedicationRequest",
+      "status": "active",
+      "subject": {
+        "display": "Amy V. Shaw",
+        "reference": "Patient/example-union-patient"
+      },
+      "supportingInformation": [
+        {
+          "reference": "Specimen/example-specimen"
+        }
+      ]
+    }
+  ],
+  "resourceInfo": {
+    "resourceType": "MedicationRequest",
+    "stableId": "1234"
+  }
+}

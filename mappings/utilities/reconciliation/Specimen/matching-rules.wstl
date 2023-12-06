@@ -1,0 +1,17 @@
+package matching_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+def SpecimenConfig() {
+  recon::anyOf(
+    recon::anyIdentifier(),
+    recon::allOf(
+      recon::pathTo("type", recon::anyCoding()),
+      recon::anyOf(
+        recon::pathTo("collection", recon::primitive("collectedDateTime")),
+        recon::pathTo("collection", recon::pathTo("collectedPeriod", recon::primitive("start")))
+      ),
+      recon::referenceFor("subject")
+    )
+  )
+}

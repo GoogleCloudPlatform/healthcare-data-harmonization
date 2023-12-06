@@ -1,0 +1,19 @@
+package matching_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+def ExplanationOfBenefitConfig() {
+  recon::anyOf(
+    recon::anyIdentifier(),
+    recon::allOf(
+      recon::primitive("status"),
+      recon::pathTo("type", recon::anyCoding()),
+      recon::primitive("use"),
+      recon::referenceFor("patient"),
+      recon::primitive("created"),
+      recon::referenceFor("insurer"),
+      recon::referenceFor("provider"),
+      recon::primitive("outcome")
+    )
+  )
+}

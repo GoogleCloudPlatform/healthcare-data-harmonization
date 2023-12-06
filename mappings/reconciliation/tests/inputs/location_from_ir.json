@@ -1,0 +1,102 @@
+{
+  "resources": [
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "address": {
+        "city": "Ann Arbor",
+        "country": "USA",
+        "line": [
+          "3300 Washtenaw Avenue, Suite 227"
+        ],
+        "postalCode": "48104",
+        "state": "MI"
+      },
+      "availabilityExceptions": "This is a useless string",
+      "description": "This is a test for a Location resource",
+      "managingOrganization": {
+        "reference": "Organization/example-organization"
+      },
+      "mode": "instance",
+      "name": "An Intermediate Location (TM)",
+      "operationalStatus": {
+        "code": "O",
+        "display": "Occupied",
+        "system": "http://terminology.hl7.org/CodeSystem/v2-0116"
+      },
+      "partOf": {
+        "reference": "Location/example-location1"
+      },
+      "physicalType": {
+        "coding": [
+          {
+            "code": "ro",
+            "display": "Room",
+            "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+          }
+        ]
+      },
+      "position": {
+        "latitude": 42.373222,
+        "longitude": -72.519854
+      },
+      "resourceType": "Location",
+      "status": "suspended"
+    },
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "address": {
+        "city": "Amherst",
+        "country": "USA",
+        "line": [
+          "3300 Washtenaw Avenue, Suite 227"
+        ],
+        "postalCode": "01002",
+        "state": "MA"
+      },
+      "availabilityExceptions": "This is a string that expresses exceptions to availability",
+      "description": "This is a test for a Location resource where fields come from the intermediate resource",
+      "managingOrganization": {
+        "display": "Health Level Seven International"
+      },
+      "mode": "kind",
+      "name": "An Intermediate Location",
+      "operationalStatus": {
+        "code": "H",
+        "display": "House",
+        "system": "http://terminology.hl7.org/CodeSystem/v2-0116"
+      },
+      "partOf": {
+        "reference": "Location/example-location2"
+      },
+      "physicalType": {
+        "coding": [
+          {
+            "code": "lvl",
+            "display": "Level",
+            "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+          }
+        ]
+      },
+      "position": {
+        "latitude": -83.694710,
+        "longitude": 42.256500
+      },
+      "resourceType": "Location",
+      "status": "active"
+    }
+  ],
+  "resourceInfo": {
+    "resourceType": "Location",
+    "stableId": "1234"
+  }
+}

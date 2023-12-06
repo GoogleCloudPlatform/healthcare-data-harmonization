@@ -1,0 +1,14 @@
+package merge_rules
+
+// Resource-level merge rule for the ExplanationOfBenefit resource type.
+def ExplanationOfBenefitRule() {
+  "latest"; // by default, we never merge EOB resources
+}
+
+def ExplanationOfBenefitMerge(existing, inbound) {
+  ""
+  // No need for this function configuration so long as the default rule is
+  // "latest". However, for resource types where our default behavior is
+  // "latest", but a customer could reasonably want to define merge behavior,
+  // reasonable defaults should be populated here.
+}

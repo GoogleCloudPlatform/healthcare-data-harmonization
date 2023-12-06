@@ -1,0 +1,21 @@
+package matching_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+def RelatedPersonConfig() {
+  recon::anyOf(
+    recon::anyIdentifier(),
+    recon::allOf(
+      recon::arrayAnyOf("name", recon::anyOf(
+          recon::allOf(
+            recon::primitive("family"),
+            recon::arrayAnyOf("given", recon::primitive(""))
+          ),
+          recon::primitive("text")
+        )
+      ),
+      recon::arrayAnyOf("relationship", recon::anyCoding()),
+      recon::referenceFor("patient")
+    )
+  )
+}

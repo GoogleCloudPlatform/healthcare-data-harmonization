@@ -1,0 +1,59 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the Patient resource type.
+def PatientRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for Patient resource types.
+def PatientMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system", "type.coding[0].code")
+
+  active: recon::preferInbound(existing.active, inbound.active)
+
+  name: recon::union(existing.name, inbound.name)
+
+  telecom: recon::unionByField(existing.telecom, inbound.telecom, "use")
+
+  gender: recon::forceInbound(existing.gender, inbound.gender)
+
+  birthDate: recon::preferInbound(existing.birthDate, inbound.birthDate)
+
+  // deceased[x] field is populated by the choiceField builtin that returns a
+  // container, rather than simply the field value, since the field name isn't
+  // known at compile time. The preferInbound merge rule is used to merge
+  // fields:
+  // {"deceasedBoolean", "deceasedDateTime"},
+  // where at most one of these fields may appear in each of the existing and
+  // inbound resources.
+  recon::choiceField(existing, inbound, "preferInbound", "deceasedBoolean", "deceasedDateTime")
+
+  address: recon::union(existing.address, inbound.address)
+
+  maritalStatus: recon::preferInbound(existing.maritalStatus, inbound.maritalStatus)
+
+  // multipleBirth[x] field is populated by the choiceField builtin that returns
+  // a container, rather than simply the field value, since the field name isn't
+  // known at compile time. The preferInbound merge rule is used to merge
+  // fields:
+  // {"multipleBirthBoolean", "multipleBirthInteger"},
+  // where at most one of these fields may appear in each of the existing and
+  // inbound resources.
+  recon::choiceField(existing, inbound, "preferInbound", "multipleBirthBoolean", "multipleBirthInteger")
+
+  photo: recon::union(existing.photo, inbound.photo)
+
+  contact: recon::union(existing.contact, inbound.contact)
+
+  communication: recon::union(existing.communication, inbound.communication)
+
+  generalPractitioner: recon::union(existing.generalPractitioner, inbound.generalPractitioner)
+
+  managingOrganization: recon::preferInbound(existing.managingOrganization, inbound.managingOrganization)
+
+  link: recon::union(existing.link, inbound.link)
+
+  extension: recon::unionByField(existing.extension, inbound.extension, "url")
+}

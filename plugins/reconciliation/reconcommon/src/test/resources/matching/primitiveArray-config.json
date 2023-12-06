@@ -1,0 +1,28 @@
+{
+  "field": "name",
+  "fieldType": "array",
+  "pathOperator": "OR",
+  "paths": [
+    {
+      "fieldType": "container",
+      "pathOperator": "AND",
+      "paths": [
+        {
+          "field": "given",
+          "fieldType": "array",
+          "pathOperator": "OR",
+          "paths": [
+            {
+              "fieldType": "primitive",
+              "fieldFilter": ["Bob", "Alice"]
+            }
+          ]
+        },
+        {
+          "field": "family",
+          "fieldType": "primitive"
+        }
+      ]
+    }
+  ]
+}

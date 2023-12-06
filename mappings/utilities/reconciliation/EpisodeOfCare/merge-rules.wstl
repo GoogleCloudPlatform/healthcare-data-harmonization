@@ -1,0 +1,36 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the EpisodeofCare resource.
+def EpisodeofCareRule() {
+  "merge"; // alternatively, "latest"
+}
+
+//TODO(): Add integration test-cases for FHIR reconciliation merge rules
+// Per-field merge rules for EpisodeofCare resource.
+def EpisodeofCareMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  status: recon::forceInbound(existing.status, inbound.status)
+
+  statusHistory: recon::union(existing.statusHistory, inbound.statusHistory)
+
+  type: recon::union(existing.type, inbound.type)
+
+  diagnosis: recon::union(existing.diagnosis, inbound.diagnosis)
+
+  patient: recon::forceInbound(existing.patient, inbound.patient)
+
+  managingOrganization: recon::preferInbound(existing.managingOrganization, inbound.managingOrganization)
+
+  period: recon::preferInbound(existing.period, inbound.period)
+
+  referralRequest: recon::union(existing.referralRequest, inbound.referralRequest)
+
+  careManager: recon::preferInbound(existing.careManager, inbound.careManager)
+
+  team: recon::union(existing.team, inbound.team)
+
+  account: recon::union(existing.account, inbound.account)
+}

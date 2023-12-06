@@ -1,0 +1,31 @@
+package matching_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+def ListConfig() {
+  recon::anyOf(
+    recon::allOf(
+      recon::anyMetaExtension(
+        recon::filterField("url", "list-purpose"),
+        // allergy-intolerance-list refers to all the allergy intolerance resources belong to a specific patient.
+        // Where allergy-intolerance-list are merged, synthetic resources will be made and mark all the inactive
+        // allergy intolerance.
+        recon::filterField("valueString", "urn:oid:google/hl7v2/allergy-intolerance-list")
+      ),
+      recon::primitive("mode"),
+      recon::referenceFor("subject")
+    ),
+    recon::allOf(
+      recon::anyMetaExtension(
+        recon::filterField("url", "list-purpose"),
+        // general-purpose-list refers to list used for other purposes.
+        recon::filterField("valueString", "urn:oid:google/general-purpose-list")
+      ),
+      recon::anyOf(
+        recon::primitive("id"),
+        recon::anyIdentifier()
+      )
+    ),
+    recon::anyIdentifier()
+  )
+}

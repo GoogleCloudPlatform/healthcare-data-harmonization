@@ -1,0 +1,50 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the DiagnosticReport resource.
+def DiagnosticReportRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for DiagnosticReport resource.
+def DiagnosticReportMerge(existing, inbound) {
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  basedOn: recon::union(existing.basedOn, inbound.basedOn)
+
+  status: recon::forceInbound(existing.status, inbound.status)
+
+  category: recon::union(existing.category, inbound.category)
+
+  code: recon::forceInbound(existing.code, inbound.code)
+
+  subject: recon::preferInbound(existing.subject, inbound.subject)
+
+  encounter: recon::preferInbound(existing.encounter, inbound.encounter)
+
+  recon::choiceField(existing, inbound, "preferInbound",
+    "effectiveDateTime", "effectivePeriod"
+  )
+
+  issued: recon::preferInbound(existing.issued, inbound.issued)
+
+  performer: recon::union(existing.performer, inbound.performer)
+
+  resultsInterpreter: recon::union(existing.resultsInterpreter, inbound.resultsInterpreter)
+
+  specimen: recon::union(existing.specimen, inbound.specimen)
+
+  result: recon::union(existing.result, inbound.result)
+
+  imagingStudy: recon::union(existing.imagingStudy, inbound.imagingStudy)
+
+  media: recon::union(existing.media, inbound.media)
+
+  conclusion: recon::preferInbound(existing.conclusion, inbound.conclusion)
+
+  conclusionCode: recon::union(existing.conclusionCode, inbound.conclusionCode)
+
+  presentedForm: recon::union(existing.presentedForm, inbound.presentedForm)
+
+}

@@ -1,0 +1,97 @@
+{
+  "resources": [
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "definition": {
+        "reference": "DeviceDefinition/example-devicedefinition1",
+        "type": "DeviceDefinition"
+      },
+      "distinctIdentifier": "I am a distinct identifier",
+      "expirationDate": "2021-01-01",
+      "location": {
+        "reference": "Location/example-location1"
+      },
+      "lotNumber": "35",
+      "manufactureDate": "2019-03-04",
+      "manufacturer": "Fun Device LTD",
+      "modelNumber": "35",
+      "owner": {
+        "reference": "Organization/example-organization1"
+      },
+      "parent": {
+        "reference": "Device/example-device1"
+      },
+      "partNumber": "35",
+      "patient": {
+        "display": "Amy Shaw",
+        "reference": "Patient/example-patient-fromER",
+        "type": "Patient"
+      },
+      "resourceType": "Device",
+      "serialNumber": "35",
+      "status": "inactive",
+      "type": {
+        "coding": [
+          {
+            "code": "15873008",
+            "display": "Boiler, device",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "udiCarrier": [
+        {
+          "carrierHRF": "(01)09504000059118(17)141120(10)7654321D(21)10987654d321",
+          "deviceIdentifier": "478546685468452",
+          "entryType": "barcode",
+          "id": "deviceId07",
+          "issuer": "http://hl7.org/fhir/NamingSystem/gs1-di",
+          "jurisdiction": "http://hl7.org/fhir/NamingSystem/fda-udi"
+        }
+      ],
+      "url": "https://url-0.com"
+    },
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "patient": {
+        "display": "Amy Shaw",
+        "reference": "Patient/example-patient-fromER",
+        "type": "Patient"
+      },
+      "resourceType": "Device",
+      "type": {
+        "coding": [
+          {
+            "code": "15873008",
+            "display": "Boiler, device",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "udiCarrier": [
+        {
+          "carrierHRF": "(01)09504000059118(17)141120(10)7654321D(21)10987654d321",
+          "deviceIdentifier": "478546685468452",
+          "entryType": "barcode",
+          "id": "deviceId07",
+          "issuer": "http://hl7.org/fhir/NamingSystem/gs1-di",
+          "jurisdiction": "http://hl7.org/fhir/NamingSystem/fda-udi"
+        }
+      ]
+    }
+  ],
+  "resourceInfo": {
+    "resourceType": "Device",
+    "stableId": "1234"
+  }
+}
