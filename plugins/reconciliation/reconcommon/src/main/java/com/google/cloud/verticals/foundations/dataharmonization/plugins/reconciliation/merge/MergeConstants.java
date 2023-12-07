@@ -86,7 +86,6 @@ public final class MergeConstants {
   public static final String RESOURCE_INFO_FIELD = "resourceInfo";
   public static final String ACTION_FIELD = "action";
   public static final String LAST_UPDATED_FIELD = "lastUpdated";
-  public static final String IGNORE_MERGE_FIELD = "ignoreMerge";
   public static final String DELETE_RESOURCE = "DeleteResource";
   public static final String UPDATE_RESOURCE = "UpdateResource";
   public static final String DELETE_FINAL_RESOURCE = "DeleteFinal";
