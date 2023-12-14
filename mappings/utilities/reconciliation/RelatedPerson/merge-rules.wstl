@@ -12,7 +12,7 @@ def RelatedPersonRule() {
 def RelatedPersonMerge(existing, inbound) {
   identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
 
-  active: recon::preferInbound(existing.name, inbound.name)
+  active: recon::preferInbound(existing.active, inbound.active)
 
   patient: recon::forceInbound(existing.patient, inbound.patient)
 
