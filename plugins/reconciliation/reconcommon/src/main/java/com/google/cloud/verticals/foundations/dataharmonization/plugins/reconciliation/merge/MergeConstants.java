@@ -87,11 +87,12 @@ public final class MergeConstants {
   public static final String LAST_UPDATED_FIELD = "lastUpdated";
   public static final String DELETE_RESOURCE = "DeleteResource";
   public static final String UPDATE_RESOURCE = "UpdateResource";
-  public static final String DELETE_FINAL_RESOURCE = "DeleteFinal";
+  public static final String DELETE_FINAL_RESOURCE_ID = "deleteFinalId";
+  public static final String DELETED_SNAPSHOTS = "deletedSnapshots";
+  public static final String IS_DELETED_SNAPSHOT_FIELD = "isDeletedSnapshot";
 
   public static final String SYNTHETIC_FIELD = "synthetic";
   public static final String OUTDATED_SYNTHETIC_FIELD = "outdatedSynthetic";
-  public static final String DELETED_CAN_CAUSE_SYNTHETIC = "deletedCanCauseSynthetic";
 
   public static final String REFERENCE_FIELD = "reference";
   public static final String ENTRY_FIELD = "entry";
