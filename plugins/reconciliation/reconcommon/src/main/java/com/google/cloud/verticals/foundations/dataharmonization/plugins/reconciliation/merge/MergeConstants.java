@@ -63,7 +63,6 @@ public final class MergeConstants {
   public static final int RECON_CHECKPOINT_SNAPSHOT_CUTOFF_DEFAULT = 100;
   // Optional environment variable name to override the default snapshot cutoff
   public static final String RECON_CHECKPOINT_SNAPSHOT_CUTOFF = "RECON_CHECKPOINT_SNAPSHOT_CUTOFF";
-  public static final String RECON_CHECKPOINT_FIELD = "reconCheckpoint";
   public static final String LIST_RESOURCE_TYPE = "List";
   public static final String LINKAGE_RESOURCE_TYPE = "Linkage";
   public static final String PERSON_RESOURCE_TYPE = "Person";
