@@ -1,0 +1,22 @@
+{
+  "code": {
+    "coding": [
+      {
+        "code": "71388002",
+        "display": "Procedure",
+        "system": "http://snomed.info/sct"
+      }
+    ]
+  },
+  "id": "1234",
+  "identifier": [],
+  "performedPeriod": {
+    "end": "2020-05-24",
+    "start": "2020-05-22"
+  },
+  "resourceType": "Procedure",
+  "status": "not-done",
+  "subject": {
+    "reference": "Patient/example-choice-patient"
+  }
+}

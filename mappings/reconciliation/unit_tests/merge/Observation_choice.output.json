@@ -1,0 +1,38 @@
+{
+  "category": [
+    {
+      "coding": [
+        {
+          "code": "laboratory",
+          "display": "Laboratory",
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+        }
+      ],
+      "text": "Laboratory"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "code": "5811-5",
+        "display": "Specific gravity of Urine by Test strip",
+        "system": "http://loinc.org"
+      }
+    ],
+    "text": "SPEC GRAV"
+  },
+  "effectivePeriod": {
+    "start": "2005-07-04"
+  },
+  "id": "1234",
+  "identifier": [],
+  "resourceType": "Observation",
+  "status": "final",
+  "subject": {
+    "reference": "Patient/example-choice-patient"
+  },
+  "valuePeriod": {
+    "end": "2005-07-05",
+    "start": "2005-07-04"
+  }
+}

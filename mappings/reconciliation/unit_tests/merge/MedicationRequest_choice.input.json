@@ -1,0 +1,58 @@
+{
+  "resources": [
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "authoredOn": "2008-04-05",
+      "intent": "plan",
+      "medicationReference": {
+        "display": "Nizatidine 15 MG/ML Oral Solution [Axid]",
+        "reference": "Medication/example-choice-medication"
+      },
+      "reportedReference": {
+        "reference": "Patient/example-patient"
+      },
+      "requester": {
+        "display": "Dr James Sheppard",
+        "reference": "Practitioner/example-practitioner1"
+      },
+      "resourceType": "MedicationRequest",
+      "status": "active",
+      "subject": {
+        "reference": "Patient/example-choice-patient"
+      }
+    },
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "authoredOn": "2008-04-05",
+      "intent": "plan",
+      "medicationReference": {
+        "display": "Nizatidine 15 MG/ML Oral Solution [Axid]",
+        "reference": "Medication/example-choice-medication"
+      },
+      "reportedBoolean": true,
+      "requester": {
+        "display": "Dr James Sheppard",
+        "reference": "Practitioner/example-practitioner1"
+      },
+      "resourceType": "MedicationRequest",
+      "status": "active",
+      "subject": {
+        "reference": "Patient/example-choice-patient"
+      }
+    }
+  ],
+  "resourceInfo": {
+    "resourceType": "MedicationRequest",
+    "stableId": "1234"
+  }
+}

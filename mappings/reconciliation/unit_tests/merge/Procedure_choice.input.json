@@ -1,0 +1,57 @@
+{
+  "resources": [
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "71388002",
+            "display": "Procedure",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "performedDateTime": "2020-05-23",
+      "resourceType": "Procedure",
+      "status": "not-done",
+      "subject": {
+        "reference": "Patient/example-choice-patient"
+      }
+    },
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "71388002",
+            "display": "Procedure",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "performedPeriod": {
+        "end": "2020-05-24",
+        "start": "2020-05-22"
+      },
+      "resourceType": "Procedure",
+      "status": "not-done",
+      "subject": {
+        "reference": "Patient/example-choice-patient"
+      }
+    }
+  ],
+  "resourceInfo": {
+    "resourceType": "Procedure",
+    "stableId": "1234"
+  }
+}

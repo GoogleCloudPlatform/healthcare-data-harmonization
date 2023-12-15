@@ -1,0 +1,155 @@
+{
+  "basedOn": [
+    {
+      "reference": "ServiceRequest/example-servicerequest1"
+    },
+    {
+      "reference": "ServiceRequest/example-servicerequest2"
+    }
+  ],
+  "category": [
+    {
+      "coding": [
+        {
+          "code": "LP29708-2",
+          "display": "Cardiology",
+          "system": "http://loinc.org"
+        }
+      ],
+      "text": "Cardiology"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "code": "45033-8",
+        "display": "Cardiovascular physiologic and EKG assessment panel",
+        "system": "http://loinc.org"
+      }
+    ],
+    "text": "Cardiovascular physiologic and EKG assessment panel"
+  },
+  "conclusionCode": [
+    {
+      "coding": [
+        {
+          "code": "109006",
+          "display": "Anxiety disorder of childhood OR adolescence",
+          "system": "http://snomed.info/sct"
+        }
+      ]
+    },
+    {
+      "coding": [
+        {
+          "code": "165002",
+          "display": "Accident-prone",
+          "system": "http://snomed.info/sct"
+        }
+      ]
+    }
+  ],
+  "effectivePeriod": {
+    "end": "1980-01-05T21:39:30.000Z",
+    "start": "1980-01-01T21:39:30.000Z"
+  },
+  "id": "1234",
+  "identifier": [],
+  "imagingStudy": [
+    {
+      "display": "Directed by Will Navidson",
+      "reference": "ImagingStudy/example-imagingstudy1"
+    },
+    {
+      "display": "Directed by Holloway Roberts",
+      "reference": "ImagingStudy/example-imagingstudy2"
+    }
+  ],
+  "media": [
+    {
+      "comment": "First video shared",
+      "link": {
+        "display": "The Five and a Half Minute Hallway",
+        "reference": "Media/example-media1"
+      }
+    },
+    {
+      "comment": "Final movie",
+      "link": {
+        "display": "The Navidson Record",
+        "reference": "Media/example-media2"
+      }
+    }
+  ],
+  "performer": [
+    {
+      "display": "Pufferfish Inc",
+      "reference": "Organization/example-organization"
+    },
+    {
+      "display": "Dr Pufferfish",
+      "reference": "Practitioner/example-practitioner"
+    }
+  ],
+  "presentedForm": [
+    {
+      "contentType": "application/pdf",
+      "url": "http://example.org/pdfdownloads/cardiopanel-report-123.pdf"
+    },
+    {
+      "contentType": "application/xhtml",
+      "url": "http://example.org/pdfdownloads/cardiopanel-report-456.pdf"
+    }
+  ],
+  "resourceType": "DiagnosticReport",
+  "result": [
+    {
+      "display": "Exploration #1",
+      "reference": "Observation/example-observation3"
+    },
+    {
+      "display": "Exploration #2",
+      "reference": "Observation/example-observation4"
+    },
+    {
+      "display": "Exploration #3",
+      "reference": "Observation/example-observation5"
+    },
+    {
+      "display": "Exploration #4",
+      "reference": "Observation/example-observation6"
+    },
+    {
+      "display": "The 5 and a half minute hallway",
+      "reference": "Observation/example-observation1"
+    },
+    {
+      "display": "Exploration A",
+      "reference": "Observation/example-observation2"
+    }
+  ],
+  "resultsInterpreter": [
+    {
+      "display": "Dr Pufferfish",
+      "reference": "Practitioner/example-practitioner"
+    },
+    {
+      "display": "Actually just a pufferfish",
+      "reference": "Practitioner/example-practitioner2"
+    }
+  ],
+  "specimen": [
+    {
+      "display": "Pufferfish sample - scales",
+      "reference": "Specimen/example-specimen1"
+    },
+    {
+      "display": "Pufferfish sample - liver",
+      "reference": "Specimen/example-specimen2"
+    }
+  ],
+  "status": "registered",
+  "subject": {
+    "reference": "Patient/example-union-patient"
+  }
+}

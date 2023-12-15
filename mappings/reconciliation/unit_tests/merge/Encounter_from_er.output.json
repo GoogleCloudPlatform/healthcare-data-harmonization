@@ -1,0 +1,126 @@
+{
+  "class": {
+    "code": "IMP",
+    "display": "inpatient encounter",
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+  },
+  "hospitalization": {
+    "admitSource": {
+      "coding": [
+        {
+          "code": "emd",
+          "display": "From accident/emergency department",
+          "system": "http://terminology.hl7.org/CodeSystem/admit-source"
+        }
+      ]
+    },
+    "dietPreference": [
+      {
+        "coding": [
+          {
+            "code": "vegetarian",
+            "display": "Vegetarian",
+            "system": "http://terminology.hl7.org/CodeSystem/diet"
+          }
+        ]
+      }
+    ],
+    "dischargeDisposition": {
+      "coding": [
+        {
+          "code": "alt-home",
+          "display": "Alternative home",
+          "system": "http://terminology.hl7.org/CodeSystem/discharge-disposition"
+        }
+      ]
+    },
+    "preAdmissionIdentifier": {
+      "system": "http://www.amc.nl/zorgportal/identifiers/pre-admissions",
+      "use": "official",
+      "value": "93042"
+    },
+    "reAdmission": {
+      "coding": [
+        {
+          "code": "R",
+          "display": "Re-admission",
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0092"
+        }
+      ]
+    },
+    "specialArrangement": [
+      {
+        "coding": [
+          {
+            "code": "wheel",
+            "display": "Wheelchair",
+            "system": "http://terminology.hl7.org/CodeSystem/encounter-special-arrangements"
+          }
+        ]
+      }
+    ],
+    "specialCourtesy": [
+      {
+        "coding": [
+          {
+            "code": "EXT",
+            "display": "extended courtesy",
+            "system": "http://terminology.hl7.org/CodeSystem/v3-EncounterSpecialCourtesy"
+          }
+        ]
+      }
+    ]
+  },
+  "id": "1234",
+  "identifier": [],
+  "length": {
+    "code": "min",
+    "system": "http://unitsofmeasure.org",
+    "unit": "min",
+    "value": 140
+  },
+  "partOf": {
+    "reference": "Encounter/example-encounter1"
+  },
+  "period": {
+    "end": "2020-10-03",
+    "start": "2020-10-02"
+  },
+  "priority": {
+    "coding": [
+      {
+        "code": "EM",
+        "system": "http://terminology.hl7.org/CodeSystem/v3-ActPriority"
+      }
+    ],
+    "text": "emergency"
+  },
+  "resourceType": "Encounter",
+  "serviceProvider": {
+    "reference": "Organization/example-organization1"
+  },
+  "serviceType": {
+    "coding": [
+      {
+        "code": "5",
+        "system": "http://terminology.hl7.org/CodeSystem/service-type"
+      }
+    ],
+    "text": "Case management for older persons"
+  },
+  "status": "triaged",
+  "subject": {
+    "reference": "Patient/example-fromER-patient"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "code": "11429006",
+          "system": "http://snomed.info/sct"
+        }
+      ],
+      "text": "Consultation"
+    }
+  ]
+}

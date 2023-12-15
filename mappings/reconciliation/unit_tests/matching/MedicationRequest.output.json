@@ -1,0 +1,10 @@
+[
+  [
+    "identifier=system=urn:oid:google/reconciliation-stable-id|value=1234",
+    "intent=plan|medicationReference=reference=Medication/example-choice-medication|status=active|subject=reference=Patient/example-choice-patient"
+  ],
+  [
+    "identifier=system=urn:oid:google/reconciliation-stable-id|value=1234",
+    "intent=plan|medicationReference=reference=Medication/example-choice-medication|status=active|subject=reference=Patient/example-choice-patient"
+  ]
+]

@@ -1,0 +1,70 @@
+{
+  "bodySite": {
+    "coding": [
+      {
+        "code": "368209003",
+        "display": "Right arm",
+        "system": "http://snomed.info/sct"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "code": "laboratory",
+          "display": "Laboratory",
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+        }
+      ],
+      "text": "Laboratory"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "code": "1975-2",
+        "display": "Bilirub SerPl-mCnc",
+        "system": "http://loinc.org"
+      }
+    ],
+    "text": "Bilirub SerPl-mCnc"
+  },
+  "device": {
+    "reference": "Device/example-device"
+  },
+  "effectiveDateTime": "2005-07-07",
+  "encounter": {
+    "reference": "Encounter/example-encounter2"
+  },
+  "id": "1234",
+  "identifier": [],
+  "issued": "2013-05-03T15:30:10+01:00",
+  "method": {
+    "coding": [
+      {
+        "code": "258020005",
+        "display": "Dye dilution technique",
+        "system": "http://snomed.info/sct"
+      }
+    ]
+  },
+  "resourceType": "Observation",
+  "specimen": {
+    "reference": "Specimen/example-specimen2"
+  },
+  "status": "preliminary",
+  "subject": {
+    "reference": "Patient/example-fromIR-patient"
+  },
+  "valueRange": {
+    "high": {
+      "unit": "minutes",
+      "value": 2
+    },
+    "low": {
+      "unit": "minutes",
+      "value": 1
+    }
+  }
+}

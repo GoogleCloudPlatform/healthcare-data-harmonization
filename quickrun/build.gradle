@@ -15,4 +15,5 @@ dependencies {
     runtimeOnly group: 'com.google.cloud.verticals.foundations.dataharmonization.plugins', name: 'example'
     runtimeOnly group: 'com.google.cloud.verticals.foundations.dataharmonization.plugins', name: 'logging'
     runtimeOnly group: 'com.google.cloud.verticals.foundations.dataharmonization.plugins.harmonization', name: 'hdev2'
+    runtimeOnly group: 'com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation', name: 'reconv2'
 }

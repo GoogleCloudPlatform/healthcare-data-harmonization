@@ -1,0 +1,238 @@
+{
+  "resourceType": "Condition",
+  "resources": [
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "abatementDateTime": "2021-02-05",
+      "category": [
+        {
+          "coding": [
+            {
+              "code": "encounter-diagnosis",
+              "display": "Encounter Diagnosis",
+              "system": "http://terminology.hl7.org/CodeSystem/condition-category"
+            },
+            {
+              "code": "439401001",
+              "display": "Diagnosis",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "368009",
+            "display": "Heart valve disorder",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "onsetDateTime": "2021-03-14",
+      "resourceType": "Condition",
+      "subject": {
+        "reference": "Patient/example-patient-choice"
+      }
+    },
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "abatementAge": {
+        "code": "a",
+        "system": "http://unitsofmeasure.org",
+        "unit": "years",
+        "value": 53
+      },
+      "category": [
+        {
+          "coding": [
+            {
+              "code": "encounter-diagnosis",
+              "display": "Encounter Diagnosis",
+              "system": "http://terminology.hl7.org/CodeSystem/condition-category"
+            },
+            {
+              "code": "439401001",
+              "display": "Diagnosis",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "368009",
+            "display": "Heart valve disorder",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "onsetAge": {
+        "code": "a",
+        "system": "http://unitsofmeasure.org",
+        "unit": "years",
+        "value": 52
+      },
+      "resourceType": "Condition",
+      "subject": {
+        "reference": "Patient/example-patient-choice"
+      }
+    },
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "abatementPeriod": {
+        "end": "2021-03-06",
+        "start": "2021-02-05"
+      },
+      "category": [
+        {
+          "coding": [
+            {
+              "code": "encounter-diagnosis",
+              "display": "Encounter Diagnosis",
+              "system": "http://terminology.hl7.org/CodeSystem/condition-category"
+            },
+            {
+              "code": "439401001",
+              "display": "Diagnosis",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "368009",
+            "display": "Heart valve disorder",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "onsetPeriod": {
+        "end": "2021-03-15",
+        "start": "2021-03-14"
+      },
+      "resourceType": "Condition",
+      "subject": {
+        "reference": "Patient/example-patient-choice"
+      }
+    },
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "abatementRange": {
+        "high": {
+          "unit": "minutes",
+          "value": 2.0
+        },
+        "low": {
+          "unit": "minutes",
+          "value": 1.0
+        }
+      },
+      "category": [
+        {
+          "coding": [
+            {
+              "code": "encounter-diagnosis",
+              "display": "Encounter Diagnosis",
+              "system": "http://terminology.hl7.org/CodeSystem/condition-category"
+            },
+            {
+              "code": "439401001",
+              "display": "Diagnosis",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "368009",
+            "display": "Heart valve disorder",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "onsetRange": {
+        "high": {
+          "unit": "minutes",
+          "value": 2.0
+        },
+        "low": {
+          "unit": "minutes",
+          "value": 1.0
+        }
+      },
+      "resourceType": "Condition",
+      "subject": {
+        "reference": "Patient/example-patient-choice"
+      }
+    },
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "abatementString": "I am an abatement string",
+      "category": [
+        {
+          "coding": [
+            {
+              "code": "encounter-diagnosis",
+              "display": "Encounter Diagnosis",
+              "system": "http://terminology.hl7.org/CodeSystem/condition-category"
+            },
+            {
+              "code": "439401001",
+              "display": "Diagnosis",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "368009",
+            "display": "Heart valve disorder",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "onsetString": "The morning of 2021-03-14",
+      "resourceType": "Condition",
+      "subject": {
+        "reference": "Patient/example-patient-choice"
+      }
+    }
+  ],
+  "resourceInfo": {
+    "resourceType": "Condition",
+    "stableId": "1234"
+  }
+}

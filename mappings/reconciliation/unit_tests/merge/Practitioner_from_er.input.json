@@ -1,0 +1,51 @@
+{
+  "resources": [
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "active": false,
+      "birthDate": "1975-12-07",
+      "gender": "unknown",
+      "name": [
+        {
+          "family": "Sheppard",
+          "given": [
+            "James"
+          ],
+          "prefix": [
+            "Dr"
+          ]
+        }
+      ],
+      "resourceType": "Practitioner"
+    },
+    {
+      "identifier": [
+        {
+          "system" : "urn:oid:google/reconciliation-stable-id",
+          "value" : "1234"
+        }
+      ],
+      "name": [
+        {
+          "family": "Sheppard",
+          "given": [
+            "James"
+          ],
+          "prefix": [
+            "Dr"
+          ]
+        }
+      ],
+      "resourceType": "Practitioner"
+    }
+  ],
+  "resourceInfo": {
+    "resourceType": "Practitioner",
+    "stableId": "1234"
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "contact": [
+    {
+      "period": {
+        "end": "2030-10-03",
+        "start": "2021-01-01"
+      },
+      "rank": 5,
+      "system": "email",
+      "use": "work",
+      "value": "fake@gmail.com"
+    },
+    {
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/iso21090-TEL-address",
+          "valueUri": "tel:+15556755745"
+        }
+      ],
+      "rank": 3,
+      "system": "phone",
+      "use": "home",
+      "value": "(555) 675 5745"
+    }
+  ],
+  "deviceName": [
+    {
+      "id": "i-am-an-id",
+      "name": "Alex",
+      "type": "user-friendly-name"
+    },
+    {
+      "name": "Mackenzie",
+      "type": "model-name"
+    }
+  ],
+  "id": "1234",
+  "identifier": [],
+  "note": [
+    {
+      "authorReference": {
+        "reference": "Patient/example-patient"
+      },
+      "text": "Hello",
+      "time": "1980-04-12"
+    },
+    {
+      "authorString": "Bob David",
+      "text": "Hello",
+      "time": "1980-04-12"
+    }
+  ],
+  "patient": {
+    "display": "Amy Shaw",
+    "reference": "Patient/example-patient-union"
+  },
+  "property": [
+    {
+      "type": {
+        "text": "I'm running out of fun texts"
+      },
+      "valueQuantity": [
+        {
+          "code": "my-code",
+          "comparator": "<",
+          "system": "my-system",
+          "unit": "cm",
+          "value": 0.3
+        }
+      ]
+    },
+    {
+      "id": "id-my-id",
+      "type": {
+        "text": "I'm still running out of fun texts"
+      }
+    }
+  ],
+  "resourceType": "Device",
+  "safety": [
+    {
+      "coding": [
+        {
+          "code": "not-safe",
+          "system": "safety-guaranteed-system"
+        }
+      ]
+    },
+    {
+      "coding": [
+        {
+          "code": "safe",
+          "system": "safety-guaranteed-system"
+        }
+      ]
+    }
+  ],
+  "specialization": [
+    {
+      "id": "i-am-also-an-id",
+      "systemType": {
+        "text": "a system of flavour"
+      },
+      "version": "4.0C"
+    }
+  ],
+  "statusReason": [
+    {
+      "coding": [
+        {
+          "code": "online",
+          "system": "http://terminology.hl7.org/CodeSystem/device-status-reason"
+        },
+        {
+          "code": "paused",
+          "system": "http://terminology.hl7.org/CodeSystem/device-status-reason"
+        }
+      ],
+      "text": "I need some text to put here"
+    },
+    {
+      "coding": [
+        {
+          "code": "paused",
+          "system": "http://terminology.hl7.org/CodeSystem/device-status-reason"
+        }
+      ]
+    },
+    {
+      "coding": [
+        {
+          "code": "standby",
+          "system": "http://terminology.hl7.org/CodeSystem/device-status-reason"
+        }
+      ],
+      "text": "I am a piece of text"
+    }
+  ],
+  "type": {
+    "coding": [
+      {
+        "code": "15000008",
+        "display": "Air-conditioner",
+        "system": "http://snomed.info/sct"
+      }
+    ]
+  },
+  "udiCarrier": [
+    {
+      "deviceIdentifier": "123456"
+    }
+  ],
+  "version": [
+    {
+      "value": "2.046.4"
+    },
+    {
+      "component": {
+        "assigner": {
+          "reference": "Organization/example-organization"
+        },
+        "period": {},
+        "system": "my-system",
+        "type": {
+          "text": "a type text"
+        },
+        "use": "usual",
+        "value": "123"
+      },
+      "id": "wow-so-many-ids",
+      "type": {
+        "text": "a distinct version without sense"
+      },
+      "value": "1"
+    }
+  ]
+}

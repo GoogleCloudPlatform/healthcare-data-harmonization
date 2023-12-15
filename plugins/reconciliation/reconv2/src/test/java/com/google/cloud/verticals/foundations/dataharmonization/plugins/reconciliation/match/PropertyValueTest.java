@@ -16,6 +16,7 @@
 package com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.match;
 
 import static com.google.cloud.verticals.foundations.dataharmonization.data.impl.TestDataTypeImplementation.testDTI;
+import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.MatchingPlugin.extractPropertyValues;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.match.MatchingTestUtils.readJsonFile;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.match.StableIdMatchingDsl.allOf;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.match.StableIdMatchingDsl.anyCoding;
@@ -35,13 +36,11 @@ import static org.junit.Assert.assertEquals;
 
 import com.google.cloud.verticals.foundations.dataharmonization.data.Container;
 import com.google.cloud.verticals.foundations.dataharmonization.function.context.RuntimeContext;
-import com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.MatchingPlugin;
 import com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.exceptions.PropertyValueFetcherException;
 import com.google.cloud.verticals.foundations.dataharmonization.utils.RuntimeContextUtil;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -53,19 +52,13 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class PropertyValueTest {
   private final RuntimeContext ctx = RuntimeContextUtil.mockRuntimeContextWithRegistry();
-  private MatchingPlugin matchingPlugin;
-
-  @Before
-  public void setup() {
-    matchingPlugin = new MatchingPlugin();
-  }
 
   @Test
   public void simpleMatch_producesPropertyValues() throws Exception {
     Container config = anyOf(ctx, primitive(ctx, "id"), anyIdentifier(ctx)).asContainer();
     Container resource = readJsonFile("patient-resource.json");
     List<String> propertyValues =
-        matchingPlugin.extractPropertyValues(ctx, config, resource).asArray().stream()
+        extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
             .collect(toImmutableList());
     List<String> expected =
@@ -84,7 +77,7 @@ public class PropertyValueTest {
             .asContainer();
     Container resource = readJsonFile("allergyIntolerance-resource.json");
     List<String> propertyValues =
-        matchingPlugin.extractPropertyValues(ctx, config, resource).asArray().stream()
+        extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
             .collect(toImmutableList());
     List<String> expected =
@@ -115,7 +108,7 @@ public class PropertyValueTest {
             .asContainer();
     Container resource = readJsonFile("medicationRequest-resource.json");
     List<String> propertyValues =
-        matchingPlugin.extractPropertyValues(ctx, config, resource).asArray().stream()
+        extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
             .collect(toImmutableList());
     List<String> expected =
@@ -136,11 +129,11 @@ public class PropertyValueTest {
         allOf(ctx, referenceFor(ctx, "patient"), pathTo(ctx, "code", anyCoding(ctx))).asContainer();
     Container resource = readJsonFile("allergyIntolerance-resource.json");
     List<String> propertyValues1 =
-        matchingPlugin.extractPropertyValues(ctx, config1, resource).asArray().stream()
+        extractPropertyValues(ctx, config1, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
             .collect(toImmutableList());
     List<String> propertyValues2 =
-        matchingPlugin.extractPropertyValues(ctx, config2, resource).asArray().stream()
+        extractPropertyValues(ctx, config2, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
             .collect(toImmutableList());
     List<String> expected =
@@ -158,7 +151,7 @@ public class PropertyValueTest {
             .asContainer();
     Container resource = readJsonFile("device-resource.json");
     List<String> propertyValues =
-        matchingPlugin.extractPropertyValues(ctx, config, resource).asArray().stream()
+        extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
             .collect(toImmutableList());
     List<String> expected =
@@ -176,7 +169,7 @@ public class PropertyValueTest {
             .asContainer();
     Container resource = readJsonFile("device-resource.json");
     List<String> propertyValues =
-        matchingPlugin.extractPropertyValues(ctx, config, resource).asArray().stream()
+        extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
             .collect(toImmutableList());
     List<String> expected = ImmutableList.of("udiCarrier=deviceIdentifier=19088|id=deviceId073");
@@ -189,7 +182,7 @@ public class PropertyValueTest {
         arrayAnyOf(ctx, "name", arrayAllOf(ctx, "given", primitive(ctx, ""))).asContainer();
     Container resource = readJsonFile("patient-resource.json");
     List<String> propertyValues =
-        matchingPlugin.extractPropertyValues(ctx, config, resource).asArray().stream()
+        extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
             .collect(toImmutableList());
     List<String> expected =
@@ -209,7 +202,7 @@ public class PropertyValueTest {
     Exception got =
         Assert.assertThrows(
             PropertyValueFetcherException.class,
-            () -> matchingPlugin.extractPropertyValues(ctx, config, resource));
+            () -> extractPropertyValues(ctx, config, resource));
     assertEquals(expected.getClass(), got.getClass());
     assertEquals(expected.getMessage(), got.getMessage());
   }
@@ -229,7 +222,7 @@ public class PropertyValueTest {
     Exception got =
         Assert.assertThrows(
             PropertyValueFetcherException.class,
-            () -> matchingPlugin.extractPropertyValues(ctx, config, resource));
+            () -> extractPropertyValues(ctx, config, resource));
     assertEquals(expected.getClass(), got.getClass());
     assertEquals(expected.getMessage(), got.getMessage());
   }
@@ -241,7 +234,7 @@ public class PropertyValueTest {
             .asContainer();
     Container resource = readJsonFile("device-resource.json");
     List<String> propertyValues =
-        matchingPlugin.extractPropertyValues(ctx, config, resource).asArray().stream()
+        extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
             .collect(toImmutableList());
     List<String> expected = ImmutableList.of("distinctIdentifier=I am a distinct identifier");
@@ -254,7 +247,7 @@ public class PropertyValueTest {
         filterField(ctx, "distinctIdentifier", testDTI().primitiveOf("no match")).asContainer();
     Container resource = readJsonFile("device-resource.json");
     List<String> propertyValues =
-        matchingPlugin.extractPropertyValues(ctx, config, resource).asArray().stream()
+        extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
             .collect(toImmutableList());
     assertPropertyValues(ImmutableList.of(), propertyValues);
@@ -271,7 +264,7 @@ public class PropertyValueTest {
             .asContainer();
     Container resource = readJsonFile("device-resource.json");
     List<String> propertyValues =
-        matchingPlugin.extractPropertyValues(ctx, config, resource).asArray().stream()
+        extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
             .collect(toImmutableList());
     List<String> expected =
@@ -289,7 +282,7 @@ public class PropertyValueTest {
             .asContainer();
     Container resource = readJsonFile("device-resource.json");
     List<String> propertyValues =
-        matchingPlugin.extractPropertyValues(ctx, config, resource).asArray().stream()
+        extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
             .collect(toImmutableList());
     assertPropertyValues(ImmutableList.of(), propertyValues);
@@ -312,7 +305,7 @@ public class PropertyValueTest {
             .asContainer();
     Container resource = readJsonFile("patient-resource.json");
     List<String> propertyValues =
-        matchingPlugin.extractPropertyValues(ctx, config, resource).asArray().stream()
+        extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
             .collect(toImmutableList());
     ImmutableList<String> expected = ImmutableList.of("name=given=Alice", "name=given=James");
@@ -324,7 +317,7 @@ public class PropertyValueTest {
     Container config = anyMetaTag(ctx).asContainer();
     Container resource = readJsonFile("patient-resource.json");
     List<String> propertyValues =
-        matchingPlugin.extractPropertyValues(ctx, config, resource).asArray().stream()
+        extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
             .collect(toImmutableList());
     List<String> expected =
@@ -341,7 +334,7 @@ public class PropertyValueTest {
             .asContainer();
     Container resource = readJsonFile("patient-resource.json");
     List<String> propertyValues =
-        matchingPlugin.extractPropertyValues(ctx, config, resource).asArray().stream()
+        extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
             .collect(toImmutableList());
     ImmutableList<String> expected = ImmutableList.of();
@@ -355,7 +348,7 @@ public class PropertyValueTest {
             .asContainer();
     Container resource = readJsonFile("device-resource.json");
     List<String> propertyValues =
-        matchingPlugin.extractPropertyValues(ctx, config, resource).asArray().stream()
+        extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
             .collect(toImmutableList());
     List<String> expected = ImmutableList.of();

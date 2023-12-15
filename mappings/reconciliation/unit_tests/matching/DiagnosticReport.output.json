@@ -1,0 +1,10 @@
+[
+  [
+    "identifier=system=urn:oid:google/reconciliation-stable-id|value=1234",
+    "category=coding=code=LP29708-2|system=http://loinc.org|code=coding=code=45033-8|system=http://loinc.org|status=final|subject=reference=Patient/example-choice-patient"
+  ],
+  [
+    "identifier=system=urn:oid:google/reconciliation-stable-id|value=1234",
+    "category=coding=code=LP29708-2|system=http://loinc.org|code=coding=code=45033-8|system=http://loinc.org|status=final|subject=reference=Patient/example-choice-patient"
+  ]
+]

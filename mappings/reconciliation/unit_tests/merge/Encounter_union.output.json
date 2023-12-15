@@ -1,0 +1,277 @@
+{
+  "account": [
+    {
+      "reference": "Account/example-account1"
+    },
+    {
+      "reference": "Account/example-account2"
+    }
+  ],
+  "appointment": [
+    {
+      "reference": "Appointment/example-appointment1"
+    },
+    {
+      "reference": "Appointment/example-appointment2"
+    }
+  ],
+  "basedOn": [
+    {
+      "reference": "ServiceRequest/example-serviceRequest1"
+    },
+    {
+      "reference": "ServiceRequest/example-serviceRequest2"
+    }
+  ],
+  "class": {
+    "code": "SS",
+    "display": "short stay",
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+  },
+  "classHistory": [
+    {
+      "class": {
+        "code": "EMER",
+        "display": "emergency",
+        "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+      },
+      "period": {
+        "end": "2017-02-01T09:27:00+10:00",
+        "start": "2017-02-01T07:15:00+10:00"
+      }
+    },
+    {
+      "class": {
+        "code": "IMP",
+        "display": "inpatient encounter",
+        "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+      },
+      "period": {
+        "start": "2017-02-01T09:27:00+10:00"
+      }
+    }
+  ],
+  "diagnosis": [
+    {
+      "condition": {
+        "reference": "Condition/example-condition1"
+      },
+      "rank": 1,
+      "use": {
+        "coding": [
+          {
+            "code": "AD",
+            "display": "Admission diagnosis",
+            "system": "http://terminology.hl7.org/CodeSystem/diagnosis-role"
+          }
+        ]
+      }
+    },
+    {
+      "condition": {
+        "reference": "Condition/example-condition2"
+      },
+      "use": {
+        "coding": [
+          {
+            "code": "DD",
+            "display": "Discharge diagnosis",
+            "system": "http://terminology.hl7.org/CodeSystem/diagnosis-role"
+          }
+        ]
+      }
+    },
+    {
+      "condition": {
+        "display": "Complications from Roel's TPF chemotherapy on January 28th, 2013"
+      },
+      "rank": 2,
+      "use": {
+        "coding": [
+          {
+            "code": "AD",
+            "display": "Admission diagnosis",
+            "system": "http://terminology.hl7.org/CodeSystem/diagnosis-role"
+          }
+        ]
+      }
+    },
+    {
+      "condition": {
+        "display": "The patient is treated for a tumor"
+      },
+      "rank": 1,
+      "use": {
+        "coding": [
+          {
+            "code": "CC",
+            "display": "Chief complaint",
+            "system": "http://terminology.hl7.org/CodeSystem/diagnosis-role"
+          }
+        ]
+      }
+    }
+  ],
+  "episodeOfCare": [
+    {
+      "reference": "EpisodeOfCare/example-episodeOfCare1"
+    },
+    {
+      "reference": "EpisodeOfCare/example-episodeOfCare2"
+    }
+  ],
+  "id": "1234",
+  "identifier": [],
+  "location": [
+    {
+      "location": {
+        "display": "Emergency Waiting Room"
+      },
+      "period": {
+        "end": "2017-02-01T08:45:00+10:00",
+        "start": "2017-02-01T07:15:00+10:00"
+      },
+      "status": "active"
+    },
+    {
+      "location": {
+        "display": "Emergency"
+      },
+      "period": {
+        "end": "2017-02-01T09:27:00+10:00",
+        "start": "2017-02-01T08:45:00+10:00"
+      },
+      "status": "active"
+    },
+    {
+      "location": {
+        "display": "Ward 1, Room 42, Bed 1"
+      },
+      "period": {
+        "end": "2017-02-01T12:45:00+10:00",
+        "start": "2017-02-01T09:27:00+10:00"
+      },
+      "status": "active"
+    }
+  ],
+  "participant": [
+    {
+      "individual": {
+        "reference": "Practitioner/example-practitioner1"
+      },
+      "type": [
+        {
+          "coding": [
+            {
+              "code": "PART",
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "individual": {
+        "reference": "Practitioner/example-practitioner1"
+      },
+      "type": [
+        {
+          "coding": [
+            {
+              "code": "PPRF",
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "period": {
+    "end": "2017-02-01T13:00:00+10:00",
+    "start": "2017-02-01T07:15:00+10:00"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "code": "404684003",
+          "display": "Clinical finding",
+          "system": "http://snomed.info/sct"
+        }
+      ]
+    },
+    {
+      "coding": [
+        {
+          "code": "71388002",
+          "display": "Procedure",
+          "system": "http://snomed.info/sct"
+        }
+      ]
+    }
+  ],
+  "reasonReference": [
+    {
+      "reference": "Condition/example-condition"
+    },
+    {
+      "reference": "Procedure/example-procedure"
+    },
+    {
+      "reference": "Observation/example-observation"
+    }
+  ],
+  "resourceType": "Encounter",
+  "status": "in-progress",
+  "statusHistory": [
+    {
+      "period": {
+        "end": "2017-02-01T07:35:00+10:00",
+        "start": "2017-02-01T07:15:00+10:00"
+      },
+      "status": "arrived"
+    },
+    {
+      "period": {
+        "end": "2017-02-01T08:45:00+10:00",
+        "start": "2017-02-01T07:35:00+10:00"
+      },
+      "status": "triaged"
+    },
+    {
+      "period": {
+        "end": "2017-02-01T12:15:00+10:00",
+        "start": "2017-02-01T08:45:00+10:00"
+      },
+      "status": "in-progress"
+    },
+    {
+      "period": {
+        "end": "2017-02-01T12:45:00+10:00",
+        "start": "2017-02-01T12:15:00+10:00"
+      },
+      "status": "onleave"
+    },
+    {
+      "period": {
+        "end": "2017-02-01T13:00:00+10:00",
+        "start": "2017-02-01T12:45:00+10:00"
+      },
+      "status": "in-progress"
+    }
+  ],
+  "subject": {
+    "reference": "Patient/example-union-patient"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "code": "209099002",
+          "system": "http://www.ama-assn.org/go/cpt"
+        }
+      ],
+      "text": "History and physical examination with management of domiciliary or rest home patient"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "resources" : [{
+    "resourceType": "Patient",
+    "identifier": [
+      {
+        "system" : "urn:oid:google/reconciliation-stable-id",
+        "value" : "1234"
+      }
+    ],
+
+    "gender" : "female",
+    "name" : [
+      {
+        "family" : "Shaw",
+        "given" : [
+          "Amy",
+          "V."
+        ],
+        "period" : {
+          "start": "2016-12-06",
+          "end": "2020-07-22"
+        }
+      }
+    ],
+
+    "deceasedDateTime": "2015-02-14T13:42:00+10:00",
+    "multipleBirthInteger": 2
+  }, {
+    "resourceType": "Patient",
+    "identifier": [
+      {
+        "system" : "urn:oid:google/reconciliation-stable-id",
+        "value" : "1234"
+      }
+    ],
+
+    "gender" : "female",
+    "name" : [
+      {
+        "family" : "Shaw",
+        "given" : [
+          "Amy",
+          "V."
+        ],
+        "period" : {
+          "start": "2016-12-06",
+          "end": "2020-07-22"
+        }
+      }
+    ],
+
+    "deceasedBoolean": true,
+    "multipleBirthBoolean": true
+  }],
+  "resourceInfo": {
+    "resourceType": "Patient",
+    "stableId": "1234"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "asserter": {
+    "reference": "Patient/example-patient1"
+  },
+  "category": [
+    "food"
+  ],
+  "clinicalStatus": {
+    "coding": [
+      {
+        "code": "inactive",
+        "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "code": "134615",
+        "display": "brimonidine",
+        "system": "http://snomed.info/sct"
+      }
+    ]
+  },
+  "criticality": "low",
+  "encounter": {
+    "reference": "Encounter/example-encounter1"
+  },
+  "id": "1234",
+  "identifier": [],
+  "lastOccurrence": "2012-06",
+  "onsetString": "When birds can fly",
+  "patient": {
+    "reference": "Patient/example-fromER-patient"
+  },
+  "reaction": [
+    {
+      "manifestation": [
+        {
+          "coding": [
+            {
+              "code": "271807003",
+              "display": "skin rash",
+              "system": "http://snomed.info/sct"
+            }
+          ],
+          "text": "skin rash"
+        }
+      ],
+      "severity": "mild"
+    }
+  ],
+  "recordedDate": "2015-09-07T15:37:31-06:00",
+  "recorder": {
+    "reference": "Practitioner/example-practitioner1"
+  },
+  "resourceType": "AllergyIntolerance",
+  "type": "intolerance",
+  "verificationStatus": {
+    "coding": [
+      {
+        "code": "confirmed",
+        "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification"
+      }
+    ]
+  }
+}

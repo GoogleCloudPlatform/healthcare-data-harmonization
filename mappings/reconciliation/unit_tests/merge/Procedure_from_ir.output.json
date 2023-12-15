@@ -1,0 +1,65 @@
+{
+  "asserter": {
+    "display": "Dr Joan Baez",
+    "reference": "Practitioner/example-practitioner2"
+  },
+  "category": {
+    "coding": [
+      {
+        "code": "387713003",
+        "display": "Surgical procedure",
+        "system": "http://snomed.info/sct"
+      }
+    ],
+    "text": "Surgical procedure"
+  },
+  "code": {
+    "coding": [
+      {
+        "code": "71388002",
+        "display": "Procedure",
+        "system": "http://snomed.info/sct"
+      }
+    ]
+  },
+  "encounter": {
+    "display": "Roel's encounter on January 29th, 2013",
+    "reference": "Encounter/example-encounter1"
+  },
+  "id": "1234",
+  "identifier": [],
+  "location": {
+    "display": "Byte Cafe",
+    "reference": "Location/example-location1"
+  },
+  "outcome": {
+    "coding": [
+      {
+        "code": "385669000",
+        "display": "Successful",
+        "system": "http://snomed.info/sct"
+      }
+    ],
+    "text": "Successful"
+  },
+  "performedDateTime": "2019-05-23",
+  "recorder": {
+    "display": "Dr Joan Baez",
+    "reference": "Practitioner/example-practitioner2"
+  },
+  "resourceType": "Procedure",
+  "status": "stopped",
+  "statusReason": {
+    "coding": [
+      {
+        "code": "416406003",
+        "display": "Procedure discontinued",
+        "system": "http://snomed.info/sct"
+      }
+    ],
+    "text": "Procedure discontinued"
+  },
+  "subject": {
+    "reference": "Patient/example-fromIR-patient"
+  }
+}

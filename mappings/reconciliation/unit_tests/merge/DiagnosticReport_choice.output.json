@@ -1,0 +1,35 @@
+{
+  "category": [
+    {
+      "coding": [
+        {
+          "code": "LP29708-2",
+          "display": "Cardiology",
+          "system": "http://loinc.org"
+        }
+      ],
+      "text": "Cardiology"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "code": "45033-8",
+        "display": "Cardiovascular physiologic and EKG assessment panel",
+        "system": "http://loinc.org"
+      }
+    ],
+    "text": "Cardiovascular physiologic and EKG assessment panel"
+  },
+  "effectivePeriod": {
+    "end": "2011-01-01T21:39:30.000Z",
+    "start": "2011-01-01T11:39:30.000Z"
+  },
+  "id": "1234",
+  "identifier": [],
+  "resourceType": "DiagnosticReport",
+  "status": "final",
+  "subject": {
+    "reference": "Patient/example-choice-patient"
+  }
+}

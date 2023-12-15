@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
 }
 
-group 'com.google.cloud.verticals.foundations.dataharmonization'
+group 'com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation'
 
 repositories {
     mavenCentral()
@@ -12,15 +12,15 @@ dependencies {
     // TODO(): Set up versioning
     implementation group: "com.google.cloud.verticals.foundations.dataharmonization", name: "runtime"
 
-    annotationProcessor group: "com.google.auto.value", name: "auto-value", version: "1.7.4"
+    implementation group: "com.google.guava", name: "guava", version: "31.0.1-jre"
 
-    implementation group: "org.apache.beam", name: "beam-sdks-java-io-google-cloud-platform", version: "${dataflowVersion}"
-    if (gradle.ext.has("annotationProcessorExists") && gradle.ext.annotationProcessorExists){
-        annotationProcessor ("com.google.cloud.verticals.foundations.dataharmonization:annotation_processor")
-    }
-    testImplementation project(":plugins:testing")
+    implementation group: "com.google.auto.value", name: "auto-value-annotations", version: "1.7.4"
+    annotationProcessor group: "com.google.auto.value", name: "auto-value", version: "1.7.4"
 
     // TODO(): Set up versioning
     testImplementation group: "com.google.cloud.verticals.foundations.dataharmonization", name: "testutil"
     testImplementation group: "org.mockito", name: "mockito-core", version: "3.7.7"
+    testImplementation 'com.google.guava:guava-testlib:25.1-jre'
+    testImplementation 'junit:junit:4.13'
+
 }

@@ -1,0 +1,6 @@
+rootProject.name = 'reconciliation'
+
+include("reconcommon")
+include("reconv2")
+
+includeBuild("../../")

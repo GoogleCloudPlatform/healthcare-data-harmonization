@@ -1,0 +1,70 @@
+import "test"
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+import "../../utilities/reconciliation/matching.wstl"
+import "../../utilities/reconciliation/AllergyIntolerance/matching-rules.wstl"
+import "../../utilities/reconciliation/Condition/matching-rules.wstl"
+import "../../utilities/reconciliation/Device/matching-rules.wstl"
+import "../../utilities/reconciliation/DiagnosticReport/matching-rules.wstl"
+import "../../utilities/reconciliation/Encounter/matching-rules.wstl"
+import "../../utilities/reconciliation/Immunization/matching-rules.wstl"
+import "../../utilities/reconciliation/Location/matching-rules.wstl"
+import "../../utilities/reconciliation/MedicationRequest/matching-rules.wstl"
+import "../../utilities/reconciliation/Observation/matching-rules.wstl"
+import "../../utilities/reconciliation/Organization/matching-rules.wstl"
+import "../../utilities/reconciliation/Patient/matching-rules.wstl"
+import "../../utilities/reconciliation/Practitioner/matching-rules.wstl"
+import "../../utilities/reconciliation/Procedure/matching-rules.wstl"
+
+test::runAll()
+
+// Tests matching-rules for AllergyIntolerance.
+def test_match_AllergyIntolerance() testMatching("AllergyIntolerance")
+
+// Tests matching-rules for Condition.
+def test_match_Condition() testMatching("Condition")
+
+// Tests matching-rules for Device.
+def test_match_Device() testMatching("Device")
+
+// Tests matching-rules for DiagnosticReport.
+def test_match_DiagnosticReport() testMatching("DiagnosticReport")
+
+// Tests matching-rules for Encounter.
+def test_match_Encounter() testMatching("Encounter")
+
+// Tests matching-rules for Immunization.
+def test_match_Immunization() testMatching("Immunization")
+
+// Tests matching-rules for Location.
+def test_match_Location() testMatching("Location")
+
+// Tests matching-rules for MedicationRequest.
+def test_match_MedicationRequest() testMatching("MedicationRequest")
+
+// Tests matching-rules for Observation.
+def test_match_Observation() testMatching("Observation")
+
+// Tests matching-rules for Organization.
+def test_match_Organization() testMatching("Organization")
+
+// Tests matching-rules for Patient.
+def test_match_Patient() testMatching("Patient")
+
+// Tests matching-rules for Practitioner.
+def test_match_Practitioner() testMatching("Practitioner")
+
+// Tests matching-rules for Procedure.
+def test_match_Procedure() testMatching("Procedure")
+
+// Generic function for testing matching configurations in the
+// reconciliation package based on the resourceType.
+def testMatching(resourceType) {
+  var config : matching_rules::GetMatchingConfig(resourceType);
+  var input: loadJson(joinPath(testdir(), "{resourceType}.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "{resourceType}.output.json"))
+  var actualOutput: recon::extractPropertyValues(config, input.resources[])
+  test::assertEquals(serializeJson(expectedOutput), serializeJson(actualOutput))
+}
+
+// Path for input and output files.
+def testdir() "./matching/"

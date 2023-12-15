@@ -1,0 +1,202 @@
+{
+  "education": [
+    {
+      "presentationDate": "2013-01-10",
+      "publicationDate": "2012-07-02",
+      "reference": "www.document.com/253088698300010311120702"
+    },
+    {
+      "documentType": "253088698300010311120702",
+      "presentationDate": "2013-01-10",
+      "publicationDate": "2012-07-02"
+    }
+  ],
+  "id": "1234",
+  "identifier": [],
+  "note": [
+    {
+      "text": "Notes on adminstration of vaccine"
+    },
+    {
+      "text": "Notes on adminstration of a historical vaccine"
+    }
+  ],
+  "occurrenceDateTime": "2010-01-01",
+  "patient": {
+    "display": "Amy Shaw",
+    "reference": "Patient/example-union-patient"
+  },
+  "performer": [
+    {
+      "actor": {
+        "reference": "Practitioner/example-practitioner"
+      },
+      "function": {
+        "coding": [
+          {
+            "code": "OP",
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0443"
+          }
+        ]
+      }
+    },
+    {
+      "actor": {
+        "reference": "Practitioner/example-practitioner"
+      },
+      "function": {
+        "coding": [
+          {
+            "code": "AP",
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0443"
+          }
+        ]
+      }
+    }
+  ],
+  "primarySource": false,
+  "programEligibility": [
+    {
+      "coding": [
+        {
+          "code": "ineligible",
+          "display": "Not Eligible",
+          "system": "http://terminology.hl7.org/CodeSystem/immunization-program-eligibility"
+        }
+      ],
+      "text": "The patient is not eligible for the funding program."
+    },
+    {
+      "coding": [
+        {
+          "code": "uninsured",
+          "display": "Uninsured",
+          "system": "http://terminology.hl7.org/CodeSystem/immunization-program-eligibility"
+        }
+      ],
+      "text": "The patient is eligible for the funding program because they are uninsured."
+    }
+  ],
+  "protocolApplied": [
+    {
+      "doseNumberPositiveInt": 1,
+      "series": "2-dose",
+      "targetDisease": [
+        {
+          "coding": [
+            {
+              "code": "1857005",
+              "display": "Gestational rubella syndrome",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "doseNumberString": "2",
+      "series": "3-dose",
+      "targetDisease": [
+        {
+          "coding": [
+            {
+              "code": "36653000",
+              "display": "Rubella",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "reaction": [
+    {
+      "date": "2010-01-02",
+      "detail": {
+        "reference": "Observation/example-observation"
+      },
+      "reported": true
+    },
+    {
+      "date": "2010-01-05",
+      "detail": {
+        "reference": "Observation/example-observation"
+      },
+      "reported": false
+    }
+  ],
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "code": "429060002",
+          "display": "Procedure to meet occupational requirement",
+          "system": "http://snomed.info/sct"
+        }
+      ]
+    },
+    {
+      "coding": [
+        {
+          "code": "281657000",
+          "display": "Travel vaccinations",
+          "system": "http://snomed.info/sct"
+        }
+      ]
+    }
+  ],
+  "reasonReference": [
+    {
+      "reference": "Condition/example-condition"
+    },
+    {
+      "reference": "Observation/example-observation"
+    },
+    {
+      "reference": "DiagnosticReport/example-diagnosticreport"
+    }
+  ],
+  "resourceType": "Immunization",
+  "status": "completed",
+  "subpotentReason": [
+    {
+      "coding": [
+        {
+          "code": "partial",
+          "display": "Partial Dose",
+          "system": "http://terminology.hl7.org/CodeSystem/immunization-subpotent-reason"
+        }
+      ],
+      "text": "The full volume of the dose was not administered to the patient."
+    },
+    {
+      "coding": [
+        {
+          "code": "coldchainbreak",
+          "display": "Cold Chain Break",
+          "system": "http://terminology.hl7.org/CodeSystem/immunization-subpotent-reason"
+        }
+      ],
+      "text": "The vaccine experienced a cold chain break."
+    },
+    {
+      "coding": [
+        {
+          "code": "recall",
+          "display": "Manufacturer Recall",
+          "system": "http://terminology.hl7.org/CodeSystem/immunization-subpotent-reason"
+        }
+      ],
+      "text": "The vaccine was recalled by the manufacturer."
+    }
+  ],
+  "vaccineCode": {
+    "coding": [
+      {
+        "code": "10",
+        "display": "poliovirus vaccine, inactivated",
+        "system": "http://hl7.org/fhir/sid/cvx"
+      }
+    ]
+  }
+}

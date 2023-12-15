@@ -1,0 +1,22 @@
+[
+  [
+    "identifier=system=urn:oid:google/reconciliation-stable-id|value=1234",
+    "code=coding=code=10493|system=http://snomed.info/sct|patient=reference=Patient/example-choice-patient"
+  ],
+  [
+    "identifier=system=urn:oid:google/reconciliation-stable-id|value=1234",
+    "code=coding=code=10493|system=http://snomed.info/sct|patient=reference=Patient/example-choice-patient"
+  ],
+  [
+    "identifier=system=urn:oid:google/reconciliation-stable-id|value=1234",
+    "code=coding=code=10493|system=http://snomed.info/sct|patient=reference=Patient/example-choice-patient"
+  ],
+  [
+    "identifier=system=urn:oid:google/reconciliation-stable-id|value=1234",
+    "code=coding=code=10493|system=http://snomed.info/sct|patient=reference=Patient/example-choice-patient"
+  ],
+  [
+    "identifier=system=urn:oid:google/reconciliation-stable-id|value=1234",
+    "code=coding=code=10493|system=http://snomed.info/sct|patient=reference=Patient/example-choice-patient"
+  ]
+]

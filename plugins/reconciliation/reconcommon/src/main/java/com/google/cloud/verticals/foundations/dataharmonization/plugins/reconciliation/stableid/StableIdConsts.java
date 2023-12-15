@@ -36,21 +36,6 @@ public final class StableIdConsts {
   public static final ImmutableSet<String> VALID_FIELD_TYPES =
       ImmutableSet.of(PRIMITIVE_FIELD_TYPE, ARRAY_FIELD_TYPE, CONTAINER_FIELD_TYPE);
 
-  // Spanner Table constants.
-  public static final String OLD_TABLE_NAME = "PropertyBooleanIndex";
-  public static final String NEW_TABLE_NAME = "StableIdPropertyValue";
-  public static final String STABLE_ID_PROPERTY_VALUE_CAVEAT_CASE =
-      "StableIdPropertyValueCaveatCase";
-  public static final String STABLE_ID_RESOURCES_TABLE = "StableIdResources";
-  public static final String STABLE_ID_COLUMN = "StableId";
-  public static final String STABLE_ID_PROPERTY_VALUE_ID_COLUMN = "StableIdPropertyValueId";
-  public static final String RESOURCE_ID_COLUMN = "ResourceId";
-  public static final String RESOURCE_ID_FIELD = "resourceId";
-  public static final String RESOURCE_TYPE_COLUMN = "ResourceType";
-  public static final String PROPERTY_VALUE_COLUMN = "PropertyValue";
-  public static final String REFERENCE_COUNT_COLUMN = "ReferenceCount";
-  public static final String FROM_FIELD = "from";
-
   // FHIR constants.
   public static final String STABLE_ID_SYSTEM = "urn:oid:google/reconciliation-stable-id";
   public static final String SYSTEM_FIELD = "system";
@@ -73,14 +58,6 @@ public final class StableIdConsts {
   public static final String AGENT_FIELD = "agent";
   public static final String WHO_FIELD = "who";
   public static final String DATA_SOURCE_NAME = "DATA_SOURCE_NAME";
-  public static final String DISABLE_LEGACY_STABLE_ID_TABLE_USE =
-      "DISABLE_LEGACY_STABLE_ID_TABLE_USE";
-  public static final String DISABLE_FORCING_SPANNER_INDEX = "DISABLE_FORCING_SPANNER_INDEX";
-  public static final String BYPASS_RECONCILIATION_TAG = "/bypass-reconciliation";
-
-  public static final String ENABLE_OCC_FOR_STABLE_ID = "enable_occ_for_stable_id";
-
-  public static final String ENABLE_CHECKPOINTING = "enable_checkpointing";
 
   private StableIdConsts() {}
 }

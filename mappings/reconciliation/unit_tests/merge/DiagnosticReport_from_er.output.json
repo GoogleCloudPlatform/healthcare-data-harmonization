@@ -1,0 +1,38 @@
+{
+  "category": [
+    {
+      "coding": [
+        {
+          "code": "LP29684-5",
+          "display": "Radiology",
+          "system": "http://loinc.org"
+        }
+      ],
+      "text": "Radiology"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "code": "30746-2",
+        "display": "Portable XR Chest Views",
+        "system": "http://loinc.org"
+      }
+    ],
+    "text": "Portable XR Chest Views"
+  },
+  "conclusion": "Pufferfish are a risk",
+  "effectiveDateTime": "2011-05-23T10:30:25.000Z",
+  "encounter": {
+    "display": "Pufferfish Encounter 3",
+    "reference": "Encounter/example-encounter3"
+  },
+  "id": "1234",
+  "identifier": [],
+  "issued": "2005-07-06T11:45:33+11:00",
+  "resourceType": "DiagnosticReport",
+  "status": "registered",
+  "subject": {
+    "reference": "Patient/example-fromER-patient"
+  }
+}

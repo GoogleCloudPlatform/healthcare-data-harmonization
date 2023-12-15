@@ -1,0 +1,12 @@
+[
+  [
+    "identifier=system=urn:oid:google/reconciliation-stable-id|value=1234",
+    "occurrenceDateTime=2013-12-27|patient=reference=Patient/example-fromER-patient|status=completed|vaccineCode=coding=code=158|system=http://hl7.org/fhir/sid/cvx",
+    "occurrenceDateTime=2013-12-27|patient=reference=Patient/example-fromER-patient|status=completed|vaccineCode=coding=code=49281-0631-15|system=http://hl7.org/fhir/sid/ndc"
+  ],
+  [
+    "identifier=system=urn:oid:google/reconciliation-stable-id|value=1234",
+    "occurrenceDateTime=2013-12-27|patient=reference=Patient/example-fromER-patient|status=completed|vaccineCode=coding=code=158|system=http://hl7.org/fhir/sid/cvx",
+    "occurrenceDateTime=2013-12-27|patient=reference=Patient/example-fromER-patient|status=completed|vaccineCode=coding=code=49281-0631-15|system=http://hl7.org/fhir/sid/ndc"
+  ]
+]

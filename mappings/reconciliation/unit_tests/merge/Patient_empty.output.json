@@ -1,0 +1,27 @@
+{
+  "gender": "female",
+  "id": "1234",
+  "identifier": [
+    {
+      "system": "http://hospital.smarthealthit.org",
+      "type": {
+        "text": "Medical Record Number"
+      },
+      "value": "empty"
+    }
+  ],
+  "name": [
+    {
+      "family": "Shaw",
+      "given": [
+        "Amy",
+        "V."
+      ],
+      "period": {
+        "end": "2020-07-22",
+        "start": "2016-12-06"
+      }
+    }
+  ],
+  "resourceType": "Patient"
+}

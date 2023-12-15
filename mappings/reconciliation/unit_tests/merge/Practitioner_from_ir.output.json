@@ -1,0 +1,19 @@
+{
+  "active": true,
+  "birthDate": "1973-12-07",
+  "gender": "male",
+  "id": "1234",
+  "identifier": [],
+  "name": [
+    {
+      "family": "Sheppard",
+      "given": [
+        "James"
+      ],
+      "prefix": [
+        "Dr"
+      ]
+    }
+  ],
+  "resourceType": "Practitioner"
+}

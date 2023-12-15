@@ -1,0 +1,105 @@
+{
+  "authoredOn": "2008-04-05",
+  "courseOfTherapyType": {
+    "coding": [
+      {
+        "code": "continuous",
+        "display": "Continuous long term therapy",
+        "system": "http://terminology.hl7.org/CodeSystem/medicationrequest-course-of-therapy"
+      }
+    ]
+  },
+  "dispenseRequest": {
+    "expectedSupplyDuration": {
+      "code": "d",
+      "system": "http://unitsofmeasure.org",
+      "unit": "days",
+      "value": 5
+    },
+    "numberOfRepeatsAllowed": 1,
+    "quantity": {
+      "code": "TAB",
+      "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+      "unit": "TAB",
+      "value": 6
+    },
+    "validityPeriod": {
+      "end": "2016-01-15",
+      "start": "2015-01-15"
+    }
+  },
+  "doNotPerform": false,
+  "encounter": {
+    "display": "Office Visit",
+    "reference": "Encounter/example-encounter2"
+  },
+  "groupIdentifier": {
+    "system": "http://www.bbc.uk/portal/prescriptions",
+    "use": "official",
+    "value": "89698659865"
+  },
+  "id": "1234",
+  "identifier": [],
+  "intent": "order",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "code": "582620",
+        "display": "Nizatidine 15 MG/ML Oral Solution [Axid]",
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm"
+      }
+    ],
+    "text": "Nizatidine 15 MG/ML Oral Solution [Axid]"
+  },
+  "performer": {
+    "display": "Dr Sheppard",
+    "reference": "Practitioner/example-practitioner1"
+  },
+  "performerType": {
+    "coding": [
+      {
+        "code": "82296001",
+        "display": "Pediatrician",
+        "system": "http://snomed.info/sct"
+      }
+    ]
+  },
+  "priorPrescription": {
+    "reference": "MedicationRequest/example-medicationrequest"
+  },
+  "priority": "urgent",
+  "recorder": {
+    "reference": "Practitioner/example-practitioner3"
+  },
+  "reportedBoolean": false,
+  "requester": {
+    "display": "Dr Sheppard",
+    "reference": "Practitioner/example-practitioner1"
+  },
+  "resourceType": "MedicationRequest",
+  "status": "completed",
+  "statusReason": {
+    "coding": [
+      {
+        "code": "altchoice",
+        "display": "Try another treatment first",
+        "system": "http://terminology.hl7.org/CodeSystem/medicationrequest-status-reason"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/example-fromIR-patient"
+  },
+  "substitution": {
+    "allowedBoolean": true,
+    "reason": {
+      "coding": [
+        {
+          "code": "FP",
+          "display": "formulary policy",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+        }
+      ]
+    }
+  }
+}

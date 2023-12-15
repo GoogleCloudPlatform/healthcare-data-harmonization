@@ -1,0 +1,65 @@
+{
+  "asserter": {
+    "display": "Dr Bob Dylan",
+    "reference": "Practitioner/example-practitioner1"
+  },
+  "category": {
+    "coding": [
+      {
+        "code": "103693007",
+        "display": "Diagnostic procedure (procedure)",
+        "system": "http://snomed.info/sct"
+      }
+    ],
+    "text": "Diagnostic procedure"
+  },
+  "code": {
+    "coding": [
+      {
+        "code": "71388002",
+        "display": "Procedure",
+        "system": "http://snomed.info/sct"
+      }
+    ]
+  },
+  "encounter": {
+    "display": "Roel's encounter on January 28th, 2013",
+    "reference": "Encounter/example-encounter1"
+  },
+  "id": "1234",
+  "identifier": [],
+  "location": {
+    "display": "True North Cafe",
+    "reference": "Location/example-location1"
+  },
+  "outcome": {
+    "coding": [
+      {
+        "code": "385670004",
+        "display": "Partially Successful",
+        "system": "http://snomed.info/sct"
+      }
+    ],
+    "text": "Partially Successful"
+  },
+  "performedDateTime": "2019-05-23",
+  "recorder": {
+    "display": "Dr Bob Dylan",
+    "reference": "Practitioner/example-practitioner1"
+  },
+  "resourceType": "Procedure",
+  "status": "not-done",
+  "statusReason": {
+    "coding": [
+      {
+        "code": "183932001",
+        "display": "Procedure contraindicated",
+        "system": "http://snomed.info/sct"
+      }
+    ],
+    "text": "Procedure contraindicated"
+  },
+  "subject": {
+    "reference": "Patient/example-fromER-patient"
+  }
+}

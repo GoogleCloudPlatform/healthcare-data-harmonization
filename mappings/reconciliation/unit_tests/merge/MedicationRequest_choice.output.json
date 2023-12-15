@@ -1,0 +1,20 @@
+{
+  "authoredOn": "2008-04-05",
+  "id": "1234",
+  "identifier": [],
+  "intent": "plan",
+  "medicationReference": {
+    "display": "Nizatidine 15 MG/ML Oral Solution [Axid]",
+    "reference": "Medication/example-choice-medication"
+  },
+  "reportedBoolean": true,
+  "requester": {
+    "display": "Dr James Sheppard",
+    "reference": "Practitioner/example-practitioner1"
+  },
+  "resourceType": "MedicationRequest",
+  "status": "active",
+  "subject": {
+    "reference": "Patient/example-choice-patient"
+  }
+}

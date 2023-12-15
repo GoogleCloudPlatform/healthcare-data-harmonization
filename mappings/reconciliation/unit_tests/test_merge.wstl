@@ -1,0 +1,172 @@
+import "test"
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+import "../../utilities/reconciliation/AllergyIntolerance/merge-rules.wstl"
+import "../../utilities/reconciliation/Condition/merge-rules.wstl"
+import "../../utilities/reconciliation/Device/merge-rules.wstl"
+import "../../utilities/reconciliation/DiagnosticReport/merge-rules.wstl"
+import "../../utilities/reconciliation/Encounter/merge-rules.wstl"
+import "../../utilities/reconciliation/Immunization/merge-rules.wstl"
+import "../../utilities/reconciliation/Location/merge-rules.wstl"
+import "../../utilities/reconciliation/MedicationRequest/merge-rules.wstl"
+import "../../utilities/reconciliation/Observation/merge-rules.wstl"
+import "../../utilities/reconciliation/Organization/merge-rules.wstl"
+import "../../utilities/reconciliation/Patient/merge-rules.wstl"
+import "../../utilities/reconciliation/Practitioner/merge-rules.wstl"
+import "../../utilities/reconciliation/Procedure/merge-rules.wstl"
+import "../../utilities/reconciliation/Default/merge-rules.wstl"
+
+test::runAll()
+
+// Tests merge-rules::AllergyIntoleranceMerge for choice.
+def test_merge_AllergyIntolerance_choice() testMerge("AllergyIntolerance", "choice")
+
+// Tests merge-rules::AllergyIntoleranceMerge for existing resources.
+def test_merge_AllergyIntolerance_from_er() testMerge("AllergyIntolerance", "from_er")
+
+// Tests merge-rules::AllergyIntoleranceMerge for incoming resources.
+def test_merge_AllergyIntolerance_from_ir() testMerge("AllergyIntolerance", "from_ir")
+
+// Tests merge-rules::AllergyIntoleranceMerge for union.
+def test_merge_AllergyIntolerance_union() testMerge("AllergyIntolerance", "union")
+
+// Tests merge-rules::ConditionMerge for choice.
+def test_merge_Condition_choice() testMerge("Condition", "choice")
+
+// Tests merge-rules::ConditionMerge for existing resources.
+def test_merge_Condition_from_er() testMerge("Condition", "from_er")
+
+// Tests merge-rules::ConditionMerge for incoming resources.
+def test_merge_Condition_from_ir() testMerge("Condition", "from_ir")
+
+// Tests merge-rules::ConditionMerge for union.
+def test_merge_Condition_union() testMerge("Condition", "union")
+
+// Tests merge-rules::DeviceMerge for existing resources.
+def test_merge_Device_from_er() testMerge("Device", "from_er")
+
+// Tests merge-rules::DeviceMerge for incoming resources.
+def test_merge_Device_from_ir() testMerge("Device", "from_ir")
+
+// Tests merge-rules::DeviceMerge for union.
+def test_merge_Device_union() testMerge("Device", "union")
+
+// Tests merge-rules::DiagnosticReportMerge for choice.
+def test_merge_DiagnosticReport_choice() testMerge("DiagnosticReport", "choice")
+
+// Tests merge-rules::DiagnosticReportMerge for existing resources.
+def test_merge_DiagnosticReport_from_er() testMerge("DiagnosticReport", "from_er")
+
+// Tests merge-rules::DiagnosticReportMerge for incoming resources.
+def test_merge_DiagnosticReport_from_ir() testMerge("DiagnosticReport", "from_ir")
+
+// Tests merge-rules::DiagnosticReportMerge for union.
+def test_merge_DiagnosticReport_union() testMerge("DiagnosticReport", "union")
+
+// Tests merge-rules::EncounterMerge for existing resources.
+def test_merge_Encounter_from_er() testMerge("Encounter", "from_er")
+
+// Tests merge-rules::EncounterMerge for incoming resources.
+def test_merge_Encounter_from_ir() testMerge("Encounter", "from_ir")
+
+// Tests merge-rules::EncounterMerge for union.
+def test_merge_Encounter_union() testMerge("Encounter", "union")
+
+// Tests merge-rules::ImmunizationMerge for existing resources.
+def test_merge_Immunization_from_er() testMerge("Immunization", "from_er")
+
+// Tests merge-rules::ImmunizationMerge for incoming resources.
+def test_merge_Immunization_from_ir() testMerge("Immunization", "from_ir")
+
+// Tests merge-rules::ImmunizationMerge for union.
+def test_merge_Immunization_union() testMerge("Immunization", "union")
+
+// Tests merge-rules::LocationMerge for existing resources.
+def test_merge_Location_from_er() testMerge("Location", "from_er")
+
+// Tests merge-rules::LocationMerge for incoming resources.
+def test_merge_Location_from_ir() testMerge("Location", "from_ir")
+
+// Tests merge-rules::LocationMerge for union.
+def test_merge_Location_union() testMerge("Location", "union")
+
+// Tests merge-rules::MedicationRequestMerge for choice.
+def test_merge_MedicationRequest_choice() testMerge("MedicationRequest", "choice")
+
+// Tests merge-rules::MedicationRequestMerge for existing resources.
+def test_merge_MedicationRequest_from_er() testMerge("MedicationRequest", "from_er")
+
+// Tests merge-rules::MedicationRequestMerge for incoming resources.
+def test_merge_MedicationRequest_from_ir() testMerge("MedicationRequest", "from_ir")
+
+// Tests merge-rules::MedicationRequestMerge for union.
+def test_merge_MedicationRequest_union() testMerge("MedicationRequest", "union")
+
+// Tests merge-rules::ObservationMerge for choice.
+def test_merge_Observation_choice() testMerge("Observation", "choice")
+
+// Tests merge-rules::ObservationMerge for existing resources.
+def test_merge_Observation_from_er() testMerge("Observation", "from_er")
+
+// Tests merge-rules::ObservationMerge for incoming resources.
+def test_merge_Observation_from_ir() testMerge("Observation", "from_ir")
+
+// Tests merge-rules::ObservationMerge for union.
+def test_merge_Observation_union() testMerge("Observation", "union")
+
+// Tests merge-rules::OrganizationMerge for existing resources.
+def test_merge_Organization_empty() testMerge("Organization", "empty")
+
+// Tests merge-rules::OrganizationMerge for incoming resources.
+def test_merge_Organization_from_ir() testMerge("Organization", "from_ir")
+
+// Tests merge-rules::OrganizationMerge for union.
+def test_merge_Organization_union() testMerge("Organization", "union")
+
+// Tests merge-rules::PatientMerge for choice.
+def test_merge_Patient_choice() testMerge("Patient", "choice")
+
+// Tests merge-rules::PatientMerge for existing resources.
+def test_merge_Patient_from_empty() testMerge("Patient", "empty")
+
+// Tests merge-rules::PatientMerge for incoming resources.
+def test_merge_Patient_from_ir() testMerge("Patient", "from_ir")
+
+// Tests merge-rules::PatientMerge for existing resources.
+def test_merge_Patient_from_er() testMerge("Patient", "from_er")
+
+// Tests merge-rules::PatientMerge for union.
+def test_merge_Patient_union() testMerge("Patient", "union")
+
+// Tests merge-rules::PractitionerMerge for incoming resources.
+def test_merge_Practitioner_from_ir() testMerge("Practitioner", "from_ir")
+
+// Tests merge-rules::PractitionerMerge for existing resources.
+def test_merge_Practitioner_from_er() testMerge("Practitioner", "from_er")
+
+// Tests merge-rules::PractitionerMerge for union.
+def test_merge_Practitioner_union() testMerge("Practitioner", "union")
+
+// Tests merge-rules::ProcedureMerge for choice.
+def test_merge_Procedure_choice() testMerge("Procedure", "choice")
+
+// Tests merge-rules::ProcedureMerge for incoming resources.
+def test_merge_Procedure_from_ir() testMerge("Procedure", "from_ir")
+
+// Tests merge-rules::ProcedureMerge for existing resources.
+def test_merge_Procedure_from_er() testMerge("Procedure", "from_er")
+
+// Tests merge-rules::ProcedureMerge for union.
+def test_merge_Procedure_union() testMerge("Procedure", "union")
+
+
+// Generic function for testing merge configurations in the
+// reconciliation package based on the resourceType.
+def testMerge(resourceType, ruleType) {
+  var input: loadJson(joinPath(testdir(), "{resourceType}_{ruleType}.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "{resourceType}_{ruleType}.output.json"))
+  var actualOutput: recon::mergeResources(input.resources, input.resourceInfo)
+  test::assertEquals(serializeJson(expectedOutput), serializeJson(actualOutput))
+}
+
+// Path for input and output files.
+def testdir() "./merge/"

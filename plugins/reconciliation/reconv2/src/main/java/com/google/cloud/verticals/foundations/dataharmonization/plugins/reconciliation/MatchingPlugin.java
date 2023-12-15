@@ -252,7 +252,7 @@ public class MatchingPlugin {
    * @throws PropertyValueFetcherException when property-values fetching fails.
    */
   @PluginFunction
-  public Data extractPropertyValues(RuntimeContext ctx, Data config, Data resource)
+  public static Data extractPropertyValues(RuntimeContext ctx, Data config, Data resource)
       throws MatchingCriteriaConfigException, PropertyValueFetcherException {
     List<String> propertyValues =
         PropertyValueFetcher.from(resource, MatchingCriteria.of(config.asContainer())).fetch();

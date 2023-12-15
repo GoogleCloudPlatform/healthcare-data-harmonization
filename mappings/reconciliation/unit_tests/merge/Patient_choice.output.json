@@ -1,0 +1,21 @@
+{
+  "deceasedBoolean": true,
+  "gender": "female",
+  "id": "1234",
+  "identifier": [],
+  "multipleBirthBoolean": true,
+  "name": [
+    {
+      "family": "Shaw",
+      "given": [
+        "Amy",
+        "V."
+      ],
+      "period": {
+        "end": "2020-07-22",
+        "start": "2016-12-06"
+      }
+    }
+  ],
+  "resourceType": "Patient"
+}

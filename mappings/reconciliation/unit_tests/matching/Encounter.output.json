@@ -1,0 +1,14 @@
+[
+  [
+    "identifier=system=urn:oid:google/reconciliation-stable-id|value=1234",
+    "class=code=IMP|period=start=2020-10-02|status=triaged|subject=reference=Patient/example-fromER-patient|type=coding=code=11429006|system=http://snomed.info/sct"
+  ],
+  [
+    "identifier=system=urn:oid:google/reconciliation-stable-id|value=1234",
+    "class=code=IMP|period=start=2020-10-02|status=triaged|subject=reference=Patient/example-fromER-patient|type=coding=code=11429006|system=http://snomed.info/sct"
+  ],
+  [
+    "identifier=system=urn:oid:google/reconciliation-stable-id|value=1234",
+    "class=code=IMP|period=start=2020-10-02|status=triaged|subject=reference=Patient/example-fromER-patient|type=coding=code=11429006|system=http://snomed.info/sct"
+  ]
+]

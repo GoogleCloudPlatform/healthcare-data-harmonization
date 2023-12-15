@@ -1,0 +1,105 @@
+{
+  "authoredOn": "2008-04-05",
+  "courseOfTherapyType": {
+    "coding": [
+      {
+        "code": "acute",
+        "display": "Short course (acute) therapy",
+        "system": "http://terminology.hl7.org/CodeSystem/medicationrequest-course-of-therapy"
+      }
+    ]
+  },
+  "dispenseRequest": {
+    "expectedSupplyDuration": {
+      "code": "d",
+      "system": "http://unitsofmeasure.org",
+      "unit": "days",
+      "value": 30
+    },
+    "numberOfRepeatsAllowed": 1,
+    "quantity": {
+      "code": "mL",
+      "system": "http://unitsofmeasure.org",
+      "unit": "mL",
+      "value": 480
+    }
+  },
+  "doNotPerform": true,
+  "encounter": {
+    "display": "Office Visit",
+    "reference": "Encounter/example-encounter1"
+  },
+  "groupIdentifier": {
+    "system": "http://www.bmc.nl/portal/prescriptions",
+    "use": "official",
+    "value": "983939393"
+  },
+  "id": "1234",
+  "identifier": [],
+  "intent": "plan",
+  "medicationReference": {
+    "display": "Nizatidine 15 MG/ML Oral Solution [Axid]",
+    "reference": "Medication/example-fromER-medication"
+  },
+  "performer": {
+    "display": "Dr James Sheppard",
+    "reference": "Practitioner/example-practitioner1"
+  },
+  "performerType": {
+    "coding": [
+      {
+        "code": "85733003",
+        "display": "General pathologist",
+        "system": "http://snomed.info/sct"
+      }
+    ]
+  },
+  "priorPrescription": {
+    "display": "Vancomycin IV",
+    "reference": "MedicationRequest/example-medicationrequest1"
+  },
+  "priority": "routine",
+  "recorder": {
+    "display": "Caroline Sheppard",
+    "reference": "Practitioner/example-practitioner2"
+  },
+  "reportedBoolean": true,
+  "requester": {
+    "display": "Dr James Sheppard",
+    "reference": "Practitioner/example-practitioner1"
+  },
+  "resourceType": "MedicationRequest",
+  "status": "active",
+  "statusReason": {
+    "coding": [
+      {
+        "code": "clarif",
+        "display": "Prescription requires clarification",
+        "system": "http://terminology.hl7.org/CodeSystem/medicationrequest-status-reason"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/example-fromER-patient"
+  },
+  "substitution": {
+    "allowedCodeableConcept": {
+      "coding": [
+        {
+          "code": "E",
+          "display": "equivalent",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-substanceAdminSubstitution"
+        }
+      ]
+    },
+    "reason": {
+      "coding": [
+        {
+          "code": "OS",
+          "display": "out of stock",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+        }
+      ]
+    }
+  }
+}
