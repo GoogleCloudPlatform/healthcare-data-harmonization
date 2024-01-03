@@ -18,18 +18,22 @@ For use with legacy pipelines, the entry point will need to be adapted.
 
 # Related link
 
+// BEGIN GOOGLEANDGOB-INTERNAL
 design doc: https://docs.google.com/document/d/1ZGzt_Eyv0xi0E27whx_ihcy4tGtA-q2GIF_RY4LhXOg/edit#
 
+// END GOOGLEANDGOB-INTERNAL
 FHIR roadmaps r3r4: https://www.hl7.org/fhir/r3maps.html
 
 FHIR roadmaps r2r3: http://hl7.org/fhir/STU3/r2maps.html
 
-Running Whistle mapping files: https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/mapping_language/doc/reference.md
+Running Whistle mapping files: https://github.com/GoogleCloudPlatform/healthcare-data-harmonization/blob/master/quickrun/README.md
 
+// BEGIN GOOGLEANDGOB-INTERNAL
 See this
 [code snippet](https://google3/cloud/healthcare/fhir/cvc/r3r4/account_test.go)
 for an example of how to use the mapping in Golang.
 
+// END GOOGLEANDGOB-INTERNAL
 # Implemented Feature:
 
 - Implemented baseline conversions followed the FHIR roadmaps R3R4 and R2R3.

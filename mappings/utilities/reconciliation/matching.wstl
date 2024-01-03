@@ -65,16 +65,3 @@ def GetAllMatchingConfigs() {
 }
 
 def GetMatchingConfig(resourceType) get(GetAllMatchingConfigs(), resourceType)
-
-// Description: Constructs a Resource creation timestamp extension to support FHIR reconciliation
-//
-// Argument(s):
-//   Timestamp: https://www.hl7.org/fhir/extensibility.html
-//
-// Output(s):
-//   ReconciledTimestampExtension
-//
-def Build_ReconciledTimestampExtension(TS) {
-  url: "urn:oid:google/reconciliation-timestamp"
-  valueInstant: TS
-}
