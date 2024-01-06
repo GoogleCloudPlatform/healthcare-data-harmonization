@@ -96,7 +96,7 @@ public class MergeResourcesBase implements Serializable {
     return removeClearFieldPlaceholders(merged);
   }
 
-  private Container removeStableIdMeta(RuntimeContext ctx, Container resource) {
+  private static Container removeStableIdMeta(RuntimeContext ctx, Container resource) {
     // Remove stable-id field from the identifier array.
     Data identifiers = resource.getField(IDENTIFIER_FIELD);
     if (identifiers.isNullOrEmpty()) {
@@ -130,7 +130,7 @@ public class MergeResourcesBase implements Serializable {
    * @param resource {@link Data} Container object holding a FHIR resource.
    * @return The passed FHIR resource with no reconciliation timestamp.
    */
-  public Data clearResourceMetadata(RuntimeContext ctx, Data resource) {
+  public static Data clearResourceMetadata(RuntimeContext ctx, Data resource) {
     Container validatedResource = validateNonEmptyContainer(resource, "clearHDEMetadata");
     Data cleared = clearMetaExtensionField(ctx, validatedResource, URL_FIELD, CREATE_TIME_URL);
     cleared = clearMetaTagField(ctx, cleared, SYSTEM_FIELD, DATA_TYPE_DATA_SOURCE_URL);
@@ -174,7 +174,7 @@ public class MergeResourcesBase implements Serializable {
    * @param resource {@link Data} Container object holding a FHIR resource.
    * @return The passed FHIR resource with no reconciliation timestamp.
    */
-  public Data clearResourceReconciliationTimestamp(RuntimeContext ctx, Data resource) {
+  public static Data clearResourceReconciliationTimestamp(RuntimeContext ctx, Data resource) {
     Container resourceContainer =
         validateNonEmptyContainer(resource, "clearReconciliationTimestamp");
     Container meta =
@@ -186,7 +186,8 @@ public class MergeResourcesBase implements Serializable {
     return clearReconciliationTimestampFromRoot(ctx, resourceContainer);
   }
 
-  private Container clearReconciliationTimestampFromRoot(RuntimeContext ctx, Container root) {
+  private static Container clearReconciliationTimestampFromRoot(
+      RuntimeContext ctx, Container root) {
     Data extensions = root.asContainer().getField(EXTENSION_FIELD);
     if (!extensions.isNullOrEmpty()) {
       return root.asContainer()
@@ -196,7 +197,7 @@ public class MergeResourcesBase implements Serializable {
     return root;
   }
 
-  public Data clearMetaTagField(
+  public static Data clearMetaTagField(
       RuntimeContext ctx, Data resource, String keyField, String valueToFilter) {
     Container resourceContainer = resource.asContainer();
     Container meta =
@@ -208,7 +209,7 @@ public class MergeResourcesBase implements Serializable {
     return resourceContainer;
   }
 
-  private Container clearTagFieldFromRoot(
+  private static Container clearTagFieldFromRoot(
       RuntimeContext ctx, Container root, String keyField, String valueToFilter) {
     Data tag = root.asContainer().getField(TAG_FIELD);
     if (!tag.isNullOrEmpty()) {
@@ -218,7 +219,7 @@ public class MergeResourcesBase implements Serializable {
     return root;
   }
 
-  private Data clearMetaExtensionField(
+  private static Data clearMetaExtensionField(
       RuntimeContext ctx, Container resourceContainer, String keyField, String valueToFilter) {
     Container meta =
         clearExtensionFieldFromRoot(
@@ -229,7 +230,7 @@ public class MergeResourcesBase implements Serializable {
     return resourceContainer;
   }
 
-  private Container clearExtensionFieldFromRoot(
+  private static Container clearExtensionFieldFromRoot(
       RuntimeContext ctx, Container root, String keyField, String valueToFilter) {
     Data tag = root.asContainer().getField(EXTENSION_FIELD);
     if (!tag.isNullOrEmpty()) {

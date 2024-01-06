@@ -81,7 +81,7 @@ public class MergeResources extends MergeResourcesBase implements Serializable {
     Container prepared = super.prepareFinalResource(ctx, resource, stableId);
     return clearMetaTagField(ctx, prepared, SYSTEM_FIELD, FHIR_VERSION_SOURCE_SYSTEM).asContainer();
   }
-  
+
   private Container mergeResource(
       RuntimeContext ctx, String resourceRule, String resourceType, Data snapshots)
       throws ConfigurationException {
