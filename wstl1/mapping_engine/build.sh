@@ -19,7 +19,7 @@ set -o errexit
 
 PREREQUISITES=( protoc go )
 PREREQUISITE_SOURCES=( "https://github.com/protocolbuffers/protobuf/releases" "https://golang.org/dl/" )
-PREREQUISITE_VERSIONS=( "v3.11.4" "v1.14" )
+PREREQUISITE_VERSIONS=( "v3.11.4" "v1.16" )
 
 function check_tools {
   LENGTH=${#PREREQUISITES[@]}
@@ -49,6 +49,7 @@ function go_mod_command {
   do
     echo Entering $(dirname $(absfilepath "$f"))
     cd $(dirname $(absfilepath "$f"))
+    go mod tidy
     go $1 ./...
     cd $START
   done
