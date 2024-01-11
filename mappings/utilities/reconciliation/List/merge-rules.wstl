@@ -13,6 +13,6 @@ def ListMerge(existing, inbound) {
     // When list is in snapshot mode for allergy intolerance purpose, we will
     // always take the final entry as the latest version, and mark all other
     // allergy intolerances we see during reconciliation process as inactive.
-    entry: inbound.entry
+    entry: recon::forceInbound(existing.entry, inbound.entry)
   }
 }
