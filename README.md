@@ -48,6 +48,7 @@ with external services, and otherwise extend the engine functionality.
         *   `logging` - Simple logging functions implementation
         *   `test` - Unit Testing Plugin enabling writing unit tests in Whistle
         *   `harmonization` - FHIR code translation support
+        *   `reconciliation` - Find and merge FHIR resources that refer to the same entity
 
 ## Coming Soon to this repository
 
