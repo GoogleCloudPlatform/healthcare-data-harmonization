@@ -61,6 +61,10 @@ public final class MergeConstants {
   // The number of snapshots required to trigger fetching reconciliation checkpoint.
   // Represents trade-off between extra FHIR operations and reduced merge latency.
   public static final int RECON_CHECKPOINT_SNAPSHOT_CUTOFF_DEFAULT = 100;
+  // The number of snapshots required to trigger fetching reconciliation checkpoint for clinical
+  // FHIR history. Represents trade-off between extra FFS FHIR read operations and reduced merge
+  // results/latency.
+  public static final int RECON_CHECKPOINT_SNAPSHOT_CUTOFF_DEFAULT_FOR_HISTORY = 5;
   // Optional environment variable name to override the default snapshot cutoff
   public static final String RECON_CHECKPOINT_SNAPSHOT_CUTOFF = "RECON_CHECKPOINT_SNAPSHOT_CUTOFF";
   public static final String LIST_RESOURCE_TYPE = "List";
@@ -88,7 +92,9 @@ public final class MergeConstants {
   public static final String DELETE_RESOURCE = "DeleteResource";
   public static final String UPDATE_RESOURCE = "UpdateResource";
   public static final String DELETE_FINAL_RESOURCE_ID = "deleteFinalId";
+  public static final String RECON_TIMESTAMP_FIELD = "reconTimestamp";
   public static final String DELETED_SNAPSHOTS = "deletedSnapshots";
+  public static final String EARLIEST_MODIFIED_RECON_TIMESTAMP = "earliestReconTimestamp";
   public static final String IS_DELETED_SNAPSHOT_FIELD = "isDeletedSnapshot";
 
   public static final String SYNTHETIC_FIELD = "synthetic";
@@ -110,12 +116,16 @@ public final class MergeConstants {
 
   public static final String ENABLE_MAPPING_SIDE_EFFECTS = "ENABLE_MAPPING_SIDE_EFFECTS";
 
+  public static final String ENABLE_CLINICAL_HISTORY = "ENABLE_CLINICAL_HISTORY";
+
   public static final String RECON_ERRORS_LIST_FIELD = "reconciliationErrorsList";
   public static final String RECON_ERROR_MESSAGE = "reconciliationErrorMessage";
   public static final String NEXT_TIMESTAMP_FIELD = "nextTimestamp";
   public static final String CURRENT_TIMESTAMP_FIELD = "currentTimestamp";
   public static final String CURRENT_MASTER_ID_FIELD = "currentMasterId";
   public static final String PREVIOUS_MASTER_ID_FIELD = "previousMasterId";
+  public static final String INVALID_CUTOFF_ERROR_STRING =
+      "RECON_CHECKPOINT_SNAPSHOT_CUTOFF is not an valid number, got \"%s\".";
   public static final String RI_ASSERT_NONNULL_ERROR_STRING =
       "ResourceInfo must be non-null; check input dataset.";
   public static final String RI_ASSERT_ARRAY = "ResourceInfo must be Array, got : \"%s\".";
