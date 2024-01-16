@@ -58,6 +58,7 @@ public final class MergeConstants {
   public static final String LAST_RECON_TIMESTAMP_FIELD = "lastReconTimestamp";
   public static final String LAST_CREATE_TIME_FIELD = "lastCreateTime";
   public static final String LAST_DATA_SOURCE_FIELD = "lastDataSource";
+  public static final String SUBJECT_FIELD = "subject";
   // The number of snapshots required to trigger fetching reconciliation checkpoint.
   // Represents trade-off between extra FHIR operations and reduced merge latency.
   public static final int RECON_CHECKPOINT_SNAPSHOT_CUTOFF_DEFAULT = 100;
@@ -99,6 +100,7 @@ public final class MergeConstants {
   public static final String IS_DELETED_SNAPSHOT_FIELD = "isDeletedSnapshot";
 
   public static final String SYNTHETIC_FIELD = "synthetic";
+  public static final String VERSIONED_SYNTHETIC_FIELD = "versionedSynthetic";
   public static final String OUTDATED_SYNTHETIC_FIELD = "outdatedSynthetic";
 
   public static final String REFERENCE_FIELD = "reference";
