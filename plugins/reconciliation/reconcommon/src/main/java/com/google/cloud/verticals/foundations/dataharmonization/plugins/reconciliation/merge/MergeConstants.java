@@ -93,6 +93,8 @@ public final class MergeConstants {
   public static final String DELETE_RESOURCE = "DeleteResource";
   public static final String UPDATE_RESOURCE = "UpdateResource";
   public static final String DELETE_FINAL_RESOURCE_ID = "deleteFinalId";
+  public static final String DELETE_FINAL_RESOURCE_TIMESTAMPS = "deleteFinalTimestamps";
+  public static final String DELETE_FINAL_RESOURCE_VERSIONS = "deleteFinalVersions";
   public static final String RECON_TIMESTAMP_FIELD = "reconTimestamp";
   public static final String DELETED_SNAPSHOTS = "deletedSnapshots";
   public static final String EARLIEST_MODIFIED_RECON_TIMESTAMP = "earliestReconTimestamp";
@@ -108,6 +110,8 @@ public final class MergeConstants {
   public static final String ITEM_FIELD = "item";
   public static final String STATUS_FIELD = "status";
   public static final String VERSION_ID_FIELD = "versionId";
+  public static final String RESPONSE_FIELD = "response";
+  public static final String LAST_MODIFIED_FIELD = "lastModified";
 
   public static final String SERVICE_REQUEST_RESOURCE_TYPE = "ServiceRequest";
 
@@ -151,6 +155,8 @@ public final class MergeConstants {
       "Mapping FhirSearchParameters to intermediate snapshots failed.";
   public static final String MERGE_RESOURCES_FAILED_FIELD =
       "Merging intermediate snapshots failed.";
+  public static final String PURGE_FINAL_RESOURCES_FAILED_MESSAGE =
+      "Purging final resources failed.";
   public static final String LIST_PURPOSE_VALUESTRING =
       "urn:oid:google/hl7v2/allergy-intolerance-list";
   public static final String LINKAGE_PURPOSE_URL =
