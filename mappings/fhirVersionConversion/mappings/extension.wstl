@@ -529,7 +529,7 @@ def BuildPositiveIntExtension(url, required positiveInt) {
 //
 def fetchPositiveInt(url, extension) {
   var result: extension[where $.url == url]
-  result[0].valueInteger
+  result[0].valuePositiveInt
 }
 
 // Description: fetches an array of extension with given url from the extension array
