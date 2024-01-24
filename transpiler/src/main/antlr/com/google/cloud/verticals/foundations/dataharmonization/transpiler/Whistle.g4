@@ -240,7 +240,7 @@ source
     | string                                # SourceConstStr
     | BOOL                                  # SourceConstBool
     | OPEN_BRACKET expression CLOSE_BRACKET # SourceExpression
-    | OPEN_ARRAY (NEWLINE? expression (',' NEWLINE? expression)* NEWLINE?)? CLOSE_ARRAY #SourceListInit
+    | OPEN_ARRAY NEWLINE* (expression (',' NEWLINE* expression)* NEWLINE*)? CLOSE_ARRAY #SourceListInit
 ;
 
 sourcePath

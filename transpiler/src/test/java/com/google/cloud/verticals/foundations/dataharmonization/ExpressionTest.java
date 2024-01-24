@@ -239,6 +239,18 @@ public class ExpressionTest {
             null
           },
           {
+            "list init multiple comments",
+            "[ // Foo, \n  // Bar, \n  // FizzBuzz \n ]",
+            new Environment("testEnv empty"),
+            ValueSource.newBuilder()
+                .setFunctionCall(
+                    FunctionCall.newBuilder()
+                        .setReference(FunctionNames.ARRAYOF_FUNC.getFunctionReferenceProto())
+                        .build())
+                .build(),
+            null
+          },
+          {
             "prefix operation",
             "!1",
             new Environment("testEnv empty"),
