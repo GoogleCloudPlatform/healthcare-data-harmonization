@@ -71,6 +71,8 @@ public final class MergeConstants {
   public static final String LIST_RESOURCE_TYPE = "List";
   public static final String LINKAGE_RESOURCE_TYPE = "Linkage";
   public static final String PERSON_RESOURCE_TYPE = "Person";
+  public static final String ALLERGY_INTOLERANCE_RESOURCE_TYPE = "AllergyIntolerance";
+  public static final String OBSERVATION_RESOURCE_TYPE = "Observation";
 
   public static final String VALUESTRING_FIELD = "valueString";
   public static final String VALUEINSTANT_FIELD = "valueInstant";
@@ -104,6 +106,8 @@ public final class MergeConstants {
   public static final String SYNTHETIC_FIELD = "synthetic";
   public static final String VERSIONED_SYNTHETIC_FIELD = "versionedSynthetic";
   public static final String OUTDATED_SYNTHETIC_FIELD = "outdatedSynthetic";
+  public static final String OUTDATED_VERSIONED_SYNTHETIC_FIELD = "outdatedVersionedSynthetic";
+  public static final String SYNTHETIC_RESOURCE_CODE = "synthetic-resource";
 
   public static final String REFERENCE_FIELD = "reference";
   public static final String ENTRY_FIELD = "entry";
