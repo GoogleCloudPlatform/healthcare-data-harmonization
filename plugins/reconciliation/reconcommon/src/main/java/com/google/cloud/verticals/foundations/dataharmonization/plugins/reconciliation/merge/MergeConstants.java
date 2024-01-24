@@ -68,6 +68,7 @@ public final class MergeConstants {
   public static final int RECON_CHECKPOINT_SNAPSHOT_CUTOFF_DEFAULT_FOR_HISTORY = 5;
   // Optional environment variable name to override the default snapshot cutoff
   public static final String RECON_CHECKPOINT_SNAPSHOT_CUTOFF = "RECON_CHECKPOINT_SNAPSHOT_CUTOFF";
+  public static final String MAX_ENTRIES_PER_HISTORY_BUNDLE = "MAX_ENTRIES_PER_HISTORY_BUNDLE";
   public static final String LIST_RESOURCE_TYPE = "List";
   public static final String LINKAGE_RESOURCE_TYPE = "Linkage";
   public static final String PERSON_RESOURCE_TYPE = "Person";
@@ -137,6 +138,8 @@ public final class MergeConstants {
   public static final String PREVIOUS_MASTER_ID_FIELD = "previousMasterId";
   public static final String INVALID_CUTOFF_ERROR_STRING =
       "RECON_CHECKPOINT_SNAPSHOT_CUTOFF is not an valid number, got \"%s\".";
+  public static final String INVALID_MAX_ENTRIES_ERROR_STRING =
+      "MAX_ENTRIES_PER_HISTORY_BUNDLE is not an valid number, got \"%s\".";
   public static final String RI_ASSERT_NONNULL_ERROR_STRING =
       "ResourceInfo must be non-null; check input dataset.";
   public static final String RI_ASSERT_ARRAY = "ResourceInfo must be Array, got : \"%s\".";
