@@ -1,0 +1,24 @@
+{
+  "id": "101",
+  "issue": [
+    {
+      "code": "code-invalid",
+      "details": {
+        "text": "The code \"W\" is not known and not legal in this context"
+      },
+      "diagnostics": "Acme.Interop.FHIRProcessors.Patient.processGender line 2453",
+      "expression": [
+        "Patient.gender"
+      ],
+      "location": [
+        "/f:Patient/f:gender"
+      ],
+      "severity": "error"
+    }
+  ],
+  "resourceType": "OperationOutcome",
+  "text": {
+    "div": "\u003cdiv xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\n      \u003cp\u003eThe code \u0026quot;W\u0026quot; is not known and not legal Patient.gender.\u003c/p\u003e\n    \u003c/div\u003e",
+    "status": "generated"
+  }
+}

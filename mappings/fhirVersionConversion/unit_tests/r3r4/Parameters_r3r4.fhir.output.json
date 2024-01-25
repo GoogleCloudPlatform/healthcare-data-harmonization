@@ -1,0 +1,18 @@
+{
+  "id": "example",
+  "parameter": [
+    {
+      "name": "start",
+      "valueDate": "2010-01-01"
+    },
+    {
+      "name": "end",
+      "resource": {
+        "contentType": "text/plain",
+        "data": "VGhpcyBpcyBhIHRlc3QgZXhhbXBsZQ==",
+        "resourceType": "Binary"
+      }
+    }
+  ],
+  "resourceType": "Parameters"
+}

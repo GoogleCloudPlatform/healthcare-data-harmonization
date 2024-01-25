@@ -205,6 +205,18 @@ def test_R3OrganizationToR4() testR3ResourceToR4("Organization")
 // Tests fhir_r3r4::R3PatientToR4() function.
 def test_R3PatientToR4() testR3ResourceToR4("Patient")
 
+// Tests fhir_r3r4::R3OperationOutcomeToR4() function.
+def test_R3OperationOutcomeToR4() testR3ResourceToR4("OperationOutcome")
+
+// Tests fhir_r3r4::R3ParametersToR4() function.
+def test_R3ParametersToR4() testR3ResourceToR4("Parameters")
+
+// Tests fhir_r3r4::R3PaymentNoticeToR4() function.
+def test_R3PaymentNoticeToR4() testR3ResourceToR4("PaymentNotice")
+
+// Tests fhir_r3r4::R3PaymentReconciliationToR4() function.
+def test_R3PaymentReconciliationToR4() testR3ResourceToR4("PaymentReconciliation")
+
 // Tests fhir_r3r4::R3PersonToR4() function.
 def test_R3PersonToR4() testR3ResourceToR4("Person")
 
