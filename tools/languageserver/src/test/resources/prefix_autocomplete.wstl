@@ -1,0 +1,9 @@
+package auto_complete_tests
+
+def tryAutoComplete() [
+  ca
+]
+    call
+def ra      ra
+package::ca       package::ca
+a

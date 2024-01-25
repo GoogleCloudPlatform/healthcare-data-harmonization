@@ -1,0 +1,7 @@
+package from_codelab
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.dataflow.DataflowPlugin";
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.retail.RetailPlugin";
+import "./engine_import_file.wstl";
+
+da

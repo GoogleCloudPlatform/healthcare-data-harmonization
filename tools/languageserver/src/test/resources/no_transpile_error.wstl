@@ -1,0 +1,11 @@
+package from_codelab
+
+Planet: ListPlanets()
+Moon: ListMoons();
+
+// These functions returns lists, note the `[...]` structure.
+def ListPlanets() [
+  PlanetName_PlanetInfo("Earth"),
+  PlanetName_PlanetInfo("Mars"),
+  PlanetName_PlanetInfo("Jupiter")
+]

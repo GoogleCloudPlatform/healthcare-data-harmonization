@@ -1,0 +1,3 @@
+rootProject.name = 'annotation_processor'
+
+includeBuild('../tools/docgen')

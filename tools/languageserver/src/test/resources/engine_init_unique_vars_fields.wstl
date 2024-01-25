@@ -1,0 +1,13 @@
+option "experiment/unique_vars_and_fields"
+
+x: 23
+{
+
+   {
+        var x: "I'm a var called x"
+       {
+          justWantToBeConfusing: x
+        }
+    }
+
+}

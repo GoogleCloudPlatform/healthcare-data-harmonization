@@ -1,0 +1,5 @@
+package importee
+
+def funcFromImportee(){
+  a:1
+}

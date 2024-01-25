@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'com.google.cloud.verticals.foundations.dataharmonization'
+
+repositories {
+    mavenCentral()
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://packages.confluent.io/maven"
+        }
+        maven {
+            url 'https://maven.google.com'
+        }
+    }
+    if  (System.getProperty("blaze_gradle_build") == null) {
+        String subPath = project.path.replace(":", File.separator) + File.separator + "build"
+        if (project.hasProperty("outputDir")) {
+            project.buildDir = new File(outputDir, subPath)
+        } else {
+            // Set build directory to be outside of the version control tracked folder,
+            // so that the build artifacts won't pollute the fig/CitC workspace.
+            File tempRoot = new File(System.getProperty("java.io.tmpdir"), project.rootProject.name)
+            project.buildDir = new File(tempRoot, subPath)
+        }
+        println "Build directory relocated to ${buildDir}"
+    }
+}
+
+dependencies {
+    implementation group: 'com.google.cloud.verticals.foundations.dataharmonization', name: 'docgen'
+    implementation 'com.google.flogger:google-extensions:0.7.1'
+    annotationProcessor 'com.google.auto.service:auto-service:1.0.1'
+    compileOnly 'com.google.auto.service:auto-service:1.0.1'
+}

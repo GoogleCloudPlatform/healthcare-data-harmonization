@@ -1,0 +1,26 @@
+package from_codelab
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.dataflow.DataflowPlugin";
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.retail.RetailPlugin";
+
+
+def localFunction(){
+}
+Â£©▀©ŠÂ£▀áÍÞæâ€š�▀©ŠÂ£áÍÞæâ€š�
+dataflow:
+
+// The text below is meant to break tranpilation
+[
+    [[].
+    asfkjhsdfkjasdhf
+    a..?!11{]]]}
+Â£©▀©ŠÂ£▀áÍÞæâ€š�▀©ŠÂ£áÍÞæâ€š�
+
+
+    [
+        [[].
+        asfkjhsdfkjasdhf
+        a..?!11{]]]}
+
+
+loc

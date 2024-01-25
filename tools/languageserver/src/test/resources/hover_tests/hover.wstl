@@ -1,0 +1,7 @@
+import "dataflow"
+strFmt("aaa")
+where(NullData, Closure)
+dataflow::bigQueryIO(Primitive, Primitive, Primitive, Array)
+test::assertEquals(Data, Data)
+validation::mockGet(Data, Primitive)
+

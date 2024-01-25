@@ -1,0 +1,23 @@
+
+import "validation"
+
+var schema: {
+  type: "object"
+  properties: {
+    field1: {type: "number";}
+    field2: {type: "string";}
+  }
+}
+
+var input: validation::getObjectFromSchema(schema)
+func(input)
+
+def func(x) {
+  x[0]
+  if (0 > 1) then {
+     x.nonSense
+  } else {
+     x[0]
+  }
+
+}

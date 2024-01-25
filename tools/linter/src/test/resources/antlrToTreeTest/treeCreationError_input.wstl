@@ -1,0 +1,4 @@
+def BuildExternalIdMetaTag(required datasourceName, code) {
+   system: recon::getExternalIdTagSystemValue();
+   code: code;
+}

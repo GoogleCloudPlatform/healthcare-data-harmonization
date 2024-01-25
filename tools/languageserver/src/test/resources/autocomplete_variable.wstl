@@ -1,0 +1,17 @@
+
+var myVariable1 : "myVariable1";
+myVar
+
+def localFunction(){
+  var myVariable2: "myVariable2";
+  if true then {
+    var myVariable3: "myVariable3";
+    myVar
+  } else {
+    var myVariable4: "myVariable4";
+    myVar
+  }
+  myVar
+}
+
+myVar

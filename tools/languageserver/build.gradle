@@ -1,0 +1,136 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+            url 'https://maven.google.com'
+        }
+    }
+    dependencies {
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.13'
+        classpath 'com.google.cloud.verticals.foundations.dataharmonization:docgen'
+    }
+}
+
+plugins {
+    id 'application'
+    id 'idea'
+    id 'java-library'
+    id 'java'
+    id "com.google.cloud.artifactregistry.gradle-plugin" version "2.1.4"
+    id "maven-publish"
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+
+apply from:"../../maven-publish.gradle"
+
+
+allprojects {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://packages.confluent.io/maven"
+        }
+        maven {
+            url 'https://maven.google.com'
+        }
+    }
+    if  (System.getProperty("blaze_gradle_build") == null) {
+        String subPath = project.path.replace(":", File.separator) + File.separator + "build"
+        if (project.hasProperty("outputDir")) {
+            project.buildDir = new File(outputDir, subPath)
+        } else {
+            // Set build directory to be outside of the version control tracked folder,
+            // so that the build artifacts won't pollute the fig/CitC workspace.
+            File tempRoot = new File(System.getProperty("java.io.tmpdir"), project.rootProject.name)
+            project.buildDir = new File(tempRoot, subPath)
+        }
+        println "Build directory relocated to ${buildDir}"
+    }
+}
+
+sourceSets {
+    test {
+        java {
+            exclude "**/blaze/**"
+        }
+    }
+}
+
+group 'com.google.cloud.verticals.foundations.dataharmonization'
+mainClassName = 'com.google.cloud.verticals.foundations.dataharmonization.lsp.ServerLauncher'
+
+ext {
+    grpcVersion = "1.43.2"
+    dataflowVersion = "2.52.0"
+    guavaVersion = "31.0.1-jre"
+}
+
+dependencies {
+    implementation 'org.eclipse.lsp4j:org.eclipse.lsp4j:0.12.0'
+    implementation group: "com.google.cloud.verticals.foundations.dataharmonization", name: "runtime"
+    implementation group: "com.google.cloud.verticals.foundations.dataharmonization", name: "testutil"
+    implementation group: "com.google.cloud.verticals.foundations.dataharmonization", name: "transpiler"
+    implementation "com.google.guava:guava:${guavaVersion}"
+
+    implementation 'com.google.flogger:google-extensions:0.7.1'
+    //Plugin Imports Start
+    implementation project (':plugins:dataflow')
+    implementation project (':plugins:gcp')
+    implementation project (':plugins:harmonization:hdev1')
+    implementation project (':plugins:reconciliation:reconv1')
+    implementation project (':plugins:hcls')
+    implementation project (':plugins:logging')
+    implementation project (':plugins:environment')
+    implementation project (':plugins:shared')
+    implementation project (':plugins:testing')
+    implementation project (':plugins:retail')
+    implementation project (':plugins:integration')
+    implementation project (':plugins:provenance')
+    implementation project (':plugins:databaselookup')
+    implementation project (':plugins:errors')
+    implementation project (':tools:linter')
+
+    implementation group: "com.google.cloud.verticals.foundations.dataharmonization.plugins", name: "validation"
+    implementation group: "com.google.cloud.verticals.foundations.dataharmonization.plugins", name: "test"
+    //Plugin Imports End
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'com.google.truth:truth:1.0.1'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.7.7'
+    testImplementation group: 'com.github.erosb', name: 'everit-json-schema', version: '1.14.1'
+}
+
+task execute(type: JavaExec) {
+    main = mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    systemProperties System.getProperties()
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': mainClassName
+        )
+    }
+}
+
+shadowJar {
+    mainClassName = 'com.google.cloud.verticals.foundations.dataharmonization.lsp.ServerLauncher'
+    zip64 true
+ }
+
+// enforced by Gradle 8
+tasks.distZip.mustRunAfter 'shadowJar'
+tasks.distTar.mustRunAfter 'shadowJar'
+tasks.startScripts.mustRunAfter 'shadowJar'
+tasks.startShadowScripts.mustRunAfter 'shadowJar'
+tasks.startScripts.mustRunAfter 'jar'
+tasks.startShadowScripts.mustRunAfter 'jar'
+
+task publishLanguageServer {
+    publishHelper(publishing, true)
+}
+

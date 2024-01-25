@@ -1,0 +1,15 @@
+package datatypes
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin";
+
+import "utilities/reconciliation/matching.wstl";
+import "utilities/reconciliation/constants.wstl";
+
+def HealthcareAPIPath() "https://healthcare.googleapis.com/v1"
+
+def getCurrentTime() currentTime("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+
+def BuildIdentifier(required value, system) {
+  system: system;
+  value: value;
+}

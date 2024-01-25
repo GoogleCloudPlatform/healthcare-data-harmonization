@@ -1,0 +1,17 @@
+# Format: google3/devtools/metadata/metadata.proto (go/google3metadata)
+
+name: "Whistle Language Server"
+description: "The Whistle Language Server"
+
+presubmit {
+  check_guitar: {
+    base {
+      disable_tags: "SKIP_WHISTLE_LANGUAGE_SERVER_GUITAR"
+    }
+    project: "language_server_build_test"
+    ignore_file_modifications: false
+    submit_execute: true
+    failure_status: ERROR
+    submit_execute_mode: SYNCHRONOUS
+  }
+}

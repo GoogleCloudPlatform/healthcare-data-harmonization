@@ -1,0 +1,5 @@
+var a: true
+
+if !a? then {
+    doSomething()
+}

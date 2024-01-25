@@ -1,0 +1,7 @@
+import "validation"
+
+var schema: validation::loadSchema("./recursive_schema.json")
+var data: validation::getObjectFromSchema(schema.rootSchema)
+
+validation::inspect(fields(data))
+data.a.b.c

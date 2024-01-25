@@ -1,0 +1,23 @@
+var x: {
+f0: 0
+}
+
+var y: {
+f0: 0
+}
+
+if (true) then {
+   var x.f1: {
+       a: 3;
+   }
+   var x: 4;
+   a: x
+   b: y;
+}
+
+var re_declare: 0
+var re_declare: 1
+
+re_declare
+
+var re_declare: 2

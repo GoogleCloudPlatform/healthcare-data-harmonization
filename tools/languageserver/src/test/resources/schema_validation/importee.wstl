@@ -1,0 +1,7 @@
+package importee
+
+import "validation"
+
+def foo(){
+    func();
+}

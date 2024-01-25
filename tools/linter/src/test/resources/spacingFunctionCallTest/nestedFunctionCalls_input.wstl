@@ -1,0 +1,12 @@
+def Convert_DateTime(datetime_format, input) {
+  var isoTime: parseDateTime(datetime_format, input)
+  recon::anyOf(
+  recon::anyIdentifier(),
+  recon::allOf(
+  recon::primitive("status"),
+  recon::primitive("intent"),
+  recon::pathTo("code", recon::anyCoding()),
+  recon::referenceFor("subject")
+  )
+  )
+}

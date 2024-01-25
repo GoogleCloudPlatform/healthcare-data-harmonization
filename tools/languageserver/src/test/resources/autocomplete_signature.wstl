@@ -1,0 +1,21 @@
+import "dataflow";
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.hcls.HclsPlugin"
+
+forma
+
+dataflow::csvIOR
+
+def localfunction(number1, number2) {
+  Mul: number1 * number2;
+}
+
+def localfunction2() {
+  Mul: 10 * 10;
+}
+
+loca
+
+hcls::h
+
+var myVariable1 : "myVariable";
+myVar
