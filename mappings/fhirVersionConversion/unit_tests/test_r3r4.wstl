@@ -199,6 +199,18 @@ def test_R3MedicationAdministrationToR4() testR3ResourceToR4("MedicationAdminist
 // Tests fhir_r3r4::R3MedicationRequestToR4() function.
 def test_R3MedicationRequestToR4() testR3ResourceToR4("MedicationRequest")
 
+// Tests fhir_r3r4::R3MessageHeaderToR4() function.
+def test_R3MessageHeaderToR4() testR3ResourceToR4("MessageHeader")
+
+// Tests fhir_r3r4::R3NamingSystemToR4() function.
+def test_R3NamingSystemToR4() testR3ResourceToR4("NamingSystem")
+
+// Tests fhir_r3r4::R3NutritionOrderToR4() function.
+def test_R3NutritionOrderToR4() testR3ResourceToR4("NutritionOrder")
+
+// Tests fhir_r3r4::R3OperationDefinitionToR4() function.
+def test_R3OperationDefinitionToR4() testR3ResourceToR4("OperationDefinition")
+
 // Tests fhir_r3r4::R3OrganizationToR4() function.
 def test_R3OrganizationToR4() testR3ResourceToR4("Organization")
 

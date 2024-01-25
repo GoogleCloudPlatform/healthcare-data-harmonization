@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   namingSystem : FHIR NamingSystem resource
+//
+// Output(s):
+//   FHIR NamingSystem Resource
+//
 def NamingSystemBase(namingSystem) {
   resourcebase::ResourceBase(namingSystem)
   name: namingSystem.name
@@ -16,6 +24,14 @@ def NamingSystemBase(namingSystem) {
   usage: namingSystem.usage
 }
 
+// Description: Converts a FHIR STU3 NamingSystem resource to FHIR R4 NamingSystem resource.
+//
+// Argument(s):
+//   namingSystem : FHIR STU3 NamingSystem resource https://www.hl7.org/fhir/stu3/namingsystem.html
+//
+// Output(s):
+//   FHIR R4 NamingSystem Resource https://www.hl7.org/fhir/r4/namingsystem.html
+//
 def R3NamingSystemToR4(namingSystem) {
   NamingSystemBase(namingSystem)
   contained: datatypes::R3ResourceToR4(namingSystem.contained[])
@@ -25,6 +41,14 @@ def R3NamingSystemToR4(namingSystem) {
   extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/namingsystem-definitions.html#NamingSystem.replacedBy", namingSystem.replacedBy)
 }
 
+// Description: Converts a FHIR R4 NamingSystem resource to FHIR STU3 NamingSystem resource.
+//
+// Argument(s):
+//   namingSystem : FHIR R4 NamingSystem resource https://www.hl7.org/fhir/r4/namingsystem.html
+//
+// Output(s):
+//   FHIR STU3 NamingSystem Resource https://www.hl7.org/fhir/stu3/namingsystem.html
+//
 def R4NamingSystemToR3(namingSystem) {
   NamingSystemBase(namingSystem)
   contained: datatypes::R4ResourceToR3(namingSystem.contained[])

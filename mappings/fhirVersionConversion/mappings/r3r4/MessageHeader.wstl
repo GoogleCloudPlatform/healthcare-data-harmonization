@@ -2,11 +2,27 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   messageHeader : FHIR MessageHeader resource
+//
+// Output(s):
+//   FHIR MessageHeader Resource
+//
 def MessageHeaderBase(messageHeader) {
   resourcebase::ResourceBase(messageHeader)
   reason: messageHeader.reason
 }
 
+// Description: Converts a FHIR STU3 MessageHeader resource to FHIR R4 MessageHeader resource.
+//
+// Argument(s):
+//   messageHeader : FHIR STU3 MessageHeader resource https://www.hl7.org/fhir/stu3/messageheader.html
+//
+// Output(s):
+//   FHIR R4 MessageHeader Resource https://www.hl7.org/fhir/r4/messageheader.html
+//
 def R3MessageHeaderToR4(messageHeader) {
   MessageHeaderBase(messageHeader)
   contained: datatypes::R3ResourceToR4(messageHeader.contained[])
@@ -24,6 +40,14 @@ def R3MessageHeaderToR4(messageHeader) {
   extension[]: extension::BuildInstantExtension("https://www.hl7.org/fhir/STU3/messageheader-definitions.html#MessageHeader.timestamp", messageHeader.timestamp)
 }
 
+// Description: Converts a FHIR R4 MessageHeader resource to FHIR STU3 MessageHeader resource.
+//
+// Argument(s):
+//   messageHeader : FHIR R4 MessageHeader resource https://www.hl7.org/fhir/r4/messageheader.html
+//
+// Output(s):
+//   FHIR STU3 MessageHeader Resource https://www.hl7.org/fhir/stu3/messageheader.html
+//
 def R4MessageHeaderToR3(messageHeader) {
   MessageHeaderBase(messageHeader)
   contained: datatypes::R4ResourceToR3(messageHeader.contained[])
@@ -42,13 +66,29 @@ def R4MessageHeaderToR3(messageHeader) {
   extension[]: extension::BuildCanonicalExtension("https://www.hl7.org/fhir/R4/messageheader-definitions.html#MessageHeader.definition", messageHeader.definition)
 }
 
+// Description: Converts a FHIR STU3 MessageHeader.destination to FHIR R4 MessageHeader.destination.
+//
+// Argument(s):
+//   data : FHIR STU3 MessageHeader.destination https://www.hl7.org/fhir/stu3/messageheader-definitions.html#MessageHeader.destination
+//
+// Output(s):
+//   FHIR R4 MessageHeader.destination https://www.hl7.org/fhir/r4/messageheader-definitions.html#MessageHeader.destination
+//
 def R3MessageHeader_DestinationToR4(data, receiver) {
   name: data.name
   target: datatypes::R3ReferenceToR4(data.target)
   endpoint: data.endpoint
-  receiver: extension::fetchReference("https://www.hl7.org/fhir/R4/messageheader-definitions.html#MessageHeader.destination.receiver", data.extension)
+  receiver: receiver
 }
 
+// Description: Converts a FHIR R4 MessageHeader.destination to FHIR STU3 MessageHeader.destination.
+//
+// Argument(s):
+//   data : FHIR R4 MessageHeader.destination https://www.hl7.org/fhir/r4/messageheader-definitions.html#MessageHeader.destination
+//
+// Output(s):
+//   FHIR STU3 MessageHeader.destination https://www.hl7.org/fhir/stu3/messageheader-definitions.html#MessageHeader.destination
+//
 def R4MessageHeader_DestinationToR3(data) {
   name: data.name
   target: datatypes::R4ReferenceToR3(data.target)
@@ -56,12 +96,28 @@ def R4MessageHeader_DestinationToR3(data) {
   extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/R4/messageheader-definitions.html#MessageHeader.destination.receiver", data.receiver)
 }
 
+// Description: Converts a FHIR STU3 MessageHeader.response to FHIR R4 MessageHeader.response.
+//
+// Argument(s):
+//   data : FHIR STU3 MessageHeader.response https://www.hl7.org/fhir/stu3/messageheader-definitions.html#MessageHeader.response
+//
+// Output(s):
+//   FHIR R4 MessageHeader.response https://www.hl7.org/fhir/r4/messageheader-definitions.html#MessageHeader.response
+//
 def R3MessageHeader_ResponseToR4(data) {
   identifier: data.identifier
   code: data.code
   details: datatypes::R3ReferenceToR4(data.details)
 }
 
+// Description: Converts a FHIR R4 MessageHeader.response to FHIR STU3 MessageHeader.response.
+//
+// Argument(s):
+//   data : FHIR R4 MessageHeader.response https://www.hl7.org/fhir/r4/messageheader-definitions.html#MessageHeader.response
+//
+// Output(s):
+//   FHIR STU3 MessageHeader.response https://www.hl7.org/fhir/stu3/messageheader-definitions.html#MessageHeader.response
+//
 def R4MessageHeader_ResponseToR3(data) {
   identifier: data.identifier
   code: data.code

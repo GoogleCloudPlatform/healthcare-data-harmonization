@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   nutritionOrder : FHIR NutritionOrder resource
+//
+// Output(s):
+//   FHIR NutritionOrder Resource
+//
 def NutritionOrderBase(nutritionOrder) {
   resourcebase::ResourceBase(nutritionOrder)
   identifier: nutritionOrder.identifier
@@ -12,6 +20,14 @@ def NutritionOrderBase(nutritionOrder) {
   supplement: nutritionOrder.supplement
 }
 
+// Description: Converts a FHIR STU3 NutritionOrder resource to FHIR R4 NutritionOrder resource.
+//
+// Argument(s):
+//   nutritionOrder : FHIR STU3 NutritionOrder resource https://www.hl7.org/fhir/stu3/nutritionorder.html
+//
+// Output(s):
+//   FHIR R4 NutritionOrder Resource https://www.hl7.org/fhir/r4/nutritionorder.html
+//
 def R3NutritionOrderToR4(nutritionOrder) {
   NutritionOrderBase(nutritionOrder)
   contained: datatypes::R3ResourceToR4(nutritionOrder.contained[])
@@ -21,15 +37,23 @@ def R3NutritionOrderToR4(nutritionOrder) {
   instantiatesCanonical: extension::fetchCanonicalArray("https://www.hl7.org/fhir/R4/nutritionorder-definitions.html#NutritionOrder.instantiatesCanonical", nutritionOrder.extension)
   instantiatesUri: extension::fetchUriArray("https://www.hl7.org/fhir/R4/nutritionorder-definitions.html#NutritionOrder.instantiatesUri", nutritionOrder.extension)
   instantiates: extension::fetchUriArray("https://www.hl7.org/fhir/R4/nutritionorder-definitions.html#NutritionOrder.instantiates", nutritionOrder.extension)
-  var status: extension::fetchCode("https://www.hl7.org/fhir/R4/nutritionorder-definitions.html#NutritionOrder.status", nutritionOrder.extension)
-  status: if status? then status else nutritionOrder.status
+  status: utilities::Convert_TerminologyCode(nutritionOrder.status, "http://hl7.org/fhir/nutrition-request-status", "Request_Status_r3r4")
+  status: utilities::defaultIfNull($this.status, "unknown")
   intent: extension::fetchCode("https://www.hl7.org/fhir/R4/nutritionorder-definitions.html#NutritionOrder.intent", nutritionOrder.extension)
+  intent: utilities::defaultIfNull($this.intent, "order")
   orderer: datatypes::R3ReferenceToR4(nutritionOrder.orderer)
   enteralFormula: nutritionOrder.enteralFormula
   note: extension::fetchAnnotationArray("https://www.hl7.org/fhir/R4/nutritionorder-definitions.html#NutritionOrder.note", nutritionOrder.extension)
-  extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/nutritionorder-definitions.html#NutritionOrder.status", nutritionOrder.status)
 }
 
+// Description: Converts a FHIR R4 NutritionOrder resource to FHIR STU3 NutritionOrder resource.
+//
+// Argument(s):
+//   nutritionOrder : FHIR R4 NutritionOrder resource https://www.hl7.org/fhir/r4/nutritionorder.html
+//
+// Output(s):
+//   FHIR STU3 NutritionOrder Resource https://www.hl7.org/fhir/stu3/nutritionorder.html
+//
 def R4NutritionOrderToR3(nutritionOrder) {
   NutritionOrderBase(nutritionOrder)
   contained: datatypes::R4ResourceToR3(nutritionOrder.contained[])
