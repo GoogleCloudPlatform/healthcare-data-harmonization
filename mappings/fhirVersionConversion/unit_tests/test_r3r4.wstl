@@ -196,8 +196,20 @@ def test_R3MediaToR4() testR3ResourceToR4("Media")
 // Tests fhir_r3r4::R3MedicationAdministrationToR4() function.
 def test_R3MedicationAdministrationToR4() testR3ResourceToR4("MedicationAdministration")
 
+// Tests fhir_r3r4::R3MedicationToR4() function.
+def test_R3MedicationToR4() testR3ResourceToR4("Medication")
+
+// Tests fhir_r3r4::R3MedicationDispenseToR4() function.
+def test_R3MedicationDispenseToR4() testR3ResourceToR4("MedicationDispense")
+
 // Tests fhir_r3r4::R3MedicationRequestToR4() function.
 def test_R3MedicationRequestToR4() testR3ResourceToR4("MedicationRequest")
+
+// Tests fhir_r3r4::R3MedicationStatementToR4() function.
+def test_R3MedicationStatementToR4() testR3ResourceToR4("MedicationStatement")
+
+// Tests fhir_r3r4::R3MessageDefinitionToR4() function.
+def test_R3MessageDefinitionToR4() testR3ResourceToR4("MessageDefinition")
 
 // Tests fhir_r3r4::R3MessageHeaderToR4() function.
 def test_R3MessageHeaderToR4() testR3ResourceToR4("MessageHeader")

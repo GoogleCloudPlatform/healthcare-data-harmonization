@@ -1,0 +1,54 @@
+{
+  "basedOn": [
+    {
+      "reference": "MedicationRequest/example"
+    }
+  ],
+  "dateAsserted": "2015-02-22",
+  "effectiveDateTime": "2015-01-23",
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.taken",
+      "valueCode": "n"
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.reasonNotTaken",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "166643006",
+            "display": "Liver enzymes abnormal",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/medicationstatement-definitions.html#MedicationStatement.status",
+      "valueCode": "active"
+    }
+  ],
+  "id": "example002",
+  "informationSource": {
+    "display": "Donald Duck",
+    "reference": "Patient/pat1"
+  },
+  "medicationReference": {
+    "reference": "Medication/example"
+  },
+  "note": [
+    {
+      "text": "Patient can not take acetaminophen as per Dr instructions"
+    }
+  ],
+  "resourceType": "MedicationStatement",
+  "status": "active",
+  "subject": {
+    "display": "Donald Duck",
+    "reference": "Patient/pat1"
+  },
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example002</p><p><b>contained</b>: </p><p><b>status</b>: active</p><p><b>medication</b>: id: med0309; Tylenol PM <span>(Details : {http://hl7.org/fhir/sid/ndc code '50580-506-02' = '50580-506-02', given as 'Tylenol PM'})</span>; isBrand; Film-coated tablet (qualifier value) <span>(Details : {SNOMED CT code '385057009' = 'Film-coated tablet', given as 'Film-coated tablet (qualifier value)'})</span></p><p><b>effective</b>: 23/01/2015</p><p><b>dateAsserted</b>: 22/02/2015</p><p><b>informationSource</b>: <a>Donald Duck</a></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>taken</b>: n</p><p><b>reasonNotTaken</b>: Liver enzymes abnormal <span>(Details : {SNOMED CT code '166643006' = 'Liver enzymes abnormal', given as 'Liver enzymes abnormal'})</span></p><p><b>note</b>: Patient can not take acetaminophen as per Dr instructions</p></div>",
+    "status": "generated"
+  }
+}

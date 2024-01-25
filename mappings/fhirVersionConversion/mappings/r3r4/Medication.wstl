@@ -2,12 +2,28 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   medication : FHIR Medication resource
+//
+// Output(s):
+//   FHIR Medication Resource
+//
 def MedicationBase(medication) {
   resourcebase::ResourceBase(medication)
   code: medication.code
   form: medication.form
 }
 
+// Description: Converts a FHIR STU3 Medication resource to FHIR R4 Medication resource.
+//
+// Argument(s):
+//   medication : FHIR STU3 Medication resource https://www.hl7.org/fhir/stu3/medication.html
+//
+// Output(s):
+//   FHIR R4 Medication Resource https://www.hl7.org/fhir/r4/medication.html
+//
 def R3MedicationToR4(medication) {
   MedicationBase(medication)
   contained: datatypes::R3ResourceToR4(medication.contained[])
@@ -21,6 +37,14 @@ def R3MedicationToR4(medication) {
   extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/medication-definitions.html#Medication.package.container", medication.'package'.container)
 }
 
+// Description: Converts a FHIR R4 Medication resource to FHIR STU3 Medication resource.
+//
+// Argument(s):
+//   medication : FHIR R4 Medication resource https://www.hl7.org/fhir/r4/medication.html
+//
+// Output(s):
+//   FHIR STU3 Medication Resource https://www.hl7.org/fhir/stu3/medication.html
+//
 def R4MedicationToR3(medication) {
   MedicationBase(medication)
   contained: datatypes::R4ResourceToR3(medication.contained[])
@@ -36,6 +60,14 @@ def R4MedicationToR3(medication) {
   extension[]: extension::BuildRatioExtension("https://www.hl7.org/fhir/R4/medication-definitions.html#Medication.amount", medication.amount)
 }
 
+// Description: Converts a FHIR STU3 Medication.ingredient to FHIR R4 Medication.ingredient.
+//
+// Argument(s):
+//   data : FHIR STU3 Medication.ingredient https://www.hl7.org/fhir/stu3/medication-definitions.html#Medication.ingredient
+//
+// Output(s):
+//   FHIR R4 Medication.ingredient https://www.hl7.org/fhir/r4/medication-definitions.html#Medication.ingredient
+//
 def R3Medication_IngredientToR4(data) {
   itemCodeableConcept: data.itemCodeableConcept
   itemReference: datatypes::R3ReferenceToR4(data.itemReference)
@@ -43,6 +75,14 @@ def R3Medication_IngredientToR4(data) {
   strength: data.amount
 }
 
+// Description: Converts a FHIR R4 Medication.ingredient to FHIR STU3 Medication.ingredient.
+//
+// Argument(s):
+//   data : FHIR R4 Medication.ingredient https://www.hl7.org/fhir/r4/medication-definitions.html#Medication.ingredient
+//
+// Output(s):
+//   FHIR STU3 Medication.ingredient https://www.hl7.org/fhir/stu3/medication-definitions.html#Medication.ingredient
+//
 def R4Medication_IngredientToR3(data) {
   itemCodeableConcept: data.itemCodeableConcept
   itemReference: datatypes::R4ReferenceToR3(data.itemReference)

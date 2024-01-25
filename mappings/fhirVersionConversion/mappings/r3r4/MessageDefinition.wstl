@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   messageDefiniton : FHIR MessageDefiniton resource
+//
+// Output(s):
+//   FHIR MessageDefiniton Resource
+//
 def MessageDefinitionBase(messageDefinition) {
   resourcebase::ResourceBase(messageDefinition)
   url: messageDefinition.url
@@ -18,6 +26,14 @@ def MessageDefinitionBase(messageDefinition) {
   copyright: messageDefinition.copyright
 }
 
+// Description: Converts a FHIR STU3 MessageDefinition resource to FHIR R4 MessageDefinition resource.
+//
+// Argument(s):
+//   messageDefinition : FHIR STU3 MessageDefinition resource https://www.hl7.org/fhir/stu3/messagedefinition.html
+//
+// Output(s):
+//   FHIR R4 MessageDefinition Resource https://www.hl7.org/fhir/r4/messagedefinition.html
+//
 def R3MessageDefinitionToR4(messageDefinition) {
   MessageDefinitionBase(messageDefinition)
   contained: datatypes::R3ResourceToR4(messageDefinition.contained[])
@@ -36,6 +52,14 @@ def R3MessageDefinitionToR4(messageDefinition) {
   graph: extension::fetchCanonicalArray("https://www.hl7.org/fhir/R4/messagedefinition-definitions.html#MessageDefinition.graph", messageDefinition.extension)
 }
 
+// Description: Converts a FHIR R4 MessageDefinition resource to FHIR STU3 MessageDefinition resource.
+//
+// Argument(s):
+//   messageDefinition : FHIR R4 MessageDefinition resource https://www.hl7.org/fhir/r4/messagedefinition.html
+//
+// Output(s):
+//   FHIR STU3 MessageDefinition Resource https://www.hl7.org/fhir/stu3/messagedefinition.html
+//
 def R4MessageDefinitionToR3(messageDefinition) {
   MessageDefinitionBase(messageDefinition)
   contained: datatypes::R4ResourceToR3(messageDefinition.contained[])
@@ -54,6 +78,14 @@ def R4MessageDefinitionToR3(messageDefinition) {
   extension[]: extension::BuildCanonicalExtension("https://www.hl7.org/fhir/R4/messagedefinition-definitions.html#MessageDefinition.graph", messageDefinition.graph[])
 }
 
+// Description: Converts a FHIR STU3 MessageDefinition.identifier to FHIR R4 MessageDefinition.identifier.
+//
+// Argument(s):
+//   data : FHIR STU3 MessageDefinition.identifier https://www.hl7.org/fhir/stu3/messagedefinition-definitions.html#MessageDefinition.identifier
+//
+// Output(s):
+//   FHIR R4 MessageDefinition.identifier https://www.hl7.org/fhir/r4/messagedefinition-definitions.html#MessageDefinition.identifier
+//
 def R3MessageDefinition_IdentifierToR4(url, extension, data) {
   var identifier: extension::fetchIdentifierArray(url, extension)
   if identifier then {
@@ -63,13 +95,30 @@ def R3MessageDefinition_IdentifierToR4(url, extension, data) {
   }
 }
 
-def R3MessageDefinition_FocusToR4(data) {
-  code: utilities::Convert_TerminologyCode(data.code, "http://hl7.org/fhir/resource-types", "ResourceTypes_r3r4")
+// Description: Converts a FHIR STU3 MessageDefinition.focus to FHIR R4 MessageDefinition.focus.
+//
+// Argument(s):
+//   data : FHIR STU3 MessageDefinition.focus https://www.hl7.org/fhir/stu3/messagedefinition-definitions.html#MessageDefinition.focus
+//
+// Output(s):
+//   FHIR R4 MessageDefinition.focus https://www.hl7.org/fhir/r4/messagedefinition-definitions.html#MessageDefinition.focus
+//
+def R3MessageDefinition_FocusToR4(required data) {
+  code: data.code
   profile: datatypes::ReferenceToCanonical(data.profile)
   min: data.min
+  min: utilities::defaultIfNull($this.min, 0)
   max: data.max
 }
 
+// Description: Converts a FHIR R4 MessageDefinition.focus to FHIR STU3 MessageDefinition.focus.
+//
+// Argument(s):
+//   data : FHIR R4 MessageDefinition.focus https://www.hl7.org/fhir/r4/messageheader-definitions.html#MessageDefinition.focus
+//
+// Output(s):
+//   FHIR STU3 MessageDefinition.focus https://www.hl7.org/fhir/stu3/messageheader-definitions.html#MessageDefinition.focus
+//
 def R4MessageDefinition_FocusToR3(data) {
   code: data.code
   profile: datatypes::CanonicalToReference(data.profile)
@@ -77,6 +126,14 @@ def R4MessageDefinition_FocusToR3(data) {
   max: data.max
 }
 
+// Description: Converts a FHIR STU3 MessageDefinition.responseRequired to FHIR R4 MessageDefinition.responseRequired.
+//
+// Argument(s):
+//   data : FHIR STU3 MessageDefinition.responseRequired https://www.hl7.org/fhir/stu3/messagedefinition-definitions.html#MessageDefinition.responseRequired
+//
+// Output(s):
+//   FHIR R4 MessageDefinition.responseRequired https://www.hl7.org/fhir/r4/messagedefinition-definitions.html#MessageDefinition.responseRequired
+//
 def R3MessageDefinition_ResponseRequiredToR4(data) {
   if data then {
     "always"
@@ -85,6 +142,14 @@ def R3MessageDefinition_ResponseRequiredToR4(data) {
   }
 }
 
+// Description: Converts a FHIR R4 MessageDefinition.responseRequired to FHIR STU3 MessageDefinition.responseRequired.
+//
+// Argument(s):
+//   data : FHIR R4 MessageDefinition.responseRequired https://www.hl7.org/fhir/r4/messageheader-definitions.html#MessageDefinition.responseRequired
+//
+// Output(s):
+//   FHIR STU3 MessageDefinition.responseRequired https://www.hl7.org/fhir/stu3/messageheader-definitions.html#MessageDefinition.responseRequired
+//
 def R4MessageDefinition_ResponseRequiredToR3(data) {
   if data == "always" then {
     true
@@ -93,11 +158,27 @@ def R4MessageDefinition_ResponseRequiredToR3(data) {
   }
 }
 
+// Description: Converts a FHIR STU3 MessageDefinition.allowedResponse to FHIR R4 MessageDefinition.allowedResponse.
+//
+// Argument(s):
+//   data : FHIR STU3 MessageDefinition.allowedResponse https://www.hl7.org/fhir/stu3/messagedefinition-definitions.html#MessageDefinition.allowedResponse
+//
+// Output(s):
+//   FHIR R4 MessageDefinition.allowedResponse https://www.hl7.org/fhir/r4/messagedefinition-definitions.html#MessageDefinition.allowedResponse
+//
 def R3MessageDefinition_AllowedResponseToR4(data) {
   message: datatypes::ReferenceToCanonical(data.message)
   situation: data.situation
 }
 
+// Description: Converts a FHIR R4 MessageDefinition.allowedResponse to FHIR STU3 MessageDefinition.allowedResponse.
+//
+// Argument(s):
+//   data : FHIR R4 MessageDefinition.allowedResponse https://www.hl7.org/fhir/r4/messageheader-definitions.html#MessageDefinition.allowedResponse
+//
+// Output(s):
+//   FHIR STU3 MessageDefinition.allowedResponse https://www.hl7.org/fhir/stu3/messageheader-definitions.html#MessageDefinition.allowedResponse
+//
 def R4MessageDefinition_AllowedResponseToR3(data) {
   message: datatypes::CanonicalToReference(data.message)
   situation: data.situation
