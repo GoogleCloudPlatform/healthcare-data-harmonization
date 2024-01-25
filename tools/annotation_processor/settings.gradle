@@ -1,3 +1,3 @@
-rootProject.name = 'annotation_processor'
+rootProject.name = "annotation_processor"
 
-includeBuild('../tools/docgen')
+includeBuild("../docgen")

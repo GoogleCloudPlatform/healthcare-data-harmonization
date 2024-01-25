@@ -1,5 +1,5 @@
 import "./autocomplete_importee.wstl"
-import "dataflow"
+import "test"
 
 def localFunction(){
 }
@@ -8,4 +8,4 @@ loc
 
 importee::
 
-dataflow::
+test::

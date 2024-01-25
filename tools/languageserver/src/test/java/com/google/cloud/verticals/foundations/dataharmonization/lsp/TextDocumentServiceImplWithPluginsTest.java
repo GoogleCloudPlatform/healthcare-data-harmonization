@@ -17,19 +17,14 @@ package com.google.cloud.verticals.foundations.dataharmonization.lsp;
 
 import static com.google.cloud.verticals.foundations.dataharmonization.lsp.TextDocumentServiceImplTestUtil.getCompletionItems;
 import static com.google.cloud.verticals.foundations.dataharmonization.lsp.TextDocumentServiceImplTestUtil.getCompletionSignature;
-import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.cloud.verticals.foundations.dataharmonization.builtins.Builtins;
 import com.google.cloud.verticals.foundations.dataharmonization.debug.proto.Debug.FunctionInfo.FunctionType;
 import com.google.cloud.verticals.foundations.dataharmonization.function.CallableFunction;
-import com.google.cloud.verticals.foundations.dataharmonization.integration.MockBuiltins;
-import com.google.cloud.verticals.foundations.dataharmonization.integration.MockReconciliationPlugin;
 import com.google.cloud.verticals.foundations.dataharmonization.integration.plugin.TestLoaderPlugin.ResourceLoader;
 import com.google.cloud.verticals.foundations.dataharmonization.plugin.Plugin;
-import com.google.cloud.verticals.foundations.dataharmonization.plugins.dataflow.DataflowPlugin;
 import com.google.cloud.verticals.foundations.dataharmonization.plugins.logging.LoggingPlugin;
-import com.google.cloud.verticals.foundations.dataharmonization.plugins.retail.RetailPlugin;
 import com.google.cloud.verticals.foundations.dataharmonization.plugins.test.TestPlugin;
 import com.google.cloud.verticals.foundations.dataharmonization.target.Target.Constructor;
 import com.google.common.collect.ImmutableSet;
@@ -56,21 +51,8 @@ public class TextDocumentServiceImplWithPluginsTest {
   private LSPServer languageServer;
   private TextDocumentServiceImpl textDocumentService;
   private static final Plugin builtins = new Builtins();
-  private static final DataflowPlugin dataflowPlugin = new DataflowPlugin();
-  private static final RetailPlugin retailPlugin = new RetailPlugin();
   private static final LoggingPlugin loggingPlugin = new LoggingPlugin();
   private static final TestPlugin testPlugin = new TestPlugin();
-  private static final MockBuiltins mockBuiltIns = new MockBuiltins();
-  private static MockReconciliationPlugin mockReconciliationPlugin;
-
-  static {
-    try {
-      mockReconciliationPlugin = new MockReconciliationPlugin();
-    } catch (Exception e) {
-      logger.atSevere().withCause(e).log(
-          "Error while trying to initialize the MockReconciliationPlugin.");
-    }
-  }
 
   @Before
   public void setUp() {
@@ -86,9 +68,7 @@ public class TextDocumentServiceImplWithPluginsTest {
     List<String> allCompletionItems = getCompletionItems(textDocumentService, inputPath, 5, 0);
     assertThat(allCompletionItems)
         .hasSize(
-            countCompletionItems(dataflowPlugin)
-                + countCompletionItems(builtins)
-                + countCompletionItems(retailPlugin)
+            countCompletionItems(builtins)
                 + countCompletionItems(loggingPlugin)
                 + countCompletionItems(testPlugin));
   }
@@ -96,25 +76,6 @@ public class TextDocumentServiceImplWithPluginsTest {
   private int countCompletionItems(Plugin plugin) {
     return (int) plugin.getFunctions().stream().filter(this::isFunctionLoaded).count()
         + plugin.getTargets().size();
-  }
-
-  @Test
-  public void autoComplete_functions_integration_mock_plugins() throws IOException {
-    String inputPath = "autocomplete_integration_mock_plugin.wstl";
-
-    List<String> mockCompletionItems = getCompletionItems(textDocumentService, inputPath, 3, 2);
-    assertThat(mockCompletionItems)
-        .hasSize(
-            countCompletionItems(mockReconciliationPlugin) + countCompletionItems(mockBuiltIns));
-
-    List<String> expectedMockReconCompletionItems =
-        getPluginPackageCompletionItemStrings(mockReconciliationPlugin);
-    List<String> mockBuiltInCompletionItems = getPluginPackageCompletionItemStrings(mockBuiltIns);
-    assertThat(mockCompletionItems)
-        .containsExactlyElementsIn(
-            Stream.concat(
-                    expectedMockReconCompletionItems.stream(), mockBuiltInCompletionItems.stream())
-                .collect(toImmutableList()));
   }
 
   private boolean isFunctionLoaded(CallableFunction fxn) {
@@ -130,9 +91,9 @@ public class TextDocumentServiceImplWithPluginsTest {
     // Get all the imported dataflow plugin completion functions
     List<String> allCompletionItems = getCompletionItems(textDocumentService, inputPath, 6, 2);
     assertThat(allCompletionItems)
-        .hasSize(dataflowPlugin.getFunctions().size() + dataflowPlugin.getTargets().size());
+        .hasSize(testPlugin.getFunctions().size() + testPlugin.getTargets().size());
 
-    List<String> expectedCompletionItems = getPluginPackageCompletionItemStrings(dataflowPlugin);
+    List<String> expectedCompletionItems = getPluginPackageCompletionItemStrings(testPlugin);
 
     assertThat(allCompletionItems).containsExactlyElementsIn(expectedCompletionItems);
   }
@@ -145,9 +106,9 @@ public class TextDocumentServiceImplWithPluginsTest {
     List<String> allCompletionItems = getCompletionItems(textDocumentService, inputPath, 6, 2);
 
     assertThat(allCompletionItems)
-        .hasSize(dataflowPlugin.getFunctions().size() + dataflowPlugin.getTargets().size());
+        .hasSize(testPlugin.getFunctions().size() + testPlugin.getTargets().size());
 
-    List<String> expectedCompletionItems = getPluginPackageCompletionItemStrings(dataflowPlugin);
+    List<String> expectedCompletionItems = getPluginPackageCompletionItemStrings(testPlugin);
 
     assertThat(allCompletionItems).containsExactlyElementsIn(expectedCompletionItems);
   }
@@ -176,10 +137,10 @@ public class TextDocumentServiceImplWithPluginsTest {
   @Test
   public void autoComplete_partial_transpile_get_plugin_completion_items() throws IOException {
     String inputPath = "autocomplete_partial_transpile.wstl";
-    List<String> allCompletionItems = getCompletionItems(textDocumentService, inputPath, 9, 9);
+    List<String> allCompletionItems = getCompletionItems(textDocumentService, inputPath, 8, 5);
     assertThat(allCompletionItems)
-        .hasSize(dataflowPlugin.getFunctions().size() + dataflowPlugin.getTargets().size());
-    List<String> expectedCompletionItems = getPluginPackageCompletionItemStrings(dataflowPlugin);
+        .hasSize(testPlugin.getFunctions().size() + testPlugin.getTargets().size());
+    List<String> expectedCompletionItems = getPluginPackageCompletionItemStrings(testPlugin);
     assertThat(allCompletionItems).containsExactlyElementsIn(expectedCompletionItems);
   }
 
@@ -195,11 +156,11 @@ public class TextDocumentServiceImplWithPluginsTest {
     allCompletionItems = getCompletionItems(textDocumentService, inputPath, 8, 10);
     assertThat(allCompletionItems).containsExactlyElementsIn(expectedImportedFunctionNames);
 
-    allCompletionItems = getCompletionItems(textDocumentService, inputPath, 10, 10);
+    allCompletionItems = getCompletionItems(textDocumentService, inputPath, 10, 6);
     assertThat(allCompletionItems)
-        .hasSize(dataflowPlugin.getFunctions().size() + dataflowPlugin.getTargets().size());
+        .hasSize(testPlugin.getFunctions().size() + testPlugin.getTargets().size());
     assertThat(allCompletionItems)
-        .containsExactlyElementsIn(getPluginPackageCompletionItemStrings(dataflowPlugin));
+        .containsExactlyElementsIn(getPluginPackageCompletionItemStrings(testPlugin));
   }
 
   @Test
@@ -234,39 +195,39 @@ public class TextDocumentServiceImplWithPluginsTest {
       "formatDateTime(String format, String iso8601DateTime)",
       "formatDateTimeZ(String format, String timezone, String iso8601DateTime)"
     };
-    String[] expecteddSignatureForCsvIOReadFunctions = {
-      "dataflow::csvIORead(String path, Array schema, Container csvReadConfigs)",
-      "dataflow::csvIORead(String path, Array schema, Data delimiter, Data recordSeparator, Data"
-          + " quote)",
-      "dataflow::csvIORead(String path, Array schema, Data delimiter)",
-      "dataflow::csvIORead(String path, Array schema)",
-      "dataflow::csvIORead(String path, Array schema, Data delimiter, Data recordSeparator)",
-      "dataflow::csvIOReadWithMetadata(String path, Array schema)"
+    String[] expectedSignatureForAssertFuncs = {
+      "test::assertEquals(Data want, Data got)",
+      "test::assertNull(Data data)",
+      "test::assertTrue(Boolean bool)",
     };
-    String[] expectedHclsPluginFunction = {
-      "hcls::hl7v2ReadAll(PCollectionDataset messageIds, Closure errorHandler)"
+    String[] expectedSignatureForRunFuncs = {
+      "test::reportAll()",
+      "test::reportAll(String packageName)",
+      "test::run(Closure body)",
+      "test::runAll()",
+      "test::runAll(String packageName)",
+      "test::runSingle(String name, Closure body)",
     };
     String[] expectedSignatureForLocalFunction = {
       "localfunction(Data number1, Data number2)", "localfunction2()"
     };
     String[] expectedVariable = {"myVariable1"};
 
-    List<String> allCompetionItems = getCompletionSignature(textDocumentService, inputPath, 3, 5);
+    List<String> allCompetionItems = getCompletionSignature(textDocumentService, inputPath, 2, 5);
     assertThat(allCompetionItems)
         .containsExactlyElementsIn(expectedSignatureForFormatDateFunctions);
 
-    allCompetionItems = getCompletionSignature(textDocumentService, inputPath, 5, 16);
-    assertThat(allCompetionItems)
-        .containsExactlyElementsIn(expecteddSignatureForCsvIOReadFunctions);
+    allCompetionItems = getCompletionSignature(textDocumentService, inputPath, 4, 8);
+    assertThat(allCompetionItems).containsExactlyElementsIn(expectedSignatureForAssertFuncs);
 
-    allCompetionItems = getCompletionSignature(textDocumentService, inputPath, 17, 7);
-    assertThat(allCompetionItems).containsExactlyElementsIn(expectedHclsPluginFunction);
+    allCompetionItems = getCompletionSignature(textDocumentService, inputPath, 16, 7);
+    assertThat(allCompetionItems).containsExactlyElementsIn(expectedSignatureForRunFuncs);
 
     // for user defined functions.
-    allCompetionItems = getCompletionSignature(textDocumentService, inputPath, 15, 4);
+    allCompetionItems = getCompletionSignature(textDocumentService, inputPath, 14, 4);
     assertThat(allCompetionItems).containsExactlyElementsIn(expectedSignatureForLocalFunction);
 
-    allCompetionItems = getCompletionSignature(textDocumentService, inputPath, 20, 5);
+    allCompetionItems = getCompletionSignature(textDocumentService, inputPath, 19, 5);
     assertThat(allCompetionItems).containsExactlyElementsIn(expectedVariable);
   }
 }

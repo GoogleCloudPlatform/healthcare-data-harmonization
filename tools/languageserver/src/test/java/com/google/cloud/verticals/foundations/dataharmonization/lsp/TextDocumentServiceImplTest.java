@@ -271,7 +271,7 @@ public class TextDocumentServiceImplTest {
   @Test
   public void autoComplete_partial_transpile_get_local_completion_items() throws IOException {
     String inputPath = "autocomplete_partial_transpile.wstl";
-    List<String> allCompletionItems = getCompletionItems(textDocumentService, inputPath, 25, 3);
+    List<String> allCompletionItems = getCompletionItems(textDocumentService, inputPath, 24, 3);
 
     String[] expectedFunctionNames = {"localFunction"};
     assertThat(allCompletionItems).containsExactlyElementsIn(expectedFunctionNames);

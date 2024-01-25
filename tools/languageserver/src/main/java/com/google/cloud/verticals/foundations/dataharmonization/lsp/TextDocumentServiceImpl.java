@@ -23,7 +23,6 @@ import com.google.cloud.verticals.foundations.dataharmonization.Transpiler;
 import com.google.cloud.verticals.foundations.dataharmonization.debug.proto.Debug.FileInfo;
 import com.google.cloud.verticals.foundations.dataharmonization.init.Engine.InitializedBuilder;
 import com.google.cloud.verticals.foundations.dataharmonization.lsp.SymbolLookup.SymbolWithPosition;
-import com.google.cloud.verticals.foundations.dataharmonization.lsp.validation.ValidationService;
 import com.google.cloud.verticals.foundations.dataharmonization.tools.linter.DefaultFileSystemShim;
 import com.google.cloud.verticals.foundations.dataharmonization.tools.linter.FileSystemShim;
 import com.google.cloud.verticals.foundations.dataharmonization.tools.linter.Linter;
@@ -70,7 +69,7 @@ import org.eclipse.lsp4j.services.TextDocumentService;
  */
 public class TextDocumentServiceImpl implements TextDocumentService {
   private static final GoogleLogger logger = GoogleLogger.forEnclosingClass();
-  private ValidationService validationService;
+
   private final TranspileUtil transpileUtil;
   private final LSPServer languageServer;
   private final Map<String, String> documentTextMap;
@@ -240,7 +239,6 @@ public class TextDocumentServiceImpl implements TextDocumentService {
         documentURI, languageServer.getLanguageClient());
   }
 
-
   /** Called when a client makes closes a {@link TextDocumentItem} */
   @Override
   public void didClose(DidCloseTextDocumentParams params) {
@@ -307,18 +305,6 @@ public class TextDocumentServiceImpl implements TextDocumentService {
     transpileUtil.generateDiagnosticsFromTranspiler(documentText, documentURI, new Transpiler());
     InitializedBuilder builder =
         engineUtil.loadEngine(documentURI, documentText, languageServer.getImportRoot());
-    addValidationDiagnostics(documentURI, documentText, builder);
-  }
-
-  private void addValidationDiagnostics(
-      String documentURI, String documentText, InitializedBuilder builder) {
-    validationService = ValidationService.loadValidationService(diagnosticMessageCollector);
-    if (builder == null || !ValidationService.canRunValidation(builder.getMetaData())) {
-      return;
-    }
-
-    validationService.produceValidationDiagnostics(
-        documentURI, documentText, languageServer.getLoaders());
   }
 
   /**

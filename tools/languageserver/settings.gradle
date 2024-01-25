@@ -12,75 +12,22 @@ if(annotationProcessorExists){
     includeBuild(annotationProcessorPath)
 }
 
-
-
 includeBuild("../../")
-includeBuild("../../plugins/validation")
-includeBuild("../../plugins/test")
 
 // Import Whistle plugins START
-include ':plugins:gcp'
-project(':plugins:gcp').projectDir = new File('../../cloud_healthcare_data_harmonization/mapping_platform/plugins/gcp')
 
-include ':plugins:retail'
-project(':plugins:retail').projectDir = new File('../../cloud_healthcare_data_harmonization/mapping_platform/plugins/retail')
+includeBuild("../../plugins/test")
+includeBuild("../../plugins/logging")
+includeBuild("../../plugins/harmonization")
+includeBuild("../../plugins/reconciliation")
 
-include ':plugins:shared'
-project(':plugins:shared').projectDir = new File('../../cloud_healthcare_data_harmonization/mapping_platform/plugins/shared')
-
-include ':plugins:dataflow'
-project(':plugins:dataflow').projectDir = new File('../../cloud_healthcare_data_harmonization/mapping_platform/plugins/dataflow')
-
-include ':plugins:harmonization:hdev1'
-project(':plugins:harmonization:hdev1').projectDir = new File('../../cloud_healthcare_data_harmonization/mapping_platform/plugins/harmonization/hdev1')
-
-include ':plugins:harmonization:common'
-project(':plugins:harmonization:common').projectDir = new File('../../cloud_healthcare_data_harmonization/mapping_platform/plugins/harmonization/common')
-
-project(':plugins:harmonization').projectDir= new File('../../cloud_healthcare_data_harmonization/mapping_platform/plugins/harmonization')
-
-include ':plugins:reconciliation:reconv1'
-project(':plugins:reconciliation:reconv1').projectDir = new File('../../cloud_healthcare_data_harmonization/mapping_platform/plugins/reconciliation/reconv1')
-
-include ':plugins:reconciliation:reconcommon'
-project(':plugins:reconciliation:reconcommon').projectDir = new File('../../cloud_healthcare_data_harmonization/mapping_platform/plugins/reconciliation/reconcommon')
-
-project(':plugins:reconciliation').projectDir= new File('../../cloud_healthcare_data_harmonization/mapping_platform/plugins/reconciliation')
-
-include ':plugins:hcls'
-project(':plugins:hcls').projectDir = new File('../../cloud_healthcare_data_harmonization/mapping_platform/plugins/hcls')
-
-include ':plugins:logging'
-project(':plugins:logging').projectDir = new File('../../cloud_healthcare_data_harmonization/mapping_platform/plugins/logging')
-
-include ':plugins:environment'
-project(':plugins:environment').projectDir = new File('../../cloud_healthcare_data_harmonization/mapping_platform/plugins/environment')
-
-include ':plugins:testing'
-project(':plugins:testing').projectDir = new File('../../cloud_healthcare_data_harmonization/mapping_platform/plugins/testing')
-
-include ':plugins:provenance'
-project(':plugins:provenance').projectDir = new File('../../cloud_healthcare_data_harmonization/mapping_platform/plugins/provenance')
-
-include ':plugins:integration'
-project(':plugins:integration').projectDir = new File('../../cloud_healthcare_data_harmonization/mapping_platform/integration')
-
-include ':plugins:databaselookup'
-project(':plugins:databaselookup').projectDir = new File('../../cloud_healthcare_data_harmonization/mapping_platform/plugins/databaselookup')
-
-include ':plugins:flag'
-project(':plugins:flag').projectDir = new File('../../cloud_healthcare_data_harmonization/mapping_platform/plugins/flag')
-
-include ':plugins:errors'
-project(':plugins:errors').projectDir = new File('../../cloud_healthcare_data_harmonization/mapping_platform/plugins/errors')
-
-include ':tools:linter'
-project(':tools:linter').projectDir = new File('../tools/linter')
+include ":tools:linter"
+project(":tools:linter").projectDir = new File("../../tools/linter")
 
 // Import Whistle plugins END
 
 buildCache {
     local {
-        directory = new File("../../", 'build_cache')
+        directory = new File("../../", "build_cache")
     }
 }

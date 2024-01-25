@@ -1,7 +1,19 @@
+buildscript {
+    dependencies {
+        if (gradle.ext.docgenExists) {
+            classpath 'com.google.cloud.verticals.foundations.dataharmonization:docgen'
+        }
+    }
+}
 
 plugins {
     id 'java-library'
     id 'idea'
+}
+
+if (gradle.ext.docgenExists) {
+    apply plugin: 'com.google.cloud.verticals.foundations.dataharmonization.docgen'
+    docgen.destinationDirectory = file("${project.projectDir.toPath().parent.parent}/g3doc")
 }
 
 group 'com.google.cloud.verticals.foundations.dataharmonization.plugins'
@@ -13,6 +25,10 @@ repositories {
 dependencies {
     // TODO(): Set up versioning
     api group: "com.google.cloud.verticals.foundations.dataharmonization", name: "runtime"
+
+    if (gradle.ext.has("annotationProcessorExists") && gradle.ext.annotationProcessorExists){
+        annotationProcessor ("com.google.cloud.verticals.foundations.dataharmonization:annotation_processor")
+    }
 
     implementation group: 'com.google.guava', name: 'guava', version: "31.0.1-jre"
     testImplementation group: "com.google.cloud.verticals.foundations.dataharmonization", name: "testutil"

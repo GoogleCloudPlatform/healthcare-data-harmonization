@@ -63,9 +63,7 @@ public class HoverTest {
         new Object[][] {
           {"built-in strFmt docs", "hover.wstl", new int[] {1, 1}, "strFmt.md"},
           {"built-in where docs", "hover.wstl", new int[] {2, 1}, "where.md"},
-          {"dataflow bigQueryIO docs", "hover.wstl", new int[] {3, 4}, "dataflow_bigqueryIO.md"},
           {"test assertEquals docs", "hover.wstl", new int[] {4, 4}, "assertEquals.md"},
-          {"validation mockGet docs", "hover.wstl", new int[] {5, 4}, "mockGet.md"},
           {"hover docs dont show from imported file", "hover_importer.wstl", new int[] {1, 1}, ""},
           {"hover importee shows docs", "hover_importee.wstl", new int[] {1, 1}, "strFmt.md"},
         });

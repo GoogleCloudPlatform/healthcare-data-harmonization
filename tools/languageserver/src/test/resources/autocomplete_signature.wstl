@@ -1,9 +1,8 @@
-import "dataflow";
-import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.hcls.HclsPlugin"
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.test.TestPlugin"
 
 forma
 
-dataflow::csvIOR
+test::as
 
 def localfunction(number1, number2) {
   Mul: number1 * number2;
@@ -15,7 +14,7 @@ def localfunction2() {
 
 loca
 
-hcls::h
+test::r
 
 var myVariable1 : "myVariable";
 myVar

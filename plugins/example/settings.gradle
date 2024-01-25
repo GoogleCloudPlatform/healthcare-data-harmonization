@@ -1,3 +1,17 @@
 rootProject.name = 'example'
 
+def docgenPath = rootDir.toPath().resolve("../../tools/docgen").toAbsolutePath()
+def docgenExists = docgenPath.toFile().exists()
+gradle.ext.set("docgenExists", docgenExists)
+if (docgenExists) {
+    includeBuild(docgenPath)
+}
+
+def annotationProcessorPath = rootDir.toPath().resolve("../../tools/annotation_processor").toAbsolutePath()
+def annotationProcessorExists = annotationProcessorPath.toFile().exists()
+gradle.ext.set("annotationProcessorExists", annotationProcessorExists)
+if(annotationProcessorExists){
+    includeBuild(annotationProcessorPath)
+}
+
 includeBuild("../../")

@@ -17,6 +17,10 @@ dependencies {
     implementation group: "com.google.auto.value", name: "auto-value-annotations", version: "1.7.4"
     annotationProcessor group: "com.google.auto.value", name: "auto-value", version: "1.7.4"
 
+    if (gradle.ext.has("annotationProcessorExists") && gradle.ext.annotationProcessorExists){
+        annotationProcessor ("com.google.cloud.verticals.foundations.dataharmonization:annotation_processor")
+    }
+
     // TODO(): Set up versioning
     testImplementation group: "com.google.cloud.verticals.foundations.dataharmonization", name: "testutil"
     testImplementation group: "org.mockito", name: "mockito-core", version: "3.7.7"

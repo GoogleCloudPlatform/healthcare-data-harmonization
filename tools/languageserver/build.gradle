@@ -19,14 +19,8 @@ plugins {
     id 'idea'
     id 'java-library'
     id 'java'
-    id "com.google.cloud.artifactregistry.gradle-plugin" version "2.1.4"
-    id "maven-publish"
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
-
-
-apply from:"../../maven-publish.gradle"
-
 
 allprojects {
     repositories {
@@ -37,18 +31,6 @@ allprojects {
         maven {
             url 'https://maven.google.com'
         }
-    }
-    if  (System.getProperty("blaze_gradle_build") == null) {
-        String subPath = project.path.replace(":", File.separator) + File.separator + "build"
-        if (project.hasProperty("outputDir")) {
-            project.buildDir = new File(outputDir, subPath)
-        } else {
-            // Set build directory to be outside of the version control tracked folder,
-            // so that the build artifacts won't pollute the fig/CitC workspace.
-            File tempRoot = new File(System.getProperty("java.io.tmpdir"), project.rootProject.name)
-            project.buildDir = new File(tempRoot, subPath)
-        }
-        println "Build directory relocated to ${buildDir}"
     }
 }
 
@@ -78,24 +60,14 @@ dependencies {
 
     implementation 'com.google.flogger:google-extensions:0.7.1'
     //Plugin Imports Start
-    implementation project (':plugins:dataflow')
-    implementation project (':plugins:gcp')
-    implementation project (':plugins:harmonization:hdev1')
-    implementation project (':plugins:reconciliation:reconv1')
-    implementation project (':plugins:hcls')
-    implementation project (':plugins:logging')
-    implementation project (':plugins:environment')
-    implementation project (':plugins:shared')
-    implementation project (':plugins:testing')
-    implementation project (':plugins:retail')
-    implementation project (':plugins:integration')
-    implementation project (':plugins:provenance')
-    implementation project (':plugins:databaselookup')
-    implementation project (':plugins:errors')
+    // TODO(): These should be loaded at runtime.
+
+    implementation group: "com.google.cloud.verticals.foundations.dataharmonization.plugins.harmonization", name: "hdev2"
+    implementation group: "com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation", name: "reconv2"
+    implementation group: "com.google.cloud.verticals.foundations.dataharmonization.plugins", name: "logging"
+    implementation group: "com.google.cloud.verticals.foundations.dataharmonization.plugins", name: "test"
     implementation project (':tools:linter')
 
-    implementation group: "com.google.cloud.verticals.foundations.dataharmonization.plugins", name: "validation"
-    implementation group: "com.google.cloud.verticals.foundations.dataharmonization.plugins", name: "test"
     //Plugin Imports End
     testImplementation 'junit:junit:4.12'
     testImplementation 'com.google.truth:truth:1.0.1'
@@ -129,8 +101,4 @@ tasks.startScripts.mustRunAfter 'shadowJar'
 tasks.startShadowScripts.mustRunAfter 'shadowJar'
 tasks.startScripts.mustRunAfter 'jar'
 tasks.startShadowScripts.mustRunAfter 'jar'
-
-task publishLanguageServer {
-    publishHelper(publishing, true)
-}
 
