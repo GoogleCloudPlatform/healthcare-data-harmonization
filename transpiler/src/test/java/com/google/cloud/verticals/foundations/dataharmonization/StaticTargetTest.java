@@ -178,6 +178,10 @@ public class StaticTargetTest {
           },
           {"var [0]", VariableTarget.newBuilder().setName("[0]").setPath("").build()},
           {"var [0].path", VariableTarget.newBuilder().setName("[0]").setPath(".path").build()},
+          {
+            "my_field\n\n.my_field1",
+            FieldTarget.newBuilder().setPath("my_field.my_field1").setType(FieldType.LOCAL).build()
+          },
         });
   }
 

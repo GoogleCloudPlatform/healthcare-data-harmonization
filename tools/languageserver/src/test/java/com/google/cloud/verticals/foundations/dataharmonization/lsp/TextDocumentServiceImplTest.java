@@ -81,11 +81,11 @@ public class TextDocumentServiceImplTest {
     String inputPath = "prefix_autocomplete.wstl";
     List<String> returnedFunctions = getCompletionItems(textDocumentService, inputPath, 1, 0);
     assertThat(returnedFunctions)
-        // +1 to account for user-defined function in the test file1
+        // +2 to account for user-defined functions in the test file1
         .hasSize(
             (int) builtins.getFunctions().stream().filter(this::isFunctionLoaded).count()
                 + builtins.getTargets().size()
-                + 1);
+                + 2);
   }
 
   private boolean isFunctionLoaded(CallableFunction fxn) {
@@ -113,7 +113,7 @@ public class TextDocumentServiceImplTest {
     List<String> returnedFunctions = getCompletionItems(textDocumentService, inputPath, 6, 6);
 
     // prefix: "ra"
-    String[] expectedFunctionNames = {"range", "range"};
+    String[] expectedFunctionNames = {"range", "range", "ra"};
     assertThat(returnedFunctions).containsExactlyElementsIn(expectedFunctionNames);
   }
 

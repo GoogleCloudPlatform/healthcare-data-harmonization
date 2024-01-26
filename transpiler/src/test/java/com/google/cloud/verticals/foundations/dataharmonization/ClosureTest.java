@@ -63,7 +63,9 @@ public class ClosureTest {
           "00000000-5908-9911-0000-00004f1bcf38",
           "00000000-782f-65e9-0000-00000340a9f0",
           "ffffffff-91c3-853d-ffff-ffff9a7633de",
-          "ffffffff-a50a-9a08-0000-000031c48152");
+          "ffffffff-a50a-9a08-0000-000031c48152",
+          "ffffffff-c902-b799-ffff-ffffdce6b5fd",
+          "00000000-26c0-d25f-ffff-ffffeb6296f8");
 
   // expected result for foo[where $ > 0].bar.baz[0][sortBy $.field]
   private static ValueSource selectorTestResult(String whereId, String sortById) {
@@ -703,7 +705,60 @@ public class ClosureTest {
                     selectorTestResult(UUIDs.get(15), UUIDs.get(16)),
                     ValueSource.newBuilder().setConstString("[0]").build())),
             null
-          }
+          },
+          // Condition - primitive with multiple newlines
+          {
+            "Condition - primitive with multiple newlines",
+            "if true then 1\n\n\n else 2",
+            new Environment("testEnv Empty"),
+            Arrays.asList(
+                FunctionDefinition.newBuilder()
+                    .setName("ternary-then_" + UUIDs.get(17))
+                    .setInheritParentVars(true)
+                    .addMapping(
+                        FieldMapping.newBuilder()
+                            .setValue(ValueSource.newBuilder().setConstInt(1).build())
+                            .build())
+                    .build(),
+                FunctionDefinition.newBuilder()
+                    .setName("ternary-else_" + UUIDs.get(18))
+                    .setInheritParentVars(true)
+                    .addMapping(
+                        FieldMapping.newBuilder()
+                            .setValue(ValueSource.newBuilder().setConstInt(2).build())
+                            .build())
+                    .build()),
+            ValueSource.newBuilder()
+                .setFunctionCall(
+                    FunctionCall.newBuilder()
+                        .setReference(Functions.TERNARY_REF)
+                        .addArgs(ValueSource.newBuilder().setConstBool(true).build())
+                        .addArgs(
+                            ValueSource.newBuilder()
+                                .setFunctionCall(
+                                    FunctionCall.newBuilder()
+                                        .setReference(
+                                            FunctionReference.newBuilder()
+                                                .setName("ternary-then_" + UUIDs.get(17))
+                                                .build())
+                                        .setBuildClosure(true)
+                                        .build())
+                                .build())
+                        .addArgs(
+                            ValueSource.newBuilder()
+                                .setFunctionCall(
+                                    FunctionCall.newBuilder()
+                                        .setReference(
+                                            FunctionReference.newBuilder()
+                                                .setName("ternary-else_" + UUIDs.get(18))
+                                                .build())
+                                        .setBuildClosure(true)
+                                        .build())
+                                .build())
+                        .build())
+                .build(),
+            null
+          },
         });
   }
 

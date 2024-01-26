@@ -165,9 +165,9 @@ argAlias
 ;
 
 functionDef
-    : DEF functionIdentifier OPEN_BRACKET ( NEWLINE?
-        argAlias (ARG_DELIM NEWLINE? argAlias)* NEWLINE?
-    )? CLOSE_BRACKET NEWLINE? expression (EOF | NEWLINE)
+    : DEF functionIdentifier OPEN_BRACKET ( NEWLINE*
+        argAlias (ARG_DELIM NEWLINE* argAlias)* NEWLINE*
+    )? CLOSE_BRACKET NEWLINE* expression (EOF | NEWLINE)
 ;
 
 expression
@@ -179,7 +179,7 @@ expression
     | expression infixOperator2 expression             # ExprInfixOp
     | expression infixOperator3 expression             # ExprInfixOp
     | expression infixOperator4 expression             # ExprInfixOpLambda
-    | IF expression THEN expression NEWLINE? (ELSE expression)? # ExprCondition
+    | IF expression THEN expression NEWLINE* (ELSE expression)? # ExprCondition
 ;
 
 block
@@ -188,7 +188,7 @@ block
 
 functionCall
     : functionName OPEN_BRACKET
-          (NEWLINE? expression (ARG_DELIM NEWLINE? expression)* NEWLINE?)?
+          (NEWLINE* expression (ARG_DELIM NEWLINE* expression)* NEWLINE*)?
     CLOSE_BRACKET
 ;
 
@@ -257,7 +257,7 @@ index     : OPEN_ARRAY INTEGER CLOSE_ARRAY;
 fieldName   : PATH_DELIM (INTEGER | identifier);
 
 sourcePathSegment
-    : NEWLINE? fieldName                          #PathFieldName
+    : NEWLINE* fieldName                          #PathFieldName
     | selector                                    #PathSelector
     | (index | WILDCARD | emptySelector)          #PathIndex
 ;
@@ -284,7 +284,7 @@ targetPathHead
 ;
 
 targetPathSegment
-    : NEWLINE? fieldName
+    : NEWLINE* fieldName
     | index
     | emptySelector
 ;

@@ -195,14 +195,19 @@ public class TranspileUtilTest {
 
     Diagnostic diagnostic1 =
         createDiagnosticError(
-            new int[] {10, 5},
-            new int[] {10, 6},
+            new int[] {0, 23},
+            new int[] {0, 24},
             TRANSPILER_SERVICE_DIAGNOSTICS,
-            "unexpected '<EOF>', expecting one of {'if', BOOL, 'merge', 'append', 'replace',"
-                + " 'extend', '-', '*', '!', '(', '[', '{', INTEGER, IDENTIFIER (Examples of"
-                + " Identifiers include, Function, Variable and Package names), STRING}");
+            "unexpected '.', expecting NEWLINE");
 
     Diagnostic diagnostic2 =
+        createDiagnosticError(
+            new int[] {4, 0},
+            new int[] {4, 3},
+            TRANSPILER_SERVICE_DIAGNOSTICS,
+            "unexpected 'var', expecting one of {NEWLINE, '.'}");
+
+    Diagnostic diagnostic3 =
         createDiagnosticError(
             new int[] {7, 5},
             new int[] {7, 6},
@@ -212,29 +217,17 @@ public class TranspileUtilTest {
                 + " '*', '!', '(', '[', '{', INTEGER, IDENTIFIER (Examples of Identifiers include,"
                 + " Function, Variable and Package names), STRING}");
 
-    Diagnostic diagnostic3 =
-        createDiagnosticError(
-            new int[] {4, 0},
-            new int[] {4, 3},
-            TRANSPILER_SERVICE_DIAGNOSTICS,
-            "unexpected 'var', expecting '.'");
-
     Diagnostic diagnostic4 =
         createDiagnosticError(
-            new int[] {2, 4},
-            new int[] {2, 5},
+            new int[] {10, 5},
+            new int[] {10, 6},
             TRANSPILER_SERVICE_DIAGNOSTICS,
-            "unexpected '\\n', expecting '.'");
-
-    Diagnostic diagnostic5 =
-        createDiagnosticError(
-            new int[] {0, 23},
-            new int[] {0, 24},
-            TRANSPILER_SERVICE_DIAGNOSTICS,
-            "unexpected '.', expecting NEWLINE");
+            "unexpected '<EOF>', expecting one of {'if', BOOL, 'merge', 'append', 'replace',"
+                + " 'extend', '-', '*', '!', '(', '[', '{', INTEGER, IDENTIFIER (Examples of"
+                + " Identifiers include, Function, Variable and Package names), STRING}");
 
     ImmutableSet<Diagnostic> expected =
-        ImmutableSet.of(diagnostic1, diagnostic2, diagnostic3, diagnostic4, diagnostic5);
+        ImmutableSet.of(diagnostic1, diagnostic2, diagnostic3, diagnostic4);
     transpileUtil.generateDiagnosticsFromTranspiler(wstlInput, TEST_URI, new Transpiler());
     diagnosticMessageCollector.publishCollectedDiagnosticsToClient(
         languageServer.getLanguageClient());
