@@ -1,0 +1,4 @@
+package importer
+import "./import_exception_in_imported_file_importee.wstl"
+
+importee::func()

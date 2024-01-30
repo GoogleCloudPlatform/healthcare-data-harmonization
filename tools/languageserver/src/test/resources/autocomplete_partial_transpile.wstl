@@ -1,0 +1,25 @@
+package from_codelab
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.test.TestPlugin"
+
+
+def localFunction(){
+}
+Â£©▀©ŠÂ£▀áÍÞæâ€š�▀©ŠÂ£áÍÞæâ€š�
+test:
+
+// The text below is meant to break transpilation
+[
+    [[].
+    asfkjhsdfkjasdhf
+    a..?!11{]]]}
+Â£©▀©ŠÂ£▀áÍÞæâ€š�▀©ŠÂ£áÍÞæâ€š�
+
+
+    [
+        [[].
+        asfkjhsdfkjasdhf
+        a..?!11{]]]}
+
+
+loc

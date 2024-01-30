@@ -1,0 +1,7 @@
+if(resource)then{
+  scenarioA()
+}else if(conditionB)then{
+  scenarioB()
+}else{
+  scenarioC()
+}

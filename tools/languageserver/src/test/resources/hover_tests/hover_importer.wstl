@@ -1,0 +1,2 @@
+import "./hover_importee.wstl"
+hover_importee::anotherFunc();

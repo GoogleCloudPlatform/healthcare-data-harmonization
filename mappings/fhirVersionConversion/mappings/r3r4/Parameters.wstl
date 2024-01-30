@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   parameters : FHIR Parameters resource
+//
+// Output(s):
+//   FHIR Parameters Resource
+//
 def ParametersBase(parameters) {
   resourceType: parameters.resourceType
   id: parameters.id
@@ -10,16 +18,40 @@ def ParametersBase(parameters) {
   language: parameters.language
 }
 
+// Description: Converts a FHIR STU3 Parameters resource to FHIR R4 Parameters resource.
+//
+// Argument(s):
+//   parameters : FHIR STU3 Parameters resource https://www.hl7.org/fhir/stu3/parameters.html
+//
+// Output(s):
+//   FHIR R4 Parameters Resource https://www.hl7.org/fhir/r4/parameters.html
+//
 def R3ParametersToR4(parameters) {
   ParametersBase(parameters)
   parameter: R3Parameters_ParameterToR4(parameters.parameter[])
 }
 
+// Description: Converts a FHIR R4 Parameters resource to FHIR STU3 Parameters resource.
+//
+// Argument(s):
+//   parameters : FHIR R4 Parameters resource https://www.hl7.org/fhir/r4/parameters.html
+//
+// Output(s):
+//   FHIR STU3 Parameters Resource https://www.hl7.org/fhir/stu3/parameters.html
+//
 def R4ParametersToR3(parameters) {
   ParametersBase(parameters)
   parameter: R4Parameters_ParameterToR3(parameters.parameter[])
 }
 
+// Description: Converts a FHIR STU3 Parameters.parameter to FHIR R4 Parameters.parameter.
+//
+// Argument(s):
+//   data : FHIR STU3 Parameters.parameter https://www.hl7.org/fhir/stu3/parameters-definitions.html#Parameters.parameter
+//
+// Output(s):
+//   FHIR R4 Parameters.parameter https://www.hl7.org/fhir/r4/parameters-definitions.html#Parameters.parameter
+//
 def R3Parameters_ParameterToR4(data) {
   name: data.name
   valueBoolean: data.valueBoolean
@@ -59,6 +91,14 @@ def R3Parameters_ParameterToR4(data) {
   part: data.part
 }
 
+// Description: Converts a FHIR R4 Parameters.parameter to FHIR STU3 Parameters.parameter.
+//
+// Argument(s):
+//   data : FHIR R4 Parameters.parameter https://www.hl7.org/fhir/r4/parameters-definitions.html#Parameters.parameter
+//
+// Output(s):
+//   FHIR STU3 Parameters.parameter https://www.hl7.org/fhir/stu3/parameters-definitions.html#Parameters.parameter
+//
 def R4Parameters_ParameterToR3(data) {
   name: data.name
   valueBoolean: data.valueBoolean

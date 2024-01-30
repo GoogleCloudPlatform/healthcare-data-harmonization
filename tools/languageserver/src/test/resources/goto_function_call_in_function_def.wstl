@@ -1,0 +1,6 @@
+def nestedFunc() {0;}
+def nestedFunc(arg1) {1;}
+def nestedFunc(arg1, arg2) {2;}
+def rootFunc() {
+    nestedFunc("foo");
+}

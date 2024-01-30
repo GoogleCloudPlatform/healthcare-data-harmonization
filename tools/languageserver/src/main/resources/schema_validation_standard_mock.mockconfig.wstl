@@ -1,0 +1,3 @@
+package schema_validation_std_mock
+
+mocking::mock("builtins::get", "validation::mockGet");

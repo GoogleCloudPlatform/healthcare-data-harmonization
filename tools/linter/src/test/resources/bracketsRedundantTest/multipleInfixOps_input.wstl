@@ -1,0 +1,6 @@
+var a: 1
+var b: 2
+var c: 3
+
+(a and b and c)
+((a and b) or ((c)))

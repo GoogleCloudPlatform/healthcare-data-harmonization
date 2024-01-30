@@ -1,0 +1,7 @@
+var x: "abc"
+if (true) then {
+   var x: 1
+   x.f1.f2: {
+       f3: x
+   }
+}

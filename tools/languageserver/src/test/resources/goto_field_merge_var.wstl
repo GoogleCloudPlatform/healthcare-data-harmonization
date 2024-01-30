@@ -1,0 +1,5 @@
+var x: "abc"
+if (true) then {
+    var x.f2: 1
+}
+var x.f3: 3

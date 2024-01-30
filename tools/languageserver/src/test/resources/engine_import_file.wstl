@@ -1,0 +1,6 @@
+package import_file
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.logging.LoggingPlugin";
+import "test"
+
+this is a transpilation exception

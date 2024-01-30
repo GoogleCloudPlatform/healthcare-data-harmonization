@@ -1,0 +1,11 @@
+import "validation"
+import "test"
+
+def func() {
+  a: 1
+  b: 2
+}
+
+var expected: ["a", 1]
+
+test::assertEquals(expected, func())

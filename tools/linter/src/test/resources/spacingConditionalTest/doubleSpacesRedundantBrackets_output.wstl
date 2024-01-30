@@ -1,0 +1,5 @@
+if valueType != "extension" and valueType != "Extension" then {
+    set("value{valueType}") : value;
+  } else {
+    extension[] : value;
+}

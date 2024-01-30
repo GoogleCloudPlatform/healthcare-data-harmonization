@@ -1,0 +1,4 @@
+
+import "./import_without_prefix_importee.wstl";
+
+name: "John";

@@ -1,6 +1,19 @@
+buildscript {
+    dependencies {
+        if (gradle.ext.docgenExists) {
+            classpath 'com.google.cloud.verticals.foundations.dataharmonization:docgen'
+        }
+    }
+}
+
 plugins {
     id 'java-library'
     id 'idea'
+}
+
+if (gradle.ext.docgenExists) {
+    apply plugin: 'com.google.cloud.verticals.foundations.dataharmonization.docgen'
+    docgen.destinationDirectory = file("${project.projectDir.toPath().parent.parent.parent}/doc")
 }
 
 group 'com.google.cloud.verticals.foundations.dataharmonization.plugins.harmonization'
@@ -15,6 +28,10 @@ dependencies {
     api project(":common")
 
     implementation group: "com.google.guava", name: "guava", version: "31.0.1-jre"
+
+    if (gradle.ext.has("annotationProcessorExists") && gradle.ext.annotationProcessorExists){
+        annotationProcessor ("com.google.cloud.verticals.foundations.dataharmonization:annotation_processor")
+    }
 
     testImplementation 'junit:junit:4.13'
     testImplementation 'com.google.guava:guava-testlib:25.1-jre'

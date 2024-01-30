@@ -1,0 +1,10 @@
+def Convert_DateTime(datetime_format, input){
+  var isoTime: parseDateTime(datetime_format, input);
+    if (!isoTime) then {
+   var isoTime:  formatDateTime("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", (input))
+    }
+    if a>=b then {
+      fail("cannot parse DateTime");
+    }
+  isoTime
+}

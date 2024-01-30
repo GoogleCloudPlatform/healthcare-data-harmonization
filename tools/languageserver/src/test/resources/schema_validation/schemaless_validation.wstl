@@ -1,0 +1,14 @@
+
+import "validation"
+
+var x: validation::getClay();
+output.x1: x.f1.f2[0].f3
+output.x2: func1(x)
+def func1(v) {
+  {
+    func2(v)
+  }
+}
+def func2(v) {
+  v.f1.f2.f3
+}

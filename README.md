@@ -40,25 +40,36 @@ with external services, and otherwise extend the engine functionality.
 
 *   Whistle 2 Runtime
     *   `runtime` - Execution engine
-    *   `proto` - Intermediate representation
-    *   `transpiler` - Syntax to `proto` transpilation
-    *   `testutil` - Unit testing helper functions
     *   `plugins` - First-Party plugins
         *   `example` - Example Plugin showcasing the plugin APIs
         *   `logging` - Simple logging functions implementation
         *   `test` - Unit Testing Plugin enabling writing unit tests in Whistle
         *   `harmonization` - FHIR code translation support
         *   `reconciliation` - Find and merge FHIR resources that refer to the same entity
+    *   `proto` - Intermediate representation
+    *   `testutil` - Unit testing helper functions
+    *   `transpiler` - Syntax to `proto` transpilation
+
+* Tooling
+    *   `tools` - Various libraries/modules/IDE plugins
+        *   `annotation_processor` - A Java compiler plugin to preserve
+            documentation and function signatures.
+        *   `docgen` - A Javadoc doclet and gradle plugin to generate plugin
+            function documentation, like in `doc/`.
+        *   `languageserver` - An [LSP](https://microsoft.github.io/language-server-protocol/)
+            implementation for Whistle.
+        *   `linter` - A code formatting tool.
+
+* Documentation
+    *   `doc` - Guides, codelabs, language spec, and plugin function
+        documentation.
 
 ## Coming Soon to this repository
 
 In no particular order:
 
 *   Visual Studio Code Extension
-    *   Language Server
-    *   Formatter
 *   HL7v2 to FHIR mappings
-*   Documentation generator
 
 ## Where is Whistle 1?
 

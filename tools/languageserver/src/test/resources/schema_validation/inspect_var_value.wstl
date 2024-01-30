@@ -1,0 +1,8 @@
+
+import "validation"
+
+var schema: loadJson("./sample_schema.json")
+
+validation::inspect(schema.properties.vegetables)
+validation::inspect(schema.'$defs'.veggie)
+validation::inspect(schema.doesNotExist)

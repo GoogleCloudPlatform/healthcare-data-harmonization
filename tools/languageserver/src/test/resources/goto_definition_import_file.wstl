@@ -1,0 +1,3 @@
+package goto_definition_import_tests
+
+def import_var() "this will be imported by another file"

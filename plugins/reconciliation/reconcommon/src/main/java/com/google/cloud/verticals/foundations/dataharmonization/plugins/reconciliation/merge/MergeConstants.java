@@ -102,6 +102,7 @@ public final class MergeConstants {
   public static final String DELETED_SNAPSHOTS = "deletedSnapshots";
   public static final String EARLIEST_MODIFIED_RECON_TIMESTAMP = "earliestReconTimestamp";
   public static final String VERSIONED_TARGET_FIELD = "versionedTarget";
+  public static final String HISTORY_BUNDLE_INDEX_FIELD = "historyBundleIndex";
   public static final String IS_DELETED_SNAPSHOT_FIELD = "isDeletedSnapshot";
 
   public static final String SYNTHETIC_FIELD = "synthetic";

@@ -1,0 +1,162 @@
+{
+  "authorizingPrescription": [
+    {
+      "reference": "MedicationRequest/medrx0310"
+    }
+  ],
+  "category": {
+    "coding": [
+      {
+        "code": "outpatient",
+        "display": "Outpatient",
+        "system": "http://hl7.org/fhir/medication-dispense-category"
+      }
+    ]
+  },
+  "contained": [
+    {
+      "code": {
+        "coding": [
+          {
+            "code": "1049623",
+            "display": "Oxycodone Hydrochloride 5mg oral tablet (Roxicodone",
+            "system": "http://www.nlm.nih.gov/research/umls/rxnorm"
+          }
+        ]
+      },
+      "id": "med0310",
+      "resourceType": "Medication"
+    }
+  ],
+  "context": {
+    "reference": "Encounter/f001"
+  },
+  "daysSupply": {
+    "code": "d",
+    "system": "http://unitsofmeasure.org",
+    "unit": "Day",
+    "value": 10
+  },
+  "detectedIssue": [
+    {
+      "reference": "DetectedIssue/allergy"
+    }
+  ],
+  "dosageInstruction": [
+    {
+      "additionalInstruction": [
+        {
+          "coding": [
+            {
+              "code": "418914006",
+              "display": "Warning. May cause drowsiness. If affected do not drive or operate machinery. Avoid alcoholic drink (qualifier value)",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ],
+      "asNeededCodeableConcept": {
+        "coding": [
+          {
+            "code": "297217002",
+            "display": "Rib Pain (finding)",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "method": {
+        "coding": [
+          {
+            "code": "421521009",
+            "display": "Swallow - dosing instruction imperative (qualifier value)",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "route": {
+        "coding": [
+          {
+            "code": "26643006",
+            "display": "Oral Route",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "sequence": 1,
+      "text": "one to two tablets every 4-6 hours as needed for rib pain",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 4,
+          "periodMax": 6,
+          "periodUnit": "h"
+        }
+      }
+    }
+  ],
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.notDone",
+      "valueBoolean": true
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.notDoneReasonReference",
+      "valueReference": {
+        "reference": "DetectedIssue/allergy"
+      }
+    },
+    {
+      "url": "https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.status",
+      "valueCode": "on-hold"
+    }
+  ],
+  "id": "meddisp0303",
+  "medicationReference": {
+    "reference": "#med0310"
+  },
+  "partOf": [
+    {
+      "reference": "Procedure/biopsy"
+    }
+  ],
+  "performer": [
+    {
+      "actor": {
+        "reference": "Practitioner/f006"
+      },
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/STU3/medicationdispense-definitions.html#MedicationDispense.performer.onBehalfOfs",
+          "valueReference": {
+            "reference": "Organization/2.16.840.1.113883.19.5"
+          }
+        }
+      ]
+    }
+  ],
+  "quantity": {
+    "code": "TAB",
+    "system": "http://hl7.org/fhir/v3/orderableDrugForm",
+    "value": 30
+  },
+  "resourceType": "MedicationDispense",
+  "status": "on-hold",
+  "subject": {
+    "display": "Donald Duck",
+    "reference": "Patient/pat1"
+  },
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: meddisp0303</p><p><b>contained</b>: </p><p><b>partOf</b>: <a>Procedure/biopsy</a></p><p><b>status</b>: on-hold</p><p><b>category</b>: Outpatient <span>(Details : {http://hl7.org/fhir/medication-dispense-category code 'outpatient' = 'Outpatient', given as 'Outpatient'})</span></p><p><b>medication</b>: id: med0310; Oxycodone Hydrochloride 5mg oral tablet (Roxicodone <span>(Details : {RxNorm code '1049623' = '1049623', given as 'Oxycodone Hydrochloride 5mg oral tablet (Roxicodone'})</span></p><p><b>subject</b>: <a>Donald Duck</a></p><p><b>context</b>: <a>Encounter/f001</a></p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td><td><b>OnBehalfOf</b></td></tr><tr><td>*</td><td><a>Practitioner/f006</a></td><td><a>Organization/2.16.840.1.113883.19.5</a></td></tr></table><p><b>authorizingPrescription</b>: <a>MedicationRequest/medrx0310</a></p><p><b>type</b>: Emergency Supply <span>(Details : {http://hl7.org/fhir/v3/ActCode code 'EM' = 'Emergency Supply', given as 'Emergency Supply'})</span></p><p><b>quantity</b>: 30 TAB<span> (Details: http://hl7.org/fhir/v3/orderableDrugForm code TAB = 'Tablet')</span></p><p><b>daysSupply</b>: 10 Day<span> (Details: UCUM code d = 'd')</span></p><p><b>whenPrepared</b>: 15/04/2016 7:14:00 AM</p><p><b>dosageInstruction</b>: </p><p><b>detectedIssue</b>: <a>DetectedIssue/allergy</a></p><p><b>notDone</b>: true</p><p><b>notDoneReason</b>: <a>DetectedIssue/allergy</a></p></div>",
+    "status": "generated"
+  },
+  "type": {
+    "coding": [
+      {
+        "code": "EM",
+        "display": "Emergency Supply",
+        "system": "http://hl7.org/fhir/v3/ActCode"
+      }
+    ]
+  },
+  "whenPrepared": "2016-04-15T07:14:00+05:00"
+}

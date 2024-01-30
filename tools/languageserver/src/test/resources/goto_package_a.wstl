@@ -1,0 +1,3 @@
+package otherPkg
+
+def func(){"This is another Package";}

@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   paymentReconciliation : FHIR PaymentReconciliation resource
+//
+// Output(s):
+//   FHIR PaymentReconciliation Resource
+//
 def PaymentReconciliationBase(paymentReconciliation) {
   resourcebase::ResourceBase(paymentReconciliation)
   identifier: paymentReconciliation.identifier
@@ -9,17 +17,30 @@ def PaymentReconciliationBase(paymentReconciliation) {
   disposition: paymentReconciliation.disposition
 }
 
+
+// Description: Converts a FHIR STU3 PaymentReconciliation resource to FHIR R4 PaymentReconciliation resource.
+//
+// Argument(s):
+//   paymentReconciliation : FHIR STU3 PaymentReconciliation resource https://www.hl7.org/fhir/stu3/paymentreconciliation.html
+//
+// Output(s):
+//   FHIR R4 PaymentReconciliation Resource https://www.hl7.org/fhir/r4/paymentreconciliation.html
+//
 def R3PaymentReconciliationToR4(paymentReconciliation) {
   PaymentReconciliationBase(paymentReconciliation)
   contained: datatypes::R3ResourceToR4(paymentReconciliation.contained[])
   status: paymentReconciliation.status
+  status: utilities::defaultIfNull($this.status, "active")
   created: paymentReconciliation.created
+  created: utilities::defaultIfNull($this.created, currentTime("yyyy-MM-dd"))
   paymentIssuer: datatypes::R3ReferenceToR4(paymentReconciliation.organization)
-  request: datatypes::R3ReferenceToR4(paymentReconciliation.request)
+  request: extension::fetchReference("https://www.hl7.org/fhir/R4/paymentreconciliation-definitions.html#PaymentReconciliation.request", paymentReconciliation.extension)
   requestor: datatypes::R3ReferenceToR4(paymentReconciliation.requestProvider)
   outcome: extension::fetchCode("https://www.hl7.org/fhir/R4/paymentreconciliation-definitions.html#PaymentReconciliation.outcome", paymentReconciliation.extension)
   paymentDate: extension::fetchDate("https://www.hl7.org/fhir/R4/paymentreconciliation-definitions.html#PaymentReconciliation.paymentDate", paymentReconciliation.extension)
-  paymentAmount: paymentReconciliation.total
+  paymentDate: utilities::defaultIfNull($this.paymentDate, currentTime("yyyy-MM-dd"))
+  paymentAmount: datatypes::R3MoneyToR4(paymentReconciliation.total)
+  paymentAmount.currency: utilities::defaultIfNull($this.paymentAmount, "USD")
   paymentIdentifier: extension::fetchIdentifier("https://www.hl7.org/fhir/R4/paymentreconciliation-definitions.html#PaymentReconciliation.paymentIdentifier", paymentReconciliation.extension)
   detail: R3PaymentReconciliation_DetailToR4(paymentReconciliation.detail[])
   formCode: paymentReconciliation.form
@@ -28,6 +49,14 @@ def R3PaymentReconciliationToR4(paymentReconciliation) {
   extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/paymentreconciliation-definitions.html#PaymentReconciliation.outcome", paymentReconciliation.outcome)
 }
 
+// Description: Converts a FHIR R4 PaymentReconciliation resource to FHIR STU3 PaymentReconciliation resource.
+//
+// Argument(s):
+//   paymentReconciliation : FHIR R4 PaymentReconciliation resource https://www.hl7.org/fhir/r4/paymentreconciliation.html
+//
+// Output(s):
+//   FHIR STU3 PaymentReconciliation Resource https://www.hl7.org/fhir/stu3/paymentreconciliation.html
+//
 def R4PaymentReconciliationToR3(paymentReconciliation) {
   PaymentReconciliationBase(paymentReconciliation)
   contained: datatypes::R4ResourceToR3(paymentReconciliation.contained[])
@@ -48,6 +77,14 @@ def R4PaymentReconciliationToR3(paymentReconciliation) {
   extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/paymentreconciliation-definitions.html#PaymentReconciliation.outcome", paymentReconciliation.outcome)
 }
 
+// Description: Converts a FHIR STU3 PaymentReconciliation.detail to FHIR R4 PaymentReconciliation.detail.
+//
+// Argument(s):
+//   data : FHIR STU3 PaymentReconciliation.detail https://www.hl7.org/fhir/stu3/paymentreconciliation-definitions.html#PaymentReconciliation.detail
+//
+// Output(s):
+//   FHIR R4 PaymentReconciliation.detail https://www.hl7.org/fhir/r4/paymentreconciliation-definitions.html#PaymentReconciliation.detail
+//
 def R3PaymentReconciliation_DetailToR4(data) {
   identifier: extension::fetchIdentifier("https://www.hl7.org/fhir/R4/paymentreconciliation-definitions.html#PaymentReconciliation.detail.identifier", data.extension)
   predecessor: extension::fetchIdentifier("https://www.hl7.org/fhir/R4/paymentreconciliation-definitions.html#PaymentReconciliation.detail.predecessor", data.extension)
@@ -58,9 +95,17 @@ def R3PaymentReconciliation_DetailToR4(data) {
   date: data.date
   responsible: extension::fetchReference("https://www.hl7.org/fhir/R4/paymentreconciliation-definitions.html#PaymentReconciliation.detail.responsible", data.extension)
   payee: datatypes::R3ReferenceToR4(data.payee)
-  amount: data.amount
+  amount: datatypes::R3MoneyToR4(data.amount)
 }
 
+// Description: Converts a FHIR R4 PaymentReconciliation.detail to FHIR STU3 PaymentReconciliation.detail.
+//
+// Argument(s):
+//   data : FHIR R4 PaymentReconciliation.detail https://www.hl7.org/fhir/r4/paymentreconciliation-definitions.html#PaymentReconciliation.detail
+//
+// Output(s):
+//   FHIR STU3 PaymentReconciliation.detail https://www.hl7.org/fhir/stu3/paymentreconciliation-definitions.html#PaymentReconciliation.detail
+//
 def R4PaymentReconciliation_DetailToR3(data) {
   type: data.type
   request: datatypes::R4ReferenceToR3(data.request)
@@ -74,11 +119,27 @@ def R4PaymentReconciliation_DetailToR3(data) {
   extension[]: extension::BuildIdentifierExtension("https://www.hl7.org/fhir/R4/paymentreconciliation-definitions.html#PaymentReconciliation.detail.predecessor", data.predecessor)
 }
 
+// Description: Converts a FHIR STU3 PaymentReconciliation.processNote to FHIR R4 PaymentReconciliation.processNote.
+//
+// Argument(s):
+//   data : FHIR STU3 PaymentReconciliation.processNote https://www.hl7.org/fhir/stu3/paymentreconciliation-definitions.html#PaymentReconciliation.processNote
+//
+// Output(s):
+//   FHIR R4 PaymentReconciliation.processNote https://www.hl7.org/fhir/r4/paymentreconciliation-definitions.html#PaymentReconciliation.processNote
+//
 def R3PaymentReconciliation_ProcessNoteToR4(data) {
   type: datatypes::CodeableConceptToCode(data.type)
   text: data.text
 }
 
+// Description: Converts a FHIR R4 PaymentReconciliation.processNote to FHIR STU3 PaymentReconciliation.processNote.
+//
+// Argument(s):
+//   data : FHIR R4 PaymentReconciliation.processNote https://www.hl7.org/fhir/r4/paymentreconciliation-definitions.html#PaymentReconciliation.processNote
+//
+// Output(s):
+//   FHIR STU3 PaymentReconciliation.processNote https://www.hl7.org/fhir/stu3/paymentreconciliation-definitions.html#PaymentReconciliation.processNote
+//
 def R4PaymentReconciliation_ProcessNoteToR3(data) {
   type: datatypes::CodeToCodeableConcept(data.type)
   text: data.text

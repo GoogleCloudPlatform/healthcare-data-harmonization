@@ -1,0 +1,8 @@
+if (a + b) then {
+  randomFunction();
+}
+
+def randomFunction(){
+    var x: (a + b)
+
+}

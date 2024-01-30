@@ -7,6 +7,9 @@ buildscript {
     }
     dependencies {
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.13'
+        if (gradle.ext.docgenExists) {
+            classpath 'com.google.cloud.verticals.foundations.dataharmonization:docgen'
+        }
     }
 }
 

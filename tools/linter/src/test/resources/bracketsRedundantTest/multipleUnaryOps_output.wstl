@@ -1,0 +1,2 @@
+var x: !(a?) and (!b?)
+var y: (a?) and !b

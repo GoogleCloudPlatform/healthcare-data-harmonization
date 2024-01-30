@@ -1,0 +1,8 @@
+functionA(
+  resource
+)
+
+functionB(
+  functionC(),
+  resource
+)

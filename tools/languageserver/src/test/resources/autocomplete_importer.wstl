@@ -1,0 +1,11 @@
+import "./autocomplete_importee.wstl"
+import "test"
+
+def localFunction(){
+}
+
+loc
+
+importee::
+
+test::
