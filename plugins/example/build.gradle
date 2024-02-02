@@ -1,6 +1,22 @@
+buildscript {
+    dependencies {
+        if (gradle.ext.docgenExists) {
+            classpath 'com.google.cloud.verticals.foundations.dataharmonization:docgen'
+        }
+    }
+}
+
 plugins {
     id 'java-library'
     id 'idea'
+}
+
+// This block establishes whether the docgen plugin is loaded, and applies it
+// if so. This can also just be replaced with loading it explicitly in
+// a pluginManagement block.
+if (gradle.ext.docgenExists) {
+    apply plugin: 'com.google.cloud.verticals.foundations.dataharmonization.docgen'
+    docgen.destinationDirectory = file("${project.projectDir.toPath().parent.parent}/doc")
 }
 
 group 'com.google.cloud.verticals.foundations.dataharmonization.plugins'
@@ -12,6 +28,10 @@ repositories {
 dependencies {
     // TODO(): Set up versioning
     api group: "com.google.cloud.verticals.foundations.dataharmonization", name: "runtime"
+
+    if (gradle.ext.has("annotationProcessorExists") && gradle.ext.annotationProcessorExists){
+        annotationProcessor ("com.google.cloud.verticals.foundations.dataharmonization:annotation_processor")
+    }
 
     testImplementation group: "com.google.cloud.verticals.foundations.dataharmonization", name: "testutil"
     testImplementation group: 'junit', name: 'junit', version: '4.13'

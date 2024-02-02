@@ -1,0 +1,13 @@
+
+import "validation"
+
+var rootSchema: loadJson("./sample_schema.json")
+var veggie: validation::getObjectFromSchema(rootSchema.$defs.veggie)
+var person: validation::getObjectFromSchema(rootSchema.$defs.person)
+
+field_warning: veggie.bloodType;
+def accessInvalidField(arg) {
+    arg.invalid_field
+}
+
+accessInvalidField(person);

@@ -1,0 +1,27 @@
+package log_based_metrics
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.logging.LoggingPlugin";
+
+def createLogEntry(tagName, labels) {
+  metricTag: tagName;
+  metricLabels: labels;
+}
+
+def increment(tagName, labels) {
+  var logEntry: createLogEntry(tagName, labels);
+  logging::logSevere(): "{serializeJson(logEntry)}";
+}
+
+def statusCode(code) {
+  statusCode: code;
+}
+
+def incrementWithError(tagName, error) {
+  var labels: [
+    statusCode(error.statusCode)
+  ];
+  var logEntry: {
+    metadata: createLogEntry(tagName, labels);
+  };
+  logging::logSevere(): "{serializeJson(logEntry)}";
+}

@@ -19,7 +19,7 @@ set -o errexit
 
 PREREQUISITES=( java go )
 PREREQUISITE_SOURCES=( "https://java.com/en/download/" "https://golang.org/dl/" )
-PREREQUISITE_VERSIONS=( "v1.8.0" "v1.14" )
+PREREQUISITE_VERSIONS=( "v1.8.0" "v1.16" )
 
 function check_tools {
   LENGTH=${#PREREQUISITES[@]}
@@ -49,6 +49,7 @@ function go_mod_command {
   do
     echo Entering $(dirname $(absfilepath "$f"))
     cd $(dirname $(absfilepath "$f"))
+    go mod tidy
     go $1 ./...
     cd $START
   done

@@ -1,0 +1,55 @@
+{
+  "$ref": "#/definitions/root",
+  "definitions": {
+    "rootSchema": {
+      "type": "object",
+      "properties": {
+        "a": {
+          "$ref": "#/definitions/A"
+        },
+        "b": {
+          "$ref": "#/definitions/B"
+        },
+        "c": {
+          "$ref": "#/definitions/C"
+        }
+      }
+    },
+    "A": {
+      "type": "object",
+      "properties": {
+        "b": {
+          "$ref": "#/definitions/B"
+        },
+        "c": {
+          "$ref": "#/definitions/C"
+        },
+        "string": {
+          "type": ["null", "string"]
+        },
+        "clay": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/B"
+            },
+            {
+              "$ref": "#/definitions/C"
+            }
+          ]
+        }
+      }
+    },
+    "B": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/A"
+      }
+    },
+    "C": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/B"
+      }
+    }
+  }
+}

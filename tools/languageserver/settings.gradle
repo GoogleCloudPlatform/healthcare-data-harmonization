@@ -1,0 +1,33 @@
+def docgenPath = java.nio.file.Path.of("../docgen")
+def docgenExists = docgenPath.toFile().exists()
+gradle.ext.set("docgenExists", docgenExists)
+if (docgenExists) {
+    includeBuild(docgenPath)
+}
+
+def annotationProcessorPath = java.nio.file.Path.of(rootDir.getAbsolutePath(), "../annotation_processor")
+def annotationProcessorExists = annotationProcessorPath.toFile().exists()
+gradle.ext.set("annotationProcessorExists", annotationProcessorExists)
+if(annotationProcessorExists){
+    includeBuild(annotationProcessorPath)
+}
+
+includeBuild("../../")
+
+// Import Whistle plugins START
+
+includeBuild("../../plugins/test")
+includeBuild("../../plugins/logging")
+includeBuild("../../plugins/harmonization")
+includeBuild("../../plugins/reconciliation")
+
+include ":tools:linter"
+project(":tools:linter").projectDir = new File("../../tools/linter")
+
+// Import Whistle plugins END
+
+buildCache {
+    local {
+        directory = new File("../../", "build_cache")
+    }
+}

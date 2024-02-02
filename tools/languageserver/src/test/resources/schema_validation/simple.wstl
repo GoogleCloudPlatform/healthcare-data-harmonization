@@ -1,0 +1,14 @@
+
+import "validation"
+
+var schema: {
+  type: "object"
+  properties: {
+    field1: {type: "number";}
+    field2: {type: "string";}
+  }
+}
+
+var x: validation::getObjectFromSchema(schema)
+
+x[0].foo

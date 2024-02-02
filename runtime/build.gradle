@@ -4,6 +4,11 @@
      id 'idea'
  }
 
+if (gradle.ext.docgenExists) {
+ apply plugin: 'com.google.cloud.verticals.foundations.dataharmonization.docgen'
+ docgen.destinationDirectory = file("${project.projectDir.parent}/g3doc")
+}
+
 sourceSets {
     test {
         java {
@@ -30,6 +35,10 @@ sourceSets {
      implementation group: 'commons-codec', name: 'commons-codec', version: '1.13'
      implementation group: 'javax.json', name: 'javax.json-api', version: '1.0'
      implementation group: 'joda-time', name: 'joda-time', version: '2.10.5'
+
+     if (gradle.ext.has("annotationProcessorExists") && gradle.ext.annotationProcessorExists){
+         annotationProcessor ("com.google.cloud.verticals.foundations.dataharmonization:annotation_processor")
+     }
 
      testImplementation project(":testutil")
      testImplementation group: 'org.hamcrest', name: 'hamcrest-core', version: '2.1'

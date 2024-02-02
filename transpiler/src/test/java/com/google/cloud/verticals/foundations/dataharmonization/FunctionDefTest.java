@@ -205,7 +205,30 @@ public class FunctionDefTest {
                         .build())
                 .build(),
             new ArrayList<FunctionDefinition>(),
-          }
+          },
+          {
+            "function with multiple newlines",
+            "def hello(\n\nx,\n\ny\n\n)\n\n {\nx + y\n}",
+            FunctionDefinition.newBuilder()
+                .setName("hello")
+                .addArgs(Argument.newBuilder().setName("x").build())
+                .addArgs(Argument.newBuilder().setName("y").build())
+                .addMapping(
+                    FieldMapping.newBuilder()
+                        .setValue(
+                            ValueSource.newBuilder()
+                                .setFunctionCall(
+                                    FunctionCall.newBuilder()
+                                        .setReference(
+                                            FunctionNames.OPERATORS.getSymbolReference(
+                                                WhistleHelper.getTokenLiteral(WhistleParser.ADD)))
+                                        .addArgs(ValueSource.newBuilder().setFromLocal("x"))
+                                        .addArgs(ValueSource.newBuilder().setFromLocal("y"))
+                                        .build()))
+                        .build())
+                .build(),
+            new ArrayList<FunctionDefinition>(),
+          },
         });
   }
 

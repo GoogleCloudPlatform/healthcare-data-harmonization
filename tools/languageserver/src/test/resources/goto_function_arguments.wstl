@@ -1,0 +1,14 @@
+var x: 4
+
+def func(x){
+    y: x
+}
+
+def func(x, z){
+    y: x + z
+}
+
+def func(x, y, z){
+    var z: z + 3
+    y: x + z
+}

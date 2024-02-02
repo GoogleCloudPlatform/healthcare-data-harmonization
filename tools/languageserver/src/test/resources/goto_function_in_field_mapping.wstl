@@ -1,0 +1,7 @@
+import "dataflow";
+
+def function(){2;}
+def functionCaller(required a){a;}
+
+functionCaller(function())
+dataflow::bigQueryIOTarget(function()) : "hello"

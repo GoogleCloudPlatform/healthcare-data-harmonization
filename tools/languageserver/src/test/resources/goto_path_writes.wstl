@@ -1,0 +1,9 @@
+var x.a: 1
+block1: {
+    var x.b: 2
+    var x: 5
+    var x.c: 3
+    y: x
+}
+
+var x: 4

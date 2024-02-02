@@ -1,0 +1,15 @@
+// TODO() this is an example comment
+def BuildDataSourceBatchMetaTag(datatype, datasource, batch) {
+  system: "urn:oid:data-type/data-source/batch";
+  code: datatype    +"/"+datasource  +  "/" +   batch;
+  test::functionA(
+  functionB(),
+  functionC()
+  )
+}
+
+def BuildDataSourceMetaTag(datatype, datasource) {
+  system: "urn:oid:data-type/data-source";
+  code: datatype+"/"+   datasource;
+  functionA(test::functionB(), functionC())
+}

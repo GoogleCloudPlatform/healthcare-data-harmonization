@@ -1,0 +1,5 @@
+package importee
+import "ThisImportDNE"
+
+def func(){1;}
+

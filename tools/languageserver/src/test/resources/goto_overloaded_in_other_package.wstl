@@ -1,0 +1,9 @@
+import "./goto_overloaded_functions.wstl"
+
+def func(a){1;}
+def func(a,b){2;}
+def func(a,b,c){3;}
+
+overloaded_functions::func(1)
+overloaded_functions::func(1,2)
+overloaded_functions::func(1,2,3)

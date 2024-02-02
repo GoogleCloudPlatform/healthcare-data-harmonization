@@ -2,28 +2,56 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   paymentNotice : FHIR PaymentNotice resource
+//
+// Output(s):
+//   FHIR PaymentNotice Resource
+//
 def PaymentNoticeBase(paymentNotice) {
   resourcebase::ResourceBase(paymentNotice)
   identifier: paymentNotice.identifier
   paymentStatus: paymentNotice.paymentStatus
 }
 
+// Description: Converts a FHIR STU3 PaymentNotice resource to FHIR R4 PaymentNotice resource.
+//
+// Argument(s):
+//   paymentNotice : FHIR STU3 PaymentNotice resource https://www.hl7.org/fhir/stu3/paymentnotice.html
+//
+// Output(s):
+//   FHIR R4 PaymentNotice Resource https://www.hl7.org/fhir/r4/paymentnotice.html
+//
 def R3PaymentNoticeToR4(paymentNotice) {
   PaymentNoticeBase(paymentNotice)
   contained: datatypes::R3ResourceToR4(paymentNotice.contained[])
   request: datatypes::R3ReferenceToR4(paymentNotice.request)
   response: datatypes::R3ReferenceToR4(paymentNotice.response)
   status: paymentNotice.status
+  status: utilities::defaultIfNull($this.status, "active")
   created: paymentNotice.created
+  created: utilities::defaultIfNull($this.created, currentTime("yyyy-MM-dd"))
   provider: datatypes::R3ReferenceToR4(paymentNotice.provider)
   payment: extension::fetchReference("https://www.hl7.org/fhir/R4/paymentnotice-definitions.html#PaymentNotice.payment", paymentNotice.extension)
   paymentDate: paymentNotice.statusDate
   payee: extension::fetchReference("https://www.hl7.org/fhir/R4/paymentnotice-definitions.html#PaymentNotice.payee", paymentNotice.extension)
   recipient: datatypes::R3ReferenceToR4(paymentNotice.target)
+  recipient.display: utilities::defaultIfNull($this.recipient, "Organization")
   amount: extension::fetchMoney("https://www.hl7.org/fhir/R4/paymentnotice-definitions.html#PaymentNotice.amount", paymentNotice.extension)
+  amount.currency: utilities::defaultIfNull($this.amount, "USD")
   extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/paymentnotice-definitions.html#PaymentNotice.organization", paymentNotice.organization)
 }
 
+// Description: Converts a FHIR R4 PaymentNotice resource to FHIR STU3 PaymentNotice resource.
+//
+// Argument(s):
+//   paymentNotice : FHIR R4 PaymentNotice resource https://www.hl7.org/fhir/r4/paymentnotice.html
+//
+// Output(s):
+//   FHIR STU3 PaymentNotice Resource https://www.hl7.org/fhir/stu3/paymentnotice.html
+//
 def R4PaymentNoticeToR3(paymentNotice) {
   PaymentNoticeBase(paymentNotice)
   contained: datatypes::R4ResourceToR3(paymentNotice.contained[])

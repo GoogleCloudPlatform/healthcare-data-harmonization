@@ -1,0 +1,9 @@
+rootProject.name = 'linter'
+
+def docgenExists = false
+gradle.ext.set("docgenExists", docgenExists)
+
+def annotationProcessorExists = false
+gradle.ext.set("annotationProcessorExists", annotationProcessorExists)
+
+includeBuild("../../")

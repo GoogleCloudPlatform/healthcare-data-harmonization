@@ -1,0 +1,4 @@
+package this_wont_compile
+
+Planet: "Earth";
+syntaxError: 2+;

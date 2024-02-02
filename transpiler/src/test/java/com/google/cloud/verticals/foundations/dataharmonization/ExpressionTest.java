@@ -628,7 +628,41 @@ public class ExpressionTest {
                         .build())
                 .build(),
             null
-          }
+          },
+          {
+            "simple functionCall with multiple newlines",
+            "func(\n\n1,\n\n 2\n\n)",
+            new Environment("testEnv empty"),
+            ValueSource.newBuilder()
+                .setFunctionCall(
+                    FunctionCall.newBuilder()
+                        .setReference(FunctionReference.newBuilder().setName("func").build())
+                        .addArgs(ValueSource.newBuilder().setConstInt(1).build())
+                        .addArgs(ValueSource.newBuilder().setConstInt(2).build())
+                        .build())
+                .build(),
+            null
+          },
+          {
+            "multiple selector in path with multiple newlines",
+            "foo\n\n.bar[*][1]",
+            new Environment(
+                "testEnv declared",
+                false,
+                null,
+                Arrays.asList("foo"),
+                ImmutableList.of(),
+                ImmutableList.of()),
+            ValueSource.newBuilder()
+                .setFunctionCall(
+                    FunctionCall.newBuilder()
+                        .setReference(FunctionNames.GET_FIELD.getFunctionReferenceProto())
+                        .addArgs(ValueSource.newBuilder().setFromLocal("foo").build())
+                        .addArgs(ValueSource.newBuilder().setConstString(".bar[*][1]"))
+                        .build())
+                .build(),
+            null
+          },
         });
   }
 

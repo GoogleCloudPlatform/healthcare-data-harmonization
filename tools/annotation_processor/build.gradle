@@ -1,0 +1,29 @@
+plugins {
+    id "java"
+    id "application"
+}
+
+group "com.google.cloud.verticals.foundations.dataharmonization"
+
+repositories {
+    mavenCentral()
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://packages.confluent.io/maven"
+        }
+        maven {
+            url "https://maven.google.com"
+        }
+    }
+}
+
+dependencies {
+    implementation group: "com.google.cloud.verticals.foundations.dataharmonization", name: "docgen"
+    implementation "com.google.flogger:google-extensions:0.7.1"
+    annotationProcessor "com.google.auto.service:auto-service:1.0.1"
+    compileOnly "com.google.auto.service:auto-service:1.0.1"
+}

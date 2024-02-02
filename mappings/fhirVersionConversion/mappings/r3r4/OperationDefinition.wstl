@@ -2,6 +2,14 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   operationDefinition : FHIR OperationDefinition resource
+//
+// Output(s):
+//   FHIR OperationDefinition Resource
+//
 def OperationDefinitionBase(operationDefinition) {
   resourcebase::ResourceBase(operationDefinition)
   url: operationDefinition.url
@@ -21,6 +29,14 @@ def OperationDefinitionBase(operationDefinition) {
   overload: operationDefinition.overload
 }
 
+// Description: Converts a FHIR STU3 OperationDefinition resource to FHIR R4 OperationDefinition resource.
+//
+// Argument(s):
+//   operationDefinition : FHIR STU3 OperationDefinition resource https://www.hl7.org/fhir/stu3/operationdefinition.html
+//
+// Output(s):
+//   FHIR R4 OperationDefinition Resource https://www.hl7.org/fhir/r4/operationdefinition.html
+//
 def R3OperationDefinitionToR4(operationDefinition) {
   OperationDefinitionBase(operationDefinition)
   contained: datatypes::R3ResourceToR4(operationDefinition.contained[])
@@ -31,12 +47,20 @@ def R3OperationDefinitionToR4(operationDefinition) {
   affectsState: operationDefinition.idempotent
   comment: operationDefinition.comment
   base: datatypes::ReferenceToCanonical(operationDefinition.base)
-  resource: operationDefinition.resource
+  resource: iterate({if datatypes::isR3ToR4Mapped($) then $;}, operationDefinition.resource)
   inputProfile: extension::fetchCanonical("https://www.hl7.org/fhir/R4/operationdefinition-definitions.html#OperationDefinition.inputProfile", operationDefinition.extension)
   outputProfile: extension::fetchCanonical("https://www.hl7.org/fhir/R4/operationdefinition-definitions.html#OperationDefinition.outputProfile", operationDefinition.extension)
   parameter: R3OperationDefinition_ParameterToR4(operationDefinition.parameter[])
 }
 
+// Description: Converts a FHIR R4 OperationDefinition resource to FHIR STU3 OperationDefinition resource.
+//
+// Argument(s):
+//   operationDefinition : FHIR R4 OperationDefinition resource https://www.hl7.org/fhir/r4/operationdefinition.html
+//
+// Output(s):
+//   FHIR STU3 OperationDefinition Resource https://www.hl7.org/fhir/stu3/operationdefinition.html
+//
 def R4OperationDefinitionToR3(operationDefinition) {
   OperationDefinitionBase(operationDefinition)
   contained: datatypes::R4ResourceToR3(operationDefinition.contained[])
@@ -53,6 +77,14 @@ def R4OperationDefinitionToR3(operationDefinition) {
   extension[]: extension::BuildCanonicalExtension("https://www.hl7.org/fhir/R4/operationdefinition-definitions.html#OperationDefinition.outputProfile", operationDefinition.outputProfile)
 }
 
+// Description: Converts a FHIR STU3 OperationDefinition.parameter to FHIR R4 OperationDefinition.parameter.
+//
+// Argument(s):
+//   data : FHIR STU3 OperationDefinition.parameter https://www.hl7.org/fhir/stu3/operationdefinition-definitions.html#OperationDefinition.parameter
+//
+// Output(s):
+//   FHIR R4 OperationDefinition.parameter https://www.hl7.org/fhir/r4/operationdefinition-definitions.html#OperationDefinition.parameter
+//
 def R3OperationDefinition_ParameterToR4(data) {
   name: data.name
   use: data.use
@@ -69,6 +101,14 @@ def R3OperationDefinition_ParameterToR4(data) {
   extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/STU3/operationdefinition-definitions.html#OperationDefinition.parameter.binding.searchType", data.searchType)
 }
 
+// Description: Converts a FHIR R4 OperationDefinition.parameter to FHIR STU3 OperationDefinition.parameter.
+//
+// Argument(s):
+//   data : FHIR R4 OperationDefinition.parameter https://www.hl7.org/fhir/r4/operationdefinition-definitions.html#OperationDefinition.parameter
+//
+// Output(s):
+//   FHIR STU3 OperationDefinition.parameter https://www.hl7.org/fhir/stu3/operationdefinition-definitions.html#OperationDefinition.parameter
+//
 def R4OperationDefinition_ParameterToR3(data) {
   name: data.name
   use: data.use
@@ -87,6 +127,14 @@ def R4OperationDefinition_ParameterToR3(data) {
   extension[]: extension::BuildCodeExtension("https://www.hl7.org/fhir/R4/operationdefinition-definitions.html#OperationDefinition.parameter.binding.searchType", data.searchType)
 }
 
+// Description: Converts a FHIR STU3 OperationDefinition.parameter.profile to FHIR R4 OperationDefinition.parameter.profile.
+//
+// Argument(s):
+//   data : FHIR STU3 OperationDefinition.parameter.profile https://www.hl7.org/fhir/stu3/operationdefinition-definitions.html#OperationDefinition.parameter.profile
+//
+// Output(s):
+//   FHIR R4 OperationDefinition.parameter.profile https://www.hl7.org/fhir/r4/operationdefinition-definitions.html#OperationDefinition.parameter.profile
+//
 def R3OperationDefinition_Parameter_ProfileToR4(url, extension, data) {
   var targetProfile: extension::fetchCanonicalArray(url, extension)
   if targetProfile then {

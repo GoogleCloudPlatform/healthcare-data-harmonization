@@ -1,0 +1,25 @@
+package goto_definition_tests
+
+import "./goto_definition_import_file.wstl";
+
+var variable: "this is a var";
+var var_2: "second var";
+var var_3: "third var";
+var comeToThisDef: "var with a function name";
+
+def comeToThisDef() {
+  a: "hello";
+}
+
+if(comeToThisDef()) then {}
+
+var var_4: var_2 + var_3;
+
+var imported: goto_definition_import_tests::import_var();
+var goToVarWithFunctionName: comeToThisDef;
+
+def nestFunctionToCall(){3;}
+comeToThisDef(nestFunctionToCall());
+comeToThisDef(nestFunctionToCall(comeToThisDef(nestFunctionToCall())));
+
+functionDoesNotExist(1);

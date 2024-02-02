@@ -1,0 +1,6 @@
+// TODO: this is an example comment.
+def BuildDataSourceBatchMetaTag(datatype, datasource, batch) {
+// Here is another comment.
+   system: "urn:oid:data-type/data-source/batch";
+   code: datatype + "/" + datasource + "/" + batch;
+}

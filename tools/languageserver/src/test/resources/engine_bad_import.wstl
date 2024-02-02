@@ -1,0 +1,7 @@
+package from_codelab
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.dataflow.ThisIsAImportException";
+import "./FileDNE.wstl";
+
+this_should_be_diagnosed
+this_should_also_be_diagnosed

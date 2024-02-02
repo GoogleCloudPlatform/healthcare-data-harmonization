@@ -1,0 +1,5 @@
+def localfunction(number, number1) {
+     if true then {
+          a: number + number1
+     }
+}

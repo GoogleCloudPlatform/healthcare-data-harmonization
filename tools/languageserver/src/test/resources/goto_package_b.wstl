@@ -1,0 +1,11 @@
+package b
+import "./goto_package_a.wstl"
+
+def func(){"This is pkg b";}
+
+func()
+otherPkg::func()
+
+func()
+func()
+if(func())

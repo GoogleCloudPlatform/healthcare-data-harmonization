@@ -2,16 +2,40 @@ package fhir_r3r4
 
 import "../ResourceBase.wstl"
 
+// Description: Maps the common fields in FHIR STU3 and FHIR R4
+//
+// Argument(s):
+//   operationOutcome : FHIR OperationOutcome resource
+//
+// Output(s):
+//   FHIR OperationOutcome Resource
+//
 def OperationOutcomeBase(operationOutcome) {
   resourcebase::ResourceBase(operationOutcome)
 }
 
+// Description: Converts a FHIR STU3 OperationOutcome resource to FHIR R4 OperationOutcome resource.
+//
+// Argument(s):
+//   operationOutcome : FHIR STU3 OperationOutcome resource https://www.hl7.org/fhir/stu3/operationoutcome.html
+//
+// Output(s):
+//   FHIR R4 OperationOutcome Resource https://www.hl7.org/fhir/r4/operationoutcome.html
+//
 def R3OperationOutcomeToR4(operationOutcome) {
   OperationOutcomeBase(operationOutcome)
   contained: datatypes::R3ResourceToR4(operationOutcome.contained[])
   issue: operationOutcome.issue
 }
 
+// Description: Converts a FHIR R4 OperationOutcome resource to FHIR STU3 OperationOutcome resource.
+//
+// Argument(s):
+//   operationOutcome : FHIR R4 OperationOutcome resource https://www.hl7.org/fhir/r4/operationoutcome.html
+//
+// Output(s):
+//   FHIR STU3 OperationOutcome Resource https://www.hl7.org/fhir/stu3/operationoutcome.html
+//
 def R4OperationOutcomeToR3(operationOutcome) {
   OperationOutcomeBase(operationOutcome)
   contained: datatypes::R4ResourceToR3(operationOutcome.contained[])

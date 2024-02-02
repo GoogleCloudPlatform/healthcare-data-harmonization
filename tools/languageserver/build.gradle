@@ -1,0 +1,104 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+            url 'https://maven.google.com'
+        }
+    }
+    dependencies {
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.13'
+        classpath 'com.google.cloud.verticals.foundations.dataharmonization:docgen'
+    }
+}
+
+plugins {
+    id 'application'
+    id 'idea'
+    id 'java-library'
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://packages.confluent.io/maven"
+        }
+        maven {
+            url 'https://maven.google.com'
+        }
+    }
+}
+
+sourceSets {
+    test {
+        java {
+            exclude "**/blaze/**"
+        }
+    }
+}
+
+group 'com.google.cloud.verticals.foundations.dataharmonization'
+mainClassName = 'com.google.cloud.verticals.foundations.dataharmonization.lsp.ServerLauncher'
+
+ext {
+    grpcVersion = "1.43.2"
+    dataflowVersion = "2.52.0"
+    guavaVersion = "31.0.1-jre"
+}
+
+dependencies {
+    implementation 'org.eclipse.lsp4j:org.eclipse.lsp4j:0.12.0'
+    implementation group: "com.google.cloud.verticals.foundations.dataharmonization", name: "runtime"
+    implementation group: "com.google.cloud.verticals.foundations.dataharmonization", name: "testutil"
+    implementation group: "com.google.cloud.verticals.foundations.dataharmonization", name: "transpiler"
+    implementation "com.google.guava:guava:${guavaVersion}"
+
+    implementation 'com.google.flogger:google-extensions:0.7.1'
+    //Plugin Imports Start
+    // TODO(): These should be loaded at runtime.
+
+    implementation group: "com.google.cloud.verticals.foundations.dataharmonization.plugins.harmonization", name: "hdev2"
+    implementation group: "com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation", name: "reconv2"
+    implementation group: "com.google.cloud.verticals.foundations.dataharmonization.plugins", name: "logging"
+    implementation group: "com.google.cloud.verticals.foundations.dataharmonization.plugins", name: "test"
+    implementation project (':tools:linter')
+
+    //Plugin Imports End
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'com.google.truth:truth:1.0.1'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.7.7'
+    testImplementation group: 'com.github.erosb', name: 'everit-json-schema', version: '1.14.1'
+}
+
+task execute(type: JavaExec) {
+    main = mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    systemProperties System.getProperties()
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': mainClassName
+        )
+    }
+}
+
+shadowJar {
+    mainClassName = 'com.google.cloud.verticals.foundations.dataharmonization.lsp.ServerLauncher'
+    zip64 true
+ }
+
+// enforced by Gradle 8
+tasks.distZip.mustRunAfter 'shadowJar'
+tasks.distTar.mustRunAfter 'shadowJar'
+tasks.startScripts.mustRunAfter 'shadowJar'
+tasks.startShadowScripts.mustRunAfter 'shadowJar'
+tasks.startScripts.mustRunAfter 'jar'
+tasks.startShadowScripts.mustRunAfter 'jar'
+

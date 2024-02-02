@@ -1,0 +1,9 @@
+package overloaded_functions
+
+def func(a){1;}
+def func(a,b){2;}
+def func(a,b,c){3;}
+
+func(1)
+func(1,2)
+func(1,2,3)

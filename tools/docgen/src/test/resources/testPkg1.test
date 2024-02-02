@@ -1,0 +1,319 @@
+<h1>Package testPkg</h1>
+<break/>
+<toc/>
+<h2>
+  <text>Import</text>
+</h2>
+<break/>
+<text>The testPkg package can be imported by adding this code to the top of your
+  Whistle file:
+</text>
+<break/>
+<block>
+  <text>import "class://com.google.testpkg"</text>
+</block>
+<break/>
+<h2>
+  <text>Functions</text>
+</h2>
+<h3>
+  <text>testFn1</text>
+</h3>
+<inline>
+  <text>testPkg::testFn1(arg1_0: Fn1Arg0Type, arg1_1: Fn1Arg1Type, arg1_2:
+    Fn1Arg2Type)
+  </text>
+</inline>
+<text>returns</text>
+<inline>
+  <text>RetType1</text>
+</inline>
+<markup>- This is the function return of function 1</markup>
+<break/>
+<h4>
+  <text>Arguments</text>
+</h4>
+<b>
+  <text>arg1_0</text>
+</b>
+<text>:</text>
+<inline>
+  <text>Fn1Arg0Type</text>
+</inline>
+<markup>- This is function 1's 0'th arg</markup>
+<break/>
+<break/>
+<b>
+  <text>arg1_1</text>
+</b>
+<text>:</text>
+<inline>
+  <text>Fn1Arg1Type</text>
+</inline>
+<markup>- This is function 1's 1'th arg</markup>
+<break/>
+<break/>
+<b>
+  <text>arg1_2</text>
+</b>
+<text>:</text>
+<inline>
+  <text>Fn1Arg2Type</text>
+</inline>
+<markup>- This is function 1's 2'th arg</markup>
+<break/>
+<break/>
+<h4>
+  <text>Description</text>
+</h4>
+<markup>This is a test function number 1</markup>
+<break/>
+<h3>
+  <text>testFn2</text>
+</h3>
+<inline>
+  <text>testPkg::testFn2(arg2_0: Fn2Arg0Type, arg2_1: Fn2Arg1Type, arg2_2:
+    Fn2Arg2Type)
+  </text>
+</inline>
+<text>returns</text>
+<inline>
+  <text>RetType2</text>
+</inline>
+<markup>- This is the function return of function 2</markup>
+<break/>
+<h4>
+  <text>Arguments</text>
+</h4>
+<b>
+  <text>arg2_0</text>
+</b>
+<text>:</text>
+<inline>
+  <text>Fn2Arg0Type</text>
+</inline>
+<markup>- This is function 2's 0'th arg</markup>
+<break/>
+<break/>
+<b>
+  <text>arg2_1</text>
+</b>
+<text>:</text>
+<inline>
+  <text>Fn2Arg1Type</text>
+</inline>
+<markup>- This is function 2's 1'th arg</markup>
+<break/>
+<break/>
+<b>
+  <text>arg2_2</text>
+</b>
+<text>:</text>
+<inline>
+  <text>Fn2Arg2Type</text>
+</inline>
+<markup>- This is function 2's 2'th arg</markup>
+<break/>
+<break/>
+<h4>
+  <text>Description</text>
+</h4>
+<markup>This is a test function number 2</markup>
+<break/>
+<h3>
+  <text>testFn3</text>
+</h3>
+<inline>
+  <text>testPkg::testFn3(arg3_0: Fn3Arg0Type, arg3_1: Fn3Arg1Type, arg3_2:
+    Fn3Arg2Type)
+  </text>
+</inline>
+<text>returns</text>
+<inline>
+  <text>RetType3</text>
+</inline>
+<markup>- This is the function return of function 3</markup>
+<break/>
+<h4>
+  <text>Arguments</text>
+</h4>
+<b>
+  <text>arg3_0</text>
+</b>
+<text>:</text>
+<inline>
+  <text>Fn3Arg0Type</text>
+</inline>
+<markup>- This is function 3's 0'th arg</markup>
+<break/>
+<break/>
+<b>
+  <text>arg3_1</text>
+</b>
+<text>:</text>
+<inline>
+  <text>Fn3Arg1Type</text>
+</inline>
+<markup>- This is function 3's 1'th arg</markup>
+<break/>
+<break/>
+<b>
+  <text>arg3_2</text>
+</b>
+<text>:</text>
+<inline>
+  <text>Fn3Arg2Type</text>
+</inline>
+<markup>- This is function 3's 2'th arg</markup>
+<break/>
+<break/>
+<h4>
+  <text>Description</text>
+</h4>
+<markup>This is a test function number 3</markup>
+<break/>
+<break/>
+<h2>
+  <text>Targets</text>
+</h2>
+<h3>
+  <text>testTarget1</text>
+</h3>
+<inline>
+  <text>testPkg::testTarget1(targ1_0: Targ1Arg0Type, targ1_1: Targ1Arg1Type,
+    targ1_2: Targ1Arg2Type): ...
+  </text>
+</inline>
+<break/>
+<h4>
+  <text>Arguments</text>
+</h4>
+<b>
+  <text>targ1_0</text>
+</b>
+<text>:</text>
+<inline>
+  <text>Targ1Arg0Type</text>
+</inline>
+<markup>- This is target 1's 0'th arg</markup>
+<break/>
+<break/>
+<b>
+  <text>targ1_1</text>
+</b>
+<text>:</text>
+<inline>
+  <text>Targ1Arg1Type</text>
+</inline>
+<markup>- This is target 1's 1'th arg</markup>
+<break/>
+<break/>
+<b>
+  <text>targ1_2</text>
+</b>
+<text>:</text>
+<inline>
+  <text>Targ1Arg2Type</text>
+</inline>
+<markup>- This is target 1's 2'th arg</markup>
+<break/>
+<break/>
+<h4>
+  <text>Description</text>
+</h4>
+<markup>This is a test target number 1</markup>
+<break/>
+<h3>
+  <text>testTarget2</text>
+</h3>
+<inline>
+  <text>testPkg::testTarget2(targ2_0: Targ2Arg0Type, targ2_1: Targ2Arg1Type,
+    targ2_2: Targ2Arg2Type): ...
+  </text>
+</inline>
+<break/>
+<h4>
+  <text>Arguments</text>
+</h4>
+<b>
+  <text>targ2_0</text>
+</b>
+<text>:</text>
+<inline>
+  <text>Targ2Arg0Type</text>
+</inline>
+<markup>- This is target 2's 0'th arg</markup>
+<break/>
+<break/>
+<b>
+  <text>targ2_1</text>
+</b>
+<text>:</text>
+<inline>
+  <text>Targ2Arg1Type</text>
+</inline>
+<markup>- This is target 2's 1'th arg</markup>
+<break/>
+<break/>
+<b>
+  <text>targ2_2</text>
+</b>
+<text>:</text>
+<inline>
+  <text>Targ2Arg2Type</text>
+</inline>
+<markup>- This is target 2's 2'th arg</markup>
+<break/>
+<break/>
+<h4>
+  <text>Description</text>
+</h4>
+<markup>This is a test target number 2</markup>
+<break/>
+<h3>
+  <text>testTarget3</text>
+</h3>
+<inline>
+  <text>testPkg::testTarget3(targ3_0: Targ3Arg0Type, targ3_1: Targ3Arg1Type,
+    targ3_2: Targ3Arg2Type): ...
+  </text>
+</inline>
+<break/>
+<h4>
+  <text>Arguments</text>
+</h4>
+<b>
+  <text>targ3_0</text>
+</b>
+<text>:</text>
+<inline>
+  <text>Targ3Arg0Type</text>
+</inline>
+<markup>- This is target 3's 0'th arg</markup>
+<break/>
+<break/>
+<b>
+  <text>targ3_1</text>
+</b>
+<text>:</text>
+<inline>
+  <text>Targ3Arg1Type</text>
+</inline>
+<markup>- This is target 3's 1'th arg</markup>
+<break/>
+<break/>
+<b>
+  <text>targ3_2</text>
+</b>
+<text>:</text>
+<inline>
+  <text>Targ3Arg2Type</text>
+</inline>
+<markup>- This is target 3's 2'th arg</markup>
+<break/>
+<break/>
+<h4>
+  <text>Description</text>
+</h4>
+<markup>This is a test target number 3</markup>
+<break/>

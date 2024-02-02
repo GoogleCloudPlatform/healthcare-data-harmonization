@@ -1,0 +1,4 @@
+def Build_ValueString(required Value) {
+  valueString : Value;
+  url : "text";
+}

@@ -1,0 +1,108 @@
+package fhir_r3r4
+
+import "../ResourceBase.wstl"
+
+// Description: Maps the common fields in FHIR STU3 EligibilityResponse and FHIR R4 ServiceRequest
+//
+// Argument(s):
+//   eligibilityResponse : FHIR EligibilityResponse resource
+//
+// Output(s):
+//   FHIR CoverageEligibilityResponse Resource
+//
+def EligibilityResponseBase(eligibilityResponse) {
+  resourcebase::ResourceBase(eligibilityResponse)
+  identifier: eligibilityResponse.identifier
+  status: eligibilityResponse.status
+  created: eligibilityResponse.created
+  disposition: eligibilityResponse.disposition
+  form: eligibilityResponse.form
+  error: eligibilityResponse.error
+}
+
+// Description: Converts a FHIR STU3 EligibilityResponse resource to FHIR R4 CoverageEligibilityResponse resource.
+//
+// Argument(s):
+//   eligibilityResponse : FHIR STU3 EligibilityResponse resource https://www.hl7.org/fhir/stu3/eligibilityresponse.html
+//
+// Output(s):
+//   FHIR R4 CoverageEligibilityResponse Resource https://www.hl7.org/fhir/r4/coverageeligibilityresponse.html
+//
+def R3EligibilityResponseToR4(eligibilityResponse) {
+  EligibilityResponseBase(eligibilityResponse)
+  resourceType: "CoverageEligibilityResponse"
+  contained: datatypes::R3ResourceToR4(eligibilityResponse.contained[])
+  status: utilities::defaultIfNull($this.status, "active")
+  purpose[]: "benefits"
+  created: utilities::defaultIfNull($this.created, currentTime("yyyy-MM-dd"))
+  if eligibilityResponse.requestOrganization then {
+    requestor: datatypes::R3ReferenceToR4(eligibilityResponse.requestOrganization)
+    extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.requestProvider", eligibilityResponse.requestProvider)
+  } else {
+    requestor: datatypes::R3ReferenceToR4(eligibilityResponse.requestProvider)
+    extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.requestOrganization", eligibilityResponse.requestOrganization)
+  }
+  request.display: "CoverageEligibilityResponse"
+  patient.display: "Patient"
+  outcome: datatypes::CodeableConceptToCode(eligibilityResponse.outcome)
+  outcome: utilities::defaultIfNull($this.outcome, "complete")
+  insurer: datatypes::R3ReferenceToR4(eligibilityResponse.insurer)
+  insurer.display: utilities::defaultIfNull($this.insurer, "Organization")
+  insurance: R3EligibilityResponse_InsuranceToR4(eligibilityResponse.insurance[])
+  preAuthRef: extension::fetchString("https://www.hl7.org/fhir/r4/coverageeligibilityresponse-definitions.html#CoverageEligibilityResponse.preAuthRef", eligibilityResponse.extension)
+}
+
+// Description: Converts a FHIR STU3 EligibilityResponse.insurance to FHIR R4 CoverageEligibilityResponse.insurance.
+//
+// Argument(s):
+//   data : FHIR STU3 EligibilityResponse.insurance http://hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.insurance
+//
+// Output(s):
+//   FHIR R4 CoverageEligibilityResponse.insurance http://hl7.org/fhir/R4/coverageeligibilityresponse-definitions.html#CoverageEligibilityResponse.insurance
+//
+def R3EligibilityResponse_InsuranceToR4(required data) {
+  coverage: datatypes::R3ReferenceToR4(data.coverage)
+  coverage.display: utilities::defaultIfNull($this.coverage, "Coverage")
+  extension[]: extension::BuildReferenceExtension("https://www.hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.insurance.contract", data.contract)
+  item: R3EligibilityResponse_Insurance_BenefitBalanceToR4(data.benefitBalance[])
+}
+
+// Description: Converts a FHIR STU3 EligibilityResponse.insurance.benefitBalance to FHIR R4 CoverageEligibilityResponse.insurance.item
+//
+// Argument(s):
+//   data : FHIR STU3 EligibilityResponse.insurance.benefitBalance http://hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.insurance.benefitBalance
+//
+// Output(s):
+//   FHIR R4 CoverageEligibilityResponse.insurance.item http://hl7.org/fhir/R4/coverageeligibilityresponse-definitions.html#CoverageEligibilityResponse.insurance.item
+//
+def R3EligibilityResponse_Insurance_BenefitBalanceToR4(required data) {
+  category: data.category
+  excluded: data.excluded
+  extension[]: extension::BuildCodeableConceptExtension("https://www.hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.insurance.benefitBalance.subCategory", data.subCategory)
+  name: data.name
+  description: data.description
+  network: data.network
+  unit: data.unit
+  term: data.term
+  benefit: R3EligibilityResponse_Insurance_BenefitBalance_FinancialToR4(data.financial[])
+  authorizationRequired: extension::fetchBoolean("https://www.hl7.org/fhir/r4/coverageeligibilityresponse-definitions.html#CoverageEligibilityResponse.insurance.item.authorizationRequired", data.extension)
+  authorizationSupporting: extension::fetchCodeableConceptArray("https://www.hl7.org/fhir/r4/coverageeligibilityresponse-definitions.html#CoverageEligibilityResponse.insurance.item.authorizationSupporting", data.extension)
+  authorizationUrl: extension::fetchUri("https://www.hl7.org/fhir/r4/coverageeligibilityresponse-definitions.html#CoverageEligibilityResponse.insurance.item.authorizationUrl", data.extension)
+}
+
+// Description: Converts a FHIR STU3 EligibilityResponse.insurance.benefitBalance.financial to FHIR R4 CoverageEligibilityResponse.insurance.item.benefit
+//
+// Argument(s):
+//   data : FHIR STU3 EligibilityResponse.insurance.benefitBalance.financial http://hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.insurance.benefitBalance.financial
+//
+// Output(s):
+//   FHIR R4 CoverageEligibilityResponse.insurance.item.benefit http://hl7.org/fhir/R4/coverageeligibilityresponse-definitions.html#CoverageEligibilityResponse.insurance.item.benefit
+//
+def R3EligibilityResponse_Insurance_BenefitBalance_FinancialToR4(required data) {
+  type: data.type
+  allowedUnsignedInt: data.allowedUnsignedInt
+  allowedString: data.allowedString
+  allowedMoney: datatypes::R3MoneyToR4(data.allowedMoney)
+  usedUnsignedInt: data.usedUnsignedInt
+  usedMoney: datatypes::R3MoneyToR4(data.usedMoney)
+}

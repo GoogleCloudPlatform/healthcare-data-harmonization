@@ -1,0 +1,12 @@
+package this_wont_compile
+
+Planet: "Earth";
+syntaxError: 2+;
+Planet: "Mars";
+Data: "23d";
+
+def badFunction(in){
+    error: [in][0]
+}
+
+badFunction(4--)
