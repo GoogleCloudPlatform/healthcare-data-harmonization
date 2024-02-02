@@ -44,6 +44,7 @@ public final class MergeConstants {
   public static final String EXTENSION_FIELD = "extension";
   public static final String PATH_FIELD = "path";
   public static final String ID_FIELD = "id";
+  public static final String ACTIVE_FIELD = "active";
   public static final String RESOURCE_TYPE_FIELD = "resourceType";
   public static final String RULE_FIELD = "rule";
   public static final String STABLE_ID_FIELD = "stableId";

@@ -1,0 +1,419 @@
+{
+  "contained": [
+    {
+      "address": [
+        {
+          "city": "Vancouver",
+          "country": "CAD",
+          "line": [
+            "1234 Main Street"
+          ],
+          "postalCode": "V2H1Y3",
+          "use": "home"
+        }
+      ],
+      "birthDate": "1986-05-17",
+      "gender": "male",
+      "id": "patient-1",
+      "name": [
+        {
+          "family": "Donald",
+          "given": [
+            "Duck"
+          ],
+          "use": "official"
+        }
+      ],
+      "resourceType": "Patient"
+    },
+    {
+      "beneficiary": {
+        "reference": "#patient-1"
+      },
+      "class": [
+        {
+          "name": "Corporate Baker's Inc. Plan#35",
+          "type": {
+            "coding": [
+              {
+                "code": "plan"
+              }
+            ]
+          },
+          "value": "CBI35"
+        },
+        {
+          "name": "Trainee Part-time Benefits",
+          "type": {
+            "coding": [
+              {
+                "code": "subPlan"
+              }
+            ]
+          },
+          "value": "123"
+        }
+      ],
+      "dependent": "1",
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/STU3/coverage-definitions.html#Coverage.sequence",
+          "valueString": "1"
+        }
+      ],
+      "id": "coverage-1",
+      "identifier": [
+        {
+          "system": "http://benefitsinc.com/certificate",
+          "value": "12345"
+        }
+      ],
+      "payor": [
+        {
+          "identifier": {
+            "system": "http://www.bindb.com/bin",
+            "value": "123456"
+          }
+        }
+      ],
+      "relationship": {
+        "coding": [
+          {
+            "code": "self"
+          }
+        ]
+      },
+      "resourceType": "Coverage",
+      "status": "active",
+      "subscriber": {
+        "reference": "#patient-1"
+      },
+      "type": {
+        "coding": [
+          {
+            "code": "EHCPOL",
+            "system": "http://hl7.org/fhir/v3/ActCode"
+          }
+        ]
+      }
+    }
+  ],
+  "created": "2014-09-16",
+  "disposition": "Policy is currently in-force.",
+  "extension": [
+    {
+      "url": "https://www.hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.requestProvider",
+      "valueReference": {
+        "extension": [
+          {
+            "url": "https://www.hl7.org/fhir/STU3/references-definitions.html#Reference.identifier",
+            "valueIdentifier": {
+              "system": "http://national.org/provider",
+              "value": "PR9876"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "form": {
+    "coding": [
+      {
+        "code": "ELRSP/2017/01",
+        "system": "http://national.org/form"
+      }
+    ]
+  },
+  "id": "E2502",
+  "identifier": [
+    {
+      "system": "http://www.BenefitsInc.com/fhir/eligibilityresponse",
+      "value": "8812342"
+    }
+  ],
+  "insurance": [
+    {
+      "coverage": {
+        "reference": "#coverage-1"
+      },
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.insurance.contract",
+          "valueReference": {
+            "reference": "http://www.BenefitsInc.com/fhir/contract/NBU22547"
+          }
+        }
+      ],
+      "item": [
+        {
+          "benefit": [
+            {
+              "allowedMoney": {
+                "currency": "USD",
+                "value": 500000
+              },
+              "type": {
+                "coding": [
+                  {
+                    "code": "benefit"
+                  }
+                ]
+              },
+              "usedMoney": {
+                "currency": "USD",
+                "value": 3748
+              }
+            },
+            {
+              "allowedMoney": {
+                "currency": "USD",
+                "value": 100
+              },
+              "type": {
+                "coding": [
+                  {
+                    "code": "copay-maximum"
+                  }
+                ]
+              }
+            },
+            {
+              "allowedUnsignedInt": 20,
+              "type": {
+                "coding": [
+                  {
+                    "code": "copay-percent"
+                  }
+                ]
+              }
+            }
+          ],
+          "category": {
+            "coding": [
+              {
+                "code": "medical",
+                "system": "http://hl7.org/fhir/benefit-category"
+              }
+            ]
+          },
+          "extension": [
+            {
+              "url": "https://www.hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.insurance.benefitBalance.subCategory",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "code": "30",
+                    "display": "Health Benefit Plan Coverage",
+                    "system": "http://hl7.org/fhir/benefit-subcategory"
+                  }
+                ]
+              }
+            }
+          ],
+          "network": {
+            "coding": [
+              {
+                "code": "in",
+                "system": "http://hl7.org/fhir/benefit-network"
+              }
+            ]
+          },
+          "term": {
+            "coding": [
+              {
+                "code": "annual",
+                "system": "http://hl7.org/fhir/benefit-term"
+              }
+            ]
+          },
+          "unit": {
+            "coding": [
+              {
+                "code": "individual",
+                "system": "http://hl7.org/fhir/benefit-unit"
+              }
+            ]
+          }
+        },
+        {
+          "benefit": [
+            {
+              "allowedMoney": {
+                "currency": "USD",
+                "value": 15000
+              },
+              "type": {
+                "coding": [
+                  {
+                    "code": "benefit"
+                  }
+                ]
+              }
+            }
+          ],
+          "category": {
+            "coding": [
+              {
+                "code": "medical",
+                "system": "http://hl7.org/fhir/benefit-category"
+              }
+            ]
+          },
+          "extension": [
+            {
+              "url": "https://www.hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.insurance.benefitBalance.subCategory",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "code": "69",
+                    "display": "Maternity",
+                    "system": "http://hl7.org/fhir/benefit-subcategory"
+                  }
+                ]
+              }
+            }
+          ],
+          "network": {
+            "coding": [
+              {
+                "code": "in",
+                "system": "http://hl7.org/fhir/benefit-network"
+              }
+            ]
+          },
+          "term": {
+            "coding": [
+              {
+                "code": "annual",
+                "system": "http://hl7.org/fhir/benefit-term"
+              }
+            ]
+          },
+          "unit": {
+            "coding": [
+              {
+                "code": "individual",
+                "system": "http://hl7.org/fhir/benefit-unit"
+              }
+            ]
+          }
+        },
+        {
+          "benefit": [
+            {
+              "allowedMoney": {
+                "currency": "USD",
+                "value": 2000
+              },
+              "type": {
+                "coding": [
+                  {
+                    "code": "benefit"
+                  }
+                ]
+              }
+            }
+          ],
+          "category": {
+            "coding": [
+              {
+                "code": "oral",
+                "system": "http://hl7.org/fhir/benefit-category"
+              }
+            ]
+          },
+          "extension": [
+            {
+              "url": "https://www.hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.insurance.benefitBalance.subCategory",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "code": "F3",
+                    "display": "Dental Coverage",
+                    "system": "http://hl7.org/fhir/benefit-subcategory"
+                  }
+                ]
+              }
+            }
+          ],
+          "network": {
+            "coding": [
+              {
+                "code": "in",
+                "system": "http://hl7.org/fhir/benefit-network"
+              }
+            ]
+          },
+          "term": {
+            "coding": [
+              {
+                "code": "annual",
+                "system": "http://hl7.org/fhir/benefit-term"
+              }
+            ]
+          },
+          "unit": {
+            "coding": [
+              {
+                "code": "individual",
+                "system": "http://hl7.org/fhir/benefit-unit"
+              }
+            ]
+          }
+        },
+        {
+          "category": {
+            "coding": [
+              {
+                "code": "vision",
+                "system": "http://hl7.org/fhir/benefit-category"
+              }
+            ]
+          },
+          "description": "Vision products and services such as exams, glasses and contatc lenses.",
+          "excluded": true,
+          "extension": [
+            {
+              "url": "https://www.hl7.org/fhir/STU3/eligibilityresponse-definitions.html#EligibilityResponse.insurance.benefitBalance.subCategory",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "code": "F6",
+                    "display": "Vision Coverage",
+                    "system": "http://hl7.org/fhir/benefit-subcategory"
+                  }
+                ]
+              }
+            }
+          ],
+          "name": "Vision"
+        }
+      ]
+    }
+  ],
+  "insurer": {
+    "reference": "Organization/2"
+  },
+  "outcome": "complete",
+  "patient": {
+    "display": "Patient"
+  },
+  "purpose": [
+    "benefits"
+  ],
+  "request": {
+    "display": "CoverageEligibilityResponse"
+  },
+  "requestor": {
+    "identifier": {
+      "system": "http://national.org/clinic",
+      "value": "OR1234"
+    }
+  },
+  "resourceType": "CoverageEligibilityResponse",
+  "status": "active",
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">A human-readable rendering of the EligibilityResponse.</div>",
+    "status": "generated"
+  }
+}
