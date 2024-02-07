@@ -714,20 +714,6 @@ def fetchUriArray(url, extension) {
   result[*].valueUri
 }
 
-// Description: Constructs a extension with url value
-//
-// Argument(s):
-//   url:  FHIR url datatype
-//   url: FHIR url datatype https://www.hl7.org/fhir/r4/datatypes.htmlExtension(url
-//
-// Output(s):
-//   FHIR extension: https://www.hl7.org/fhir/extensibility.html#extension
-//
-def BuildUrlExtension(url, required url) {
-  url: url
-  valueString: url
-}
-
 // Description: fetches a extension with given url from the extension array
 //
 // Argument(s):
