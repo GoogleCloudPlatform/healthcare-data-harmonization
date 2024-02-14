@@ -19,6 +19,7 @@ import com.google.cloud.verticals.foundations.dataharmonization.data.impl.Defaul
 import com.google.cloud.verticals.foundations.dataharmonization.data.impl.DefaultPrimitive;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import java.time.Duration;
 
 /** Constants for merging module within FHIR reconciliation. */
 public final class MergeConstants {
@@ -176,6 +177,8 @@ public final class MergeConstants {
       "urn:oid:google/source-fhir-resource-version-name";
 
   public static final String FIRST_MERGE_NULL_SNAPSHOT = "enable_first_merge_null_snapshot";
+
+  public static final Duration SLOWNESS_LOG_FREQUENCY = Duration.ofMinutes(10);
 
   public static final Data REMOVE_FIELD_PLACEHOLDER =
       new DefaultContainer(
