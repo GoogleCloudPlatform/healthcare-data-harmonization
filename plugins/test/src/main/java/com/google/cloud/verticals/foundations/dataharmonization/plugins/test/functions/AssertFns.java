@@ -15,6 +15,7 @@
  */
 package com.google.cloud.verticals.foundations.dataharmonization.plugins.test.functions;
 
+import static com.google.common.collect.ImmutableList.toImmutableList;
 import static java.lang.Math.max;
 import static java.util.stream.Collectors.joining;
 
@@ -33,11 +34,14 @@ import com.google.cloud.verticals.foundations.dataharmonization.function.java.Pl
 import com.google.common.base.VerifyException;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /** This class contains an example of a static function. */
 public final class AssertFns {
@@ -87,7 +91,7 @@ public final class AssertFns {
   @PluginFunction
   public static NullData assertEquals(RuntimeContext context, Data want, Data got) {
     RunnerFns.setAssertionMade(context);
-    ImmutableList<Diff> diffs = diff(want, got, new ArrayDeque<>());
+    ImmutableList<Diff> diffs = diff(want, got, new ArrayDeque<>(), new ArrayList<>());
     if (diffs.isEmpty()) {
       return NullData.instance;
     }
@@ -96,7 +100,31 @@ public final class AssertFns {
         String.format("-want, +got\n%s", diffs.stream().map(d -> " " + d).collect(joining("\n"))));
   }
 
-  public static ImmutableList<Diff> diff(Data want, Data got, Deque<PathSegment> segments) {
+  /**
+   * Throws an exception describing the difference between the two given data, if there is any. If
+   * they are the same returns null. Takes an extra param for fields to ignore.
+   *
+   */
+  @PluginFunction
+  public static NullData assertEquals(
+      RuntimeContext context, Data want, Data got, Array fieldsToIgnore) {
+    ImmutableList<String> fieldsToIgnoreList =
+        fieldsToIgnore.stream()
+            .map(Object::toString)
+            .collect(toImmutableList());
+
+    RunnerFns.setAssertionMade(context);
+    ImmutableList<Diff> diffs = diff(want, got, new ArrayDeque<>(), fieldsToIgnoreList);
+    if (diffs.isEmpty()) {
+      return NullData.instance;
+    }
+
+    throw new VerifyException(
+        String.format("-want, +got\n%s", diffs.stream().map(d -> " " + d).collect(joining("\n"))));
+  }
+
+  public static ImmutableList<Diff> diff(
+      Data want, Data got, Deque<PathSegment> segments, List<String> fieldsToIgnore) {
     if (want.isNullOrEmpty() && !got.isNullOrEmpty()) {
       return ImmutableList.of(new Diff(NullData.instance, got, Path.of(segments)));
     }
@@ -104,10 +132,10 @@ public final class AssertFns {
       return ImmutableList.of(new Diff(want, NullData.instance, Path.of(segments)));
     }
     if (want.isContainer() && got.isContainer()) {
-      return diff(want.asContainer(), got.asContainer(), segments);
+      return diff(want.asContainer(), got.asContainer(), segments, fieldsToIgnore);
     }
     if (want.isArray() && got.isArray()) {
-      return diff(want.asArray(), got.asArray(), segments);
+      return diff(want.asArray(), got.asArray(), segments, fieldsToIgnore);
     }
     if (want.isPrimitive() && got.isPrimitive()) {
       return diff(want.asPrimitive(), got.asPrimitive(), segments);
@@ -115,7 +143,8 @@ public final class AssertFns {
     return ImmutableList.of(new Diff(want, got, Path.of(segments)));
   }
 
-  public static ImmutableList<Diff> diff(Array want, Array got, Deque<PathSegment> segments) {
+  public static ImmutableList<Diff> diff(
+      Array want, Array got, Deque<PathSegment> segments, List<String> fieldsToIgnore) {
     int max = max(want.size(), got.size());
     ImmutableList.Builder<Diff> diffs = ImmutableList.builder();
 
@@ -126,7 +155,7 @@ public final class AssertFns {
       } else if (i >= got.size()) {
         diffs.add(new Diff(want.getElement(i), null, Path.of(segments)));
       } else {
-        diffs.addAll(diff(want.getElement(i), got.getElement(i), segments));
+        diffs.addAll(diff(want.getElement(i), got.getElement(i), segments, fieldsToIgnore));
       }
       segments.removeLast();
     }
@@ -135,11 +164,17 @@ public final class AssertFns {
   }
 
   public static ImmutableList<Diff> diff(
-      Container want, Container got, Deque<PathSegment> segments) {
+      Container want, Container got, Deque<PathSegment> segments, List<String> fieldsToIgnore) {
     Set<String> wantFields = want.fields();
     Set<String> gotFields = got.fields();
+    // Filter out some fields
+    Set<String> fieldsToIgnoreSet = new HashSet<>(fieldsToIgnore);
+    ImmutableList<String> allFields = Stream.concat(wantFields.stream(), gotFields.stream())
+        .distinct()
+        .filter(fieldName -> !fieldsToIgnoreSet.contains(fieldName))
+        .sorted()
+        .collect(toImmutableList());
 
-    ImmutableList<String> allFields = ImmutableList.sortedCopyOf(Sets.union(wantFields, gotFields));
     ImmutableList.Builder<Diff> diffs = ImmutableList.builder();
     for (String field : allFields) {
       segments.add(new Field(field));
@@ -148,7 +183,7 @@ public final class AssertFns {
       } else if (!gotFields.contains(field)) {
         diffs.add(new Diff(want.getField(field), null, Path.of(segments)));
       } else {
-        diffs.addAll(diff(want.getField(field), got.getField(field), segments));
+        diffs.addAll(diff(want.getField(field), got.getField(field), segments, fieldsToIgnore));
       }
       segments.removeLast();
     }

@@ -37,6 +37,23 @@ An example diff between `{"a": {"b": [1, 2, 3]}, "c": 1}` and `{"a": {"b": [1,
  c: -1 +"one"
 ```
 
+### assertEquals
+`test::assertEquals(want: Data, got: Data, fieldsToIgnore: Array)` returns `NullData`
+
+#### Arguments
+
+**want**: `Data`
+
+**got**: `Data`
+
+**fieldsToIgnore**: `Array`
+
+#### Description
+
+Throws an exception describing the difference between the two given data, if
+there is any. If they are the same returns null. Takes an extra param for fields to ignore.
+
+
 ### assertNull
 `test::assertNull(data: Data)` returns `NullData`
 

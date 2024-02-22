@@ -41,6 +41,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class AssertFnsTest {
   private final RuntimeContext mockCtx = RuntimeContextUtil.mockRuntimeContextWithMockedMetaData();
+  private final Array fieldsToIgnore = testDTI().arrayOf();
 
   @Test
   public void assertEqual_diffPrimitives() {
@@ -48,7 +49,9 @@ public class AssertFnsTest {
     Primitive got = testDTI().primitiveOf(1.);
 
     VerifyException ex =
-        assertThrows(VerifyException.class, () -> AssertFns.assertEquals(mockCtx, want, got));
+        assertThrows(
+            VerifyException.class,
+            () -> AssertFns.assertEquals(mockCtx, want, got, fieldsToIgnore));
     assertThat(ex).hasMessageThat().isEqualTo("-want, +got\n  -\"hello\" +1");
   }
 
@@ -57,7 +60,7 @@ public class AssertFnsTest {
     Data want = NullData.instance;
     Data got = NullData.instance;
 
-    assertThat(AssertFns.assertEquals(mockCtx, want, got).isNullOrEmpty()).isTrue();
+    assertThat(AssertFns.assertEquals(mockCtx, want, got, fieldsToIgnore).isNullOrEmpty()).isTrue();
   }
 
   @Test
@@ -66,10 +69,15 @@ public class AssertFnsTest {
     Data got = testDTI().primitiveOf(1.);
 
     VerifyException ex =
-        assertThrows(VerifyException.class, () -> AssertFns.assertEquals(mockCtx, want, got));
+        assertThrows(
+            VerifyException.class,
+            () -> AssertFns.assertEquals(mockCtx, want, got, fieldsToIgnore));
     assertThat(ex).hasMessageThat().isEqualTo("-want, +got\n  -<not present> +1");
 
-    ex = assertThrows(VerifyException.class, () -> AssertFns.assertEquals(mockCtx, got, want));
+    ex =
+        assertThrows(
+            VerifyException.class,
+            () -> AssertFns.assertEquals(mockCtx, got, want, fieldsToIgnore));
     assertThat(ex).hasMessageThat().isEqualTo("-want, +got\n  -1 +<not present>");
   }
 
@@ -79,7 +87,9 @@ public class AssertFnsTest {
     Container got = json("{\"a\": 2}").asContainer();
 
     VerifyException ex =
-        assertThrows(VerifyException.class, () -> AssertFns.assertEquals(mockCtx, want, got));
+        assertThrows(
+            VerifyException.class,
+            () -> AssertFns.assertEquals(mockCtx, want, got, fieldsToIgnore));
     assertThat(ex).hasMessageThat().isEqualTo("-want, +got\n .a -1 +2");
   }
 
@@ -89,7 +99,9 @@ public class AssertFnsTest {
     Container got = json("{\"a\": {\"b\": [{\"c\": 2}]}}").asContainer();
 
     VerifyException ex =
-        assertThrows(VerifyException.class, () -> AssertFns.assertEquals(mockCtx, want, got));
+        assertThrows(
+            VerifyException.class,
+            () -> AssertFns.assertEquals(mockCtx, want, got, fieldsToIgnore));
     assertThat(ex).hasMessageThat().isEqualTo("-want, +got\n .a.b[0].c -1 +2");
   }
 
@@ -99,7 +111,9 @@ public class AssertFnsTest {
     Container got = json("{\"a\": {\"b\": [1, 5, 6, 7]}, \"c\": \"one\"}").asContainer();
 
     VerifyException ex =
-        assertThrows(VerifyException.class, () -> AssertFns.assertEquals(mockCtx, want, got));
+        assertThrows(
+            VerifyException.class,
+            () -> AssertFns.assertEquals(mockCtx, want, got, fieldsToIgnore));
     assertThat(ex)
         .hasMessageThat()
         .isEqualTo(
@@ -116,7 +130,9 @@ public class AssertFnsTest {
     Container got = json("{\"a\": 1}").asContainer();
 
     VerifyException ex =
-        assertThrows(VerifyException.class, () -> AssertFns.assertEquals(mockCtx, want, got));
+        assertThrows(
+            VerifyException.class,
+            () -> AssertFns.assertEquals(mockCtx, want, got, fieldsToIgnore));
     assertThat(ex).hasMessageThat().isEqualTo("-want, +got\n .b -2 +<not present>");
   }
 
@@ -126,7 +142,9 @@ public class AssertFnsTest {
     Container got = json("{\"a\": 1, \"b\": 2}").asContainer();
 
     VerifyException ex =
-        assertThrows(VerifyException.class, () -> AssertFns.assertEquals(mockCtx, want, got));
+        assertThrows(
+            VerifyException.class,
+            () -> AssertFns.assertEquals(mockCtx, want, got, fieldsToIgnore));
     assertThat(ex).hasMessageThat().isEqualTo("-want, +got\n .b -<not present> +2");
   }
 
@@ -136,7 +154,9 @@ public class AssertFnsTest {
     Array got = json("[3]").asArray();
 
     VerifyException ex =
-        assertThrows(VerifyException.class, () -> AssertFns.assertEquals(mockCtx, want, got));
+        assertThrows(
+            VerifyException.class,
+            () -> AssertFns.assertEquals(mockCtx, want, got, fieldsToIgnore));
     assertThat(ex).hasMessageThat().isEqualTo("-want, +got\n [0] -2 +3");
   }
 
@@ -146,7 +166,9 @@ public class AssertFnsTest {
     Array got = json("[1, 3, 3]").asArray();
 
     VerifyException ex =
-        assertThrows(VerifyException.class, () -> AssertFns.assertEquals(mockCtx, want, got));
+        assertThrows(
+            VerifyException.class,
+            () -> AssertFns.assertEquals(mockCtx, want, got, fieldsToIgnore));
     assertThat(ex).hasMessageThat().isEqualTo("-want, +got\n [1] -2 +3");
   }
 
@@ -156,7 +178,9 @@ public class AssertFnsTest {
     Array got = json("[1, 2]").asArray();
 
     VerifyException ex =
-        assertThrows(VerifyException.class, () -> AssertFns.assertEquals(mockCtx, want, got));
+        assertThrows(
+            VerifyException.class,
+            () -> AssertFns.assertEquals(mockCtx, want, got, fieldsToIgnore));
     assertThat(ex).hasMessageThat().isEqualTo("-want, +got\n" + " [2] -3 +<past end of array>");
   }
 
@@ -166,7 +190,9 @@ public class AssertFnsTest {
     Array got = json("[1, 2, 3]").asArray();
 
     VerifyException ex =
-        assertThrows(VerifyException.class, () -> AssertFns.assertEquals(mockCtx, want, got));
+        assertThrows(
+            VerifyException.class,
+            () -> AssertFns.assertEquals(mockCtx, want, got, fieldsToIgnore));
     assertThat(ex).hasMessageThat().isEqualTo("-want, +got\n" + " [2] -<past end of array> +3");
   }
 
@@ -176,7 +202,9 @@ public class AssertFnsTest {
     Dataset got = datasetOf(testDTI().primitiveOf(1.));
 
     VerifyException ex =
-        assertThrows(VerifyException.class, () -> AssertFns.assertEquals(mockCtx, want, got));
+        assertThrows(
+            VerifyException.class,
+            () -> AssertFns.assertEquals(mockCtx, want, got, fieldsToIgnore));
     assertThat(ex)
         .hasMessageThat()
         .isEqualTo("-want, +got\n" + "  - comparing datasets is not supported.");
@@ -191,7 +219,9 @@ public class AssertFnsTest {
     Container got = containerOf("dataset", gotDs);
 
     VerifyException ex =
-        assertThrows(VerifyException.class, () -> AssertFns.assertEquals(mockCtx, want, got));
+        assertThrows(
+            VerifyException.class,
+            () -> AssertFns.assertEquals(mockCtx, want, got, fieldsToIgnore));
     assertThat(ex)
         .hasMessageThat()
         .isEqualTo("-want, +got\n" + " .dataset - comparing datasets is not supported.");
@@ -211,7 +241,9 @@ public class AssertFnsTest {
                     testDTI().containerOf(ImmutableMap.of("hello", testDTI().primitiveOf("two")))));
 
     VerifyException ex =
-        assertThrows(VerifyException.class, () -> AssertFns.assertEquals(mockCtx, want, got));
+        assertThrows(
+            VerifyException.class,
+            () -> AssertFns.assertEquals(mockCtx, want, got, fieldsToIgnore));
     assertThat(ex)
         .hasMessageThat()
         .isEqualTo("-want, +got\n" + " .someField -[\"one\"] +{\"hello\":\"two\"}");
@@ -222,7 +254,7 @@ public class AssertFnsTest {
     Data want = json("{\"a\": [1, 2, 3], \"b\": {\"c\": \"d\"}}").asContainer();
     Data got = json("{\"a\": [1, 2, 3], \"b\": {\"c\": \"d\"}}").asContainer();
 
-    assertThat(AssertFns.assertEquals(mockCtx, want, got).isNullOrEmpty()).isTrue();
+    assertThat(AssertFns.assertEquals(mockCtx, want, got, fieldsToIgnore).isNullOrEmpty()).isTrue();
   }
 
   private static Data json(String json) {

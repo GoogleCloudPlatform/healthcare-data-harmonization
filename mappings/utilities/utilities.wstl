@@ -59,3 +59,17 @@ def Build_System(required System) {
 //   default : FHIR R4 datatype
 //
 def defaultIfNull(value, required default) if !value then default
+
+// Description: Return list of ignored field values while performing assertEquals
+//   between two objects
+//
+// Argument(s): None
+
+// Output(s):
+//   list : fields that would be ignored
+def getFieldsToIgnore() [
+  "id",
+  "url",
+  "reference",
+  "value"
+]
