@@ -197,6 +197,7 @@ public class TextDocumentServiceImplWithPluginsTest {
     };
     String[] expectedSignatureForAssertFuncs = {
       "test::assertEquals(Data want, Data got)",
+      "test::assertEquals(Data want, Data got, Array fieldsToIgnore)",
       "test::assertNull(Data data)",
       "test::assertTrue(Boolean bool)",
     };

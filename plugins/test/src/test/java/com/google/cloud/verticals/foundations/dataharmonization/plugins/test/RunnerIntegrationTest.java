@@ -92,7 +92,7 @@ public class RunnerIntegrationTest {
         .contains(
             "Test function test_codelab_missingAssertion did not make any assertions. Make sure you"
                 + " call one of the assertion functions at least once. Assertion functions are:"
-                + " test::assertEquals, test::assertNull, test::assertTrue");
+                + " test::assertEquals, test::assertEquals, test::assertNull, test::assertTrue");
   }
 
   @Test

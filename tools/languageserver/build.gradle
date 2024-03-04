@@ -92,6 +92,8 @@ jar {
 shadowJar {
     mainClassName = 'com.google.cloud.verticals.foundations.dataharmonization.lsp.ServerLauncher'
     zip64 true
+    // Makes sure jar files are just .jar and not "1-all.jar" which breaks maven.
+    archiveClassifier.set('')
  }
 
 // enforced by Gradle 8

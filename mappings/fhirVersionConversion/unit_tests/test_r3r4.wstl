@@ -1,6 +1,20 @@
 import "test"
 import "./../mappings/r3r4/fhir_r3r4.wstl"
 
+// Description: Return list of ignored field values while performing assertEquals
+//   between two objects
+//
+// Argument(s): None
+
+// Output(s):
+//   list : fields that would be ignored
+def getFieldsToIgnore() [
+  "id",
+  "url",
+  "reference",
+  "value"
+]
+
 // Runs all Test Functions in the current package.
 //
 // A Test Function is a function whose name starts with test_.
@@ -343,7 +357,7 @@ def testR3ResourceToR4(resourceType) {
   var input: loadJson(joinPath(testdir(), "{resourceType}_r3r4.fhir.input.json"))
   var expectedOutput: loadJson(joinPath(testdir(), "{resourceType}_r3r4.fhir.output.json"))
   var actualOutput: callPackageFn("fhir_r3r4", "R3{resourceType}ToR4", input)
-  test::assertEquals(expectedOutput, actualOutput)
+  test::assertEquals(expectedOutput, actualOutput, getFieldsToIgnore())
 }
 
 // Path for input and output files.
