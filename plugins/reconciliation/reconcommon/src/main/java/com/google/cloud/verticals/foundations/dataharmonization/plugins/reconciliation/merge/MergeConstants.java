@@ -95,6 +95,7 @@ public final class MergeConstants {
   public static final String RESOURCE_INFO_FIELD = "resourceInfo";
   public static final String ACTION_FIELD = "action";
   public static final String LAST_UPDATED_FIELD = "lastUpdated";
+  public static final String CREATE_RESOURCE = "CreateResource";
   public static final String DELETE_RESOURCE = "DeleteResource";
   public static final String UPDATE_RESOURCE = "UpdateResource";
   public static final String DELETE_FINAL_RESOURCE_ID = "deleteFinalId";
@@ -178,7 +179,9 @@ public final class MergeConstants {
 
   public static final String FIRST_MERGE_NULL_SNAPSHOT = "enable_first_merge_null_snapshot";
 
-  public static final Duration SLOWNESS_LOG_FREQUENCY = Duration.ofMinutes(10);
+  public static final Duration SLOWNESS_LOG_INITIAL_THRESHOLD = Duration.ofMinutes(1);
+  public static final Duration SLOWNESS_LOG_FREQUENCY = Duration.ofMinutes(3);
+  public static final int NUM_SNAPSHOT_LOG_THRESHOLD = 1000;
 
   public static final Data REMOVE_FIELD_PLACEHOLDER =
       new DefaultContainer(
