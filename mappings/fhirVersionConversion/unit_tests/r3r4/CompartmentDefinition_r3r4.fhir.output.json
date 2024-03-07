@@ -239,13 +239,13 @@
       ]
     },
     {
-      "code": "Resource",
+      "code": "CoverageEligibilityRequest",
       "param": [
         "patient"
       ]
     },
     {
-      "code": "Resource"
+      "code": "CoverageEligibilityResponse"
     },
     {
       "code": "Encounter",
@@ -470,7 +470,7 @@
       ]
     },
     {
-      "code": "Resource",
+      "code": "ServiceRequest",
       "param": [
         "subject",
         "performer"
@@ -501,7 +501,7 @@
       ]
     },
     {
-      "code": "Resource",
+      "code": "ServiceRequest",
       "param": [
         "patient",
         "requester"

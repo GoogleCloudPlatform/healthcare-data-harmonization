@@ -35,7 +35,7 @@ def R3ReferralRequestToR4(referralRequest) {
   resourceType: "ServiceRequest"
   instantiatesCanonical: datatypes::ReferenceToCanonical(referralRequest.definition[])
   instantiatesUri: extension::fetchUri("https://www.hl7.org/fhir/R4/servicerequest-definitions.html#Servicerequest.instantiatesUri", referralRequest.extension)
-  basedOn: datatypes::R3ReferenceToR4(referralRequest.basedOn[where !matchesRegex($.reference, "^ProcedureRequest.*|^ReferralRequest.*")][])
+  basedOn: datatypes::R3ReferenceToR4(referralRequest.basedOn[])
   requisition: referralRequest.groupIdentifier
   status: utilities::Convert_TerminologyCode(referralRequest.status, "http://hl7.org/fhir/request-status", "Request_Status_r3r4")
   category: extension::fetchCodeableConceptArray("https://hl7.org/fhir/R4/servicerequest-definitions.html#ServiceRequest.category", referralRequest.extension)

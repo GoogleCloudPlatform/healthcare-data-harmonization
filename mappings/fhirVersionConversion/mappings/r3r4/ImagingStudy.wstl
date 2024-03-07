@@ -36,7 +36,7 @@ def R3ImagingStudyToR4(imagingStudy) {
   modality: imagingStudy.modalityList
   subject: datatypes::R3ReferenceToR4(imagingStudy.patient)
   encounter: if matchesRegex(imagingStudy.context.reference, "^Encounter.*") then datatypes::R3ReferenceToR4(imagingStudy.context)
-  basedOn: datatypes::R3ReferenceToR4(imagingStudy.basedOn[where matchesRegex($.reference, "^CarePlan.*")][])
+  basedOn: datatypes::R3ReferenceToR4(imagingStudy.basedOn[])
   referrer: datatypes::R3ReferenceToR4(imagingStudy.referrer)
   interpreter: datatypes::R3ReferenceToR4(imagingStudy.interpreter[])
   procedureReference: datatypes::R3ReferenceToR4(imagingStudy.procedureReference[0])

@@ -1,4 +1,9 @@
 {
+  "basedOn": [
+    {
+      "reference": "ServiceRequest/example"
+    }
+  ],
   "encounter": {
     "reference": "Encounter/example"
   },

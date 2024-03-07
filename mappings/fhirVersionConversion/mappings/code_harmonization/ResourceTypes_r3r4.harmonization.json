@@ -410,6 +410,28 @@
           ]
         },
         {
+          "code": "EligibilityRequest",
+          "display": "EligibilityRequest",
+          "target": [
+            {
+              "code": "CoverageEligibilityRequest",
+              "display": "CoverageEligibilityRequest",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "EligibilityResponse",
+          "display": "EligibilityResponse",
+          "target": [
+            {
+              "code": "CoverageEligibilityResponse",
+              "display": "CoverageEligibilityResponse",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
           "code": "Encounter",
           "display": "Encounter",
           "target": [
@@ -916,6 +938,17 @@
           ]
         },
         {
+          "code": "ProcedureRequest",
+          "display": "ProcedureRequest",
+          "target": [
+            {
+              "code": "ServiceRequest",
+              "display": "ServiceRequest",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
           "code": "Provenance",
           "display": "Provenance",
           "target": [
@@ -944,6 +977,17 @@
             {
               "code": "QuestionnaireResponse",
               "display": "QuestionnaireResponse",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ReferralRequest",
+          "display": "ReferralRequest",
+          "target": [
+            {
+              "code": "ServiceRequest",
+              "display": "ServiceRequest",
               "equivalence": "equivalent"
             }
           ]

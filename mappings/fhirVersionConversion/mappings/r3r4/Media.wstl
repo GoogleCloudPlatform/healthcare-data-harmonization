@@ -34,7 +34,7 @@ def R3MediaToR4(media) {
   MediaBase(media)
   contained: datatypes::R3ResourceToR4(media.contained[])
   device: datatypes::R3ReferenceToR4(media.device)
-  basedOn: datatypes::R3ReferenceToR4(media.basedOn[where !matchesRegex($.reference, "^ProcedureRequest.*")][])
+  basedOn: datatypes::R3ReferenceToR4(media.basedOn[])
   partOf: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/media-definitions.html#Media.partOf", media.extension)
   status: extension::fetchCode("https://www.hl7.org/fhir/R4/media-definitions.html#Media.status", media.extension)
   status: utilities::defaultIfNull($this.status, "unknown")

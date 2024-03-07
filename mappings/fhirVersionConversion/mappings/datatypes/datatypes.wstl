@@ -58,7 +58,7 @@ import "../code_harmonization/ResourceTypes_r3r4.harmonization.json"
 //   FHIR R4 Resource https://hl7.org/fhir/R4/resource.html#Resource
 //
 def R3ResourceToR4(data) {
-  if isR3ToR4Mapped(data.resourceType) then {
+  if harmonizeR4ResourceType(data.resourceType)? then {
     callPackageFn("fhir_r3r4", "R3{data.resourceType}ToR4", data)
   }
 }
@@ -72,7 +72,7 @@ def R3ResourceToR4(data) {
 //   FHIR STU3 Resource https://hl7.org/fhir/STU3/resource.html#Resource
 //
 def R4ResourceToR3(data) {
-  if isR3ToR4Mapped(data.resourceType) then {
+  if harmonizeR4ResourceType(data.resourceType)? then {
     callPackageFn("fhir_r3r4", "R4{data.resourceType}ToR3", data)
   }
 }
@@ -141,12 +141,17 @@ def Convert_Extension(required extension) {
   url: extension.url
 }
 
-// Description: Find if the mapped ResourceType present or not
+// Description: Harmonizes the STU3 resourceType to R4 ResourceType from the
+// valueset http://hl7.org/fhir/resource-types
+// Returns null if no harmonized value found.
 //
 // Argument(s):
-//   value: FHIR R4 resourceType
+//   resourceType: FHIR STU3 resourceType
 //
 // Output(s):
-//   boolean : true or false
+//   returns R4 resourceType or return null if no harmonized value found
 //
-def isR3ToR4Mapped(required resourceType) !(utilities::Convert_TerminologyCode(resourceType, "http://hl7.org/fhir/resource-types", "ResourceTypes_r3r4") == "Resource")
+def harmonizeR4ResourceType(required resourceType) {
+  var harmonizedType: utilities::Convert_TerminologyCode(resourceType, "http://hl7.org/fhir/resource-types", "ResourceTypes_r3r4")
+  if harmonizedType != "Resource" then harmonizedType
+}

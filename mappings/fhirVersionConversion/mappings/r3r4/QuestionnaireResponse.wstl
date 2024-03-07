@@ -28,7 +28,7 @@ def R3QuestionnaireResponseToR4(questionnaireResponse) {
   QuestionnaireResponseBase(questionnaireResponse)
   contained: datatypes::R3ResourceToR4(questionnaireResponse.contained[])
   subject: datatypes::R3ReferenceToR4(questionnaireResponse.subject)
-  basedOn: datatypes::R3ReferenceToR4(questionnaireResponse.basedOn[where matchesRegex($.reference, "^CarePlan.*")][])
+  basedOn: datatypes::R3ReferenceToR4(questionnaireResponse.basedOn[])
   partOf: datatypes::R3ReferenceToR4(questionnaireResponse.parent[])
   questionnaire: datatypes::ReferenceToCanonical(questionnaireResponse.questionnaire)
   status: questionnaireResponse.status

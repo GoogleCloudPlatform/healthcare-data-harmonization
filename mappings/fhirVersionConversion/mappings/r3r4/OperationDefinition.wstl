@@ -47,7 +47,7 @@ def R3OperationDefinitionToR4(operationDefinition) {
   affectsState: operationDefinition.idempotent
   comment: operationDefinition.comment
   base: datatypes::ReferenceToCanonical(operationDefinition.base)
-  resource: iterate({if datatypes::isR3ToR4Mapped($) then $;}, operationDefinition.resource)
+  resource: datatypes::harmonizeR4ResourceType(operationDefinition.resource[])
   inputProfile: extension::fetchCanonical("https://www.hl7.org/fhir/R4/operationdefinition-definitions.html#OperationDefinition.inputProfile", operationDefinition.extension)
   outputProfile: extension::fetchCanonical("https://www.hl7.org/fhir/R4/operationdefinition-definitions.html#OperationDefinition.outputProfile", operationDefinition.extension)
   parameter: R3OperationDefinition_ParameterToR4(operationDefinition.parameter[])

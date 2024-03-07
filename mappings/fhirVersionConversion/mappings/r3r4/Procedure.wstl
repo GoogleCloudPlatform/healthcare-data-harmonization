@@ -45,7 +45,7 @@ def R3ProcedureToR4(procedure) {
   partOf: datatypes::R3ReferenceToR4(procedure.partOf[])
   instantiatesCanonical: extension::fetchCanonicalArray("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.instantiatesCanonical", procedure.extension)
   instantiatesUri: extension::fetchUriArray("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.instantiatesUri", procedure.extension)
-  basedOn: datatypes::R3ReferenceToR4(procedure.basedOn[where matchesRegex($.reference, "^CarePlan.*")][])
+  basedOn: datatypes::R3ReferenceToR4(procedure.basedOn[])
   var status: extension::fetchCode("https://www.hl7.org/fhir/R4/procedure-definitions.html#Procedure.status", procedure.extension)
   status: if status? then status else utilities::Convert_TerminologyCode(procedure.status, "http://hl7.org/fhir/event-status", "Event_Status_r3r4")
   statusReason: procedure.notDoneReason

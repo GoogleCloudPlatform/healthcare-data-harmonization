@@ -55,7 +55,7 @@ def R3MedicationRequestToR4(medicationRequest) {
   recorder: datatypes::R3ReferenceToR4(medicationRequest.recorder)
   instantiatesCanonical: datatypes::ReferenceToCanonical(medicationRequest.definition[])
   instantiatesUri: extension::fetchUriArray("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.instantiatesUri", medicationRequest.extension)
-  basedOn: datatypes::R3ReferenceToR4(medicationRequest.basedOn[where !matchesRegex($.reference, "^ProcedureRequest.*|^ReferralRequest.*")][])
+  basedOn: datatypes::R3ReferenceToR4(medicationRequest.basedOn[])
   courseOfTherapyType: extension::fetchCodeableConcept("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.courseOfTherapyType", medicationRequest.extension)
   insurance: extension::fetchReferenceArray("https://www.hl7.org/fhir/R4/medicationrequest-definitions.html#MedicationRequest.insurance", medicationRequest.extension)
   dispenseRequest: R3MedicationRequest_DispenseRequestToR4(medicationRequest.dispenseRequest)

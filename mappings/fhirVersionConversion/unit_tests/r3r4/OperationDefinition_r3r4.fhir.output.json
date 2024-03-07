@@ -72,7 +72,8 @@
   ],
   "publisher": "Acme Healthcare Services",
   "resource": [
-    "Questionnaire"
+    "Questionnaire",
+    "ServiceRequest"
   ],
   "resourceType": "OperationDefinition",
   "status": "draft",

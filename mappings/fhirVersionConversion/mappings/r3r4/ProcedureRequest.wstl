@@ -45,7 +45,7 @@ def R3ProcedureRequestToR4(procedureRequest) {
   contained: datatypes::R3ResourceToR4(procedureRequest.contained[])
   instantiatesCanonical: datatypes::ReferenceToCanonical(procedureRequest.definition[])
   instantiatesUri: extension::fetchUriArray("https://www.hl7.org/fhir/R4/procedureRequest-definitions.html#ProcedureRequest.instantiatesUri", procedureRequest.extension)
-  basedOn: datatypes::R3ReferenceToR4(procedureRequest.basedOn[where matchesRegex($.reference, "^CarePlan.*|^MedicationRequest.*")][])
+  basedOn: datatypes::R3ReferenceToR4(procedureRequest.basedOn[where matchesRegex($.reference, "^CarePlan.*|^MedicationRequest.*|^ProcedureRequest.*|^ReferralRequest.*")][])
   status: utilities::Convert_TerminologyCode(procedureRequest.status, "http://hl7.org/fhir/request-status", "Request_Status_r3r4")
   subject: datatypes::R3ReferenceToR4(procedureRequest.subject)
   encounter: if matchesRegex(procedureRequest.context.reference, "^Encounter.*") then datatypes::R3ReferenceToR4(procedureRequest.context)

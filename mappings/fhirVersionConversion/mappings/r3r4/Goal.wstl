@@ -42,7 +42,7 @@ def R3GoalToR4(goal) {
   subject.display: utilities::defaultIfNull($this.subject, "Unknown")
   target[]: R3Goal_TargetToR4(goal.target)
   expressedBy: datatypes::R3ReferenceToR4(goal.expressedBy)
-  addresses: datatypes::R3ReferenceToR4(goal.addresses[where !matchesRegex($.reference, "^ProcedureRequest.*")][])
+  addresses: datatypes::R3ReferenceToR4(goal.addresses[])
 }
 
 // Description: Converts a FHIR R4 Goal resource to FHIR STU3 Goal resource.

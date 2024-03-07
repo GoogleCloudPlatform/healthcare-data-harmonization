@@ -6,6 +6,9 @@
   "basedOn": [
     {
       "reference": "CarePlan/123"
+    },
+    {
+      "reference": "ServiceRequest/123"
     }
   ],
   "contained": [

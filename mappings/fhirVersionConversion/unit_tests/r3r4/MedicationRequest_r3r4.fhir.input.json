@@ -17,6 +17,91 @@
   "medicationReference": {
     "reference": "Medication/example"
   },
+  "dosageInstruction": [
+    {
+      "sequence": 1,
+      "text": "Two tablets at once",
+      "additionalInstruction": [
+        {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "311504000",
+              "display": "With or after food"
+            }
+          ]
+        }
+      ],
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "26643006",
+            "display": "Oral Route"
+          }
+        ]
+      },
+      "method": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "421521009",
+            "display": "Swallow - dosing instruction imperative (qualifier value)"
+          }
+        ]
+      },
+      "doseQuantity": {
+        "value": 2,
+        "unit": "TAB",
+        "system": "http://hl7.org/fhir/v3/orderableDrugForm",
+        "code": "TAB"
+      }
+    },
+    {
+      "sequence": 2,
+      "text": "One tablet daily for 4 days",
+      "additionalInstruction": [
+        {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "311504000",
+              "display": "With or after food"
+            }
+          ]
+        }
+      ],
+      "timing": {
+        "repeat": {
+          "frequency": 4,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "26643006",
+            "display": "Oral Route"
+          }
+        ]
+      },
+      "doseQuantity": {
+        "value": 1,
+        "unit": "TAB",
+        "system": "http://hl7.org/fhir/v3/orderableDrugForm",
+        "code": "TAB"
+      }
+    }
+  ],
   "subject": {
     "reference": "Patient/pat1",
     "display": "Donald Duck"

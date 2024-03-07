@@ -30,6 +30,7 @@ def R3ProvenanceToR4(provenance) {
   contained: datatypes::R3ResourceToR4(provenance.contained[])
   location: datatypes::R3ReferenceToR4(provenance.location)
   target: datatypes::R3ReferenceToR4(provenance.target[])
+  target[].display: utilities::defaultIfNull($this.target, "unknown")
   occurredPeriod: provenance.period
   occurredDateTime: extension::fetchDateTime("https://www.hl7.org/fhir/R4/provenance-definitions.html#Provenance.occurredDateTime", provenance.extension)
   reason: datatypes::CodingToCodeableConcept(provenance.reason[])

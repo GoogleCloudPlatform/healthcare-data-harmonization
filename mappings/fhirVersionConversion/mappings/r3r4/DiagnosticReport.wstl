@@ -35,7 +35,7 @@ def R3DiagnosticReportToR4(diagnosticReport) {
   result: datatypes::R3ReferenceToR4(diagnosticReport.result[])
   specimen: datatypes::R3ReferenceToR4(diagnosticReport.specimen[])
   subject: datatypes::R3ReferenceToR4(diagnosticReport.subject)
-  basedOn: datatypes::R3ReferenceToR4(diagnosticReport.basedOn[where !matchesRegex($.reference, "^ProcedureRequest.*|^ReferralRequest.*")][])
+  basedOn: datatypes::R3ReferenceToR4(diagnosticReport.basedOn[])
   status: diagnosticReport.status
   category: R3DiagnosticReport_CategoryToR4("https://www.hl7.org/fhir/R4/diagnosticreport-definitions.html#DiagnosticReport.category", diagnosticReport.extension, diagnosticReport.category)
   encounter: if matchesRegex(diagnosticReport.context.reference, "^Encounter.*") then datatypes::R3ReferenceToR4(diagnosticReport.context)

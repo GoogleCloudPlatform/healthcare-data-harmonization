@@ -2,7 +2,103 @@
   "authoredOn": "2015-01-15",
   "basedOn": [
     {
+      "reference": "ServiceRequest/example"
+    },
+    {
       "reference": "CarePlan/example"
+    }
+  ],
+  "dosageInstruction": [
+    {
+      "additionalInstruction": [
+        {
+          "coding": [
+            {
+              "code": "311504000",
+              "display": "With or after food",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ],
+      "doseAndRate": [
+        {
+          "doseQuantity": {
+            "code": "TAB",
+            "system": "http://hl7.org/fhir/v3/orderableDrugForm",
+            "unit": "TAB",
+            "value": 2
+          }
+        }
+      ],
+      "method": {
+        "coding": [
+          {
+            "code": "421521009",
+            "display": "Swallow - dosing instruction imperative (qualifier value)",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "route": {
+        "coding": [
+          {
+            "code": "26643006",
+            "display": "Oral Route",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "sequence": 1,
+      "text": "Two tablets at once",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      }
+    },
+    {
+      "additionalInstruction": [
+        {
+          "coding": [
+            {
+              "code": "311504000",
+              "display": "With or after food",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      ],
+      "doseAndRate": [
+        {
+          "doseQuantity": {
+            "code": "TAB",
+            "system": "http://hl7.org/fhir/v3/orderableDrugForm",
+            "unit": "TAB",
+            "value": 1
+          }
+        }
+      ],
+      "route": {
+        "coding": [
+          {
+            "code": "26643006",
+            "display": "Oral Route",
+            "system": "http://snomed.info/sct"
+          }
+        ]
+      },
+      "sequence": 2,
+      "text": "One tablet daily for 4 days",
+      "timing": {
+        "repeat": {
+          "frequency": 4,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      }
     }
   ],
   "encounter": {

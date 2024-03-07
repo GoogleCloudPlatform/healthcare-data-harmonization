@@ -9,7 +9,20 @@ package datatypes
 //   FHIR R4 Reference https://hl7.org/fhir/R4/references.html#Reference
 //
 def R3ReferenceToR4(required reference) {
-  reference: reference.reference
+  if reference.reference then {
+    // The Resources for which R3 to R4 transformation functions not exist
+    var notMappedResources: ["DeviceComponent", "ExpansionProfile", "ImagingManifest",
+                             "ProcessRequest", "ProcessResponse", "ServiceDefinition"]
+    var array: split(reference.reference, "/")
+    // Get harmonized resourceType code in R4 if exists.
+    var harmonizedResourceType: harmonizeR4ResourceType(array[0])
+    if harmonizedResourceType then {
+      var array[0]: harmonizedResourceType
+      reference: strJoin("/", array)
+    } else if !notMappedResources[where $ == array[0]]? then {
+      reference: reference.reference
+    }
+ }
   type: extension::fetchUri("https://www.hl7.org/fhir/references-definitions.html#Reference.type", reference.extension)
   identifier: reference.identifier
   display: reference.display

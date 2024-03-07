@@ -94,7 +94,7 @@ def R3CarePlan_ActivityToR4(data) {
   outcomeCodeableConcept: data.outcomeCodeableConcept
   outcomeReference: datatypes::R3ReferenceToR4(data.outcomeReference[])
   progress: data.progress
-  reference: datatypes::R3ReferenceToR4(data.reference[where !matchesRegex($.value, "^ProcedureRequest.*|^ReferralRequest.*")])
+  reference: datatypes::R3ReferenceToR4(data.reference)
   detail: R3CarePlan_Activity_DetailToR4(data.detail)
 }
 
