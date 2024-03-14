@@ -60,6 +60,7 @@ public class InlineConfigExtractor extends ConfigExtractorBase {
    *     from {@link Registries} is needed.
    */
   @Override
+  @SuppressWarnings("unused")
   byte[] getFileContent(Registries unusedRegistries) {
     return inlineWhistleConfig.getBytes(UTF_8);
   }
@@ -69,6 +70,7 @@ public class InlineConfigExtractor extends ConfigExtractorBase {
    * {@link Registries} and {@link ImportProcessor} is not used in this case.
    */
   @Override
+  @SuppressWarnings("unused")
   ProtoParserBase getParser(Registries unusedRegistries, ImportProcessor unusedImportProcessor) {
     return new WhistleParser(throwTranspilationException);
   }

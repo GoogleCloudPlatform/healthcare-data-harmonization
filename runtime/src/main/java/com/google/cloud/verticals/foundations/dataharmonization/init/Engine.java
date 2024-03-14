@@ -154,6 +154,7 @@ public class Engine implements AutoCloseable {
     private final ConfigExtractorBase mainConfig;
     private final List<Plugin> defaultMainPlugins;
     private final Set<Loader> defaultLoaders = new HashSet<>();
+    private final List<ConfigExtractorBase> sideInputs = new ArrayList<>();
     private final List<Plugin> defaultMockPlugins = new ArrayList<>();
     private final List<ConfigExtractorBase> mockConfigs = new ArrayList<>();
 
@@ -187,7 +188,7 @@ public class Engine implements AutoCloseable {
     }
 
     /**
-     * Added the given {@link Plugin}s to the plugins to be loaded before initializing main config
+     * Adds the given {@link Plugin}s to the plugins to be loaded before initializing main config
      * and mock config.
      */
     @CanIgnoreReturnValue
@@ -197,7 +198,7 @@ public class Engine implements AutoCloseable {
     }
 
     /**
-     * Added the given {@link Plugin}s to the plugins to be loaded before initializing mock config.
+     * Adds the given {@link Plugin}s to the plugins to be loaded before initializing mock config.
      */
     @CanIgnoreReturnValue
     public Builder withDefaultMockPlugins(Plugin... mockPlugins) {
@@ -208,6 +209,18 @@ public class Engine implements AutoCloseable {
     @CanIgnoreReturnValue
     public Builder withDefaultLoaders(Set<Loader> loaders) {
       defaultLoaders.addAll(loaders);
+      return this;
+    }
+
+    /**
+     * Loads the given {@link ConfigExtractorBase} into the function registry when initializing the
+     * config. Functions added in side inputs do not need to be imported from the Whistle entryPoint
+     * file, and are directly accessible within Whistle backend code via:
+     * `context.getRegistries().getFunctionRegistry(package).getOverloads(package, functionName)`
+     */
+    @CanIgnoreReturnValue
+    public Builder withSideInputs(List<ConfigExtractorBase> configs) {
+      sideInputs.addAll(configs);
       return this;
     }
 
@@ -262,10 +275,10 @@ public class Engine implements AutoCloseable {
 
       defaultLoaders.forEach(initializedBuilder.registries.getLoaderRegistry()::register);
 
-      // load default main plugins, which allows mock config to be initialized
+      // Load default main plugins, which allows mock config to be initialized.
       loadPlugins(initializedBuilder.registries, defaultMainPlugins, initializedBuilder.metaData);
 
-      // initialize mock config
+      // Initialize mock config.
       if (!mockConfigs.isEmpty()) {
         loadPlugins(initializedBuilder.registries, defaultMockPlugins, initializedBuilder.metaData);
         for (ConfigExtractorBase mockConfig : mockConfigs) {
@@ -274,6 +287,15 @@ public class Engine implements AutoCloseable {
               initializedBuilder.metaData,
               initializedBuilder.importProcessor);
         }
+      }
+
+      // Load the side input functions.
+      if (!sideInputs.isEmpty()) {
+        loadSideInputs(
+            initializedBuilder.registries,
+            initializedBuilder.metaData,
+            initializedBuilder.importProcessor,
+            sideInputs);
       }
 
       initializedBuilder.mainConfigProto =
@@ -340,6 +362,17 @@ public class Engine implements AutoCloseable {
         if (pluginClass.add(plugin.getClass())) {
           Plugin.load(plugin, registries, metaData);
         }
+      }
+    }
+
+    private static void loadSideInputs(
+        Registries registries,
+        MetaData metadata,
+        ImportProcessor importProcessor,
+        List<ConfigExtractorBase> sideInputs)
+        throws IOException {
+      for (ConfigExtractorBase config : sideInputs) {
+        config.initialize(registries, metadata, importProcessor);
       }
     }
 

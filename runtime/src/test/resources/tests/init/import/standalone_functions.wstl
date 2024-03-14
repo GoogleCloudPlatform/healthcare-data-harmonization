@@ -1,0 +1,5 @@
+package test
+
+def goodbye(name) {
+  name: name
+}

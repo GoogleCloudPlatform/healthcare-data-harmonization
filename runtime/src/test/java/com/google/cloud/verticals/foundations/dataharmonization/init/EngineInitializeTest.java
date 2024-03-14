@@ -141,7 +141,7 @@ public class EngineInitializeTest {
 
   @Test
   public void testInitialize_whistleConfigPath() throws IOException, URISyntaxException {
-    URI whistleConfig = new URI(ResourceLoader.TEST_LOADER, null, config, null);
+    URI whistleConfig = new URI(IMPORT_PATH_URI_SCHEME, null, config, null);
     if (expectedExceptionClass == null) {
       new Engine.Builder(ExternalConfigExtractor.of(whistleConfig, importsRootURI))
           .withDefaultPlugins(new TestLoaderPlugin())
