@@ -95,7 +95,7 @@ def fetchBooleanArray(url, extension) {
 //
 def BuildCanonicalExtension(url, required canonical) {
   url: url
-  valueString: canonical
+  valueCanonical: canonical
 }
 
 // Description: fetches a extension with given url from the extension array
