@@ -727,7 +727,8 @@ true, otherwise returns null.
 ### mergeResources
 
 `recon::mergeResources(sortedSnapshots: Data, resourceInfo: Data)` returns
-`Data` - Data Container containing the cleaned merge result resource.
+`Data` - Data Container containing the cleaned final merge result resource or a
+list of cleaned merge result resources.
 
 #### Arguments
 
@@ -740,10 +741,15 @@ and 'linkageIds' fields.
 
 Builtin for reconciliation to merge an Array of temporally-sorted resource
 snapshots according to the resource-level merge rule and the configured
-field-level merge function. Returns a container with resource and synthetic
-fields. The resource field contains properly formatted, reconciled FHIR
-resource, ready to be written to the final FHIR store. If merging the resource
-produces synthetic resources, they will be added to synthetic field as an Array.
+field-level merge function. Returns a container with the final merge result
+resource and synthetic fields if the environment variable
+ENABLE_CLINICAL_HISTORY is not set or set to false. The resource field contains
+properly formatted, reconciled FHIR resource, ready to be written to the final
+FHIR store. If merging the resource produces synthetic resources, they will be
+added to synthetic field as an Array. If the environment variable
+ENABLE_CLINICAL_HISTORY is set to true, the returned container will contain a
+list of all intermediate merge result resources in addition to the final merge
+result resource.
 
 #### Throws
 

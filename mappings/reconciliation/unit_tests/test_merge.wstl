@@ -158,6 +158,15 @@ def test_merge_Procedure_from_er() testMerge("Procedure", "from_er")
 // Tests merge-rules::ProcedureMerge for union.
 def test_merge_Procedure_union() testMerge("Procedure", "union")
 
+// Tests merge-rules::PatientMerge for existing resources.
+def test_merge_Patient_from_er() {
+  var input: loadJson(joinPath(testdir(), "Patient_from_er.history.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "Patient_from_er.history.output.json"))
+  environment::addEnvironmentValue("ENABLE_CLINICAL_HISTORY"): true;
+  var actualOutput: recon::mergeResources(input.resources, input.resourceInfo).versionedTarget
+  test::assertEquals(serializeJson(expectedOutput), serializeJson(actualOutput))
+}
+
 
 // Generic function for testing merge configurations in the
 // reconciliation package based on the resourceType.
