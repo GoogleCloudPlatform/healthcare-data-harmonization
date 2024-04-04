@@ -1,0 +1,113 @@
+{
+  "resources": [
+    {
+      "id": "0001",
+      "resourceType": "Patient",
+      "identifier": [
+        {
+          "type": {
+            "text": "Medical Record Number"
+          },
+          "system": "http://hospital.smarthealthit.org",
+          "value": "empty"
+        },
+        {
+          "system": "urn:oid:google/reconciliation-stable-id",
+          "value": "1234"
+        }
+      ],
+      "meta": {
+        "extension": [
+          {
+            "url": "urn:oid:google/reconciliation-timestamp",
+            "valueInstant": "1988-08-18T11:26:00.000+00:00"
+          },
+          {
+            "url": "urn:oid:google/create-time"
+          }
+        ],
+        "tag": [
+          {
+            "code": "csv/datasource1",
+            "system": "urn:oid:data-type/data-source"
+          },
+          {
+            "code": "0001",
+            "system": "urn:oid:datasource1/reconciliation-external-id"
+          }
+        ]
+      },
+      "deceasedBoolean": false,
+      "gender": "female",
+      "name": [
+        {
+          "family": "Shaw",
+          "given": [
+            "Amy",
+            "V."
+          ],
+          "period": {
+            "start": "2016-12-06",
+            "end": "2020-07-22"
+          }
+        }
+      ]
+    },
+    {
+      "id": "0002",
+      "resourceType": "Patient",
+      "identifier": [
+        {
+          "type": {
+            "text": "Medical Record Number"
+          },
+          "system": "http://hospital.smarthealthit.org",
+          "value": "not-empty"
+        },
+        {
+          "system": "urn:oid:google/reconciliation-stable-id",
+          "value": "1234"
+        }
+      ],
+      "meta": {
+        "extension": [
+          {
+            "url": "urn:oid:google/reconciliation-timestamp",
+            "valueInstant": "1988-08-19T11:26:00.000+00:00"
+          },
+          {
+            "url": "urn:oid:google/create-time"
+          }
+        ],
+        "tag": [
+          {
+            "code": "csv/datasource1",
+            "system": "urn:oid:data-type/data-source"
+          },
+          {
+            "code": "0002",
+            "system": "urn:oid:datasource1/reconciliation-external-id"
+          }
+        ]
+      },
+      "gender": "female",
+      "name": [
+        {
+          "family": "Shaw",
+          "given": [
+            "Amy",
+            "V."
+          ],
+          "period": {
+            "start": "2016-12-06",
+            "end": "2020-07-22"
+          }
+        }
+      ],
+      "managingOrganization" : {
+        "reference" : "Organization/4",
+        "display" : "ACME Healthcare, Inc"
+      }
+    }
+  ]
+}
