@@ -1,3 +1,0 @@
-package matching_rules
-
-import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
