@@ -29,8 +29,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * ArrayJsonDeserializer provides a {@link com.google.gson.JsonSerializer} TypeAdapter allowing Gson
- * to convert a byte array to an {@link Container}.
+ * ContainerJsonDeserializer provides a {@link com.google.gson.JsonSerializer} TypeAdapter allowing
+ * Gson to convert a byte array to a {@link Container}.
  */
 public class ContainerJsonDeserializer implements JsonDeserializer<Container> {
   @Override

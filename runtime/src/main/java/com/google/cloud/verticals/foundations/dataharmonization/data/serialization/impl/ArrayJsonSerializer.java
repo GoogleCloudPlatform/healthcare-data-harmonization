@@ -30,7 +30,7 @@ import java.lang.reflect.Type;
  */
 public class ArrayJsonSerializer implements JsonSerializer<Array> {
 
-  static JsonArray processArray(Array src) {
+  public static JsonArray processArray(Array src) {
     JsonArray array = new JsonArray();
     for (int x = 0; x < src.size(); x++) {
       array.add(JsonSerializerDeserializer.gson.toJsonTree(src.asArray().getElement(x), Data.class));

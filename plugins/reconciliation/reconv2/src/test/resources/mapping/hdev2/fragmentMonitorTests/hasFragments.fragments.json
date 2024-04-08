@@ -1,0 +1,11 @@
+{
+  "fragments": [{
+    "resourceType": "Organization",
+    "id": "4",
+    "identifier": [
+      {
+        "system": "organization-system",
+        "value": "123"
+      }]
+  }]
+}

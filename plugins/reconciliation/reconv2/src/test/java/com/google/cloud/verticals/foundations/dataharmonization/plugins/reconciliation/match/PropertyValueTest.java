@@ -16,8 +16,8 @@
 package com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.match;
 
 import static com.google.cloud.verticals.foundations.dataharmonization.data.impl.TestDataTypeImplementation.testDTI;
+import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.JsonFileUtils.readJsonFile;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.MatchingPlugin.extractPropertyValues;
-import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.match.MatchingTestUtils.readJsonFile;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.match.StableIdMatchingDsl.allOf;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.match.StableIdMatchingDsl.anyCoding;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.match.StableIdMatchingDsl.anyIdentifier;
@@ -51,12 +51,14 @@ import org.junit.runners.JUnit4;
  */
 @RunWith(JUnit4.class)
 public class PropertyValueTest {
+
+  public static final String RESOURCE_DIR = "/matching/";
   private final RuntimeContext ctx = RuntimeContextUtil.mockRuntimeContextWithRegistry();
 
   @Test
   public void simpleMatch_producesPropertyValues() throws Exception {
     Container config = anyOf(ctx, primitive(ctx, "id"), anyIdentifier(ctx)).asContainer();
-    Container resource = readJsonFile("patient-resource.json");
+    Container resource = readJsonFile(RESOURCE_DIR, "patient-resource.json");
     List<String> propertyValues =
         extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
@@ -75,7 +77,7 @@ public class PropertyValueTest {
                 anyIdentifier(ctx, filter(ctx, "system", testDTI().primitiveOf("unique-id"))),
                 allOf(ctx, referenceFor(ctx, "patient"), pathTo(ctx, "code", anyCoding(ctx))))
             .asContainer();
-    Container resource = readJsonFile("allergyIntolerance-resource.json");
+    Container resource = readJsonFile(RESOURCE_DIR, "allergyIntolerance-resource.json");
     List<String> propertyValues =
         extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
@@ -106,7 +108,7 @@ public class PropertyValueTest {
                             referenceFor(ctx, "medicationReference")))),
                 anyIdentifier(ctx))
             .asContainer();
-    Container resource = readJsonFile("medicationRequest-resource.json");
+    Container resource = readJsonFile(RESOURCE_DIR, "medicationRequest-resource.json");
     List<String> propertyValues =
         extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
@@ -127,7 +129,7 @@ public class PropertyValueTest {
         allOf(ctx, pathTo(ctx, "code", anyCoding(ctx)), referenceFor(ctx, "patient")).asContainer();
     Container config2 =
         allOf(ctx, referenceFor(ctx, "patient"), pathTo(ctx, "code", anyCoding(ctx))).asContainer();
-    Container resource = readJsonFile("allergyIntolerance-resource.json");
+    Container resource = readJsonFile(RESOURCE_DIR, "allergyIntolerance-resource.json");
     List<String> propertyValues1 =
         extractPropertyValues(ctx, config1, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
@@ -149,7 +151,7 @@ public class PropertyValueTest {
     Container config =
         arrayAnyOf(ctx, "udiCarrier", primitive(ctx, "deviceIdentifier"), primitive(ctx, "id"))
             .asContainer();
-    Container resource = readJsonFile("device-resource.json");
+    Container resource = readJsonFile(RESOURCE_DIR, "device-resource.json");
     List<String> propertyValues =
         extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
@@ -167,7 +169,7 @@ public class PropertyValueTest {
                 "udiCarrier",
                 allOf(ctx, primitive(ctx, "deviceIdentifier"), primitive(ctx, "id")))
             .asContainer();
-    Container resource = readJsonFile("device-resource.json");
+    Container resource = readJsonFile(RESOURCE_DIR, "device-resource.json");
     List<String> propertyValues =
         extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
@@ -180,7 +182,7 @@ public class PropertyValueTest {
   public void match_arrayAllOfPrimitives_producesPropertyValues() throws Exception {
     Container config =
         arrayAnyOf(ctx, "name", arrayAllOf(ctx, "given", primitive(ctx, ""))).asContainer();
-    Container resource = readJsonFile("patient-resource.json");
+    Container resource = readJsonFile(RESOURCE_DIR, "patient-resource.json");
     List<String> propertyValues =
         extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
@@ -194,7 +196,7 @@ public class PropertyValueTest {
   public void match_parsePropertyValues_throwsExceptionForMalformedArray() throws Exception {
     Container config =
         arrayAnyOf(ctx, "id", pathTo(ctx, "coding", primitive(ctx, "code"))).asContainer();
-    Container resource = readJsonFile("device-resource.json");
+    Container resource = readJsonFile(RESOURCE_DIR, "device-resource.json");
     PropertyValueFetcherException expected =
         new PropertyValueFetcherException(
             " Config has 'field' = 'id' but 'resource' = '123' does not match 'fieldType' ="
@@ -210,7 +212,7 @@ public class PropertyValueTest {
   @Test
   public void match_parsePropertyValues_throwsExceptionForMalformedPrimitive() throws Exception {
     Container config = anyOf(ctx, primitive(ctx, "udiCarrier"), anyIdentifier(ctx)).asContainer();
-    Container resource = readJsonFile("device-resource.json");
+    Container resource = readJsonFile(RESOURCE_DIR, "device-resource.json");
     PropertyValueFetcherException expected =
         new PropertyValueFetcherException(
             " Config has 'field' = 'udiCarrier' but 'resource' ="
@@ -232,7 +234,7 @@ public class PropertyValueTest {
     Container config =
         filterField(ctx, "distinctIdentifier", testDTI().primitiveOf("I am a distinct identifier"))
             .asContainer();
-    Container resource = readJsonFile("device-resource.json");
+    Container resource = readJsonFile(RESOURCE_DIR, "device-resource.json");
     List<String> propertyValues =
         extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
@@ -245,7 +247,7 @@ public class PropertyValueTest {
   public void match_simpleFilterField_noMatch() throws Exception {
     Container config =
         filterField(ctx, "distinctIdentifier", testDTI().primitiveOf("no match")).asContainer();
-    Container resource = readJsonFile("device-resource.json");
+    Container resource = readJsonFile(RESOURCE_DIR, "device-resource.json");
     List<String> propertyValues =
         extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
@@ -262,7 +264,7 @@ public class PropertyValueTest {
                     ctx, "distinctIdentifier", testDTI().primitiveOf("I am a distinct identifier")),
                 primitive(ctx, "lotNumber"))
             .asContainer();
-    Container resource = readJsonFile("device-resource.json");
+    Container resource = readJsonFile(RESOURCE_DIR, "device-resource.json");
     List<String> propertyValues =
         extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
@@ -280,7 +282,7 @@ public class PropertyValueTest {
                 filterField(ctx, "distinctIdentifier", testDTI().primitiveOf("no match")),
                 primitive(ctx, "lotNumber"))
             .asContainer();
-    Container resource = readJsonFile("device-resource.json");
+    Container resource = readJsonFile(RESOURCE_DIR, "device-resource.json");
     List<String> propertyValues =
         extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
@@ -303,7 +305,7 @@ public class PropertyValueTest {
                             .arrayOf(
                                 testDTI().primitiveOf("Alice"), testDTI().primitiveOf("James")))))
             .asContainer();
-    Container resource = readJsonFile("patient-resource.json");
+    Container resource = readJsonFile(RESOURCE_DIR, "patient-resource.json");
     List<String> propertyValues =
         extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
@@ -315,7 +317,7 @@ public class PropertyValueTest {
   @Test
   public void match_anyMetaTag_producesPropertyValues() throws Exception {
     Container config = anyMetaTag(ctx).asContainer();
-    Container resource = readJsonFile("patient-resource.json");
+    Container resource = readJsonFile(RESOURCE_DIR, "patient-resource.json");
     List<String> propertyValues =
         extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
@@ -332,7 +334,7 @@ public class PropertyValueTest {
     Container config =
         anyMetaTag(ctx, filterField(ctx, "system", testDTI().primitiveOf("datasource1_Id")))
             .asContainer();
-    Container resource = readJsonFile("patient-resource.json");
+    Container resource = readJsonFile(RESOURCE_DIR, "patient-resource.json");
     List<String> propertyValues =
         extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())
@@ -346,7 +348,7 @@ public class PropertyValueTest {
     Container config =
         anyMetaTag(ctx, filterField(ctx, "system", testDTI().primitiveOf("datasource1_Id")))
             .asContainer();
-    Container resource = readJsonFile("device-resource.json");
+    Container resource = readJsonFile(RESOURCE_DIR, "device-resource.json");
     List<String> propertyValues =
         extractPropertyValues(ctx, config, resource).asArray().stream()
             .map(i -> i.asPrimitive().toString())

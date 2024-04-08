@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.match;
+package com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation;
 
 import com.google.cloud.verticals.foundations.dataharmonization.data.Container;
 import com.google.cloud.verticals.foundations.dataharmonization.data.Data;
@@ -23,19 +23,14 @@ import com.google.common.io.ByteStreams;
 import java.io.IOException;
 import java.io.InputStream;
 
-/** Test util for matching criteria */
-public final class MatchingTestUtils {
-  public static final String MATCHING_DIR = "/matching/";
-
-  public static Container readJsonFile(String filename) throws IOException {
-    return readJsonFile(MATCHING_DIR, filename);
-  }
+/** Utils for reading JSON files for test setup. */
+public final class JsonFileUtils {
 
   public static Container readJsonFile(String dir, String filename) throws IOException {
-    InputStream stream = MatchingTestUtils.class.getResourceAsStream(dir + filename);
+    InputStream stream = JsonFileUtils.class.getResourceAsStream(dir + filename);
     Data data = JsonSerializerDeserializer.jsonToData(ByteStreams.toByteArray(stream));
     return data.asContainer();
   }
 
-  private MatchingTestUtils() {}
+  private JsonFileUtils() {}
 }
