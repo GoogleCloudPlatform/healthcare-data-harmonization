@@ -287,7 +287,7 @@ public class MatchingPlugin {
    * @return reference in format {resourceType/resourceId}
    */
   @PluginFunction
-  public Primitive buildReferenceFor(RuntimeContext ctx, Data referenceFragment) {
+  public static Primitive buildReferenceFor(RuntimeContext ctx, Data referenceFragment) {
     Array fragments = ctx.getMetaData().getSerializableMeta(FRAGMENTS_FIELD);
     if (fragments == null) {
       fragments = ctx.getDataTypeImplementation().emptyArray();
