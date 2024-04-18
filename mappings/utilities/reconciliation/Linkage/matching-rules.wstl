@@ -1,0 +1,22 @@
+package matching_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+def LinkageConfig() {
+  recon::anyOf(
+    recon::allOf(
+      recon::anyMetaExtension(
+        recon::filterField("url", "urn:oid:google/streaming-empi/patient-masterid-linkage"),
+        // patient-masterid-linkage forms a patient to masterID linkage, it
+        // represents the current masterID associated with a patient stableID.
+        recon::filterField("valueString", "linkage-purpose")
+      ),
+      recon::arrayAnyOf("item",
+        recon::allOf(
+          recon::filterField("type", "source"),
+          recon::referenceFor("resource")
+        )
+      )
+    )
+  )
+}
