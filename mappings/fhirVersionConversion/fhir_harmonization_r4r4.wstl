@@ -1,34 +1,6 @@
-// Import matching rules so that the property value extraction matches
+// Import matching so that the property value extraction matches
 // resources properly.
 
-import "utilities/reconciliation/Account/matching-rules.wstl"
-import "utilities/reconciliation/AllergyIntolerance/matching-rules.wstl"
-import "utilities/reconciliation/Appointment/matching-rules.wstl"
-import "utilities/reconciliation/Bundle/matching-rules.wstl"
-import "utilities/reconciliation/Condition/matching-rules.wstl"
-import "utilities/reconciliation/Coverage/matching-rules.wstl"
-import "utilities/reconciliation/Device/matching-rules.wstl"
-import "utilities/reconciliation/DiagnosticReport/matching-rules.wstl"
-import "utilities/reconciliation/Encounter/matching-rules.wstl"
-import "utilities/reconciliation/EpisodeOfCare/matching-rules.wstl"
-import "utilities/reconciliation/ExplanationOfBenefit/matching-rules.wstl"
-import "utilities/reconciliation/Goal/matching-rules.wstl"
-import "utilities/reconciliation/Immunization/matching-rules.wstl"
-import "utilities/reconciliation/List/matching-rules.wstl"
-import "utilities/reconciliation/Location/matching-rules.wstl"
-import "utilities/reconciliation/Medication/matching-rules.wstl"
-import "utilities/reconciliation/MedicationAdministration/matching-rules.wstl"
-import "utilities/reconciliation/MedicationRequest/matching-rules.wstl"
-import "utilities/reconciliation/MedicationStatement/matching-rules.wstl"
-import "utilities/reconciliation/Observation/matching-rules.wstl"
-import "utilities/reconciliation/Organization/matching-rules.wstl"
-import "utilities/reconciliation/Patient/matching-rules.wstl"
-import "utilities/reconciliation/Practitioner/matching-rules.wstl"
-import "utilities/reconciliation/PractitionerRole/matching-rules.wstl"
-import "utilities/reconciliation/Procedure/matching-rules.wstl"
-import "utilities/reconciliation/RelatedPerson/matching-rules.wstl"
-import "utilities/reconciliation/ServiceRequest/matching-rules.wstl"
-import "utilities/reconciliation/Specimen/matching-rules.wstl"
-import "utilities/reconciliation/SupplyDelivery/matching-rules.wstl"
+import "matching/matching.wstl"
 
 resources[]: $root
