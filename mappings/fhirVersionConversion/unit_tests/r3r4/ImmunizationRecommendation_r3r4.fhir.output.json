@@ -58,7 +58,7 @@
       "extension": [
         {
           "url": "https://www.hl7.org/fhir/STU3/immunizationrecommendation-definitions.html#ImmunizationRecommendation.recommendation.protocol.doseSequence",
-          "valueInteger": 1
+          "valuePositiveInt": 1
         }
       ],
       "forecastStatus": {

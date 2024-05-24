@@ -515,7 +515,7 @@ def fetchOidArray(url, extension) {
 //
 def BuildPositiveIntExtension(url, required positiveInt) {
   url: url
-  valueInteger: positiveInt
+  valuePositiveInt: positiveInt
 }
 
 // Description: fetches a extension with given url from the extension array
