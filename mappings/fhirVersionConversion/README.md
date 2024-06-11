@@ -7,8 +7,7 @@ versions using the Whistle mapping language. It can be potentially integrated
 into the Cloud Healthcare FHIR API and other ETL pipelines where the Whistle
 mapping framework can be used. The conversion specifies field-to-field
 transformation that covers, in addition to basic mappings, incompatible field
-mappings and code-system/value-sets mappings. The conversion is developed as
-part of a 3-month intern project. It probably has a lot of room for improvement.
+mappings and code-system/value-sets mappings.
 
 # Entry Point
 
