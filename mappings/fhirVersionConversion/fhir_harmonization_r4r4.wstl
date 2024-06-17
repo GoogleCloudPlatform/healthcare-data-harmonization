@@ -1,6 +1,4 @@
 // Import matching so that the property value extraction matches
 // resources properly.
 
-import "matching/matching.wstl"
-
 resources[]: $root
