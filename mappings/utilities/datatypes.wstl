@@ -14,22 +14,6 @@ def BuildExtension(url, required value) {
   extension[]: Build_ValueString(value)
 }
 
-// TODO(): Remove the method once CDA pipeline moves to using data-type/data-source ID.
-def BuildDataSourceBatchMetaTag(datatype, datasource, batch) {
-  system: "urn:oid:data-type/data-source/batch"
-  code: datatype + "/" + datasource + "/" + batch
-}
-
-def BuildDataSourceMetaTag(datatype, datasource) {
-  system: "urn:oid:data-type/data-source"
-  code: datatype + "/" + datasource
-}
-
-def BuildCreateTimeMetaExtension(epochTime) {
-  url: "urn:oid:google/create-time"
-  valueString: epochTime
-}
-
 def Build_ValueString(required Value) {
   valueString: Value
   url: "text"
@@ -53,7 +37,6 @@ def BuildReferenceFromNonLocalGCPResource(fhirStorePath, resourceType, resourceI
 
 def ResourceReference(resource)
   "{resource.resourceType}/{resource.id}"
-
 
 def ResourceReference(resourceType, id)
   "{resourceType}/{id}"
@@ -94,36 +77,4 @@ def ClearReconciliationTimestamp(resource) {
   var resource.meta: metaWithoutTimestamp
 }
 
-// GetLastCreateTime gets the createTime for the last snapshot. We would like
-// synthetic resources to have the same timestamp as its latest parent resource.
-def GetLastCreateTime(sortedSnapshots) last(sortedSnapshots).meta.extension[where $.url == "urn:oid:google/create-time"][0]
-
-// GetLastDataSource gets the dataSource for the last snapshot.
-def GetLastDataSource(sortedSnapshots) last(sortedSnapshots).meta.tag[where $.system == "urn:oid:data-type/data-source"][0]
-
-def addCreateTimeAndDataSourceToMeta(resource, createTime, dataSource) {
-  var resource.meta.tag[]: dataSource
-  var resource.meta.extension[]: createTime
-  resource
-}
-
 def in(el, arr) arr[where $ == el]?
-
-// Constructs a FHIR R4 List resource with AllergyIntolerance resources as List.entry.
-def Build_AllergyIntoleranceList(AllergyIntoleranceResources) {
-  resourceType: "List"
-  subject: AllergyIntoleranceResources[0].patient
-  meta.extension[]: {
-    url: "list-purpose"
-    valueString: "urn:oid:google/hl7v2/allergy-intolerance-list"
-  }
-  status: "current"
-  mode: "snapshot"
-  entry: Build_AllergyIntoleranceEntry(AllergyIntoleranceResources[])
-  id: hash($this)
-}
-
-// Builds a reference from the resource and assigns to item field.
-def Build_AllergyIntoleranceEntry(AllergyIntoleranceResource) {
-  item: datatypes::BuildReferenceFromResource(AllergyIntoleranceResource)
-}
