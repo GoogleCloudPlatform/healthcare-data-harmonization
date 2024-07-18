@@ -32,6 +32,21 @@ allprojects {
             url 'https://maven.google.com'
         }
     }
+
+    // for powermock
+    tasks.withType(Test).configureEach{
+        jvmArgs = jvmArgs + [
+            '--add-opens=java.base/java.io=ALL-UNNAMED',
+            '--add-opens=java.base/java.lang.invoke=ALL-UNNAMED',
+            '--add-opens=java.base/java.lang=ALL-UNNAMED',
+            '--add-opens=java.base/java.time=ALL-UNNAMED',
+            '--add-opens=java.base/java.util.concurrent=ALL-UNNAMED',
+            '--add-opens=java.base/java.util.stream=ALL-UNNAMED',
+            '--add-opens=java.base/java.util=ALL-UNNAMED',
+            '--add-opens=java.base/sun.nio.fs=ALL-UNNAMED',
+            '--add-opens=java.logging/java.util.logging=ALL-UNNAMED'
+        ]
+    }
 }
 
 sourceSets {
@@ -71,7 +86,7 @@ dependencies {
     //Plugin Imports End
     testImplementation 'junit:junit:4.12'
     testImplementation 'com.google.truth:truth:1.0.1'
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.7.7'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.12.0'
     testImplementation group: 'com.github.erosb', name: 'everit-json-schema', version: '1.14.1'
 }
 
