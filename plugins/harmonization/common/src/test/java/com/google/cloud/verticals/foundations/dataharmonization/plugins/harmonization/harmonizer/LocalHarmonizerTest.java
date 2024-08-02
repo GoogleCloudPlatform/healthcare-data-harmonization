@@ -21,7 +21,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 import com.google.cloud.verticals.foundations.dataharmonization.plugins.harmonization.harmonizer.LocalHarmonizer.Conceptmap;
-import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -29,6 +28,7 @@ import com.google.gson.JsonParser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,7 +55,7 @@ public class LocalHarmonizerTest {
       InputStream stream = LocalHarmonizerTest.class.getResourceAsStream(path);
       JsonElement element =
           JsonParser.parseString(
-              CharStreams.toString(new InputStreamReader(stream, Charsets.UTF_8)));
+              CharStreams.toString(new InputStreamReader(stream, StandardCharsets.UTF_8)));
       return element.getAsJsonObject();
     } catch (IOException e) {
       System.out.println("Json file is missing.");

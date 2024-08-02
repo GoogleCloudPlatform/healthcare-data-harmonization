@@ -22,7 +22,6 @@ import com.google.cloud.verticals.foundations.dataharmonization.reflection.Refle
 import com.google.cloud.verticals.foundations.dataharmonization.reflection.ReflectedJavaFunction;
 import com.google.cloud.verticals.foundations.dataharmonization.reflection.ReflectedPlugin;
 import com.google.cloud.verticals.foundations.dataharmonization.reflection.ReflectedTargetConstructor;
-import com.google.common.base.Charsets;
 import com.google.common.base.VerifyException;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -32,6 +31,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -222,7 +222,7 @@ public class WhistleDoclet extends StandardDoclet {
       throw new UncheckedIOException(
           new IOException(String.format("Failed to mkdirs %s", file.getParentFile())));
     }
-    try (FileWriter fw = new FileWriter(file, Charsets.UTF_8)) {
+    try (FileWriter fw = new FileWriter(file, StandardCharsets.UTF_8)) {
       logger.atInfo().log("Writing %s to %s", path, file);
       fw.write(s);
       fw.flush();
@@ -243,7 +243,7 @@ public class WhistleDoclet extends StandardDoclet {
               String.format("File %s did not exist but should.", file.getAbsolutePath())));
     }
     try {
-      String existing = Files.readString(file.toPath(), Charsets.UTF_8);
+      String existing = Files.readString(file.toPath(), StandardCharsets.UTF_8);
       // Compare ignoring spaces since mdformat may have messed with them.
       // Also ignore non-word chars (b/232813309).
       // TODO(): Fix non-word chars and do not ignore them.
