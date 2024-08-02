@@ -13,9 +13,9 @@
 // limitations under the License.
 package com.google.cloud.verticals.foundations.dataharmonization.doclet.formatting;
 
-import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.io.ByteStreams.toByteArray;
 import static com.google.common.truth.Truth.assertThat;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Objects.requireNonNull;
 
 import com.google.cloud.verticals.foundations.dataharmonization.doclet.TestMarkup;
