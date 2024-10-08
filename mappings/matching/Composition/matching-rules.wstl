@@ -1,0 +1,17 @@
+package matching_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// TODO(): Add dateTime matching once supported.
+def CompositionConfig() {
+  recon::anyOf(
+    recon::anyIdentifier(),
+    recon::allOf(
+      recon::primitive("status"),
+      recon::pathTo("type", recon::anyCoding()),
+      recon::primitive("date"),
+      recon::primitive("title"),
+      recon::arrayAllOf("subject", recon::referenceFor(""))
+    )
+  )
+}

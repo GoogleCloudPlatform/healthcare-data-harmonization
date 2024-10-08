@@ -1,0 +1,44 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the DocumentReference resource.
+def DocumentReferenceRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for DocumentReference resource.
+def DocumentReferenceMerge(existing, inbound) {
+  masterIdentifier: recon::preferInbound(existing.masterIdentifier, inbound.masterIdentifier)
+
+  identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
+
+  status: recon::forceInbound(existing.status, inbound.status)
+
+  docStatus: recon::preferInbound(existing.docStatus, inbound.docStatus)
+
+  type: recon::forceInbound(existing.type, inbound.type)
+
+  category: recon::union(existing.category, inbound.category)
+
+  subject: recon::forceInbound(existing.subject, inbound.subject)
+
+  date: recon::preferInbound(existing.date, inbound.date)
+
+  author: recon::union(existing.author, inbound.author)
+
+  authenticator: recon::preferInbound(existing.authenticator, inbound.authenticator)
+
+  custodian: recon::preferInbound(existing.custodian, inbound.custodian)
+
+  relatesTo: recon::union(existing.relatesTo, inbound.relatesTo)
+
+  description: recon::preferInbound(existing.description, inbound.description)
+
+  securityLabel: recon::union(existing.securityLabel, inbound.securityLabel)
+
+  content: recon::union(existing.content, inbound.content)
+
+  context: recon::preferInbound(existing.context, inbound.context)
+
+}

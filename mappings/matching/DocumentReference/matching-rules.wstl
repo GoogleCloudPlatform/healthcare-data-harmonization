@@ -1,0 +1,23 @@
+package matching_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// TODO(): Add dateTime matching once supported.
+def DocumentReferenceConfig() {
+  recon::anyOf(
+    recon::anyIdentifier(),
+    recon::allOf(
+      recon::primitive("status"),
+      recon::pathTo("type", recon::anyCoding()),
+      recon::arrayAnyOf("category", recon::anyCoding()),
+      recon::referenceFor("subject"),
+      recon::arrayAnyOf("content", recon::anyOf(
+        recon::allOf(
+          recon::pathTo("attachment", recon::primitive("contentType"))
+          )
+        ),
+        recon::pathTo("format", recon::primitive("code"))
+      )
+    )
+  )
+}

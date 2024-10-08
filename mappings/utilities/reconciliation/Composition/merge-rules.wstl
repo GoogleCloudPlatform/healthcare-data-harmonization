@@ -1,0 +1,42 @@
+package merge_rules
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
+
+// Resource-level merge rule for the Composition resource.
+def CompositionRule() {
+  "merge"; // alternatively, "latest"
+}
+
+// Per-field merge rules for Composition resource.
+def CompositionMerge(existing, inbound) {
+  identifier: recon::preferInbound(existing.identifier, inbound.identifier)
+
+  status: recon::forceInbound(existing.status, inbound.status)
+
+  type: recon::forceInbound(existing.type, inbound.type)
+
+  category: recon::union(existing.category, inbound.category)
+
+  subject: recon::preferInbound(existing.subject, inbound.subject)
+
+  encounter: recon::preferInbound(existing.encounter, inbound.encounter)
+
+  date: recon::forceInbound(existing.date, inbound.date)
+
+  author: recon::union(existing.author, inbound.author)
+
+  title: recon::forceInbound(existing.title, inbound.title)
+
+  confidentiality: recon::preferInbound(existing.confidentiality, inbound.confidentiality)
+
+  attester: recon::union(existing.attester, inbound.attester)
+
+  custodian: recon::preferInbound(existing.custodian, inbound.custodian)
+
+  relatesTo: recon::union(existing.relatesTo, inbound.relatesTo)
+
+  event: recon::union(existing.event, inbound.event)
+
+  section: recon::union(existing.section, inbound.section)
+
+}
