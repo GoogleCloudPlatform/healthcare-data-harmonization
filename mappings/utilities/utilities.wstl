@@ -73,3 +73,23 @@ def getFieldsToIgnore() [
   "reference",
   "value"
 ]
+
+// Description: Assigns id and outputs the resource to the resource array for
+// the current mapping stage. IDs may be assigned beforehand if desired.
+//
+// Argument(s):
+//   resource : FHIR resource
+//
+// Output(s):
+//   Returns reference of the resource and putting the actual resource into the root.
+//
+def OutputResourceAndGetReference(required resource) {
+  if !resource.id then {
+    var resource.id: hash(resource)
+  }
+  // The resource array is scoped to a single HL7v2 message and when mapping is
+  // complete it will contain all the FHIR resources in the bundle that is
+  // executed against the destination FHIR store.
+  root Resources[]: resource
+  reference: "{resource.resourceType}/{resource.id}"
+}
