@@ -1,6 +1,5 @@
 import "test"
 import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
-import "../../utilities/reconciliation/matching.wstl"
 import "../../matching/AllergyIntolerance/matching-rules.wstl"
 import "../../matching/Condition/matching-rules.wstl"
 import "../../matching/Device/matching-rules.wstl"
@@ -67,22 +66,22 @@ def testMatching(resourceType) {
 }
 
 def getAllMatchingConfigs() {
-  AllergyIntolerance: AllergyIntoleranceConfig()
-  Condition: ConditionConfig()
-  Device: DeviceConfig()
-  DiagnosticReport: DiagnosticReportConfig()
-  Encounter: EncounterConfig()
-  Immunization: ImmunizationConfig()
-  Location: LocationConfig()
-  MedicationRequest: MedicationRequestConfig()
-  Observation: ObservationConfig()
-  Organization: OrganizationConfig()
-  Patient: PatientConfig()
-  Practitioner: PractitionerConfig()
-  Procedure: ProcedureConfig()
+  AllergyIntolerance: matching_rules::AllergyIntoleranceConfig()
+  Condition: matching_rules::ConditionConfig()
+  Device: matching_rules::DeviceConfig()
+  DiagnosticReport: matching_rules::DiagnosticReportConfig()
+  Encounter: matching_rules::EncounterConfig()
+  Immunization: matching_rules::ImmunizationConfig()
+  Location: matching_rules::LocationConfig()
+  MedicationRequest: matching_rules::MedicationRequestConfig()
+  Observation: matching_rules::ObservationConfig()
+  Organization: matching_rules::OrganizationConfig()
+  Patient: matching_rules::PatientConfig()
+  Practitioner: matching_rules::PractitionerConfig()
+  Procedure: matching_rules::ProcedureConfig()
 }
 
-def getMatchingConfig(resourceType) get(GetAllMatchingConfigs(), resourceType)
+def getMatchingConfig(resourceType) get(getAllMatchingConfigs(), resourceType)
 
 // Path for input and output files.
 def testdir() "./matching/"
