@@ -13,7 +13,6 @@
 // limitations under the License.
 
 // Package cloudfunction contains methods for creating and calling projectors containing Google cloud functions.
-// TODO(): Need an end-to-end mapping library test for mocked cloud function calls.
 package cloudfunction
 
 import (

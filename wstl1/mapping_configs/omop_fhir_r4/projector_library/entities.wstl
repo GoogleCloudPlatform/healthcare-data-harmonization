@@ -282,7 +282,6 @@ def DrugExposure_MedicationRequest(DrugExposure) {
   } else {
     status : "unknown";
   }
-  //TODO(): Re-test againsts https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-medicationrequest-definitions.html#MedicationRequest.dosageInstruction.doseAndRate
   dosageInstruction[0].doseAndRate[0].doseQuantity.value : DrugExposure.effective_drug_dose;
   category[] : Convert_Terminology(DrugExposure.drug_type_concept_id, "LOINC");
   dosageInstruction[0].doseAndRate[0].doseQuantity.unit : Convert_TerminologyCode(DrugExposure.dose_unit_concept_id, "UCUM");
