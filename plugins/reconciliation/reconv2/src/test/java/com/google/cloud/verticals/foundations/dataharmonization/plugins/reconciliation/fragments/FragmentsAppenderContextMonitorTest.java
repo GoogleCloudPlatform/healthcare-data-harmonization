@@ -139,7 +139,7 @@ public final class FragmentsAppenderContextMonitorTest {
   }
 
   @Test
-  public void testOnFragmentsAppenderContextMonitorFinish_fragmentsFieldNotOverwritten()
+  public void testOnFragmentsAppenderContextMonitorFinish_overwritesExistingFragmentsField()
       throws IOException, URISyntaxException {
     InputStream wstlStream =
         JsonFileUtils.class.getResourceAsStream(RESOURCE_DIR + "happyPath.mapping.wstl");
@@ -161,37 +161,6 @@ public final class FragmentsAppenderContextMonitorTest {
 
     InputStream wantInputStream =
         JsonFileUtils.class.getResourceAsStream(RESOURCE_DIR + "hasFragments.result.json");
-    String wantString = new String(wantInputStream.readAllBytes(), UTF_8);
-    JsonElement wantJson = JsonParser.parseString(wantString);
-    JsonElement gotJson = ContainerJsonSerializer.processContainer(got.asContainer());
-
-    assertEquals(wantJson, gotJson);
-  }
-
-  @Test
-  public void testOnFragmentsAppenderContextMonitorFinish_fragmentsFieldEmpty_overwritten()
-      throws IOException, URISyntaxException {
-    InputStream wstlStream =
-        JsonFileUtils.class.getResourceAsStream(RESOURCE_DIR + "happyPath.mapping.wstl");
-    String wstlConfig = new String(wstlStream.readAllBytes(), UTF_8);
-    Engine engine =
-        new Engine.Builder(InlineConfigExtractor.of(wstlConfig, URI.create("")))
-            .withDefaultPlugins()
-            .initialize()
-            .build();
-    RuntimeContext ctx = engine.getRuntimeContext();
-    FragmentsAppenderContextMonitor monitor = new FragmentsAppenderContextMonitor();
-    Container resources =
-        JsonFileUtils.readJsonFile(RESOURCE_DIR, "hasEmptyFragments.resources.json");
-    Container inputFragments =
-        JsonFileUtils.readJsonFile(RESOURCE_DIR, "hasEmptyFragments.fragments.json");
-    Array inputFragmentArray = inputFragments.getField("fragments").asArray();
-    ctx.getMetaData().setSerializableMeta("fragments", inputFragmentArray);
-    monitor.enable();
-    Data got = monitor.onRuntimeContextFinish(ctx, resources);
-
-    InputStream wantInputStream =
-        JsonFileUtils.class.getResourceAsStream(RESOURCE_DIR + "hasEmptyFragments.result.json");
     String wantString = new String(wantInputStream.readAllBytes(), UTF_8);
     JsonElement wantJson = JsonParser.parseString(wantString);
     JsonElement gotJson = ContainerJsonSerializer.processContainer(got.asContainer());

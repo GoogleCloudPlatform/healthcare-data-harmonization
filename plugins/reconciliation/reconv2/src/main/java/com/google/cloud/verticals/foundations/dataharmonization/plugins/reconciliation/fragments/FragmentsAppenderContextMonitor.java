@@ -19,6 +19,7 @@ import com.google.cloud.verticals.foundations.dataharmonization.data.Container;
 import com.google.cloud.verticals.foundations.dataharmonization.data.Data;
 import com.google.cloud.verticals.foundations.dataharmonization.function.context.RuntimeContext;
 import com.google.cloud.verticals.foundations.dataharmonization.function.context.RuntimeContextMonitor;
+import com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.Constants;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 
 /**
@@ -31,7 +32,6 @@ public class FragmentsAppenderContextMonitor implements RuntimeContextMonitor {
   public FragmentsAppenderContextMonitor() {}
 
   private boolean enabled = false;
-  private static final String FRAGMENTS_FIELD = "fragments";
 
   @Override
   @CanIgnoreReturnValue
@@ -45,16 +45,10 @@ public class FragmentsAppenderContextMonitor implements RuntimeContextMonitor {
     }
 
     Container returnContainer = returnData.deepCopy().asContainer();
-    if (!returnContainer.getField(FRAGMENTS_FIELD).isNullOrEmpty()) {
-      // Don't overwrite the fragments key if the customer's mapping already has it set to something
-      // in their mapping output.
-      return returnContainer;
-    }
-
-    Array fragments = context.getMetaData().getSerializableMeta("fragments");
+    Array fragments = context.getMetaData().getSerializableMeta(Constants.FRAGMENTS_FIELD);
 
     if (fragments != null) {
-      returnContainer.setField("fragments", fragments);
+      returnContainer.setField(Constants.FRAGMENTS_FIELD, fragments);
     }
     return returnContainer;
   }
