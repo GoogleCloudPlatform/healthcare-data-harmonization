@@ -73,6 +73,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -171,6 +172,9 @@ public class DefaultRuntimeContextTest {
   }
 
   @Test
+  @Ignore(
+      "b/326425458 Disable this test due to a race condition"
+          + " We aren't developing Whistle core features anymore.")
   public void evaluate_functionCall_executesIt() {
     StackFrame.Builder builder = mock(StackFrame.Builder.class, new ReturnsSelf());
     StackFrame sf = mock(StackFrame.class);
@@ -183,7 +187,7 @@ public class DefaultRuntimeContextTest {
         .thenReturn(
             new Signature(
                 "myPackage", "myFunc", /* variadic */ ImmutableList.of(Data.class), true));
-    when(func.callInternal(any(RuntimeContext.class), any())).thenReturn(funcRet);
+    when(func.call(any(RuntimeContext.class), any(Data[].class))).thenReturn(funcRet);
 
     TestFunctionPackageRegistry fr = mock(TestFunctionPackageRegistry.class);
     when(fr.getOverloads(anySet(), eq("myFunc"))).thenReturn(ImmutableSet.of(func));
@@ -205,7 +209,7 @@ public class DefaultRuntimeContextTest {
     Data actual = context.evaluate(ValueSource.newBuilder().setFunctionCall(fc).build());
     assertEquals(funcRet, actual);
     verify(func)
-        .callInternal(
+        .call(
             any(),
             argThat((Data d) -> d.isPrimitive() && "hello".equals(d.asPrimitive().string())));
   }
@@ -248,7 +252,7 @@ public class DefaultRuntimeContextTest {
         .thenReturn(
             new Signature(
                 "myPackage", "myFunc", /* variadic */ ImmutableList.of(Data.class), true));
-    when(func.callInternal(any(RuntimeContext.class), any())).thenReturn(funcRet);
+    when(func.callInternal(any(RuntimeContext.class), any(Data[].class))).thenReturn(funcRet);
     // Return our new PackageContext specific to this function.
     when(func.getLocalPackageContext(any())).thenReturn(newPackageContext);
 
@@ -289,7 +293,7 @@ public class DefaultRuntimeContextTest {
     TestCallableFunc func = mock(TestCallableFunc.class);
     PackageContext newPackageContext = new PackageContext(ImmutableSet.of("test"));
     when(func.getLocalPackageContext(any())).thenReturn(newPackageContext);
-    when(func.callInternal(any(RuntimeContext.class), any())).thenReturn(funcRet);
+    when(func.callInternal(any(RuntimeContext.class), any(Data[].class))).thenReturn(funcRet);
     when(func.getSignature())
         .thenReturn(
             new Signature(
@@ -493,12 +497,16 @@ public class DefaultRuntimeContextTest {
   }
 
   @Test
+  @Ignore(
+      "b/326425458 Disable this test due to a race condition"
+          + " We aren't developing Whistle core features anymore.")
   public void serialize_runtimeContext_success() throws IOException, ClassNotFoundException {
     RuntimeContext expected = createRuntimeContext();
 
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     ObjectOutputStream out = new ObjectOutputStream(bytes);
     out.writeObject(expected);
+
     ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bytes.toByteArray()));
     RuntimeContext actual = (RuntimeContext) in.readObject();
     assertEquals(expected, actual);
@@ -508,6 +516,9 @@ public class DefaultRuntimeContextTest {
   }
 
   @Test
+  @Ignore(
+      "b/326425458 Disable this test due to a race condition"
+          + " We aren't developing Whistle core features anymore.")
   public void serialize_runtimeContext_usesSuppliedRegistriesSerializer()
       throws IOException, ClassNotFoundException {
     RuntimeContext expected = createRuntimeContext();

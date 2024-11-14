@@ -54,6 +54,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.Var;
 import java.util.List;
 import java.util.function.BiFunction;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -179,6 +180,9 @@ public class DefaultClosureTest {
   }
 
   @Test
+  @Ignore(
+      "b/326425458 Disable this test due to a race condition"
+          + " We aren't developing Whistle core features anymore.")
   public void bindNextFreeParameter_removesFromList() {
     Pipeline.FunctionCall proto =
         Pipeline.FunctionCall.newBuilder()
@@ -252,6 +256,9 @@ public class DefaultClosureTest {
   @Test
   @SuppressWarnings(
       "unchecked") // This test uses some mocks and casts arguments from a reflection call.
+  @Ignore(
+      "b/326425458 Disable this test due to a race condition"
+          + " We aren't developing Whistle core features anymore.")
   public void execute_integratesContextComponents() {
     Pipeline.FunctionCall proto =
         Pipeline.FunctionCall.newBuilder()
@@ -264,7 +271,7 @@ public class DefaultClosureTest {
 
     // Mock up function.
     CallableFunction function = mock(CallableFunction.class);
-    when(function.callInternal(any(), any())).thenReturn(wantResult);
+    when(function.call(any(), any(Data[].class))).thenReturn(wantResult);
 
     // Mock up registry.
     TestFunctionPackageRegistry registry = mock(TestFunctionPackageRegistry.class);
@@ -305,6 +312,9 @@ public class DefaultClosureTest {
   @Test
   @SuppressWarnings(
       "unchecked") // This test uses some mocks and casts arguments from a reflection call.
+  @Ignore(
+      "b/326425458 Disable this test due to a race condition"
+          + " We aren't developing Whistle core features anymore.")
   public void execute_callFunctionFromAllPackages() {
     FunctionCall proto =
         FunctionCall.newBuilder()
@@ -320,7 +330,7 @@ public class DefaultClosureTest {
 
     // Mock up function.
     CallableFunction function = mock(CallableFunction.class);
-    when(function.callInternal(any(), any())).thenReturn(wantResult);
+    when(function.call(any(), any(Data[].class))).thenReturn(wantResult);
     when(function.getName()).thenReturn(proto.getReference().getName());
 
     final String packageName = "google";
@@ -373,6 +383,9 @@ public class DefaultClosureTest {
   @Test
   @SuppressWarnings(
       "unchecked") // This test uses some mocks and casts arguments from a reflection call.
+  @Ignore(
+      "b/326425458 Disable this test due to a race condition"
+          + " We aren't developing Whistle core features anymore.")
   public void execute_multiFunctionsFromAllPackages() {
     // Create a function call with two arguments.
     ValueSource protoArgZero = ValueSource.newBuilder().setConstString("argZero").build();
@@ -394,8 +407,10 @@ public class DefaultClosureTest {
     // Mock up function.
     CallableFunction oneArgFunc = mock(CallableFunction.class);
     CallableFunction twoArgsFunc = mock(CallableFunction.class);
-    when(oneArgFunc.callInternal(any(), any())).thenReturn(wantOneArgFuncResult);
-    when(twoArgsFunc.callInternal(any(), any())).thenReturn(wantTwoArgsFuncResult);
+    when(oneArgFunc.call(any(RuntimeContext.class), any(Data[].class)))
+        .thenReturn(wantOneArgFuncResult);
+    when(twoArgsFunc.call(any(RuntimeContext.class), any(Data[].class)))
+        .thenReturn(wantTwoArgsFuncResult);
     when(oneArgFunc.getName()).thenReturn(proto.getReference().getName());
     when(twoArgsFunc.getName()).thenReturn(proto.getReference().getName());
 

@@ -23,7 +23,7 @@ dependencies {
 
     // TODO(): Set up versioning
     testImplementation group: "com.google.cloud.verticals.foundations.dataharmonization", name: "testutil"
-    testImplementation group: "org.mockito", name: "mockito-core", version: "3.7.7"
+    testImplementation group: "org.mockito", name: "mockito-core", version: "5.12.0"
     testImplementation 'com.google.guava:guava-testlib:25.1-jre'
     testImplementation 'junit:junit:4.13'
 

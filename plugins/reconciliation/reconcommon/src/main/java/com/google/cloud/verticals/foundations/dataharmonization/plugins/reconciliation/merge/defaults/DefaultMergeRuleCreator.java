@@ -21,6 +21,7 @@ import static com.google.cloud.verticals.foundations.dataharmonization.plugins.r
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.MERGE_RULES_PACKAGE;
 
 import com.google.cloud.verticals.foundations.dataharmonization.data.Container;
+import com.google.cloud.verticals.foundations.dataharmonization.data.Data;
 import com.google.cloud.verticals.foundations.dataharmonization.function.DefaultClosure;
 import com.google.cloud.verticals.foundations.dataharmonization.function.context.RuntimeContext;
 import com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.ChoiceFieldGroup;
@@ -79,12 +80,12 @@ public class DefaultMergeRuleCreator implements Serializable {
   private static Container getDefaultFieldMergeRules(RuntimeContext context)
       throws ConfigurationException {
     try {
-      Container mergeRules =
+      Data mergeRulesData =
           DefaultClosure.create(
                   new DefaultClosure.FunctionReference(
                       MERGE_RULES_PACKAGE, DEFAULT_FIELD_RULES_METHOD))
-              .execute(context)
-              .asContainer();
+              .execute(context);
+      Container mergeRules = mergeRulesData.asContainer();
       if (mergeRules == null) {
         throw throwInvalidDefaultFieldMergeRules("Null merge rules.");
       }
