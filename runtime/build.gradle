@@ -35,6 +35,7 @@ sourceSets {
      implementation group: 'commons-codec', name: 'commons-codec', version: '1.13'
      implementation group: 'javax.json', name: 'javax.json-api', version: '1.0'
      implementation group: 'joda-time', name: 'joda-time', version: '2.10.5'
+     implementation group: "org.apache.beam", name: "beam-sdks-java-core", version: "2.52.0"
 
      if (gradle.ext.has("annotationProcessorExists") && gradle.ext.annotationProcessorExists){
          annotationProcessor ("com.google.cloud.verticals.foundations.dataharmonization:annotation_processor")

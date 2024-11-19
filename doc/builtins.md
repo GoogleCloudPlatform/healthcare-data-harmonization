@@ -15,7 +15,6 @@ functions. These functions are available everywhere.
 `string`
 
 #### Arguments
-
 **first**: `String` - the first path segment
 
 **rest**: `String...` - the remaining path segments
@@ -46,7 +45,6 @@ absPath("prefix:///newdir/one/two")
 ```
 
 ### and
-
 `and(args: Closure...)` returns `Primitive` - Primitive `boolean`
 
 #### Arguments
@@ -80,11 +78,9 @@ var z: "string3"
 ```
 
 ### arrayOf
-
 `arrayOf(items: Data...)` returns `Array`
 
 #### Arguments
-
 **items**: `Data...` - one or more `Data` data elements
 
 #### Description
@@ -150,7 +146,6 @@ arrayOf(array1)
 base64-decoded string version of the input data
 
 #### Arguments
-
 **inputBase64**: `String` - base64 data to decode
 
 #### Description
@@ -190,7 +185,6 @@ as a `Container`, first pass the data to the `serializeJson()` function to
 convert the structured data to a `string`.
 
 #### Description
-
 Encodes the given `String` to UTF-8 bytes and then to base64.
 
 An empty string/null input will return an empty string.
@@ -223,7 +217,6 @@ base64encode("")
 String, timeScale: String)` returns `Primitive` - Primitive `number`
 
 #### Arguments
-
 **iso8601StartDateTime**: `String` - start timestamp
 
 **iso8601EndDateTime**: `String` - end timestamp
@@ -241,7 +234,6 @@ points in time. Case-sensitive and must be uppercase. Supported time scales:
 *   MILLIS
 
 #### Description
-
 Calculates the duration between two points in time as follows:
 
 1.  Converts the ISO 8601-formatted start and end timestamp values to
@@ -284,7 +276,6 @@ String)` returns `Primitive` - Primitive `string` a new ISO 8601-formatted
 timestamp
 
 #### Arguments
-
 **iso8601DateTime**: `String` - timestamp to modify
 
 **timeOffset**: `Long` - timeOffset to add or subtract to the `iso8601DateTime`
@@ -341,7 +332,6 @@ calculateNewDateTime((start, timeOffset, "seconds")
 function call
 
 #### Arguments
-
 **functionName**: `String` - the name of the function to call
 
 **args**: `Data...` - the arguments to pass to the function specified in
@@ -402,7 +392,6 @@ def otherPackageFunction() {
   10
 }
 ```
-
 `my_file_2.wstl`:
 
 ```
@@ -427,7 +416,6 @@ output: callPackageFn("foo", "otherPackageFunction")
 current local date-time in the provided format
 
 #### Arguments
-
 **format**: `String` - the format for representing the current local time
 
 #### Description
@@ -444,11 +432,9 @@ timestampYearMonthDate: currentTime("yyyy-MM-dd")
 ```
 
 ### deepCopy
-
 `deepCopy(data: Data)` returns `Data` - a deep copy of the original `Data`
 
 #### Arguments
-
 **data**: `Data` - the `Data` to make a deep copy of
 
 #### Description
@@ -493,15 +479,12 @@ var value: modifierFunctionDeepCopy(billingAccount)
 ```
 
 ### deserializeJson
-
 `deserializeJson(json: String)` returns `Data` - the deserialized Whistle `Data`
 
 #### Arguments
-
 **json**: `String` - the JSON `string` to deserialize
 
 #### Description
-
 Deserializes a JSON string to the Whistle `Data` format.
 
 ```
@@ -521,7 +504,6 @@ deserializeJson(inputJson)
 `number`
 
 #### Arguments
-
 **dividend**: `Primitive` - the number to divide
 
 **divisor**: `Primitive` - the number by which to divide the `dividend`
@@ -552,7 +534,6 @@ div(1, 2)
 `boolean`
 
 #### Arguments
-
 **first**: `Data` - the first value to compare
 
 **second**: `Data` - the second value to compare
@@ -560,7 +541,6 @@ div(1, 2)
 **rest**: `Data...` - the remaining values to compare
 
 #### Description
-
 Returns `Primitive` `boolean` with the value `true` if all arguments are equal.
 
 ```
@@ -581,13 +561,11 @@ eq([], {})
 ```
 
 ### explicitEmptyString
-
 `explicitEmptyString()` returns `Primitive`
 
 #### Arguments
 
 #### Description
-
 Allows a user to explicitly output an empty string as a value for fields.
 
 For example:
@@ -604,7 +582,6 @@ match of `pattern` in `input`. NullData if either input or pattern is null or
 there is no match.
 
 #### Arguments
-
 **input**: `String` - string input to match.
 
 **pattern**: `String` - string regex pattern.
@@ -621,7 +598,6 @@ there's no match for `pattern` in `input`.
 match.
 
 #### Arguments
-
 **input**: `String` - The input string to match against.
 
 **pattern**: `String` - The regex pattern to match.
@@ -671,11 +647,9 @@ extractRegex(input, pattern, {
 ```
 
 ### fail
-
 `fail(message: String)` returns `NullData`
 
 #### Arguments
-
 **message**: `String`
 
 #### Description
@@ -684,11 +658,9 @@ Throws an exception with the given message. It will be caught by
 Errors#withError if present.
 
 ### fields
-
 `fields(container: Container)` returns `Array`
 
 #### Arguments
-
 **container**: `Container`
 
 #### Description
@@ -697,7 +669,6 @@ Returns an array of the fields in the given container. The fields are sorted
 alphabetically.
 
 ### fileExists
-
 `fileExists(path: String)` returns `Primitive`
 
 #### Arguments
@@ -713,11 +684,9 @@ Returns true iff the file at the given path exists (regardless of whether it is
 empty).
 
 ### fileName
-
 `fileName(path: String)` returns `Primitive`
 
 #### Arguments
-
 **path**: `String`
 
 #### Description
@@ -736,11 +705,9 @@ fileName("/hello/world/this/is/a/path.json.zip.tar.gz") == "path.json.zip.tar.gz
 ```
 
 ### floor
-
 `floor(data: Data)` returns `Primitive`
 
 #### Arguments
-
 **data**: `Data` - a `Data` data type
 
 #### Description
@@ -800,17 +767,14 @@ format must be specified according to Java formatting rules:
 https://www.joda.org/joda-time/apidocs/org/joda/time/format/DateTimeFormat.html
 
 ### get
-
 `get(source: Data, path: String)` returns `Data`
 
 #### Arguments
-
 **source**: `Data`
 
 **path**: `String`
 
 #### Description
-
 Gets the value at the given path applied to the given value.
 
 ### getEpochMillis
@@ -831,11 +795,9 @@ provided datetime, which must be in ISO 8601
 (https://www.w3.org/TR/NOTE-datetime) format.
 
 ### groupBy
-
 `groupBy(array: Array, keyExtractor: Closure)` returns `Array`
 
 #### Arguments
-
 **array**: `Array`
 
 **keyExtractor**: `Closure`
@@ -867,7 +829,6 @@ var array: [{num: 1; word: "one";}, {num: 2; word: "two";},
 `boolean`
 
 #### Arguments
-
 **left**: `Primitive` - number to compare
 
 **right**: `Primitive` - the second number to compare
@@ -898,7 +859,6 @@ Returns `true` if the value of `left` is greater than the value of `right`.
 `boolean`
 
 #### Arguments
-
 **left**: `Primitive` - the first number to compare
 
 **right**: `Primitive` - the second number to compare
@@ -929,7 +889,6 @@ gtEq(1, 10)
 the input Data object.
 
 #### Arguments
-
 **obj**: `Data` - Data object to generate hash code for.
 
 #### Description
@@ -945,7 +904,6 @@ and stability.
 representing the input Data object.
 
 #### Arguments
-
 **obj**: `Data` - Data object to generate hash code for.
 
 #### Description
@@ -956,17 +914,14 @@ secure and is not to be used for secure hashing. Uses murmur3 hashing for speed
 and stability.
 
 ### is
-
 `is(data: Data, type: String)` returns `Primitive`
 
 #### Arguments
-
 **data**: `Data`
 
 **type**: `String`
 
 #### Description
-
 Returns true if the given data is of the given type (according to #types).
 
 Possible basic types are: Array, Container, Primitive, Dataset, and null.
@@ -1005,11 +960,9 @@ inclusive of the start and end points.
     are improperly formatted.
 
 ### isNil
-
 `isNil(data: Data)` returns `Primitive` - Primitive `boolean`
 
 #### Arguments
-
 **data**: `Data` - a `Data` data type
 
 #### Description
@@ -1032,11 +985,9 @@ isNil(emptyContainer)
 ```
 
 ### isNotNil
-
 `isNotNil(data: Data)` returns `Primitive` - Primitive `boolean`
 
 #### Arguments
-
 **data**: `Data` - a `Data` data type
 
 #### Description
@@ -1062,11 +1013,9 @@ isNotNil(dataContainer)
 ```
 
 ### iterate
-
 `iterate(closure: Closure, iterables: NullData...)` returns `NullData`
 
 #### Arguments
-
 **closure**: `Closure`
 
 **iterables**: `NullData...`
@@ -1077,11 +1026,9 @@ Iteration stub for iterating over NullData, to disambiguate it from a dataset or
 an array. This method always returns NullData and never calls the given closure.
 
 ### iterate
-
 `iterate(closure: Closure, iterables: Array...)` returns `Array`
 
 #### Arguments
-
 **closure**: `Closure` - The closure to use for iteration.
 
 **iterables**: `Array...` - The arrays to iterate.
@@ -1119,11 +1066,9 @@ bound to $1, $2, $3...$n in order. If there is only one array argument, it is
 bound to just $ (with no number).
 
 ### iterate
-
 `iterate(closure: Closure, iterables: Container...)` returns `Container`
 
 #### Arguments
-
 **closure**: `Closure` - The closure to use for iteration.
 
 **iterables**: `Container...` - The containers to iterate.
@@ -1156,7 +1101,6 @@ The results of these calls will be collected into a container as in:
    k3: fn(a.k3, b.k3, c.k3, x, y)
 }
 ```
-
 Example:
 
 ```
@@ -1190,11 +1134,9 @@ sum(c1[], c2[], c3[]) == {
 ```
 
 ### iterate
-
 `iterate(closure: Closure, dataset: Dataset)` returns `Dataset`
 
 #### Arguments
-
 **closure**: `Closure` - The closure to use for iteration.
 
 **dataset**: `Dataset` - The dataset to iterate/map.
@@ -1212,7 +1154,6 @@ joined elements. Joined pairs are themselves arrays, with matching elements from
 left and right, or nulls in place of no matches.
 
 #### Arguments
-
 **left**: `Array` - The left array
 
 **right**: `Array` - The right array
@@ -1221,7 +1162,6 @@ left and right, or nulls in place of no matches.
 true if the two elements shall be joined together
 
 #### Description
-
 Performs a full outer join on the two given arrays.
 
 Example:
@@ -1248,7 +1188,6 @@ join(array1, array2, $left.id == $right.id) == [
  [{}, { id: 3; val: "2ccc"; }]
 ]
 ```
-
 **Ordering:** Order is preserved such that:
 
 *   Items from left (and corresponding matches from right, if any) appear first
@@ -1266,11 +1205,9 @@ null - Cr
 ```
 
 ### joinPath
-
 `joinPath(first: String, rest: String...)` returns `Primitive`
 
 #### Arguments
-
 **first**: `String` - The first element of the path.
 
 **rest**: `String...` - The remaining elements of the path.
@@ -1292,19 +1229,15 @@ joinPath("hello:///bucket/one/two", "../three", "four") == "hello:///bucket/one/
 ```
 
 ### last
-
 `last(array: Array)` returns `Data`
 
 #### Arguments
-
 **array**: `Array`
 
 #### Description
-
 Returns the lastIndex data Data in a given Array or Null data for an empty array
 
 ### listFiles
-
 `listFiles(pattern: String)` returns `Array`
 
 #### Arguments
@@ -1347,19 +1280,15 @@ listFiles("/**/*.zz?.json") == ["./one/bbb.zzz.json", "./one/foo/eee.zzz.json",
 ```
 
 ### listLen
-
 `listLen(array: Array)` returns `Primitive`
 
 #### Arguments
-
 **array**: `Array`
 
 #### Description
-
 Returns the length of the given Array.
 
 ### loadJson
-
 `loadJson(path: String)` returns `Data`
 
 #### Arguments
@@ -1370,11 +1299,9 @@ imports (e.x. file:///hello/world or gs://my-bucket/hello/world if a GCP plugin
 is imported).
 
 #### Description
-
 Loads the json data at the given path, and returns it as a Data.
 
 ### loadText
-
 `loadText(path: String)` returns `Primitive`
 
 #### Arguments
@@ -1395,7 +1322,6 @@ primitive.
 `boolean`
 
 #### Arguments
-
 **left**: `Primitive` - the first number to compare
 
 **right**: `Primitive` - the second number to compare
@@ -1426,7 +1352,6 @@ values are treated like the `number` 0.
 `boolean`
 
 #### Arguments
-
 **left**: `Primitive` - the first number to compare
 
 **right**: `Primitive` - the second number to compare
@@ -1457,7 +1382,6 @@ ltEq(10, 1)
 boolean, true iff input string matches input regex pattern
 
 #### Arguments
-
 **str**: `String` - Primitive string input to match.
 
 **regex**: `String` - Primitive string regex pattern.
@@ -1473,7 +1397,6 @@ pattern.
 `number`
 
 #### Arguments
-
 **first**: `Primitive` - the first number to multiply
 
 **rest**: `Primitive...` - the remaining numbers to multiply
@@ -1501,7 +1424,6 @@ mul(5, 10, 2)
 `boolean`
 
 #### Arguments
-
 **first**: `Data` - the first value to compare
 
 **second**: `Data` - the second value to compare
@@ -1525,11 +1447,9 @@ neq("text1", "text1")
 ```
 
 ### not
-
 `not(data: Data)` returns `Primitive` - Primitive `boolean`
 
 #### Arguments
-
 **data**: `Data` - a `Data` data type
 
 #### Description
@@ -1552,7 +1472,6 @@ not(b)
 ```
 
 ### or
-
 `or(args: Closure...)` returns `Primitive` - Primitive `boolean`
 
 #### Arguments
@@ -1592,7 +1511,6 @@ Primitive string holding an ISO 8601 representation of the provided timestamp;
 NullData.instance if parse of timestamp using provided format fails.
 
 #### Arguments
-
 **format**: `String` - format String for parsing the provided timestamp.
 
 **datetime**: `String` - timestamp String to be parsed.
@@ -1614,7 +1532,6 @@ timestamp in ISO 8601 format (yyyy-MM-dd'T'HH:mm:ss.SSSZ) or NullData if parse
 fails.
 
 #### Arguments
-
 **input**: `Long` - the number of milliseconds from 1970-01-01T00:00:00Z.
 
 #### Description
@@ -1623,23 +1540,18 @@ Gets the Java epoch of 1970-01-01T00:00:00Z from the milliseconds for the
 provided datetime.
 
 ### parseNum
-
 `parseNum(str: String)` returns `Primitive`
 
 #### Arguments
-
 **str**: `String`
 
 #### Description
-
 Parses String and returns Primitive double.
 
 ### range
-
 `range(start: Primitive, end: Primitive)` returns `Array`
 
 #### Arguments
-
 **start**: `Primitive`
 
 **end**: `Primitive`
@@ -1654,11 +1566,9 @@ var x : range(5, 10) // x: [5, 6, 7, 8, 9]
 ```
 
 ### range
-
 `range(size: Primitive)` returns `Array`
 
 #### Arguments
-
 **size**: `Primitive`
 
 #### Description
@@ -1676,7 +1586,6 @@ var x : range(5) // x: [0, 1, 2, 3, 4]
 representing the result of the reduction.
 
 #### Arguments
-
 **array**: `Array` - Array to reduce.
 
 **seed**: `Data` - Initial value of $acc.
@@ -1704,7 +1613,6 @@ reduce([1], 10, "some const") == "some const"
 the result of the reduction.
 
 #### Arguments
-
 **array**: `Array` - Array to reduce.
 
 **accumulator**: `Closure` - Closure to use as the accumulation function. `$acc`
@@ -1731,7 +1639,6 @@ reduce([1], "some const") == 1
 value of either the body, or the error handler if it was called.
 
 #### Arguments
-
 **body**: `Closure` - The code to handle errors from.
 
 **errorHandler**: `Closure` - The code to handle errors with.
@@ -1749,25 +1656,32 @@ by any other withError or rethrowError handlers.
 serialization of the input data.
 
 #### Arguments
-
 **data**: `Data` - The data to serialize.
 
 #### Description
-
 Serializes the Data input to JSON string.
 
-### sortBy
+### sleep
 
-`sortBy(array: Array, keySelector: Closure)` returns `Array` - sorted Array.
+`sleep(millis: Long)` returns `Data` link `NullData`
 
 #### Arguments
 
+**millis**: `Long` - number of milliseconds to sleep
+
+#### Description
+
+Sleep for the specified number of milliseconds.
+
+### sortBy
+`sortBy(array: Array, keySelector: Closure)` returns `Array` - sorted Array.
+
+#### Arguments
 **array**: `Array` - Array to sort.
 
 **keySelector**: `Closure` - Closure to use for extracting sortBy key.
 
 #### Description
-
 Sorts an Array using the key specified by the provided Closure.
 
 ### sortByDescending
@@ -1776,7 +1690,6 @@ Sorts an Array using the key specified by the provided Closure.
 sorted in descending order.
 
 #### Arguments
-
 **array**: `Array` - Array to sort.
 
 **keySelector**: `Closure` - Closure to use for extracting sort-by key.
@@ -1792,7 +1705,6 @@ Closure.
 the input String which are partitioned by the provided delimiter.
 
 #### Arguments
-
 **str**: `String` - String to split.
 
 **delimiter**: `String` - String to use to split the input string.
@@ -1809,15 +1721,12 @@ array of individual characters.
 input string.
 
 #### Arguments
-
 **str**: `String` - string to split.
 
 #### Description
-
 Splits the String `str` into individual characters.
 
 ### strFmt
-
 `strFmt(format: String, args: Data...)` returns `Primitive`
 
 #### Arguments
@@ -1828,7 +1737,6 @@ conventions.
 **args**: `Data...` - Arguments to fill into the placeholders.
 
 #### Description
-
 Formats a string using the given format and arguments.
 
 ### strJoin
@@ -1837,7 +1745,6 @@ Formats a string using the given format and arguments.
 result as a string Primitive.
 
 #### Arguments
-
 **delimiter**: `String` - String to use to join the given array
 
 **components**: `Array` - Array of data to join.
@@ -1853,7 +1760,6 @@ expression.
 `number`
 
 #### Arguments
-
 **first**: `Primitive` - the first number
 
 **rest**: `Primitive...` - the remaining numbers to subtract from `first`
@@ -1884,7 +1790,6 @@ sub(10, "", 4)
 representation of the sum
 
 #### Arguments
-
 **first**: `Primitive` - the first value to sum
 
 **rest**: `Primitive...` - the remaining values to sum
@@ -1923,7 +1828,6 @@ sum(true, 1, "hello")
 executing `body`
 
 #### Arguments
-
 **body**: `Closure` - code to execute and time
 
 **timeHandler**: `Closure` - code to handle the elapsed time result, in
@@ -1955,35 +1859,27 @@ INFO: Timed function executed in 9.0 milliseconds.
 ```
 
 ### toLower
-
 `toLower(str: String)` returns `Primitive`
 
 #### Arguments
-
 **str**: `String`
 
 #### Description
-
 Converts all letters in the provided string to lower case.
 
 ### toUpper
-
 `toUpper(str: String)` returns `Primitive`
 
 #### Arguments
-
 **str**: `String`
 
 #### Description
-
 Converts all letters in the provided string to upper case.
 
 ### tryParseNum
-
 `tryParseNum(primitive: Primitive)` returns `Primitive`
 
 #### Arguments
-
 **primitive**: `Primitive`
 
 #### Description
@@ -1992,11 +1888,9 @@ Tries to parse Primitive and returns Primitive double if primitive is String.
 Returns itself otherwise.
 
 ### types
-
 `types(data: Data)` returns `Array`
 
 #### Arguments
-
 **data**: `Data`
 
 #### Description
@@ -2010,11 +1904,9 @@ Implementations, like DefaultArray can vary depending on the execution
 environment.
 
 ### unique
-
 `unique(array: Array)` returns `Array` - a Data object with duplicates removed
 
 #### Arguments
-
 **array**: `Array` - an array of elements
 
 #### Description
@@ -2029,7 +1921,6 @@ be removed. The order of the elements in the returned value will be preserved.
 duplicate elements removed.
 
 #### Arguments
-
 **array**: `Array` - Array to deduplicate.
 
 **keySelector**: `Closure` - Closure for extracting key from array entries to
@@ -2044,11 +1935,9 @@ element in the Array. The order of the elements in the returned value will be
 preserved.
 
 ### unset
-
 `unset(container: Container, field: String)` returns `Container`
 
 #### Arguments
-
 **container**: `Container`
 
 **field**: `String`
@@ -2061,21 +1950,17 @@ RuntimeContext#getDataTypeImplementation() the returned container may or may not
 be the same object as the input.
 
 ### uuid
-
 `uuid()` returns `Primitive`
 
 #### Arguments
 
 #### Description
-
 Returns a random uuid String.
 
 ### values
-
 `values(container: Container)` returns `Array`
 
 #### Arguments
-
 **container**: `Container`
 
 #### Description
@@ -2084,11 +1969,9 @@ Returns an array of the values in the given container. The order of values
 corresponds to the fields being sorted alphabetically.
 
 ### where
-
 `where(nullData: NullData, predicate: Closure)` returns `NullData`
 
 #### Arguments
-
 **nullData**: `NullData`
 
 **predicate**: `Closure`
@@ -2099,11 +1982,9 @@ Catch-all for where applied to null, to disambiguate null from Array and
 Container.
 
 ### where
-
 `where(array: Array, predicate: Closure)` returns `Array`
 
 #### Arguments
-
 **array**: `Array`
 
 **predicate**: `Closure`
@@ -2120,11 +2001,9 @@ var array: [-1, 2, -3, -4, 5, -6]
 ```
 
 ### where
-
 `where(container: Container, predicate: Closure)` returns `Container`
 
 #### Arguments
-
 **container**: `Container`
 
 **predicate**: `Closure`
@@ -2151,7 +2030,6 @@ var container: {
 value of either the body, or the error handler if it was called.
 
 #### Arguments
-
 **body**: `Closure` - The code to handle errors from.
 
 **errorHandler**: `Closure` - The code to handle errors with.
@@ -2203,22 +2081,38 @@ Executes the given expression, merging its output with any `side` outputs that
 are written within (including by other functions/expressions called by this
 one).
 
-## Targets
+### withTimeout
 
-### Debug
-
-`Debug(...TODO: Args need to be added to javadoc...): ...`
+`withTimeout(body: Closure, millis: Long, timeoutHandler: Closure)` returns
+`Data` - result of executing `body`
 
 #### Arguments
 
-**...TODO**: `Args need to be added to javadoc...` - ...
+**body**: `Closure` - code to execute
+
+**millis**: `Long` - number of milliseconds to wait
+
+**timeoutHandler**: `Closure` - code to execute when timing out
 
 #### Description
 
+Executes the code given in `body`, timing out after the specified number of
+milliseconds. If the execution finishes before the time limit is reached, the
+return value of this function is the return value of `body`. If, on the other
+hand, the time limit is reached, the execution will be aborted and the
+`timeoutHandler` will be called.
+
+## Targets
+### Debug
+`Debug(...TODO: Args need to be added to javadoc...): ...`
+
+#### Arguments
+**...TODO**: `Args need to be added to javadoc...` - ...
+
+#### Description
 TODO: This is missing documentation. It will be added soon.
 
 ### set
-
 `set(var: optional String, field: String, mergeMode: optional String): ...`
 
 #### Arguments
@@ -2280,7 +2174,6 @@ def setSomeVars(num) {
 ```
 
 ### side
-
 `side(path: String, mergeMode: optional String): ...`
 
 #### Arguments
@@ -2300,7 +2193,6 @@ are:
 Note: Primitives will always be replaced, regardless of merge mode.
 
 #### Description
-
 Writes to a side output (for using with Core#withSides.
 
 For example:
@@ -2336,5 +2228,4 @@ def addSomeSides(num) {
 // Do note that the field ordering here is for illustration, no ordering is guaranteed
 // by the side target.
 ```
-
 For more information see Core#withSides.

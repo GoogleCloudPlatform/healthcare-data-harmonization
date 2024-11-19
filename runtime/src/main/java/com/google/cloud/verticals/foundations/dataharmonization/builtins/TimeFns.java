@@ -16,6 +16,8 @@
 
 package com.google.cloud.verticals.foundations.dataharmonization.builtins;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+
 import com.google.cloud.verticals.foundations.dataharmonization.data.Data;
 import com.google.cloud.verticals.foundations.dataharmonization.data.NullData;
 import com.google.cloud.verticals.foundations.dataharmonization.data.Primitive;
@@ -23,6 +25,8 @@ import com.google.cloud.verticals.foundations.dataharmonization.function.Closure
 import com.google.cloud.verticals.foundations.dataharmonization.function.context.RuntimeContext;
 import com.google.cloud.verticals.foundations.dataharmonization.function.java.PluginFunction;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.util.concurrent.SimpleTimeLimiter;
+import com.google.common.util.concurrent.TimeLimiter;
 import java.io.Serializable;
 import java.time.Clock;
 import java.time.Instant;
@@ -30,8 +34,13 @@ import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.beam.sdk.metrics.MetricsContainer;
+import org.apache.beam.sdk.metrics.MetricsEnvironment;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -446,5 +455,53 @@ public class TimeFns implements Serializable {
     Primitive elapsedMS = context.getDataTypeImplementation().primitiveOf((double) (end - start));
     timeHandler.bindNextFreeParameter(elapsedMS).execute(context);
     return result;
+  }
+
+  /**
+   * Executes the code given in {@code body}, timing out after the specified number of milliseconds.
+   * If the execution finishes before the time limit is reached, the return value of this function
+   * is the return value of {@code body}. If, on the other hand, the time limit is reached, the
+   * execution will be aborted and the {@code timeoutHandler} will be called.
+   *
+   * @param body code to execute
+   * @param millis number of milliseconds to wait
+   * @param timeoutHandler code to execute when timing out
+   * @return result of executing {@code body}
+   */
+  @PluginFunction
+  public Data withTimeout(
+      RuntimeContext context, Closure body, Long millis, Closure timeoutHandler) {
+    // TODO(): Move withTimeout plugin to cloud_healthcare_data_harmoinzation
+    MetricsContainer container = MetricsEnvironment.getCurrentContainer();
+    TimeLimiter timeLimiter = SimpleTimeLimiter.create(Executors.newSingleThreadExecutor());
+    try {
+      return timeLimiter.callWithTimeout(
+          () -> {
+            MetricsEnvironment.setCurrentContainer(container);
+            return body.execute(context);
+          },
+          millis,
+          MILLISECONDS);
+    } catch (TimeoutException e) {
+      return timeoutHandler.execute(context);
+    } catch (ExecutionException | InterruptedException e) {
+      throw new IllegalArgumentException(e);
+    }
+  }
+
+  /**
+   * Sleep for the specified number of milliseconds.
+   *
+   * @param millis number of milliseconds to sleep
+   * @return @link NullData}
+   */
+  @PluginFunction
+  public Data sleep(RuntimeContext context, Long millis) {
+    try {
+      Thread.sleep(millis);
+    } catch (InterruptedException e) {
+      throw new IllegalArgumentException(e);
+    }
+    return NullData.instance;
   }
 }

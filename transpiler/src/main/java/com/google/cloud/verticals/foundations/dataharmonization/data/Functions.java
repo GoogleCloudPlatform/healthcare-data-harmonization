@@ -46,6 +46,7 @@ public final class Functions {
   public static final FunctionReference WITH_ERROR_REF = builtin("withError");
   public static final FunctionReference RETHROW_ERROR_REF = builtin("rethrowError");
   public static final FunctionReference TIMED_REF = builtin("timed");
+  public static final FunctionReference WITH_TIMEOUT_REF = builtin("withTimeout");
   public static final FunctionReference SIDE_REF = builtin("side");
   public static final FunctionReference WITH_SIDES = builtin("withSides");
   public static final FunctionReference EXTRACT_REGEX = builtin("extractRegex");
@@ -124,6 +125,12 @@ public final class Functions {
               Signature.of(
                   closure(LambdaFuncNames.BLOCK, FunctionType.IMPLICIT),
                   closure("timed_", FunctionType.IMPLICIT, free("$time"))));
+          addSig(
+              WITH_TIMEOUT_REF,
+              Signature.of(
+                  closure(LambdaFuncNames.BLOCK, FunctionType.IMPLICIT),
+                  value() /* timeoutSeconds */,
+                  closure("with_timeout_", FunctionType.IMPLICIT)));
 
           // Selectors:
           addSig(

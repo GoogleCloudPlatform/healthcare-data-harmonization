@@ -1,0 +1,17 @@
+package func
+
+def addWithSleep(x, y, millis) {
+  sleep(millis)
+  x + y
+}
+
+def addWithTimeout(x, y) {
+  noTimeoutOutput: withTimeout(addWithSleep(x, y, 10), 100, handler())
+  timeoutOutput: withTimeout(addWithSleep(x, y, 10), 1, handler())
+}
+
+def handler() {
+  "timed out"
+}
+
+addWithTimeout(1, 2)

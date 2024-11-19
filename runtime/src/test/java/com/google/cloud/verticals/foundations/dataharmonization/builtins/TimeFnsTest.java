@@ -490,4 +490,17 @@ public class TimeFnsTest {
                     "handlerOutput", testDTI().primitiveOf("logged time")));
     assertDCAPEquals(expected, actual);
   }
+
+  @Test
+  public void withTimeout_returnsResultCallsHandler() throws Exception {
+    Engine engine = TESTER.initializeTestFile("with_timeout.wstl");
+    Data actual = engine.transform(NullData.instance);
+    Container expected =
+        testDTI()
+            .containerOf(
+                ImmutableMap.of(
+                    "noTimeoutOutput", testDTI().primitiveOf(3.0),
+                    "timeoutOutput", testDTI().primitiveOf("timed out")));
+    assertDCAPEquals(expected, actual);
+  }
 }
