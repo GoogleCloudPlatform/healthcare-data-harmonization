@@ -133,6 +133,8 @@ public final class MergeConstants {
   public static final String ENABLE_MAPPING_SIDE_EFFECTS = "ENABLE_MAPPING_SIDE_EFFECTS";
 
   public static final String ENABLE_CLINICAL_HISTORY = "ENABLE_CLINICAL_HISTORY";
+  public static final String MERGE_TIMEOUT_MILLISECONDS = "MERGE_TIMEOUT_MILLISECONDS";
+  public static final String SEARCH_TIMEOUT_MILLISECONDS = "SEARCH_TIMEOUT_MILLISECONDS";
 
   public static final String RECON_ERRORS_LIST_FIELD = "reconciliationErrorsList";
   public static final String RECON_ERROR_MESSAGE = "reconciliationErrorMessage";
