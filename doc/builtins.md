@@ -1671,7 +1671,8 @@ Serializes the Data input to JSON string.
 
 #### Description
 
-Sleep for the specified number of milliseconds.
+Sleep for the specified number of milliseconds. The duration of the sleep is not
+guaranteed to be exact.
 
 ### sortBy
 `sortBy(array: Array, keySelector: Closure)` returns `Array` - sorted Array.

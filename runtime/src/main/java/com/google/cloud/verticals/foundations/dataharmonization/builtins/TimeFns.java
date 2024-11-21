@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
@@ -473,7 +474,8 @@ public class TimeFns implements Serializable {
       RuntimeContext context, Closure body, Long millis, Closure timeoutHandler) {
     // TODO(): Move withTimeout plugin to cloud_healthcare_data_harmoinzation
     MetricsContainer container = MetricsEnvironment.getCurrentContainer();
-    TimeLimiter timeLimiter = SimpleTimeLimiter.create(Executors.newSingleThreadExecutor());
+    ExecutorService executor = Executors.newSingleThreadExecutor();
+    TimeLimiter timeLimiter = SimpleTimeLimiter.create(executor);
     try {
       return timeLimiter.callWithTimeout(
           () -> {
@@ -483,6 +485,12 @@ public class TimeFns implements Serializable {
           millis,
           MILLISECONDS);
     } catch (TimeoutException e) {
+      executor.shutdownNow();
+      try {
+        executor.awaitTermination(millis, MILLISECONDS);
+      } catch (InterruptedException x) {
+        // Do nothing.
+      }
       return timeoutHandler.execute(context);
     } catch (ExecutionException | InterruptedException e) {
       throw new IllegalArgumentException(e);
@@ -490,7 +498,8 @@ public class TimeFns implements Serializable {
   }
 
   /**
-   * Sleep for the specified number of milliseconds.
+   * Sleep for the specified number of milliseconds. The duration of the sleep is not guaranteed to
+   * be exact.
    *
    * @param millis number of milliseconds to sleep
    * @return @link NullData}

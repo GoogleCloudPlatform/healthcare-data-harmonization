@@ -6,8 +6,8 @@ def addWithSleep(x, y, millis) {
 }
 
 def addWithTimeout(x, y) {
-  noTimeoutOutput: withTimeout(addWithSleep(x, y, 10), 100, handler())
-  timeoutOutput: withTimeout(addWithSleep(x, y, 10), 1, handler())
+  noTimeoutOutput: withTimeout(addWithSleep(x, y, 50), 10000, handler())
+  timeoutOutput: withTimeout(addWithSleep(x, y, 200), 100, handler())
 }
 
 def handler() {
