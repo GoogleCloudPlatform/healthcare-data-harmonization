@@ -1,0 +1,14 @@
+[
+  {
+    "system": "http://hl7.org/fhir/sid/us-ssn",
+    "type": {
+      "coding": [
+        {
+          "code": "SB",
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+        }
+      ]
+    },
+    "value": "SSN-4834"
+  }
+]

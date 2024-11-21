@@ -1,0 +1,40 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "M",
+          "display": "Mailing",
+          "target": [
+            {
+              "code": "postal",
+              "display": "Postal",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "SH",
+          "display": "Shipping Address",
+          "target": [
+            {
+              "code": "postal",
+              "display": "Postal",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70190",
+      "target": "http://hl7.org/fhir/address-type",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "postal",
+        "display": "Postal"
+      }
+    }
+  ],
+  "id": "Address_Type",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

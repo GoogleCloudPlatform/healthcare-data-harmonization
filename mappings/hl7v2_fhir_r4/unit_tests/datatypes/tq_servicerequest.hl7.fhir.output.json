@@ -1,0 +1,31 @@
+[
+  {
+    "note": [
+      {
+        "text": "under pain"
+      }
+    ],
+    "occurrenceTiming": {
+      "code": {
+        "coding": [
+          {
+            "code": "Q8H",
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0335"
+          }
+        ]
+      },
+      "repeat": {
+        "boundsPeriod": {
+          "end": "2009-07-18T14:30:00+00:00",
+          "start": "2009-07-17T14:00:00+00:00"
+        },
+        "count": "10"
+      }
+    },
+    "priority": "routine",
+    "quantityQuantity": {
+      "unit": "MG",
+      "value": 5
+    }
+  }
+]

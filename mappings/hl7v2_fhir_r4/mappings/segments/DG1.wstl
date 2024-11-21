@@ -1,0 +1,66 @@
+package segments
+
+// Description: Constructs a FHIR R4 Condition Resource and its related resources based on V2 DG1 Segment and Patient resource
+//
+// Argument(s):
+//   DG1 V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Condition: https://www.hl7.org/fhir/condition.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def DG1_Condition(required DG1, PatientReference) {
+  code: datatypes::CWE_CodeableConcept(DG1.3);     // Need Terminology Mapping: No mappings found in community sheet
+  code.text: DG1.4
+  onsetDateTime: utilities::Convert_DateTime(DG1.5)
+  // The resource must be output before building the asserter reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the asserter
+  // reference. The resource must not be modified after it has been output.
+  asserter: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(DG1.16[0]))
+  extension[]: utilities::Build_Extension(utilities::Convert_DateTime(DG1.19), "DateTime", "http://hl7.org/fhir/StructureDefinition/condition-assertedDate")
+  recordedDate: utilities::Convert_DateTime(DG1.19)
+  identifier[]: datatypes::EI_Identifier(DG1.20, "", "")
+  verificationStatus.coding[0].code: "entered-in-error"
+  verificationStatus.coding[0].system: "http://terminology.hl7.org/CodeSystem/condition-ver-status"
+  // The resource must be output before building the condition reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the condition
+  // reference. The resource must not be modified after it has been output.
+  var Condition: utilities::OutputResourceAndGetReference(datatypes::EI_Condition(DG1.22, PatientReference))
+  extension[]: utilities::Build_Extension(Condition, "Reference", "http://hl7.org/fhir/StructureDefinition/condition-dueTo")
+  subject: PatientReference
+  // Fixed value to ensure 1..* cardinality: https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-condition-definitions.html#Condition.category
+  category[0].coding[0].code: "unknown"
+  resourceType: "Condition"
+}
+
+// Description: Constructs an Encounter's condition datatype
+//
+// Argument(s):
+//   DG1 Segment datatype
+//   Condition already constructed from DG1 segment: https://www.hl7.org/fhir/condition.html
+// Output(s):
+//   an Encounter's condition datatype
+//
+def DG1_Encounter (required DG1, ConditionReference) {
+  condition: ConditionReference
+  use: datatypes::CWE_CodeableConcept(DG1.6);   // ConceptMap needed
+  var Integer: if DG1.15 then tryParseNum(DG1.15)
+  rank: if Integer > 0 then Integer
+}
+
+// Description: Constructs a diagnosis backbone element of EpisodeOfCare resource based on V2 DG1 segment and condition resource
+//
+// Argument(s):
+//   DG1 Segment
+//   Condition already constructed from DG1 segment: https://www.hl7.org/fhir/condition.html
+//
+// Output(s):
+//   condition : https://www.hl7.org/fhir/condition.html
+//
+def DG1_Diagnosis(DG1, ConditionReference) {
+  condition: ConditionReference
+  role: datatypes::CWE_CodeableConcept(DG1.6);    // ConceptMap needed
+  var Rank: if DG1.15 then tryParseNum(DG1.15)
+  rank: if Rank > 0 then Rank
+}

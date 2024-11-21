@@ -1,0 +1,62 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "NW",
+          "display": "New order/service",
+          "target": [
+            {
+              "code": "CREATE",
+              "display": "create",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "SC",
+          "display": "Status changed",
+          "target": [
+            {
+              "code": "UPDATE",
+              "display": "revise",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "OC",
+          "display": "Order/service canceled",
+          "target": [
+            {
+              "code": "CANCEL",
+              "display": "cancel",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "CA",
+          "display": "Cancel order/service request",
+          "target": [
+            {
+              "code": "CANCEL",
+              "display": "cancel",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70119",
+      "target": "http://terminology.hl7.org/CodeSystem/v3-DataOperation",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "UPDATE",
+        "display": "revise"
+      }
+    }
+  ],
+  "id": "Order_Control_Codes",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

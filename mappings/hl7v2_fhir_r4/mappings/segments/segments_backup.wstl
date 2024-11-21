@@ -1,0 +1,1750 @@
+package segments
+
+import "./datatypes/datatypes.wstl"
+import "./constants.wstl"
+
+// Description: Constructs a FHIR R4 MessageHeader Resource and its related resources based on V2 MSH Segment
+//
+// Argument(s):
+//   MSH V2 Segment
+//
+// Output(s):
+//   MessageHeader: https://www.hl7.org/fhir/messageheader.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//
+def MSH_MessageHeader (required MSH) {
+  if !MSH.24 and MSH.3 then {
+    source: datatypes::HD_MessageHeaderEndpoint(MSH.3)
+  } else if MSH.24 then {
+    source: datatypes::HD_MessageHeaderEndpoint(MSH.24)
+  } else {
+    source.endpoint.extension[]: utilities::Build_Extension("unknown", "Code", "http://hl7.org/fhir/StructureDefinition/data-absent-reason")
+  }
+  // The resource must be output before building the sender reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the sender
+  // reference. The resource must not be modified after it has been output.
+  sender: utilities::OutputResourceAndGetReference(datatypes::HD_CC_Organization(MSH.4, MSH.17))
+  // MSH.6 maximum cardinality changed from 1 to * in v2.9. Following condition helps to parse MSH.6
+  // irrespective of whether it is an object as in previous versions or an array as from v2.9.
+  var MSH_6: if is(MSH.6, "Container") then arrayOf(MSH.6) else MSH.6;  // MSH.6 max cardinality changed to *
+  if !MSH.25 and MSH.5 then {
+    destination[]: datatypes::HD_MessageHeaderDestination(MSH.5, MSH_6[], MSH.23)
+  } else if MSH.25 then {
+    destination[]: datatypes::HD_MessageHeaderDestination(MSH.25, MSH_6[], MSH.23)
+  } else {
+    destination[].endpoint.extension[]: utilities::Build_Extension("unknown", "Code", "http://hl7.org/fhir/StructureDefinition/data-absent-reason")
+  }
+  meta.security[0].code: MSH.8
+  eventCoding.code: MSH.9.2
+  eventCoding.display: "{MSH.9.1}^{MSH.9.2}^{MSH.9.3}"
+  eventCoding.system: "http://terminology.hl7.org/CodeSystem/v2-0003"
+  meta.tag[0].code: MSH.11.1
+  meta.tag[0].system: "http://terminology.hl7.org/CodeSystem/v2-0103"
+  meta.tag[1].code: MSH.11.2
+  meta.tag[1].system: "http://terminology.hl7.org/CodeSystem/v2-0207"
+  language: datatypes::CWE_Code(MSH.19)
+  // The resource must be output before building the responsible reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the responsible
+  // reference. The resource must not be modified after it has been output.
+  responsible: utilities::OutputResourceAndGetReference(datatypes::XON_Organization(MSH.22))
+  resourceType: "MessageHeader"
+}
+
+// Description: Constructs a FHIR R4 Patient Resource and its related resources based on V2 PID & PD1 Segments
+//
+// Argument(s):
+//   PID V2 Segment
+//   PD1 V2 Segment
+//
+// Output(s):
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def PID_PD1_Patient(required PID, PD1) {
+  identifier[]: datatypes::CX_Identifier(PID.2)
+  identifier[]: datatypes::CX_Identifier(PID.3[])
+  identifier[]: datatypes::CX_Identifier(PID.4[])
+  name[]: datatypes::XPN_HumanName(PID.5[])
+  extension[]: if PID.6 then utilities::Build_Extension(sum(PID.6[*].2[], " ", PID.6[*].1.1[])[], "String", "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName")
+  birthDate: utilities::Extract_Date(PID.7)
+  if PID.7 and div(tryParseNum(PID.7), 100000000) >= 1 then {
+    _birthDate.extension[]: utilities::Build_Extension(utilities::Convert_DateTime(PID.7), "DateTime", "http://hl7.org/fhir/StructureDefinition/patient-birthTime")
+  }
+  if PID.8 then {
+    gender: utilities::Convert_TerminologyCode(datatypes::CWE_Code(PID.8), "HL70001", "Gender")
+  } else {
+    gender: "unknown"
+  }
+  name[]: datatypes::XPN_HumanName(PID.9[])
+  extension[]: iterate({
+      var raceExt[]: utilities::Build_Extension($.2, "String", "text")
+      if raceExt then {
+        var raceExt[]: utilities::Build_Extension(datatypes::CWE_Coding($), "Coding", "ombCategory")
+        utilities::Build_Extension(raceExt, "Extension", "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race")
+      }
+    }, PID.10
+  )
+  address[]: datatypes::XAD_Address(PID.11[])
+  // PID.12 to be used as district if PID.11 has only one address and no district attribute. Otherwise, PID.12 should be added as a new entry in address[].
+  if listLen(PID.11) == 1 and !PID.11[0].9 then {
+    address[0].district: PID.12
+  } else {
+    address[].district: PID.12
+  }
+  telecom[]: datatypes::XTN_ContactPoint(PID.13[], "home")
+  telecom[]: datatypes::XTN_ContactPoint(PID.14[], "work")
+  communication[0].language: datatypes::CWE_CodeableConcept(PID.15);   // Need Terminology Mapping: No mappings found in community sheet
+  communication[0].preferred: if PID.15 then true
+  maritalStatus: utilities::Convert_Terminology(datatypes::CWE_Code(PID.16), "HL70002", "Marital_Status")
+  extension[]: if PID.17 then utilities::Build_Extension(datatypes::CWE_CodeableConcept(PID.17), "CodeableConcept", "http://hl7.org/fhir/StructureDefinition/patient-religion")
+  identifier[]: datatypes::ST_Identifier(PID.19)
+  identifier[]: datatypes::DLN_Identifier(PID.20, "DL")
+  extension[]: iterate({
+      var raceExt[]: utilities::Build_Extension($.2, "String", "text")
+      if raceExt then {
+        var raceExt[]: utilities::Build_Extension(datatypes::CWE_Coding($), "Coding", "ombCategory")
+        utilities::Build_Extension(raceExt, "Extension", "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity")
+      }
+    }, PID.22
+  )
+  var address.text: PID.23
+  extension[]: utilities::Build_Extension(address, "Address", "http://hl7.org/fhir/StructureDefinition/patient-birthPlace")
+  if !PID.25 then {
+    multipleBirthBoolean: PID.24 == "Y"
+  }
+  multipleBirthInteger: if PID.25 then tryParseNum(PID.25)
+  var citizenshipCode1: utilities::Build_Extension(datatypes::CWE_CodeableConcept(PID.26[])[], "CodeableConcept", "code")
+  extension[]: utilities::Build_Extension(citizenshipCode1[], "Extension", "http://hl7.org/fhir/StructureDefinition/patient-citizenship")
+  var nationalityCode: utilities::Build_Extension(datatypes::CWE_CodeableConcept(PID.28), "CodeableConcept", "code")
+  extension[]: utilities::Build_Extension(nationalityCode, "Extension", "http://hl7.org/fhir/StructureDefinition/patient-nationality")
+  deceasedDateTime: utilities::Convert_DateTime(PID.29)
+  if !PID.29 then {
+    deceasedBoolean: if PID.30 then PID.30 == "Y"
+  }
+  meta.lastUpdated: utilities::Convert_DateTime(PID.33)
+  var animalExtension[]: utilities::Build_Extension(datatypes::CWE_CodeableConcept(PID.35), "CodeableConcept", "species")
+  var animalExtension[]: utilities::Build_Extension(datatypes::CWE_CodeableConcept(PID.36), "CodeableConcept", "breed")
+  extension[]: utilities::Build_Extension(animalExtension, "Extension", "http://hl7.org/fhir/StructureDefinition/patient-animal")
+  var citizenshipCode2: utilities::Build_Extension(datatypes::CWE_CodeableConcept(PID.39[])[], "CodeableConcept", "code")
+  extension[]: utilities::Build_Extension(citizenshipCode2[], "Extension", "http://hl7.org/fhir/StructureDefinition/patient-citizenship")
+  telecom[]: datatypes::XTN_ContactPoint(PID.40[], "home")
+  // The organization resource must be output before building the generalPractitioner reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in the generalPractitioner
+  // reference. The resource must not be modified after it has been output.
+  generalPractitioner[]: utilities::OutputResourceAndGetReference(datatypes::XON_Organization(PD1.3[])[])
+  // The practitioner resource must be output before building the generalPractitioner reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in the generalPractitioner
+  // reference. The resource must not be modified after it has been output.
+  generalPractitioner[]: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(PD1.4[])[])
+  extension[]: utilities::Build_Extension(datatypes::CWE_CodeableConcept(PD1.6), "CodeableConcept", "http://hl7.org/fhir/StructureDefinition/patient-disability")
+  extension[]: utilities::Build_Extension(datatypes::XON_String(PD1.14[])[], "String", "http://hl7.org/fhir/StructureDefinition/patient-congregation")
+  active: true
+  resourceType: "Patient"
+}
+
+// Description: Constructs a FHIR R4 Account Resource based on V2 PID-18 Segment and Patient Resource
+//
+// Argument(s):
+//   PID-18 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Account: https://www.hl7.org/fhir/account.html
+//
+def PID_Account(required PID_18, PatientReference) {
+  var identifier: datatypes::CX_Identifier(PID_18)
+  var identifier.type: datatypes::Build_CodeableConcept("AN", "https://terminology.hl7.org/3.0.0/CodeSystem-v2-0203", "", "Account Number")
+  identifier[]: identifier
+  subject[]: PatientReference
+  status: "active"
+  resourceType: "Account"
+}
+
+// Description: Constructs a FHIR R4 RelatedPerson Resource and its related resources based on V2 NK1 Segment
+//
+// Argument(s):
+//   NK1 V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   RelatedPerson: https://www.hl7.org/fhir/relatedperson.html
+//
+def NK1_RelatedPerson(required NK1, PatientReference) {
+  name[]: datatypes::XPN_HumanName(NK1.2[])
+  var relationshipCC: datatypes::CWE_CodeableConcept(NK1.3)
+  relationship[]: if relationshipCC then utilities::Convert_Terminology(relationshipCC.coding[0].code, "HL70063", "Relationship")
+  address[]: datatypes::XAD_Address(NK1.4[])
+  telecom[]: datatypes::XTN_ContactPoint(NK1.5[], "home")
+  telecom[]: datatypes::XTN_ContactPoint(NK1.6[], "work")
+  var relationshipCC: datatypes::CWE_CodeableConcept(NK1.7)
+  relationship[]: if relationshipCC then utilities::Convert_Terminology(relationshipCC.coding[0].code, "HL70131", "Relationship")
+  period.start: utilities::Convert_DateTime(NK1.8)
+  period.end: utilities::Convert_DateTime(NK1.9)
+  identifier[]: datatypes::CX_Identifier(NK1.12)
+  gender: utilities::Convert_TerminologyCode(datatypes::CWE_Code(NK1.15), "HL70001", "Gender")
+  birthDate: utilities::Extract_Date(NK1.16)
+  communication[].language: datatypes::CWE_CodeableConcept(NK1.20)
+  name[]: datatypes::XPN_HumanName(NK1.30[])
+  telecom[]: datatypes::XTN_ContactPoint(NK1.31[], "work")
+  address[]: datatypes::XAD_Address(NK1.32[])
+  identifier[]: datatypes::CX_Identifier(NK1.33[])
+  identifier[]: datatypes::ST_Identifier(NK1.37)
+  telecom[]: datatypes::XTN_ContactPoint(NK1.40, "home")
+  telecom[]: datatypes::XTN_ContactPoint(NK1.41, "work")
+  patient: PatientReference
+  resourceType: "RelatedPerson"
+}
+
+// Description: Constructs a FHIR R4 Condition Resource and its related resources based on V2 DG1 Segment and Patient resource
+//
+// Argument(s):
+//   DG1 V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Condition: https://www.hl7.org/fhir/condition.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def DG1_Condition(required DG1, PatientReference) {
+  code: datatypes::CWE_CodeableConcept(DG1.3);     // Need Terminology Mapping: No mappings found in community sheet
+  code.text: DG1.4
+  onsetDateTime: utilities::Convert_DateTime(DG1.5)
+  // The resource must be output before building the asserter reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the asserter
+  // reference. The resource must not be modified after it has been output.
+  asserter: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(DG1.16[0]))
+  extension[]: utilities::Build_Extension(utilities::Convert_DateTime(DG1.19), "DateTime", "http://hl7.org/fhir/StructureDefinition/condition-assertedDate")
+  recordedDate: utilities::Convert_DateTime(DG1.19)
+  identifier[]: datatypes::EI_Identifier(DG1.20, "", "")
+  verificationStatus.coding[0].code: "entered-in-error"
+  verificationStatus.coding[0].system: "http://terminology.hl7.org/CodeSystem/condition-ver-status"
+  // The resource must be output before building the condition reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the condition
+  // reference. The resource must not be modified after it has been output.
+  var Condition: utilities::OutputResourceAndGetReference(datatypes::EI_Condition(DG1.22, PatientReference))
+  extension[]: utilities::Build_Extension(Condition, "Reference", "http://hl7.org/fhir/StructureDefinition/condition-dueTo")
+  subject: PatientReference
+  // Fixed value to ensure: https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-condition-definitions.html#Condition.category
+  category[0].coding[0].code: "unknown"
+  resourceType: "Condition"
+}
+
+// Description: Constructs a FHIR R4 Encounter Resource and its related resources based on V2 PV1, DG1 Segments and Patient, Condition resources
+//
+// Argument(s):
+//   PV1 V2 Segment
+//   DG1 V2 Segment
+//   MSH.9 V2 Field
+//   EVN.2 V2 Field
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Condition Resource already constructed through DG1_Condition Projector: https://www.hl7.org/fhir/condition.html
+//
+// Output(s):
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Location: https://www.hl7.org/fhir/location.html
+//   EpisodeOfCare: https://www.hl7.org/fhir/episodeofcare.html
+//
+def PV1_DG1_Encounter(required PV1, DG1, MSH_9, EVN_2, PatientReference, ConditionReference) {
+  if PV1.2 then {
+    var classCoding: datatypes::CWE_Coding(PV1.2)
+    class: utilities::Convert_TerminologyCoding(classCoding.code, "HL70004", "Encounter_Class")
+  } else {
+    class.code: "AMB"
+  }
+  var assignedLocation: if PV1.2.1 != "P" then {
+    var assignedLocationStatus: if MSH_9.2 == "A03" then "completed" else "active"
+    datatypes::PL_Location(PV1.3, assignedLocationStatus)
+  } else if PV1.2.1 == "P" then {
+    datatypes::PL_Location(PV1.3, "planned")
+  }
+  var assignedLocation.period.start: if MSH_9.2 == "A01" or MSH_9.2 == "A02" then utilities::Convert_DateTime(EVN_2)
+  var assignedLocation.period.end: if MSH_9.2 == "A03" then utilities::Convert_DateTime(EVN_2)
+  location[]: assignedLocation
+  if PV1.4 then {
+    type[0]: datatypes::CWE_CodeableConcept(PV1.4)
+  } else {
+    // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-encounter-definitions.html#Encounter.type
+    type[0].coding[0].code: "unknown"
+  }
+  hospitalization.preAdmissionIdentifier: datatypes::CX_Identifier(PV1.5)
+  var previousLocation: datatypes::PL_Location(PV1.6, "completed")
+  var previousLocation.period.end: if MSH_9.2 == "A02" then utilities::Convert_DateTime(EVN_2)
+  location[]: previousLocation
+  participant[]: datatypes::Build_Participant(PV1.7[], "ATND", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType", "attender")
+  participant[]: datatypes::Build_Participant(PV1.8[], "REF", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType", "referrer")
+  participant[]: datatypes::Build_Participant(PV1.9[], "CON", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType", "consultant")
+  serviceType: datatypes::CWE_CodeableConcept(PV1.10); // ConceptMap needed
+  hospitalization.reAdmission: datatypes::CWE_CodeableConcept(PV1.13)
+  hospitalization.admitSource: datatypes::CWE_CodeableConcept(PV1.14)
+  participant[]: datatypes::Build_Participant(PV1.17[], "ADM", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType", "admitter")
+  if PV1.19 then {
+    identifier[0]: datatypes::CX_Identifier(PV1.19)
+    identifier[0].type.coding[0].code: "VN"
+    identifier[0].type.coding[0].system: "http://terminology.hl7.org/CodeSystem/v2-0203"
+    identifier[0].type.text: "visit number"
+  }
+  hospitalization.dischargeDisposition: datatypes::CWE_CodeableConcept(PV1.36)
+  // The resource must be output before building the hospitalization.destination reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the hospitalization.destination
+  // reference. The resource must not be modified after it has been output.
+  hospitalization.destination: utilities::OutputResourceAndGetReference(datatypes::DLD_Location(PV1.37))
+  hospitalization.dietPreference[]: datatypes::CWE_CodeableConcept(PV1.38)
+  location[]: datatypes::PL_Location(PV1.42, "planned")
+  location[]: datatypes::PL_Location(PV1.43, "completed")
+  period.start: utilities::Convert_DateTime(PV1.44)
+  period.end: utilities::Convert_DateTime(PV1.45)
+  if !PV1.45 and PV1.2 then {
+    status: utilities::Convert_TerminologyCode(datatypes::CWE_Code(PV1.2), "HL70004", "Encounter_Status")
+  } else {
+    status: "finished"
+  }
+  identifier[]: datatypes::CX_Identifier(PV1.50[])
+  participant[]: datatypes::Build_Participant(PV1.52[], "PART", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType", "Participation")
+  if DG1 or ConditionReference then {
+    diagnosis[]: DG1_Encounter(DG1[], ConditionReference[])
+    // The resource must be output before building the episodeOfCare reference. Outputting the
+    // resource adds it to the bundle and assigns the id used in the episodeOfCare
+    // reference. The resource must not be modified after it has been output.
+    episodeOfCare[]: utilities::OutputResourceAndGetReference(datatypes::CX_DG1_EpisodeOfCare(PV1.54, DG1, ConditionReference, PatientReference))
+  }
+  subject: PatientReference
+  resourceType: "Encounter"
+}
+
+// Description: Constructs a FHIR R4 AllergyIntolerance Resource based on AL1 Segment and Patient resource
+//
+// Argument(s):
+//   AL1 V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   AllergyIntolerance: https://www.hl7.org/fhir/allergyintolerance.html
+//
+def AL1_AllergyIntolerance (required AL1, PatientReference) {
+  category[]: utilities::Convert_TerminologyCode(datatypes::CWE_Code(AL1.2), "http://terminology.hl7.org/CodeSystem/v2-0127", "Allergy_Category")
+  type: utilities::Convert_TerminologyCode(datatypes::CWE_Code(AL1.2), "http://terminology.hl7.org/CodeSystem/v2-0127", "Allergy_Type")
+  code: datatypes::CWE_CodeableConcept(AL1.3)
+  clinicalStatus.coding[0].code: "active"
+  clinicalStatus.coding[0].system: "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical"
+  if AL1.4.1 != "MO" and AL1.4.1 != "U" then {
+    criticality: utilities::Convert_TerminologyCode(datatypes::CWE_Code(AL1.4), "http://terminology.hl7.org/CodeSystem/v2-0128", "Allergy_Criticality")
+  }
+  if AL1.5 then {
+    if AL1.4.1 != "U" then {
+      reaction[0].severity: utilities::Convert_TerminologyCode(datatypes::CWE_Code(AL1.4), "http://terminology.hl7.org/CodeSystem/v2-0128", "Allergy_Severity")
+    }
+    reaction[0].manifestation[].text: AL1.5[]
+    reaction[0].onset: utilities::Convert_DateTime(AL1.6)
+  }
+  patient: PatientReference
+  resourceType: "AllergyIntolerance"
+}
+
+// Description: Constructs a FHIR R4 Observation Resource based on OBX Segment and Patient resource
+//
+// Argument(s):
+//   OBX V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Device : https://www.hl7.org/fhir/device.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def OBX_Observation (required OBX, PatientReference) {
+  // Ensures fhirpath-constraint-violation-Bundle.entry.resource.ofType(Observation): "value.empty() or component.code.where(coding.intersect(%resource.code.coding).exists()).empty()"
+  if listLen(OBX.5) > 1 then {
+    component[]: Build_ObservationComponent(OBX.5[], OBX.2, OBX.3, OBX.6)
+  } else {
+    Build_ObservationValue(OBX.5[0], OBX.2, OBX.6)
+  }
+  if OBX.3 then {
+    code: datatypes::CWE_CodeableConcept(OBX.3)
+  } else {
+    code.coding[0].code: "10001-6"
+  }
+  // Ensures fhirpath-constraint-violation-Bundle.entry.resource.ofType(Observation).referenceRange: "low.exists() or high.exists() or text.exists()"
+  referenceRange[0].text: OBX.7
+  interpretation[]: utilities::Convert_Terminology(datatypes::CWE_Code(OBX.8[])[], "HL70078", "Interpretation_Codes")
+  if OBX.11 then {
+    status: utilities::Convert_TerminologyCode(OBX.11, "HL70085", "Observation_Status")
+  } else {
+    status: "registered"
+  }
+  // To ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(Observation): "dataAbsentReason.empty() or value.empty()"
+  if !OBX.5 then {
+    if OBX.11 == "X" then {
+      dataAbsentReason.coding[0].code: "unknown"
+      dataAbsentReason.coding[0].system: "http://terminology.hl7.org/CodeSystem/data-absent-reason"
+    } else if OBX.11 == "N" then {
+      dataAbsentReason.coding[0].code: "not-asked"
+      dataAbsentReason.coding[0].system: "http://terminology.hl7.org/CodeSystem/data-absent-reason"
+    }
+  }
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-smokingstatus-definitions.html#Observation.issued
+  issued: currentTime("yyyy-MM-dd'T'HH:mm:ss.SSSxxx")
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-observation-lab-definitions.html#Observation.category:Laboratory
+  category[0].coding[0].code: "laboratory"
+  category[0].coding[0].system: "http://terminology.hl7.org/CodeSystem/observation-category"
+  effectiveDateTime: utilities::Convert_DateTime(OBX.14)
+  // The resource must be output before building the performer reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the performer
+  // reference. The resource must not be modified after it has been output.
+  performer[]: utilities::OutputResourceAndGetReference(datatypes::CWE_Organization(OBX.15))
+  performer[]: utilities::OutputResourceAndGetReference(datatypes::XCN_PractitionerRole(OBX.16[], "responsibleObserver", "http://terminology.hl7.org/CodeSystem/practitioner-role")[])
+  method: datatypes::CWE_CodeableConcept(OBX.17[0])
+  // The resource must be output before building the device reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the device
+  // reference. The resource must not be modified after it has been output.
+  device: utilities::OutputResourceAndGetReference(datatypes::EI_Device(OBX.18[], PatientReference)[])
+  bodySite: datatypes::CWE_CodeableConcept(OBX.20[0])
+  identifier[]: datatypes::EI_Identifier(OBX.21, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  var OBX_23: if is(OBX.25, "Array") then OBX.23[0] else OBX.23
+  var OBX_24: if is(OBX.25, "Array") then OBX.24[0] else OBX.24
+  var organization: datatypes::XON_XAD_Organization(OBX_23, OBX_24)
+  if OBX.25 then {
+    var OBX_25: if is(OBX.25, "Array") then OBX.25[0] else OBX.25
+    var practitionerRole: datatypes::XCN_PractitionerRole(OBX_25, "MDIR", "http://terminology.hl7.org/CodeSystem/v2-0912")
+    var practitionerRole.organization: utilities::OutputResourceAndGetReference(organization)
+    // The resource must be output before building the performer reference. Outputting the
+    // resource adds it to the bundle and assigns the id used in the performer
+    // reference. The resource must not be modified after it has been output.
+    performer[]: utilities::OutputResourceAndGetReference(practitionerRole)
+  } else {
+    performer[]: utilities::OutputResourceAndGetReference(organization)
+  }
+  subject: PatientReference
+  resourceType: "Observation"
+}
+
+// Description: Constructs a FHIR R4 DiagnosticReport Resource based on OBR Segment
+//
+// Argument(s):
+//   OBR V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   DiagnosticReport: https://hl7.org/fhir/diagnosticreport.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Specimen : https://hl7.org/fhir/specimen.html
+//
+def OBR_ORC_DiagnosticReport(required OBR, ORC, PatientReference) {
+  identifier[]: datatypes::EI_Identifier(ORC.2, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  if !ORC.2 or ORC.2.1 != OBR.2.1 then {
+    identifier[]: datatypes::EI_Identifier(OBR.2, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  }
+  identifier[]: datatypes::EI_Identifier(ORC.3, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  if !ORC.3 or ORC.3.1 != OBR.3.1 then {
+    identifier[]: datatypes::EI_Identifier(OBR.3, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  }
+  identifier[]: datatypes::EI_Identifier(ORC.4, "PGN", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  if OBR.4 then {
+    code: datatypes::CWE_CodeableConcept(OBR.4);  //ConceptMap needed
+  } else {
+    code.coding[0].code: "1003-3"
+  }
+  if !OBR.7 then {
+    effectiveDateTime: utilities::Convert_DateTime(ORC.9)
+  } else {
+    if !OBR.8 then {
+      effectiveDateTime: utilities::Convert_DateTime(OBR.7)
+    } else {
+      effectivePeriod.start: utilities::Convert_DateTime(OBR.7)
+      effectivePeriod.end: utilities::Convert_DateTime(OBR.8)
+    }
+  }
+  extension[]: utilities::Build_Extension(datatypes::CWE_CodeableConcept(ORC.16), "CodeableConcept", "http://hl7.org/fhir/StructureDefinition/event-statusReason")
+  issued: utilities::Convert_Instant(OBR.22)
+  if OBR.24 then {
+    category[0].coding[0].code: OBR.24;    // OBR.24 and category uses codes from the same codeSystem (HL70074)
+    category[0].coding[0].system: "http://terminology.hl7.org/CodeSystem/v2-0074"
+  } else {
+    // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-diagnosticreport-note-definitions.html#DiagnosticReport.category
+    category[0].coding[0].code: "unknown"
+  }
+  if OBR.25 then {
+    status: utilities::Convert_TerminologyCode(OBR.25, "HL70123", "Report_Status")
+  } else {
+    status: "registered";    // place-holder for 1-1 cardinality
+  }
+  // The resource must be output before building the resultsInterpreter reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the resultsInterpreter
+  // reference. The resource must not be modified after it has been output.
+  resultsInterpreter[]: utilities::OutputResourceAndGetReference(datatypes::NDL_PractitionerRole(OBR.32))
+  performer[]: Build_DiagnosticReportPerformer(OBR.34[], "SPRF")
+  performer[]: Build_DiagnosticReportPerformer(OBR.35[], "TRANS")
+  // The resource must be output before building the specimen reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the specimen
+  // reference. The resource must not be modified after it has been output.
+  specimen[]: utilities::OutputResourceAndGetReference(OBR_Specimen(OBR, PatientReference))
+  subject: PatientReference
+  resourceType: "DiagnosticReport"
+}
+
+// Description: Parse OBSERVATION group, and constructs FHIR R4 Resources based on OBX, NTE sub-segments
+//
+// Argument(s):
+//   ORDER_OBSERVATION Group
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Encounter Resource already constructed through PV1_DG1_Encounter Projector: https://www.hl7.org/fhir/encounter.html
+//
+// Output(s):
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def PARSE_OBSERVATION(required OBSERVATION, PatientReference, EncounterReference) {
+  var Observation: OBX_Observation(OBSERVATION.OBX, PatientReference)
+  if listLen(OBSERVATION.OBX.5) <= 1 and OBSERVATION.OBX.29 == "RSLT" then {
+    var Observation.encounter: EncounterReference
+  }
+  var Observation.note: datatypes::NTE_Annotation(OBSERVATION.NTE[])
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  $this: utilities::OutputResourceAndGetReference(Observation)
+}
+
+// Description: Parse ORDER_OBSERVATION group, and constructs FHIR R4 Resources based on OBX, OBR, ORC sub-segments
+//
+// Argument(s):
+//   ORDER_OBSERVATION Group
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Encounter Resource already constructed through PV1_datatypes::DG1_Encounter Projector: https://www.hl7.org/fhir/encounter.html
+//
+// Output(s):
+//   DiagnosticReport: https://hl7.org/fhir/diagnosticreport.html
+//   Location: https://www.hl7.org/fhir/location.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Specimen : https://hl7.org/fhir/specimen.html
+//
+def PARSE_ORDER_OBSERVATION (required ORDER_OBSERVATION, PatientReference, EncounterReference) {
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var ServiceRequestReference: utilities::OutputResourceAndGetReference(ORC_OBR_ServiceRequest(ORDER_OBSERVATION.COMMON_ORDER.ORC, ORDER_OBSERVATION.OBR, {}, PatientReference))
+
+  var ObservationReference[]: PARSE_OBSERVATION(ORDER_OBSERVATION.OBSERVATION[], PatientReference, EncounterReference)
+
+  var DiagnosticReport: OBR_ORC_DiagnosticReport(ORDER_OBSERVATION.OBR, ORDER_OBSERVATION.COMMON_ORDER.ORC, PatientReference)
+  var DiagnosticReport.result[]: ObservationReference[]
+  var DiagnosticReport.basedOn[]: ServiceRequestReference
+  var DiagnosticReport.encounter: EncounterReference
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var DiagnosticReportReference: utilities::OutputResourceAndGetReference(DiagnosticReport)
+}
+
+// Description: Parse PATIENT_RESULT group, and constructs FHIR R4 Resources based on PID, PD1, PV1, OBX, OBR, ORC sub-segments
+//
+// Argument(s):
+//   PATIENT_RESULT Group
+//
+// Output(s):
+//   Account: https://www.hl7.org/fhir/account.html
+//   Device : https://www.hl7.org/fhir/device.html
+//   DiagnosticReport: https://hl7.org/fhir/diagnosticreport.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   Location: https://www.hl7.org/fhir/location.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   Specimen : https://hl7.org/fhir/specimen.html
+//
+def Parse_PATIENT_RESULT (required PATIENT_RESULT, MSH_9, EVN_2) {
+  var Patient: PID_PD1_Patient(PATIENT_RESULT.PATIENT.PID, PATIENT_RESULT.PATIENT.PD1)
+  var Patient.contact[]: if PATIENT_RESULT.PATIENT.NK1 then datatypes::NK1_Contact(PATIENT_RESULT.PATIENT.NK1[])
+  var Patient.extension[]: utilities::Build_Extension(datatypes::CWE_CodeableConcept(PATIENT_RESULT.PATIENT.VISIT.PV1.16), "CodeableConcept", "http://hl7.org/fhir/StructureDefinition/patient-importance")
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var PatientReference: utilities::OutputResourceAndGetReference(Patient)
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var AccountReference: utilities::OutputResourceAndGetReference(PID_Account(PATIENT_RESULT.PATIENT.PID.18, PatientReference))
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var ProvenanceReference: utilities::OutputResourceAndGetReference(PID_Provenance(PATIENT_RESULT.PATIENT.PID.34, PATIENT_RESULT.PATIENT.PID.33, PatientReference))
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var RelatedPersonReference: utilities::OutputResourceAndGetReference(NK1_RelatedPerson(PATIENT_RESULT.PATIENT.NK1[], PatientReference)[])
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var EncounterReference: utilities::OutputResourceAndGetReference(PV1_DG1_Encounter(PATIENT_RESULT.PATIENT.VISIT.PV1, "", MSH_9, EVN_2, PatientReference, ""))
+
+  if PATIENT_RESULT.PATIENT.PATIENT_OBSERVATION[*].OBX then {
+    // Outputting the resource adds it to the bundle and assigns the ids. The resource
+    // must not be modified after it is output.
+    var ObservationReference: utilities::OutputResourceAndGetReference(OBX_Observation(PATIENT_RESULT.PATIENT.PATIENT_OBSERVATION[*].OBX[], PatientReference)[])
+  }
+  PARSE_ORDER_OBSERVATION(PATIENT_RESULT.ORDER_OBSERVATION[], PatientReference, EncounterReference)
+  PatientReference
+}
+
+// Description: Constructs a FHIR R4 RelatedPerson Resource based on V2 PID-21 Field and Patient Resource
+//
+// Argument(s):
+//   PID-21 V2 Segment Field
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   RelatedPerson: https://www.hl7.org/fhir/relatedperson.html
+//
+def PID_RelatedPersonMother(required PID_21, PatientReference) {
+  identifier[]: datatypes::CX_Identifier(PID_21[])
+  relationship[0].coding[0].code: "MTH"
+  relationship[0].coding[0].system: "http://terminology.hl7.org/CodeSystem/v3-RoleCode"
+  patient: PatientReference
+  resourceType: "RelatedPerson"
+}
+
+// Description: Constructs a FHIR R4 Provenance Resource based on V2 PID-34 and PID-35 Fields and Patient Resource
+//
+// Argument(s):
+//   PID-34 V2 Segment Field
+//   PID-33 V2 Segment Field
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//
+def PID_Provenance(required PID_34, PID_33, PatientReference) {
+  recorded: currentTime("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+  activity.coding[0].code: "UPDATE"
+  activity.coding[0].system: "http://terminology.hl7.org/CodeSystem/v3-DataOperation"
+  occurredDateTime: utilities::Convert_DateTime(PID_33)
+  var performer: utilities::OutputResourceAndGetReference(datatypes::HD_Organization(PID_34))
+  agent[]: datatypes::Build_Agent("performer", "http://terminology.hl7.org/CodeSystem/provenance-participant-type", performer)
+  target[]: PatientReference
+  resourceType: "Provenance"
+}
+
+// Description: Constructs a FHIR R4 Procedure Resource and its related resources based on V2 PR1 Segment and Patient Resource
+//
+// Argument(s):
+//   PR1 V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Procedure: https://www.hl7.org/fhir/procedure.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def PR1_Procedure(required PR1, PatientReference) {
+  code: datatypes::CNE_CodeableConcept(PR1.3)
+  code.text: if !PR1.3.9 then PR1.4
+  if !PR1.7 then {
+    performedDateTime: utilities::Convert_DateTime(PR1.5)
+  } else {
+    var start: utilities::Convert_DateTime(PR1.5)
+    performedPeriod.start: start
+    performedPeriod.end: calculateNewDateTime(start, tryParseNum(PR1.7), "MINUTES")
+  }
+  category: datatypes::CWE_CodeableConcept(PR1.6);     // Need Terminology Mapping: No mappings found in community sheet
+  performer[]: datatypes::Build_Performer(PR1.8[], constants::SnomedCode_Anesthesiologist(), "http://snomed.info/sct")
+  performer[]: datatypes::Build_Performer(PR1.11[], constants::SnomedCode_Surgeon(), "http://snomed.info/sct")
+  performer[]: datatypes::Build_Performer(PR1.12[], "", "");    // passing empty values since performer-role code and system are unknown
+  reasonCode[]: datatypes::CWE_CodeableConcept(PR1.15);     // Need Terminology Mapping: No mappings found in community sheet
+  identifier[]: datatypes::EI_Identifier(PR1.19, "", "");    // passing empty values since identifier code and system are unknown
+  location: datatypes::PL_Location(PR1.23[0], "").location;    // passing empty value since location status is unknown
+  status: "unknown";    // place-holder for 1..1 cardinality
+  subject: PatientReference
+  resourceType: "Procedure"
+}
+
+// Description: Constructs a FHIR R4 Provenance Resource and its related resources based on V2 EVN, MSH Segments and MessageHeader Resource
+//
+// Argument(s):
+//   EVN V2 Segment
+//   MSH V2 Segment
+//   MessageHeader Resource already constructed through MSH_MessageHeader Projector: https://www.hl7.org/fhir/messageheader.html
+//
+// Output(s):
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//
+def EVN_Provenance(required EVN, MSH, MessageHeaderReference) {
+  var agent[]: datatypes::Build_Agent("", "", utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(EVN.5[])[])[]);  // passing empty values since agent's code and system are unknown
+  if !MSH.22 then {
+    var agent[]: datatypes::Build_Agent("", "", utilities::OutputResourceAndGetReference(datatypes::HD_Organization(MSH.4)));  // passing empty values since agent's code and system are unknown
+  } else {
+    var agent[]: datatypes::Build_Agent("", "", utilities::OutputResourceAndGetReference(datatypes::XON_Organization(MSH.22)));  // passing empty values since agent's code and system are unknown
+  }
+  if listLen(agent) > 0 then {
+    agent: agent
+    activity.coding[0].display: "event - :{MSH.9.1}^{MSH.9.2}"
+    recorded: utilities::Convert_Instant(EVN.2)
+    if EVN.4.1 == "U" then {
+      reason[0].extension[0].valueCodeableConcept.coding[0].code: "unknown"
+      reason[0].extension[0].url: "http://hl7.org/fhir/StructureDefinition/data-absent-reason"
+    } else {
+      reason[]: utilities::Convert_Terminology(datatypes::CWE_Code(EVN.4), "HL70062", "Event_Reason")
+    }
+    occurredDateTime: utilities::Convert_DateTime(EVN.6)
+    location: utilities::OutputResourceAndGetReference(datatypes::HD_Location(EVN.7, ""))
+    target[]: MessageHeaderReference
+    resourceType: "Provenance"
+  }
+}
+
+// Description: Constructs a FHIR R4 ServiceRequest Resource and its related resources based on V2 ORC, OBR Segments and Patient Resource
+//
+// Argument(s):
+//   ORC V2 Segment
+//   OBR V2 Segment
+//   TQ1 V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Provenance: https://www.hl7.org/fhir/servicerequest.html
+//   PractitionerRole: https://www.hl7.org/fhir/practitionerrole.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//
+def ORC_OBR_ServiceRequest(required ORC, OBR, TQ1, PatientReference) {
+  identifier[]: datatypes::EI_Identifier(ORC.2, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: if !ORC.2 then datatypes::EI_Identifier(OBR.2, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: datatypes::EI_Identifier(ORC.3, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: if !ORC.3 then datatypes::EI_Identifier(OBR.3, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: datatypes::EI_Identifier(ORC.4, "PGN", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: datatypes::EI_Identifier(ORC.4, "FGN", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  if ORC.5 then {
+    status: utilities::Convert_TerminologyCode(ORC.5, "HL70038", "Order_Status")
+  } else {
+    status: "unknown";  // place-holder for 1..1 cardinality
+    extension[]: utilities::Build_Extension(datatypes::CWE_CodeableConcept(ORC.16), "CodeableConcept", "http://hl7.org/fhir/StructureDefinition/request-statusReason")
+  }
+  if TQ1 then {
+    $this: datatypes::TQ1_ServiceRequest(TQ1)
+  } else {
+    if ORC.7 then {
+      $this: datatypes::TQ_ServiceRequest(ORC.7[0])
+    } else {
+      $this: datatypes::TQ_ServiceRequest(OBR.27[0])
+    }
+  }
+  authoredOn: if ORC.1 == "NW" then utilities::Convert_DateTime(ORC.9)
+  if ORC.12 then {
+    var Practitioner: datatypes::XCN_Practitioner(ORC.12[0])
+    var Practitioner.address[]: datatypes::XAD_Address(ORC.24[0])
+    var Practitioner: utilities::OutputResourceAndGetReference(Practitioner)
+    if ORC.21 then {
+      var Organization: datatypes::XON_XAD_Organization(ORC.21[0], ORC.22[0])
+      var Organization.telecom[]: datatypes::XTN_ContactPoint(ORC.23[0], "");    // passing "" since use is unknown
+      var Organization: utilities::OutputResourceAndGetReference(Organization)
+      var PractitionerRole: utilities::OutputResourceAndGetReference(datatypes::Build_PractitionerRole(Practitioner, Organization, "", ""));    // passing empty arguments since code and system are unknown
+      // The resource must be output before building the requester reference. Outputting the
+      // resource adds it to the bundle and assigns the id used in the requester
+      // reference. The resource must not be modified after it has been output.
+      requester: PractitionerRole
+    } else {
+      requester: Practitioner
+    }
+  } else {
+    // The resource must be output before building the requester reference. Outputting the
+    // resource adds it to the bundle and assigns the id used in the requester
+    // reference. The resource must not be modified after it has been output.
+    requester: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(OBR.16[0]))
+  }
+  locationCode[]: utilities::Convert_Terminology(datatypes::CWE_Code(ORC.29), "HL70482", "Order_Type")
+  if !OBR.53 then {
+    identifier[]: datatypes::CX_Identifier(ORC.33[])
+  } else {
+    identifier[]: datatypes::CX_Identifier(OBR.53[])
+  }
+
+  code: datatypes::CWE_CodeableConcept(OBR.4)
+  priority: utilities::Convert_TerminologyCode(OBR.5, "HL70485", "Priority")
+  if !$this.occurrenceTiming then {
+    occurrenceDateTime: utilities::Convert_DateTime(OBR.6)
+  }
+  if OBR.11 == "G" then {
+    intent: "reflex-order"
+  } else {
+    intent: "order"
+  }
+  reasonCode[]: datatypes::CWE_CodeableConcept(OBR.31[])
+  // To ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(ServiceRequest): "orderDetail.empty() or code.exists()"
+  if $this.code then {
+    orderDetail[]: datatypes::CWE_CodeableConcept(OBR.46[])
+    orderDetail[]: datatypes::CWE_CodeableConcept(OBR.47[])
+  }
+  subject: PatientReference
+  resourceType: "ServiceRequest"
+}
+
+// Description: Parse ORDER group, and constructs FHIR R4 Resources based on OBX, OBR, ORC and SPM sub-segments
+//
+// Argument(s):
+//   ORDER Group
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Condition Resource already constructed through DG1_Condition Projector: https://www.hl7.org/fhir/condition.html
+//
+// Output(s):
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Specimen : https://hl7.org/fhir/specimen.html
+//   ServiceRequest: https://www.hl7.org/fhir/servicerequest.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//
+def Parse_ORDER(ORDER, PatientReference, ConditionReference) {
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var ObservationReference[]: PARSE_OBSERVATION(ORDER.OBSERVATION_REQUEST.OBSERVATION[], PatientReference, {})
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var SpecimenReference: utilities::OutputResourceAndGetReference(OBR_Specimen(ORDER.OBSERVATION_REQUEST.OBR, PatientReference))
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var SpecimenReference: utilities::OutputResourceAndGetReference(SPM_Specimen(ORDER.OBSERVATION_REQUEST.SPECIMEN[*].SPM[], PatientReference)[])
+
+  var ServiceRequest: ORC_OBR_ServiceRequest(ORDER.ORC, ORDER.OBSERVATION_REQUEST.OBR, ORDER.TIMING[0].TQ1, PatientReference)
+  var ServiceRequest.reasonReference[]: ConditionReference[]
+  var ServiceRequest.supportingInfo[]: ObservationReference[]
+  var ServiceRequest.specimen[]: SpecimenReference[]
+  var ServiceRequest.note: datatypes::NTE_Annotation(ORDER.OBSERVATION_REQUEST.NTE[])
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var ServiceRequestReference: utilities::OutputResourceAndGetReference(ServiceRequest)
+
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var ProvenanceReference: utilities::OutputResourceAndGetReference(ORC_Provenance(ORDER.ORC, ServiceRequestReference))
+}
+
+// Description: Constructs a FHIR R4 Specimen Resource based on V2 SPM Segment and Patient Resource
+//
+// Argument(s):
+//   SPM V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Specimen: https://www.hl7.org/fhir/specimen.html
+//
+def SPM_Specimen(required SPM, PatientReference) {
+  identifier[]: datatypes::EI_Identifier(SPM.2.1, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: datatypes::EI_Identifier(SPM.2.2, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  type: datatypes::CWE_CodeableConcept(SPM.4)
+  container[].additiveCodeableConcept: datatypes::CWE_CodeableConcept(SPM.6[])[]
+  collection.method: datatypes::CWE_CodeableConcept(SPM.7)
+  collection.bodySite: datatypes::CWE_CodeableConcept(SPM.8)
+  collection.quantity: datatypes::CQ_Quantity(SPM.12)
+  note[].text: SPM.14[]
+  if SPM.17.2 then {
+    collection.collectedPeriod.start: utilities::Convert_DateTime(SPM.17.1)
+    collection.collectedPeriod.end: utilities::Convert_DateTime(SPM.17.2)
+  } else {
+    collection.collectedDateTime: utilities::Convert_DateTime(SPM.17.1)
+  }
+  receivedTime: utilities::Convert_DateTime(SPM.18)
+  status: SPM.20
+  condition[]: datatypes::CWE_CodeableConcept(SPM.24[])
+  container[].type: datatypes::CWE_CodeableConcept(SPM.27)
+  accessionIdentifier: datatypes::CX_Identifier(SPM.30[0])
+  identifier[]: datatypes::CX_Identifier(SPM.31[])
+  var SPM_32: if is(SPM.32, "Array") then SPM.32[0] else SPM.32
+  identifier[]: datatypes::EI_Identifier(SPM_32, "SHIP", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  subject: PatientReference
+  resourceType: "Specimen"
+}
+
+// Description: Constructs a FHIR R4 Provenance Resource and its related resources based on V2 ORC Segment and Patient Resource
+//
+// Argument(s):
+//   ORC V2 Segment
+//   ServiceRequest Resource already constructed through ORC_OBR_ServiceRequest Projector: https://www.hl7.org/fhir/servicerequest.html
+//
+// Output(s):
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Location: https://www.hl7.org/fhir/location.html
+//
+def ORC_Provenance(required ORC, required ServiceRequestReference) {
+  // The resource must be output before building the agent. Outputting the
+  // resource adds it to the bundle and assigns the id used in the agent
+  // reference. The resource must not be modified after it has been output.
+  var enterer[]: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(ORC.10[])[])
+  var agent[]: datatypes::Build_Agent("enterer", "http://terminology.hl7.org/CodeSystem/provenance-participant-type", enterer[])
+  // The resource must be output before building the agent. Outputting the
+  // resource adds it to the bundle and assigns the id used in the agent
+  // reference. The resource must not be modified after it has been output.
+  var verifier[]: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(ORC.11[])[])
+  var agent[]: datatypes::Build_Agent("verifier", "http://terminology.hl7.org/CodeSystem/provenance-participant-type", verifier[])
+  // The resource must be output before building the agent. Outputting the
+  // resource adds it to the bundle and assigns the id used in the agent
+  // reference. The resource must not be modified after it has been output.
+  var author[]: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(ORC.12[])[])
+  var agent[]: datatypes::Build_Agent("author", "http://terminology.hl7.org/CodeSystem/provenance-participant-type", author[])
+  // The resource must be output before building the agent. Outputting the
+  // resource adds it to the bundle and assigns the id used in the agent
+  // reference. The resource must not be modified after it has been output.
+  var performer[]: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(ORC.19[])[])
+  var agent[]: datatypes::Build_Agent("performer", "http://terminology.hl7.org/CodeSystem/provenance-participant-type", performer[])
+  if listLen(agent) > 0 then {
+    agent: agent
+    activity: utilities::Convert_Terminology(ORC.1, "HL70119", "Order_Control_Codes")
+    recorded: if ORC.9 then utilities::Convert_Instant(ORC.9) else currentTime("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");  // place-holder for 1..1 cardinality
+    occurredDateTime: utilities::Convert_DateTime(ORC.9)
+    // The resource must be output before building the location. Outputting the
+    // resource adds it to the bundle and assigns the id used in the location
+    // reference. The resource must not be modified after it has been output
+    location: utilities::OutputResourceAndGetReference(datatypes::XON_XAD_XTN_Location(ORC.21[0], ORC.22[0], ORC.23[0]))
+    target[]: ServiceRequestReference
+    resourceType: "Provenance"
+  }
+}
+
+// Description: Constructs a FHIR R4 MedicationRequest Resource and its related resources based on V2 ORC, RXR Segments and Patient resource
+//
+// Argument(s):
+//   ORC V2 Segment
+//   RXR V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   MedicationRequest: https://www.hl7.org/fhir/medicationrequest.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def ORC_RXR_MedicationRequest(required ORC, RXR, PatientReference) {
+  intent: "original-order"
+  identifier[]: datatypes::EI_Identifier(ORC.2, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: datatypes::EI_Identifier(ORC.3, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: datatypes::EI_Identifier(ORC.4, "PGN", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  status: if ORC.5 then utilities::Convert_TerminologyCode(ORC.5, "HL70038", "Order_Status") else "unknown";    // place-holder for 1-1 cardinality
+  dosageInstruction[]: datatypes::TQ_Dosage(ORC.7[])
+  dosageInstruction[]: RXR_Dosage(RXR[])
+  priority: utilities::Convert_TerminologyCode(ORC.7[0].6, "HL70485", "Priority")
+  authoredOn: utilities::Convert_DateTime(ORC.9)
+  // The resource must be output before building the requester. Outputting the
+  // resource adds it to the bundle and assigns the id used in the requester
+  // reference. The resource must not be modified after it has been output.
+  requester: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(ORC.10[0]))
+  // The resource must be output before building the performer. Outputting the
+  // resource adds it to the bundle and assigns the id used in the performer
+  // reference. The resource must not be modified after it has been output.
+  performer: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(ORC.12[0]))
+  reasonCode[]: datatypes::CWE_CodeableConcept(ORC.16)
+  // The resource must be output before building the recorder. Outputting the
+  // resource adds it to the bundle and assigns the id used in the recorder
+  // reference. The resource must not be modified after it has been output.
+  recorder: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(ORC.19[0]))
+  medicationCodeableConcept.text: "unknown";    // place-holder for 1-1 cardinality
+  subject: PatientReference
+  resourceType: "MedicationRequest"
+}
+
+// Description: Constructs a FHIR R4 MedicationRequest Resource and its related resources based on V2 RXE, RXR Segments and Patient resource
+//
+// Argument(s):
+//   RXE V2 Segment
+//   RXR V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   MedicationRequest: https://www.hl7.org/fhir/medicationrequest.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Medication: https://www.hl7.org/fhir/medication.html
+//
+def RXE_RXR_MedicationRequest(required RXE, RXR, PatientReference) {
+  intent: "filler-order"
+  dosageInstruction[]: datatypes::TQ_Dosage(RXE.1)
+  dosageInstruction[]: RXR_Dosage(RXR[])
+  priority: utilities::Convert_TerminologyCode(RXE.1.6, "HL70485", "Priority")
+  // The resource must be output before building the medication. Outputting the
+  // resource adds it to the bundle and assigns the id used in the medication
+  // reference. The resource must not be modified after it has been output.
+  medicationReference: utilities::OutputResourceAndGetReference(datatypes::Build_Medication(RXE.2, RXE.6))
+  dosageInstruction[0].doseAndRate[0].doseRange.low.value: if RXE.3 then tryParseNum(RXE.3)
+  dosageInstruction[0].doseAndRate[0].type.coding[0].code: "ordered"
+  dosageInstruction[0].doseAndRate[0].doseRange.high.value: if RXE.4 then tryParseNum(RXE.4)
+  if RXE.5.1 or RXE.5.3 then {
+    var lowCode: if RXE.3 then datatypes::CWE_Code(RXE.5);   // Need Terminology Mapping: No mappings found in community sheet
+    dosageInstruction[0].doseAndRate[0].doseRange.low.code: lowCode
+    // Fixed-value to ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(MedicationRequest).dosageInstruction.doseAndRate.dose.ofType(Range).low: "code.empty() or system.exists()"
+    dosageInstruction[0].doseAndRate[0].doseRange.low.system: if lowCode then "unknown"
+    var highCode: if RXE.4 then datatypes::CWE_Code(RXE.5);   // Need Terminology Mapping: No mappings found in community sheet
+    dosageInstruction[0].doseAndRate[0].doseRange.high.code: highCode
+    // Fixed-value to ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(MedicationRequest).dosageInstruction.doseAndRate.dose.ofType(Range).high: "code.empty() or system.exists()"
+    dosageInstruction[0].doseAndRate[0].doseRange.high.system: if highCode then "unknown"
+  } else {
+    dosageInstruction[0].doseAndRate[0].doseRange.low.unit: if RXE.3 then datatypes::CWE_String(RXE.5)
+    dosageInstruction[0].doseAndRate[0].doseRange.high.unit: if RXE.4 then datatypes::CWE_String(RXE.5)
+  }
+  dispenseRequest.quantity.value: if RXE.10 then tryParseNum(RXE.10)
+  if RXE.10 then {
+    if RXE.11.1 or RXE.11.3 then {
+      dispenseRequest.quantity.code: datatypes::CWE_Code(RXE.11);   // Need Terminology Mapping: No mappings found in community sheet
+      // Fixed-value to ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(MedicationRequest).dispenseRequest.quantity: "code.empty() or system.exists()"
+      dispenseRequest.quantity.system: if RXE.11 then "unknown"
+    } else {
+      dispenseRequest.quantity.unit: datatypes::CWE_String(RXE.11)
+    }
+  }
+  dispenseRequest.numberOfRepeatsAllowed: if RXE.12 then tryParseNum(RXE.12)
+  // The resource must be output before building the requester. Outputting the
+  // resource adds it to the bundle and assigns the id used in the requester
+  // reference. The resource must not be modified after it has been output.
+  requester: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(RXE.13[0]))
+  // The resource must be output before building the recorder. Outputting the
+  // resource adds it to the bundle and assigns the id used in the recorder
+  // reference. The resource must not be modified after it has been output.
+  recorder: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(RXE.14[0]))
+  var Identifier: datatypes::ST_Identifier(RXE.15)
+  var Identifier.type.text: if RXE.15 then "prescription-number"
+  identifier[]: Identifier
+  status: "unknown";    // place-holder for 1..1 cardinality
+  subject: PatientReference
+  resourceType: "MedicationRequest"
+}
+
+// Description: Constructs a FHIR R4 MedicationAdministration Resource and its related resources based on V2 RXA, ORC, RXR Segments and Patient, Encounter, MedicationRequest resources
+//
+// Argument(s):
+//   RXA V2 Segment
+//   ORC V2 Segment
+//   RXR V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Encounter Resource already constructed through PV1_DG1_Encounter Projector: https://www.hl7.org/fhir/encounter.html
+//   MedicationRequest Resource already constructed through RXE_ORC_RXR_MedicationRequest Projector: https://www.hl7.org/fhir/medicationrequest.html
+//
+// Output(s):
+//   MedicationAdministration: https://www.hl7.org/fhir/medicationadministration.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Medication: https://www.hl7.org/fhir/medication.html
+//
+def RXA_ORC_RXR_MedicationAdministration(required RXA, ORC, RXR, PatientReference, EncounterReference, MedicationRequestReference) {
+  identifier[]: datatypes::EI_Identifier(ORC.2, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: datatypes::EI_Identifier(ORC.3, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+
+  effectivePeriod.start: utilities::Convert_DateTime(RXA.3)
+  effectivePeriod.end: utilities::Convert_DateTime(RXA.4)
+  dosage.dose.value: if RXA.6 then tryParseNum(RXA.6)
+  dosage.dose: datatypes::CWE_Qauntity(RXA.7)
+  performer[]: datatypes::Build_Performer(RXA.10[], "AP", "http://terminology.hl7.org/CodeSystem/v2-0443")
+  performer[]: datatypes::Build_Performer(ORC.12[], "OP", "http://terminology.hl7.org/CodeSystem/v2-0443")
+  statusReason: datatypes::CWE_CodeableConcept(RXA.18[0]);   // Need Terminology Mapping: No mappings found in community sheet
+  reasonCode: datatypes::CWE_CodeableConcept(RXA.19[])   // Need Terminology Mapping: No mappings found in community sheet
+
+  if RXA.21 != "D" then {
+    if RXA.20 then {
+      status: utilities::Convert_TerminologyCode(RXA.20, "HL70322", "Completion_Status")
+    } else {
+      status: "completed"
+    }
+  } else {
+    status: "entered-in-error"
+  }
+
+  var Medication: datatypes::Build_Medication(RXA.5, RXA.8)
+  var Medication.batch.lotNumber: RXA.15[0]
+  var Medication.batch.expirationDate: if RXA.16 then utilities::Convert_DateTime(RXA.16[0])
+  var Manufacturer: utilities::OutputResourceAndGetReference(datatypes::CWE_Organization(RXA.17[0]))
+  var Medication.manufacturer: Manufacturer
+  medicationReference: utilities::OutputResourceAndGetReference(Medication)
+
+  // To ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(MedicationAdministration).dosage: "dose.exists() or rate.exists()"
+  if $this.dosage.dose then {
+    dosage.route: datatypes::CWE_CodeableConcept(RXR.1)
+    dosage.site: datatypes::CWE_CodeableConcept(RXR.2)
+    dosage.method: datatypes::CWE_CodeableConcept(RXR.4)
+  }
+  request: MedicationRequestReference
+  subject: PatientReference
+  context: EncounterReference
+  resourceType: "MedicationAdministration"
+}
+
+// Description: Parse PATIENT group, and constructs FHIR R4 Resources based on OBX, PID, PV1, DG1, PD1, sub-segments
+//
+// Argument(s):
+//   PATIENT Group
+// Output(s):
+//   Patient: https://hl7.org/fhir/patient.html
+//   Location: https://www.hl7.org/fhir/location.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Encounter : https://hl7.org/fhir/encounter.html
+//   Condition : https://hl7.org/fhir/condition.html
+//   Account : https://hl7.org/fhir/account.html
+//
+def Parse_PATIENT(required PATIENT, MSH_9, EVN_2) {
+  var Patient: segments::PID_PD1_Patient(PATIENT.PID, PATIENT.PD1)
+  var Patient.extension[]: utilities::Build_Extension(datatypes::CWE_CodeableConcept(PATIENT.PV1.16), "CodeableConcept", "http://hl7.org/fhir/StructureDefinition/patient-importance")
+  var PatientReference: utilities::OutputResourceAndGetReference(Patient)
+
+  var AccountReference: utilities::OutputResourceAndGetReference(segments::PID_Account(PATIENT.PID.18, PatientReference))
+
+  var ProvenanceReference: utilities::OutputResourceAndGetReference(segments::PID_Provenance(PATIENT.PID.34, PATIENT.PID.33, PatientReference))
+
+  var ConditionReference: utilities::OutputResourceAndGetReference(segments::DG1_Condition(PATIENT.DG1[], PatientReference)[])
+
+  var EncounterReference: utilities::OutputResourceAndGetReference(segments::PV1_DG1_Encounter(PATIENT.PV1, PATIENT.DG1, MSH_9, EVN_2, PatientReference, ConditionReference))
+
+  var ObservationReference: utilities::OutputResourceAndGetReference(segments::OBX_Observation(PATIENT.OBX[], PatientReference)[])
+
+  PatientReference
+}
+
+// Description: Constructs a FHIR R4 Immunization Resource and its related resources based on V2 ORC Segment and Patient Resource
+//
+// Argument(s):
+//   ORC V2 Segment
+//   RXA V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Immunization: https://www.hl7.org/fhir/immunization.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Location: https://www.hl7.org/fhir/location.html
+//
+def ORDER_Immunization(required ORDER, PatientReference) {
+  var ORC: ORDER.ORC
+  var RXA: ORDER.RXA
+  var RXR: ORDER.RXR
+  identifier[]: datatypes::EI_Identifier(ORC.2, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: datatypes::EI_Identifier(ORC.3, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  recorded: utilities::Convert_DateTime(ORC.9)
+  performer[]: datatypes::Build_Performer(ORC.12[], "OP", "http://terminology.hl7.org/CodeSystem/v2-0443")
+  occurrenceDateTime: utilities::Convert_DateTime(RXA.3)
+  vaccineCode: datatypes::CWE_CodeableConcept(RXA.5)
+  doseQuantity: datatypes::CWE_Qauntity(RXA.7)
+  doseQuantity.value: if RXA.6 then tryParseNum(RXA.6)
+  performer[]: datatypes::Build_Performer(RXA.10[], "AP", "http://terminology.hl7.org/CodeSystem/v2-0443")
+  lotNumber: RXA.15[0]
+  expirationDate: utilities::Extract_Date(RXA.16[0])
+  manufacturer: utilities::OutputResourceAndGetReference(datatypes::CWE_Organization(RXA.17[0]))
+  statusReason: datatypes::CWE_CodeableConcept(RXA.18[0])
+  reasonCode: datatypes::CWE_CodeableConcept(RXA.19[])
+
+  if RXA.21 == "D" then {
+    status: "entered-in-error"
+  } else {
+    if RXA.21 == "A" then {
+      recorded: utilities::Convert_DateTime(RXA.22)
+    }
+    if RXA.20 then {
+      status: utilities::Convert_TerminologyCode(RXA.20, "HL70322", "Completion_Status")
+    } else {
+      status: "completed"
+    }
+  }
+  location: datatypes::PL_Location(RXA.27, "completed").location
+
+  route[]: if RXR then datatypes::CWE_CodeableConcept(RXR.1)
+  site[]: if RXR then datatypes::CWE_CodeableConcept(RXR.2)
+  patient: PatientReference
+  resourceType: "Immunization"
+}
+
+// Description: Constructs a FHIR R4 DiagnosticReport Resource based on TXA Segment
+//
+// Argument(s):
+//   TXA V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   DiagnosticReport: https://hl7.org/fhir/diagnosticreport.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   PractitionerRole: https://www.hl7.org/fhir/practitionerrole.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//
+def TXA_DiagnosticReport(required TXA, PatientReference, EncounterReference) {
+  code: datatypes::CWE_CodeableConcept(TXA.2)
+  effectiveDateTime: utilities::Convert_DateTime(TXA.4)
+  var TXA5: if is(TXA.5, "Container") then [TXA.5] else TXA.5
+  performer[]: if TXA.4 then utilities::OutputResourceAndGetReference(datatypes::XCN_PractitionerRole(TXA5[], "PPRF", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType")[])
+  issued: utilities::Convert_Instant(TXA.6)
+  performer[]: utilities::OutputResourceAndGetReference(datatypes::XCN_PractitionerRole(TXA.9[], "AUT", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType")[])
+  performer[]: utilities::OutputResourceAndGetReference(datatypes::XCN_PractitionerRole(TXA.10[], "AUTHEN", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType")[])
+  performer[]: if TXA.11 then utilities::OutputResourceAndGetReference(datatypes::XCN_PractitionerRole(TXA.11[], "TRANS", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType")[])
+  identifier[]: datatypes::EI_Identifier(TXA.12, "", "");  // passing "" since code and System are unknown
+  identifier[]: datatypes::EI_Identifier(TXA.13, "", "");  // passing "" since code and System are unknown
+  identifier[]: datatypes::EI_Identifier(TXA.14[], "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: datatypes::EI_Identifier(TXA.15, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  status: utilities::Convert_TerminologyCode(TXA.17, "HL70271", "Document_Completion_Status"); // ConceptMap needed
+  performer[]: utilities::OutputResourceAndGetReference(datatypes::HD_Organization(TXA.27));   // TXA.27(Creating Facility) added in v2.9
+  encounter: EncounterReference
+  subject: PatientReference
+  resourceType: "DiagnosticReport"
+}
+
+// Description: Parse PROBLEM.ORDER group, and constructs FHIR R4 Resources based on OBX, OBR, ORC segments
+//
+// Argument(s):
+//   ORDER Group
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Encounter Resource already constructed through PV1_DG1_Encounter Projector: https://www.hl7.org/fhir/encounter.html
+//   Condition Resource already constructed through PV1_DG1_Encounter Projector: https://www.hl7.org/fhir/condition.html
+//
+// Output(s):
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   ServiceRequest: https://www.hl7.org/fhir/servicerequest.html
+//
+def Parse_PROBLEM_ORDER(required ORDER, PatientReference, EncounterReference, ConditionReference) {
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var ObservationReference[]: PARSE_OBSERVATION(ORDER.ORDER_DETAIL.ORDER_OBSERVATION[], PatientReference, EncounterReference)
+
+  var ServiceRequest: ORC_OBR_ServiceRequest(ORDER.ORC, ORDER.ORDER_DETAIL.CHOICE.OBR, {}, PatientReference)
+  var ServiceRequest.reasonReference[]: ConditionReference
+  var ServiceRequest.supportingInfo[]: ObservationReference[]
+  var ServiceRequest.note[]: datatypes::NTE_Annotation(ORDER.ORDER_DETAIL.NTE[])
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var ServiceRequestReference: utilities::OutputResourceAndGetReference(ServiceRequest)
+
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var ProvenanceReference: utilities::OutputResourceAndGetReference(ORC_Provenance(ORDER.ORC, ServiceRequestReference))
+}
+
+// Description: Parse PROBLEM group, and constructs FHIR R4 Resources based on OBX, PRB, ORC, GOL segments
+//
+// Argument(s):
+//   PROBLEM Group
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Encounter Resource already constructed through PV1_DG1_Encounter Projector: https://www.hl7.org/fhir/encounter.html
+//
+// Output(s):
+//   Condition: https://www.hl7.org/fhir/condition.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//
+def Parse_PROBLEM(required PROBLEM, PatientReference, EncounterReference) {
+  var ObservationReference[]: PARSE_OBSERVATION(PROBLEM.PROBLEM_OBSERVATION[], PatientReference, EncounterReference)
+
+  var Condition: PRB_Condition(PROBLEM.PRB, PatientReference)
+  var Condition.note[]: datatypes::NTE_Annotation(PROBLEM.NTE[])
+  var Condition.evidence[0].detail[]: ObservationReference[]
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var ConditionReference: utilities::OutputResourceAndGetReference(Condition)
+
+  var GoalReference[]: Parse_GOAL(PROBLEM.GOAL[], PatientReference, EncounterReference, ConditionReference)
+
+  $this: Parse_PROBLEM_ORDER(PROBLEM.ORDER[], PatientReference, EncounterReference, ConditionReference)
+}
+
+// Description: Constructs a FHIR R4 Condition Resource and its related resources based on V2 PRB Segment and Patient resource
+//
+// Argument(s):
+//   PRB V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Condition: https://www.hl7.org/fhir/condition.html
+//
+def PRB_Condition(required PRB, PatientReference) {
+  category[0].coding[0].code: "problem-list-item"
+  category[0].coding[0].system: "http://terminology.hl7.org/CodeSystem/condition-category"
+  code: datatypes::CWE_CodeableConcept(PRB.3)
+  identifier[]: datatypes::EI_Identifier(PRB.4, "", "");    // passing empty values since identifier code and system are unknown
+  recordedDate: utilities::Convert_DateTime(PRB.7)
+  abatementDateTime: utilities::Convert_DateTime(PRB.9)
+  category[]: datatypes::CWE_CodeableConcept(PRB.10)
+  verificationStatus: datatypes::CWE_CodeableConcept(PRB.13)
+  // To ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(Condition): "verificationStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/condition-ver-status' and code='entered-in-error').empty() or clinicalStatus.empty()"
+  if PRB.13.1 != "entered-in-error" then {
+    clinicalStatus.coding[0].code: if PRB.9 then "resolved" else "active"
+    clinicalStatus.coding[0].system: "http://terminology.hl7.org/CodeSystem/condition-clinical"
+  }
+  onsetDateTime: utilities::Convert_DateTime(PRB.16)
+  onsetString: if !PRB.16 then PRB.17
+  severity: datatypes::CWE_CodeableConcept(PRB.26)
+  subject: PatientReference
+  resourceType: "Condition"
+}
+
+// Description: Parse GOAL group, and constructs FHIR R4 Resources based on OBX, GOL, NTE segments
+//
+// Argument(s):
+//   GOAL Group
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Condition Resource already constructed through PRB_Condition Projector: https://www.hl7.org/fhir/condition.html
+//   Encounter Resource already constructed through PV1_DG1_Encounter Projector: https://www.hl7.org/fhir/encounter.html
+//
+// Output(s):
+//   Goal: https://www.hl7.org/fhir/goal.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//
+def Parse_GOAL(required GOAL, PatientReference, EncounterReference, ConditionReference) {
+  var ObservationResource[]: PARSE_OBSERVATION(GOAL.GOAL_OBSERVATION[], PatientReference, EncounterReference)
+
+  var Goal: GOL_Goal(GOAL.GOL, PatientReference, ConditionReference)
+  var Goal.note[]: datatypes::NTE_Annotation(GOAL.NTE[])
+  var Goal.outcomeReference[]: ObservationResource[]
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var GoalReference: utilities::OutputResourceAndGetReference(Goal)
+  $this: GoalReference
+}
+
+// Description: Constructs a FHIR R4 Goal Resource and its related resources based on V2 GOL Segment and Patient and Conditon resources
+//
+// Argument(s):
+//   GOL V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Condition Resource already constructed through PRB_Condition Projector: https://www.hl7.org/fhir/conditon.html
+//
+// Output(s):
+//   Goal: https://www.hl7.org/fhir/goal.html
+//
+def GOL_Goal(required GOL, PatientReference, ConditionReference) {
+  description: datatypes::CWE_CodeableConcept(GOL.3)
+  identifier[]: datatypes::EI_Identifier(GOL.4, "", "");    // passing empty values since identifier code and system are unknown
+  target[0].dueDate: utilities::Extract_Date(GOL.8)
+  category[]: datatypes::CWE_CodeableConcept(GOL.9)
+  lifecycleStatus: "active";    // place-holder for 1..1 cardinality
+  subject: PatientReference
+  addresses[]: ConditionReference
+  resourceType: "Goal"
+}
+
+// Description: Constructs a FHIR R4 SCH Resource and its related resources based on V2 MSH Segment
+//
+// Argument(s):
+//   SCH V2 Segment
+//
+// Output(s):
+//   SCH Segment: https://v2plus.hl7.org/2021Jan/segment-definition/SCH.html#SCH-7
+//   Organization: https://www.hl7.org/fhir/organization.html
+//
+def SCH_ServiceRequest(required SCH, PatientReference) {
+  intent: "order"
+  status: "unknown"
+  identifier[]: datatypes::EI_Identifier(SCH.26[], "", "")
+  identifier[]: datatypes::EI_Identifier(SCH.27[], "", "")
+  subject: PatientReference
+  resourceType: "ServiceRequest"
+}
+
+// Description: Constructs a FHIR R4 Build Appointment Resource and its related resources based on V2 MSH Segment
+//
+// Argument(s):
+//   MSH V2 Segment
+//   https://v2plus.hl7.org/2021Jan/segment-definition/SCH.html#SCH-7
+// Output(s):
+//   Schedule Activity Information Segment: https://v2plus.hl7.org/2021Jan/segment-definition/SCH.html#SCH-7
+//   Appointment: https://www.hl7.org/fhir/appointment.html
+//
+def Build_Appointment(required SCH, RESOURCES, Patient, ServiceRequestReference) {
+  identifier[]: datatypes::EI_Identifier(SCH.1, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: datatypes::EI_Identifier(SCH.2, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  reasonCode[]: datatypes::CWE_CodeableConcept(SCH.7)
+  appointmentType: if !SCH.8 then datatypes::CWE_CodeableConcept(SCH.7)
+  appointmentType: datatypes::CWE_CodeableConcept(SCH.8)
+  minutesDuration: if SCH.9 then tryParseNum(SCH.9)
+  var Actor: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(SCH.12[])[])
+  var Actor: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(SCH.16[])[])
+  var Actor: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(SCH.20[])[])
+  participant[]: datatypes::Build_AppointmentParticipant(Actor[], {})
+
+  status: if SCH.25 then utilities::Convert_TerminologyCode(datatypes::CWE_Code(SCH.25), "HL70278", "Filler_Status") else "booked"
+  basedOn[]: ServiceRequestReference
+  participant[]: datatypes::Build_AppointmentParticipant(Patient[], {})
+
+  participant[]: AIS_AppointmentParticipant(RESOURCES[*].SERVICE[*].AIS[])
+  var comments[]: strJoin("; ", RESOURCES[*].SERVICE[*].NTE[*].3[*].1.1)
+  participant[]: AIG_AppointmentParticipant(RESOURCES[*].GENERAL_RESOURCE[*].AIG[])
+  var comments[]: strJoin("; ", RESOURCES[*].GENERAL_RESOURCE[*].NTE[*].3[*].1.1)
+  participant[]: AIL_AppointmentParticipant(RESOURCES[*].LOCATION_RESOURCE[*].AIL[])
+  var comments[]: strJoin("; ", RESOURCES[*].LOCATION_RESOURCE[*].NTE[*].3[*].1.1)
+  participant[]: AIP_AppointmentParticipant(RESOURCES[*].PERSONNEL_RESOURCE[*].AIP[])
+  var comments[]: strJoin("; ", RESOURCES[*].PERSONNEL_RESOURCE[*].NTE[*].3[*].1.1)
+  comment: strJoin("; ", comments)
+  resourceType: "Appointment"
+}
+
+// Description: Constructs a FHIR R4 RelatedPerson Resource based on V2 GT1, PID Segment and Patient Resource
+//
+// Argument(s):
+//   GT1 Segment
+//   PID-41 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   RelatedPerson: https://www.hl7.org/fhir/relatedperson.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//
+def GT1_RelatedPerson(required GT1, PatientReference) {
+  name[]: datatypes::XPN_HumanName(GT1.3[])
+  address[]: datatypes::XAD_Address(GT1.5[])
+  telecom[]: datatypes::XTN_ContactPoint(GT1.6[], "home")
+  birthDate: utilities::Extract_Date(GT1.8)
+  gender: utilities::Convert_TerminologyCode(datatypes::CWE_Code(GT1.9), "HL70001", "Gender")
+  var relationshipCC: datatypes::CWE_CodeableConcept(GT1.11)
+  relationship[].coding[0]: if relationshipCC then utilities::Convert_TerminologyCoding(relationshipCC.coding[0].code, "HL70063", "Relationship")
+  patient: PatientReference
+  resourceType: "RelatedPerson"
+}
+
+// Description: Constructs a FHIR R4 Coverage Resource based on V2 IN1 Segment and Patient Resource
+//
+// Argument(s):
+//   IN1 Segment
+//   PatienReference already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Coverage: https://www.hl7.org/fhir/coverage.html
+//
+def IN1_Coverage(required IN1, PatientReference) {
+  order: if IN1? and tryParseNum(IN1.1) > 0 then tryParseNum(IN1.1)
+  identifier[0]: datatypes::Build_Identifier(datatypes::CWE_Code(IN1.2), "", "")
+  identifier[0].type.text: if IN1.2 then "Insurance Plan Id"
+  var Organization: datatypes::XON_XAD_Organization(IN1.4[0], IN1.5[0])
+  var Organization.telecom[]: datatypes::XTN_ContactPoint(IN1.7[], "work")
+  payor[]: utilities::OutputResourceAndGetReference(Organization)
+  class[]: if IN1.8 then {
+    type: datatypes::Build_CodeableConcept("group", "http://hl7.org/fhir/ValueSet/coverage-class", "", "")
+    value: IN1.8
+  }
+  class[]: if IN1.11 then {
+    type: datatypes::Build_CodeableConcept("group", "http://hl7.org/fhir/ValueSet/coverage-class", "", "")
+    value: IN1.11[0].1
+  }
+  policyHolder: utilities::OutputResourceAndGetReference(datatypes::XON_Organization(IN1.11[0]))
+  period.start: utilities::Convert_DateTime(IN1.12)
+  period.end: utilities::Convert_DateTime(IN1.13)
+  type: datatypes::CWE_CodeableConcept(IN1.15)
+  relationship: utilities::Convert_Terminology(datatypes::CWE_Code(IN1.17), "HL70063", "Relationship")
+  if IN1.17.1 == "SEL" then {
+    subscriber: PatientReference
+  } else {
+    subscriber: utilities::OutputResourceAndGetReference(IN1_RelatedPerson(IN1, PatientReference))
+  }
+  beneficiary: PatientReference
+  status: "active";    // place-holder for 1..1 cardinality
+  resourceType: "Coverage"
+}
+
+// Description: Constructs a FHIR R4 Specimen & Practitioner Resources based on OBR Segment
+//
+// Argument(s):
+//   OBR V2 Segment
+//   Patient Resource already constructed through segments::PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Specimen : https://hl7.org/fhir/specimen.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def OBR_Specimen (required OBR, PatientReference) {
+  if !OBR.8 then {
+    collection.collectedDateTime: utilities::Convert_DateTime(OBR.7)
+  } else {
+    collection.collectedPeriod.start: utilities::Convert_DateTime(OBR.7)
+    collection.collectedPeriod.end: utilities::Convert_DateTime(OBR.8)
+  }
+  collection.quantity: datatypes::CQ_Quantity(OBR.9)
+  // The resource must be output before building the collector reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in
+  // the reference. The resource must not be modified after it has been output.
+  var xcnPractitioner: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(OBR.10[0]))
+  collection.collector: xcnPractitioner
+  receivedTime: utilities::Convert_DateTime(OBR.14)
+  if is(OBR.13, "Array") then {
+    collection.fastingStatusCodeableConcept: datatypes::CWE_CodeableConcept(OBR.13[0])
+  } else {
+    collection.fastingStatusCodeableConcept.text: OBR.13
+  }
+  $this: datatypes::CM_Specimen(OBR.15)
+  subject: PatientReference
+  resourceType: "Specimen"
+}
+
+// Description: Constructs a FHIR R4 Appointment Information Personnel Resource and its related resources based on V2 MSH Segment
+//
+// Argument(s):
+//   CWE Resource Type
+//
+// Output(s):
+//   Appointment Information Personnel Resource Segment: https://v2plus.hl7.org/2021Jan/segment-definition/AIP.html
+//   Appointment: https://www.hl7.org/fhir/appointment.html
+//
+def AIP_AppointmentParticipant(required AIP) {
+  var Actor: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(AIP.3[0]))
+  var participant: datatypes::Build_AppointmentParticipant(Actor, AIP.4)
+  var participant.status: "accepted"
+  var start: utilities::Convert_DateTime(AIP.6)
+  if AIP.8.1 == "MIN" then {
+    var start: calculateNewDateTime(start, tryParseNum(AIP.7), "MINUTES")
+  }
+  var participant.period.start: start
+  if AIP.10.1 == "MIN" then {
+    var participant.period.end: calculateNewDateTime(start, tryParseNum(AIP.9), "MINUTES")
+  }
+  participant
+}
+
+// Description: Constructs a FHIR R4 Appointment Information Resource and its related resources based on V2 MSH Segment
+//
+// Argument(s):
+//   CWE Datatype
+//
+// Output(s):
+//   Appointment Information: https://v2plus.hl7.org/2021Jan/segment-definition/AIS.html
+//   Appointment: https://www.hl7.org/fhir/appointment.html
+//
+def AIS_AppointmentParticipant(required AIS) {
+  var start: utilities::Convert_DateTime(AIS.4)
+  var participant.status: "accepted"
+  if AIS.6.1 == "MIN" then {
+    var start: calculateNewDateTime(start, tryParseNum(AIS.5), "MINUTES")
+  }
+  var participant.period.start: start
+  if AIS.8.1 == "MIN" then {
+    var participant.period.end: calculateNewDateTime(start, tryParseNum(AIS.7), "MINUTES")
+  }
+  participant
+}
+
+// Description: Constructs a FHIR R4 Appointment Information General Resource and its related resources based on V2 MSH Segment
+//
+// Argument(s):
+//   CWE Datatype
+//
+// Output(s):
+//   Appointment Information General Resource Segment : https://v2plus.hl7.org/2021Jan/segment-definition/AIG.html
+//   Appointment: https://www.hl7.org/fhir/appointment.html
+//
+def AIG_AppointmentParticipant(required AIG) {
+  var participant.type[]: datatypes::CWE_CodeableConcept(AIG.4)
+  var participant.status: "accepted"
+  var start: utilities::Convert_DateTime(AIG.8)
+  if AIG.10.1 == "MIN" then {
+    var start: calculateNewDateTime(start, tryParseNum(AIG.9), "MINUTES")
+  }
+  var participant.period.start: start
+  if AIG.12.1 == "MIN" then {
+    var participant.period.end: calculateNewDateTime(start, tryParseNum(AIG.11), "MINUTES")
+  }
+  participant
+}
+
+// Description: Constructs a FHIR R4 Appointment Information Location Resource and its related resources based on V2 MSH Segment
+//
+// Argument(s):
+//   CWE Datatype
+//
+// Output(s):
+//   Appointment Information Location Resource Segment : https://v2plus.hl7.org/2021Jan/segment-definition/AIL.html
+//   Appointment: https://www.hl7.org/fhir/appointment.html
+//
+def AIL_AppointmentParticipant(required AIL) {
+  var participant.actor: datatypes::PL_Location(AIL.3[0], "").location
+  var participant.status: "accepted"
+  var start: utilities::Convert_DateTime(AIL.6)
+  if AIL.8.1 == "MIN" then {
+    var start: calculateNewDateTime(start, tryParseNum(AIL.7), "MINUTES")
+  }
+  var participant.period.start: start
+  if AIL.10.1 == "MIN" then {
+    var participant.period.end: calculateNewDateTime(start, tryParseNum(AIL.9), "MINUTES")
+  }
+  participant
+}
+
+// Description: Constructs a Dosage BackBoneElement based on V2 RXR segment
+//
+// Argument(s):
+//   RXR segment
+//
+// Output(s):
+//   MedicationRequest.dosageInstruction Resource : http://hl7.org/fhir/R4/dosage.html#Dosage
+//
+def RXR_Dosage(RXR) {
+  route: datatypes::CWE_CodeableConcept(RXR.1)
+  site: datatypes::CWE_CodeableConcept(RXR.2)
+  method: datatypes::CWE_CodeableConcept(RXR.4)
+  additionalInstruction[]: datatypes::CWE_CodeableConcept(RXR.5)
+}
+
+// Description: Constructs an Encounter's condition datatype
+//
+// Argument(s):
+//   DG1 Segment datatype
+//   Condition already constructed from DG1 segment: https://www.hl7.org/fhir/condition.html
+// Output(s):
+//   an Encounter's condition datatype
+//
+def DG1_Encounter (required DG1, ConditionReference) {
+  condition: ConditionReference
+  use: datatypes::CWE_CodeableConcept(DG1.6);   // ConceptMap needed
+  var Integer: if DG1.15 then tryParseNum(DG1.15)
+  rank: if Integer > 0 then Integer
+}
+
+// Description: Constructs a FHIR R4 RelatedPerson Resource based on V2 IN1 Segment and Patient Resource
+//
+// Argument(s):
+//   IN1 Segment
+//   PatientReference already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   RelatedPerson: https://www.hl7.org/fhir/relatedperson.html
+//
+def IN1_RelatedPerson(required IN1, PatientReference) {
+  if IN1.16 then {
+    name[]: datatypes::XPN_HumanName(IN1.16[])
+    birthDate: utilities::Extract_Date(IN1.18)
+    gender: utilities::Convert_TerminologyCode(datatypes::CWE_Code(IN1.43), "HL70001", "Gender")
+    address[]: datatypes::XAD_Address(IN1.44[])
+    patient: PatientReference
+    resourceType: "RelatedPerson"
+  }
+}
+
+// Description: Constructs a Provenance Resource based on MSH Segment
+//
+// Argument(s):
+//   MSH Segment
+//
+// Output(s):
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   Device: https://www.hl7.org/fhir/device.html
+//
+def MSH_Provenance(required MSH, PatientReference) {
+  // Provenance.agent is required https://www.hl7.org/fhir/provenance-definitions.html#Provenance.agent
+  if MSH.4 then {
+    // The resource must be output before building the agent. Outputting the
+    // resource adds it to the bundle and assigns the id used in the agent
+    // reference. The resource must not be modified after it has been output.
+    var author: utilities::OutputResourceAndGetReference(datatypes::HD_Organization(MSH.4))
+    agent[]: datatypes::Build_Agent("author", "http://terminology.hl7.org/CodeSystem/provenance-participant-type", author)
+    // The resource must be output before building the entity. Outputting the
+    // resource adds it to the bundle and assigns the id used in the agent
+    // reference. The resource must not be modified after it has been output.
+    entity[0].what: utilities::OutputResourceAndGetReference(datatypes::HD_Device(MSH.3, PatientReference))
+    entity[0].role: if MSH.3 then "source"
+    recorded: utilities::Convert_Instant(MSH.7)
+    activity.coding[0].code: "message - {MSH.9.1}^{MSH.9.2}^{MSH.9.3}"
+    resourceType: "Provenance"
+  }
+}
+
+// Description: Constructs a Bundle Resource
+//
+// Argument(s):
+//   MSH-10 datatype
+//
+// Output(s):
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//
+def MSH_Bundle (MSH_7, MSH_10) {
+  timestamp: utilities::Convert_Instant(MSH_7)
+  identifier.value: MSH_10
+}
+
+// Description: Constructs a diagnosis backbone element of EpisodeOfCare resource based on V2 DG1 segment and condition resource
+//
+// Argument(s):
+//   DG1 Segment datatype
+//   Condition already constructed from DG1 segment: https://www.hl7.org/fhir/condition.html
+//
+// Output(s):
+//   condition : https://www.hl7.org/fhir/condition.html
+//
+def DG1_Diagnosis(DG1, ConditionReference) {
+  condition: ConditionReference
+  role: datatypes::CWE_CodeableConcept(DG1.6);    // ConceptMap needed
+  var Rank: if DG1.15 then tryParseNum(DG1.15)
+  rank: if Rank > 0 then Rank
+}
+
+// Description: Constructs an Observation.value datatype, where based on OBX2 datatype Observation values are mapped.
+//
+// Argument(s):
+//   OBX5 Datatype
+//   OBX2 Datatype
+//   OBX3 Datatype
+//   OBX6 Datatype
+//
+// Output(s):
+//   Observation.value datatype : https://www.hl7.org/fhir/observation-definitions.html#Observation.value_x_
+//
+def Build_ObservationValue(OBX5, OBX2, OBX6) {
+  if OBX2 == "NM" then {
+    if utilities::IsNumber(OBX5.1.1) then {
+      valueQuantity.value: parseNum(OBX5.1.1)
+      valueQuantity: datatypes::CWE_Qauntity(OBX6)
+    } else {
+      valueString: OBX5.1.1
+    }
+  } else if OBX2 == "ST" or OBX2 == "FT" or OBX2 == "TX" then {
+    valueString: OBX5.1.1
+  } else if OBX2 == "CF" or OBX2 == "CNE" or OBX2 == "CWE" or OBX2 == "CE" or OBX2 == "IS" then {
+    valueCodeableConcept: datatypes::VARIES_CodeableConcept(OBX5)
+  } else if OBX2 == "IS" then {
+    valueCodeableConcept.coding[].code: OBX5.1.1
+  } else if OBX2 == "DR" then {
+    valuePeriod: datatypes::VARIES_Period(OBX5)
+  } else if OBX2 == "DTM" or OBX2 == "DT" then {
+    valueDateTime: utilities::Convert_DateTime(OBX5.1.1)
+  } else if OBX2 == "NR" then {
+    valueRange: datatypes::VARIES_Range(OBX5)
+  } else if OBX2 == "VR" then {
+    valueString: "{OBX5.1.1}-{OBX5.2.1}"
+  } else if OBX2 == "TM" then {
+    valueTime: formatDateTime("HH:mm:ss", parseDateTime("HHmmss", OBX5.1.1))
+  } else if OBX2 == "SN" and (OBX5.3.1 == ":" or OBX5.3.1 == "/") then {
+    valueRatio: datatypes::VARIES_Ratio(OBX5)
+    valueRatio.numerator: datatypes::CWE_Qauntity(OBX6)
+    valueRatio.denominator: datatypes::CWE_Qauntity(OBX6)
+  } else if OBX2 == "SN" and OBX5.3.1 == "-" then {
+    valueRange: datatypes::VARIES_Range(OBX5)
+    valueRange.low: datatypes::CWE_Qauntity(OBX6)
+    valueRange.high: datatypes::CWE_Qauntity(OBX6)
+  } else if OBX2 == "SN" and OBX5.3.1 == "+" then {
+    valueString: OBX5.1.1 + " " + OBX5.2.1 + " " + OBX5.3.1
+  } else if OBX2 == "SN" and OBX5.3.1 != ":" and OBX5.3.1 != "/" and OBX5.3.1 != "+" and OBX5.3.1 != "-" then {
+    valueQuantity: datatypes::VARIES_Quantity(OBX5, OBX6)
+  } else if OBX2 == "NA" then {
+    valueQuantity: datatypes::CWE_Qauntity(OBX6)
+  }
+}
+
+// Description: Constructs an Observation.component datatype, where based on OBX2 datatype Observation values are mapped.
+//
+// Argument(s):
+//   OBX5 Datatype
+//   OBX2 Datatype
+//   OBX3 Datatype
+//   OBX6 Datatype
+//
+// Output(s):
+//   Observation.component datatype : https://www.hl7.org/fhir/observation-definitions.html#Observation.component
+//
+def Build_ObservationComponent(OBX5, OBX2, OBX3, OBX6) {
+  code: datatypes::CWE_CodeableConcept(OBX3)
+  $this: Build_ObservationValue(OBX5, OBX2, OBX6)
+}
+
+// Description: Constructs a DiagnosticReport.Performer with event-performerFunction extension
+//
+// Argument(s):
+//   OBR segment
+//   code datatype : https://www.hl7.org/fhir/datatypes.html#code
+//
+// Output(s):
+//   DiagnosticReport.Performer: https://www.hl7.org/fhir/diagnosticreport-definitions.html#DiagnosticReport.performer
+//
+def Build_DiagnosticReportPerformer(required OBR, code) {
+  // The resource must be output before building the performer reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the performer
+  // reference. The resource must not be modified after it has been output.
+  $this: utilities::OutputResourceAndGetReference(datatypes::NDL_PractitionerRole(OBR))
+  if code then {
+    var performerFunction.coding[0].code: code
+    var performerFunction.coding[0].system: "http://hl7.org/fhir/R4/valueset-performer-function.html"
+    extension[]: utilities::Build_Extension(performerFunction, "CodeableConcept", "http://hl7.org/fhir/StructureDefinition/event-performerFunction")
+  }
+}

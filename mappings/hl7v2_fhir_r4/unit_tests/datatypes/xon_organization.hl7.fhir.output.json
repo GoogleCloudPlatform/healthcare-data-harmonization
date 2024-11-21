@@ -1,0 +1,20 @@
+[
+  {
+    "active": true,
+    "identifier": [
+      {
+        "type": {
+          "coding": [
+            {
+              "code": "XX",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "123457"
+      }
+    ],
+    "name": "Good Health Clinic",
+    "resourceType": "Organization"
+  }
+]

@@ -1,0 +1,153 @@
+package segments
+
+// Description: Constructs a FHIR R4 Patient Resource and its related resources based on V2 PID & PD1 Segments
+//
+// Argument(s):
+//   PID V2 Segment
+//   PD1 V2 Segment
+//
+// Output(s):
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def PID_PD1_Patient(required PID, PD1) {
+  identifier[]: datatypes::CX_Identifier(PID.2)
+  identifier[]: datatypes::CX_Identifier(PID.3[])
+  identifier[]: datatypes::CX_Identifier(PID.4[])
+  name[]: datatypes::XPN_HumanName(PID.5[])
+  extension[]: if PID.6 then utilities::Build_Extension(sum(PID.6[*].2[], " ", PID.6[*].1.1[])[], "String", "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName")
+  birthDate: utilities::Extract_Date(PID.7)
+  if PID.7 and div(tryParseNum(PID.7), 100000000) >= 1 then {
+    _birthDate.extension[]: utilities::Build_Extension(utilities::Convert_DateTime(PID.7), "DateTime", "http://hl7.org/fhir/StructureDefinition/patient-birthTime")
+  }
+  if PID.8 then {
+    gender: utilities::Convert_TerminologyCode(datatypes::CWE_Code(PID.8), "HL70001", "Gender")
+  } else {
+    gender: "unknown"
+  }
+  name[]: datatypes::XPN_HumanName(PID.9[])
+  extension[]: iterate({
+      var raceExt[]: utilities::Build_Extension($.2, "String", "text")
+      if raceExt then {
+        var raceExt[]: utilities::Build_Extension(datatypes::CWE_Coding($), "Coding", "ombCategory")
+        utilities::Build_Extension(raceExt, "Extension", "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race")
+      }
+    }, PID.10
+  )
+  address[]: datatypes::XAD_Address(PID.11[])
+  // PID.12 to be used as district if PID.11 has only one address and no district attribute. Otherwise, PID.12 should be added as a new entry in address[].
+  if listLen(PID.11) == 1 and !PID.11[0].9 then {
+    address[0].district: PID.12
+  } else {
+    address[].district: PID.12
+  }
+  telecom[]: datatypes::XTN_ContactPoint(PID.13[], "home")
+  telecom[]: datatypes::XTN_ContactPoint(PID.14[], "work")
+  communication[0].language: datatypes::CWE_CodeableConcept(PID.15);   // Need Terminology Mapping: No mappings found in community sheet
+  communication[0].preferred: if PID.15 then true
+  maritalStatus: utilities::Convert_Terminology(datatypes::CWE_Code(PID.16), "HL70002", "Marital_Status")
+  extension[]: if PID.17 then utilities::Build_Extension(datatypes::CWE_CodeableConcept(PID.17), "CodeableConcept", "http://hl7.org/fhir/StructureDefinition/patient-religion")
+  identifier[]: datatypes::ST_Identifier(PID.19)
+  identifier[]: datatypes::DLN_Identifier(PID.20, "DL")
+  extension[]: iterate({
+      var raceExt[]: utilities::Build_Extension($.2, "String", "text")
+      if raceExt then {
+        var raceExt[]: utilities::Build_Extension(datatypes::CWE_Coding($), "Coding", "ombCategory")
+        utilities::Build_Extension(raceExt, "Extension", "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity")
+      }
+    }, PID.22
+  )
+  var address.text: PID.23
+  extension[]: utilities::Build_Extension(address, "Address", "http://hl7.org/fhir/StructureDefinition/patient-birthPlace")
+  if !PID.25 then {
+    multipleBirthBoolean: PID.24 == "Y"
+  }
+  multipleBirthInteger: if PID.25 then tryParseNum(PID.25)
+  var citizenshipCode1: utilities::Build_Extension(datatypes::CWE_CodeableConcept(PID.26[])[], "CodeableConcept", "code")
+  extension[]: utilities::Build_Extension(citizenshipCode1[], "Extension", "http://hl7.org/fhir/StructureDefinition/patient-citizenship")
+  var nationalityCode: utilities::Build_Extension(datatypes::CWE_CodeableConcept(PID.28), "CodeableConcept", "code")
+  extension[]: utilities::Build_Extension(nationalityCode, "Extension", "http://hl7.org/fhir/StructureDefinition/patient-nationality")
+  deceasedDateTime: utilities::Convert_DateTime(PID.29)
+  if !PID.29 then {
+    deceasedBoolean: if PID.30 then PID.30 == "Y"
+  }
+  meta.lastUpdated: utilities::Convert_DateTime(PID.33)
+  var animalExtension[]: utilities::Build_Extension(datatypes::CWE_CodeableConcept(PID.35), "CodeableConcept", "species")
+  var animalExtension[]: utilities::Build_Extension(datatypes::CWE_CodeableConcept(PID.36), "CodeableConcept", "breed")
+  extension[]: utilities::Build_Extension(animalExtension, "Extension", "http://hl7.org/fhir/StructureDefinition/patient-animal")
+  var citizenshipCode2: utilities::Build_Extension(datatypes::CWE_CodeableConcept(PID.39[])[], "CodeableConcept", "code")
+  extension[]: utilities::Build_Extension(citizenshipCode2[], "Extension", "http://hl7.org/fhir/StructureDefinition/patient-citizenship")
+  telecom[]: datatypes::XTN_ContactPoint(PID.40[], "home")
+  // The organization resource must be output before building the generalPractitioner reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in the generalPractitioner
+  // reference. The resource must not be modified after it has been output.
+  generalPractitioner[]: utilities::OutputResourceAndGetReference(datatypes::XON_Organization(PD1.3[])[])
+  // The practitioner resource must be output before building the generalPractitioner reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in the generalPractitioner
+  // reference. The resource must not be modified after it has been output.
+  generalPractitioner[]: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(PD1.4[])[])
+  extension[]: utilities::Build_Extension(datatypes::CWE_CodeableConcept(PD1.6), "CodeableConcept", "http://hl7.org/fhir/StructureDefinition/patient-disability")
+  extension[]: utilities::Build_Extension(datatypes::XON_String(PD1.14[])[], "String", "http://hl7.org/fhir/StructureDefinition/patient-congregation")
+  active: true
+  resourceType: "Patient"
+}
+
+// Description: Constructs a FHIR R4 Account Resource based on V2 PID-18 Segment and Patient Resource
+//
+// Argument(s):
+//   PID-18 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Account: https://www.hl7.org/fhir/account.html
+//
+def PID_Account(required PID_18, PatientReference) {
+  var identifier: datatypes::CX_Identifier(PID_18)
+  var identifier.type: datatypes::Build_CodeableConcept("AN", "https://terminology.hl7.org/3.0.0/CodeSystem-v2-0203", "", "Account Number")
+  identifier[]: identifier
+  subject[]: PatientReference
+  status: "active"
+  resourceType: "Account"
+}
+
+// Description: Constructs a FHIR R4 RelatedPerson Resource based on V2 PID-21 Field and Patient Resource
+//
+// Argument(s):
+//   PID-21 V2 Segment Field
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   RelatedPerson: https://www.hl7.org/fhir/relatedperson.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//
+def PID_RelatedPersonMother(required PID_21, PatientReference) {
+  identifier[]: datatypes::CX_Identifier(PID_21[])
+  relationship[0].coding[0].code: "MTH"
+  relationship[0].coding[0].system: "http://terminology.hl7.org/CodeSystem/v3-RoleCode"
+  patient: PatientReference
+  resourceType: "RelatedPerson"
+}
+
+// Description: Constructs a FHIR R4 Provenance Resource based on V2 PID-34 and PID-35 Fields and Patient Resource
+//
+// Argument(s):
+//   PID-34 V2 Segment Field
+//   PID-33 V2 Segment Field
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//
+def PID_Provenance(required PID_34, PID_33, PatientReference) {
+  recorded: currentTime("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+  activity.coding[0].code: "UPDATE"
+  activity.coding[0].system: "http://terminology.hl7.org/CodeSystem/v3-DataOperation"
+  occurredDateTime: utilities::Convert_DateTime(PID_33)
+  var performer: utilities::OutputResourceAndGetReference(datatypes::HD_Organization(PID_34))
+  agent[]: datatypes::Build_Agent("performer", "http://terminology.hl7.org/CodeSystem/provenance-participant-type", performer)
+  target[]: PatientReference
+  resourceType: "Provenance"
+}

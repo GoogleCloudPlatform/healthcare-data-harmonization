@@ -1,0 +1,79 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 CodeableConcept datatype based on HL7 v2 VARIES datatype
+//
+// Argument(s):
+//   VR: VARIES datatype
+//
+// Output(s):
+//   CodeableConcept datatype : https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def VARIES_CodeableConcept(VR) {
+  coding[0].code: VR.1.1
+  coding[0].display: VR.2.1
+  coding[0].system: utilities::Build_System(VR.3.1)
+  coding[1].code: VR.4.1
+  coding[1].display: VR.5.1
+  coding[1].system: utilities::Build_System(VR.6.1)
+  coding[0].version: VR.7.1
+  coding[1].version: VR.8.1
+  text: VR.9.1
+  coding[2].code: VR.10.1
+  coding[2].display: VR.11.1
+  coding[2].system: utilities::Build_System(VR.12.1)
+  coding[2].version: VR.13.1
+}
+
+// Description: Constructs a FHIR R4 Period datatype based on HL7 v2 VARIES datatype
+//
+// Argument(s):
+//   VR: VARIES datatype
+//
+// Output(s):
+//   Period datatype : https://www.hl7.org/fhir/datatypes.html#Period
+//
+def VARIES_Period(VR) {
+  start: utilities::Convert_DateTime(VR.1.1)
+  end: utilities::Convert_DateTime(VR.2.1)
+}
+
+// Description: Constructs a FHIR R4 Range datatype based on HL7 v2 VARIES datatype
+//
+// Argument(s):
+//   VR: VARIES datatype
+//
+// Output(s):
+//   Range Datatype : https://www.hl7.org/fhir/datatypes.html#Range
+//
+def VARIES_Range(VR) {
+  low.value: parseNum(VR.1.1)
+  high.value: parseNum(VR.2.1)
+}
+
+// Description: Constructs a FHIR R4 Ratio datatype based on HL7 v2 VARIES datatype
+//
+// Argument(s):
+//   VR: VARIES datatype
+//
+// Output(s):
+//   Ratio Datatype : https://www.hl7.org/fhir/datatypes.html#Ratio
+//
+def VARIES_Ratio (VR) {
+  numerator.value: parseNum(VR.2.1)
+  denominator.value: parseNum(VR.4.1)
+}
+
+// Description: Constructs a FHIR R4 Quantity datatype based on HL7 v2 VARIES datatype and OBX6 segment
+//
+// Argument(s):
+//   VR: OBX-5 VARIES datatype
+//   OBX6 segment
+//
+// Output(s):
+//   Quantity Datatype : https://www.hl7.org/fhir/datatypes.html#Quantity
+//
+def VARIES_Quantity (VR, OBX6) {
+  comparator : VR.1.1
+  value : if VR.2.1 then tryParseNum(VR.2.1)
+  CWE_Qauntity(OBX6)
+}

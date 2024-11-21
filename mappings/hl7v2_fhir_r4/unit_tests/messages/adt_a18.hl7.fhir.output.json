@@ -1,0 +1,140 @@
+[
+  {
+    "eventCoding": {
+      "code": "A18",
+      "display": "ADT^A18^ADT_A18",
+      "system": "http://terminology.hl7.org/CodeSystem/v2-0003"
+    },
+    "id": "2c79300b1eeed69ad5d3105e25721f8a",
+    "meta": {
+      "tag": [
+        {
+          "code": "D",
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0103"
+        },
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0207"
+        }
+      ]
+    },
+    "resourceType": "MessageHeader",
+    "source": {
+      "endpoint": {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/R4/extension-data-absent-reason.html",
+            "valueCode": "unknown"
+          }
+        ]
+      },
+      "name": "DPS-GUID:DPS"
+    }
+  },
+  {
+    "active": true,
+    "address": [
+      {
+        "city": "ISHPEMING",
+        "line": [
+          "171 ZOBERLEIN"
+        ],
+        "postalCode": "49849",
+        "state": " "
+      }
+    ],
+    "birthDate": "1956-01-29",
+    "deceasedDateTime": "2001-01-31T00:00:00+00:00",
+    "extension": [
+      {
+        "url": "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName",
+        "valueString": " Schulz"
+      },
+      {
+        "url": "http://hl7.org/fhir/StructureDefinition/patient-birthPlace",
+        "valueAddress": {
+          "text": "New York"
+        }
+      },
+      {
+        "extension": [
+          {
+            "url": "code",
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "display": "American"
+                }
+              ]
+            }
+          }
+        ],
+        "url": "http://hl7.org/fhir/StructureDefinition/patient-nationality"
+      }
+    ],
+    "gender": "female",
+    "id": "c008f2c8b5d86373a82abcef6e808189",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "MR",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "191919"
+      },
+      {
+        "system": "http://hl7.org/fhir/sid/us-ssn",
+        "type": {
+          "coding": [
+            {
+              "code": "SB",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "371-66-9256"
+      }
+    ],
+    "multipleBirthBoolean": false,
+    "name": [
+      {
+        "family": "Franz",
+        "given": [
+          "Lotte",
+          "Marie"
+        ]
+      }
+    ],
+    "resourceType": "Patient",
+    "telecom": [
+      {
+        "system": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+              "valueCode": "unknown"
+            }
+          ]
+        },
+        "use": "home",
+        "value": "(900)485-5344"
+      },
+      {
+        "system": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+              "valueCode": "unknown"
+            }
+          ]
+        },
+        "use": "work",
+        "value": "(900)485-5344"
+      }
+    ]
+  }
+]

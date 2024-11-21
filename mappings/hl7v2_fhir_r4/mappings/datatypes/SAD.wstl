@@ -1,0 +1,15 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 Address datatype based on V2 SAD datatype
+//
+// Argument(s):
+//   SAD datatype
+//
+// Output(s):
+//   Address datatype : https://www.hl7.org/fhir/datatypes.html#Address
+//
+def SAD_AddressLine(SAD) {
+  line[]: SAD.1
+  line[]: SAD.2
+  line[]: SAD.3
+}

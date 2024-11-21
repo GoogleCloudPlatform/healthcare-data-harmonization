@@ -1,0 +1,25 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 Practitioner Resource based on CNN datatype
+//
+// Argument(s):
+//   CNN datatype
+//
+// Output(s):
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def CNN_Practitioner (required CNN) {
+  if CNN.1 then {
+    identifier[0].value: CNN.1
+  } else {
+    identifier[0].value: "unknown"
+  }
+  identifier[0].system: "unknown"
+  name[0].family: CNN.2
+  name[0].given[]: CNN.3
+  name[0].given[]: CNN.4
+  name[0].suffix[]: CNN.5
+  name[0].prefix[]: CNN.6
+  name[0].suffix[]: CNN.7
+  resourceType: "Practitioner"
+}

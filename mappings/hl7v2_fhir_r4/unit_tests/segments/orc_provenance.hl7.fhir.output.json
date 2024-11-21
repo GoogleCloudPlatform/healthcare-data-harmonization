@@ -1,0 +1,63 @@
+[
+  {
+    "id": "ef59b26e85eca7981a8933101ca07a87",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "NPI"
+            }
+          ]
+        },
+        "value": "5742200012"
+      }
+    ],
+    "name": [
+      {
+        "family": "Radon",
+        "given": [
+          "Nicholas"
+        ],
+        "use": "official"
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "activity": {
+      "coding": [
+        {
+          "code": "CREATE",
+          "display": "create",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-DataOperation",
+          "version": "v1"
+        }
+      ]
+    },
+    "agent": [
+      {
+        "type": {
+          "coding": [
+            {
+              "code": "author",
+              "system": "http://terminology.hl7.org/CodeSystem/provenance-participant-type"
+            }
+          ]
+        },
+        "who": {
+          "reference": "Practitioner/ef59b26e85eca7981a8933101ca07a87"
+        }
+      }
+    ],
+    "occurredDateTime": "2012-06-28T07:01:00+00:00",
+    "recorded": "2012-06-28T07:01:00.000+00:00",
+    "resourceType": "Provenance",
+    "target": [
+      {
+        "reference": "ServiceRequest/456"
+      }
+    ]
+  }
+]

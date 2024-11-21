@@ -1,0 +1,106 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "Pending",
+          "display": "Pending",
+          "target": [
+            {
+              "code": "pending",
+              "display": "Proposed",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Waitlist",
+          "display": "Waitlist",
+          "target": [
+            {
+              "code": "waitlist",
+              "display": "Waitlisted",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Booked",
+          "display": "Booked",
+          "target": [
+            {
+              "code": "booked",
+              "display": "Booked",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Started",
+          "display": "Started",
+          "target": [
+            {
+              "code": "checked-in",
+              "display": "Checked In",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Complete",
+          "display": "Complete",
+          "target": [
+            {
+              "code": "fulfilled",
+              "display": "Fulfilled",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Cancelled",
+          "display": "Cancelled",
+          "target": [
+            {
+              "code": "cancelled",
+              "display": "Cancelled",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Deleted",
+          "display": "Deleted",
+          "target": [
+            {
+              "code": "entered-in-error",
+              "display": "Entered In Error",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Noshow",
+          "display": "Noshow",
+          "target": [
+            {
+              "code": "noshow",
+              "display": "No Show",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ] ,
+      "source": "HL70278",
+      "target": "http://hl7.org/fhir/request-status",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "booked",
+        "display": "Booked"
+      }
+    }
+  ],
+  "id": "Filler_Status",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

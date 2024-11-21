@@ -1,0 +1,16 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 Timing datatype based on V2 RI datatype
+//
+// Argument(s):
+//   RI datatype
+//
+// Output(s):
+//   Timing datatype : https://www.hl7.org/fhir/datatypes.html#Timing
+//
+def RI_Timing(required RI) {
+  code.coding[0].code: RI.1
+  code.coding[0].system: "http://terminology.hl7.org/CodeSystem/v2-0335"
+  var timeInterval: if RI.2 then split(RI.2, ",")[where $]
+  repeat.timeOfDay: formatDateTime("HH:mm:ss", parseDateTime("HHmm", timeInterval[])[])
+}

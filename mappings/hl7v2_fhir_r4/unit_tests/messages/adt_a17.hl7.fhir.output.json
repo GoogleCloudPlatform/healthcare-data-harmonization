@@ -1,0 +1,726 @@
+[
+  {
+    "active": true,
+    "id": "28cbec31edc2646c476be193dd113db7",
+    "identifier": [
+      {
+        "value": "EMC"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "destination": [
+      {
+        "endpoint": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+              "valueCode": "unknown"
+            }
+          ]
+        }
+      }
+    ],
+    "eventCoding": {
+      "code": "A17",
+      "display": "ADT^A17^ADT_A17",
+      "system": "http://terminology.hl7.org/CodeSystem/v2-0003"
+    },
+    "id": "3383a61409f7a64d03f28aa59728f32e",
+    "meta": {
+      "security": [
+        {
+          "code": "22419"
+        }
+      ],
+      "tag": [
+        {
+          "code": "T",
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0103"
+        },
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0207"
+        }
+      ]
+    },
+    "resourceType": "MessageHeader",
+    "sender": {
+      "reference": "Organization/28cbec31edc2646c476be193dd113db7"
+    },
+    "source": {
+      "endpoint": {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/R4/extension-data-absent-reason.html",
+            "valueCode": "unknown"
+          }
+        ]
+      },
+      "name": "EPIC"
+    }
+  },
+  {
+    "active": true,
+    "id": "28cbec31edc2646c476be193dd113db7",
+    "identifier": [
+      {
+        "value": "EMC"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "id": "be673bd132c4db1ed4d748445912fc41",
+    "identifier": [
+      {
+        "value": "EPIC"
+      }
+    ],
+    "resourceType": "Device",
+    "type": {
+      "coding": [
+        {
+          "code": "unknown"
+        }
+      ]
+    }
+  },
+  {
+    "id": "f0c234fc548a4a2803daea0371ee6783",
+    "identifier": [
+      {
+        "system": "unknown",
+        "value": "unknown"
+      }
+    ],
+    "name": [
+      {
+        "family": "LONGBOTTOM",
+        "given": [
+          "NEVILLE"
+        ]
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "active": true,
+    "id": "28cbec31edc2646c476be193dd113db7",
+    "identifier": [
+      {
+        "value": "EMC"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "activity": {
+      "coding": [
+        {
+          "display": "event - :ADT^A17"
+        }
+      ]
+    },
+    "agent": [
+      {
+        "who": {
+          "reference": "Practitioner/f0c234fc548a4a2803daea0371ee6783"
+        }
+      },
+      {
+        "who": {
+          "reference": "Organization/28cbec31edc2646c476be193dd113db7"
+        }
+      }
+    ],
+    "id": "ca8fda4fbd05d786652cbaf9695370d2",
+    "occurredDateTime": "2018-10-17T16:06:00+00:00",
+    "reason": [
+      {
+        "coding": [
+          {
+            "code": "U",
+            "display": "Unknown",
+            "system": "HL70062",
+            "version": "v1"
+          }
+        ]
+      }
+    ],
+    "recorded": "2018-10-17T16:06:06.000+00:00",
+    "resourceType": "Provenance",
+    "target": [
+      {
+        "reference": "MessageHeader/3383a61409f7a64d03f28aa59728f32e"
+      }
+    ]
+  },
+  {
+    "active": true,
+    "address": [
+      {
+        "city": "VERONA",
+        "country": "USA",
+        "line": [
+          "MAIN ST"
+        ],
+        "postalCode": "53593",
+        "state": "WI"
+      }
+    ],
+    "birthDate": "1992-10-17",
+    "deceasedBoolean": false,
+    "gender": "male",
+    "id": "d1bebb69dc55d337116b1ebf778cfc27",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "MR",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "Z880885"
+      },
+      {
+        "system": "http://hl7.org/fhir/sid/us-ssn",
+        "type": {
+          "coding": [
+            {
+              "code": "SB",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "203-50-4055"
+      }
+    ],
+    "multipleBirthBoolean": false,
+    "name": [
+      {
+        "family": "DOE",
+        "given": [
+          "JANE"
+        ]
+      }
+    ],
+    "resourceType": "Patient"
+  },
+  {
+    "id": "7b4e52118652127728aa46c34ce4cc6a",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "AN",
+              "system": "https://terminology.hl7.org/3.0.0/CodeSystem-v2-0203"
+            }
+          ],
+          "text": "Account Number"
+        },
+        "value": "10002353265"
+      }
+    ],
+    "resourceType": "Account",
+    "status": "active",
+    "subject": [
+      {
+        "reference": "Patient/d1bebb69dc55d337116b1ebf778cfc27"
+      }
+    ]
+  },
+  {
+    "id": "9606fdff7c643c933063364bce0e5aa8",
+    "mode": "instance",
+    "name": "7058",
+    "physicalType": {
+      "coding": [
+        {
+          "code": "ro",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "5e0660b0f45281d49a24198dbbb782f4",
+    "mode": "instance",
+    "name": "75063",
+    "partOf": {
+      "reference": "Location/9606fdff7c643c933063364bce0e5aa8"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "bd",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "9606fdff7c643c933063364bce0e5aa8",
+    "mode": "instance",
+    "name": "7058",
+    "physicalType": {
+      "coding": [
+        {
+          "code": "ro",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "c25930e380a82ab1a9d82fa8b7c2de18",
+    "mode": "instance",
+    "name": "86187",
+    "partOf": {
+      "reference": "Location/9606fdff7c643c933063364bce0e5aa8"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "bd",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "c60f607deefd4737b21d48c28eaf94ec",
+    "identifier": [
+      {
+        "system": "unknown",
+        "value": "97"
+      }
+    ],
+    "name": [
+      {
+        "family": "RAKE",
+        "given": [
+          "SAM",
+          "C."
+        ]
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "id": "c60f607deefd4737b21d48c28eaf94ec",
+    "identifier": [
+      {
+        "system": "unknown",
+        "value": "97"
+      }
+    ],
+    "name": [
+      {
+        "family": "RAKE",
+        "given": [
+          "SAM",
+          "C."
+        ]
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "class": {
+      "code": "IMP",
+      "display": "inpatient encounter",
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+      "version": "v1"
+    },
+    "id": "1a41b23a0eeeb21d3b8c7a9a75696f26",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "VN",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ],
+          "text": "visit number"
+        },
+        "value": "10002353265"
+      },
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "VN",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "99449"
+      }
+    ],
+    "location": [
+      {
+        "location": {
+          "display": "7058, 75063",
+          "reference": "Location/5e0660b0f45281d49a24198dbbb782f4"
+        },
+        "status": "active"
+      },
+      {
+        "location": {
+          "display": "7058, 86187",
+          "reference": "Location/c25930e380a82ab1a9d82fa8b7c2de18"
+        },
+        "status": "completed"
+      }
+    ],
+    "participant": [
+      {
+        "individual": {
+          "reference": "Practitioner/c60f607deefd4737b21d48c28eaf94ec"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "ATND",
+                "display": "attender",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "individual": {
+          "reference": "Practitioner/c60f607deefd4737b21d48c28eaf94ec"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "ADM",
+                "display": "admitter",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "period": {
+      "start": "2018-10-17T16:04:03+00:00"
+    },
+    "resourceType": "Encounter",
+    "status": "in-progress",
+    "subject": {
+      "reference": "Patient/d1bebb69dc55d337116b1ebf778cfc27"
+    },
+    "type": [
+      {
+        "coding": [
+          {
+            "code": "IN"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "active": true,
+    "address": [
+      {
+        "city": "VERONA",
+        "country": "USA",
+        "line": [
+          "NORTH ST"
+        ],
+        "postalCode": "53593",
+        "state": "WI"
+      }
+    ],
+    "birthDate": "1993-10-17",
+    "deceasedBoolean": false,
+    "gender": "male",
+    "id": "76b0f1b06912c5e4b1e9c00e992ec63b",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "MR",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "Z880884"
+      },
+      {
+        "system": "http://hl7.org/fhir/sid/us-ssn",
+        "type": {
+          "coding": [
+            {
+              "code": "SB",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "401-02-5963"
+      }
+    ],
+    "multipleBirthBoolean": false,
+    "name": [
+      {
+        "family": "DOE",
+        "given": [
+          "JOHN"
+        ]
+      }
+    ],
+    "resourceType": "Patient"
+  },
+  {
+    "id": "1e0d91ed9a54b6708984096db3e15d26",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "AN",
+              "system": "https://terminology.hl7.org/3.0.0/CodeSystem-v2-0203"
+            }
+          ],
+          "text": "Account Number"
+        },
+        "value": "10002353258"
+      }
+    ],
+    "resourceType": "Account",
+    "status": "active",
+    "subject": [
+      {
+        "reference": "Patient/76b0f1b06912c5e4b1e9c00e992ec63b"
+      }
+    ]
+  },
+  {
+    "id": "9606fdff7c643c933063364bce0e5aa8",
+    "mode": "instance",
+    "name": "7058",
+    "physicalType": {
+      "coding": [
+        {
+          "code": "ro",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "c25930e380a82ab1a9d82fa8b7c2de18",
+    "mode": "instance",
+    "name": "86187",
+    "partOf": {
+      "reference": "Location/9606fdff7c643c933063364bce0e5aa8"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "bd",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "9606fdff7c643c933063364bce0e5aa8",
+    "mode": "instance",
+    "name": "7058",
+    "physicalType": {
+      "coding": [
+        {
+          "code": "ro",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "5e0660b0f45281d49a24198dbbb782f4",
+    "mode": "instance",
+    "name": "75063",
+    "partOf": {
+      "reference": "Location/9606fdff7c643c933063364bce0e5aa8"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "bd",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "c60f607deefd4737b21d48c28eaf94ec",
+    "identifier": [
+      {
+        "system": "unknown",
+        "value": "97"
+      }
+    ],
+    "name": [
+      {
+        "family": "RAKE",
+        "given": [
+          "SAM",
+          "C."
+        ]
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "id": "c60f607deefd4737b21d48c28eaf94ec",
+    "identifier": [
+      {
+        "system": "unknown",
+        "value": "97"
+      }
+    ],
+    "name": [
+      {
+        "family": "RAKE",
+        "given": [
+          "SAM",
+          "C."
+        ]
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "class": {
+      "code": "IMP",
+      "display": "inpatient encounter",
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+      "version": "v1"
+    },
+    "id": "d4621d769609e980515a7024d69e73e8",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "VN",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ],
+          "text": "visit number"
+        },
+        "value": "10002353258"
+      },
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "VN",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "99447"
+      }
+    ],
+    "location": [
+      {
+        "location": {
+          "display": "7058, 86187",
+          "reference": "Location/c25930e380a82ab1a9d82fa8b7c2de18"
+        },
+        "status": "active"
+      },
+      {
+        "location": {
+          "display": "7058, 75063",
+          "reference": "Location/5e0660b0f45281d49a24198dbbb782f4"
+        },
+        "status": "completed"
+      }
+    ],
+    "participant": [
+      {
+        "individual": {
+          "reference": "Practitioner/c60f607deefd4737b21d48c28eaf94ec"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "ATND",
+                "display": "attender",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "individual": {
+          "reference": "Practitioner/c60f607deefd4737b21d48c28eaf94ec"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "ADM",
+                "display": "admitter",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "period": {
+      "start": "2018-10-17T16:03:01+00:00"
+    },
+    "resourceType": "Encounter",
+    "status": "in-progress",
+    "subject": {
+      "reference": "Patient/76b0f1b06912c5e4b1e9c00e992ec63b"
+    },
+    "type": [
+      {
+        "coding": [
+          {
+            "code": "IN"
+          }
+        ]
+      }
+    ]
+  }
+]

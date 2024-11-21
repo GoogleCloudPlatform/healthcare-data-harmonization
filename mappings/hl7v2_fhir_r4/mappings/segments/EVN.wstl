@@ -1,0 +1,37 @@
+package segments
+
+// Description: Constructs a FHIR R4 Provenance Resource and its related resources based on V2 EVN, MSH Segments and MessageHeader Resource
+//
+// Argument(s):
+//   EVN V2 Segment
+//   MSH V2 Segment
+//   MessageHeader Resource already constructed through MSH_MessageHeader Projector: https://www.hl7.org/fhir/messageheader.html
+//
+// Output(s):
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//
+def EVN_Provenance(required EVN, MSH, MessageHeaderReference) {
+  var agent[]: datatypes::Build_Agent("", "", utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(EVN.5[])[])[]);  // passing empty values since agent's code and system are unknown
+  if !MSH.22 then {
+    var agent[]: datatypes::Build_Agent("", "", utilities::OutputResourceAndGetReference(datatypes::HD_Organization(MSH.4)));  // passing empty values since agent's code and system are unknown
+  } else {
+    var agent[]: datatypes::Build_Agent("", "", utilities::OutputResourceAndGetReference(datatypes::XON_Organization(MSH.22)));  // passing empty values since agent's code and system are unknown
+  }
+  if listLen(agent) > 0 then {
+    agent: agent
+    activity.coding[0].display: "event - :{MSH.9.1}^{MSH.9.2}"
+    recorded: utilities::Convert_Instant(EVN.2)
+    if EVN.4.1 == "U" then {
+      reason[0].extension[0].valueCodeableConcept.coding[0].code: "unknown"
+      reason[0].extension[0].url: "http://hl7.org/fhir/StructureDefinition/data-absent-reason"
+    } else {
+      reason[]: utilities::Convert_Terminology(datatypes::CWE_Code(EVN.4), "HL70062", "Event_Reason")
+    }
+    occurredDateTime: utilities::Convert_DateTime(EVN.6)
+    location: utilities::OutputResourceAndGetReference(datatypes::HD_Location(EVN.7, ""))
+    target[]: MessageHeaderReference
+    resourceType: "Provenance"
+  }
+}

@@ -1,0 +1,55 @@
+[
+  {
+    "address": [
+      {
+        "city": "MI",
+        "line": [
+          "2222 HOME STREET",
+          "ISHPEMING"
+        ],
+        "state": "49849"
+      }
+    ],
+    "birthDate": "1970-06-01",
+    "gender": "male",
+    "name": [
+      {
+        "family": "EVERYMAN",
+        "given": [
+          "ADAM",
+          "A"
+        ]
+      }
+    ],
+    "patient": {
+      "reference": "Patient/123"
+    },
+    "relationship": [
+      {
+        "coding": [
+          {
+            "code": "ONESELF",
+            "display": "self",
+            "system": "http://terminology.hl7.org/CodeSystem/v3-RoleCode",
+            "version": "v1"
+          }
+        ]
+      }
+    ],
+    "resourceType": "RelatedPerson",
+    "telecom": [
+      {
+        "system": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+              "valueCode": "unknown"
+            }
+          ]
+        },
+        "use": "home",
+        "value": "(555) 555-2004"
+      }
+    ]
+  }
+]

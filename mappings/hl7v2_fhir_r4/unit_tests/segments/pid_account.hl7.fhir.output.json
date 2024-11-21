@@ -1,0 +1,40 @@
+[
+  {
+    "active": true,
+    "id": "b325fb1586de5b3653d0bafbd38d9de3",
+    "identifier": [
+      {
+        "value": "ADT1"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "identifier": [
+      {
+        "assigner": {
+          "reference": "Organization/b325fb1586de5b3653d0bafbd38d9de3"
+        },
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "AN",
+              "system": "https://terminology.hl7.org/3.0.0/CodeSystem-v2-0203"
+            }
+          ],
+          "text": "Account Number"
+        },
+        "value": "PATID12345001"
+      }
+    ],
+    "resourceType": "Account",
+    "status": "active",
+    "subject": [
+      {
+        "reference": "Patient/123"
+      }
+    ]
+  }
+]

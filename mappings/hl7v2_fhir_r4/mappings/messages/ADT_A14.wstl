@@ -1,0 +1,31 @@
+package messages
+
+// Description: Define ADT_A14 HL7v2 Message Type (version 2.9) to FHIR R4 transformation
+//
+// Argument(s):
+//   ADT_A17 HL7v2 Message Type (version 2.9)
+//   ADT_A14 Segments covered in this mapping configuration are: MSH, PID, PD1, DG1, PV1, AL1, OBX, EVN, PR1, GT1, IN1, NK1
+//
+// Output(s):
+//   FHIR R4 Resources : http://www.hl7.org/fhir/resourcelist.html
+// List of Generated FHIR Resources:
+//   Account: https://www.hl7.org/fhir/account.html
+//   AllergyIntolerance: https://www.hl7.org/fhir/allergyintolerance.html
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//   Condition: https://www.hl7.org/fhir/condition.html
+//   Coverage: https://www.hl7.org/fhir/coverage.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   EpisodeOfCare: https://www.hl7.org/fhir/episodeofcare.html
+//   Location: https://www.hl7.org/fhir/location.html
+//   MessageHeader: https://www.hl7.org/fhir/messageheader.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   RelatedPerson: https://www.hl7.org/fhir/stu3/relatedperson.html
+//   Procedure: https://www.hl7.org/fhir/procedure.html
+//
+def ADT_A14(required ADT_A14) {
+  Transform_ADT(ADT_A14)
+}

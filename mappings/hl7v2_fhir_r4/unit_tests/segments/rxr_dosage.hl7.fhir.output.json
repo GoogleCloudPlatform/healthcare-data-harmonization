@@ -1,0 +1,36 @@
+[
+  {
+    "method": {
+      "coding": [
+        {
+          "code": "IS",
+          "display": "Insert",
+          "system": "HL70165"
+        }
+      ]
+    },
+    "route": {
+      "coding": [
+        {
+          "code": "C28161",
+          "display": "IM",
+          "system": "NCIT"
+        },
+        {
+          "code": "IM",
+          "display": "Intramuscular",
+          "system": "HL70162"
+        }
+      ]
+    },
+    "site": {
+      "coding": [
+        {
+          "code": "RT",
+          "display": "Right Thigh",
+          "system": "HL70163"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,19 @@
+[
+  {
+    "coding": [
+      {
+        "code": "L",
+        "display": "Local",
+        "system": "HL70301",
+        "version": "2.2.0"
+      },
+      {
+        "code": "L",
+        "display": "Local",
+        "system": "HL70396",
+        "version": "2.4.0"
+      }
+    ],
+    "text": "Local general code"
+  }
+]

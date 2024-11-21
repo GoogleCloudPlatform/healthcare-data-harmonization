@@ -1,0 +1,655 @@
+[
+  {
+    "active": true,
+    "id": "a721017f8d4db6f9dd8775d00fb96db8",
+    "identifier": [
+      {
+        "value": "EHS"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "destination": [
+      {
+        "endpoint": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+              "valueCode": "unknown"
+            }
+          ]
+        }
+      }
+    ],
+    "eventCoding": {
+      "code": "A07",
+      "display": "ADT^A07^ADT_A06",
+      "system": "http://terminology.hl7.org/CodeSystem/v2-0003"
+    },
+    "id": "6f7cc82c853f5b5ae4dc799bf06ea8c9",
+    "meta": {
+      "security": [
+        {
+          "code": "ADTADM"
+        }
+      ],
+      "tag": [
+        {
+          "code": "T",
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0103"
+        },
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0207"
+        }
+      ]
+    },
+    "resourceType": "MessageHeader",
+    "sender": {
+      "reference": "Organization/a721017f8d4db6f9dd8775d00fb96db8"
+    },
+    "source": {
+      "endpoint": {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/R4/extension-data-absent-reason.html",
+            "valueCode": "unknown"
+          }
+        ]
+      },
+      "name": "EPIC"
+    }
+  },
+  {
+    "active": true,
+    "id": "d60db5d9aa7a0af8838eef6ccfdc964e",
+    "identifier": [
+      {
+        "value": "EPIC"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "active": true,
+    "id": "e98f3aed4caa8b1be587b89b74d12f6d",
+    "identifier": [
+      {
+        "value": "EPI"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "active": true,
+    "address": [
+      {
+        "city": "MADISON",
+        "country": "US",
+        "line": [
+          "123 NORTHSTREET"
+        ],
+        "postalCode": "53703",
+        "state": "WI"
+      },
+      {
+        "district": "DANE"
+      }
+    ],
+    "birthDate": "1977-05-26",
+    "deceasedBoolean": false,
+    "gender": "male",
+    "id": "ca3e20a1d17f280c240d75d35d99ac66",
+    "identifier": [
+      {
+        "assigner": {
+          "reference": "Organization/d60db5d9aa7a0af8838eef6ccfdc964e"
+        },
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "MRN",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "E5177"
+      },
+      {
+        "assigner": {
+          "reference": "Organization/e98f3aed4caa8b1be587b89b74d12f6d"
+        },
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "MR",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "204774"
+      },
+      {
+        "system": "http://hl7.org/fhir/sid/us-ssn",
+        "type": {
+          "coding": [
+            {
+              "code": "SB",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "999-99-9999"
+      }
+    ],
+    "multipleBirthBoolean": false,
+    "name": [
+      {
+        "family": "HDK",
+        "given": [
+          "TEST"
+        ],
+        "use": "usual"
+      }
+    ],
+    "resourceType": "Patient"
+  },
+  {
+    "active": true,
+    "id": "a721017f8d4db6f9dd8775d00fb96db8",
+    "identifier": [
+      {
+        "value": "EHS"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "id": "0ad378b2c8cdddef8ea75c14967fc766",
+    "identifier": [
+      {
+        "value": "EPIC"
+      }
+    ],
+    "patient": {
+      "reference": "Patient/ca3e20a1d17f280c240d75d35d99ac66"
+    },
+    "resourceType": "Device",
+    "type": {
+      "coding": [
+        {
+          "code": "unknown"
+        }
+      ]
+    }
+  },
+  {
+    "id": "8944b924869ca718979ab8bdee5684aa",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "AN",
+              "system": "https://terminology.hl7.org/3.0.0/CodeSystem-v2-0203"
+            }
+          ],
+          "text": "Account Number"
+        },
+        "value": "1001903"
+      }
+    ],
+    "resourceType": "Account",
+    "status": "active",
+    "subject": [
+      {
+        "reference": "Patient/ca3e20a1d17f280c240d75d35d99ac66"
+      }
+    ]
+  },
+  {
+    "category": [
+      {
+        "coding": [
+          {
+            "code": "unknown"
+          }
+        ]
+      }
+    ],
+    "code": {
+      "coding": [
+        {
+          "display": "asdf"
+        }
+      ],
+      "text": "asdf"
+    },
+    "id": "b2627a3cef5c1a1e5bc4fd4b66637720",
+    "resourceType": "Condition",
+    "subject": {
+      "reference": "Patient/ca3e20a1d17f280c240d75d35d99ac66"
+    },
+    "verificationStatus": {
+      "coding": [
+        {
+          "code": "entered-in-error",
+          "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status"
+        }
+      ]
+    }
+  },
+  {
+    "id": "ecedff1515e6cc01377068f06a6b2d4d",
+    "mode": "instance",
+    "name": "MEDSURG",
+    "physicalType": {
+      "coding": [
+        {
+          "code": "si",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "952c5c0f6ead93ec0088e3752bea30a8",
+    "mode": "instance",
+    "name": "MS150",
+    "partOf": {
+      "reference": "Location/ecedff1515e6cc01377068f06a6b2d4d"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "ro",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "f6209775b09e96084dfaab41a9538c5b",
+    "mode": "instance",
+    "name": "2024",
+    "partOf": {
+      "reference": "Location/952c5c0f6ead93ec0088e3752bea30a8"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "bd",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "ecedff1515e6cc01377068f06a6b2d4d",
+    "mode": "instance",
+    "name": "MEDSURG",
+    "physicalType": {
+      "coding": [
+        {
+          "code": "si",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "3982653c6f6030c036bf45330a089d80",
+    "mode": "instance",
+    "name": "MS 150",
+    "partOf": {
+      "reference": "Location/ecedff1515e6cc01377068f06a6b2d4d"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "ro",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "cd40d089f1385749bce25a5d510c8db2",
+    "mode": "instance",
+    "name": "2024",
+    "partOf": {
+      "reference": "Location/3982653c6f6030c036bf45330a089d80"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "bd",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "c1e039055ebfa0f180c54d643fffbbb8",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "PROVID"
+            }
+          ]
+        },
+        "value": "90003"
+      }
+    ],
+    "name": [
+      {
+        "family": "BUGSY",
+        "given": [
+          "PROJECT",
+          "TEAM"
+        ]
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "id": "7c1a75d16be5ba9a31e84fcb013f791c",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "PROVID"
+            }
+          ]
+        },
+        "value": "1054"
+      }
+    ],
+    "name": [
+      {
+        "family": "CHAMPION",
+        "given": [
+          "PHYSICIAN"
+        ]
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "diagnosis": [
+      {
+        "condition": {
+          "reference": "Condition/b2627a3cef5c1a1e5bc4fd4b66637720"
+        },
+        "role": {
+          "coding": [
+            {
+              "display": "A"
+            }
+          ]
+        }
+      }
+    ],
+    "id": "1c84bea8c49fca84799e0a7a5cbed6be",
+    "patient": {
+      "reference": "Patient/ca3e20a1d17f280c240d75d35d99ac66"
+    },
+    "resourceType": "EpisodeOfCare",
+    "status": "finished"
+  },
+  {
+    "class": {
+      "code": "U",
+      "display": "Unknown",
+      "system": "http://terminology.hl7.org/CodeSystem/v2-0004",
+      "version": "v1"
+    },
+    "diagnosis": [
+      {
+        "condition": {
+          "reference": "Condition/b2627a3cef5c1a1e5bc4fd4b66637720"
+        },
+        "use": {
+          "coding": [
+            {
+              "display": "A"
+            }
+          ]
+        }
+      }
+    ],
+    "episodeOfCare": [
+      {
+        "reference": "EpisodeOfCare/1c84bea8c49fca84799e0a7a5cbed6be"
+      }
+    ],
+    "hospitalization": {
+      "admitSource": {
+        "coding": [
+          {
+            "code": "Disch/Readm"
+          }
+        ]
+      }
+    },
+    "id": "d007b62655557786d5fd75e6e531b1d1",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "VN",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ],
+          "text": "visit number"
+        },
+        "value": "34980"
+      }
+    ],
+    "location": [
+      {
+        "location": {
+          "display": "MEDSURG, MS150, 2024",
+          "reference": "Location/f6209775b09e96084dfaab41a9538c5b"
+        },
+        "status": "active"
+      },
+      {
+        "location": {
+          "display": "MEDSURG, MS 150, 2024",
+          "reference": "Location/cd40d089f1385749bce25a5d510c8db2"
+        },
+        "status": "completed"
+      }
+    ],
+    "participant": [
+      {
+        "individual": {
+          "reference": "Practitioner/c1e039055ebfa0f180c54d643fffbbb8"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "ATND",
+                "display": "attender",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "individual": {
+          "reference": "Practitioner/7c1a75d16be5ba9a31e84fcb013f791c"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "ADM",
+                "display": "admitter",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "period": {
+      "start": "2017-05-26T14:08:07+00:00"
+    },
+    "resourceType": "Encounter",
+    "serviceType": {
+      "coding": [
+        {
+          "code": "Internal Med"
+        }
+      ]
+    },
+    "status": "unknown",
+    "subject": {
+      "reference": "Patient/ca3e20a1d17f280c240d75d35d99ac66"
+    },
+    "type": [
+      {
+        "coding": [
+          {
+            "code": "ER"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "00daed7849b4152e8c3922730b93401e",
+    "identifier": [
+      {
+        "system": "unknown",
+        "value": "ADTADM"
+      }
+    ],
+    "name": [
+      {
+        "family": "ADT",
+        "given": [
+          "ADMIN"
+        ]
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "active": true,
+    "id": "a721017f8d4db6f9dd8775d00fb96db8",
+    "identifier": [
+      {
+        "value": "EHS"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "activity": {
+      "coding": [
+        {
+          "display": "event - :ADT^A07"
+        }
+      ]
+    },
+    "agent": [
+      {
+        "who": {
+          "reference": "Practitioner/00daed7849b4152e8c3922730b93401e"
+        }
+      },
+      {
+        "who": {
+          "reference": "Organization/a721017f8d4db6f9dd8775d00fb96db8"
+        }
+      }
+    ],
+    "id": "f6e7289d721f93bffa70e001b762f427",
+    "occurredDateTime": "2017-05-26T14:10:00+00:00",
+    "reason": [
+      {
+        "coding": [
+          {
+            "code": "U",
+            "display": "Unknown",
+            "system": "HL70062",
+            "version": "v1"
+          }
+        ]
+      }
+    ],
+    "recorded": "2017-05-26T14:10:16.000+00:00",
+    "resourceType": "Provenance",
+    "target": [
+      {
+        "reference": "MessageHeader/6f7cc82c853f5b5ae4dc799bf06ea8c9"
+      }
+    ]
+  },
+  {
+    "address": [
+      {
+        "city": "MADISON",
+        "country": "US",
+        "line": [
+          "123 NORTH STREET"
+        ],
+        "postalCode": "53703",
+        "state": "WI"
+      }
+    ],
+    "birthDate": "1977-05-26",
+    "gender": "male",
+    "id": "c03fd02bb363e3cb6fb9b806c2905209",
+    "name": [
+      {
+        "family": "HDK",
+        "given": [
+          "TEST"
+        ]
+      }
+    ],
+    "patient": {
+      "reference": "Patient/ca3e20a1d17f280c240d75d35d99ac66"
+    },
+    "relationship": [
+      {
+        "coding": [
+          {
+            "code": "U",
+            "display": "Unknown",
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+            "version": "v1"
+          }
+        ]
+      }
+    ],
+    "resourceType": "RelatedPerson"
+  }
+]

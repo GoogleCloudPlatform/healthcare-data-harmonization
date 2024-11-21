@@ -1,0 +1,62 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "ROUTINE",
+          "display": "Routine appointment - default if not valued",
+          "target": [
+            {
+              "code": "3780001",
+              "display": "Routine patient disposition, no follow-up planned",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "CHECKUP",
+          "display": "A routine check-up, such as an annual physical",
+          "target": [
+            {
+              "code": "866149003 |Annual visit (procedure)|",
+              "display": "SNOMED",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "FOLLOWUP",
+          "display": "A follow up visit from a previous appointment",
+          "target": [
+            {
+              "code": "185389009 |Follow-up visit (procedure)|",
+              "display": "SNOMED",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "EMERGENCY",
+          "display": "Emergency appointment",
+          "target": [
+            {
+              "code": "373110003 |Emergency procedure (procedure)|",
+              "display": "SNOMED",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70276",
+      "target": "http://hl7.org/fhir/ValueSet/encounter-reason",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "3780001",
+        "display": "Routine patient disposition, no follow-up planned"
+      }
+    }
+  ],
+  "id": "Appointment_Type",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

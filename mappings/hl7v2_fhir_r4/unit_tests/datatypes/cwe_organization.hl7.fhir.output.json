@@ -1,0 +1,12 @@
+[
+  {
+    "identifier": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/v2-0227",
+        "value": "GHH01"
+      }
+    ],
+    "name": "Good Health Hospital",
+    "resourceType": "Organization"
+  }
+]

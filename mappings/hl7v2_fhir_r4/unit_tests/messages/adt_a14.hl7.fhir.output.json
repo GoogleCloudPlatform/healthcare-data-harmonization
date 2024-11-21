@@ -1,0 +1,483 @@
+[
+  {
+    "active": true,
+    "id": "a721017f8d4db6f9dd8775d00fb96db8",
+    "identifier": [
+      {
+        "value": "EHS"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "destination": [
+      {
+        "endpoint": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+              "valueCode": "unknown"
+            }
+          ]
+        }
+      }
+    ],
+    "eventCoding": {
+      "code": "A14",
+      "display": "ADT^A14^ADT_A05",
+      "system": "http://terminology.hl7.org/CodeSystem/v2-0003"
+    },
+    "id": "dbddb607cbb3e4b52121117a182d54b6",
+    "meta": {
+      "security": [
+        {
+          "code": "EDIADM"
+        }
+      ],
+      "tag": [
+        {
+          "code": "T",
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0103"
+        },
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0207"
+        }
+      ]
+    },
+    "resourceType": "MessageHeader",
+    "sender": {
+      "reference": "Organization/a721017f8d4db6f9dd8775d00fb96db8"
+    },
+    "source": {
+      "endpoint": {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/R4/extension-data-absent-reason.html",
+            "valueCode": "unknown"
+          }
+        ]
+      },
+      "name": "EPIC"
+    }
+  },
+  {
+    "active": true,
+    "id": "d60db5d9aa7a0af8838eef6ccfdc964e",
+    "identifier": [
+      {
+        "value": "EPIC"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "active": true,
+    "id": "e98f3aed4caa8b1be587b89b74d12f6d",
+    "identifier": [
+      {
+        "value": "EPI"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "active": true,
+    "address": [
+      {
+        "city": "MADISON",
+        "country": "US",
+        "line": [
+          "400 BARK ST."
+        ],
+        "postalCode": "53711",
+        "state": "WI"
+      }
+    ],
+    "birthDate": "1982-03-31",
+    "communication": [
+      {
+        "language": {
+          "coding": [
+            {
+              "code": "SGN"
+            }
+          ]
+        },
+        "preferred": true
+      }
+    ],
+    "deceasedBoolean": false,
+    "gender": "male",
+    "id": "03b4f02dd7a81991ab65f205e5c6983c",
+    "identifier": [
+      {
+        "assigner": {
+          "reference": "Organization/d60db5d9aa7a0af8838eef6ccfdc964e"
+        },
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "MRN",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "E4433"
+      },
+      {
+        "assigner": {
+          "reference": "Organization/e98f3aed4caa8b1be587b89b74d12f6d"
+        },
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "MR",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "204090"
+      },
+      {
+        "system": "http://hl7.org/fhir/sid/us-ssn",
+        "type": {
+          "coding": [
+            {
+              "code": "SB",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "092-34-0900"
+      }
+    ],
+    "maritalStatus": {
+      "coding": [
+        {
+          "code": "unknown",
+          "display": "Unknown",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
+          "version": "v1"
+        }
+      ]
+    },
+    "multipleBirthBoolean": false,
+    "name": [
+      {
+        "family": "BOBOWSKI",
+        "given": [
+          "CARMELO"
+        ],
+        "use": "usual"
+      }
+    ],
+    "resourceType": "Patient",
+    "telecom": [
+      {
+        "system": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+              "valueCode": "unknown"
+            }
+          ]
+        },
+        "use": "home",
+        "value": "123-123-1234"
+      },
+      {
+        "system": "email",
+        "use": "home",
+        "value": "jbobowsk@epic.com"
+      }
+    ]
+  },
+  {
+    "active": true,
+    "id": "a721017f8d4db6f9dd8775d00fb96db8",
+    "identifier": [
+      {
+        "value": "EHS"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "id": "6268411c8bdc33347494ad2932ae9dcc",
+    "identifier": [
+      {
+        "value": "EPIC"
+      }
+    ],
+    "patient": {
+      "reference": "Patient/03b4f02dd7a81991ab65f205e5c6983c"
+    },
+    "resourceType": "Device",
+    "type": {
+      "coding": [
+        {
+          "code": "unknown"
+        }
+      ]
+    }
+  },
+  {
+    "id": "c638e93a234f76bbf55244198ac27a7d",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "AN",
+              "system": "https://terminology.hl7.org/3.0.0/CodeSystem-v2-0203"
+            }
+          ],
+          "text": "Account Number"
+        },
+        "value": "1001901"
+      }
+    ],
+    "resourceType": "Account",
+    "status": "active",
+    "subject": [
+      {
+        "reference": "Patient/03b4f02dd7a81991ab65f205e5c6983c"
+      }
+    ]
+  },
+  {
+    "id": "ecedff1515e6cc01377068f06a6b2d4d",
+    "mode": "instance",
+    "name": "MEDSURG",
+    "physicalType": {
+      "coding": [
+        {
+          "code": "si",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "39290215ef19a5ed358dfd89f32ce518",
+    "mode": "instance",
+    "name": "135",
+    "partOf": {
+      "reference": "Location/ecedff1515e6cc01377068f06a6b2d4d"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "ro",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "e47bf1b88a38f0d500e0a15bedd69923",
+    "mode": "instance",
+    "name": "135-01",
+    "partOf": {
+      "reference": "Location/39290215ef19a5ed358dfd89f32ce518"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "bd",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "ecedff1515e6cc01377068f06a6b2d4d",
+    "mode": "instance",
+    "name": "MEDSURG",
+    "physicalType": {
+      "coding": [
+        {
+          "code": "si",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "39290215ef19a5ed358dfd89f32ce518",
+    "mode": "instance",
+    "name": "135",
+    "partOf": {
+      "reference": "Location/ecedff1515e6cc01377068f06a6b2d4d"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "ro",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "e47bf1b88a38f0d500e0a15bedd69923",
+    "mode": "instance",
+    "name": "135-01",
+    "partOf": {
+      "reference": "Location/39290215ef19a5ed358dfd89f32ce518"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "bd",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "class": {
+      "code": "U",
+      "display": "Unknown",
+      "system": "http://terminology.hl7.org/CodeSystem/v2-0004",
+      "version": "v1"
+    },
+    "id": "1ea42efc38dde66c658cd008edd0d103",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "VN",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ],
+          "text": "visit number"
+        },
+        "value": "35043"
+      }
+    ],
+    "location": [
+      {
+        "location": {
+          "display": "MEDSURG, 135, 135-01",
+          "reference": "Location/e47bf1b88a38f0d500e0a15bedd69923"
+        },
+        "status": "active"
+      },
+      {
+        "location": {
+          "display": "MEDSURG, 135, 135-01",
+          "reference": "Location/e47bf1b88a38f0d500e0a15bedd69923"
+        },
+        "status": "planned"
+      }
+    ],
+    "resourceType": "Encounter",
+    "serviceType": {
+      "coding": [
+        {
+          "code": "Surgery"
+        }
+      ]
+    },
+    "status": "unknown",
+    "subject": {
+      "reference": "Patient/03b4f02dd7a81991ab65f205e5c6983c"
+    },
+    "type": [
+      {
+        "coding": [
+          {
+            "code": "unknown"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1a2dbb81a71b587867d4f49884251b54",
+    "identifier": [
+      {
+        "system": "unknown",
+        "value": "EDIADM"
+      }
+    ],
+    "name": [
+      {
+        "family": "INTERFACE",
+        "given": [
+          "ADMIN"
+        ]
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "active": true,
+    "id": "a721017f8d4db6f9dd8775d00fb96db8",
+    "identifier": [
+      {
+        "value": "EHS"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "activity": {
+      "coding": [
+        {
+          "display": "event - :ADT^A14"
+        }
+      ]
+    },
+    "agent": [
+      {
+        "who": {
+          "reference": "Practitioner/1a2dbb81a71b587867d4f49884251b54"
+        }
+      },
+      {
+        "who": {
+          "reference": "Organization/a721017f8d4db6f9dd8775d00fb96db8"
+        }
+      }
+    ],
+    "id": "d9e3ee160c2c07af5ff9791271a8974d",
+    "occurredDateTime": "2017-05-26T14:17:40+00:00",
+    "reason": [
+      {
+        "coding": [
+          {
+            "code": "U",
+            "display": "Unknown",
+            "system": "HL70062",
+            "version": "v1"
+          }
+        ]
+      }
+    ],
+    "recorded": "2017-05-26T14:17:42.000+00:00",
+    "resourceType": "Provenance",
+    "target": [
+      {
+        "reference": "MessageHeader/dbddb607cbb3e4b52121117a182d54b6"
+      }
+    ]
+  }
+]

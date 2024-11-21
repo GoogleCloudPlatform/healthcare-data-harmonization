@@ -1,0 +1,1939 @@
+package datatypes
+
+import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.harmonization.HarmonizationPlugin"
+import "./code_harmonization/Address_Type.harmonization.json"
+import "./code_harmonization/Address_Use.harmonization.json"
+import "./code_harmonization/Allergy_Category.harmonization.json"
+import "./code_harmonization/Allergy_Criticality.harmonization.json"
+import "./code_harmonization/Allergy_Severity.harmonization.json"
+import "./code_harmonization/Allergy_Type.harmonization.json"
+import "./code_harmonization/Appointment_Type.harmonization.json"
+import "./code_harmonization/Completion_Status.harmonization.json"
+import "./code_harmonization/Document_Completion_Status.harmonization.json"
+import "./code_harmonization/Encounter_Class.harmonization.json"
+import "./code_harmonization/Encounter_Status.harmonization.json"
+import "./code_harmonization/Event_Reason.harmonization.json"
+import "./code_harmonization/Filler_Status.harmonization.json"
+import "./code_harmonization/Gender.harmonization.json"
+import "./code_harmonization/Interpretation_Codes.harmonization.json"
+import "./code_harmonization/Marital_Status.harmonization.json"
+import "./code_harmonization/Name_Type.harmonization.json"
+import "./code_harmonization/Observation_Status.harmonization.json"
+import "./code_harmonization/Order_Control_Codes.harmonization.json"
+import "./code_harmonization/Order_Status.harmonization.json"
+import "./code_harmonization/Order_Type.harmonization.json"
+import "./code_harmonization/Priority.harmonization.json"
+import "./code_harmonization/Relationship.harmonization.json"
+import "./code_harmonization/Report_Status.harmonization.json"
+import "./code_harmonization/Telecom_Use.harmonization.json"
+import "./code_harmonization/Telecom_Equipment_Type.harmonization.json"
+
+import "utilities/postprocess.wstl";
+
+// Description: Returns SNOMED code for Anesthesiologist
+//
+// Output(s):
+//   Anesthesiologist Code : http://snomed.info/sct
+//
+def SnomedCode_Anesthesiologist() "88189002"
+
+// Description: Returns SNOMED code for Surgeon
+//
+// Output(s):
+//   Surgeon Code : http://snomed.info/sct
+def SnomedCode_Surgeon() "304292004"
+
+// Description: Converts HL7 v2 terminology into FHIR terminology
+//
+// Argument(s):
+//   HL7 v2 Code:  https://hl7-definition.caristix.com/v2/HL7v2.7/Tables
+//   System: System of the source code specified in the concept map (https://build.fhir.org/conceptmap-definitions.html#ConceptMap.group.source).
+//   ConceptMapID: https://www.hl7.org/fhir/conceptmap.html
+//
+// Output(s):
+//   FHIR Code datatype: https://www.hl7.org/fhir/datatypes.html#code
+//
+def Convert_TerminologyCode(required Code, System, ConceptMapID) {
+  var mapping: harmonization::harmonize("$Local", Code, System, ConceptMapID)
+  $this: mapping[0].code
+}
+
+// Description: Converts HL7 v2 terminology into FHIR terminology
+//
+// Argument(s):
+//   HL7 v2 Code:  https://hl7-definition.caristix.com/v2/HL7v2.7/Tables
+//   System: System of the source code specified in the concept map (https://build.fhir.org/conceptmap-definitions.html#ConceptMap.group.source).
+//   ConceptMapID: https://www.hl7.org/fhir/conceptmap.html
+//
+// Output(s):
+//   FHIR Coding datatype: https://www.hl7.org/fhir/datatypes.html#Coding
+//
+def Convert_TerminologyCoding(required Code, System, ConceptMapID) {
+  var mapping: harmonization::harmonize("$Local", Code, System, ConceptMapID)
+  $this: mapping[0]
+}
+
+// Description: Converts HL7 v2 terminology into FHIR terminology
+//
+// Argument(s):
+//   HL7 v2 Code:  https://hl7-definition.caristix.com/v2/HL7v2.7/Tables
+//   System: System of the source code specified in the concept map (https://build.fhir.org/conceptmap-definitions.html#ConceptMap.group.source).
+//   ConceptMapID: https://www.hl7.org/fhir/conceptmap.html
+//
+// Output(s):
+//   FHIR CodeableConcept datatype: https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def Convert_Terminology(required Code, System, ConceptMapID) {
+  coding: harmonization::harmonize("$Local", Code, System, ConceptMapID)
+}
+
+// Description: Matches the given string is a Number or not
+//
+// Argument(s):
+//   str:  input string
+//
+// Output(s):
+//   Boolean: return true when str is a Number; otherwise false
+//
+def IsNumber(required str) {
+  $this: matchesRegex(str, "^\\d*\\.?\\d+$")
+}
+
+// Description: Extracts a date in FHIR format from a HL7v2 DateTime datatype
+//
+// Argument(s):
+//   str:  HL7v2 DateTime datatype
+//
+// Output(s):
+//   FHIR Date datatype: https://www.hl7.org/fhir/datatypes.html#date
+//
+def Extract_Date(required str) {
+  var input: multiFormatParseTime(str)
+  formatDateTime("yyyy-MM-dd", input)
+}
+
+// Description: Converts a HL7v2 DateTime datatype to a FHIR Instant datatype
+//
+// Argument(s):
+//   str:  HL7v2 DateTime datatype
+//
+// Output(s):
+//   FHIR Instant datatype: https://www.hl7.org/fhir/datatypes.html#instant
+//
+def Convert_Instant(required str) {
+  var input: multiFormatParseTime(str)
+  formatDateTime("yyyy-MM-dd'T'HH:mm:ss.SSSZZ", input)
+}
+
+// Description: Converts HL7v2 DateTime to FHIR DateTime format
+//
+// Argument(s):
+//   str:  HL7v2 DateTime datatype
+//
+// Output(s):
+//   FHIR DateTime datatype: https://www.hl7.org/fhir/datatypes.html#dateTime
+//
+def Convert_DateTime(required str) {
+  var input: multiFormatParseTime(str)
+  formatDateTime("yyyy-MM-dd'T'HH:mm:ssZZ", input)
+}
+
+// Description: Converts HL7v2 DateTime to FHIR DateTime format
+//
+// Argument(s):
+//   str:  HL7v2 DateTime datatype
+//
+// Output(s): Unix timestamp as a string: https://www.unixtimestamp.com/
+//
+def Convert_EpochUnixTimestamp(required str) {
+  var input: multiFormatParseTime(str)
+  strFmt("%s", floor(getEpochMillis(input) / 1000))
+}
+
+// Description: Constructs a Provenance Resource based on MSH Segment
+//
+// Argument(s):
+//   MSH Segment
+//
+// Output(s):
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   Device: https://www.hl7.org/fhir/device.html
+//
+def MSH_Provenance(required MSH, PatientReference) {
+  // Provenance.agent is required https://www.hl7.org/fhir/provenance-definitions.html#Provenance.agent
+  if MSH.4 then {
+    // The resource must be output before building the agent. Outputting the
+    // resource adds it to the bundle and assigns the id used in the agent
+    // reference. The resource must not be modified after it has been output.
+    var author: utilities::OutputResourceAndGetReference(HD_Organization(MSH.4))
+    agent[]: Build_Agent("author", "http://terminology.hl7.org/CodeSystem/provenance-participant-type", author)
+    // The resource must be output before building the entity. Outputting the
+    // resource adds it to the bundle and assigns the id used in the agent
+    // reference. The resource must not be modified after it has been output.
+    entity[0].what: utilities::OutputResourceAndGetReference(HD_Device(MSH.3, PatientReference))
+    entity[0].role: if MSH.3 then "source"
+    recorded: Convert_Instant(MSH.7)
+    activity.coding[0].code: "message - {MSH.9.1}^{MSH.9.2}^{MSH.9.3}"
+    resourceType: "Provenance"
+  }
+}
+
+// Description: Constructs a Provenance Resource, and the Device Resource being referenced
+//
+// Argument(s):
+//   HD datatype
+//   MessageHeader: already constructed MessageHeader from segments::MSH_MessageHeader projector
+//
+// Output(s):
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   Device: https://www.hl7.org/fhir/device.html
+//
+def HD_Provenance (required HD, MSH_7, MessageHeaderReference, PatientReference) {
+  // The resource must be output before building the agent. Outputting the
+  // resource adds it to the bundle and assigns the id used in the agent
+  // reference. The resource must not be modified after it has been output.
+  var hdDevice: utilities::OutputResourceAndGetReference(HD_Device(HD, PatientReference))
+  agent[0].who: hdDevice
+
+  recorded: Convert_Instant(MSH_7)
+  target[0]: MessageHeaderReference
+  resourceType: "Provenance"
+}
+
+// Description: Constructs a Bundle Resource
+//
+// Argument(s):
+//   MSH-10 datatype
+//
+// Output(s):
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//
+def MSH_Bundle (MSH_7, MSH_10) {
+  timestamp: Convert_Instant(MSH_7)
+  identifier.value: MSH_10
+}
+
+// Description: Constructs a MessageDefinition resource
+//
+// Argument(s):
+//   MSH.MSG datatype
+//
+// Output(s):
+//   MessageDefinition resource : https://www.hl7.org/fhir/messagedefinition.html
+//
+def MSG_MessageDefinition (required MSG) {
+  identifier[].value: MSG.3
+  resourceType: "MessageDefinition"
+}
+
+// Description: Constructs a Device resource from HD datatype
+//
+// Argument(s):
+//   HD datatype
+//
+// Output(s):
+//   Device Resource : https://www.hl7.org/fhir/device.html
+//
+def HD_Device (required HD, PatientReference) {
+  if HD.1 then {
+    identifier[]: Build_Identifier(HD.1, "", "")
+  }
+  if HD.3 == "ISO" or HD.3 == "UUID" then {
+    identifier[]: Build_Identifier(HD.2, HD.3, HD.3)
+  }
+  // Fixed-value to ensure https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-implantable-device-definitions.html#Device.type
+  type.coding[0].code: "unknown"
+  // To ensure https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-implantable-device-definitions.html#Device.patient
+  patient: PatientReference
+  resourceType: "Device"
+}
+
+// Description: Constructs an Organization resource
+//
+// Argument(s):
+//   HD datatype
+//
+// Output(s):
+//   Organization Resource : https://www.hl7.org/fhir/organization.html
+//
+def HD_Organization (required HD) {
+  identifier[]: Build_Identifier(HD.1, "", "")
+  identifier[]: Build_Identifier(HD.2, HD.3, HD.3)
+  // Fixed-value to ensure fhirpath-constraint-violation-ContainedResource.ofType(Bundle).entry.resource.ofType(Organization): "(identifier.count() + name.count()) > 0"
+  name: "Unknown"
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-organization-definitions.html#Organization.active
+  active: true
+  resourceType: "Organization"
+}
+
+// Description: Constructs Identifier datatype
+//
+// Argument(s):
+//   varValue: Identifier.value attribute
+//   varType: Identifier.type attribute
+//   varID: HD.3 identifier type
+// Output(s):
+//   Identifier datatype : https://www.hl7.org/fhir/datatypes.html#Identifier
+//
+def Build_Identifier (varValue, varType, varID) {
+  value: varValue
+  type: ID_CodeableConcept(varType)
+  if varID == "ISO" or varID == "UUID" then {
+    system: "urn:ietf:rfc:3986";   // when the identifier is a URI: https://www.hl7.org/fhir/identifier-registry.html
+  }
+}
+
+// Description: Constructs an Organization resource
+//
+// Argument(s):
+//   HD datatype
+//   CC Country Code
+// Output(s):
+//   Organization Resource : https://www.hl7.org/fhir/organization.html
+//
+def HD_CC_Organization (required HD, CC) {
+  $this: HD_Organization(HD)
+  address[].country: CC
+}
+
+// Description: Constructs CodeableConcept datatype
+//
+// Argument(s):
+//   ID datatype
+//
+// Output(s):
+//   CodeableConcept datatype : https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def ID_CodeableConcept (required ID) {
+  coding[0].code: ID
+  coding[0].system: "http://terminology.hl7.org/CodeSystem/v2-0301"
+}
+
+// Description: Constructs a Organization resource
+//
+// Argument(s):
+//   XON datatype
+//
+// Output(s):
+//   Organization Resource : https://www.hl7.org/fhir/organization.html
+//
+def XON_Organization(required XON) {
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-organization-definitions.html#Organization.active
+  name: if XON.1 then XON.1 else "unknown"
+  if !XON.10 then {
+    identifier[0].value: XON.3
+  } else {
+    identifier[0].value: XON.10
+  }
+  identifier[0].type.coding[0].code: XON.7
+  identifier[0].type.coding[0].system: if XON.7 then "http://terminology.hl7.org/CodeSystem/v2-0203"
+  // Fixed-value to ensure fhirpath-constraint-violation-ContainedResource.ofType(Bundle).entry.resource.ofType(Organization): "(identifier.count() + name.count()) > 0"
+  active: true
+  resourceType: "Organization"
+}
+
+// Description: Constructs Identifier datatype
+//
+// Argument(s):
+//   CX datatype
+//
+// Output(s):
+//   Identifier datatype : https://www.hl7.org/fhir/datatypes.html#Identifier
+//
+def CX_Identifier(required CX) {
+  value: CX.1
+  if CX.4.3 == "ISO" or CX.4.3 == "UUID" or CX.4 == "DNS" or CX.4 == "GUID" or CX.4 == "URI" then {
+    system: HD_Uri(CX.4)
+  } else {
+    assigner: utilities::OutputResourceAndGetReference(HD_Organization(CX.4))
+    // Fixed value to ensure https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-patient-definitions.html#Patient.identifier.system
+    system: "unknown"
+  }
+  type: Build_CodeableConcept(CX.5, "http://terminology.hl7.org/CodeSystem/v2-0203", "", "")
+  period.start: Convert_DateTime(CX.7)
+  period.end: Convert_DateTime(CX.8)
+}
+
+// Description: Constructs Identifier.system attribute
+//
+// Argument(s):
+//   HD datatype
+//
+// Output(s):
+//   Identifier.system attribute : https://www.hl7.org/fhir/datatypes-definitions.html#Identifier.system
+//
+def HD_Uri(required HD) {
+  var uri: if !matchesRegex(HD.1, ".*\\s.*") then HD.1
+  if !uri then {
+    if HD.3 == "ISO" then {
+      var uri: "urn:oid:{HD.2}"
+    } else if HD.3 == "UUID" then {
+      var uri: "urn:uuid:{HD.2}"
+    } else {
+      var uri: HD.2
+    }
+  }
+  uri
+}
+
+// Description: Constructs Family datatype
+//
+// Argument(s):
+//   FN datatype
+//
+// Output(s):
+//   Family datatype : https://www.hl7.org/fhir/datatypes.html#HumanName
+//
+def FN_Family(FN) {
+  $this: FN.1
+}
+
+// Description: Constructs Code datatype
+//
+// Argument(s):
+//   CWE datatype
+//
+// Output(s):
+//   Code datatype : https://www.hl7.org/fhir/datatypes.html#code
+//
+def CWE_Code(CWE) {
+  if CWE.1 then CWE.1 else CWE.4
+}
+
+// Description: Constructs Coding datatype
+//
+// Argument(s):
+//   CWE datatype
+//
+// Output(s):
+//   Coding datatype : https://www.hl7.org/fhir/datatypes.html#Coding
+//
+def CWE_Coding(CWE) {
+  code: CWE.1
+  display: CWE.2
+  system: utilities::Build_System(CWE.3)
+  version: CWE.7
+}
+
+// Description: Constructs CodeableConcept datatype
+//
+// Argument(s):
+//   CWE datatype
+//
+// Output(s):
+//   CodeableConcept datatype : https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def CWE_CodeableConcept(CWE) {
+  coding[0].code: CWE.1
+  coding[0].display: CWE.2
+  coding[0].system: utilities::Build_System(CWE.3)
+  coding[1].code: CWE.4
+  coding[1].display: CWE.5
+  coding[1].system: utilities::Build_System(CWE.6)
+  coding[0].version: CWE.7
+  coding[1].version: CWE.8
+  text: CWE.9
+  coding[2].code: CWE.10
+  coding[2].display: CWE.11
+  coding[2].system: utilities::Build_System(CWE.12)
+  coding[2].version: CWE.13
+}
+
+// Description: Constructs Identifier datatype
+//
+// Argument(s):
+//   DLN datatype
+//   varCode: a code string to be mapped with Identifier.type code
+// Output(s):
+//   Identifier datatype : https://www.hl7.org/fhir/datatypes.html#Identifier
+//
+def DLN_Identifier(required DLN, varCode) {
+  value: DLN.1
+  type.coding[0].code: varCode
+  type.coding[0].system: "http://terminology.hl7.org/CodeSystem/v2-0203"
+  if DLN.2.1 then {
+    system: utilities::Build_System(DLN.2.1)
+  } else {
+    system: "unknown"
+  }
+  period.end: Convert_DateTime(DLN.3)
+}
+
+// Description: Constructs Address datatype
+//
+// Argument(s):
+//   XAD datatype
+//
+// Output(s):
+//   Address datatype : https://www.hl7.org/fhir/datatypes.html#Address
+//
+def XAD_Address(XAD) {
+  $this: SAD_AddressLine(XAD.1)
+  line[]: XAD.2
+  city: XAD.3
+  state: XAD.4
+  postalCode: XAD.5
+  country: XAD.6
+  if XAD.7 == "M" or XAD.7 == "SH" then {
+    type: Convert_TerminologyCode(XAD.7, "HL70190", "Address_Type")
+  }
+  if XAD.7 == "BA" or XAD.7 == "BI" or XAD.7 == "C" or XAD.7 == "B" or XAD.7 == "H" or XAD.7 == "O" then {
+    use: Convert_TerminologyCode(XAD.7, "HL70190", "Address_Use")
+  }
+  district: CWE_String(XAD.9)
+  period: DR_Period(XAD.12)
+  period.start: Convert_DateTime(XAD.13)
+  period.end: Convert_DateTime(XAD.14)
+  line[]: XAD.19
+}
+
+// Description: Constructs Identifier datatype
+//
+// Argument(s):
+//   ST datatype, in the context PID.19 - SSN Number - Patient
+//
+// Output(s):
+//   Identifier datatype : https://www.hl7.org/fhir/datatypes.html#Identifier
+//
+def ST_Identifier(required ST) {
+  value: ST
+  type.coding[0].code: "SB"
+  type.coding[0].system: "http://terminology.hl7.org/CodeSystem/v2-0203"
+  system: "http://hl7.org/fhir/sid/us-ssn"
+}
+
+// Description: Constructs Address datatype
+//
+// Argument(s):
+//   SAD datatype
+//
+// Output(s):
+//   Address datatype : https://www.hl7.org/fhir/datatypes.html#Address
+//
+def SAD_AddressLine(SAD) {
+  line[]: SAD.1
+  line[]: SAD.2
+  line[]: SAD.3
+}
+
+// Description: Constructs String datatype
+//
+// Argument(s):
+//   CWE datatype
+//
+// Output(s):
+//   String datatype, in the context of XAD.9
+//
+def CWE_String(CWE) {
+  if !CWE.9 then {
+    $this: CWE.2
+  } else {
+    $this: CWE.9
+  }
+}
+
+// Description: Constructs Period datatype
+//
+// Argument(s):
+//   DR datatype
+//
+// Output(s):
+//   Period datatype : https://www.hl7.org/fhir/datatypes.html#Period
+//
+def DR_Period(DR) {
+  start: Convert_DateTime(DR.1)
+  end: Convert_DateTime(DR.2)
+}
+
+// Description: Constructs ContactPoint datatype
+//
+// Argument(s):
+//   varValue, varSystem, varUse, varRank, varStart, varEnd : respective values are passed to construct a ContactPoint datatype
+//
+// Output(s):
+//   ContactPoint datatype : https://www.hl7.org/fhir/datatypes.html#ContactPoint
+//
+def Build_ContactPoint(required varValue, varSystem, varUse, varRank, varStart, varEnd, extension) {
+  value: varValue
+  system: varSystem
+  use: varUse
+  rank: varRank
+  period.start: Convert_DateTime(varStart)
+  period.end: Convert_DateTime(varEnd)
+  extension[]: extension[]
+}
+
+// Description: Constructs ContactPoint datatype
+//
+// Argument(s):
+//   XTN datatype
+//
+// Output(s):
+//   ContactPoint datatype : https://www.hl7.org/fhir/datatypes.html#ContactPoint
+//
+def XTN_ContactPoint(XTN, cUse) {
+  var use: if cUse then cUse else Convert_TerminologyCode(XTN.2, "HL70201", "Telecom_Use")
+  var system: if XTN.4 then {
+    if XTN.3 then Convert_TerminologyCode(XTN.3, "HL70202", "Telecom_Equipment_Type") else "email"
+  } else {
+    extension[]: datatypes::Build_Extension("unknown", "Code", "http://hl7.org/fhir/StructureDefinition/data-absent-reason")
+  }
+  var extension[]: datatypes::Build_Extension(XTN.5, "String", "http://hl7.org/fhir/StructureDefinition/contactpoint-country")
+  var extension[]: datatypes::Build_Extension(XTN.6, "String", "http://hl7.org/fhir/StructureDefinition/contactpoint-area")
+  var extension[]: datatypes::Build_Extension(XTN.8, "String", "http://hl7.org/fhir/StructureDefinition/contactpoint-extension")
+  if XTN.3 != "Internet" and XTN.3 != "X.400" then {
+    var extension[]: datatypes::Build_Extension(XTN.7, "String", "http://hl7.org/fhir/StructureDefinition/contactpoint-local")
+    if !XTN.7 and !XTN.12 then {
+      $this: Build_ContactPoint(XTN.1, system, use, XTN.18, XTN.13, XTN.14, extension)
+    } else {
+      $this: Build_ContactPoint(XTN.12, system, use, XTN.18, XTN.13, XTN.14, extension)
+    }
+  } else {
+    if XTN.3 == "Internet" or XTN.3 == "X.400" then {
+      $this: Build_ContactPoint(XTN.4, system, use, XTN.18, XTN.13, XTN.14, extension)
+    }
+  }
+}
+
+// Description: Constructs HumanName datatype
+//
+// Argument(s):
+//   XPN datatype
+//
+// Output(s):
+//   HumanName datatype : https://www.hl7.org/fhir/datatypes.html#HumanName
+//
+def XPN_HumanName(XPN) {
+  family: FN_Family(XPN.1)
+  given[]: XPN.2
+  given[]: XPN.3
+  suffix[]: XPN.4
+  prefix[]: XPN.5
+  suffix[]: XPN.6
+  use: Convert_TerminologyCode(XPN.7, "HL70200", "Name_Type")
+  if !XPN.12 and !XPN.13 then {
+    period: DR_Period(XPN.10)
+  }
+  period.start: Convert_DateTime(XPN.12)
+  period.end: Convert_DateTime(XPN.13)
+  suffix[]: XPN.14
+}
+
+// Description: Constructs a FHIR R4 Patient.contact and its related resources based on NK1 Segment
+//
+// Argument(s):
+//   NK1 V2 Segment
+//
+// Output(s):
+//   Patient.contact: https://www.hl7.org/fhir/patient-definitions.html#Patient.contact
+//
+def NK1_Contact(required NK1) {
+  var contact.name: XPN_HumanName(NK1.2[0])
+  var contact.address: XAD_Address(NK1.4[0])
+  var contact.telecom[]: XTN_ContactPoint(NK1.5[], "home")
+  var contact.telecom[]: XTN_ContactPoint(NK1.6[], "work")
+  var relationshipCC: CWE_CodeableConcept(NK1.7)
+  var contact.relationship[]: if relationshipCC then Convert_Terminology(relationshipCC.coding[0].code, "HL70131", "Relationship")
+  var contact.period.start: Convert_DateTime(NK1.8)
+  var contact.period.end: Convert_DateTime(NK1.9)
+  var Organization: XON_Organization(NK1.13[0])
+  var Organization.contact[]: if Organization then XPN_XTN_XAD_OrganizationContact(NK1.30, NK1.31, NK1.32)
+  // The resource must be output before building the organization reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in
+  // the reference. The resource must not be modified after it has been output.
+  var contact.organization: utilities::OutputResourceAndGetReference(Organization)
+  var contact.gender: Convert_TerminologyCode(CWE_Code(NK1.14), "HL70001", "Gender")
+  var contact.telecom[]: XTN_ContactPoint(NK1.40, "home")
+  var contact.telecom[]: XTN_ContactPoint(NK1.41, "work")
+
+  // To ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(Patient).contact: "name.exists() or telecom.exists() or address.exists() or organization.exists()"
+  if contact.name or contact.telecom or contact.address or contact.organization then {
+    contact
+  }
+}
+
+// Description: Constructs an Organization resource
+//
+// Argument(s):
+//   XPN datatype
+//   XTN datatype
+//   XAD datatype
+// Output(s):
+//   Organization Resource : https://www.hl7.org/fhir/organization.html
+//
+def XPN_XTN_XAD_OrganizationContact(XPN, XTN, XAD) {
+  name: XPN_HumanName(XPN[0])
+  telecom[]: XTN_ContactPoint(XTN[], "work")
+  address: XAD_Address(XAD[0])
+}
+
+// Description: Constructs an Encouter.participant datatype, where a Practitioner resource is created and referrenced.
+//
+// Argument(s):
+//   XCN Datatype
+//   varCode, varSystem, varDisplay: respective values are passed to construct a participant datatype
+//
+// Output(s):
+//   Encouter.participant datatype : https://www.hl7.org/fhir/encounter-definitions.html#Encounter.participant
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def Build_Participant (required XCN, varCode, varSystem, varDisplay) {
+  // The resource must be output before building the individual reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in
+  // the reference. The resource must not be modified after it has been output.
+  var xcnPractitioner: utilities::OutputResourceAndGetReference(XCN_Practitioner(XCN))
+  individual: xcnPractitioner
+  type[0].coding[0].code: varCode
+  type[0].coding[0].system: utilities::Build_System(varSystem)
+  type[0].coding[0].display: varDisplay
+}
+
+// Description: Constructs a Practitioner resource
+//
+// Argument(s):
+//   XCN datatype
+//
+// Output(s):
+//   Practitioner Resource : https://www.hl7.org/fhir/practitioner.html
+//
+def XCN_Practitioner(required XCN) {
+  if XCN.1 then {
+    identifier[0].value: XCN.1
+  } else {
+    identifier[0].value: "unknown"
+  }
+  identifier[0].system: "unknown"
+  name[0].family: FN_Family(XCN.2)
+  // Fixed-value to ensure https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-practitioner-definitions.html#Practitioner.name.family
+  name[0].family: if !XCN.2 then "unknown"
+  name[0].given[]: XCN.3
+  name[0].given[]: XCN.4
+  name[0].suffix[]: XCN.5
+  name[0].prefix[]: XCN.6
+  name[0].suffix[]: XCN.7
+  name[0].use: Convert_TerminologyCode(XCN.10, "HL70200", "Name_Type")
+  identifier[0].type.coding[].code: XCN.13
+  if XCN.19 and !XCN.20 then {
+    name[0].period: DR_Period(XCN.17)
+  }
+  name[0].period.start: Convert_DateTime(XCN.19)
+  name[0].period.end: Convert_DateTime(XCN.20)
+  name[0].suffix[]: XCN.21
+  resourceType: "Practitioner"
+}
+
+// Description: Constructs a Location resource
+//
+// Argument(s):
+//   DH datatype
+//   segN represents each of PL subsegments to be mapped a location type in Location Resource
+//
+// Output(s):
+//   Location Resource : https://www.hl7.org/fhir/location.html
+//
+def HD_Location(required HD, segN) {
+  if HD.1 then {
+    name: HD.1
+  } else {
+    name: "unknown"
+  }
+  if HD.3 == "ISO" or HD.3 == "UUID" then {
+    identifier[].value: HD.2
+  }
+  mode: "instance"
+  if segN == "PL.1" or segN == "" then {
+    physicalType.coding[0].code: "si"
+  }
+  if segN == "PL.2" then {
+    physicalType.coding[0].code: "ro"
+  }
+  if segN == "PL.3" then {
+    physicalType.coding[0].code: "bd"
+  }
+  if segN == "PL.4" then {
+    physicalType.coding[0].code: "si"
+  }
+  if segN == "PL.7" then {
+    physicalType.coding[0].code: "bu"
+  }
+  if segN == "PL.8" then {
+    physicalType.coding[0].code: "lvl"
+  }
+  physicalType.coding[0].system: "http://terminology.hl7.org/CodeSystem/location-physical-type";    //Code System to define Location Physical Type: https://www.hl7.org/fhir/codesystem-location-physical-type.html
+  resourceType: "Location"
+}
+
+// Description: Constructs an array of Location resource based on PL subsegments
+//
+// Argument(s):
+//   PL datatype
+//   Status represents status each of PL subsegments to be mapped a location type in Location Resource
+//
+// Output(s):
+//   Location Resource : https://www.hl7.org/fhir/location.html
+//
+def PL_Location (required PL,Status) {
+  // All resources must be output before they are used in a partOf reference.
+  // Outputting a resource adds it to the bundle and assigns an id that is used
+  // in the reference.
+  //
+  // Expressions in this function are carefully ordered so that all resources
+  // are output before they are used in references and no resource is modified
+  // after it is output. Resources must not change after they have been output.
+  var facility: HD_Location(PL.4, "PL.4")
+  var location_names[]: facility.name
+  var location: utilities::OutputResourceAndGetReference(facility)
+
+  var building: HD_Location(PL.7, "PL.7")
+  var location_names[]: building.name
+  if building then {
+    var building.partOf: location
+    var location: utilities::OutputResourceAndGetReference(building)
+  }
+  var floor: HD_Location(PL.8, "PL.8")
+  var location_names[]: floor.name
+  if floor then {
+    var floor.partOf: location
+    var floor: utilities::OutputResourceAndGetReference(floor)
+  }
+  var pointOfCare: HD_Location(PL.1, "PL.1")
+  var location_names[]: pointOfCare.name
+  if pointOfCare then {
+    var pointOfCare.partOf: location
+    var location: utilities::OutputResourceAndGetReference(pointOfCare)
+  }
+  var room: HD_Location(PL.2, "PL.2")
+  var location_names[]: room.name
+  if room then {
+    var room.partOf: location
+    var location: utilities::OutputResourceAndGetReference(room)
+  }
+  var bed: HD_Location(PL.3, "PL.3")
+  var location_names[]: bed.name
+  if bed then {
+    var bed.partOf: location
+    var location: utilities::OutputResourceAndGetReference(bed)
+  }
+  var location.display: strJoin(", ", location_names)
+  // Only one location resource reference and status should be returned
+  // location contains the leaf location node.
+  Build_LocationStatus(location, Status)
+}
+
+// Description: Constructs a Location resource and its corresponding status
+//
+// Argument(s):
+//   Location Resource : https://www.hl7.org/fhir/location.html
+//   Status represents status each of PL subsegments to be mapped a location type in Location Resource
+//
+// Output(s):
+//   Location Resource reference & its status
+//
+def Build_LocationStatus (required Location, Status) {
+  location: Location
+  status: Status
+}
+
+// Description: Constructs a Location resource
+//
+// Argument(s):
+//   DLD datatype
+//
+// Output(s):
+//   Location Resource : https://www.hl7.org/fhir/location.html
+//
+def DLD_Location(required DLD) {
+  $this: CWE_Location(DLD.1)
+}
+
+// Description: Constructs a EpisodeOfCare resource
+//
+// Argument(s):
+//   CX datatype
+//
+// Output(s):
+//   EpisodeOfCare Resource : https://www.hl7.org/fhir/episodeofcare.html
+//
+def CX_EpisodeOfCare(required CX) {
+  identifier[]: CX_Identifier(CX)
+  resourceType: "EpisodeOfCare"
+}
+
+// Description: Constructs a Location resource
+//
+// Argument(s):
+//   DLD datatype
+//
+// Output(s):
+//   Location Resource : https://www.hl7.org/fhir/location.html
+//
+def CWE_Location(required CWE) {
+  identifier[0].value: CWE.1
+  if CWE.2 then {
+    name: CWE.2
+  } else {
+    name: "unknown"
+  }
+  identifier[0].system: utilities::Build_System(CWE.3)
+  resourceType: "Location"
+}
+
+// Description: Constructs an Encounter's condition datatype
+//
+// Argument(s):
+//   DG1 Segment datatype
+//   Condition already constructed from DG1 segment: https://www.hl7.org/fhir/condition.html
+// Output(s):
+//   an Encounter's condition datatype
+//
+def DG1_Encounter (required DG1, ConditionReference) {
+  condition: ConditionReference
+  use: CWE_CodeableConcept(DG1.6);   // ConceptMap needed
+  var Integer: if DG1.15 then tryParseNum(DG1.15)
+  rank: if Integer > 0 then Integer
+}
+
+// Description: Constructs a EpisodeOfCare resource based on Condition and Patient resources
+//
+// Argument(s):
+//   CX datatype
+//   DG1 Segment
+//   Condition Resource: https://www.hl7.org/fhir/condition.html
+//   Patient Resource: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   EpisodeOfCare Resource : https://www.hl7.org/fhir/episodeofcare.html
+//
+def CX_DG1_EpisodeOfCare(CX, DG1, ConditionReference, PatientReference) {
+  identifier[]: CX_Identifier(CX)
+  status: "finished"
+  diagnosis[]: DG1_EpisodeOfCare(DG1[], ConditionReference[])
+  patient: PatientReference
+  resourceType: "EpisodeOfCare"
+}
+
+// Description: Constructs an EpisodeOfCare's condition datatype
+//
+// Argument(s):
+//   DG1 Segment datatype
+//   Condition already constructed from DG1 segment: https://www.hl7.org/fhir/condition.html
+// Output(s):
+//   an EpisodeOfCare's condition datatype
+//
+def DG1_EpisodeOfCare (DG1, ConditionReference) {
+  condition: ConditionReference
+  role: CWE_CodeableConcept(DG1.6);    // ConceptMap needed
+  var Integer: if DG1.15 then tryParseNum(DG1.15)
+  rank: if Integer > 0 then Integer
+}
+
+// Description: Constructs a Condition resource
+//
+// Argument(s):
+//   EI datatype
+//
+// Output(s):
+//   Condition Resource : https://www.hl7.org/fhir/condition.html
+//
+def EI_Condition (required EI, PatientReference) {
+  identifier[0].value: EI.1
+  var Identifier[0].value: EI.2
+  var Identifier[1].value: EI.3
+  var Identifier[1].type: EI.4
+  // The resource must be output before building the assigner reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in
+  // the reference. The resource must not be modified after it has been output.
+  identifier[0].assigner: utilities::OutputResourceAndGetReference(Build_Organization(Identifier))
+  subject: PatientReference
+  resourceType: "Condition"
+}
+
+// Description: Constructs Identifier datatype
+//
+// Argument(s):
+//   EI datatype
+//   typeCode: a code string to be mapped with Identifier.type code
+//   typeSystem : a system string to be mapped with Identifier.type system
+//
+// Output(s):
+//   Identifier datatype : https://www.hl7.org/fhir/datatypes.html#Identifier
+//
+def EI_Identifier(required EI, typeCode, typeSystem) {
+  value: EI.1
+  type.coding[0].code: if typeCode != "" then typeCode
+  type.coding[0].system: utilities::Build_System(typeSystem)
+}
+
+// Description: Constructs a Device resource from HD datatype
+//
+// Argument(s):
+//   EI datatype
+//
+// Output(s):
+//   Device Resource : https://www.hl7.org/fhir/device.html
+//
+def EI_Device (required EI, required PatientReference) {
+  $this: EI_Identifier(EI, "", "")
+  // Fixed-value to ensure https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-implantable-device-definitions.html#Device.type
+  type.coding[0].code: "unknown"
+  // To ensure https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-implantable-device-definitions.html#Device.patient
+  patient: PatientReference
+  resourceType: "Device"
+}
+
+// Description: Constructs a Quantity datatype from CWE datatype
+//
+// Argument(s):
+//   CWE datatype
+//
+// Output(s):
+//   Quantity Datatype : https://www.hl7.org/fhir/datatypes.html#Quantity
+//
+def CWE_Qauntity(CWE) {
+  if CWE.1 and CWE.3 then {
+    code: CWE.1
+    system: utilities::Build_System(CWE.3)
+  }
+  if !CWE.2 then {
+    unit: CWE.1
+  } else {
+    unit: CWE.2
+  }
+}
+
+// Description: Constructs a Quantity datatype from CWE datatype
+//
+// Argument(s):
+//   SN datatype
+//
+// Output(s):
+//   Quantity Datatype : https://www.hl7.org/fhir/datatypes.html#Quantity
+//
+def SN_Quantity (SN) {
+  comparator: SN.1
+  value: parseNum(SN.2)
+}
+
+// Description: Constructs a Ratio datatype from SN datatype
+//
+// Argument(s):
+//   SN datatype
+//
+// Output(s):
+//   Ratio Datatype : https://www.hl7.org/fhir/datatypes.html#Ratio
+//
+def SN_Ratio (SN) {
+  numerator.value: parseNum(SN.2)
+  denominator.value: parseNum(SN.4)
+}
+
+// Description: Constructs a Range datatype from SN datatype
+//
+// Argument(s):
+//   SN datatype
+//
+// Output(s):
+//   Range Datatype : https://www.hl7.org/fhir/datatypes.html#Range
+//
+def SN_Range(SN) {
+  low.value: parseNum(SN.2)
+  high.value: parseNum(SN.4)
+}
+
+// Description: Constructs a Range datatype from NR datatype
+//
+// Argument(s):
+//   NR datatype
+//
+// Output(s):
+//   Range Datatype : https://www.hl7.org/fhir/datatypes.html#Range
+//
+def NR_Range(NR) {
+  low.value: parseNum(NR.1)
+  high.value: parseNum(NR.2)
+}
+
+// Description: Constructs CodeableConcept datatype based on HL7 v2 OBX-5 VARIES datatype
+//
+// Argument(s):
+//   VR: OBX-5 VARIES datatype
+//
+// Output(s):
+//   CodeableConcept datatype : https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def VARIES_CodeableConcept(VR) {
+  coding[0].code: VR.1.1
+  coding[0].display: VR.2.1
+  coding[0].system: utilities::Build_System(VR.3.1)
+  coding[1].code: VR.4.1
+  coding[1].display: VR.5.1
+  coding[1].system: utilities::Build_System(VR.6.1)
+  coding[0].version: VR.7.1
+  coding[1].version: VR.8.1
+  text: VR.9.1
+  coding[2].code: VR.10.1
+  coding[2].display: VR.11.1
+  coding[2].system: utilities::Build_System(VR.12.1)
+  coding[2].version: VR.13.1
+}
+
+// Description: Constructs Period datatype based on HL7 v2 OBX-5 VARIES datatype
+//
+// Argument(s):
+//   VR: OBX-5 VARIES datatype
+//
+// Output(s):
+//   Period datatype : https://www.hl7.org/fhir/datatypes.html#Period
+//
+def VARIES_Period(VR) {
+  start: Convert_DateTime(VR.1.1)
+  end: Convert_DateTime(VR.2.1)
+}
+
+// Description: Constructs a Range datatype from NR datatype based on HL7 v2 OBX-5 VARIES datatype
+//
+// Argument(s):
+//   VR: OBX-5 VARIES datatype
+//
+// Output(s):
+//   Range Datatype : https://www.hl7.org/fhir/datatypes.html#Range
+//
+def VARIES_Range(VR) {
+  low.value: parseNum(VR.1.1)
+  high.value: parseNum(VR.2.1)
+}
+
+// Description: Constructs a Ratio datatype from SN datatype based on HL7 v2 OBX-5 VARIES datatype
+//
+// Argument(s):
+//   VR: OBX-5 VARIES datatype
+//
+// Output(s):
+//   Ratio Datatype : https://www.hl7.org/fhir/datatypes.html#Ratio
+//
+def VARIES_Ratio (VR) {
+  numerator.value: parseNum(VR.2.1)
+  denominator.value: parseNum(VR.4.1)
+}
+
+// Description: Constructs a Quantity datatype from CWE datatype based on HL7 v2 OBX-5 VARIES datatype
+//
+// Argument(s):
+//   VR: OBX-5 VARIES datatype
+//
+// Output(s):
+//   Quantity Datatype : https://www.hl7.org/fhir/datatypes.html#Quantity
+//
+def VARIES_Quantity (VR, OBX6) {
+  comparator: VR.1.1
+  value: parseNum(VR.2.1)
+  $this: CWE_Qauntity(OBX6)
+}
+
+// Description: Constructs an Observation.value datatype, where based on OBX2 datatype Observation values are mapped.
+//
+// Argument(s):
+//   OBX5 Datatype
+//   OBX2 Datatype
+//   OBX3 Datatype
+//   OBX6 Datatype
+//
+// Output(s):
+//   Observation.value datatype : https://www.hl7.org/fhir/observation-definitions.html#Observation.value_x_
+//
+def Build_ObservationValue(OBX5, OBX2, OBX6) {
+  if OBX2 == "NM" then {
+    if IsNumber(OBX5.1.1) then {
+      valueQuantity.value: parseNum(OBX5.1.1)
+      valueQuantity: CWE_Qauntity(OBX6)
+    } else {
+      valueString: OBX5.1.1
+    }
+  } else if OBX2 == "ST" or OBX2 == "FT" or OBX2 == "TX" then {
+    valueString: OBX5.1.1
+  } else if OBX2 == "CF" or OBX2 == "CNE" or OBX2 == "CWE" or OBX2 == "CE" or OBX2 == "IS" then {
+    valueCodeableConcept: VARIES_CodeableConcept(OBX5)
+  } else if OBX2 == "IS" then {
+    valueCodeableConcept.coding[].code: OBX5.1.1
+  } else if OBX2 == "DR" then {
+    valuePeriod: VARIES_Period(OBX5)
+  } else if OBX2 == "DTM" or OBX2 == "DT" then {
+    valueDateTime: Convert_DateTime(OBX5.1.1)
+  } else if OBX2 == "NR" then {
+    valueRange: VARIES_Range(OBX5)
+  } else if OBX2 == "VR" then {
+    valueString: "{OBX5.1.1}-{OBX5.2.1}"
+  } else if OBX2 == "TM" then {
+    valueTime: formatDateTime("HH:mm:ss", parseDateTime("HHmmss", OBX5.1.1))
+  } else if OBX2 == "SN" and (OBX5.3.1 == ":" or OBX5.3.1 == "/") then {
+    valueRatio: VARIES_Ratio(OBX5)
+    valueRatio.numerator: CWE_Qauntity(OBX6)
+    valueRatio.denominator: CWE_Qauntity(OBX6)
+  } else if OBX2 == "SN" and OBX5.3.1 == "-" then {
+    valueRange: VARIES_Range(OBX5)
+    valueRange.low: CWE_Qauntity(OBX6)
+    valueRange.high: CWE_Qauntity(OBX6)
+  } else if OBX2 == "SN" and OBX5.3.1 == "+" then {
+    valueString: OBX5.1.1 + " " + OBX5.2.1 + " " + OBX5.3.1
+  } else if OBX2 == "SN" and OBX5.3.1 != ":" and OBX5.3.1 != "/" and OBX5.3.1 != "+" and OBX5.3.1 != "-" then {
+    valueQuantity: VARIES_Quantity(OBX5, OBX6)
+  } else if OBX2 == "NA" then {
+    valueQuantity: CWE_Qauntity(OBX6)
+  }
+}
+
+// Description: Constructs an Observation.component datatype, where based on OBX2 datatype Observation values are mapped.
+//
+// Argument(s):
+//   OBX5 Datatype
+//   OBX2 Datatype
+//   OBX3 Datatype
+//   OBX6 Datatype
+//
+// Output(s):
+//   Observation.component datatype : https://www.hl7.org/fhir/observation-definitions.html#Observation.component
+//
+def Build_ObservationComponent(OBX5, OBX2, OBX3, OBX6) {
+  code: CWE_CodeableConcept(OBX3)
+  $this: Build_ObservationValue(OBX5, OBX2, OBX6)
+}
+
+// Description: Constructs an Organization resource
+//
+// Argument(s):
+//   XON datatype
+//   XAD datatype
+// Output(s):
+//   Organization Resource : https://www.hl7.org/fhir/organization.html
+//
+def XON_XAD_Organization (required XON, XAD) {
+  $this: XON_Organization(XON)
+  var Address: XAD_Address(XAD)
+  // To ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(Organization).address: "where(use = 'home').empty()"
+  address[]: if Address.use != "home" then Address
+}
+
+// Description: Constructs a FHIR R4 PractitionerRole Resource based on NDL datatype
+//
+// Argument(s):
+//   NDL datatype
+//
+// Output(s):
+//   Practitioner: https://www.hl7.org/fhir/practitionerrole.html
+//
+def NDL_PractitionerRole (required NDL) {
+  // The resource must be output before building the practitioner reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in
+  // the reference. The resource must not be modified after it has been output.
+  var practitioner: utilities::OutputResourceAndGetReference(CNN_Practitioner(NDL.1))
+  practitioner: practitioner
+  period.start: Convert_DateTime(NDL.2)
+  period.end: Convert_DateTime(NDL.3)
+  resourceType: "PractitionerRole"
+}
+
+// Description: Constructs a FHIR R4 Practitioner Resource based on CNN datatype
+//
+// Argument(s):
+//   CNN datatype
+//
+// Output(s):
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def CNN_Practitioner (required CNN) {
+  if CNN.1 then {
+    identifier[0].value: CNN.1
+  } else {
+    identifier[0].value: "unknown"
+  }
+  identifier[0].system: "unknown"
+  name[0].family: CNN.2
+  name[0].given[]: CNN.3
+  name[0].given[]: CNN.4
+  name[0].suffix[]: CNN.5
+  name[0].prefix[]: CNN.6
+  name[0].suffix[]: CNN.7
+  resourceType: "Practitioner"
+}
+
+// Description: Constructs a FHIR R4 Specimen Resource based on CM datatype
+//
+// Argument(s):
+//   CM datatype
+//
+// Output(s):
+//   Specimen : https://hl7.org/fhir/specimen.html
+//
+def CM_Specimen (CM) {
+  type: CWE_CodeableConcept(CM.1)
+  container[].additiveCodeableConcept.text: CM.2
+  note[].text: CM.3
+  collection.bodySite: CWE_CodeableConcept(CM.4)
+}
+
+// Description: Constructs a FHIR R4 Specimen & Practitioner Resources based on OBR Segment
+//
+// Argument(s):
+//   OBR V2 Segment
+//   Patient Resource already constructed through segments::PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Specimen : https://hl7.org/fhir/specimen.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def OBR_Specimen (required OBR, PatientReference) {
+  if !OBR.8 then {
+    collection.collectedDateTime: datatypes::Convert_DateTime(OBR.7)
+  } else {
+    collection.collectedPeriod.start: datatypes::Convert_DateTime(OBR.7)
+    collection.collectedPeriod.end: datatypes::Convert_DateTime(OBR.8)
+  }
+  collection.quantity: CQ_Quantity(OBR.9)
+  // The resource must be output before building the collector reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in
+  // the reference. The resource must not be modified after it has been output.
+  var xcnPractitioner: utilities::OutputResourceAndGetReference(XCN_Practitioner(OBR.10[0]))
+  collection.collector: xcnPractitioner
+  receivedTime: Convert_DateTime(OBR.14)
+  if is(OBR.13, "Array") then {
+    collection.fastingStatusCodeableConcept: CWE_CodeableConcept(OBR.13[0])
+  } else {
+    collection.fastingStatusCodeableConcept.text: OBR.13
+  }
+  $this: CM_Specimen(OBR.15)
+  subject: PatientReference
+  resourceType: "Specimen"
+}
+
+// Description: Constructs a MessageHeader.source datatype
+//
+// Argument(s):
+//   HD datatype
+//
+// Output(s):
+//   MessageHeader.source : https://www.hl7.org/fhir/messageheader-definitions.html#MessageHeader.source
+//
+def HD_MessageHeaderEndpoint(required HD) {
+  if HD.3 == "ISO" then {
+    endpoint: "urn:oid:{HD.2}"
+  } else if HD.3 == "UUID" then {
+    endpoint: "urn:uuid:{HD.2}"
+  } else if HD.3 == "DNS" then {
+    endpoint: "urn:dns:{HD.2}"
+  } else if HD.3 == "URI" then {
+    endpoint: "urn:uri:{HD.2}"
+  } else {
+    if HD.2 and HD.3 then {
+      name: "{HD.1}-{HD.3}:{HD.2}"
+    } else {
+      name: HD.1
+    }
+    endpoint.extension[]: Build_Extension("unknown", "Code", "http://hl7.org/fhir/R4/extension-data-absent-reason.html")
+  }
+}
+
+// Description: Constructs a MessageHeader.destination datatype
+//
+// Argument(s):
+//   HD datatype
+//
+// Output(s):
+//   MessageHeader.destination : https://www.hl7.org/fhir/messageheader-definitions.html#MessageHeader.destination
+//
+def HD_MessageHeaderDestination(required HD, MSH6, MSH23) {
+  $this: HD_MessageHeaderEndpoint(HD)
+  var receiver: if MSH23 then {
+    XON_Organization(MSH23)
+  } else {
+    HD_Organization(MSH6)
+  }
+
+  // The resource must be output before building the receiver reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in
+  // the reference. The resource must not be modified after it has been output.
+  var receiver: utilities::OutputResourceAndGetReference(receiver)
+  receiver: receiver
+}
+
+// Description: Constructs a Provenance.agent datatype
+//
+// Argument(s):
+//   Provenance.Type: https://www.hl7.org/fhir/provenance-definitions.html#Provenance.agent.type
+//   Provenance.Who: https://www.hl7.org/fhir/provenance-definitions.html#Provenance.agent.who
+//
+// Output(s):
+//   Provenance.agent : https://www.hl7.org/fhir/provenance-definitions.html#Provenance.agent
+//
+def Build_Agent(Code, System, required Who) {
+  type.coding[0].code: Code
+  type.coding[0].system: utilities::Build_System(System)
+  who: Who
+}
+
+// Description: Parses the given timestamp string into ISO format using one of
+// the five allowed formats. Returns input timestamp if not in allowed format.
+//
+// Argument(s):
+//   datetime: input string of the timestamp to be parsed
+//
+// Output(s):
+//   string: parsed timestamp in ISO format when input is in one of the
+//           supported formats, otherwise returns input timestamp string
+def multiFormatParseTime(datetime) {
+  // allowed timestamp formats
+  var dateTimeWithZoneOffsetFmt: "yyyyMMddHHmmssZ"
+  var dateTimeWithFractionalSecondsFmt: "yyyyMMddHHmmss.SSSSSS"
+  var dateTimeWithSecondsFmt: "yyyyMMddHHmmss"
+  var dateTimeFmt: "yyyyMMddHHmm"
+  var dateFmt: "yyyyMMdd"
+  // attempt parsing with each of the five allowed formats
+  if parseDateTime(dateTimeWithZoneOffsetFmt, datetime)? then {
+    parseDateTime(dateTimeWithZoneOffsetFmt, datetime)
+  } else if parseDateTime(dateTimeWithFractionalSecondsFmt, datetime)? then {
+    parseDateTime(dateTimeWithFractionalSecondsFmt, datetime)
+  } else if parseDateTime(dateTimeWithSecondsFmt, datetime)? then {
+    parseDateTime(dateTimeWithSecondsFmt, datetime)
+  } else if parseDateTime(dateTimeFmt, datetime)? then {
+    parseDateTime(dateTimeFmt, datetime)
+  } else if parseDateTime(dateFmt, datetime)? then {
+    parseDateTime(dateFmt, datetime)
+  } else {
+    datetime
+  }
+}
+
+// Description: Constructs Extension datatype
+//
+// Argument(s):
+//   value: value of the extension
+//   valueType: value datatype
+//   url: uri for the extension
+// Output(s):
+//   Extension datatype : http://hl7.org/fhir/R4/extensibility.html#extension
+//
+def Build_Extension(required value, required valueType, required url) {
+  url: url
+  if valueType != "extension" and valueType != "Extension" then {
+    set("value{valueType}"): value
+  } else {
+    extension[]: value
+  }
+}
+
+// Description: Constructs String datatype
+//
+// Argument(s):
+//   XON datatype
+//
+// Output(s):
+//   String datatype
+//
+def XON_String(required XON) {
+  if XON.1 then {
+    $this: XON.1
+  } else {
+    $this: XON.10
+  }
+}
+
+// Description: Constructs Organization resource
+//
+// Argument(s):
+//   CWE datatype
+//
+// Output(s):
+//   Organization Resource : https://www.hl7.org/fhir/organization.html
+//
+def CWE_Organization(required CWE) {
+  identifier[0].value: CWE.1
+  identifier[0].system: if CWE.1 then "http://terminology.hl7.org/CodeSystem/v2-0227"
+  name: CWE.2
+  // Fixed value to ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(Organization): "(identifier.count() + name.count()) > 0"
+  name: if !CWE.2 then "Unknown"
+  resourceType: "Organization"
+}
+
+// Description: Constructs a PractitionerRole resource
+//
+// Argument(s):
+//   XCN datatype
+//   code datatype : https://www.hl7.org/fhir/datatypes.html#code
+//   system : uri datatype (https://www.hl7.org/fhir/datatypes.html#uri)
+// Output(s):
+//   PractitionerRole Resource : https://www.hl7.org/fhir/r4/practitionerrole.html
+//
+def XCN_PractitionerRole(required XCN, code, system) {
+  // The resource must be output before building the practitioner reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in
+  // the reference. The resource must not be modified after it has been output.
+  practitioner: utilities::OutputResourceAndGetReference(XCN_Practitioner(XCN))
+  code[0].coding[0].code: code
+  code[0].coding[0].system: utilities::Build_System(system)
+  resourceType: "PractitionerRole"
+}
+
+// Description: Constructs a Organization resource
+//
+// Argument(s):
+//   identifier datatype : https://www.hl7.org/fhir/datatypes.html#identifier
+// Output(s):
+//   Condition Resource : https://www.hl7.org/fhir/r4/condition.html
+//
+def Build_Organization(required Identifier) {
+  identifier[]: Identifier[]
+  // Fixed-value to ensure fhirpath-constraint-violation-ContainedResource.ofType(Bundle).entry.resource.ofType(Organization): "(identifier.count() + name.count()) > 0"
+  name: "Unknown"
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-organization-definitions.html#Organization.active
+  active: true
+  resourceType: "Organization"
+}
+
+// Description: Constructs a DiagnosticReport.Performer with event-performerFunction extension
+//
+// Argument(s):
+//   NDL datatype
+//   code datatype : https://www.hl7.org/fhir/datatypes.html#code
+//
+// Output(s):
+//   DiagnosticReport.Performer: https://www.hl7.org/fhir/diagnosticreport-definitions.html#DiagnosticReport.performer
+//
+def Build_DiagnosticReportPerformer(required NDL, code) {
+  // The resource must be output before building the performer reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the performer
+  // reference. The resource must not be modified after it has been output.
+  $this: utilities::OutputResourceAndGetReference(datatypes::NDL_PractitionerRole(NDL))
+  if code then {
+    var performerFunction.coding[0].code: code
+    var performerFunction.coding[0].system: "http://hl7.org/fhir/R4/valueset-performer-function.html"
+    extension[]: Build_Extension(performerFunction, "CodeableConcept", "http://hl7.org/fhir/StructureDefinition/event-performerFunction")
+  }
+}
+
+// Description: Constructs a Quantity datatype from CQ datatype
+//
+// Argument(s):
+//   CQ datatype
+//
+// Output(s):
+//   Quantity Datatype : https://www.hl7.org/fhir/datatypes.html#Quantity
+//
+def CQ_Quantity(required CQ) {
+  value: if CQ.1 then tryParseNum(CQ.1)
+  unit: CWE_String(CQ.2)
+}
+
+// Description: Constructs Procedure.performer datatype
+//
+// Argument(s):
+//   XCN datatype
+//   code: a code string to be mapped with Performer.function code
+//   system : a system string to be mapped with Performer.function system
+//
+// Output(s):
+//   Performer datatype : https://www.hl7.org/fhir/procedure-definitions.html#Procedure.performer
+//   Practitioner Resource : https://www.hl7.org/fhir/practitioner.html
+//
+def Build_Performer(required XCN, Code, System) {
+  // The resource must be output before building the actor reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in
+  // the reference. The resource must not be modified after it has been output.
+  var Actor: utilities::OutputResourceAndGetReference(XCN_Practitioner(XCN))
+  actor: Actor
+  function.coding[0].code: Code
+  function.coding[0].system: utilities::Build_System(System)
+}
+
+// Description: Constructs CodeableConcept datatype
+//
+// Argument(s):
+//   CNE datatype
+//
+// Output(s):
+//   CodeableConcept datatype : https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def CNE_CodeableConcept(required CNE) {
+  coding[0].code: CNE.1
+  coding[0].display: CNE.2
+  coding[0].system: utilities::Build_System(CNE.3)
+  coding[1].code: CNE.4
+  coding[1].display: CNE.5
+  coding[1].system: utilities::Build_System(CNE.6)
+  coding[0].version: CNE.7
+  coding[1].version: CNE.8
+  text: CNE.9
+  coding[2].code: CNE.10
+  coding[2].display: CNE.11
+  coding[2].system: utilities::Build_System(CNE.12)
+  coding[2].version: CNE.13
+}
+
+// Description: Constructs a PractitionerRole resource
+//
+// Argument(s):
+//   Practitioner Resource : https://www.hl7.org/fhir/r4/practitioner.html
+//   Organization Resource : https://www.hl7.org/fhir/r4/organization.html
+//   code datatype : https://www.hl7.org/fhir/datatypes.html#code
+//   system : uri datatype (https://www.hl7.org/fhir/datatypes.html#uri)
+// Output(s):
+//   PractitionerRole Resource : https://www.hl7.org/fhir/r4/practitionerrole.html
+//
+def Build_PractitionerRole(required PractitionerReference, required OrganizationReference, code, system) {
+  // The resource must be output before building the practitioner reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in
+  // the reference. The resource must not be modified after it has been output.
+  practitioner: PractitionerReference
+  organization: OrganizationReference
+  code[0].coding[0].code: code
+  code[0].coding[0].system: utilities::Build_System(system)
+  resourceType: "PractitionerRole"
+}
+
+// Description: Constructs a Timing datatype
+//
+// Argument(s):
+//   HL7 V2 RI datatype
+//
+// Output(s):
+//   Timing datatype : https://www.hl7.org/fhir/datatypes.html#Timing
+//
+def RI_Timing(required RI) {
+  code.coding[0].code: RI.1
+  code.coding[0].system: "http://terminology.hl7.org/CodeSystem/v2-0335"
+  var timeInterval: if RI.2 then split(RI.2, ",")[where $]
+  repeat.timeOfDay: formatDateTime("HH:mm:ss", parseDateTime("HHmm", timeInterval[])[])
+}
+
+// Description: Constructs a ServiceRequest resource
+//
+// Argument(s):
+//   HL7 V2 TQ datatype
+//
+// Output(s):
+//   ServiceRequest : https://www.hl7.org/fhir/servicerequest.html
+//
+def TQ_ServiceRequest(required TQ) {
+  quantityQuantity: CQ_Quantity(TQ.1)
+  occurrenceTiming: RI_Timing(TQ.2)
+  occurrenceTiming.repeat.boundsPeriod.start: Convert_DateTime(TQ.4)
+  occurrenceTiming.repeat.boundsPeriod.end: Convert_DateTime(TQ.5)
+  priority: Convert_TerminologyCode(TQ.6, "HL70485", "Priority")
+  note[0].text: TQ.8
+  occurrenceTiming.repeat.count: TQ.12
+}
+
+// Description: Constructs a Annotation datatype based on NTE segment
+//
+// Argument(s):
+//   NTE Segment
+//
+// Output(s):
+//   Annotation datatype : https://www.hl7.org/fhir/datatypes.html#Annotation
+//   Practitioner Resource : https://www.hl7.org/fhir/r4/practitioner.html
+//
+def NTE_Annotation(required NTE) {
+  if NTE.3 then {
+    //TODO () : Investigate v2 parser issue on NTE segment
+    var NTE_3: if is(NTE.3, "Array") then NTE.3[0] else NTE.3
+    text: NTE_3.1.1
+    // The resource must be output before building the author reference.
+    // Outputting the resource adds it to the bundle and assigns the id used in
+    // the reference. The resource must not be modified after it has been output.
+    authorReference: utilities::OutputResourceAndGetReference(XCN_Practitioner(NTE.5))
+    time: Convert_DateTime(NTE.6)
+  }
+}
+
+// Description: Constructs a Location resource
+//
+// Argument(s):
+//   HL7 V2 XON datatype
+//   HL7 V2 XAD datatype
+//   HL7 V2 XTN datatype
+//
+// Output(s):
+//   Location : https://www.hl7.org/fhir/location.html
+//
+def XON_XAD_XTN_Location(required XON, XAD, XTN) {
+  name: XON.1
+  identifier[0].value: if !XON.10 then XON.3
+  identifier[0].type.coding[0].code: XON.7
+  identifier[0].type.coding[0].system: if XON.7 then "http://terminology.hl7.org/CodeSystem/v2-0203"
+  identifier[0].value: XON.10
+  address: XAD_Address(XAD)
+  telecom[]: XTN_ContactPoint(XTN, "");    // passing empty value since use is unknown
+  resourceType: "Location"
+}
+
+// Description: Constructs MedicationRequest.dosage datatype
+//
+// Argument(s):
+//   HL7 V2 TQ datatype
+//
+// Output(s):
+//   MedicationRequest.dosage : https://www.hl7.org/fhir/dosage.html#Dosage
+//
+def TQ_MedicationRequest(TQ) {
+  doseAndRate[0].doseQuantity: CQ_Quantity(TQ.1)
+  timing: RI_Timing(TQ.2)
+  timing.repeat.duration: if TQ.3 then tryParseNum(TQ.3)
+  timing.repeat.boundsPeriod.start: Convert_DateTime(TQ.4)
+  timing.repeat.boundsPeriod.end: Convert_DateTime(TQ.5)
+  timing.repeat.count: if TQ.12 then tryParseNum(TQ.12)
+}
+
+// Description: Constructs a MedicationRequest resource
+//
+// Argument(s):
+//   RXR Segment
+//
+// Output(s):
+//   MedicationRequest Resource : https://www.hl7.org/fhir/medicationrequest.html
+//
+def RXR_MedicationRequest(RXR) {
+  route: CWE_CodeableConcept(RXR.1)
+  site: CWE_CodeableConcept(RXR.2)
+  method: CWE_CodeableConcept(RXR.4)
+  additionalInstruction[]: CWE_CodeableConcept(RXR.5)
+}
+
+// Description: Constructs a Medication resource
+//
+// Argument(s):
+//   code CWE datatype
+//   dosageForm CWE datatype
+//
+// Output(s):
+//   Medication Resource : https://www.hl7.org/fhir/medication.html
+//
+def Build_Medication(required code, dosageForm) {
+  code: CWE_CodeableConcept(code);   // Need Terminology Mapping: No mappings found in community sheet
+  form: CWE_CodeableConcept(dosageForm);   // Need Terminology Mapping: No mappings found in community sheet
+  resourceType: "Medication"
+}
+
+// Description: Constructs a Appointment resource
+//
+// Argument(s):
+//   Appointment Resource : https://www.hl7.org/fhir/r4/appointment.html
+//   CWE Datatype : https://www.hl7.org/fhir/r4/datatypes.html#CodeableConcept
+// Output(s):
+//   AppointmentParticipant Resource : https://www.hl7.org/fhir/r4/appointment.html
+//
+def Build_AppointmentParticipant(required Actor, Type) {
+  actor: Actor
+  type[]: CWE_CodeableConcept(Type)
+  status: "accepted";    // place-holder for 1..1 cardinality
+}
+
+// Description: Constructs a Location resource
+//
+// Argument(s):
+//   identifier datatype : https://www.hl7.org/fhir/datatypes.html#identifier
+// Output(s):
+//   Location Resource : https://www.hl7.org/fhir/r4/location.html
+//
+def Build_Location(required Identifier) {
+  identifier[]: Identifier[]
+  // Fixed value to ensure : https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-location-definitions.html#Location.name;
+  name: "Unknown"
+  resourceType: "Location"
+}
+
+// Description: Constructs a FHIR R4 Appointment Information Resource and its related resources based on V2 MSH Segment
+//
+// Argument(s):
+//   CWE Datatype
+//
+// Output(s):
+//   Appointment Information: https://v2plus.hl7.org/2021Jan/segment-definition/AIS.html
+//   Appointment: https://www.hl7.org/fhir/appointment.html
+//
+def AIS_AppointmentParticipant(required AIS) {
+  var start: datatypes::Convert_DateTime(AIS.4)
+  var participant.status: "accepted"
+  if AIS.6.1 == "MIN" then {
+    var start: calculateNewDateTime(start, tryParseNum(AIS.5), "MINUTES")
+  }
+  var participant.period.start: start
+  if AIS.8.1 == "MIN" then {
+    var participant.period.end: calculateNewDateTime(start, tryParseNum(AIS.7), "MINUTES")
+  }
+  participant
+}
+
+// Description: Constructs a FHIR R4 Appointment Information General Resource and its related resources based on V2 MSH Segment
+//
+// Argument(s):
+//   CWE Datatype
+//
+// Output(s):
+//   Appointment Information General Resource Segment : https://v2plus.hl7.org/2021Jan/segment-definition/AIG.html
+//   Appointment: https://www.hl7.org/fhir/appointment.html
+//
+def AIG_AppointmentParticipant(required AIG) {
+  //var participant.actor : datatypes::CWE_CodeableConcept(AIG.3);
+  var participant.type[]: datatypes::CWE_CodeableConcept(AIG.4)
+  var participant.status: "accepted"
+  var start: datatypes::Convert_DateTime(AIG.8)
+  if AIG.10.1 == "MIN" then {
+    var start: calculateNewDateTime(start, tryParseNum(AIG.9), "MINUTES")
+  }
+  var participant.period.start: start
+  if AIG.12.1 == "MIN" then {
+    var participant.period.end: calculateNewDateTime(start, tryParseNum(AIG.11), "MINUTES")
+  }
+  participant
+}
+
+// Description: Constructs a FHIR R4 Appointment Information Location Resource and its related resources based on V2 MSH Segment
+//
+// Argument(s):
+//   CWE Datatype
+//
+// Output(s):
+//   Appointment Information Location Resource Segment : https://v2plus.hl7.org/2021Jan/segment-definition/AIL.html
+//   Appointment: https://www.hl7.org/fhir/appointment.html
+//
+def AIL_AppointmentParticipant(required AIL) {
+  var participant.actor: datatypes::PL_Location(AIL.3[0], "").location
+  var participant.status: "accepted"
+  var start: datatypes::Convert_DateTime(AIL.6)
+  if AIL.8.1 == "MIN" then {
+    var start: calculateNewDateTime(start, tryParseNum(AIL.7), "MINUTES")
+  }
+  var participant.period.start: start
+  if AIL.10.1 == "MIN" then {
+    var participant.period.end: calculateNewDateTime(start, tryParseNum(AIL.9), "MINUTES")
+  }
+  participant
+}
+
+// Description: Constructs a FHIR R4 Appointment Information Personnel Resource and its related resources based on V2 MSH Segment
+//
+// Argument(s):
+//   CWE Resource Type
+//
+// Output(s):
+//   Appointment Information Personnel Resource Segment: https://v2plus.hl7.org/2021Jan/segment-definition/AIP.html
+//   Appointment: https://www.hl7.org/fhir/appointment.html
+//
+def AIP_AppointmentParticipant(required AIP) {
+  var Actor: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(AIP.3[0]))
+  var participant: datatypes::Build_AppointmentParticipant(Actor, AIP.4)
+  var participant.status: "accepted"
+  var start: datatypes::Convert_DateTime(AIP.6)
+  if AIP.8.1 == "MIN" then {
+    var start: calculateNewDateTime(start, tryParseNum(AIP.7), "MINUTES")
+  }
+  var participant.period.start: start
+  if AIP.10.1 == "MIN" then {
+    var participant.period.end: calculateNewDateTime(start, tryParseNum(AIP.9), "MINUTES")
+  }
+  participant
+}
+
+// Description: Constructs CodeableConcept datatype
+//
+// Argument(s):
+//   code : codeableConcept.coding.code attribute
+//   system : codeableConcept.coding.system attribute
+//   display : codeableConcept.coding.display attribute
+//   text : codeableConcept.text attribute
+//
+// Output(s):
+//   CodeableConcept datatype : https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def Build_CodeableConcept(required code, required system, display, text) {
+  coding[0].code: code
+  coding[0].display: display
+  coding[0].system: utilities::Build_System(system)
+  text: text
+}
+
+// Description: Constructs Timing.repeat datatype
+//
+// Argument(s):
+//   CQ datatype
+//
+// Output(s):
+//   Timing.repeat : https://www.hl7.org/fhir/datatypes-definitions.html#Timing.repeat
+//
+def CQ_RepeatPeriod(required CQ) {
+  // To ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(ServiceRequest).occurrence.ofType(Timing).repeat: "period.empty() or periodUnit.exists()"
+  if CQ.1 and CQ.2 then {
+    period: tryParseNum(CQ.1)
+    periodUnit: CWE_Code(CQ.2)
+  }
+}
+
+// Description: Constructs Timing.repeat datatype
+//
+// Argument(s):
+//   CQ datatype
+//
+// Output(s):
+//   Timing.repeat : https://www.hl7.org/fhir/datatypes-definitions.html#Timing.repeat
+//
+def CQ_RepeatDuration(required CQ) {
+  // To ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(ServiceRequest).occurrence.ofType(Timing).repeat: "duration.empty() or durationUnit.exists()"
+  if CQ.1 and CQ.2 then {
+    duration: tryParseNum(CQ.1)
+    durationUnit: CWE_Code(CQ.2)
+  }
+}
+
+// Description: Constructs a ServiceRequest resource
+//
+// Argument(s):
+//   TQ1 V2 Segment
+//
+// Output(s):
+//   ServiceRequest Resource : https://www.hl7.org/fhir/servicerequest.html
+//
+def TQ1_ServiceRequest(required TQ1) {
+  quantityQuantity: CQ_Quantity(TQ1.2)
+  occurrenceTiming.repeat.timeOfDay[]: formatDateTime("hh:mm:ss.SSS", parseDateTime("HHmmssZ", TQ1.4[])[])
+  occurrenceTiming.repeat: CQ_RepeatPeriod(TQ1.5[0])
+  occurrenceTiming.repeat.boundsPeriod.start: Convert_DateTime(TQ1.7)
+  occurrenceTiming.repeat.boundsPeriod.end: Convert_DateTime(TQ1.8)
+  priority: Convert_TerminologyCode(CWE_Code(TQ1.9[0]), "HL70485", "Priority")
+  note[].text: TQ1.11
+  occurrenceTiming.repeat: CQ_RepeatDuration(TQ1.13)
+  occurrenceTiming.repeat.count: if TQ1.14 then tryParseNum(TQ1.14)
+}
+
+// Description: Constructs a FHIR R4 RelatedPerson Resource based on V2 IN1 Segment and Patient Resource
+//
+// Argument(s):
+//   IN1 Segment
+//   PatientReference already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   RelatedPerson: https://www.hl7.org/fhir/relatedperson.html
+//
+def IN1_RelatedPerson(required IN1, PatientReference) {
+  if IN1.16 then {
+    name[]: datatypes::XPN_HumanName(IN1.16[])
+    birthDate: utilities::Extract_Date(IN1.18)
+    gender: datatypes::Convert_TerminologyCode(datatypes::CWE_Code(IN1.43), "HL70001", "Gender")
+    address[]: datatypes::XAD_Address(IN1.44[])
+    patient: PatientReference
+    resourceType: "RelatedPerson"
+  }
+}
+
+// Description: Constructs coding.system attribute
+//
+// Argument(s):
+//   system : coding.system attribute
+//
+// Output(s):
+//   Coding[0].system attribute : https://www.hl7.org/fhir/datatypes.html#uri
+//
+// def utilities::Build_System(required System) {
+//   if !matchesRegex(System, ".*\\s.*") then {
+//     System
+//   } else {
+//     toLower(strJoin("-", split(System, " ")));
+//   }
+// }

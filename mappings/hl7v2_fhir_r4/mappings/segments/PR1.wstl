@@ -1,0 +1,33 @@
+package segments
+
+// Description: Constructs a FHIR R4 Procedure Resource and its related resources based on V2 PR1 Segment and Patient Resource
+//
+// Argument(s):
+//   PR1 V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Procedure: https://www.hl7.org/fhir/procedure.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//
+def PR1_Procedure(required PR1, PatientReference) {
+  code: datatypes::CNE_CodeableConcept(PR1.3)
+  code.text: if !PR1.3.9 then PR1.4
+  if !PR1.7 then {
+    performedDateTime: utilities::Convert_DateTime(PR1.5)
+  } else {
+    var start: utilities::Convert_DateTime(PR1.5)
+    performedPeriod.start: start
+    performedPeriod.end: calculateNewDateTime(start, tryParseNum(PR1.7), "MINUTES")
+  }
+  category: datatypes::CWE_CodeableConcept(PR1.6);     // Need Terminology Mapping: No mappings found in community sheet
+  performer[]: datatypes::Build_Performer(PR1.8[], constants::SnomedCode_Anesthesiologist(), "http://snomed.info/sct")
+  performer[]: datatypes::Build_Performer(PR1.11[], constants::SnomedCode_Surgeon(), "http://snomed.info/sct")
+  performer[]: datatypes::Build_Performer(PR1.12[], "", "");    // passing empty values since performer-role code and system are unknown
+  reasonCode[]: datatypes::CWE_CodeableConcept(PR1.15);     // Need Terminology Mapping: No mappings found in community sheet
+  identifier[]: datatypes::EI_Identifier(PR1.19, "", "");    // passing empty values since identifier code and system are unknown
+  location: datatypes::PL_Location(PR1.23[0], "").location;    // passing empty value since location status is unknown
+  status: "unknown";    // place-holder for 1..1 cardinality
+  subject: PatientReference
+  resourceType: "Procedure"
+}

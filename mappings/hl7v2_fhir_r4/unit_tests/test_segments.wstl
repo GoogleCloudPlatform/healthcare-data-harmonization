@@ -1,0 +1,379 @@
+import "test";
+import "./../mappings/segments/segments.wstl";
+
+// Runs all Test Functions in the current package.
+//
+// A Test Function is a function whose name starts with test_.
+// It must take no parameters. Upon failure, this method throws an exception.
+// Test functions loads input and output files and asserts the mappings output
+// (actualOutput) with the loaded output (expectedOutput).
+//
+test::runAll()
+
+// Tests segments::MSH_MessageHeader() function.
+def test_MSH_MessageHeader() {
+  var input: loadJson(joinPath(testdir(), "msh_messageheader.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "msh_messageheader.hl7.fhir.output.json"))
+
+  var output: withSides(segments::MSH_MessageHeader(input.MSH))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::PID_PD1_Patient() function.
+def test_PID_PD1_Patient() {
+  var input: loadJson(joinPath(testdir(), "pid_pd1_patient.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "pid_pd1_patient.hl7.fhir.output.json"))
+
+  var output: withSides(segments::PID_PD1_Patient(input.PID, input.PD1))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::PID_Account() function.
+def test_PID_Account() {
+  var input: loadJson(joinPath(testdir(), "pid_account.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "pid_account.hl7.fhir.output.json"))
+
+  var output: withSides(segments::PID_Account(input.PID.18, input.patientReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::NK1_RelatedPerson() function.
+def test_NK1_RelatedPerson() {
+  var input: loadJson(joinPath(testdir(), "nk1_relatedperson.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "nk1_relatedperson.hl7.fhir.output.json"))
+
+  var output: withSides(segments::NK1_RelatedPerson(input.NK1, input.patientReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::DG1_Condition() function.
+def test_DG1_Condition() {
+  var input: loadJson(joinPath(testdir(), "dg1_condition.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "dg1_condition.hl7.fhir.output.json"))
+
+  var output: withSides(segments::DG1_Condition(input.DG1, input.patientReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::PV1_DG1_Encounter() function.
+def test_PV1_DG1_Encounter() {
+  var input: loadJson(joinPath(testdir(), "pv1_dg1_encounter.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "pv1_dg1_encounter.hl7.fhir.output.json"))
+
+  var output: withSides(segments::PV1_DG1_Encounter(input.PV1, input.DG1, {}, {}, input.patientReference, {}))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::AL1_AllergyIntolerance() function.
+def test_AL1_AllergyIntolerance() {
+  var input: loadJson(joinPath(testdir(), "al1_allergyintolerance.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "al1_allergyintolerance.hl7.fhir.output.json"))
+
+  var output: withSides(segments::AL1_AllergyIntolerance(input.AL1, input.patientReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::OBX_Observation() function.
+def test_OBX_Observation() {
+  var input: loadJson(joinPath(testdir(), "obx_observation.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "obx_observation.hl7.fhir.output.json"))
+
+  var output: withSides(segments::OBX_Observation(input.OBX, input.patientReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::OBR_ORC_DiagnosticReport() function.
+def test_OBR_ORC_DiagnosticReport() {
+  var input: loadJson(joinPath(testdir(), "obr_orc_diagnosticreport.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "obr_orc_diagnosticreport.hl7.fhir.output.json"))
+
+  var output: withSides(segments::OBR_ORC_DiagnosticReport(input.OBR, input.ORC, input.patientReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::PID_RelatedPersonMother() function.
+def test_PID_RelatedPersonMother() {
+  var input: loadJson(joinPath(testdir(), "pid_relatedpersonmother.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "pid_relatedpersonmother.hl7.fhir.output.json"))
+
+  var output: withSides(segments::PID_RelatedPersonMother(input.PID.21, input.patientReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::PID_Provenance() function.
+def test_PID_Provenance() {
+  var input: loadJson(joinPath(testdir(), "pid_provenance.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "pid_provenance.hl7.fhir.output.json"))
+
+  var output: withSides(segments::PID_Provenance(input.PID.34, input.PID.33, input.patientReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::PR1_Procedure() function.
+def test_PR1_Procedure() {
+  var input: loadJson(joinPath(testdir(), "pr1_procedure.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "pr1_procedure.hl7.fhir.output.json"))
+
+  var output: withSides(segments::PR1_Procedure(input.PR1, input.patientReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::EVN_Provenance() function.
+def test_EVN_Provenance() {
+  var input: loadJson(joinPath(testdir(), "evn_provenance.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "evn_provenance.hl7.fhir.output.json"))
+
+  var output: withSides(segments::EVN_Provenance(input.EVN, input.MSH, input.messageHeaderResource))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::ORC_OBR_ServiceRequest() function.
+def test_ORC_OBR_ServiceRequest() {
+  var input: loadJson(joinPath(testdir(), "orc_obr_servicerequest.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "orc_obr_servicerequest.hl7.fhir.output.json"))
+
+  var output: withSides(segments::ORC_OBR_ServiceRequest(input.ORC, input.OBR, {}, input.patientReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::SPM_Specimen() function.
+def test_SPM_Specimen() {
+  var input: loadJson(joinPath(testdir(), "spm_specimen.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "spm_specimen.hl7.fhir.output.json"))
+
+  var output: withSides(segments::SPM_Specimen(input.SPM, input.patientReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::ORC_Provenance() function.
+def test_ORC_Provenance() {
+  var input: loadJson(joinPath(testdir(), "orc_provenance.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "orc_provenance.hl7.fhir.output.json"))
+
+  var output: withSides(segments::ORC_Provenance(input.ORC, input.ServiceRequestReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::ORC_RXR_MedicationRequest() function.
+def test_ORC_RXR_MedicationRequest() {
+  var input: loadJson(joinPath(testdir(), "orc_rxr_medicationrequest.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "orc_rxr_medicationrequest.hl7.fhir.output.json"))
+
+  var output: withSides(segments::ORC_RXR_MedicationRequest(input.ORC, input.RXR, input.patientReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::RXE_RXR_MedicationRequest() function.
+def test_RXE_RXR_MedicationRequest() {
+  var input: loadJson(joinPath(testdir(), "rxe_rxr_medicationrequest.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "rxe_rxr_medicationrequest.hl7.fhir.output.json"))
+
+  var output: withSides(segments::RXE_RXR_MedicationRequest(input.RXE, input.RXR, input.patientReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::RXA_ORC_RXR_MedicationAdministration() function.
+def test_RXA_ORC_RXR_MedicationAdministration() {
+  var input: loadJson(joinPath(testdir(), "rxa_orc_rxr_medicationadministration.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "rxa_orc_rxr_medicationadministration.hl7.fhir.output.json"))
+
+  var output: withSides(segments::RXA_ORC_RXR_MedicationAdministration(input.RXA, input.ORC, input.RXR, input.patientReference,{},{}))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::TXA_DiagnosticReport() function.
+def test_TXA_DiagnosticReport() {
+  var input: loadJson(joinPath(testdir(), "txa_diagnosticreport.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "txa_diagnosticreport.hl7.fhir.output.json"))
+
+  var output: withSides(segments::TXA_DiagnosticReport(input.TXA, input.patientReference, input.encounterReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::PRB_Condition() function.
+def test_PRB_Condition() {
+  var input: loadJson(joinPath(testdir(), "prb_condition.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "prb_condition.hl7.fhir.output.json"))
+
+  var output: withSides(segments::PRB_Condition(input.PRB,input.patientReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::GOL_Goal() function.
+def test_GOL_Goal() {
+  var input: loadJson(joinPath(testdir(), "gol_goal.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "gol_goal.hl7.fhir.output.json"))
+
+  var output: withSides(segments::GOL_Goal(input.GOL,input.patientReference, input.conditionReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::SCH_ServiceRequest() function.
+def test_SCH_ServiceRequest() {
+  var input: loadJson(joinPath(testdir(), "sch_servicerequest.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "sch_servicerequest.hl7.fhir.output.json"))
+
+  var output: withSides(segments::SCH_ServiceRequest(input.SCH, input.patientReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::GT1_RelatedPerson() function.
+def test_GT1_RelatedPerson() {
+  var input: loadJson(joinPath(testdir(), "gt1_relatedperson.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "gt1_relatedperson.hl7.fhir.output.json"))
+
+  var output: withSides(segments::GT1_RelatedPerson(input.GT1, input.PatientReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::IN1_Coverage() function.
+def test_IN1_Coverage() {
+  var input: loadJson(joinPath(testdir(), "in1_coverage.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "in1_coverage.hl7.fhir.output.json"))
+
+  var output: withSides(segments::IN1_Coverage(input.IN1, input.PatientReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::RXR_Dosage() function.
+def test_RXR_Dosage() {
+  var input: loadJson(joinPath(testdir(), "rxr_dosage.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "rxr_dosage.hl7.fhir.output.json"))
+  var actualOutput[]: segments::RXR_Dosage(input.RXR)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::DG!_Encounter() function.
+def test_DG1_Encounter() {
+  var input: loadJson(joinPath(testdir(), "dg1_encounter.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "dg1_encounter.hl7.fhir.output.json"))
+  var actualOutput[]: segments::DG1_Encounter(input.DG1, input.Condition)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::MSH_Bundle() function.
+def test_MSH_Bundle() {
+  var input: loadJson(joinPath(testdir(), "msh_bundle.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "msh_bundle.hl7.fhir.output.json"))
+  var actualOutput[]: segments::MSH_Bundle(input.MSH.7, input.MSH.10)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::MSH_Provenance() function.
+def test_MSH_Provenance() {
+  var input: loadJson(joinPath(testdir(), "msh_provenance.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "msh_provenance.hl7.fhir.output.json"))
+
+  var output: withSides(segments::MSH_Provenance(input.MSH, input.PatientReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::OBR_Specimen() function.
+def test_OBR_Specimen() {
+  var input: loadJson(joinPath(testdir(), "obr_specimen.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "obr_specimen.hl7.fhir.output.json"))
+
+  var output: withSides(segments::OBR_Specimen(input.OBR, input.PatientReference))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::IN1_RelatedPerson() function.
+def test_IN1_RelatedPerson() {
+  var input: loadJson(joinPath(testdir(), "in1_relatedperson.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "in1_relatedperson.hl7.fhir.output.json"))
+  var actualOutput[]: segments::IN1_RelatedPerson(input.IN1, input.PatientReference)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests segments::DG1_Diagnosis() function.
+def test_DG1_Diagnosis() {
+  var input: loadJson(joinPath(testdir(), "dg1_diagnosis.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "dg1_diagnosis.hl7.fhir.output.json"))
+  var actualOutput[]: segments::DG1_Diagnosis(input.DG1, input.Condition)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Path for input and output files.
+def testdir() "./segments/"
+

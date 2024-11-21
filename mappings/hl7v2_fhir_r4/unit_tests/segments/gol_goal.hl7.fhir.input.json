@@ -1,0 +1,51 @@
+{
+  "GOL": {
+    "0": "GOL",
+    "1": "AD",
+    "12": null,
+    "13": "199505021200",
+    "14": null,
+    "15": "QAM",
+    "16": null,
+    "17": null,
+    "18": {
+      "1": "ACT",
+      "2": "Active",
+      "3": "Level Seven Healthcare, Inc. Internal"
+    },
+    "19": "199505011200",
+    "20": [
+      {
+        "1": "P",
+        "2": "Patient",
+        "3": "Level Seven Healthcare, Inc."
+      }
+    ],
+    "2": "199505011200",
+    "3": {
+      "1": "00312",
+      "2": "Improve Peripheral Circulation",
+      "3": "GoalList"
+    },
+    "4": {
+      "1": "123GL"
+    },
+    "5": null,
+    "6": null,
+    "7": "199505011200",
+    "8": "199505101200",
+    "9": null,
+    "10": null,
+    "11": {
+      "1": "Due",
+      "2": "Review Due",
+      "3": "NextReviewList"
+    }
+  },
+  "patientReference": {
+    "reference": "Patient/123"
+  },
+  "conditionReference": {
+    "reference": "Condition/123"
+  }
+}

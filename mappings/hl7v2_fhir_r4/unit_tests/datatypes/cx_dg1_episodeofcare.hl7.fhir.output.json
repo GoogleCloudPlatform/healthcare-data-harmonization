@@ -1,0 +1,41 @@
+[
+  {
+    "diagnosis": [
+      {
+        "condition": {
+          "reference": "Condition/456"
+        },
+        "role": {
+          "coding": [
+            {
+              "code": "Working"
+            }
+          ]
+        }
+      }
+    ],
+    "identifier": [
+      {
+        "period": {
+          "end": "2018-07-25T14:01:56+00:00",
+          "start": "2018-07-25T14:01:56+00:00"
+        },
+        "system": "ORG12",
+        "type": {
+          "coding": [
+            {
+              "code": "visitid",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "5609582645793883000"
+      }
+    ],
+    "patient": {
+      "reference": "Patient/123"
+    },
+    "resourceType": "EpisodeOfCare",
+    "status": "finished"
+  }
+]

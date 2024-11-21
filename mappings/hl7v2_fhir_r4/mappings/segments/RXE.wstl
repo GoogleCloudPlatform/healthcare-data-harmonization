@@ -1,0 +1,65 @@
+package segments
+
+// Description: Constructs a FHIR R4 MedicationRequest Resource and its related resources based on V2 RXE, RXR Segments and Patient resource
+//
+// Argument(s):
+//   RXE V2 Segment
+//   RXR V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   MedicationRequest: https://www.hl7.org/fhir/medicationrequest.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Medication: https://www.hl7.org/fhir/medication.html
+//
+def RXE_RXR_MedicationRequest(required RXE, RXR, PatientReference) {
+  intent: "filler-order"
+  dosageInstruction[]: datatypes::TQ_Dosage(RXE.1)
+  dosageInstruction[]: RXR_Dosage(RXR[])
+  priority: utilities::Convert_TerminologyCode(RXE.1.6, "HL70485", "Priority")
+  // The resource must be output before building the medication. Outputting the
+  // resource adds it to the bundle and assigns the id used in the medication
+  // reference. The resource must not be modified after it has been output.
+  medicationReference: utilities::OutputResourceAndGetReference(datatypes::Build_Medication(RXE.2, RXE.6))
+  dosageInstruction[0].doseAndRate[0].doseRange.low.value: if RXE.3 then tryParseNum(RXE.3)
+  dosageInstruction[0].doseAndRate[0].type.coding[0].code: "ordered"
+  dosageInstruction[0].doseAndRate[0].doseRange.high.value: if RXE.4 then tryParseNum(RXE.4)
+  if RXE.5.1 or RXE.5.3 then {
+    var lowCode: if RXE.3 then datatypes::CWE_Code(RXE.5);   // Need Terminology Mapping: No mappings found in community sheet
+    dosageInstruction[0].doseAndRate[0].doseRange.low.code: lowCode
+    // Fixed-value to ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(MedicationRequest).dosageInstruction.doseAndRate.dose.ofType(Range).low: "code.empty() or system.exists()"
+    dosageInstruction[0].doseAndRate[0].doseRange.low.system: if lowCode then "unknown"
+    var highCode: if RXE.4 then datatypes::CWE_Code(RXE.5);   // Need Terminology Mapping: No mappings found in community sheet
+    dosageInstruction[0].doseAndRate[0].doseRange.high.code: highCode
+    // Fixed-value to ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(MedicationRequest).dosageInstruction.doseAndRate.dose.ofType(Range).high: "code.empty() or system.exists()"
+    dosageInstruction[0].doseAndRate[0].doseRange.high.system: if highCode then "unknown"
+  } else {
+    dosageInstruction[0].doseAndRate[0].doseRange.low.unit: if RXE.3 then datatypes::CWE_String(RXE.5)
+    dosageInstruction[0].doseAndRate[0].doseRange.high.unit: if RXE.4 then datatypes::CWE_String(RXE.5)
+  }
+  dispenseRequest.quantity.value: if RXE.10 then tryParseNum(RXE.10)
+  if RXE.10 then {
+    if RXE.11.1 or RXE.11.3 then {
+      dispenseRequest.quantity.code: datatypes::CWE_Code(RXE.11);   // Need Terminology Mapping: No mappings found in community sheet
+      // Fixed-value to ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(MedicationRequest).dispenseRequest.quantity: "code.empty() or system.exists()"
+      dispenseRequest.quantity.system: if RXE.11 then "unknown"
+    } else {
+      dispenseRequest.quantity.unit: datatypes::CWE_String(RXE.11)
+    }
+  }
+  dispenseRequest.numberOfRepeatsAllowed: if RXE.12 then tryParseNum(RXE.12)
+  // The resource must be output before building the requester. Outputting the
+  // resource adds it to the bundle and assigns the id used in the requester
+  // reference. The resource must not be modified after it has been output.
+  requester: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(RXE.13[0]))
+  // The resource must be output before building the recorder. Outputting the
+  // resource adds it to the bundle and assigns the id used in the recorder
+  // reference. The resource must not be modified after it has been output.
+  recorder: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(RXE.14[0]))
+  var Identifier: datatypes::ST_Identifier(RXE.15)
+  var Identifier.type.text: if RXE.15 then "prescription-number"
+  identifier[]: Identifier
+  status: "unknown";    // place-holder for 1..1 cardinality
+  subject: PatientReference
+  resourceType: "MedicationRequest"
+}

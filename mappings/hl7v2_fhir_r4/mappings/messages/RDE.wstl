@@ -1,0 +1,51 @@
+package messages
+
+// Description: Define RDE_Oxx HL7v2 (version 2.9) to FHIR R4 transformation
+//
+// Argument(s):
+//   RDE_Oxx HL7v2 Message Type (version 2.9)
+//   RDE_Oxx Segments covered in this mapping configuration are: MSH, PID, PD1, PV1, OBX, OBR, ORC, AL1, IN1, RXE
+//
+// Output(s):
+//   FHIR R4 Resources : http://www.hl7.org/fhir/resourcelist.html
+// List of Generated FHIR Resources:
+//   Account: https://www.hl7.org/fhir/account.html
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//   Coverage: https://www.hl7.org/fhir/coverage.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   Location: https://www.hl7.org/fhir/location.html
+//   MessageHeader: https://www.hl7.org/fhir/messageheader.html
+//   MedicationRequest: https://www.hl7.org/fhir/medicationrequest.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   AllergyIntolerance: https://www.hl7.org/fhir/allergyintolerance.html
+//   RelatedPerson: https://www.hl7.org/fhir/relatedperson.html
+//
+def Transform_RDE(RDE) {
+  var MessageHeaderReference: utilities::OutputResourceAndGetReference(segments::MSH_MessageHeader(RDE.MSH))
+
+  var Patient: segments::PID_PD1_Patient(RDE.PATIENT.PID, RDE.PATIENT.PD1)
+  var Patient.extension[]: utilities::Build_Extension(datatypes::CWE_CodeableConcept(RDE.PATIENT.PATIENT_VISIT.PV1.16), "CodeableConcept", "http://hl7.org/fhir/StructureDefinition/patient-importance")
+  var PatientReference: utilities::OutputResourceAndGetReference(Patient)
+
+  root Bundle: segments::MSH_Bundle(RDE.MSH.7, RDE.MSH.10)
+  root Provenance: segments::MSH_Provenance(RDE.MSH, PatientReference)
+
+  var AccountReference: utilities::OutputResourceAndGetReference(segments::PID_Account(RDE.PATIENT.PID.18, PatientReference))
+  var ProvenanceReference: utilities::OutputResourceAndGetReference(segments::PID_Provenance(RDE.PATIENT.PID.34, RDE.PATIENT.PID.33, PatientReference))
+
+  var EncounterReference: utilities::OutputResourceAndGetReference(segments::PV1_DG1_Encounter(RDE.PATIENT.PATIENT_VISIT.PV1, {}, RDE.MSH.9, {}, PatientReference, {}))
+
+  var GuarantorReference: utilities::OutputResourceAndGetReference(segments::GT1_RelatedPerson(RDE.PATIENT.GT1, PatientReference))
+
+  var AllergyIntoleranceReference: utilities::OutputResourceAndGetReference(segments::AL1_AllergyIntolerance(RDE.PATIENT.AL1[], PatientReference)[])
+
+  var CoverageReference: utilities::OutputResourceAndGetReference(segments::IN1_Coverage(RDE.PATIENT.INSURANCE[*].IN1[], PatientReference)[])
+
+  var ObservationReference: utilities::OutputResourceAndGetReference(segments::OBX_Observation(RDE.ORDER[*].OBSERVATION[*].OBX[], PatientReference)[])
+
+  var MedicationRequestReference: utilities::OutputResourceAndGetReference(segments::ORC_RXR_MedicationRequest(RDE.ORDER[*].ORC[], RDE.ORDER[*].ORDER_DETAIL.RXR[], PatientReference)[])
+
+  var MedicationRequestReference: utilities::OutputResourceAndGetReference(segments::RXE_RXR_MedicationRequest(RDE.ORDER[*].RXE[], RDE.ORDER[*].RXR[], PatientReference)[])
+}

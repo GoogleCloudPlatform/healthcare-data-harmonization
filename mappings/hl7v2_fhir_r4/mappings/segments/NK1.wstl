@@ -1,0 +1,36 @@
+package segments
+
+// Description: Constructs a FHIR R4 RelatedPerson Resource and its related resources based on V2 NK1 Segment and Patient Resource
+//
+// Argument(s):
+//   NK1 V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   RelatedPerson: https://www.hl7.org/fhir/relatedperson.html
+//
+def NK1_RelatedPerson(required NK1, PatientReference) {
+  name[]: datatypes::XPN_HumanName(NK1.2[])
+  var relationshipCC: datatypes::CWE_CodeableConcept(NK1.3)
+  relationship[]: if relationshipCC then utilities::Convert_Terminology(relationshipCC.coding[0].code, "HL70063", "Relationship")
+  address[]: datatypes::XAD_Address(NK1.4[])
+  telecom[]: datatypes::XTN_ContactPoint(NK1.5[], "home")
+  telecom[]: datatypes::XTN_ContactPoint(NK1.6[], "work")
+  var relationshipCC: datatypes::CWE_CodeableConcept(NK1.7)
+  relationship[]: if relationshipCC then utilities::Convert_Terminology(relationshipCC.coding[0].code, "HL70131", "Relationship")
+  period.start: utilities::Convert_DateTime(NK1.8)
+  period.end: utilities::Convert_DateTime(NK1.9)
+  identifier[]: datatypes::CX_Identifier(NK1.12)
+  gender: utilities::Convert_TerminologyCode(datatypes::CWE_Code(NK1.15), "HL70001", "Gender")
+  birthDate: utilities::Extract_Date(NK1.16)
+  communication[].language: datatypes::CWE_CodeableConcept(NK1.20)
+  name[]: datatypes::XPN_HumanName(NK1.30[])
+  telecom[]: datatypes::XTN_ContactPoint(NK1.31[], "work")
+  address[]: datatypes::XAD_Address(NK1.32[])
+  identifier[]: datatypes::CX_Identifier(NK1.33[])
+  identifier[]: datatypes::ST_Identifier(NK1.37)
+  telecom[]: datatypes::XTN_ContactPoint(NK1.40, "home")
+  telecom[]: datatypes::XTN_ContactPoint(NK1.41, "work")
+  patient: PatientReference
+  resourceType: "RelatedPerson"
+}

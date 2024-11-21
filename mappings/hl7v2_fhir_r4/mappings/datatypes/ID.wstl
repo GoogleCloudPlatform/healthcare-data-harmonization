@@ -1,0 +1,14 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 CodeableConcept datatype based on V2 ID datatype
+//
+// Argument(s):
+//   ID datatype
+//
+// Output(s):
+//   CodeableConcept datatype : https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def ID_CodeableConcept (required ID) {
+  coding[0].code: ID
+  coding[0].system: "http://terminology.hl7.org/CodeSystem/v2-0301"
+}

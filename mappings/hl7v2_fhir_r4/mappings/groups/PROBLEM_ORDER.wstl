@@ -1,0 +1,32 @@
+package groups
+
+// Description: Parse PROBLEM.ORDER group, and constructs FHIR R4 Resources based on OBX, OBR, ORC, NTE segments
+//
+// Argument(s):
+//   ORDER Group
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Encounter Resource already constructed through PV1_DG1_Encounter Projector: https://www.hl7.org/fhir/encounter.html
+//   Condition Resource already constructed through PV1_DG1_Encounter Projector: https://www.hl7.org/fhir/condition.html
+//
+// Output(s):
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   ServiceRequest: https://www.hl7.org/fhir/servicerequest.html
+//
+def Parse_PROBLEM_ORDER(required ORDER, PatientReference, EncounterReference, ConditionReference) {
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var ObservationReference[]: PARSE_OBSERVATION(ORDER.ORDER_DETAIL.ORDER_OBSERVATION[], PatientReference, EncounterReference)
+
+  var ServiceRequest: segments::ORC_OBR_ServiceRequest(ORDER.ORC, ORDER.ORDER_DETAIL.CHOICE.OBR, {}, PatientReference)
+  var ServiceRequest.reasonReference[]: ConditionReference
+  var ServiceRequest.supportingInfo[]: ObservationReference[]
+  var ServiceRequest.note[]: datatypes::NTE_Annotation(ORDER.ORDER_DETAIL.NTE[])
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var ServiceRequestReference: utilities::OutputResourceAndGetReference(ServiceRequest)
+
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var ProvenanceReference: utilities::OutputResourceAndGetReference(ORC_Provenance(ORDER.ORC, ServiceRequestReference))
+}

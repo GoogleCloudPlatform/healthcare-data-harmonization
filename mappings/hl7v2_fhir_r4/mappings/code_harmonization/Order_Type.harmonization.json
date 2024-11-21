@@ -1,0 +1,40 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "I",
+          "display": "Inpatient Order",
+          "target": [
+            {
+              "code": "HOSP",
+              "display": "Hospital",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "O",
+          "display": "Outpatient Order",
+          "target": [
+            {
+              "code": "OF",
+              "display": "Outpatient facility",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70482",
+      "target": "http://terminology.hl7.org/CodeSystem/v3-RoleCode",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "PROFF",
+        "display": "Provider's Office"
+      }
+    }
+  ],
+  "id": "Order_Type",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

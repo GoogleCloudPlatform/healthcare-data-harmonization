@@ -1,0 +1,29 @@
+[
+  {
+    "note": [
+      {
+        "text": "A TX datatype"
+      }
+    ],
+    "occurrenceTiming": {
+      "repeat": {
+        "boundsPeriod": {
+          "end": "2022-11-10T11:41:00+00:00",
+          "start": "2022-11-10T11:00:00+00:00"
+        },
+        "count": 9,
+        "duration": 20,
+        "durationUnit": "min",
+        "period": 60,
+        "periodUnit": "min",
+        "timeOfDay": [
+          "12:58:23.000"
+        ]
+      }
+    },
+    "priority": "asap",
+    "quantityQuantity": {
+      "value": 10
+    }
+  }
+]

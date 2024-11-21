@@ -1,0 +1,27 @@
+package messages
+
+// Description: Define ADT_A47 HL7v2 Message Type (version 2.9) to FHIR R4 transformation
+//
+// Argument(s):
+//   ADT_A47 HL7v2 Message Type (version 2.9)
+//   ADT_A47 Segments covered in this mapping configuration are: MSH, PID, PD1
+//
+// Output(s):
+//   FHIR R4 Resources : http://www.hl7.org/fhir/resourcelist.html
+// List of Generated FHIR Resources:
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//   MessageHeader: https://www.hl7.org/fhir/messageheader.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//
+def ADT_A47(required ADT_A47) {
+  var MessageHeaderReference: utilities::OutputResourceAndGetReference(segments::MSH_MessageHeader(ADT_A47.MSH))
+
+  var PatientReference: utilities::OutputResourceAndGetReference(segments::PID_PD1_Patient(ADT_A47.PATIENT[*].PID[], ADT_A47.PATIENT[*].PD1[])[])
+
+  root Bundle: segments::MSH_Bundle(ADT_A47.MSH.7, ADT_A47.MSH.10)
+  root Provenance: segments::MSH_Provenance(ADT_A47.MSH, PatientReference[0])
+
+  var ProvenanceReference: utilities::OutputResourceAndGetReference(segments::PID_Provenance(ADT_A47.PATIENT[*].PID.34[], ADT_A47.PATIENT[*].PID.33[], PatientReference[])[])
+}

@@ -1,0 +1,173 @@
+package segments
+
+// Description: Constructs a FHIR R4 ServiceRequest Resource and its related resources based on V2 ORC, OBR, TQ1 Segments and Patient Resource
+//
+// Argument(s):
+//   ORC V2 Segment
+//   OBR V2 Segment
+//   TQ1 V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   ServiceRequest: https://www.hl7.org/fhir/servicerequest.html
+//   PractitionerRole: https://www.hl7.org/fhir/practitionerrole.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//
+def ORC_OBR_ServiceRequest(required ORC, OBR, TQ1, PatientReference) {
+  identifier[]: datatypes::EI_Identifier(ORC.2, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: if !ORC.2 then datatypes::EI_Identifier(OBR.2, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: datatypes::EI_Identifier(ORC.3, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: if !ORC.3 then datatypes::EI_Identifier(OBR.3, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: datatypes::EI_Identifier(ORC.4, "PGN", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: datatypes::EI_Identifier(ORC.4, "FGN", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  if ORC.5 then {
+    status: utilities::Convert_TerminologyCode(ORC.5, "HL70038", "Order_Status")
+  } else {
+    status: "unknown";  // place-holder for 1..1 cardinality
+    extension[]: utilities::Build_Extension(datatypes::CWE_CodeableConcept(ORC.16), "CodeableConcept", "http://hl7.org/fhir/StructureDefinition/request-statusReason")
+  }
+  if TQ1 then {
+    $this: datatypes::TQ1_ServiceRequest(TQ1)
+  } else {
+    if ORC.7 then {
+      $this: datatypes::TQ_ServiceRequest(ORC.7[0])
+    } else {
+      $this: datatypes::TQ_ServiceRequest(OBR.27[0])
+    }
+  }
+  authoredOn: if ORC.1 == "NW" then utilities::Convert_DateTime(ORC.9)
+  if ORC.12 then {
+    var Practitioner: datatypes::XCN_Practitioner(ORC.12[0])
+    var Practitioner.address[]: datatypes::XAD_Address(ORC.24[0])
+    var Practitioner: utilities::OutputResourceAndGetReference(Practitioner)
+    if ORC.21 then {
+      var Organization: datatypes::XON_XAD_Organization(ORC.21[0], ORC.22[0])
+      var Organization.telecom[]: datatypes::XTN_ContactPoint(ORC.23[0], "");    // passing "" since use is unknown
+      var Organization: utilities::OutputResourceAndGetReference(Organization)
+      var PractitionerRole: utilities::OutputResourceAndGetReference(datatypes::Build_PractitionerRole(Practitioner, Organization, "", ""));    // passing empty arguments since code and system are unknown
+      // The resource must be output before building the requester reference. Outputting the
+      // resource adds it to the bundle and assigns the id used in the requester
+      // reference. The resource must not be modified after it has been output.
+      requester: PractitionerRole
+    } else {
+      requester: Practitioner
+    }
+  } else {
+    // The resource must be output before building the requester reference. Outputting the
+    // resource adds it to the bundle and assigns the id used in the requester
+    // reference. The resource must not be modified after it has been output.
+    requester: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(OBR.16[0]))
+  }
+  locationCode[]: utilities::Convert_Terminology(datatypes::CWE_Code(ORC.29), "HL70482", "Order_Type")
+  if !OBR.53 then {
+    identifier[]: datatypes::CX_Identifier(ORC.33[])
+  } else {
+    identifier[]: datatypes::CX_Identifier(OBR.53[])
+  }
+
+  code: datatypes::CWE_CodeableConcept(OBR.4)
+  priority: utilities::Convert_TerminologyCode(OBR.5, "HL70485", "Priority")
+  if !$this.occurrenceTiming then {
+    occurrenceDateTime: utilities::Convert_DateTime(OBR.6)
+  }
+  if OBR.11 == "G" then {
+    intent: "reflex-order"
+  } else {
+    intent: "order"
+  }
+  reasonCode[]: datatypes::CWE_CodeableConcept(OBR.31[])
+  // To ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(ServiceRequest): "orderDetail.empty() or code.exists()"
+  if $this.code then {
+    orderDetail[]: datatypes::CWE_CodeableConcept(OBR.46[])
+    orderDetail[]: datatypes::CWE_CodeableConcept(OBR.47[])
+  }
+  subject: PatientReference
+  resourceType: "ServiceRequest"
+}
+
+// Description: Constructs a FHIR R4 Provenance Resource and its related resources based on V2 ORC Segment and Patient Resource
+//
+// Argument(s):
+//   ORC V2 Segment
+//   ServiceRequest Resource already constructed through ORC_OBR_ServiceRequest Projector: https://www.hl7.org/fhir/servicerequest.html
+//
+// Output(s):
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Location: https://www.hl7.org/fhir/location.html
+//
+def ORC_Provenance(required ORC, required ServiceRequestReference) {
+  // The resource must be output before building the agent. Outputting the
+  // resource adds it to the bundle and assigns the id used in the agent
+  // reference. The resource must not be modified after it has been output.
+  var enterer[]: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(ORC.10[])[])
+  var agent[]: datatypes::Build_Agent("enterer", "http://terminology.hl7.org/CodeSystem/provenance-participant-type", enterer[])
+  // The resource must be output before building the agent. Outputting the
+  // resource adds it to the bundle and assigns the id used in the agent
+  // reference. The resource must not be modified after it has been output.
+  var verifier[]: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(ORC.11[])[])
+  var agent[]: datatypes::Build_Agent("verifier", "http://terminology.hl7.org/CodeSystem/provenance-participant-type", verifier[])
+  // The resource must be output before building the agent. Outputting the
+  // resource adds it to the bundle and assigns the id used in the agent
+  // reference. The resource must not be modified after it has been output.
+  var author[]: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(ORC.12[])[])
+  var agent[]: datatypes::Build_Agent("author", "http://terminology.hl7.org/CodeSystem/provenance-participant-type", author[])
+  // The resource must be output before building the agent. Outputting the
+  // resource adds it to the bundle and assigns the id used in the agent
+  // reference. The resource must not be modified after it has been output.
+  var performer[]: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(ORC.19[])[])
+  var agent[]: datatypes::Build_Agent("performer", "http://terminology.hl7.org/CodeSystem/provenance-participant-type", performer[])
+  if listLen(agent) > 0 then {
+    agent: agent
+    activity: utilities::Convert_Terminology(ORC.1, "HL70119", "Order_Control_Codes")
+    recorded: if ORC.9 then utilities::Convert_Instant(ORC.9) else currentTime("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");  // place-holder for 1..1 cardinality
+    occurredDateTime: utilities::Convert_DateTime(ORC.9)
+    // The resource must be output before building the location. Outputting the
+    // resource adds it to the bundle and assigns the id used in the location
+    // reference. The resource must not be modified after it has been output
+    location: utilities::OutputResourceAndGetReference(datatypes::XON_XAD_XTN_Location(ORC.21[0], ORC.22[0], ORC.23[0]))
+    target[]: ServiceRequestReference
+    resourceType: "Provenance"
+  }
+}
+
+// Description: Constructs a FHIR R4 MedicationRequest Resource and its related resources based on V2 ORC, RXR Segments and Patient resource
+//
+// Argument(s):
+//   ORC V2 Segment
+//   RXR V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   MedicationRequest: https://www.hl7.org/fhir/medicationrequest.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//
+def ORC_RXR_MedicationRequest(required ORC, RXR, PatientReference) {
+  intent: "original-order"
+  identifier[]: datatypes::EI_Identifier(ORC.2, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: datatypes::EI_Identifier(ORC.3, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: datatypes::EI_Identifier(ORC.4, "PGN", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  status: if ORC.5 then utilities::Convert_TerminologyCode(ORC.5, "HL70038", "Order_Status") else "unknown";    // place-holder for 1-1 cardinality
+  dosageInstruction[]: datatypes::TQ_Dosage(ORC.7[])
+  dosageInstruction[]: RXR_Dosage(RXR[])
+  priority: utilities::Convert_TerminologyCode(ORC.7[0].6, "HL70485", "Priority")
+  authoredOn: utilities::Convert_DateTime(ORC.9)
+  // The resource must be output before building the requester. Outputting the
+  // resource adds it to the bundle and assigns the id used in the requester
+  // reference. The resource must not be modified after it has been output.
+  requester: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(ORC.10[0]))
+  // The resource must be output before building the performer. Outputting the
+  // resource adds it to the bundle and assigns the id used in the performer
+  // reference. The resource must not be modified after it has been output.
+  performer: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(ORC.12[0]))
+  reasonCode[]: datatypes::CWE_CodeableConcept(ORC.16)
+  // The resource must be output before building the recorder. Outputting the
+  // resource adds it to the bundle and assigns the id used in the recorder
+  // reference. The resource must not be modified after it has been output.
+  recorder: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(ORC.19[0]))
+  medicationCodeableConcept.text: "unknown";    // place-holder for 1-1 cardinality
+  subject: PatientReference
+  resourceType: "MedicationRequest"
+}

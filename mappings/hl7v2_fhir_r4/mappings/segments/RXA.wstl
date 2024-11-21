@@ -1,0 +1,111 @@
+package segments
+
+// Description: Constructs a FHIR R4 MedicationAdministration Resource and its related resources based on V2 RXA, ORC, RXR Segments and Patient, Encounter, MedicationRequest resources
+//
+// Argument(s):
+//   RXA V2 Segment
+//   ORC V2 Segment
+//   RXR V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Encounter Resource already constructed through PV1_DG1_Encounter Projector: https://www.hl7.org/fhir/encounter.html
+//   MedicationRequest Resource already constructed through RXE_ORC_RXR_MedicationRequest Projector: https://www.hl7.org/fhir/medicationrequest.html
+//
+// Output(s):
+//   MedicationAdministration: https://www.hl7.org/fhir/medicationadministration.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Medication: https://www.hl7.org/fhir/medication.html
+//
+def RXA_ORC_RXR_MedicationAdministration(required RXA, ORC, RXR, PatientReference, EncounterReference, MedicationRequestReference) {
+  identifier[]: datatypes::EI_Identifier(ORC.2, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: datatypes::EI_Identifier(ORC.3, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+
+  effectivePeriod.start: utilities::Convert_DateTime(RXA.3)
+  effectivePeriod.end: utilities::Convert_DateTime(RXA.4)
+  dosage.dose.value: if RXA.6 then tryParseNum(RXA.6)
+  dosage.dose: datatypes::CWE_Qauntity(RXA.7)
+  performer[]: datatypes::Build_Performer(RXA.10[], "AP", "http://terminology.hl7.org/CodeSystem/v2-0443")
+  performer[]: datatypes::Build_Performer(ORC.12[], "OP", "http://terminology.hl7.org/CodeSystem/v2-0443")
+  statusReason: datatypes::CWE_CodeableConcept(RXA.18[0]);   // Need Terminology Mapping: No mappings found in community sheet
+  reasonCode: datatypes::CWE_CodeableConcept(RXA.19[])   // Need Terminology Mapping: No mappings found in community sheet
+
+  if RXA.21 != "D" then {
+    if RXA.20 then {
+      status: utilities::Convert_TerminologyCode(RXA.20, "HL70322", "Completion_Status")
+    } else {
+      status: "completed"
+    }
+  } else {
+    status: "entered-in-error"
+  }
+
+  var Medication: datatypes::Build_Medication(RXA.5, RXA.8)
+  var Medication.batch.lotNumber: RXA.15[0]
+  var Medication.batch.expirationDate: if RXA.16 then utilities::Convert_DateTime(RXA.16[0])
+  var Manufacturer: utilities::OutputResourceAndGetReference(datatypes::CWE_Organization(RXA.17[0]))
+  var Medication.manufacturer: Manufacturer
+  medicationReference: utilities::OutputResourceAndGetReference(Medication)
+
+  // To ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(MedicationAdministration).dosage: "dose.exists() or rate.exists()"
+  if $this.dosage.dose then {
+    dosage.route: datatypes::CWE_CodeableConcept(RXR.1)
+    dosage.site: datatypes::CWE_CodeableConcept(RXR.2)
+    dosage.method: datatypes::CWE_CodeableConcept(RXR.4)
+  }
+  request: MedicationRequestReference
+  subject: PatientReference
+  context: EncounterReference
+  resourceType: "MedicationAdministration"
+}
+
+// Description: Constructs a FHIR R4 Immunization Resource and its related resources based on V2 RXA, RXR and ORC Segments and Patient Resource
+//
+// Argument(s):
+//   ORC V2 Segment
+//   RXA V2 Segment
+//   RXR V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Immunization: https://www.hl7.org/fhir/immunization.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//
+def ORDER_Immunization(required ORDER, PatientReference) {
+  var ORC: ORDER.ORC
+  var RXA: ORDER.RXA
+  var RXR: ORDER.RXR
+  identifier[]: datatypes::EI_Identifier(ORC.2, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: datatypes::EI_Identifier(ORC.3, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  recorded: utilities::Convert_DateTime(ORC.9)
+  performer[]: datatypes::Build_Performer(ORC.12[], "OP", "http://terminology.hl7.org/CodeSystem/v2-0443")
+  occurrenceDateTime: utilities::Convert_DateTime(RXA.3)
+  vaccineCode: datatypes::CWE_CodeableConcept(RXA.5)
+  doseQuantity: datatypes::CWE_Qauntity(RXA.7)
+  doseQuantity.value: if RXA.6 then tryParseNum(RXA.6)
+  performer[]: datatypes::Build_Performer(RXA.10[], "AP", "http://terminology.hl7.org/CodeSystem/v2-0443")
+  lotNumber: RXA.15[0]
+  expirationDate: utilities::Extract_Date(RXA.16[0])
+  manufacturer: utilities::OutputResourceAndGetReference(datatypes::CWE_Organization(RXA.17[0]))
+  statusReason: datatypes::CWE_CodeableConcept(RXA.18[0])
+  reasonCode: datatypes::CWE_CodeableConcept(RXA.19[])
+
+  if RXA.21 == "D" then {
+    status: "entered-in-error"
+  } else {
+    if RXA.21 == "A" then {
+      recorded: utilities::Convert_DateTime(RXA.22)
+    }
+    if RXA.20 then {
+      status: utilities::Convert_TerminologyCode(RXA.20, "HL70322", "Completion_Status")
+    } else {
+      status: "completed"
+    }
+  }
+  location: datatypes::PL_Location(RXA.27, "completed").location
+
+  route[]: if RXR then datatypes::CWE_CodeableConcept(RXR.1)
+  site[]: if RXR then datatypes::CWE_CodeableConcept(RXR.2)
+  patient: PatientReference
+  resourceType: "Immunization"
+}

@@ -1,0 +1,62 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "CP",
+          "display": "Complete",
+          "target": [
+            {
+              "code": "completed",
+              "display": "Completed",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "RE",
+          "display": "Refused",
+          "target": [
+            {
+              "code": "not-done",
+              "display": "Not Done",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "NA",
+          "display": "Not Administered",
+          "target": [
+            {
+              "code": "not-done",
+              "display": "Not Done",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "PA",
+          "display": "Partially Administered",
+          "target": [
+            {
+              "code": "completed",
+              "display": "Completed",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70322",
+      "target": "http://hl7.org/fhir/event-status",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "completed",
+        "display": "Completed"
+      }
+    }
+  ],
+  "id": "Completion_Status",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

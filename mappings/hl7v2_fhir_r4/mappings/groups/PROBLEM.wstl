@@ -1,0 +1,30 @@
+package groups
+
+// Description: Parse PROBLEM group, and constructs FHIR R4 Resources based on OBX, PRB, ORC, GOL segments
+//
+// Argument(s):
+//   PROBLEM Group
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Encounter Resource already constructed through PV1_DG1_Encounter Projector: https://www.hl7.org/fhir/encounter.html
+//
+// Output(s):
+//   Condition: https://www.hl7.org/fhir/condition.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Goal: https://www.hl7.org/fhir/goal.html
+//   ServiceRequest: https://www.hl7.org/fhir/servicerequest.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//
+def Parse_PROBLEM(required PROBLEM, PatientReference, EncounterReference) {
+  var ObservationReference[]: PARSE_OBSERVATION(PROBLEM.PROBLEM_OBSERVATION[], PatientReference, EncounterReference)
+
+  var Condition: segments::PRB_Condition(PROBLEM.PRB, PatientReference)
+  var Condition.note[]: datatypes::NTE_Annotation(PROBLEM.NTE[])
+  var Condition.evidence[0].detail[]: ObservationReference[]
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var ConditionReference: utilities::OutputResourceAndGetReference(Condition)
+
+  var GoalReference[]: Parse_GOAL(PROBLEM.GOAL[], PatientReference, EncounterReference, ConditionReference)
+
+  $this: Parse_PROBLEM_ORDER(PROBLEM.ORDER[], PatientReference, EncounterReference, ConditionReference)
+}

@@ -1,0 +1,14 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 MessageDefinition resource based on MSG datatype
+//
+// Argument(s):
+//   MSG datatype
+//
+// Output(s):
+//   MessageDefinition resource : https://www.hl7.org/fhir/messagedefinition.html
+//
+def MSG_MessageDefinition (required MSG) {
+  identifier[].value: MSG.3
+  resourceType: "MessageDefinition"
+}

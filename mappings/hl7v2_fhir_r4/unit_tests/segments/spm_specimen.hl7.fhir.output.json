@@ -1,0 +1,38 @@
+[
+  {
+    "collection": {
+      "collectedDateTime": "2012-06-28T07:01:00+00:00"
+    },
+    "identifier": [
+      {
+        "type": {
+          "coding": [
+            {
+              "code": "PLAC",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "S-2012_448811"
+      }
+    ],
+    "resourceType": "Specimen",
+    "subject": {
+      "reference": "Patient/123"
+    },
+    "type": {
+      "coding": [
+        {
+          "code": "119364003",
+          "display": "Serum specimen (specimen)",
+          "system": "SCT"
+        },
+        {
+          "code": "SER",
+          "display": "Serum",
+          "system": "L"
+        }
+      ]
+    }
+  }
+]

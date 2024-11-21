@@ -1,0 +1,25 @@
+package segments
+
+// Description: Constructs a FHIR R4 Appointment Information Personnel Resource and its related resources based on V2 MSH Segment
+//
+// Argument(s):
+//   CWE Resource Type
+//
+// Output(s):
+//   Appointment Information Personnel Resource Segment: https://v2plus.hl7.org/2021Jan/segment-definition/AIP.html
+//   Appointment: https://www.hl7.org/fhir/appointment.html
+//
+def AIP_AppointmentParticipant(required AIP) {
+  var Actor: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(AIP.3[0]))
+  var participant: datatypes::Build_AppointmentParticipant(Actor, AIP.4)
+  var participant.status: "accepted"
+  var start: utilities::Convert_DateTime(AIP.6)
+  if AIP.8.1 == "MIN" then {
+    var start: calculateNewDateTime(start, tryParseNum(AIP.7), "MINUTES")
+  }
+  var participant.period.start: start
+  if AIP.10.1 == "MIN" then {
+    var participant.period.end: calculateNewDateTime(start, tryParseNum(AIP.9), "MINUTES")
+  }
+  participant
+}

@@ -1,0 +1,24 @@
+package segments
+
+// Description: Constructs a FHIR R4 Appointment Information Location Resource and its related resources based on V2 MSH Segment
+//
+// Argument(s):
+//   CWE Datatype
+//
+// Output(s):
+//   Appointment Information Location Resource Segment : https://v2plus.hl7.org/2021Jan/segment-definition/AIL.html
+//   Appointment: https://www.hl7.org/fhir/appointment.html
+//
+def AIL_AppointmentParticipant(required AIL) {
+  var participant.actor: datatypes::PL_Location(AIL.3[0], "").location
+  var participant.status: "accepted"
+  var start: utilities::Convert_DateTime(AIL.6)
+  if AIL.8.1 == "MIN" then {
+    var start: calculateNewDateTime(start, tryParseNum(AIL.7), "MINUTES")
+  }
+  var participant.period.start: start
+  if AIL.10.1 == "MIN" then {
+    var participant.period.end: calculateNewDateTime(start, tryParseNum(AIL.9), "MINUTES")
+  }
+  participant
+}

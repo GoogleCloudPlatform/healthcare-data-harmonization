@@ -1,0 +1,40 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 Quantity datatype based on V2 SN datatype
+//
+// Argument(s):
+//   SN datatype
+//
+// Output(s):
+//   Quantity Datatype : https://www.hl7.org/fhir/datatypes.html#Quantity
+//
+def SN_Quantity (SN) {
+  comparator: SN.1
+  value: parseNum(SN.2)
+}
+
+// Description: Constructs a FHIR R4 Ratio datatype based on V2 SN datatype
+//
+// Argument(s):
+//   SN datatype
+//
+// Output(s):
+//   Ratio Datatype : https://www.hl7.org/fhir/datatypes.html#Ratio
+//
+def SN_Ratio (SN) {
+  numerator.value: parseNum(SN.2)
+  denominator.value: parseNum(SN.4)
+}
+
+// Description: Constructs a FHIR R4 Range datatype based on V2 SN datatype
+//
+// Argument(s):
+//   SN datatype
+//
+// Output(s):
+//   Range Datatype : https://www.hl7.org/fhir/datatypes.html#Range
+//
+def SN_Range(SN) {
+  low.value: parseNum(SN.2)
+  high.value: parseNum(SN.4)
+}

@@ -1,0 +1,436 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "< ",
+          "display": "Off scale low",
+          "target": [
+            {
+              "code": "<",
+              "display": "Off scale low",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "> ",
+          "display": "Off scale high",
+          "target": [
+            {
+              "code": ">",
+              "display": "Off scale high",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "A",
+          "display": "Abnormal",
+          "target": [
+            {
+              "code": "A",
+              "display": "Abnormal",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "AA",
+          "display": "Critically abnormal",
+          "target": [
+            {
+              "code": "AA",
+              "display": "Critical abnormal",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "AC",
+          "display": "Anti-complementary substances present",
+          "target": [
+            {
+              "code": "AC",
+              "display": "Anti-complementary substances present",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "B",
+          "display": "Better",
+          "target": [
+            {
+              "code": "B",
+              "display": "Better",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "CAR",
+          "display": "Carrier",
+          "target": [
+            {
+              "code": "CAR",
+              "display": "Carrier",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "D",
+          "display": "Significant change down",
+          "target": [
+            {
+              "code": "D",
+              "display": "Significant change down",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "DET",
+          "display": "Detected",
+          "target": [
+            {
+              "code": "DET",
+              "display": "Detected",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "E",
+          "display": "Equivocal",
+          "target": [
+            {
+              "code": "E",
+              "display": "Equivocal",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "EX",
+          "display": "outside threshold",
+          "target": [
+            {
+              "code": "EX",
+              "display": "outside threshold",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "EXP",
+          "display": "Expected",
+          "target": [
+            {
+              "code": "EXP",
+              "display": "Expected",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "H",
+          "display": "High",
+          "target": [
+            {
+              "code": "H",
+              "display": "High",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "HH",
+          "display": "Critically high",
+          "target": [
+            {
+              "code": "HH",
+              "display": "Critical high",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "HU",
+          "display": "Very high",
+          "target": [
+            {
+              "code": "HU",
+              "display": "Significantly high",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "I",
+          "display": "Intermediate",
+          "target": [
+            {
+              "code": "I",
+              "display": "Intermediate",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "IE",
+          "display": "Insufficient evidence",
+          "target": [
+            {
+              "code": "IE",
+              "display": "Insufficient evidence",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "IND",
+          "display": "Indeterminate",
+          "target": [
+            {
+              "code": "IND",
+              "display": "Indeterminate",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "L",
+          "display": "Low",
+          "target": [
+            {
+              "code": "L",
+              "display": "Low",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "LL",
+          "display": "Critically low",
+          "target": [
+            {
+              "code": "LL",
+              "display": "Critical low",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "LU",
+          "display": "Very low",
+          "target": [
+            {
+              "code": "LU",
+              "display": "Significantly low",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "N",
+          "display": "Normal",
+          "target": [
+            {
+              "code": "N",
+              "display": "Normal",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "NCL",
+          "display": "No CLSI defined breakpoint",
+          "target": [
+            {
+              "code": "NCL",
+              "display": "No CLSI defined breakpoint",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ND",
+          "display": "Not Detected",
+          "target": [
+            {
+              "code": "ND",
+              "display": "Not detected",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "NEG",
+          "display": "Negative",
+          "target": [
+            {
+              "code": "NEG",
+              "display": "Negative",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "NR",
+          "display": "Non-reactive",
+          "target": [
+            {
+              "code": "NR",
+              "display": "Non-reactive",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "NS",
+          "display": "Non-susceptible",
+          "target": [
+            {
+              "code": "NS",
+              "display": "Non-susceptible",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "POS",
+          "display": "Positive",
+          "target": [
+            {
+              "code": "POS",
+              "display": "Positive",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "R",
+          "display": "Resistant",
+          "target": [
+            {
+              "code": "R",
+              "display": "Resistant",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "RR",
+          "display": "Reactive",
+          "target": [
+            {
+              "code": "RR",
+              "display": "Reactive",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "S",
+          "display": "Susceptible",
+          "target": [
+            {
+              "code": "S",
+              "display": "Susceptible",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "SDD",
+          "display": "Susceptible-dose dependent",
+          "target": [
+            {
+              "code": "SDD",
+              "display": "Susceptible-dose dependent",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "SYN-R",
+          "display": "Synergy – resistant",
+          "target": [
+            {
+              "code": "SYN-R",
+              "display": "Synergy - resistant",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "SYN-S",
+          "display": "Synergy – susceptible",
+          "target": [
+            {
+              "code": "SYN-S",
+              "display": "Synergy - susceptible",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "U",
+          "display": "Significant change up",
+          "target": [
+            {
+              "code": "U",
+              "display": "Significant change up",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "UNE",
+          "display": "Unexpected",
+          "target": [
+            {
+              "code": "UNE",
+              "display": "Unexpected",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "W",
+          "display": "Worse",
+          "target": [
+            {
+              "code": "W",
+              "display": "Worse",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "WR",
+          "display": "Weakly reactive",
+          "target": [
+            {
+              "code": "WR",
+              "display": "Weakly reactive",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70078",
+      "target": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "IND",
+        "display": "Indeterminate"
+      }
+    }
+  ],
+  "id": "Interpretation_Codes",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

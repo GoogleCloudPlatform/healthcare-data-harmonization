@@ -1,0 +1,600 @@
+[
+  {
+    "active": true,
+    "id": "21d4f0ff0f61cb105e2954e7a5a44fc7",
+    "identifier": [
+      {
+        "value": "GOOD HEALTH HOSPITAL"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "eventCoding": {
+      "code": "A02",
+      "display": "ADT^A02^ADT_A02",
+      "system": "http://terminology.hl7.org/CodeSystem/v2-0003"
+    },
+    "id": "16b5af75953a96e9efda85fbc621c155",
+    "meta": {
+      "tag": [
+        {
+          "code": "P",
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0103"
+        },
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0207"
+        }
+      ]
+    },
+    "resourceType": "MessageHeader",
+    "sender": {
+      "reference": "Organization/21d4f0ff0f61cb105e2954e7a5a44fc7"
+    },
+    "source": {
+      "endpoint": {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/R4/extension-data-absent-reason.html",
+            "valueCode": "unknown"
+          }
+        ]
+      },
+      "name": "REGADT"
+    }
+  },
+  {
+    "active": true,
+    "id": "21d4f0ff0f61cb105e2954e7a5a44fc7",
+    "identifier": [
+      {
+        "value": "GOOD HEALTH HOSPITAL"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "active": true,
+    "id": "bf5f7213aab11a6a041086f4d4ef0433",
+    "identifier": [
+      {
+        "value": "USSSA"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "active": true,
+    "address": [
+      {
+        "city": "ISHPEMING",
+        "line": [
+          "2222 HOME STREET"
+        ],
+        "postalCode": "49849",
+        "state": "MI"
+      }
+    ],
+    "birthDate": "1956-01-29",
+    "extension": [
+      {
+        "url": "http://hl7.org/fhir/StructureDefinition/patient-religion",
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "code": "C"
+            }
+          ]
+        }
+      },
+      {
+        "extension": [
+          {
+            "url": "code",
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "u003ccru003e"
+                }
+              ]
+            }
+          }
+        ],
+        "url": "http://hl7.org/fhir/StructureDefinition/patient-nationality"
+      }
+    ],
+    "gender": "male",
+    "id": "a861efc02456e4fd67c10c177af4b030",
+    "identifier": [
+      {
+        "assigner": {
+          "reference": "Organization/21d4f0ff0f61cb105e2954e7a5a44fc7"
+        },
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "MR",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "191919"
+      },
+      {
+        "assigner": {
+          "reference": "Organization/bf5f7213aab11a6a041086f4d4ef0433"
+        },
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "SS",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "111111"
+      },
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "MR",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "253763"
+      },
+      {
+        "system": "http://hl7.org/fhir/sid/us-ssn",
+        "type": {
+          "coding": [
+            {
+              "code": "SB",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "444-33-3333"
+      }
+    ],
+    "maritalStatus": {
+      "coding": [
+        {
+          "code": "S",
+          "display": "Never Married",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
+          "version": "v1"
+        }
+      ]
+    },
+    "multipleBirthBoolean": false,
+    "name": [
+      {
+        "family": "EVERYMAN",
+        "given": [
+          "ADAM",
+          "A"
+        ]
+      }
+    ],
+    "resourceType": "Patient",
+    "telecom": [
+      {
+        "system": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+              "valueCode": "unknown"
+            }
+          ]
+        },
+        "use": "home",
+        "value": "555-555-2004"
+      },
+      {
+        "system": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+              "valueCode": "unknown"
+            }
+          ]
+        },
+        "use": "work",
+        "value": "555-555-2004"
+      }
+    ]
+  },
+  {
+    "active": true,
+    "id": "21d4f0ff0f61cb105e2954e7a5a44fc7",
+    "identifier": [
+      {
+        "value": "GOOD HEALTH HOSPITAL"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "id": "5d6e36ba409a2e0d6b597e44029f8061",
+    "identifier": [
+      {
+        "value": "REGADT"
+      }
+    ],
+    "patient": {
+      "reference": "Patient/a861efc02456e4fd67c10c177af4b030"
+    },
+    "resourceType": "Device",
+    "type": {
+      "coding": [
+        {
+          "code": "unknown"
+        }
+      ]
+    }
+  },
+  {
+    "active": true,
+    "id": "21d4f0ff0f61cb105e2954e7a5a44fc7",
+    "identifier": [
+      {
+        "value": "GOOD HEALTH HOSPITAL"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "id": "2a4311b462266a87963f7075adb23ff3",
+    "identifier": [
+      {
+        "assigner": {
+          "reference": "Organization/21d4f0ff0f61cb105e2954e7a5a44fc7"
+        },
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "AN",
+              "system": "https://terminology.hl7.org/3.0.0/CodeSystem-v2-0203"
+            }
+          ],
+          "text": "Account Number"
+        },
+        "value": "10199925"
+      }
+    ],
+    "resourceType": "Account",
+    "status": "active",
+    "subject": [
+      {
+        "reference": "Patient/a861efc02456e4fd67c10c177af4b030"
+      }
+    ]
+  },
+  {
+    "id": "92ad1d98636c99543b0621070990e727",
+    "mode": "instance",
+    "name": "GOOD HEALTH HOSPITAL",
+    "physicalType": {
+      "coding": [
+        {
+          "code": "si",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "922a175e3a567f3dd374ec791ee19d24",
+    "mode": "instance",
+    "name": "SICU",
+    "partOf": {
+      "reference": "Location/92ad1d98636c99543b0621070990e727"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "si",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "ac948498a787bdf739afc91b6b93fa20",
+    "mode": "instance",
+    "name": "0001",
+    "partOf": {
+      "reference": "Location/922a175e3a567f3dd374ec791ee19d24"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "ro",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "6bb4c8533af609904fbdac25a59fe6ef",
+    "mode": "instance",
+    "name": "01",
+    "partOf": {
+      "reference": "Location/ac948498a787bdf739afc91b6b93fa20"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "bd",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "92ad1d98636c99543b0621070990e727",
+    "mode": "instance",
+    "name": "GOOD HEALTH HOSPITAL",
+    "physicalType": {
+      "coding": [
+        {
+          "code": "si",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "7f324b6f3d71126fa6e2e60147a15ecc",
+    "mode": "instance",
+    "name": "6N",
+    "partOf": {
+      "reference": "Location/92ad1d98636c99543b0621070990e727"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "si",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "93c2bacd92847f96f8bf7a058f5f4d16",
+    "mode": "instance",
+    "name": "1234",
+    "partOf": {
+      "reference": "Location/7f324b6f3d71126fa6e2e60147a15ecc"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "ro",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "6e359500686d7ca46e83f3dbb5e50ec7",
+    "mode": "instance",
+    "name": "A",
+    "partOf": {
+      "reference": "Location/93c2bacd92847f96f8bf7a058f5f4d16"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "bd",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "e56f1a6928fb36ccdb96a375dc753607",
+    "identifier": [
+      {
+        "system": "unknown",
+        "value": "0200"
+      }
+    ],
+    "name": [
+      {
+        "family": "ATTEND",
+        "given": [
+          "AARON",
+          "A"
+        ]
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "id": "05e8899caab74862cc857e50a66e698c",
+    "identifier": [
+      {
+        "system": "unknown",
+        "value": "0148"
+      }
+    ],
+    "name": [
+      {
+        "family": "SENDER",
+        "given": [
+          "SAM"
+        ]
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "id": "05e8899caab74862cc857e50a66e698c",
+    "identifier": [
+      {
+        "system": "unknown",
+        "value": "0148"
+      }
+    ],
+    "name": [
+      {
+        "family": "SENDER",
+        "given": [
+          "SAM"
+        ]
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "class": {
+      "code": "IMP",
+      "display": "inpatient encounter",
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+      "version": "v1"
+    },
+    "id": "18e328a383140b1960bb63e955b85fa9",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "VN",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ],
+          "text": "visit number"
+        },
+        "value": "1400"
+      }
+    ],
+    "location": [
+      {
+        "location": {
+          "display": "GOOD HEALTH HOSPITAL, SICU, 0001, 01",
+          "reference": "Location/6bb4c8533af609904fbdac25a59fe6ef"
+        },
+        "period": {
+          "start": "2007-01-11T05:20:00+00:00"
+        },
+        "status": "active"
+      },
+      {
+        "location": {
+          "display": "GOOD HEALTH HOSPITAL, 6N, 1234, A",
+          "reference": "Location/6e359500686d7ca46e83f3dbb5e50ec7"
+        },
+        "period": {
+          "end": "2007-01-11T05:20:00+00:00"
+        },
+        "status": "completed"
+      }
+    ],
+    "participant": [
+      {
+        "individual": {
+          "reference": "Practitioner/e56f1a6928fb36ccdb96a375dc753607"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "ATND",
+                "display": "attender",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "individual": {
+          "reference": "Practitioner/05e8899caab74862cc857e50a66e698c"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "REF",
+                "display": "referrer",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "individual": {
+          "reference": "Practitioner/05e8899caab74862cc857e50a66e698c"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "ADM",
+                "display": "admitter",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "period": {
+      "start": "2007-01-10T23:00:00+00:00"
+    },
+    "resourceType": "Encounter",
+    "serviceType": {
+      "coding": [
+        {
+          "code": "ICU"
+        }
+      ]
+    },
+    "status": "finished",
+    "subject": {
+      "reference": "Patient/a861efc02456e4fd67c10c177af4b030"
+    },
+    "type": [
+      {
+        "coding": [
+          {
+            "code": "unknown"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "active": true,
+    "id": "21d4f0ff0f61cb105e2954e7a5a44fc7",
+    "identifier": [
+      {
+        "value": "GOOD HEALTH HOSPITAL"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  }
+]

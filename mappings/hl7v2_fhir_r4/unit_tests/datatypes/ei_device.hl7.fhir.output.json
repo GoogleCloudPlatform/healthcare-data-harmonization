@@ -1,0 +1,16 @@
+[
+  {
+    "patient": {
+      "reference": "Patient/123"
+    },
+    "resourceType": "Device",
+    "type": {
+      "coding": [
+        {
+          "code": "unknown"
+        }
+      ]
+    },
+    "value": "DVC435"
+  }
+]

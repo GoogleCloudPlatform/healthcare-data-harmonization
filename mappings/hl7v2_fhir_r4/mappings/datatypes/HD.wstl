@@ -1,0 +1,193 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 Provenance Resource based on V2 MSH_7 segment, HD datatype and MessageHeader, Patient resource
+//
+// Argument(s):
+//   HD datatype
+//   MessageHeader: already constructed MessageHeader from segments::MSH_MessageHeader projector
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   Device: https://www.hl7.org/fhir/device.html
+//
+def HD_Provenance (required HD, MSH_7, MessageHeaderReference, PatientReference) {
+  // The resource must be output before building the agent. Outputting the
+  // resource adds it to the bundle and assigns the id used in the agent
+  // reference. The resource must not be modified after it has been output.
+  var hdDevice: utilities::OutputResourceAndGetReference(HD_Device(HD, PatientReference))
+  agent[0].who: hdDevice
+
+  recorded: Convert_Instant(MSH_7)
+  target[0]: MessageHeaderReference
+  resourceType: "Provenance"
+}
+
+// Description: Constructs a FHIR R4 Device resource based on HD datatype and Patient resource
+//
+// Argument(s):
+//   HD datatype
+//
+// Output(s):
+//   Device Resource : https://www.hl7.org/fhir/device.html
+//
+def HD_Device (required HD, PatientReference) {
+  if HD.1 then {
+    identifier[]: Build_Identifier(HD.1, "", "")
+  }
+  if HD.3 == "ISO" or HD.3 == "UUID" then {
+    identifier[]: Build_Identifier(HD.2, HD.3, HD.3)
+  }
+  // Fixed-value to ensure https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-implantable-device-definitions.html#Device.type
+  type.coding[0].code: "unknown"
+  // To ensure https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-implantable-device-definitions.html#Device.patient
+  patient: PatientReference
+  resourceType: "Device"
+}
+
+// Description: Constructs a FHIR R4 Organization resource based on V2 HD datatype
+//
+// Argument(s):
+//   HD datatype
+//
+// Output(s):
+//   Organization Resource : https://www.hl7.org/fhir/organization.html
+//
+def HD_Organization (required HD) {
+  identifier[]: Build_Identifier(HD.1, "", "")
+  identifier[]: Build_Identifier(HD.2, HD.3, HD.3)
+  // Fixed-value to ensure fhirpath-constraint-violation-ContainedResource.ofType(Bundle).entry.resource.ofType(Organization): "(identifier.count() + name.count()) > 0"
+  name: "Unknown"
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-organization-definitions.html#Organization.active
+  active: true
+  resourceType: "Organization"
+}
+
+// Description: Constructs a FHIR R4 Organization resource based on HD datatype and country code
+//
+// Argument(s):
+//   HD datatype
+//   CC Country Code
+//
+// Output(s):
+//   Organization Resource : https://www.hl7.org/fhir/organization.html
+//
+def HD_CC_Organization (required HD, CC) {
+  $this: HD_Organization(HD)
+  address[].country: CC
+}
+
+// Description: Constructs a FHIR R4 Identifier.system attribute based on V2 HD datatype
+//
+// Argument(s):
+//   HD datatype
+//
+// Output(s):
+//   Identifier.system attribute : https://www.hl7.org/fhir/datatypes-definitions.html#Identifier.system
+//
+def HD_Uri(required HD) {
+  var uri: if !matchesRegex(HD.1, ".*\\s.*") then HD.1
+  if !uri then {
+    if HD.3 == "ISO" then {
+      var uri: "urn:oid:{HD.2}"
+    } else if HD.3 == "UUID" then {
+      var uri: "urn:uuid:{HD.2}"
+    } else {
+      var uri: HD.2
+    }
+  }
+  uri
+}
+
+// Description: Constructs a FHIR R4 Location resource based on V2 HD and PL datatypes
+//
+// Argument(s):
+//   DH datatype
+//   segN represents each of PL subsegments to be mapped a location type in Location Resource
+//
+// Output(s):
+//   Location Resource : https://www.hl7.org/fhir/location.html
+//
+def HD_Location(required HD, segN) {
+  if HD.1 then {
+    name: HD.1
+  } else {
+    name: "unknown"
+  }
+  if HD.3 == "ISO" or HD.3 == "UUID" then {
+    identifier[].value: HD.2
+  }
+  mode: "instance"
+  if segN == "PL.1" or segN == "" then {
+    physicalType.coding[0].code: "si"
+  }
+  if segN == "PL.2" then {
+    physicalType.coding[0].code: "ro"
+  }
+  if segN == "PL.3" then {
+    physicalType.coding[0].code: "bd"
+  }
+  if segN == "PL.4" then {
+    physicalType.coding[0].code: "si"
+  }
+  if segN == "PL.7" then {
+    physicalType.coding[0].code: "bu"
+  }
+  if segN == "PL.8" then {
+    physicalType.coding[0].code: "lvl"
+  }
+  physicalType.coding[0].system: "http://terminology.hl7.org/CodeSystem/location-physical-type";    //Code System to define Location Physical Type: https://www.hl7.org/fhir/codesystem-location-physical-type.html
+  resourceType: "Location"
+}
+
+// Description: Constructs a FHIR R4 MessageHeader.source datatype based on V2 HD datatype
+//
+// Argument(s):
+//   HD datatype
+//
+// Output(s):
+//   MessageHeader.source : https://www.hl7.org/fhir/messageheader-definitions.html#MessageHeader.source
+//
+def HD_MessageHeaderEndpoint(required HD) {
+  if HD.3 == "ISO" then {
+    endpoint: "urn:oid:{HD.2}"
+  } else if HD.3 == "UUID" then {
+    endpoint: "urn:uuid:{HD.2}"
+  } else if HD.3 == "DNS" then {
+    endpoint: "urn:dns:{HD.2}"
+  } else if HD.3 == "URI" then {
+    endpoint: "urn:uri:{HD.2}"
+  } else {
+    if HD.2 and HD.3 then {
+      name: "{HD.1}-{HD.3}:{HD.2}"
+    } else {
+      name: HD.1
+    }
+    endpoint.extension[]: utilities::Build_Extension("unknown", "Code", "http://hl7.org/fhir/R4/extension-data-absent-reason.html")
+  }
+}
+
+// Description: Constructs a FHIR R4 MessageHeader.destination datatype based on V2 MSH6, MSH23 segment and HD datatype
+//
+// Argument(s):
+//   HD datatype
+//   MSH6 Segment
+//   MSH23 Segment
+//
+// Output(s):
+//   MessageHeader.destination : https://www.hl7.org/fhir/messageheader-definitions.html#MessageHeader.destination
+//
+def HD_MessageHeaderDestination(required HD, MSH6, MSH23) {
+  $this: HD_MessageHeaderEndpoint(HD)
+  var receiver: if MSH23 then {
+    XON_Organization(MSH23)
+  } else {
+    HD_Organization(MSH6)
+  }
+
+  // The resource must be output before building the receiver reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in
+  // the reference. The resource must not be modified after it has been output.
+  var receiver: utilities::OutputResourceAndGetReference(receiver)
+  receiver: receiver
+}

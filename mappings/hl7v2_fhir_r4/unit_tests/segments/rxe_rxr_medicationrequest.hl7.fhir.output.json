@@ -1,0 +1,65 @@
+[
+  {
+    "code": {
+      "coding": [
+        {
+          "code": "0006-0740-31",
+          "display": "Simvastatin"
+        }
+      ],
+      "text": "simvastatin (ZOCOR) 20 MG PO tablet"
+    },
+    "id": "8e5c57e544ce383484b8454b703b73d4",
+    "resourceType": "Medication"
+  },
+  {
+    "dispenseRequest": {
+      "numberOfRepeatsAllowed": 2,
+      "quantity": {
+        "code": "Tab",
+        "system": "unknown",
+        "value": 30
+      }
+    },
+    "dosageInstruction": [
+      {
+        "doseAndRate": [
+          {
+            "doseRange": {
+              "low": {
+                "code": "MG",
+                "system": "unknown",
+                "value": 1
+              }
+            },
+            "type": {
+              "coding": [
+                {
+                  "code": "ordered"
+                }
+              ]
+            }
+          }
+        ],
+        "route": {
+          "coding": [
+            {
+              "code": "MTH",
+              "display": "Mouth",
+              "system": "HL70162"
+            }
+          ]
+        }
+      }
+    ],
+    "intent": "filler-order",
+    "medicationReference": {
+      "reference": "Medication/8e5c57e544ce383484b8454b703b73d4"
+    },
+    "resourceType": "MedicationRequest",
+    "status": "unknown",
+    "subject": {
+      "reference": "Patient/123"
+    }
+  }
+]

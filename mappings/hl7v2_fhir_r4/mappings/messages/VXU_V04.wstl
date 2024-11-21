@@ -1,0 +1,52 @@
+package messages
+
+// Description: Define VXU_V04 HL7v2 (version 2.9) to FHIR R4 transformation
+//
+// Argument(s):
+//   VXU_V04 HL7v2 Message Type (version 2.9)
+//   VXU_V04 Segments covered in this mapping configuration are: MSH, PID, PD1, PV1, OBX, ORC, NK1, IN1, GT1
+//
+// Output(s):
+//   FHIR R4 Resources : http://www.hl7.org/fhir/resourcelist.html
+// List of Generated FHIR Resources:
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//   Coverage: https://www.hl7.org/fhir/coverage.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   Location: https://www.hl7.org/fhir/location.html
+//   MessageHeader: https://www.hl7.org/fhir/messageheader.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   RelatedPerson: https://www.hl7.org/fhir/relatedperson.html
+//   ServiceRequest: https://www.hl7.org/fhir/servicerequest.html
+//   Immunization: https://www.hl7.org/fhir/immunization.html
+//
+def VXU_V04(VXU_V04) {
+  var MessageHeaderReference: utilities::OutputResourceAndGetReference(segments::MSH_MessageHeader(VXU_V04.MSH))
+
+  var Patient: segments::PID_PD1_Patient(VXU_V04.PID, VXU_V04.PD1)
+  var Patient.contact[]: if VXU_V04.NK1 then datatypes::NK1_Contact(VXU_V04.NK1[])
+  var Patient.extension[]: utilities::Build_Extension(datatypes::CWE_CodeableConcept(VXU_V04.PATIENT_VISIT.PV1.16), "CodeableConcept", "http://hl7.org/fhir/StructureDefinition/patient-importance")
+  var PatientReference: utilities::OutputResourceAndGetReference(Patient)
+
+  root Bundle: segments::MSH_Bundle(VXU_V04.MSH.7, VXU_V04.MSH.10)
+  root Provenance: segments::MSH_Provenance(VXU_V04.MSH, PatientReference)
+
+  var ProvenanceReference: utilities::OutputResourceAndGetReference(segments::PID_Provenance(VXU_V04.PID.34, VXU_V04.PID.33, PatientReference))
+
+  var RelatedPersonReference: utilities::OutputResourceAndGetReference(segments::NK1_RelatedPerson(VXU_V04.NK1[], PatientReference)[])
+
+  var EncounterReference: utilities::OutputResourceAndGetReference(segments::PV1_DG1_Encounter(VXU_V04.PATIENT_VISIT.PV1, {}, VXU_V04.MSH.9, {}, PatientReference, {}))
+
+  var GuarantorReference: utilities::OutputResourceAndGetReference(segments::GT1_RelatedPerson(VXU_V04.GT1[], PatientReference)[])
+
+  var CoverageReference: utilities::OutputResourceAndGetReference(segments::IN1_Coverage(VXU_V04.INSURANCE[*].IN1[], PatientReference)[])
+
+  var ObservationReference: utilities::OutputResourceAndGetReference(segments::OBX_Observation(VXU_V04.PERSON_OBSERVATION[*].OBX[], PatientReference)[])
+
+  var ObservationReference: utilities::OutputResourceAndGetReference(segments::OBX_Observation(VXU_V04.ORDER[*].OBSERVATION[*].OBX[], PatientReference)[])
+
+  var ServiceRequestReference: utilities::OutputResourceAndGetReference(segments::ORC_OBR_ServiceRequest(VXU_V04.ORDER[*].ORC[], {}, {}, PatientReference)[])   // passing {} since OBR  and TQ1 not present
+
+  var ImmunizationReference: utilities::OutputResourceAndGetReference(segments::ORDER_Immunization(VXU_V04.ORDER[], PatientReference)[])
+}

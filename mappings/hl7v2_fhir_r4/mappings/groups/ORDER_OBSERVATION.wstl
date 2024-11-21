@@ -1,0 +1,29 @@
+package groups
+
+// Description: Parse ORDER_OBSERVATION group, and constructs FHIR R4 Resources based on OBX, OBR, ORC sub-segments
+//
+// Argument(s):
+//   ORDER_OBSERVATION Group
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Encounter Resource already constructed through PV1_datatypes::DG1_Encounter Projector: https://www.hl7.org/fhir/encounter.html
+//
+// Output(s):
+//   DiagnosticReport: https://hl7.org/fhir/diagnosticreport.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   ServiceRequest : https://hl7.org/fhir/servicerequest.html
+//
+def PARSE_ORDER_OBSERVATION (required ORDER_OBSERVATION, PatientReference, EncounterReference) {
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var ServiceRequestReference: utilities::OutputResourceAndGetReference(segments::ORC_OBR_ServiceRequest(ORDER_OBSERVATION.COMMON_ORDER.ORC, ORDER_OBSERVATION.OBR, {}, PatientReference))
+
+  var ObservationReference[]: PARSE_OBSERVATION(ORDER_OBSERVATION.OBSERVATION[], PatientReference, EncounterReference)
+
+  var DiagnosticReport: segments::OBR_ORC_DiagnosticReport(ORDER_OBSERVATION.OBR, ORDER_OBSERVATION.COMMON_ORDER.ORC, PatientReference)
+  var DiagnosticReport.result[]: ObservationReference[]
+  var DiagnosticReport.basedOn[]: ServiceRequestReference
+  var DiagnosticReport.encounter: EncounterReference
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var DiagnosticReportReference: utilities::OutputResourceAndGetReference(DiagnosticReport)
+}

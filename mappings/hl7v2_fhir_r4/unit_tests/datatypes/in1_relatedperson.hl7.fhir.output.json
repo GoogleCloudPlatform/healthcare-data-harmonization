@@ -1,0 +1,17 @@
+[
+  {
+    "birthDate": "1941-02-28",
+    "name": [
+      {
+        "family": "POLDARK",
+        "given": [
+          "ROSS"
+        ]
+      }
+    ],
+    "patient": {
+      "reference": "Patient/123"
+    },
+    "resourceType": "RelatedPerson"
+  }
+]

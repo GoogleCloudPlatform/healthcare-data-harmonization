@@ -1,0 +1,97 @@
+[
+  {
+    "id": "ef59b26e85eca7981a8933101ca07a87",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "NPI"
+            }
+          ]
+        },
+        "value": "5742200012"
+      }
+    ],
+    "name": [
+      {
+        "family": "Radon",
+        "given": [
+          "Nicholas"
+        ],
+        "use": "official"
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "code": {
+      "coding": [
+        {
+          "code": "85",
+          "display": "hep B,unspec",
+          "system": "CVX"
+        }
+      ]
+    },
+    "id": "cd19bec8fa2db0d6bcde88c3ab3e05af",
+    "resourceType": "Medication"
+  },
+  {
+    "dosage": {
+      "dose": {
+        "value": 999
+      },
+      "route": {
+        "coding": [
+          {
+            "code": "MTH",
+            "display": "Mouth",
+            "system": "HL70162"
+          }
+        ]
+      }
+    },
+    "effectivePeriod": {
+      "end": "2011-04-16T00:00:00+00:00",
+      "start": "2011-04-15T00:00:00+00:00"
+    },
+    "identifier": [
+      {
+        "type": {
+          "coding": [
+            {
+              "code": "PLAC",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "ORD448811"
+      }
+    ],
+    "medicationReference": {
+      "reference": "Medication/cd19bec8fa2db0d6bcde88c3ab3e05af"
+    },
+    "performer": [
+      {
+        "actor": {
+          "reference": "Practitioner/ef59b26e85eca7981a8933101ca07a87"
+        },
+        "function": {
+          "coding": [
+            {
+              "code": "OP",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0443"
+            }
+          ]
+        }
+      }
+    ],
+    "resourceType": "MedicationAdministration",
+    "status": "completed",
+    "subject": {
+      "reference": "Patient/123"
+    }
+  }
+]

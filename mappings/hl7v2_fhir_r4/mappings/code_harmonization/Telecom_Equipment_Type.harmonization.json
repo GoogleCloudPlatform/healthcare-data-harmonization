@@ -1,0 +1,128 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "PH",
+          "display": "Telephone",
+          "target": [
+            {
+              "code": "phone",
+              "display": "Phone",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "FX",
+          "display": "Fax",
+          "target": [
+            {
+              "code": "fax",
+              "display": "Fax",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "MD",
+          "display": "Modem",
+          "target": [
+            {
+              "code": "other",
+              "display": "Other",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "CP",
+          "display": "Cellular or Mobile Phone",
+          "target": [
+            {
+              "code": "phone",
+              "display": "Phone",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "SAT",
+          "display": "Satellite Phone",
+          "target": [
+            {
+              "code": "other",
+              "display": "Other",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "BP",
+          "display": "Beeper",
+          "target": [
+            {
+              "code": "pager",
+              "display": "Pager",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "Internet",
+          "display": "Internet Address",
+          "target": [
+            {
+              "code": "email",
+              "display": "Email",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "X.400",
+          "display": "X.400 email address",
+          "target": [
+            {
+              "code": "email",
+              "display": "Email",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "TDD",
+          "display": "Telecommunications Device for the Deaf",
+          "target": [
+            {
+              "code": "other",
+              "display": "Other",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "TTY",
+          "display": "Teletypewriter",
+          "target": [
+            {
+              "code": "other",
+              "display": "Other",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70202",
+      "target": "http://hl7.org/fhir/contact-point-system",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "other",
+        "display": "Other"
+      }
+    }
+  ],
+  "id": "Telecom_Equipment_Type",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

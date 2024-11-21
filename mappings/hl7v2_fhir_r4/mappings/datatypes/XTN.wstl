@@ -1,0 +1,33 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 ContactPoint datatype based on V2 XTN datatype
+//
+// Argument(s):
+//   XTN datatype
+//
+// Output(s):
+//   ContactPoint datatype : https://www.hl7.org/fhir/datatypes.html#ContactPoint
+//
+def XTN_ContactPoint(XTN, cUse) {
+  var use: if cUse then cUse else utilities::Convert_TerminologyCode(XTN.2, "HL70201", "Telecom_Use")
+  var system: if XTN.4 then {
+    if XTN.3 then utilities::Convert_TerminologyCode(XTN.3, "HL70202", "Telecom_Equipment_Type") else "email"
+  } else {
+    extension[]: utilities::Build_Extension("unknown", "Code", "http://hl7.org/fhir/StructureDefinition/data-absent-reason")
+  }
+  var extension[]: utilities::Build_Extension(XTN.5, "String", "http://hl7.org/fhir/StructureDefinition/contactpoint-country")
+  var extension[]: utilities::Build_Extension(XTN.6, "String", "http://hl7.org/fhir/StructureDefinition/contactpoint-area")
+  var extension[]: utilities::Build_Extension(XTN.8, "String", "http://hl7.org/fhir/StructureDefinition/contactpoint-extension")
+  if XTN.3 != "Internet" and XTN.3 != "X.400" then {
+    var extension[]: utilities::Build_Extension(XTN.7, "String", "http://hl7.org/fhir/StructureDefinition/contactpoint-local")
+    if !XTN.7 and !XTN.12 then {
+      $this: Build_ContactPoint(XTN.1, system, use, XTN.18, XTN.13, XTN.14, extension)
+    } else {
+      $this: Build_ContactPoint(XTN.12, system, use, XTN.18, XTN.13, XTN.14, extension)
+    }
+  } else {
+    if XTN.3 == "Internet" or XTN.3 == "X.400" then {
+      $this: Build_ContactPoint(XTN.4, system, use, XTN.18, XTN.13, XTN.14, extension)
+    }
+  }
+}

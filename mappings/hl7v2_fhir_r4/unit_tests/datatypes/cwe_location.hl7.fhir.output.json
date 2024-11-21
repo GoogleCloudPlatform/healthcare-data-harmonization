@@ -1,0 +1,12 @@
+[
+  {
+    "identifier": [
+      {
+        "system": "XX",
+        "value": "GHH01"
+      }
+    ],
+    "name": "Good Health Hospital",
+    "resourceType": "Location"
+  }
+]

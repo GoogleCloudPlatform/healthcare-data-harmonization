@@ -1,0 +1,34 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 Patient.contact and its related resources based on NK1 Segment
+//
+// Argument(s):
+//   NK1 V2 Segment
+//
+// Output(s):
+//   Patient.contact: https://www.hl7.org/fhir/patient-definitions.html#Patient.contact
+//
+def NK1_Contact(required NK1) {
+  var contact.name: XPN_HumanName(NK1.2[0])
+  var contact.address: XAD_Address(NK1.4[0])
+  var contact.telecom[]: XTN_ContactPoint(NK1.5[], "home")
+  var contact.telecom[]: XTN_ContactPoint(NK1.6[], "work")
+  var relationshipCC: CWE_CodeableConcept(NK1.7)
+  var contact.relationship[]: if relationshipCC then utilities::Convert_Terminology(relationshipCC.coding[0].code, "HL70131", "Relationship")
+  var contact.period.start: utilities::Convert_DateTime(NK1.8)
+  var contact.period.end: utilities::Convert_DateTime(NK1.9)
+  var Organization: XON_Organization(NK1.13[0])
+  var Organization.contact[]: if Organization then XPN_XTN_XAD_OrganizationContact(NK1.30, NK1.31, NK1.32)
+  // The resource must be output before building the organization reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in
+  // the reference. The resource must not be modified after it has been output.
+  var contact.organization: utilities::OutputResourceAndGetReference(Organization)
+  var contact.gender: utilities::Convert_TerminologyCode(CWE_Code(NK1.14), "HL70001", "Gender")
+  var contact.telecom[]: XTN_ContactPoint(NK1.40, "home")
+  var contact.telecom[]: XTN_ContactPoint(NK1.41, "work")
+
+  // To ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(Patient).contact: "name.exists() or telecom.exists() or address.exists() or organization.exists()"
+  if contact.name or contact.telecom or contact.address or contact.organization then {
+    contact
+  }
+}

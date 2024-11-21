@@ -1,0 +1,147 @@
+package segments
+
+// Description: Constructs a FHIR R4 Observation Resource based on OBX Segment and Patient resource
+//
+// Argument(s):
+//   OBX V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Device : https://www.hl7.org/fhir/device.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def OBX_Observation (required OBX, PatientReference) {
+  // Ensures fhirpath-constraint-violation-Bundle.entry.resource.ofType(Observation): "value.empty() or component.code.where(coding.intersect(%resource.code.coding).exists()).empty()"
+  if listLen(OBX.5) > 1 then {
+    component[]: Build_ObservationComponent(OBX.5[], OBX.2, OBX.3, OBX.6)
+  } else {
+    Build_ObservationValue(OBX.5[0], OBX.2, OBX.6)
+  }
+  if OBX.3 then {
+    code: datatypes::CWE_CodeableConcept(OBX.3)
+  } else {
+    code.coding[0].code: "10001-6"
+  }
+  // Ensures fhirpath-constraint-violation-Bundle.entry.resource.ofType(Observation).referenceRange: "low.exists() or high.exists() or text.exists()"
+  referenceRange[0].text: OBX.7
+  interpretation[]: utilities::Convert_Terminology(datatypes::CWE_Code(OBX.8[])[], "HL70078", "Interpretation_Codes")
+  if OBX.11 then {
+    status: utilities::Convert_TerminologyCode(OBX.11, "HL70085", "Observation_Status")
+  } else {
+    status: "registered"
+  }
+  // To ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(Observation): "dataAbsentReason.empty() or value.empty()"
+  if !OBX.5 then {
+    if OBX.11 == "X" then {
+      dataAbsentReason.coding[0].code: "unknown"
+      dataAbsentReason.coding[0].system: "http://terminology.hl7.org/CodeSystem/data-absent-reason"
+    } else if OBX.11 == "N" then {
+      dataAbsentReason.coding[0].code: "not-asked"
+      dataAbsentReason.coding[0].system: "http://terminology.hl7.org/CodeSystem/data-absent-reason"
+    }
+  }
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-smokingstatus-definitions.html#Observation.issued
+  issued: currentTime("yyyy-MM-dd'T'HH:mm:ss.SSSxxx")
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-observation-lab-definitions.html#Observation.category:Laboratory
+  category[0].coding[0].code: "laboratory"
+  category[0].coding[0].system: "http://terminology.hl7.org/CodeSystem/observation-category"
+  effectiveDateTime: utilities::Convert_DateTime(OBX.14)
+  // The resource must be output before building the performer reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the performer
+  // reference. The resource must not be modified after it has been output.
+  performer[]: utilities::OutputResourceAndGetReference(datatypes::CWE_Organization(OBX.15))
+  performer[]: utilities::OutputResourceAndGetReference(datatypes::XCN_PractitionerRole(OBX.16[], "responsibleObserver", "http://terminology.hl7.org/CodeSystem/practitioner-role")[])
+  method: datatypes::CWE_CodeableConcept(OBX.17[0])
+  // The resource must be output before building the device reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the device
+  // reference. The resource must not be modified after it has been output.
+  device: utilities::OutputResourceAndGetReference(datatypes::EI_Device(OBX.18[], PatientReference)[])
+  bodySite: datatypes::CWE_CodeableConcept(OBX.20[0])
+  identifier[]: datatypes::EI_Identifier(OBX.21, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  var OBX_23: if is(OBX.25, "Array") then OBX.23[0] else OBX.23
+  var OBX_24: if is(OBX.25, "Array") then OBX.24[0] else OBX.24
+  var organization: datatypes::XON_XAD_Organization(OBX_23, OBX_24)
+  if OBX.25 then {
+    var OBX_25: if is(OBX.25, "Array") then OBX.25[0] else OBX.25
+    var practitionerRole: datatypes::XCN_PractitionerRole(OBX_25, "MDIR", "http://terminology.hl7.org/CodeSystem/v2-0912")
+    var practitionerRole.organization: utilities::OutputResourceAndGetReference(organization)
+    // The resource must be output before building the performer reference. Outputting the
+    // resource adds it to the bundle and assigns the id used in the performer
+    // reference. The resource must not be modified after it has been output.
+    performer[]: utilities::OutputResourceAndGetReference(practitionerRole)
+  } else {
+    performer[]: utilities::OutputResourceAndGetReference(organization)
+  }
+  subject: PatientReference
+  resourceType: "Observation"
+}
+
+// Description: Constructs an Observation.value datatype, where based on OBX2 datatype Observation values are mapped.
+//
+// Argument(s):
+//   OBX5 Datatype
+//   OBX2 Datatype
+//   OBX6 Datatype
+//
+// Output(s):
+//   Observation.value datatype : https://www.hl7.org/fhir/observation-definitions.html#Observation.value_x_
+//
+def Build_ObservationValue(OBX5, OBX2, OBX6) {
+  if OBX2 == "NM" then {
+    if utilities::IsNumber(OBX5.1.1) then {
+      valueQuantity.value: parseNum(OBX5.1.1)
+      valueQuantity: datatypes::CWE_Qauntity(OBX6)
+    } else {
+      valueString: OBX5.1.1
+    }
+  } else if OBX2 == "ST" or OBX2 == "FT" or OBX2 == "TX" then {
+    valueString: OBX5.1.1
+  } else if OBX2 == "CF" or OBX2 == "CNE" or OBX2 == "CWE" or OBX2 == "CE" or OBX2 == "IS" then {
+    valueCodeableConcept: datatypes::VARIES_CodeableConcept(OBX5)
+  } else if OBX2 == "IS" then {
+    valueCodeableConcept.coding[].code: OBX5.1.1
+  } else if OBX2 == "DR" then {
+    valuePeriod: datatypes::VARIES_Period(OBX5)
+  } else if OBX2 == "DTM" or OBX2 == "DT" then {
+    valueDateTime: utilities::Convert_DateTime(OBX5.1.1)
+  } else if OBX2 == "NR" then {
+    valueRange: datatypes::VARIES_Range(OBX5)
+  } else if OBX2 == "VR" then {
+    valueString: "{OBX5.1.1}-{OBX5.2.1}"
+  } else if OBX2 == "TM" then {
+    valueTime: formatDateTime("HH:mm:ss", parseDateTime("HHmmss", OBX5.1.1))
+  } else if OBX2 == "SN" and (OBX5.3.1 == ":" or OBX5.3.1 == "/") then {
+    valueRatio: datatypes::VARIES_Ratio(OBX5)
+    valueRatio.numerator: datatypes::CWE_Qauntity(OBX6)
+    valueRatio.denominator: datatypes::CWE_Qauntity(OBX6)
+  } else if OBX2 == "SN" and OBX5.3.1 == "-" then {
+    valueRange: datatypes::VARIES_Range(OBX5)
+    valueRange.low: datatypes::CWE_Qauntity(OBX6)
+    valueRange.high: datatypes::CWE_Qauntity(OBX6)
+  } else if OBX2 == "SN" and OBX5.3.1 == "+" then {
+    valueString: OBX5.1.1 + " " + OBX5.2.1 + " " + OBX5.3.1
+  } else if OBX2 == "SN" and OBX5.3.1 != ":" and OBX5.3.1 != "/" and OBX5.3.1 != "+" and OBX5.3.1 != "-" then {
+    valueQuantity: datatypes::VARIES_Quantity(OBX5, OBX6)
+  } else if OBX2 == "NA" then {
+    valueQuantity: datatypes::CWE_Qauntity(OBX6)
+  }
+}
+
+// Description: Constructs an Observation.component datatype, where based on OBX2 datatype Observation values are mapped.
+//
+// Argument(s):
+//   OBX5 Datatype
+//   OBX2 Datatype
+//   OBX3 Datatype
+//   OBX6 Datatype
+//
+// Output(s):
+//   Observation.component datatype : https://www.hl7.org/fhir/observation-definitions.html#Observation.component
+//
+def Build_ObservationComponent(OBX5, OBX2, OBX3, OBX6) {
+  code: datatypes::CWE_CodeableConcept(OBX3)
+  $this: Build_ObservationValue(OBX5, OBX2, OBX6)
+}

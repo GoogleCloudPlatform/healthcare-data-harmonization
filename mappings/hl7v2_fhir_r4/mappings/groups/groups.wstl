@@ -1,0 +1,13 @@
+package groups
+
+import "./../datatypes/datatypes.wstl"
+import "./../constants.wstl"
+
+import  "./GOAL.wstl"
+import  "./OBSERVATION.wstl"
+import  "./ORDER_OBSERVATION.wstl"
+import  "./ORDER.wstl"
+import  "./PATIENT_RESULT.wstl"
+import  "./PATIENT.wstl"
+import  "./PROBLEM_ORDER.wstl"
+import  "./PROBLEM.wstl"

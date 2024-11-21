@@ -1,0 +1,78 @@
+{
+  "PRB": {
+    "0": "PRB",
+    "1": "AD",
+    "10": {
+      "1": "IP",
+      "2": "Inpatient",
+      "3": "ProblemClassificationList"
+    },
+    "11": [
+      {
+        "1": "NU",
+        "2": "Nursing",
+        "3": "ManagementDisciplineList"
+      }
+    ],
+    "12": {
+      "1": "Acute",
+      "2": "Acute",
+      "3": "PersistenceList"
+    },
+    "13": {
+      "1": "C",
+      "2": "Confirmed",
+      "3": "ConfirmationStatusList"
+    },
+    "14": {
+      "1": "A1",
+      "2": "Active",
+      "3": "LifeCycleStatusList"
+    },
+    "15": "199505011200",
+    "16": "199504250000",
+    "17": null,
+    "18": {
+      "1": "2",
+      "2": "Secondary",
+      "3": "RankingList"
+    },
+    "19": {
+      "1": "HI",
+      "2": "High",
+      "3": "CertaintyCodingList"
+    },
+    "2": "199505011200",
+    "20": null,
+    "21": {
+      "1": "1",
+      "2": "Fully",
+      "3": "AwarenessCodingList"
+    },
+    "22": {
+      "1": "2",
+      "2": "Good",
+      "3": "PrognosisCodingList"
+    },
+    "23": null,
+    "24": null,
+    "25": null,
+    "26": null,
+    "3": {
+      "1": "04411",
+      "2": "Restricted Circulation",
+      "3": "NursingProblemList"
+    },
+    "4": {
+      "1": "123PB"
+    },
+    "5": null,
+    "6": null,
+    "7": "199505011200",
+    "8": null,
+    "9": null
+  },
+  "patientReference": {
+    "reference": "Patient/123"
+  }
+}

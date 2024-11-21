@@ -1,0 +1,52 @@
+package messages
+
+// Description: Define OML_O21 HL7v2 Message Type (version 2.9) to FHIR R4 transformation
+//
+// Argument(s):
+//   OML_O21 HL7v2 Message Type (version 2.9)
+//   OML_O21 Segments covered in this mapping configuration are: MSH, PID, PD1, PV1, OBX, OBR, ORC, AL1, NK1, IN1, GT1, ORDER Group
+//
+// Output(s):
+//   FHIR R4 Resources : http://www.hl7.org/fhir/resourcelist.html
+// List of Generated FHIR Resources:
+//   Account: https://www.hl7.org/fhir/account.html
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//   Coverage: https://www.hl7.org/fhir/coverage.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   MessageHeader: https://www.hl7.org/fhir/messageheader.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   Specimen : https://hl7.org/fhir/specimen.html
+//
+def OML_O21(required OML_O21) {
+  var MessageHeaderReference: utilities::OutputResourceAndGetReference(segments::MSH_MessageHeader(OML_O21.MSH))
+
+  var Patient: segments::PID_PD1_Patient(OML_O21.PATIENT.PID, OML_O21.PATIENT.PD1)
+  var Patient.contact[]: if OML_O21.PATIENT.NK1 then datatypes::NK1_Contact(OML_O21.PATIENT.NK1[])
+  var Patient.extension[]: utilities::Build_Extension(datatypes::CWE_CodeableConcept(OML_O21.PATIENT.PATIENT_VISIT.PV1.16), "CodeableConcept", "http://hl7.org/fhir/StructureDefinition/patient-importance")
+  var PatientReference: utilities::OutputResourceAndGetReference(Patient)
+
+  root Bundle: segments::MSH_Bundle(OML_O21.MSH.7, OML_O21.MSH.10)
+  root Provenance: segments::MSH_Provenance(OML_O21.MSH, PatientReference)
+
+  var AccountReference: utilities::OutputResourceAndGetReference(segments::PID_Account(OML_O21.PATIENT.PID.18, PatientReference))
+
+  var ProvenanceReference: utilities::OutputResourceAndGetReference(segments::PID_Provenance(OML_O21.PATIENT.PID.34, OML_O21.PATIENT.PID.33, PatientReference))
+
+  var RelatedPersonReference: utilities::OutputResourceAndGetReference(segments::NK1_RelatedPerson(OML_O21.PATIENT.NK1[], PatientReference)[])
+
+  var ConditionReference: utilities::OutputResourceAndGetReference(segments::DG1_Condition(OML_O21.ORDER[*].OBSERVATION_REQUEST.DG1[*][], PatientReference)[])
+
+  var EncounterReference: utilities::OutputResourceAndGetReference(segments::PV1_DG1_Encounter(OML_O21.PATIENT.PATIENT_VISIT.PV1, OML_O21.ORDER[*].OBSERVATION_REQUEST.DG1[], OML_O21.MSH.9, {}, PatientReference, ConditionReference)[])
+
+  var GuarantorReference: utilities::OutputResourceAndGetReference(segments::GT1_RelatedPerson(OML_O21.PATIENT.GT1, PatientReference))
+
+  var AllergyIntoleranceReference: utilities::OutputResourceAndGetReference(segments::AL1_AllergyIntolerance(OML_O21.PATIENT.AL1[], PatientReference)[])
+
+  var CoverageReference: utilities::OutputResourceAndGetReference(segments::IN1_Coverage(OML_O21.PATIENT.INSURANCE[*].IN1[], PatientReference)[])
+
+  $this: groups::Parse_ORDER(OML_O21.ORDER[], PatientReference, ConditionReference)
+}

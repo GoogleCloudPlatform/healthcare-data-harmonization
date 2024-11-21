@@ -1,0 +1,391 @@
+import "test";
+import "./../mappings/datatypes/datatypes.wstl";
+
+// Runs all Test Functions in the current package.
+//
+// A Test Function is a function whose name starts with test_.
+// It must take no parameters. Upon failure, this method throws an exception.
+// Test functions loads input and output files and asserts the mappings output
+// (actualOutput) with the loaded output (expectedOutput).
+//
+test::runAll()
+
+// Tests datatypes::CM_Specimen() function.
+def test_CM_Specimen() {
+  var input: loadJson(joinPath(testdir(), "cm_specimen.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "cm_specimen.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::CM_Specimen(input.CM)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::CNE_CodeableConcept() function.
+def test_CNE_CodeableConcept() {
+  var input: loadJson(joinPath(testdir(), "cne_codeableconcept.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "cne_codeableconcept.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::CWE_CodeableConcept(input.CNE)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::CNN_Practitioner() function.
+def test_CNN_Practitioner() {
+  var input: loadJson(joinPath(testdir(), "cnn_practitioner.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "cnn_practitioner.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::CNN_Practitioner(input.CNN)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::CQ_Quantity() function.
+def test_CQ_Quantity() {
+  var input: loadJson(joinPath(testdir(), "cq_quantity.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "cq_quantity.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::CQ_Quantity(input.CQ)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::CWE_CodeableConcept() function.
+def test_CWE_CodeableConcept() {
+  var input: loadJson(joinPath(testdir(), "cwe_codeableconcept.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "cwe_codeableconcept.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::CWE_CodeableConcept(input.CWE)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::CWE_Coding() function.
+def test_CWE_Coding() {
+  var input: loadJson(joinPath(testdir(), "cwe_coding.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "cwe_coding.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::CWE_Coding(input.CWE)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::CWE_Location() function.
+def test_CWE_Location() {
+  var input: loadJson(joinPath(testdir(), "cwe_location.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "cwe_location.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::CWE_Location(input.CWE)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::CWE_Organization() function.
+def test_CWE_Organization() {
+  var input: loadJson(joinPath(testdir(), "cwe_organization.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "cwe_organization.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::CWE_Organization(input.CWE)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::CWE_Qauntity() function.
+def test_CWE_Quantity() {
+  var input: loadJson(joinPath(testdir(), "cwe_quantity.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "cwe_quantity.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::CWE_Qauntity(input.CWE)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::CX_EpisodeOfCare() function.
+def test_CX_EpisodeOfCare() {
+  var input: loadJson(joinPath(testdir(), "cx_episodeofcare.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "cx_episodeofcare.hl7.fhir.output.json"))
+  var output: withSides(datatypes::CX_EpisodeOfCare(input.CX))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::CX_DG1_EpisodeOfCare() function.
+def test_CX_DG1_EpisodeOfCare() {
+  var input: loadJson(joinPath(testdir(), "cx_dg1_episodeofcare.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "cx_dg1_episodeofcare.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::CX_DG1_EpisodeOfCare(input.CX, input.DG1, input.Condition, input.Patient)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::CX_Identifier() function.
+def test_CX_Identifier() {
+  var input: loadJson(joinPath(testdir(), "cx_identifier.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "cx_identifier.hl7.fhir.output.json"))
+  var output: withSides(datatypes::CX_Identifier(input.CX))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::() function.
+def test_DLN_Identifier() {
+  var input: loadJson(joinPath(testdir(), "dln_identifier.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "dln_identifier.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::DLN_Identifier(input.DLN, "DL")
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::DLN_Identifier() function.
+def test_DR_Period() {
+  var input: loadJson(joinPath(testdir(), "dr_period.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "dr_period.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::DR_Period(input.DR)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::EI_Condition() function.
+def test_EI_Condition() {
+  var input: loadJson(joinPath(testdir(), "ei_condition.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "ei_condition.hl7.fhir.output.json"))
+  var output: withSides(datatypes::EI_Condition(input.EI, input.Patient))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::DLN_Identifier() function.
+def test_EI_Device() {
+  var input: loadJson(joinPath(testdir(), "ei_device.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "ei_device.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::EI_Device(input.EI, input.Patient)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::EI_Identifier() function.
+def test_EI_Identifier() {
+  var input: loadJson(joinPath(testdir(), "ei_identifier.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "ei_identifier.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::EI_Identifier(input.EI, "", "")
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::HD_Device() function.
+def test_HD_Device() {
+  var input: loadJson(joinPath(testdir(), "hd_device.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "hd_device.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::HD_Device(input.HD, {})
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::HD_Location() function.
+def test_HD_Location() {
+  var input: loadJson(joinPath(testdir(), "hd_location.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "hd_location.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::HD_Location(input.HD, "PL.1")
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::HD_MessageHeaderDestination() function.
+def test_HD_MessageHeaderDestination() {
+  var input: loadJson(joinPath(testdir(), "hd_messageheaderdestination.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "hd_messageheaderdestination.hl7.fhir.output.json"))
+  var output: withSides(datatypes::HD_MessageHeaderDestination(input.HD, input.MSH.6, input.MSH.23))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::HD_MessageHeaderEndpoint() function.
+def test_HD_MessageHeaderEndpoint() {
+  var input: loadJson(joinPath(testdir(), "hd_messageheaderendpoint.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "hd_messageheaderendpoint.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::HD_MessageHeaderEndpoint(input.HD)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::HD_Organization() function.
+def test_HD_Organization() {
+  var input: loadJson(joinPath(testdir(), "hd_organization.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "hd_organization.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::HD_Organization(input.HD)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::HD_CC_Organization() function.
+def test_HD_CC_Organization() {
+  var input: loadJson(joinPath(testdir(), "hd_cc_organization.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "hd_cc_organization.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::HD_CC_Organization(input.HD, input.CC)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::NDL_PractitionerRole() function.
+def test_NDL_PractitionerRole() {
+  var input: loadJson(joinPath(testdir(), "ndl_practitionerrole.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "ndl_practitionerrole.hl7.fhir.output.json"))
+  var output: withSides(datatypes::NDL_PractitionerRole(input.NDL))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::NK1_Contact() function.
+def test_NK1_Contact() {
+  var input: loadJson(joinPath(testdir(), "nk1_contact.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "nk1_contact.hl7.fhir.output.json"))
+  var output: withSides(datatypes::NK1_Contact(input.NK1))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::NR_Range() function.
+def test_NR_Range() {
+  var input: loadJson(joinPath(testdir(), "nr_range.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "nr_range.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::NR_Range(input.NR)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::NTE_Annotation() function.
+def test_NTE_Annotation() {
+  var input: loadJson(joinPath(testdir(), "nte_annotation.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "nte_annotation.hl7.fhir.output.json"))
+  var output: withSides(datatypes::NTE_Annotation(input.NTE))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::PL_Location() function.
+def test_PL_Location() {
+  var input: loadJson(joinPath(testdir(), "pl_location.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "pl_location.hl7.fhir.output.json"))
+  var output: withSides(datatypes::PL_Location(input.PL, "active"))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::RI_Timing() function.
+def test_RI_Timing() {
+  var input: loadJson(joinPath(testdir(), "ri_timing.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "ri_timing.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::RI_Timing(input.RI)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::SN_Range() function.
+def test_SN_Range() {
+  var input: loadJson(joinPath(testdir(), "sn_range.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "sn_range.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::SN_Range(input.SN)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::SN_Ratio() function.
+def test_SN_Ratio() {
+  var input: loadJson(joinPath(testdir(), "sn_ratio.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "sn_ratio.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::SN_Ratio(input.SN)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::SN_Quantity() function.
+def test_SN_Quantity() {
+  var input: loadJson(joinPath(testdir(), "sn_quantity.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "sn_quantity.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::SN_Quantity(input.SN)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::ST_Identifier() function.
+def test_ST_Identifier() {
+  var input: loadJson(joinPath(testdir(), "st_identifier.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "st_identifier.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::ST_Identifier(input.ST)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::TQ_Dosage() function.
+def test_TQ_Dosage() {
+  var input: loadJson(joinPath(testdir(), "tq_dosage.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "tq_dosage.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::TQ_Dosage(input.TQ)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::TQ_ServiceRequest() function.
+def test_TQ_ServiceRequest() {
+  var input: loadJson(joinPath(testdir(), "tq_servicerequest.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "tq_servicerequest.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::TQ_ServiceRequest(input.TQ)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::XCN_Practitioner() function.
+def test_XCN_Practitioner() {
+  var input: loadJson(joinPath(testdir(), "xcn_practitioner.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "xcn_practitioner.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::XCN_Practitioner(input.XCN)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::XCN_PractitionerRole() function.
+def test_XCN_PractitionerRole() {
+  var input: loadJson(joinPath(testdir(), "xcn_practitionerrole.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "xcn_practitionerrole.hl7.fhir.output.json"))
+  var output: withSides(datatypes::XCN_PractitionerRole(input.XCN, "AP", "http://terminology.hl7.org/CodeSystem/v2-0912"))
+  var actualOutput: unique(output.Resources)
+  var actualOutput[]: unset(output, "Resources")
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::XAD_Address() function.
+def test_XAD_Address() {
+  var input: loadJson(joinPath(testdir(), "xad_address.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "xad_address.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::XAD_Address(input.XAD)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::XON_Organization() function.
+def test_XON_Organization() {
+  var input: loadJson(joinPath(testdir(), "xon_organization.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "xon_organization.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::XON_Organization(input.XON)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::XON_XAD_Organization() function.
+def test_XON_XAD_Organization() {
+  var input: loadJson(joinPath(testdir(), "xon_xad_organization.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "xon_xad_organization.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::XON_XAD_Organization(input.XON, input.XAD)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::XON_XAD_XTN_Location() function.
+def test_XON_XAD_XTN_Location() {
+  var input: loadJson(joinPath(testdir(), "xon_xad_xtn_location.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "xon_xad_xtn_location.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::XON_XAD_XTN_Location(input.XON, input.XAD, input.XTN)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::XPN_HumanName() function.
+def test_XPN_HumanName() {
+  var input: loadJson(joinPath(testdir(), "xpn_humanname.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "xpn_humanname.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::XPN_HumanName(input.XPN)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::XPN_XTN_XAD_OrganizationContact() function.
+def test_XPN_XTN_XAD_OrganizationContact() {
+  var input: loadJson(joinPath(testdir(), "xpn_xtn_xad_organizationcontact.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "xpn_xtn_xad_organizationcontact.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::XPN_XTN_XAD_OrganizationContact(input.XPN, input.XTN, input.XAD)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::XTN_ContactPoint() function.
+def test_XTN_ContactPoint() {
+  var input: loadJson(joinPath(testdir(), "xtn_contactpoint.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "xtn_contactpoint.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::XTN_ContactPoint(input.XTN[], "home")
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests datatypes::TQ1_ServiceRequest() function.
+def test_TQ1_ServiceRequest() {
+  var input: loadJson(joinPath(testdir(), "tq1_servicerequest.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "tq1_servicerequest.hl7.fhir.output.json"))
+  var actualOutput[]: datatypes::TQ1_ServiceRequest(input.TQ1)
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+def testdir() "./datatypes/"

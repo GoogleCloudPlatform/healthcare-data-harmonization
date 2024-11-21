@@ -1,0 +1,30 @@
+package messages
+
+// Description: Define SIU_Sxx HL7v2 Message Types (version 2.9) to FHIR R4 transformation
+//
+// Argument(s):
+//   SIU_Sxx HL7v2 Message Type (version 2.9)
+//   SIU_Sxx Segments covered in this mapping configuration are: MSH, SCH, NTE, PID, PV1
+//
+// Output(s):
+//   FHIR R4 Resources : http://www.hl7.org/fhir/resourcelist.html
+// List of Generated FHIR Resources:
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//   MessageHeader: https://www.hl7.org/fhir/messageheader.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   Appointment: https://www.hl7.org/fhir/appointment.html
+//   ServiceRequest: https://www.hl7.org/fhir/servicerequest.html
+//
+def Transform_SIU(required SIU) {
+  var MessageHeaderReference: utilities::OutputResourceAndGetReference(segments::MSH_MessageHeader(SIU.MSH))
+
+  var PatientReference[]: groups::Parse_PATIENT(SIU.PATIENT[], SIU.MSH.9, {})
+
+  root Bundle: segments::MSH_Bundle(SIU.MSH.7, SIU.MSH.10)
+  root Provenance: segments::MSH_Provenance(SIU.MSH, PatientReference[0])
+
+  var ServiceRequestReference: utilities::OutputResourceAndGetReference(segments::SCH_ServiceRequest(SIU.SCH, PatientReference[0]))
+  var Appointment: segments::SCH_Appointment(SIU.SCH, SIU.RESOURCES, PatientReference, ServiceRequestReference)
+  var AppointmentReference: utilities::OutputResourceAndGetReference(Appointment)
+}

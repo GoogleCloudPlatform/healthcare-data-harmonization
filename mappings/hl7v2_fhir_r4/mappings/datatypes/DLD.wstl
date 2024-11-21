@@ -1,0 +1,13 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 Location resource based on V2 DLD datatype
+//
+// Argument(s):
+//   DLD datatype
+//
+// Output(s):
+//   Location Resource : https://www.hl7.org/fhir/location.html
+//
+def DLD_Location(required DLD) {
+  $this: CWE_Location(DLD.1)
+}

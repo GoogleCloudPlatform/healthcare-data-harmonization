@@ -1,0 +1,84 @@
+package segments
+
+// Description: Constructs a FHIR R4 Encounter Resource and its related resources based on V2 PV1, DG1, MSH_9, EVN_2 Segments and Patient, Condition resources
+//
+// Argument(s):
+//   PV1 V2 Segment
+//   DG1 V2 Segment
+//   MSH.9 V2 Field
+//   EVN.2 V2 Field
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Condition Resource already constructed through DG1_Condition Projector: https://www.hl7.org/fhir/condition.html
+//
+// Output(s):
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   Location: https://www.hl7.org/fhir/location.html
+//   EpisodeOfCare: https://www.hl7.org/fhir/episodeofcare.html
+//
+def PV1_DG1_Encounter(required PV1, DG1, MSH_9, EVN_2, PatientReference, ConditionReference) {
+  if PV1.2 then {
+    var classCoding: datatypes::CWE_Coding(PV1.2)
+    class: utilities::Convert_TerminologyCoding(classCoding.code, "HL70004", "Encounter_Class")
+  } else {
+    class.code: "AMB"
+  }
+  var assignedLocation: if PV1.2.1 != "P" then {
+    var assignedLocationStatus: if MSH_9.2 == "A03" then "completed" else "active"
+    datatypes::PL_Location(PV1.3, assignedLocationStatus)
+  } else if PV1.2.1 == "P" then {
+    datatypes::PL_Location(PV1.3, "planned")
+  }
+  var assignedLocation.period.start: if MSH_9.2 == "A01" or MSH_9.2 == "A02" then utilities::Convert_DateTime(EVN_2)
+  var assignedLocation.period.end: if MSH_9.2 == "A03" then utilities::Convert_DateTime(EVN_2)
+  location[]: assignedLocation
+  if PV1.4 then {
+    type[0]: datatypes::CWE_CodeableConcept(PV1.4)
+  } else {
+    // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-encounter-definitions.html#Encounter.type
+    type[0].coding[0].code: "unknown"
+  }
+  hospitalization.preAdmissionIdentifier: datatypes::CX_Identifier(PV1.5)
+  var previousLocation: datatypes::PL_Location(PV1.6, "completed")
+  var previousLocation.period.end: if MSH_9.2 == "A02" then utilities::Convert_DateTime(EVN_2)
+  location[]: previousLocation
+  participant[]: datatypes::Build_Participant(PV1.7[], "ATND", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType", "attender")
+  participant[]: datatypes::Build_Participant(PV1.8[], "REF", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType", "referrer")
+  participant[]: datatypes::Build_Participant(PV1.9[], "CON", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType", "consultant")
+  serviceType: datatypes::CWE_CodeableConcept(PV1.10); // ConceptMap needed
+  hospitalization.reAdmission: datatypes::CWE_CodeableConcept(PV1.13)
+  hospitalization.admitSource: datatypes::CWE_CodeableConcept(PV1.14)
+  participant[]: datatypes::Build_Participant(PV1.17[], "ADM", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType", "admitter")
+  if PV1.19 then {
+    identifier[0]: datatypes::CX_Identifier(PV1.19)
+    identifier[0].type.coding[0].code: "VN"
+    identifier[0].type.coding[0].system: "http://terminology.hl7.org/CodeSystem/v2-0203"
+    identifier[0].type.text: "visit number"
+  }
+  hospitalization.dischargeDisposition: datatypes::CWE_CodeableConcept(PV1.36)
+  // The resource must be output before building the hospitalization.destination reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the hospitalization.destination
+  // reference. The resource must not be modified after it has been output.
+  hospitalization.destination: utilities::OutputResourceAndGetReference(datatypes::DLD_Location(PV1.37))
+  hospitalization.dietPreference[]: datatypes::CWE_CodeableConcept(PV1.38)
+  location[]: datatypes::PL_Location(PV1.42, "planned")
+  location[]: datatypes::PL_Location(PV1.43, "completed")
+  period.start: utilities::Convert_DateTime(PV1.44)
+  period.end: utilities::Convert_DateTime(PV1.45)
+  if !PV1.45 and PV1.2 then {
+    status: utilities::Convert_TerminologyCode(datatypes::CWE_Code(PV1.2), "HL70004", "Encounter_Status")
+  } else {
+    status: "finished"
+  }
+  identifier[]: datatypes::CX_Identifier(PV1.50[])
+  participant[]: datatypes::Build_Participant(PV1.52[], "PART", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType", "Participation")
+  if DG1 or ConditionReference then {
+    diagnosis[]: DG1_Encounter(DG1[], ConditionReference[])
+    // The resource must be output before building the episodeOfCare reference. Outputting the
+    // resource adds it to the bundle and assigns the id used in the episodeOfCare
+    // reference. The resource must not be modified after it has been output.
+    episodeOfCare[]: utilities::OutputResourceAndGetReference(datatypes::CX_DG1_EpisodeOfCare(PV1.54, DG1, ConditionReference, PatientReference))
+  }
+  subject: PatientReference
+  resourceType: "Encounter"
+}

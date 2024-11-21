@@ -1,0 +1,22 @@
+package segments
+
+// Description: Constructs a FHIR R4 RelatedPerson Resource based on V2 GT1 and Patient Resource
+//
+// Argument(s):
+//   GT1 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   RelatedPerson: https://www.hl7.org/fhir/relatedperson.html
+//
+def GT1_RelatedPerson(required GT1, PatientReference) {
+  name[]: datatypes::XPN_HumanName(GT1.3[])
+  address[]: datatypes::XAD_Address(GT1.5[])
+  telecom[]: datatypes::XTN_ContactPoint(GT1.6[], "home")
+  birthDate: utilities::Extract_Date(GT1.8)
+  gender: utilities::Convert_TerminologyCode(datatypes::CWE_Code(GT1.9), "HL70001", "Gender")
+  var relationshipCC: datatypes::CWE_CodeableConcept(GT1.11)
+  relationship[].coding[0]: if relationshipCC then utilities::Convert_TerminologyCoding(relationshipCC.coding[0].code, "HL70063", "Relationship")
+  patient: PatientReference
+  resourceType: "RelatedPerson"
+}

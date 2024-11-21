@@ -1,0 +1,14 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 Range datatype based on V2 NR datatype
+//
+// Argument(s):
+//   NR datatype
+//
+// Output(s):
+//   Range Datatype : https://www.hl7.org/fhir/datatypes.html#Range
+//
+def NR_Range(NR) {
+  low.value: parseNum(NR.1)
+  high.value: parseNum(NR.2)
+}

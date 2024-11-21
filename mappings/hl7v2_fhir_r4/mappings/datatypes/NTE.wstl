@@ -1,0 +1,26 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 Annotation datatype based on V2 NTE segment
+//
+// Argument(s):
+//   NTE Segment
+//
+// Output(s):
+//   Annotation datatype : https://www.hl7.org/fhir/datatypes.html#Annotation
+//   Practitioner Resource : https://www.hl7.org/fhir/r4/practitioner.html
+//
+def NTE_Annotation(required NTE) {
+  if NTE.3 then {
+    //TODO () : Investigate v2 parser issue on NTE segment
+    if is(NTE.3, "Array") then {
+      text: NTE.3[0].1.1
+    } else {
+      text: NTE.3.1.1
+    }
+    // The resource must be output before building the author reference.
+    // Outputting the resource adds it to the bundle and assigns the id used in
+    // the reference. The resource must not be modified after it has been output.
+    authorReference: utilities::OutputResourceAndGetReference(XCN_Practitioner(NTE.5))
+    time: utilities::Convert_DateTime(NTE.6)
+  }
+}

@@ -1,0 +1,16 @@
+package segments
+
+// Description: Constructs a Dosage BackBoneElement based on V2 RXR segment
+//
+// Argument(s):
+//   RXR Segment
+//
+// Output(s):
+//   MedicationRequest.dosageInstruction Resource : http://hl7.org/fhir/R4/dosage.html#Dosage
+//
+def RXR_Dosage(RXR) {
+  route: datatypes::CWE_CodeableConcept(RXR.1)
+  site: datatypes::CWE_CodeableConcept(RXR.2)
+  method: datatypes::CWE_CodeableConcept(RXR.4)
+  additionalInstruction[]: datatypes::CWE_CodeableConcept(RXR.5)
+}

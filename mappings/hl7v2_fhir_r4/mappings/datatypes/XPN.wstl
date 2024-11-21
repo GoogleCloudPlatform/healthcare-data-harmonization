@@ -1,0 +1,40 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 HumanName datatype based on V2 XPN datatype
+//
+// Argument(s):
+//   XPN datatype
+//
+// Output(s):
+//   HumanName datatype : https://www.hl7.org/fhir/datatypes.html#HumanName
+//
+def XPN_HumanName(XPN) {
+  family: FN_Family(XPN.1)
+  given[]: XPN.2
+  given[]: XPN.3
+  suffix[]: XPN.4
+  prefix[]: XPN.5
+  suffix[]: XPN.6
+  use: utilities::Convert_TerminologyCode(XPN.7, "HL70200", "Name_Type")
+  if !XPN.12 and !XPN.13 then {
+    period: DR_Period(XPN.10)
+  }
+  period.start: utilities::Convert_DateTime(XPN.12)
+  period.end: utilities::Convert_DateTime(XPN.13)
+  suffix[]: XPN.14
+}
+
+// Description: Constructs a FHIR R4 Organization resource based on V2 XPN, XTN, XAD datatypes
+//
+// Argument(s):
+//   XPN datatype
+//   XTN datatype
+//   XAD datatype
+// Output(s):
+//   Organization Resource : https://www.hl7.org/fhir/organization.html
+//
+def XPN_XTN_XAD_OrganizationContact(XPN, XTN, XAD) {
+  name: XPN_HumanName(XPN[0])
+  telecom[]: XTN_ContactPoint(XTN[], "work")
+  address: XAD_Address(XAD[0])
+}

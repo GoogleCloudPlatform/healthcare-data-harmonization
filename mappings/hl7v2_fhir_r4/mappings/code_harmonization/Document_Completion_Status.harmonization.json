@@ -1,0 +1,95 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "AU",
+          "display": "Authenticated",
+          "target": [
+            {
+              "code": "preliminary",
+              "display": "Preliminary",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "DI",
+          "display": "Dictated",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "Unknown",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "DO",
+          "display": "Documented",
+          "target": [
+            {
+              "code": "final",
+              "display": "Final",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "IN",
+          "display": "Incomplete",
+          "target": [
+            {
+              "code": "partial",
+              "display": "Partial",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "IP",
+          "display": "In progress",
+          "target": [
+            {
+              "code": "partial",
+              "display": "Partial",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "LA",
+          "display": "Legally authenticated",
+          "target": [
+            {
+              "code": "final",
+              "display": "Final",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "PA",
+          "display": "Pre-authenticated",
+          "target": [
+            {
+              "code": "partial",
+              "display": "Partial",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70271",
+      "target": "http://hl7.org/fhir/ValueSet/diagnostic-report-status",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "unknown",
+        "display": "Unknown"
+      }
+    }
+  ],
+  "id": "Document_Completion_Status",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

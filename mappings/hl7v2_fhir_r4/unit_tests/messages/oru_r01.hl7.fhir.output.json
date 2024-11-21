@@ -1,0 +1,652 @@
+[
+  {
+    "active": true,
+    "address": [
+      {
+        "country": "44"
+      }
+    ],
+    "id": "bfea31969606f60d02f4136506cea370",
+    "identifier": [
+      {
+        "value": "RAL"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "active": true,
+    "id": "3405a1e82fd6b791e7142b6755b57e60",
+    "identifier": [
+      {
+        "value": "RAL"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "destination": [
+      {
+        "endpoint": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/R4/extension-data-absent-reason.html",
+              "valueCode": "unknown"
+            }
+          ]
+        },
+        "name": "STREAMS",
+        "receiver": {
+          "reference": "Organization/3405a1e82fd6b791e7142b6755b57e60"
+        }
+      }
+    ],
+    "eventCoding": {
+      "code": "R01",
+      "display": "ORU^R01^",
+      "system": "http://terminology.hl7.org/CodeSystem/v2-0003"
+    },
+    "id": "da2df27501920e594d4a348a33d0767c",
+    "meta": {
+      "tag": [
+        {
+          "code": "T",
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0103"
+        },
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0207"
+        }
+      ]
+    },
+    "resourceType": "MessageHeader",
+    "sender": {
+      "reference": "Organization/bfea31969606f60d02f4136506cea370"
+    },
+    "source": {
+      "endpoint": {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/R4/extension-data-absent-reason.html",
+            "valueCode": "unknown"
+          }
+        ]
+      },
+      "name": "CERNER"
+    }
+  },
+  {
+    "active": true,
+    "id": "8c1745f5bfc0112829e4f5972f928713",
+    "identifier": [
+      {
+        "value": "SIMULATOR MRN"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "active": true,
+    "id": "8c1745f5bfc0112829e4f5972f928713",
+    "identifier": [
+      {
+        "value": "SIMULATOR MRN"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "active": true,
+    "id": "c179038a76e4d76e774a7307ba03ff33",
+    "identifier": [
+      {
+        "value": "NHSNBR"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "_birthDate": {
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+          "valueDateTime": "1977-04-20T01:00:00+00:00"
+        }
+      ]
+    },
+    "active": true,
+    "address": [
+      {
+        "city": "Ilford",
+        "country": "GBR",
+        "line": [
+          "140 Heater Lane"
+        ],
+        "postalCode": "JN83 4OE"
+      }
+    ],
+    "birthDate": "1977-04-20",
+    "extension": [
+      {
+        "extension": [
+          {
+            "url": "text",
+            "valueString": "Asian or Asian British - Pakistani"
+          },
+          {
+            "url": "ombCategory",
+            "valueCoding": {
+              "code": "J",
+              "display": "Asian or Asian British - Pakistani"
+            }
+          }
+        ],
+        "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"
+      }
+    ],
+    "gender": "female",
+    "id": "7956c4769d737c7589c284306a0a78d5",
+    "identifier": [
+      {
+        "assigner": {
+          "reference": "Organization/8c1745f5bfc0112829e4f5972f928713"
+        },
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "MRN",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "1325463202"
+      },
+      {
+        "assigner": {
+          "reference": "Organization/8c1745f5bfc0112829e4f5972f928713"
+        },
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "MRN",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "1325463202"
+      },
+      {
+        "assigner": {
+          "reference": "Organization/c179038a76e4d76e774a7307ba03ff33"
+        },
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "NHSNMBR",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "3789692603"
+      }
+    ],
+    "multipleBirthBoolean": false,
+    "name": [
+      {
+        "family": "Bradley",
+        "given": [
+          "Angela",
+          "Bridget"
+        ],
+        "prefix": [
+          "Mrs"
+        ],
+        "use": "official"
+      }
+    ],
+    "resourceType": "Patient",
+    "telecom": [
+      {
+        "system": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+              "valueCode": "unknown"
+            }
+          ]
+        },
+        "use": "home",
+        "value": "020 2295 8931"
+      }
+    ]
+  },
+  {
+    "id": "0972e79bd4a7b989b3d534e377e21fc9",
+    "mode": "instance",
+    "name": "Simulated Hospital",
+    "physicalType": {
+      "coding": [
+        {
+          "code": "si",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "b7d75ea2bbdad8ecbe667b19f7c7c705",
+    "mode": "instance",
+    "name": "RFH",
+    "partOf": {
+      "reference": "Location/0972e79bd4a7b989b3d534e377e21fc9"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "bu",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "c558be1aa3ae17939ab6d0444aa886a6",
+    "mode": "instance",
+    "name": "ED",
+    "partOf": {
+      "reference": "Location/b7d75ea2bbdad8ecbe667b19f7c7c705"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "si",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "17eb83edb4627a1d917e7e7ca31ae7b8",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "ORGDR"
+            }
+          ]
+        },
+        "value": "C2842226"
+      }
+    ],
+    "name": [
+      {
+        "family": "Hinchley",
+        "given": [
+          "G"
+        ],
+        "prefix": [
+          "Dr"
+        ],
+        "use": "anonymous"
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "class": {
+      "code": "U",
+      "display": "Unknown",
+      "system": "http://terminology.hl7.org/CodeSystem/v2-0004",
+      "version": "v1"
+    },
+    "id": "363926fe40328025042eb9e34e5bd310",
+    "location": [
+      {
+        "location": {
+          "display": "Simulated Hospital, RFH, ED",
+          "reference": "Location/c558be1aa3ae17939ab6d0444aa886a6"
+        },
+        "status": "active"
+      }
+    ],
+    "participant": [
+      {
+        "individual": {
+          "reference": "Practitioner/17eb83edb4627a1d917e7e7ca31ae7b8"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "ATND",
+                "display": "attender",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "period": {
+      "start": "2018-04-11T20:38:05+00:00"
+    },
+    "resourceType": "Encounter",
+    "serviceType": {
+      "coding": [
+        {
+          "code": "180"
+        }
+      ]
+    },
+    "status": "unknown",
+    "subject": {
+      "reference": "Patient/7956c4769d737c7589c284306a0a78d5"
+    },
+    "type": [
+      {
+        "coding": [
+          {
+            "code": "28b"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "code": {
+      "coding": [
+        {
+          "code": "AP Pelvis",
+          "display": "AP Pelvis"
+        }
+      ]
+    },
+    "id": "b500c3407f94a976c54b9eb76528de30",
+    "identifier": [
+      {
+        "type": {
+          "coding": [
+            {
+              "code": "PLAC",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "1909829541"
+      },
+      {
+        "type": {
+          "coding": [
+            {
+              "code": "FILL",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "3496264291"
+      }
+    ],
+    "intent": "order",
+    "occurrenceDateTime": "2014-08-11T19:38:05+00:00",
+    "quantityQuantity": {
+      "value": 1
+    },
+    "resourceType": "ServiceRequest",
+    "status": "completed",
+    "subject": {
+      "reference": "Patient/7956c4769d737c7589c284306a0a78d5"
+    }
+  },
+  {
+    "category": [
+      {
+        "coding": [
+          {
+            "code": "laboratory",
+            "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+          }
+        ]
+      }
+    ],
+    "code": {
+      "coding": [
+        {
+          "code": "APELV",
+          "display": "APELV"
+        }
+      ]
+    },
+    "effectiveDateTime": "2014-08-11T19:38:05+00:00",
+    "id": "eed0df64a9225b036eb447090bb205b6",
+    "issued": "2009-08-07T06:05:04.321+00:00",
+    "note": [
+      {
+        "text": "Deposit occasion addition hydraulics ground"
+      }
+    ],
+    "resourceType": "Observation",
+    "status": "final",
+    "subject": {
+      "reference": "Patient/7956c4769d737c7589c284306a0a78d5"
+    },
+    "valueString": "No fracture or dislocation is present. The joint spaces are normal.  Soft tissue is normal."
+  },
+  {
+    "id": "8336d1e82e71ee931d80516d282a3056",
+    "identifier": [
+      {
+        "system": "unknown",
+        "value": "unknown"
+      }
+    ],
+    "name": [
+      {
+        "family": "Angela",
+        "given": [
+          "Bridget"
+        ],
+        "prefix": [
+          "Mrs"
+        ],
+        "suffix": [
+          "L"
+        ]
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "id": "a3ccb51e40e4c37826e2f6829874fffb",
+    "practitioner": {
+      "reference": "Practitioner/8336d1e82e71ee931d80516d282a3056"
+    },
+    "resourceType": "PractitionerRole"
+  },
+  {
+    "id": "7137a537907765c810184c99b871d32b",
+    "identifier": [
+      {
+        "system": "unknown",
+        "value": "unknown"
+      }
+    ],
+    "name": [
+      {
+        "family": "Angela1",
+        "given": [
+          "Bridget1"
+        ],
+        "prefix": [
+          "Mrs"
+        ],
+        "suffix": [
+          "L1"
+        ]
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "id": "bbd3ba48f6fb871596f01f267efc355f",
+    "practitioner": {
+      "reference": "Practitioner/7137a537907765c810184c99b871d32b"
+    },
+    "resourceType": "PractitionerRole"
+  },
+  {
+    "collection": {
+      "collectedDateTime": "2014-08-11T19:38:05+00:00"
+    },
+    "id": "f7bfc1f0ae629f980f18523e84cb778e",
+    "receivedTime": "2014-08-11T19:38:05+00:00",
+    "resourceType": "Specimen",
+    "subject": {
+      "reference": "Patient/7956c4769d737c7589c284306a0a78d5"
+    }
+  },
+  {
+    "basedOn": [
+      {
+        "reference": "ServiceRequest/b500c3407f94a976c54b9eb76528de30"
+      }
+    ],
+    "category": [
+      {
+        "coding": [
+          {
+            "code": "unknown"
+          }
+        ]
+      }
+    ],
+    "code": {
+      "coding": [
+        {
+          "code": "AP Pelvis",
+          "display": "AP Pelvis"
+        }
+      ]
+    },
+    "effectiveDateTime": "2014-08-11T19:38:05+00:00",
+    "encounter": {
+      "reference": "Encounter/363926fe40328025042eb9e34e5bd310"
+    },
+    "id": "66969009b1f1bcd010a3ff270488bea6",
+    "identifier": [
+      {
+        "type": {
+          "coding": [
+            {
+              "code": "PLAC",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "1909829541"
+      },
+      {
+        "type": {
+          "coding": [
+            {
+              "code": "FILL",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "3496264291"
+      }
+    ],
+    "issued": "2014-08-11T19:38:05.000+00:00",
+    "performer": [
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/event-performerFunction",
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "SPRF",
+                  "system": "http://hl7.org/fhir/R4/valueset-performer-function.html"
+                }
+              ]
+            }
+          }
+        ],
+        "reference": "PractitionerRole/a3ccb51e40e4c37826e2f6829874fffb"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/event-performerFunction",
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "TRANS",
+                  "system": "http://hl7.org/fhir/R4/valueset-performer-function.html"
+                }
+              ]
+            }
+          }
+        ],
+        "reference": "PractitionerRole/bbd3ba48f6fb871596f01f267efc355f"
+      }
+    ],
+    "resourceType": "DiagnosticReport",
+    "result": [
+      {
+        "reference": "Observation/eed0df64a9225b036eb447090bb205b6"
+      }
+    ],
+    "specimen": [
+      {
+        "reference": "Specimen/f7bfc1f0ae629f980f18523e84cb778e"
+      }
+    ],
+    "status": "final",
+    "subject": {
+      "reference": "Patient/7956c4769d737c7589c284306a0a78d5"
+    }
+  },
+  {
+    "active": true,
+    "id": "3405a1e82fd6b791e7142b6755b57e60",
+    "identifier": [
+      {
+        "value": "RAL"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "id": "ee3a622cd000fd7be8f3c3db299f68ad",
+    "identifier": [
+      {
+        "value": "CERNER"
+      }
+    ],
+    "patient": {
+      "reference": "Patient/7956c4769d737c7589c284306a0a78d5"
+    },
+    "resourceType": "Device",
+    "type": {
+      "coding": [
+        {
+          "code": "unknown"
+        }
+      ]
+    }
+  }
+]

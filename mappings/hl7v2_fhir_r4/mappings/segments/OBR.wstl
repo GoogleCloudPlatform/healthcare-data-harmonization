@@ -1,0 +1,122 @@
+package segments
+
+// Description: Constructs a FHIR R4 DiagnosticReport Resource based on OBR, ORC Segment and Patient Resource
+//
+// Argument(s):
+//   OBR V2 Segment
+//   ORC V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   DiagnosticReport: https://hl7.org/fhir/diagnosticreport.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Specimen : https://hl7.org/fhir/specimen.html
+//
+def OBR_ORC_DiagnosticReport(required OBR, ORC, PatientReference) {
+  identifier[]: datatypes::EI_Identifier(ORC.2, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  if !ORC.2 or ORC.2.1 != OBR.2.1 then {
+    identifier[]: datatypes::EI_Identifier(OBR.2, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  }
+  identifier[]: datatypes::EI_Identifier(ORC.3, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  if !ORC.3 or ORC.3.1 != OBR.3.1 then {
+    identifier[]: datatypes::EI_Identifier(OBR.3, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  }
+  identifier[]: datatypes::EI_Identifier(ORC.4, "PGN", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  if OBR.4 then {
+    code: datatypes::CWE_CodeableConcept(OBR.4);  //ConceptMap needed
+  } else {
+    code.coding[0].code: "1003-3"
+  }
+  if !OBR.7 then {
+    effectiveDateTime: utilities::Convert_DateTime(ORC.9)
+  } else {
+    if !OBR.8 then {
+      effectiveDateTime: utilities::Convert_DateTime(OBR.7)
+    } else {
+      effectivePeriod.start: utilities::Convert_DateTime(OBR.7)
+      effectivePeriod.end: utilities::Convert_DateTime(OBR.8)
+    }
+  }
+  extension[]: utilities::Build_Extension(datatypes::CWE_CodeableConcept(ORC.16), "CodeableConcept", "http://hl7.org/fhir/StructureDefinition/event-statusReason")
+  issued: utilities::Convert_Instant(OBR.22)
+  if OBR.24 then {
+    category[0].coding[0].code: OBR.24;    // OBR.24 and category uses codes from the same codeSystem (HL70074)
+    category[0].coding[0].system: "http://terminology.hl7.org/CodeSystem/v2-0074"
+  } else {
+    // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-diagnosticreport-note-definitions.html#DiagnosticReport.category
+    category[0].coding[0].code: "unknown"
+  }
+  if OBR.25 then {
+    status: utilities::Convert_TerminologyCode(OBR.25, "HL70123", "Report_Status")
+  } else {
+    status: "registered";    // place-holder for 1-1 cardinality
+  }
+  // The resource must be output before building the resultsInterpreter reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the resultsInterpreter
+  // reference. The resource must not be modified after it has been output.
+  resultsInterpreter[]: utilities::OutputResourceAndGetReference(datatypes::NDL_PractitionerRole(OBR.32))
+  performer[]: Build_DiagnosticReportPerformer(OBR.34[], "SPRF")
+  performer[]: Build_DiagnosticReportPerformer(OBR.35[], "TRANS")
+  // The resource must be output before building the specimen reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the specimen
+  // reference. The resource must not be modified after it has been output.
+  specimen[]: utilities::OutputResourceAndGetReference(OBR_Specimen(OBR, PatientReference))
+  subject: PatientReference
+  resourceType: "DiagnosticReport"
+}
+
+// Description: Constructs a FHIR R4 Specimen & Practitioner Resources based on OBR Segment
+//
+// Argument(s):
+//   OBR V2 Segment
+//   Patient Resource already constructed through segments::PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Specimen : https://hl7.org/fhir/specimen.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def OBR_Specimen (required OBR, PatientReference) {
+  if !OBR.8 then {
+    collection.collectedDateTime: utilities::Convert_DateTime(OBR.7)
+  } else {
+    collection.collectedPeriod.start: utilities::Convert_DateTime(OBR.7)
+    collection.collectedPeriod.end: utilities::Convert_DateTime(OBR.8)
+  }
+  collection.quantity: datatypes::CQ_Quantity(OBR.9)
+  // The resource must be output before building the collector reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in
+  // the reference. The resource must not be modified after it has been output.
+  var xcnPractitioner: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(OBR.10[0]))
+  collection.collector: xcnPractitioner
+  receivedTime: utilities::Convert_DateTime(OBR.14)
+  if is(OBR.13, "Array") then {
+    collection.fastingStatusCodeableConcept: datatypes::CWE_CodeableConcept(OBR.13[0])
+  } else {
+    collection.fastingStatusCodeableConcept.text: OBR.13
+  }
+  $this: datatypes::CM_Specimen(OBR.15)
+  subject: PatientReference
+  resourceType: "Specimen"
+}
+
+// Description: Constructs a DiagnosticReport.Performer with event-performerFunction extension
+//
+// Argument(s):
+//   OBR segment
+//   code datatype : https://www.hl7.org/fhir/datatypes.html#code
+//
+// Output(s):
+//   DiagnosticReport.Performer: https://www.hl7.org/fhir/diagnosticreport-definitions.html#DiagnosticReport.performer
+//
+def Build_DiagnosticReportPerformer(required OBR, code) {
+  // The resource must be output before building the performer reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the performer
+  // reference. The resource must not be modified after it has been output.
+  $this: utilities::OutputResourceAndGetReference(datatypes::NDL_PractitionerRole(OBR))
+  if code then {
+    var performerFunction.coding[0].code: code
+    var performerFunction.coding[0].system: "http://hl7.org/fhir/R4/valueset-performer-function.html"
+    extension[]: utilities::Build_Extension(performerFunction, "CodeableConcept", "http://hl7.org/fhir/StructureDefinition/event-performerFunction")
+  }
+}

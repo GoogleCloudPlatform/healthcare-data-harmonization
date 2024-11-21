@@ -1,0 +1,191 @@
+{
+  "RAS_O17": {
+    "MSH": {
+      "0": "MSH",
+      "1": "|",
+      "10": "154",
+      "11": {
+        "1": "P"
+      },
+      "12": {
+        "1": "2.6"
+      },
+      "13": null,
+      "2": "^~\\\\\\u0026",
+      "3": {
+        "1": "EXTERNAL"
+      },
+      "4": {
+        "1": "SITE"
+      },
+      "5": {
+        "1": "EPIC"
+      },
+      "6": {
+        "1": "SITE"
+      },
+      "7": "200907181500",
+      "8": null,
+      "9": {
+        "1": "RAS",
+        "2": "O17"
+      }
+    },
+    "NTE": null,
+    "ORDER": [
+      {
+        "ADMINISTRATION": [
+          {
+            "OBSERVATION": null,
+            "PRT": null,
+            "RXA": [
+              {
+                "0": "RXA",
+                "1": null,
+                "10": null,
+                "2": null,
+                "3": null,
+                "4": null,
+                "5": {
+                  "1": "ACE325",
+                  "2": "Tylenol 325 Tab Oral",
+                  "3": "EXTMED"
+                },
+                "6": null,
+                "7": null,
+                "8": null,
+                "9": [
+                  {
+                    "1": null,
+                    "2": "650mg oral by White, Betty at 7/17/09 14:22\\\\.br\\\\650mg oral by Green, James at 7/18/09 0230"
+                  }
+                ]
+              }
+            ],
+            "RXR": null
+          }
+        ],
+        "CTI": null,
+        "ENCODING": null,
+        "ORC": {
+          "0": "ORC",
+          "1": "RE",
+          "10": null,
+          "11": null,
+          "12": [
+            {
+              "1": "033171",
+              "10": null,
+              "11": null,
+              "12": null,
+              "13": "SER",
+              "2": {
+                "1": "SEEGER"
+              },
+              "3": "MARTY",
+              "4": null,
+              "5": null,
+              "6": null,
+              "7": null,
+              "8": null,
+              "9": {
+                "1": "EPIC"
+              }
+            }
+          ],
+          "2": null,
+          "3": {
+            "1": "57432"
+          },
+          "4": null,
+          "5": null,
+          "6": null,
+          "7": [
+            {
+              "1": null,
+              "2": null,
+              "3": null,
+              "4": "200907171400",
+              "5": "200907181430"
+            }
+          ],
+          "8": null,
+          "9": null
+        },
+        "ORDER_DETAIL": null,
+        "PRT": null,
+        "TIMING": null
+      }
+    ],
+    "PATIENT": {
+      "ADDITIONAL_DEMOGRAPHICS": null,
+      "AL1": null,
+      "ARV": null,
+      "NTE": null,
+      "PATIENT_VISIT": {
+        "ARV": null,
+        "PRT": null,
+        "PV1": {
+          "0": "PV1",
+          "1": null,
+          "10": null,
+          "11": null,
+          "12": null,
+          "13": null,
+          "14": null,
+          "15": null,
+          "16": null,
+          "17": null,
+          "18": null,
+          "19": {
+            "1": "11234581321"
+          },
+          "2": null,
+          "20": null,
+          "3": null,
+          "4": null,
+          "5": null,
+          "6": null,
+          "7": null,
+          "8": null,
+          "9": null
+        },
+        "PV2": null
+      },
+      "PID": {
+        "0": "PID",
+        "1": null,
+        "2": null,
+        "3": [
+          {
+            "1": "12345",
+            "2": null,
+            "3": null,
+            "4": {
+              "1": "EPIC"
+            },
+            "5": "MRN"
+          }
+        ],
+        "4": null,
+        "5": [
+          {
+            "1": {
+              "1": "DOE"
+            },
+            "2": "JOHN",
+            "3": "J"
+          }
+        ],
+        "6": null,
+        "7": "19780322",
+        "8": {
+          "1": "M"
+        },
+        "9": null
+      }
+    },
+    "SFT": null,
+    "UAC": null
+  }
+}

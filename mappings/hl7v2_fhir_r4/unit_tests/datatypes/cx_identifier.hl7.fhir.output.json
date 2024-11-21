@@ -1,0 +1,32 @@
+[
+  {
+    "active": true,
+    "id": "b325fb1586de5b3653d0bafbd38d9de3",
+    "identifier": [
+      {
+        "value": "ADT1"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "assigner": {
+      "reference": "Organization/b325fb1586de5b3653d0bafbd38d9de3"
+    },
+    "period": {
+      "end": "1988-07-01T09:00:00+00:00",
+      "start": "1978-07-01T09:00:00+00:00"
+    },
+    "system": "unknown",
+    "type": {
+      "coding": [
+        {
+          "code": "MR",
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+        }
+      ]
+    },
+    "value": "PATID1234"
+  }
+]

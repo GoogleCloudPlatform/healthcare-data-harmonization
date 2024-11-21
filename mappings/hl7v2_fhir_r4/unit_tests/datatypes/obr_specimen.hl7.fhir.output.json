@@ -1,0 +1,64 @@
+[
+  {
+    "id": "ffffffff-8648-9c4a-0000-0000497b11be",
+    "identifier": [
+      {
+        "system": "unknown",
+        "value": "MDP04"
+      }
+    ],
+    "name": [
+      {
+        "family": "unknown"
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "collection": {
+      "bodySite": {
+        "coding": [
+          {
+            "code": "LA",
+            "display": "Left Arm",
+            "system": "HL70163"
+          }
+        ]
+      },
+      "collectedPeriod": {
+        "end": "2020-05-08T14:06:44+00:00",
+        "start": "2020-05-08T13:06:44+00:00"
+      },
+      "collector": {
+        "reference": "Practitioner/ffffffff-8648-9c4a-0000-0000497b11be"
+      },
+      "fastingStatusCodeableConcept": {
+        "text": "clinical information"
+      },
+      "quantity": {
+        "value": 10
+      }
+    },
+    "container": [
+      {
+        "additiveCodeableConcept": {
+          "text": "ACET"
+        }
+      }
+    ],
+    "note": [
+      {
+        "text": "Swab"
+      }
+    ],
+    "receivedTime": "2020-05-08T13:06:44+00:00",
+    "resourceType": "Specimen",
+    "type": {
+      "coding": [
+        {
+          "code": "SP03"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,86 @@
+[
+  {
+    "id": "210ba1bb79c40fcc9f1c1a32e062f172",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "NPI"
+            }
+          ]
+        },
+        "value": "99234"
+      }
+    ],
+    "name": [
+      {
+        "family": "SLEEPY",
+        "given": [
+          "SAMANTHA",
+          "ELAINE"
+        ],
+        "period": {
+          "end": "1999-12-31T00:00:00+00:00",
+          "start": "1990-01-01T00:00:00+00:00"
+        },
+        "prefix": [
+          "DR"
+        ],
+        "suffix": [
+          "II",
+          "MD",
+          "MD"
+        ],
+        "use": "official"
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "category": {
+      "coding": [
+        {
+          "code": "SCT",
+          "display": "SCT",
+          "system": "HL7"
+        }
+      ]
+    },
+    "code": {
+      "coding": [
+        {
+          "code": "41976001",
+          "display": "Cardiac catheterization",
+          "system": "SCT"
+        }
+      ],
+      "text": "Cardiac catheterization"
+    },
+    "performedPeriod": {
+      "end": "1988-08-18T09:01:00Z",
+      "start": "1988-08-18T07:01:00+00:00"
+    },
+    "performer": [
+      {
+        "actor": {
+          "reference": "Practitioner/210ba1bb79c40fcc9f1c1a32e062f172"
+        },
+        "function": {
+          "coding": [
+            {
+              "code": "88189002",
+              "system": "http://snomed.info/sct"
+            }
+          ]
+        }
+      }
+    ],
+    "resourceType": "Procedure",
+    "status": "unknown",
+    "subject": {
+      "reference": "Patient/123"
+    }
+  }
+]

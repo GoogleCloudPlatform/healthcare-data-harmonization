@@ -1,0 +1,56 @@
+[
+  {
+    "collection": {
+      "collectedDateTime": "2012-06-28T07:01:00+00:00"
+    },
+    "id": "398b6dfe5b0047df4cfdf15262d8d400",
+    "resourceType": "Specimen",
+    "subject": {
+      "reference": "Patient/123"
+    }
+  },
+  {
+    "category": [
+      {
+        "coding": [
+          {
+            "code": "unknown"
+          }
+        ]
+      }
+    ],
+    "code": {
+      "coding": [
+        {
+          "code": "1000",
+          "display": "Hepatitis A  B  C Panel",
+          "system": "99USL"
+        }
+      ]
+    },
+    "effectiveDateTime": "2012-06-28T07:01:00+00:00",
+    "identifier": [
+      {
+        "type": {
+          "coding": [
+            {
+              "code": "PLAC",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "ORD448811"
+      }
+    ],
+    "resourceType": "DiagnosticReport",
+    "specimen": [
+      {
+        "reference": "Specimen/398b6dfe5b0047df4cfdf15262d8d400"
+      }
+    ],
+    "status": "registered",
+    "subject": {
+      "reference": "Patient/123"
+    }
+  }
+]

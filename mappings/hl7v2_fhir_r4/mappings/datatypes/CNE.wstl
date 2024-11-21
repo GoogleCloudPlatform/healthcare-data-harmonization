@@ -1,0 +1,25 @@
+package datatypes
+
+// Description: Constructs CodeableConcept datatype
+//
+// Argument(s):
+//   CNE datatype
+//
+// Output(s):
+//   CodeableConcept datatype : https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def CNE_CodeableConcept(required CNE) {
+  coding[0].code: CNE.1
+  coding[0].display: CNE.2
+  coding[0].system: utilities::Build_System(CNE.3)
+  coding[1].code: CNE.4
+  coding[1].display: CNE.5
+  coding[1].system: utilities::Build_System(CNE.6)
+  coding[0].version: CNE.7
+  coding[1].version: CNE.8
+  text: CNE.9
+  coding[2].code: CNE.10
+  coding[2].display: CNE.11
+  coding[2].system: utilities::Build_System(CNE.12)
+  coding[2].version: CNE.13
+}

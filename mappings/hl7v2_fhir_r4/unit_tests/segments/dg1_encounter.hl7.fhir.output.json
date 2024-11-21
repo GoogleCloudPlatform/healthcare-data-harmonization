@@ -1,0 +1,14 @@
+[
+  {
+    "condition": {
+      "reference": "Condition/456"
+    },
+    "use": {
+      "coding": [
+        {
+          "code": "Working"
+        }
+      ]
+    }
+  }
+]

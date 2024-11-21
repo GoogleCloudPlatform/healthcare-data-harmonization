@@ -1,0 +1,38 @@
+package segments
+
+// Description: Constructs a FHIR R4 Specimen Resource based on V2 SPM Segment and Patient Resource
+//
+// Argument(s):
+//   SPM V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Specimen: https://www.hl7.org/fhir/specimen.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//
+def SPM_Specimen(required SPM, PatientReference) {
+  identifier[]: datatypes::EI_Identifier(SPM.2.1, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: datatypes::EI_Identifier(SPM.2.2, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  type: datatypes::CWE_CodeableConcept(SPM.4)
+  container[].additiveCodeableConcept: datatypes::CWE_CodeableConcept(SPM.6[])[]
+  collection.method: datatypes::CWE_CodeableConcept(SPM.7)
+  collection.bodySite: datatypes::CWE_CodeableConcept(SPM.8)
+  collection.quantity: datatypes::CQ_Quantity(SPM.12)
+  note[].text: SPM.14[]
+  if SPM.17.2 then {
+    collection.collectedPeriod.start: utilities::Convert_DateTime(SPM.17.1)
+    collection.collectedPeriod.end: utilities::Convert_DateTime(SPM.17.2)
+  } else {
+    collection.collectedDateTime: utilities::Convert_DateTime(SPM.17.1)
+  }
+  receivedTime: utilities::Convert_DateTime(SPM.18)
+  status: SPM.20
+  condition[]: datatypes::CWE_CodeableConcept(SPM.24[])
+  container[].type: datatypes::CWE_CodeableConcept(SPM.27)
+  accessionIdentifier: datatypes::CX_Identifier(SPM.30[0])
+  identifier[]: datatypes::CX_Identifier(SPM.31[])
+  var SPM_32: if is(SPM.32, "Array") then SPM.32[0] else SPM.32
+  identifier[]: datatypes::EI_Identifier(SPM_32, "SHIP", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  subject: PatientReference
+  resourceType: "Specimen"
+}

@@ -1,0 +1,29 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 Address datatype based on XAD datatype
+//
+// Argument(s):
+//   XAD datatype
+//
+// Output(s):
+//   Address datatype : https://www.hl7.org/fhir/datatypes.html#Address
+//
+def XAD_Address(XAD) {
+  $this: SAD_AddressLine(XAD.1)
+  line[]: XAD.2
+  city: XAD.3
+  state: XAD.4
+  postalCode: XAD.5
+  country: XAD.6
+  if XAD.7 == "M" or XAD.7 == "SH" then {
+    type: utilities::Convert_TerminologyCode(XAD.7, "HL70190", "Address_Type")
+  }
+  if XAD.7 == "BA" or XAD.7 == "BI" or XAD.7 == "C" or XAD.7 == "B" or XAD.7 == "H" or XAD.7 == "O" then {
+    use: utilities::Convert_TerminologyCode(XAD.7, "HL70190", "Address_Use")
+  }
+  district: CWE_String(XAD.9)
+  period: DR_Period(XAD.12)
+  period.start: utilities::Convert_DateTime(XAD.13)
+  period.end: utilities::Convert_DateTime(XAD.14)
+  line[]: XAD.19
+}

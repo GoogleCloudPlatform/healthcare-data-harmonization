@@ -1,0 +1,59 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 Condition resource based on V2 EI datatype and Patient resource
+//
+// Argument(s):
+//   EI datatype
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Condition Resource : https://www.hl7.org/fhir/condition.html
+//   Patient Resource : https://www.hl7.org/fhir/patient.html
+//
+def EI_Condition (required EI, PatientReference) {
+  identifier[0].value: EI.1
+  var Identifier[0].value: EI.2
+  var Identifier[1].value: EI.3
+  var Identifier[1].type: EI.4
+  // The resource must be output before building the assigner reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in
+  // the reference. The resource must not be modified after it has been output.
+  identifier[0].assigner: utilities::OutputResourceAndGetReference(Build_Organization(Identifier))
+  subject: PatientReference
+  resourceType: "Condition"
+}
+
+// Description: Constructs a FHIR R4 Identifier datatype based on V2 EI datatype
+//
+// Argument(s):
+//   EI datatype
+//   typeCode: a code string to be mapped with Identifier.type code
+//   typeSystem : a system string to be mapped with Identifier.type system
+//
+// Output(s):
+//   Identifier datatype : https://www.hl7.org/fhir/datatypes.html#Identifier
+//
+def EI_Identifier(required EI, typeCode, typeSystem) {
+  value: EI.1
+  type.coding[0].code: if typeCode != "" then typeCode
+  type.coding[0].system: utilities::Build_System(typeSystem)
+}
+
+// Description: Constructs a FHIR R4 Device resource based on V2 EI datatype and Patient resource
+//
+// Argument(s):
+//   HD datatype
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Device Resource : https://www.hl7.org/fhir/device.html
+//   Patient Resource : https://www.hl7.org/fhir/patient.html
+//
+def EI_Device (required EI, required PatientReference) {
+  $this: EI_Identifier(EI, "", "")
+  // Fixed-value to ensure https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-implantable-device-definitions.html#Device.type
+  type.coding[0].code: "unknown"
+  // To ensure https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-implantable-device-definitions.html#Device.patient
+  patient: PatientReference
+  resourceType: "Device"
+}

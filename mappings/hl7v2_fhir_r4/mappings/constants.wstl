@@ -1,0 +1,14 @@
+package constants
+
+// Description: Returns SNOMED code for Anesthesiologist
+//
+// Output(s):
+//   Anesthesiologist Code : http://snomed.info/sct
+//
+def SnomedCode_Anesthesiologist() "88189002"
+
+// Description: Returns SNOMED code for Surgeon
+//
+// Output(s):
+//   Surgeon Code : http://snomed.info/sct
+def SnomedCode_Surgeon() "304292004"

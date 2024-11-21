@@ -1,0 +1,90 @@
+package segments
+
+// Description: Constructs a FHIR R4 MessageHeader Resource and its related resources based on V2 MSH Segment
+//
+// Argument(s):
+//   MSH V2 Segment
+//
+// Output(s):
+//   MessageHeader: https://www.hl7.org/fhir/messageheader.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//
+def MSH_MessageHeader (required MSH) {
+  if !MSH.24 and MSH.3 then {
+    source: datatypes::HD_MessageHeaderEndpoint(MSH.3)
+  } else if MSH.24 then {
+    source: datatypes::HD_MessageHeaderEndpoint(MSH.24)
+  } else {
+    source.endpoint.extension[]: utilities::Build_Extension("unknown", "Code", "http://hl7.org/fhir/StructureDefinition/data-absent-reason")
+  }
+  // The resource must be output before building the sender reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the sender
+  // reference. The resource must not be modified after it has been output.
+  sender: utilities::OutputResourceAndGetReference(datatypes::HD_CC_Organization(MSH.4, MSH.17))
+  // MSH.6 maximum cardinality changed from 1 to * in v2.9. Following condition helps to parse MSH.6
+  // irrespective of whether it is an object as in previous versions or an array as from v2.9.
+  var MSH_6: if is(MSH.6, "Container") then arrayOf(MSH.6) else MSH.6;  // MSH.6 max cardinality changed to *
+  if !MSH.25 and MSH.5 then {
+    destination[]: datatypes::HD_MessageHeaderDestination(MSH.5, MSH_6[], MSH.23)
+  } else if MSH.25 then {
+    destination[]: datatypes::HD_MessageHeaderDestination(MSH.25, MSH_6[], MSH.23)
+  } else {
+    destination[].endpoint.extension[]: utilities::Build_Extension("unknown", "Code", "http://hl7.org/fhir/StructureDefinition/data-absent-reason")
+  }
+  meta.security[0].code: MSH.8
+  eventCoding.code: MSH.9.2
+  eventCoding.display: "{MSH.9.1}^{MSH.9.2}^{MSH.9.3}"
+  eventCoding.system: "http://terminology.hl7.org/CodeSystem/v2-0003"
+  meta.tag[0].code: MSH.11.1
+  meta.tag[0].system: "http://terminology.hl7.org/CodeSystem/v2-0103"
+  meta.tag[1].code: MSH.11.2
+  meta.tag[1].system: "http://terminology.hl7.org/CodeSystem/v2-0207"
+  language: datatypes::CWE_Code(MSH.19)
+  // The resource must be output before building the responsible reference. Outputting the
+  // resource adds it to the bundle and assigns the id used in the responsible
+  // reference. The resource must not be modified after it has been output.
+  responsible: utilities::OutputResourceAndGetReference(datatypes::XON_Organization(MSH.22))
+  resourceType: "MessageHeader"
+}
+
+// Description: Constructs a Provenance Resource based on MSH Segment and Patient Resource
+//
+// Argument(s):
+//   MSH Segment
+//
+// Output(s):
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   Device: https://www.hl7.org/fhir/device.html
+//
+def MSH_Provenance(required MSH, PatientReference) {
+  // Provenance.agent is required https://www.hl7.org/fhir/provenance-definitions.html#Provenance.agent
+  if MSH.4 then {
+    // The resource must be output before building the agent. Outputting the
+    // resource adds it to the bundle and assigns the id used in the agent
+    // reference. The resource must not be modified after it has been output.
+    var author: utilities::OutputResourceAndGetReference(datatypes::HD_Organization(MSH.4))
+    agent[]: datatypes::Build_Agent("author", "http://terminology.hl7.org/CodeSystem/provenance-participant-type", author)
+    // The resource must be output before building the entity. Outputting the
+    // resource adds it to the bundle and assigns the id used in the agent
+    // reference. The resource must not be modified after it has been output.
+    entity[0].what: utilities::OutputResourceAndGetReference(datatypes::HD_Device(MSH.3, PatientReference))
+    entity[0].role: if MSH.3 then "source"
+    recorded: utilities::Convert_Instant(MSH.7)
+    activity.coding[0].code: "message - {MSH.9.1}^{MSH.9.2}^{MSH.9.3}"
+    resourceType: "Provenance"
+  }
+}
+
+// Description: Constructs a Bundle Resource
+//
+// Argument(s):
+//   MSH-7 datatype
+//   MSH-10 datatype
+//
+// Output(s):
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//
+def MSH_Bundle (MSH_7, MSH_10) {
+  timestamp: utilities::Convert_Instant(MSH_7)
+  identifier.value: MSH_10
+}

@@ -1,0 +1,13 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 Family datatype based on FN datatype
+//
+// Argument(s):
+//   FN datatype
+//
+// Output(s):
+//   Family datatype : https://www.hl7.org/fhir/datatypes.html#HumanName
+//
+def FN_Family(FN) {
+  $this: FN.1
+}

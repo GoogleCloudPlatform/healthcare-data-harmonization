@@ -1,0 +1,40 @@
+[
+  {
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "NPI"
+            }
+          ]
+        },
+        "value": "998874"
+      }
+    ],
+    "name": [
+      {
+        "family": "PARSONS",
+        "given": [
+          "PATRICIA",
+          "COLLEEN"
+        ],
+        "period": {
+          "end": "1999-12-31T00:00:00+00:00",
+          "start": "1990-01-01T00:00:00+00:00"
+        },
+        "prefix": [
+          "DR"
+        ],
+        "suffix": [
+          "II",
+          "MD",
+          "MD"
+        ],
+        "use": "official"
+      }
+    ],
+    "resourceType": "Practitioner"
+  }
+]

@@ -1,0 +1,981 @@
+[
+  {
+    "active": true,
+    "id": "21d4f0ff0f61cb105e2954e7a5a44fc7",
+    "identifier": [
+      {
+        "value": "GOOD HEALTH HOSPITAL"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "eventCoding": {
+      "code": "A05",
+      "display": "ADT^A05^ADT_A05",
+      "system": "http://terminology.hl7.org/CodeSystem/v2-0003"
+    },
+    "id": "c350624e90164521186529a8c1ab5a03",
+    "meta": {
+      "tag": [
+        {
+          "code": "P",
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0103"
+        },
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0207"
+        }
+      ]
+    },
+    "resourceType": "MessageHeader",
+    "sender": {
+      "reference": "Organization/21d4f0ff0f61cb105e2954e7a5a44fc7"
+    },
+    "source": {
+      "endpoint": {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/R4/extension-data-absent-reason.html",
+            "valueCode": "unknown"
+          }
+        ]
+      },
+      "name": "REGADT"
+    }
+  },
+  {
+    "active": true,
+    "id": "21d4f0ff0f61cb105e2954e7a5a44fc7",
+    "identifier": [
+      {
+        "value": "GOOD HEALTH HOSPITAL"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "active": true,
+    "id": "bf5f7213aab11a6a041086f4d4ef0433",
+    "identifier": [
+      {
+        "value": "USSSA"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "active": true,
+    "id": "de0759c29cc74de25935c064dc81a0b1",
+    "name": "WORK IS FUN, INC.",
+    "resourceType": "Organization"
+  },
+  {
+    "active": true,
+    "address": [
+      {
+        "city": "ISHPEMING",
+        "line": [
+          "2222 HOME STREET"
+        ],
+        "postalCode": "49849",
+        "state": "MI"
+      }
+    ],
+    "birthDate": "1956-01-29",
+    "contact": [
+      {
+        "address": {
+          "city": "ISHPEMING",
+          "line": [
+            "6666 HOME STREET "
+          ],
+          "postalCode": "49849",
+          "state": "MI"
+        },
+        "name": {
+          "family": "NUCLEAR",
+          "given": [
+            "NELDA",
+            "W"
+          ]
+        },
+        "relationship": [
+          {
+            "coding": [
+              {
+                "code": "U",
+                "display": "Unknown",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+                "version": "v1"
+              }
+            ]
+          }
+        ],
+        "telecom": [
+          {
+            "system": {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+                  "valueCode": "unknown"
+                }
+              ]
+            },
+            "use": "home",
+            "value": "555-555-5001"
+          },
+          {
+            "system": {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+                  "valueCode": "unknown"
+                }
+              ]
+            },
+            "use": "work",
+            "value": "555-555-5001"
+          }
+        ]
+      },
+      {
+        "address": {
+          "city": "ISHPEMING",
+          "line": [
+            "4444 HOME STREET "
+          ],
+          "postalCode": "49849",
+          "state": "MI"
+        },
+        "name": {
+          "family": "MUM",
+          "given": [
+            "MARTHA",
+            "M"
+          ]
+        },
+        "relationship": [
+          {
+            "coding": [
+              {
+                "code": "U",
+                "display": "Unknown",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+                "version": "v1"
+              }
+            ]
+          }
+        ],
+        "telecom": [
+          {
+            "system": {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+                  "valueCode": "unknown"
+                }
+              ]
+            },
+            "use": "home",
+            "value": "555-555-2006"
+          },
+          {
+            "system": {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+                  "valueCode": "unknown"
+                }
+              ]
+            },
+            "use": "work",
+            "value": "555-555-2006"
+          }
+        ]
+      },
+      {
+        "address": {
+          "city": "ISHPEMING",
+          "line": [
+            "6666 WORKER LOOP"
+          ],
+          "postalCode": "49849",
+          "state": "MI"
+        },
+        "organization": {
+          "reference": "Organization/de0759c29cc74de25935c064dc81a0b1"
+        },
+        "period": {
+          "start": "1994-06-05T00:00:00+00:00"
+        },
+        "relationship": [
+          {
+            "coding": [
+              {
+                "code": "U",
+                "display": "Unknown",
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+                "version": "v1"
+              }
+            ]
+          }
+        ],
+        "telecom": [
+          {
+            "system": {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+                  "valueCode": "unknown"
+                }
+              ]
+            },
+            "use": "home",
+            "value": "555-555-3003"
+          }
+        ]
+      }
+    ],
+    "gender": "male",
+    "id": "bf2d3cabe6c1f4b52e1fcf859964b0b9",
+    "identifier": [
+      {
+        "assigner": {
+          "reference": "Organization/21d4f0ff0f61cb105e2954e7a5a44fc7"
+        },
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "MR",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "PATID1234"
+      },
+      {
+        "assigner": {
+          "reference": "Organization/bf5f7213aab11a6a041086f4d4ef0433"
+        },
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "SS",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "123456789"
+      },
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "MR",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "253763"
+      }
+    ],
+    "maritalStatus": {
+      "coding": [
+        {
+          "code": "S",
+          "display": "Never Married",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
+          "version": "v1"
+        }
+      ]
+    },
+    "multipleBirthBoolean": false,
+    "name": [
+      {
+        "family": "EVERYMAN",
+        "given": [
+          "ADAM",
+          "A"
+        ]
+      }
+    ],
+    "resourceType": "Patient",
+    "telecom": [
+      {
+        "system": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+              "valueCode": "unknown"
+            }
+          ]
+        },
+        "use": "home",
+        "value": "(555)555-2004"
+      },
+      {
+        "system": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+              "valueCode": "unknown"
+            }
+          ]
+        },
+        "use": "work",
+        "value": "(555)555-2004"
+      }
+    ]
+  },
+  {
+    "active": true,
+    "id": "21d4f0ff0f61cb105e2954e7a5a44fc7",
+    "identifier": [
+      {
+        "value": "GOOD HEALTH HOSPITAL"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "id": "b7a5c2c1c997d8c912973c134d0c4f3b",
+    "identifier": [
+      {
+        "value": "REGADT"
+      }
+    ],
+    "patient": {
+      "reference": "Patient/bf2d3cabe6c1f4b52e1fcf859964b0b9"
+    },
+    "resourceType": "Device",
+    "type": {
+      "coding": [
+        {
+          "code": "unknown"
+        }
+      ]
+    }
+  },
+  {
+    "address": [
+      {
+        "city": "ISHPEMING",
+        "line": [
+          "6666 HOME STREET "
+        ],
+        "postalCode": "49849",
+        "state": "MI"
+      }
+    ],
+    "id": "8343ac6cdf70da54d0508a7b3040c3a2",
+    "name": [
+      {
+        "family": "NUCLEAR",
+        "given": [
+          "NELDA",
+          "W"
+        ]
+      }
+    ],
+    "patient": {
+      "reference": "Patient/bf2d3cabe6c1f4b52e1fcf859964b0b9"
+    },
+    "relationship": [
+      {
+        "coding": [
+          {
+            "code": "SPS",
+            "display": "spouse",
+            "system": "http://terminology.hl7.org/CodeSystem/v3-RoleCode",
+            "version": "v1"
+          },
+          {
+            "code": "U",
+            "display": "Unknown",
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+            "version": "v1"
+          }
+        ]
+      },
+      {
+        "coding": [
+          {
+            "code": "U",
+            "display": "Unknown",
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+            "version": "v1"
+          }
+        ]
+      }
+    ],
+    "resourceType": "RelatedPerson",
+    "telecom": [
+      {
+        "system": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+              "valueCode": "unknown"
+            }
+          ]
+        },
+        "use": "home",
+        "value": "555-555-5001"
+      },
+      {
+        "system": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+              "valueCode": "unknown"
+            }
+          ]
+        },
+        "use": "work",
+        "value": "555-555-5001"
+      }
+    ]
+  },
+  {
+    "address": [
+      {
+        "city": "ISHPEMING",
+        "line": [
+          "4444 HOME STREET "
+        ],
+        "postalCode": "49849",
+        "state": "MI"
+      }
+    ],
+    "id": "c65fc27c196ace1c0d7e7741463a2dce",
+    "name": [
+      {
+        "family": "MUM",
+        "given": [
+          "MARTHA",
+          "M"
+        ]
+      }
+    ],
+    "patient": {
+      "reference": "Patient/bf2d3cabe6c1f4b52e1fcf859964b0b9"
+    },
+    "relationship": [
+      {
+        "coding": [
+          {
+            "code": "U",
+            "display": "Unknown",
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+            "version": "v1"
+          }
+        ]
+      },
+      {
+        "coding": [
+          {
+            "code": "U",
+            "display": "Unknown",
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+            "version": "v1"
+          }
+        ]
+      }
+    ],
+    "resourceType": "RelatedPerson",
+    "telecom": [
+      {
+        "system": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+              "valueCode": "unknown"
+            }
+          ]
+        },
+        "use": "home",
+        "value": "555-555-2006"
+      },
+      {
+        "system": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+              "valueCode": "unknown"
+            }
+          ]
+        },
+        "use": "work",
+        "value": "555-555-2006"
+      }
+    ]
+  },
+  {
+    "id": "725060fb2370f7cb765eb67205b4f003",
+    "patient": {
+      "reference": "Patient/bf2d3cabe6c1f4b52e1fcf859964b0b9"
+    },
+    "resourceType": "RelatedPerson"
+  },
+  {
+    "address": [
+      {
+        "city": "ISHPEMING",
+        "line": [
+          "6666 WORKER LOOP"
+        ],
+        "postalCode": "49849",
+        "state": "MI"
+      }
+    ],
+    "id": "78c4738f21dc2c2bcd879966ea7acc46",
+    "patient": {
+      "reference": "Patient/bf2d3cabe6c1f4b52e1fcf859964b0b9"
+    },
+    "period": {
+      "start": "1994-06-05T00:00:00+00:00"
+    },
+    "relationship": [
+      {
+        "coding": [
+          {
+            "code": "U",
+            "display": "Unknown",
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+            "version": "v1"
+          }
+        ]
+      }
+    ],
+    "resourceType": "RelatedPerson",
+    "telecom": [
+      {
+        "system": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+              "valueCode": "unknown"
+            }
+          ]
+        },
+        "use": "home",
+        "value": "555-555-3003"
+      }
+    ]
+  },
+  {
+    "category": [
+      {
+        "coding": [
+          {
+            "code": "unknown"
+          }
+        ]
+      }
+    ],
+    "code": {
+      "coding": [
+        {
+          "code": "U"
+        }
+      ],
+      "text": "BIOPSY"
+    },
+    "id": "24d6094155ec731bee1cfa378b42ca45",
+    "resourceType": "Condition",
+    "subject": {
+      "reference": "Patient/bf2d3cabe6c1f4b52e1fcf859964b0b9"
+    },
+    "verificationStatus": {
+      "coding": [
+        {
+          "code": "entered-in-error",
+          "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status"
+        }
+      ]
+    }
+  },
+  {
+    "id": "9f9e263bdab975b179a1ff9935dc2547",
+    "identifier": [
+      {
+        "system": "unknown",
+        "value": "0148"
+      }
+    ],
+    "name": [
+      {
+        "family": "ATTEND",
+        "given": [
+          "AARON",
+          "A"
+        ]
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "id": "05e8899caab74862cc857e50a66e698c",
+    "identifier": [
+      {
+        "system": "unknown",
+        "value": "0148"
+      }
+    ],
+    "name": [
+      {
+        "family": "SENDER",
+        "given": [
+          "SAM"
+        ]
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "id": "9f9e263bdab975b179a1ff9935dc2547",
+    "identifier": [
+      {
+        "system": "unknown",
+        "value": "0148"
+      }
+    ],
+    "name": [
+      {
+        "family": "ATTEND",
+        "given": [
+          "AARON",
+          "A"
+        ]
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "diagnosis": [
+      {
+        "condition": {
+          "reference": "Condition/24d6094155ec731bee1cfa378b42ca45"
+        },
+        "role": {
+          "coding": [
+            {
+              "code": "00"
+            }
+          ]
+        }
+      }
+    ],
+    "id": "94a3ceef63dcc900766cffca453ce32a",
+    "patient": {
+      "reference": "Patient/bf2d3cabe6c1f4b52e1fcf859964b0b9"
+    },
+    "resourceType": "EpisodeOfCare",
+    "status": "finished"
+  },
+  {
+    "class": {
+      "code": "AMB",
+      "display": "ambulatory",
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+      "version": "v1"
+    },
+    "diagnosis": [
+      {
+        "condition": {
+          "reference": "Condition/24d6094155ec731bee1cfa378b42ca45"
+        },
+        "use": {
+          "coding": [
+            {
+              "code": "00"
+            }
+          ]
+        }
+      }
+    ],
+    "episodeOfCare": [
+      {
+        "reference": "EpisodeOfCare/94a3ceef63dcc900766cffca453ce32a"
+      }
+    ],
+    "id": "ce2a277be6687eb31f347a5834de5a9a",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "VN",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ],
+          "text": "visit number"
+        },
+        "value": "1400"
+      }
+    ],
+    "participant": [
+      {
+        "individual": {
+          "reference": "Practitioner/9f9e263bdab975b179a1ff9935dc2547"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "ATND",
+                "display": "attender",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "individual": {
+          "reference": "Practitioner/05e8899caab74862cc857e50a66e698c"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "REF",
+                "display": "referrer",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "individual": {
+          "reference": "Practitioner/9f9e263bdab975b179a1ff9935dc2547"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "ADM",
+                "display": "admitter",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "resourceType": "Encounter",
+    "serviceType": {
+      "coding": [
+        {
+          "code": "AMB"
+        }
+      ]
+    },
+    "status": "in-progress",
+    "subject": {
+      "reference": "Patient/bf2d3cabe6c1f4b52e1fcf859964b0b9"
+    },
+    "type": [
+      {
+        "coding": [
+          {
+            "code": "unknown"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "active": true,
+    "id": "21d4f0ff0f61cb105e2954e7a5a44fc7",
+    "identifier": [
+      {
+        "value": "GOOD HEALTH HOSPITAL"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "category": [
+      {
+        "coding": [
+          {
+            "code": "laboratory",
+            "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+          }
+        ]
+      }
+    ],
+    "code": {
+      "coding": [
+        {
+          "code": "1010.1",
+          "display": "BODY WEIGHT"
+        }
+      ]
+    },
+    "id": "ddb2c235c00b6f5167df334d2bc4db9f",
+    "issued": "2009-08-07T06:05:04.321+00:00",
+    "resourceType": "Observation",
+    "status": "final",
+    "subject": {
+      "reference": "Patient/bf2d3cabe6c1f4b52e1fcf859964b0b9"
+    },
+    "valueString": "62"
+  },
+  {
+    "category": [
+      {
+        "coding": [
+          {
+            "code": "laboratory",
+            "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+          }
+        ]
+      }
+    ],
+    "code": {
+      "coding": [
+        {
+          "code": "1010.1",
+          "display": "HEIGHT"
+        }
+      ]
+    },
+    "id": "d028687305f1fdd014cb23df44928236",
+    "issued": "2009-08-07T06:05:04.321+00:00",
+    "resourceType": "Observation",
+    "status": "final",
+    "subject": {
+      "reference": "Patient/bf2d3cabe6c1f4b52e1fcf859964b0b9"
+    },
+    "valueString": "190"
+  },
+  {
+    "address": [
+      {
+        "city": "MI",
+        "line": [
+          "2222 HOME STREET",
+          "ISHPEMING"
+        ],
+        "state": "49849"
+      }
+    ],
+    "id": "04168c8d4c29e1a15a176ba22f879ab0",
+    "name": [
+      {
+        "family": "EVERYMAN",
+        "given": [
+          "ADAM",
+          "A"
+        ]
+      }
+    ],
+    "patient": {
+      "reference": "Patient/bf2d3cabe6c1f4b52e1fcf859964b0b9"
+    },
+    "relationship": [
+      {
+        "coding": [
+          {
+            "code": "U",
+            "display": "Unknown",
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+            "version": "v1"
+          }
+        ]
+      }
+    ],
+    "resourceType": "RelatedPerson",
+    "telecom": [
+      {
+        "system": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+              "valueCode": "unknown"
+            }
+          ]
+        },
+        "use": "home",
+        "value": "(555) 555-2004"
+      }
+    ]
+  },
+  {
+    "active": true,
+    "address": [
+      {
+        "city": "ISHPEMING",
+        "line": [
+          "8888 INSURERS CIRCLE"
+        ],
+        "postalCode": "49849",
+        "state": "M1"
+      }
+    ],
+    "id": "d57c1130cbe96972b8731f8961685219",
+    "name": "UARE INSURED, INC.",
+    "resourceType": "Organization",
+    "telecom": [
+      {
+        "system": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+              "valueCode": "unknown"
+            }
+          ]
+        },
+        "use": "work",
+        "value": "555-555-3015"
+      }
+    ]
+  },
+  {
+    "beneficiary": {
+      "reference": "Patient/bf2d3cabe6c1f4b52e1fcf859964b0b9"
+    },
+    "class": [
+      {
+        "type": {
+          "coding": [
+            {
+              "code": "group",
+              "system": "http://hl7.org/fhir/ValueSet/coverage-class"
+            }
+          ]
+        },
+        "value": "90"
+      }
+    ],
+    "id": "d48c7091444025188ec429fcc08be9f2",
+    "identifier": [
+      {
+        "type": {
+          "text": "Insurance Plan Id"
+        },
+        "value": "0"
+      }
+    ],
+    "order": 1,
+    "payor": [
+      {
+        "reference": "Organization/d57c1130cbe96972b8731f8961685219"
+      }
+    ],
+    "resourceType": "Coverage",
+    "status": "active"
+  }
+]

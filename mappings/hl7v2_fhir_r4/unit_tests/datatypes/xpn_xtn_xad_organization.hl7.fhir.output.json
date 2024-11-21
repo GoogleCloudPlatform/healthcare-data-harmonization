@@ -1,0 +1,53 @@
+[
+  {
+    "address": {
+      "city": "GREENSBORO",
+      "country": "US",
+      "district": "GUILDFORD",
+      "line": [
+        "1 THIS STREET",
+        "APT 23",
+        "C/O Good Health Clinic"
+      ],
+      "period": {
+        "end": "1999-12-31T23:59:00+00:00",
+        "start": "1999-07-01T09:00:00+00:00"
+      },
+      "postalCode": "27401-1020",
+      "state": "NC",
+      "type": "postal"
+    },
+    "name": {
+      "family": "JAMES",
+      "given": [
+        "JOSEPH",
+        "THOMAS"
+      ],
+      "period": {
+        "end": "1999-12-31T23:59:00+00:00",
+        "start": "1999-07-01T09:00:00+00:00"
+      },
+      "prefix": [
+        "DR"
+      ],
+      "suffix": [
+        "III",
+        "II",
+        "PhD"
+      ],
+      "use": "official"
+    },
+    "telecom": [
+      {
+        "period": {
+          "end": "1999-12-31T23:59:00+00:00",
+          "start": "1988-07-01T09:00:00+00:00"
+        },
+        "rank": 1,
+        "system": "phone",
+        "use": "work",
+        "value": "5552004-ABC"
+      }
+    ]
+  }
+]

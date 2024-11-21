@@ -1,0 +1,575 @@
+[
+  {
+    "id": "92ad1d98636c99543b0621070990e727",
+    "mode": "instance",
+    "name": "GOOD HEALTH HOSPITAL",
+    "physicalType": {
+      "coding": [
+        {
+          "code": "si",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "387e3bb6d8c7111fca43b93cdbd1de00",
+    "mode": "instance",
+    "name": "1956 ADDITION",
+    "partOf": {
+      "reference": "Location/92ad1d98636c99543b0621070990e727"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "bu",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "6eb4ccd30ddc07c6f90a6ae7cdcc7c30",
+    "mode": "instance",
+    "name": "12",
+    "partOf": {
+      "reference": "Location/387e3bb6d8c7111fca43b93cdbd1de00"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "lvl",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "c352edbeeedbaf3a9cf6b64fadf06402",
+    "mode": "instance",
+    "name": "12NORTH",
+    "partOf": {
+      "reference": "Location/387e3bb6d8c7111fca43b93cdbd1de00"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "si",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "58b9acb34efee360ead7280fde16eac3",
+    "mode": "instance",
+    "name": "1211",
+    "partOf": {
+      "reference": "Location/c352edbeeedbaf3a9cf6b64fadf06402"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "ro",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "d14cec1ab129f503157a067f8915ff7a",
+    "mode": "instance",
+    "name": "A",
+    "partOf": {
+      "reference": "Location/58b9acb34efee360ead7280fde16eac3"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "bd",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "dec121dafddf78756693162b19eb2181",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "NPI"
+            }
+          ]
+        },
+        "value": "004777"
+      }
+    ],
+    "name": [
+      {
+        "family": "ATTEND",
+        "given": [
+          "AARON",
+          "A"
+        ],
+        "period": {
+          "end": "1999-12-31T00:00:00+00:00",
+          "start": "1990-01-01T00:00:00+00:00"
+        },
+        "prefix": [
+          "DR"
+        ],
+        "suffix": [
+          "JR",
+          "MD",
+          "MD"
+        ],
+        "use": "official"
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "id": "2aad72734d9248b65d21ded7dc6ee64c",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "NPI"
+            }
+          ]
+        },
+        "value": "004778"
+      }
+    ],
+    "name": [
+      {
+        "family": "REFER",
+        "given": [
+          "RALPH",
+          "A"
+        ],
+        "period": {
+          "end": "1999-12-31T00:00:00+00:00",
+          "start": "1990-01-01T00:00:00+00:00"
+        },
+        "prefix": [
+          "DR"
+        ],
+        "suffix": [
+          "II",
+          "MD",
+          "MD"
+        ],
+        "use": "official"
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "id": "fccc3355067e670717fb5300e6439e59",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "NPI"
+            }
+          ]
+        },
+        "value": "004799"
+      }
+    ],
+    "name": [
+      {
+        "family": "CONSULT",
+        "given": [
+          "CHRISTINA",
+          "A"
+        ],
+        "period": {
+          "end": "1999-12-31T00:00:00+00:00",
+          "start": "1990-01-01T00:00:00+00:00"
+        },
+        "prefix": [
+          "DR"
+        ],
+        "suffix": [
+          "JR",
+          "MD",
+          "MD"
+        ],
+        "use": "official"
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "id": "720489a9bf70f66e6974d830bfad6ba5",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "NPI"
+            }
+          ]
+        },
+        "value": "004744"
+      }
+    ],
+    "name": [
+      {
+        "family": "ADMIT",
+        "given": [
+          "ABIGAIL",
+          "A"
+        ],
+        "period": {
+          "end": "1999-12-31T00:00:00+00:00",
+          "start": "1990-01-01T00:00:00+00:00"
+        },
+        "prefix": [
+          "DR"
+        ],
+        "suffix": [
+          "III",
+          "MD",
+          "MD"
+        ],
+        "use": "official"
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "active": true,
+    "id": "4fd39b35c22594a75704730a0b819042",
+    "identifier": [
+      {
+        "value": "GHH"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "id": "334493814c19e8a591216cb9a45aabe5",
+    "identifier": [
+      {
+        "value": "PV1-37"
+      }
+    ],
+    "name": "unknown",
+    "resourceType": "Location"
+  },
+  {
+    "active": true,
+    "id": "527d43907ef7f2742453b947e5bfd8ab",
+    "identifier": [
+      {
+        "value": "GHS"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "id": "fa720e187a88f8abf931b7011fef5a12",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "NPI"
+            }
+          ]
+        },
+        "value": "004744"
+      }
+    ],
+    "name": [
+      {
+        "family": "OTHER",
+        "given": [
+          "OTHELLO",
+          "A"
+        ],
+        "period": {
+          "end": "1999-12-31T00:00:00+00:00",
+          "start": "1990-01-01T00:00:00+00:00"
+        },
+        "prefix": [
+          "DR"
+        ],
+        "suffix": [
+          "II",
+          "MD",
+          "MD"
+        ],
+        "use": "official"
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "id": "63ebcc05a5732c047f8587fc68162206",
+    "identifier": [
+      {
+        "system": "unknown",
+        "value": "IDPV154"
+      }
+    ],
+    "patient": {
+      "reference": "Patient/123"
+    },
+    "resourceType": "EpisodeOfCare",
+    "status": "finished"
+  },
+  {
+    "class": {
+      "code": "IMP",
+      "display": "inpatient encounter",
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+      "version": "v1"
+    },
+    "episodeOfCare": [
+      {
+        "reference": "EpisodeOfCare/63ebcc05a5732c047f8587fc68162206"
+      }
+    ],
+    "hospitalization": {
+      "admitSource": {
+        "coding": [
+          {
+            "code": "ADM",
+            "system": "HL70023"
+          }
+        ]
+      },
+      "destination": {
+        "reference": "Location/334493814c19e8a591216cb9a45aabe5"
+      },
+      "dietPreference": [
+        {
+          "coding": [
+            {
+              "code": "VEG",
+              "display": "VEGETARIAN",
+              "system": "HL701114"
+            }
+          ]
+        }
+      ],
+      "dischargeDisposition": {
+        "coding": [
+          {
+            "code": "DEC",
+            "display": "DECEASED",
+            "system": "HL70112"
+          }
+        ]
+      },
+      "preAdmissionIdentifier": {
+        "system": "unknown",
+        "value": "pa5543"
+      },
+      "reAdmission": {
+        "coding": [
+          {
+            "code": "R",
+            "display": "READMISSION",
+            "system": "HL70093"
+          }
+        ]
+      }
+    },
+    "identifier": [
+      {
+        "assigner": {
+          "reference": "Organization/4fd39b35c22594a75704730a0b819042"
+        },
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "VN",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ],
+          "text": "visit number"
+        },
+        "value": "P1231"
+      },
+      {
+        "assigner": {
+          "reference": "Organization/527d43907ef7f2742453b947e5bfd8ab"
+        },
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "VN",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "9942"
+      }
+    ],
+    "location": [
+      {
+        "location": {
+          "display": "GOOD HEALTH HOSPITAL, 1956 ADDITION, 12, 12NORTH, 1211, A",
+          "reference": "Location/d14cec1ab129f503157a067f8915ff7a"
+        },
+        "status": "active"
+      },
+      {
+        "location": {
+          "display": "GOOD HEALTH HOSPITAL, 1956 ADDITION, 12, 12NORTH, 1211, A",
+          "reference": "Location/d14cec1ab129f503157a067f8915ff7a"
+        },
+        "status": "completed"
+      },
+      {
+        "location": {
+          "display": "GOOD HEALTH HOSPITAL, 1956 ADDITION, 12, 12NORTH, 1211, A",
+          "reference": "Location/d14cec1ab129f503157a067f8915ff7a"
+        },
+        "status": "planned"
+      },
+      {
+        "location": {
+          "display": "GOOD HEALTH HOSPITAL, 1956 ADDITION, 12, 12NORTH, 1211, A",
+          "reference": "Location/d14cec1ab129f503157a067f8915ff7a"
+        },
+        "status": "completed"
+      }
+    ],
+    "participant": [
+      {
+        "individual": {
+          "reference": "Practitioner/dec121dafddf78756693162b19eb2181"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "ATND",
+                "display": "attender",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "individual": {
+          "reference": "Practitioner/2aad72734d9248b65d21ded7dc6ee64c"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "REF",
+                "display": "referrer",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "individual": {
+          "reference": "Practitioner/fccc3355067e670717fb5300e6439e59"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "CON",
+                "display": "consultant",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "individual": {
+          "reference": "Practitioner/720489a9bf70f66e6974d830bfad6ba5"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "ADM",
+                "display": "admitter",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "individual": {
+          "reference": "Practitioner/fa720e187a88f8abf931b7011fef5a12"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "PART",
+                "display": "Participation",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "period": {
+      "end": "1988-08-18T11:26:00+00:00",
+      "start": "1988-08-16T12:16:00+00:00"
+    },
+    "resourceType": "Encounter",
+    "serviceType": {
+      "coding": [
+        {
+          "code": "SUR",
+          "display": "SURGICAL SERVICE",
+          "system": "HL70069"
+        }
+      ]
+    },
+    "status": "finished",
+    "subject": {
+      "reference": "Patient/123"
+    },
+    "type": [
+      {
+        "coding": [
+          {
+            "code": "U",
+            "display": "URGENT",
+            "system": "HL0007"
+          }
+        ]
+      }
+    ]
+  }
+]

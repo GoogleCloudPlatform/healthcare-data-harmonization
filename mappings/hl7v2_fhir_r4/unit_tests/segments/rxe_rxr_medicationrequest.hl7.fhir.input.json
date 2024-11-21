@@ -1,0 +1,77 @@
+{
+  "RXE": {
+    "0": "RXE",
+    "1": null,
+    "10": "30",
+    "11": {
+      "1": "Tab"
+    },
+    "12": "2",
+    "13": null,
+    "14": null,
+    "15": null,
+    "16": "1",
+    "17": null,
+    "18": null,
+    "19": null,
+    "2": {
+      "1": "0006-0740-31",
+      "2": "Simvastatin",
+      "3": null,
+      "4": null,
+      "5": null,
+      "6": null,
+      "7": null,
+      "8": null,
+      "9": "simvastatin (ZOCOR) 20 MG PO tablet"
+    },
+    "20": null,
+    "21": null,
+    "22": null,
+    "23": null,
+    "24": null,
+    "25": null,
+    "26": null,
+    "27": null,
+    "28": null,
+    "29": null,
+    "3": "1",
+    "30": null,
+    "31": null,
+    "32": null,
+    "33": null,
+    "34": null,
+    "35": null,
+    "36": null,
+    "37": null,
+    "38": null,
+    "39": null,
+    "4": null,
+    "40": null,
+    "5": {
+      "1": "MG"
+    },
+    "6": null,
+    "7": [
+      {
+        "1": null,
+        "2": "Take ONE tablet by mouth nightly when needed. Take with Water"
+      }
+    ],
+    "8": null,
+    "9": null
+  },
+  "RXR": [
+    {
+      "0": "RXR",
+      "1": {
+        "1": "MTH",
+        "2": "Mouth",
+        "3": "HL70162"
+      }
+    }
+  ],
+  "patientReference": {
+    "reference": "Patient/123"
+  }
+}

@@ -1,0 +1,72 @@
+package datatypes
+
+// Description: Constructs an array of Location resource based on PL subsegments
+//
+// Argument(s):
+//   PL datatype
+//   Status represents status each of PL subsegments to be mapped a location type in Location Resource
+//
+// Output(s):
+//   Location Resource : https://www.hl7.org/fhir/location.html
+//
+def PL_Location (required PL,Status) {
+  // All resources must be output before they are used in a partOf reference.
+  // Outputting a resource adds it to the bundle and assigns an id that is used
+  // in the reference.
+  //
+  // Expressions in this function are carefully ordered so that all resources
+  // are output before they are used in references and no resource is modified
+  // after it is output. Resources must not change after they have been output.
+  var facility: HD_Location(PL.4, "PL.4")
+  var location_names[]: facility.name
+  var location: utilities::OutputResourceAndGetReference(facility)
+
+  var building: HD_Location(PL.7, "PL.7")
+  var location_names[]: building.name
+  if building then {
+    var building.partOf: location
+    var location: utilities::OutputResourceAndGetReference(building)
+  }
+  var floor: HD_Location(PL.8, "PL.8")
+  var location_names[]: floor.name
+  if floor then {
+    var floor.partOf: location
+    var floor: utilities::OutputResourceAndGetReference(floor)
+  }
+  var pointOfCare: HD_Location(PL.1, "PL.1")
+  var location_names[]: pointOfCare.name
+  if pointOfCare then {
+    var pointOfCare.partOf: location
+    var location: utilities::OutputResourceAndGetReference(pointOfCare)
+  }
+  var room: HD_Location(PL.2, "PL.2")
+  var location_names[]: room.name
+  if room then {
+    var room.partOf: location
+    var location: utilities::OutputResourceAndGetReference(room)
+  }
+  var bed: HD_Location(PL.3, "PL.3")
+  var location_names[]: bed.name
+  if bed then {
+    var bed.partOf: location
+    var location: utilities::OutputResourceAndGetReference(bed)
+  }
+  var location.display: strJoin(", ", location_names)
+  // Only one location resource reference and status should be returned
+  // location contains the leaf location node.
+  Build_LocationStatus(location, Status)
+}
+
+// Description: Constructs a Location resource and its corresponding status
+//
+// Argument(s):
+//   Location Resource : https://www.hl7.org/fhir/location.html
+//   Status represents status each of PL subsegments to be mapped a location type in Location Resource
+//
+// Output(s):
+//   Location Resource reference & its status
+//
+def Build_LocationStatus (required Location, Status) {
+  location: Location
+  status: Status
+}

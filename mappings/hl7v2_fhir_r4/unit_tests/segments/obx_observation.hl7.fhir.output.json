@@ -1,0 +1,32 @@
+[
+  {
+    "category": [
+      {
+        "coding": [
+          {
+            "code": "laboratory",
+            "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+          }
+        ]
+      }
+    ],
+    "code": {
+      "coding": [
+        {
+          "code": "150001",
+          "display": "HIV-1 ABS-O.D. RATIO",
+          "system": "L"
+        }
+      ]
+    },
+    "issued": "2009-08-07T06:05:04.321+00:00",
+    "resourceType": "Observation",
+    "status": "unknown",
+    "subject": {
+      "reference": "Patient/123"
+    },
+    "valueQuantity": {
+      "value": 5
+    }
+  }
+]

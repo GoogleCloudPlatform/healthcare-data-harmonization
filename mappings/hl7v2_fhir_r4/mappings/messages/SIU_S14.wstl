@@ -1,0 +1,21 @@
+package messages
+
+// Description: Define SIU_S14 HL7v2 Message Types (version 2.9) to FHIR R4 transformation
+//
+// Argument(s):
+//   SIU_S14 HL7v2 Message Types (version 2.9)
+//   SIU_S14 Segments covered in this mapping configuration are: MSH, SCH, NTE, PID, PV1
+//
+// Output(s):
+//   FHIR R4 Resources : http://www.hl7.org/fhir/resourcelist.html
+// List of Generated FHIR Resources:
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//   MessageHeader: https://www.hl7.org/fhir/messageheader.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   Appointment: https://www.hl7.org/fhir/appointment.html
+//   ServiceRequest: https://www.hl7.org/fhir/servicerequest.html
+//
+def SIU_S14(required SIU_S14) {
+  Transform_SIU(SIU_S14)
+}

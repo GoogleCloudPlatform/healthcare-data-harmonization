@@ -1,0 +1,27 @@
+[
+  {
+    "active": true,
+    "id": "9cb971edcb3e3828e32cb185fc8c3bd9",
+    "identifier": [
+      {
+        "type": {
+          "coding": [
+            {
+              "code": "DCode",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "6010DC"
+      }
+    ],
+    "name": "Reciever - YIEWSLEY FAMILY PRACTICE",
+    "resourceType": "Organization"
+  },
+  {
+    "endpoint": "urn:uuid:4.2-two",
+    "receiver": {
+      "reference": "Organization/9cb971edcb3e3828e32cb185fc8c3bd9"
+    }
+  }
+]

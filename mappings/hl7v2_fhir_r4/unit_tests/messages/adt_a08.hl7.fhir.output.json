@@ -1,0 +1,338 @@
+[
+  {
+    "active": true,
+    "id": "e03c45ea4fda039d2792db6382ec295a",
+    "identifier": [
+      {
+        "value": "Ntierprise Clinic"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "active": true,
+    "id": "3fd666db179a7f7661fa846bf578c81d",
+    "identifier": [
+      {
+        "value": "Healthmatics Clinic"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "destination": [
+      {
+        "endpoint": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/R4/extension-data-absent-reason.html",
+              "valueCode": "unknown"
+            }
+          ]
+        },
+        "name": "Healthmatics EHR",
+        "receiver": {
+          "reference": "Organization/3fd666db179a7f7661fa846bf578c81d"
+        }
+      }
+    ],
+    "eventCoding": {
+      "code": "A08",
+      "display": "ADT^A08^",
+      "system": "http://terminology.hl7.org/CodeSystem/v2-0003"
+    },
+    "id": "11d73edd7f2bbe62f06a46edb543dc86",
+    "meta": {
+      "tag": [
+        {
+          "code": "P",
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0103"
+        },
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0207"
+        }
+      ]
+    },
+    "resourceType": "MessageHeader",
+    "sender": {
+      "reference": "Organization/e03c45ea4fda039d2792db6382ec295a"
+    },
+    "source": {
+      "endpoint": {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/R4/extension-data-absent-reason.html",
+            "valueCode": "unknown"
+          }
+        ]
+      },
+      "name": "Ntierprise"
+    }
+  },
+  {
+    "active": true,
+    "address": [
+      {
+        "city": "Raleigh",
+        "line": [
+          "8388 Secret Agent Way"
+        ],
+        "postalCode": "27677",
+        "state": "NC"
+      }
+    ],
+    "birthDate": "1999-07-23",
+    "contact": [
+      {
+        "address": {
+          "city": "Cary",
+          "line": [
+            "007 Soho Lane"
+          ],
+          "postalCode": "27511",
+          "state": "NC"
+        },
+        "name": {
+          "family": "Bond",
+          "given": [
+            "Lady",
+            "T"
+          ]
+        }
+      }
+    ],
+    "deceasedBoolean": false,
+    "extension": [
+      {
+        "url": "http://hl7.org/fhir/StructureDefinition/patient-importance",
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "code": "N"
+            }
+          ]
+        }
+      }
+    ],
+    "gender": "male",
+    "id": "fc7c13bdb5ab0ab03162ddfd6f8a36ce",
+    "identifier": [
+      {
+        "system": "unknown",
+        "value": "151"
+      }
+    ],
+    "multipleBirthBoolean": false,
+    "name": [
+      {
+        "family": "Bond",
+        "given": [
+          "Tiny"
+        ]
+      }
+    ],
+    "resourceType": "Patient"
+  },
+  {
+    "active": true,
+    "id": "e03c45ea4fda039d2792db6382ec295a",
+    "identifier": [
+      {
+        "value": "Ntierprise Clinic"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "id": "6aa07d7446c367c3d503489c50d68744",
+    "identifier": [
+      {
+        "value": "Ntierprise"
+      }
+    ],
+    "patient": {
+      "reference": "Patient/fc7c13bdb5ab0ab03162ddfd6f8a36ce"
+    },
+    "resourceType": "Device",
+    "type": {
+      "coding": [
+        {
+          "code": "unknown"
+        }
+      ]
+    }
+  },
+  {
+    "id": "0e223d553b862b569fc3f7133ede071f",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "AN",
+              "system": "https://terminology.hl7.org/3.0.0/CodeSystem-v2-0203"
+            }
+          ],
+          "text": "Account Number"
+        },
+        "value": "151"
+      }
+    ],
+    "resourceType": "Account",
+    "status": "active",
+    "subject": [
+      {
+        "reference": "Patient/fc7c13bdb5ab0ab03162ddfd6f8a36ce"
+      }
+    ]
+  },
+  {
+    "address": [
+      {
+        "city": "Cary",
+        "line": [
+          "007 Soho Lane"
+        ],
+        "postalCode": "27511",
+        "state": "NC"
+      }
+    ],
+    "id": "f4923a1cc463a7061b42f98fba11fe20",
+    "name": [
+      {
+        "family": "Bond",
+        "given": [
+          "Lady",
+          "T"
+        ]
+      }
+    ],
+    "patient": {
+      "reference": "Patient/fc7c13bdb5ab0ab03162ddfd6f8a36ce"
+    },
+    "relationship": [
+      {
+        "coding": [
+          {
+            "code": "U",
+            "display": "Unknown",
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+            "version": "v1"
+          }
+        ]
+      }
+    ],
+    "resourceType": "RelatedPerson"
+  },
+  {
+    "id": "f6e73f8021ea91ad7e22bebecbd13355",
+    "identifier": [
+      {
+        "system": "unknown",
+        "value": "Manning"
+      }
+    ],
+    "name": [
+      {
+        "family": "Manning",
+        "given": [
+          "Terry"
+        ]
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "class": {
+      "code": "R",
+      "display": "Recurring patient",
+      "system": "http://terminology.hl7.org/CodeSystem/v2-0004",
+      "version": "v1"
+    },
+    "id": "6c71145481fb83f1cc25695fcf7692eb",
+    "participant": [
+      {
+        "individual": {
+          "reference": "Practitioner/f6e73f8021ea91ad7e22bebecbd13355"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "ATND",
+                "display": "attender",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "resourceType": "Encounter",
+    "status": "in-progress",
+    "subject": {
+      "reference": "Patient/fc7c13bdb5ab0ab03162ddfd6f8a36ce"
+    },
+    "type": [
+      {
+        "coding": [
+          {
+            "code": "unknown"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "active": true,
+    "id": "e03c45ea4fda039d2792db6382ec295a",
+    "identifier": [
+      {
+        "value": "Ntierprise Clinic"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "address": [
+      {
+        "city": "Cary",
+        "line": [
+          "007 Soho Lane"
+        ],
+        "postalCode": "27511",
+        "state": "NC"
+      }
+    ],
+    "birthDate": "1977-09-20",
+    "gender": "male",
+    "id": "3fe0bcc977f213043996b59cef3a8a82",
+    "name": [
+      {
+        "family": "Bond",
+        "given": [
+          "James"
+        ],
+        "suffix": [
+          "007"
+        ]
+      }
+    ],
+    "patient": {
+      "reference": "Patient/fc7c13bdb5ab0ab03162ddfd6f8a36ce"
+    },
+    "resourceType": "RelatedPerson",
+    "telecom": [
+      {
+        "system": "email",
+        "use": "home",
+        "value": "007@BritishSecretService.com"
+      }
+    ]
+  }
+]

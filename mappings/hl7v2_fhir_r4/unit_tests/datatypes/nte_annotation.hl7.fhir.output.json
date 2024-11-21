@@ -1,0 +1,24 @@
+[
+  {
+    "id": "c3dfdef2f2858a90dd6720213b62e432",
+    "identifier": [
+      {
+        "system": "unknown",
+        "value": "AUT01"
+      }
+    ],
+    "name": [
+      {
+        "family": "unknown"
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "authorReference": {
+      "reference": "Practitioner/c3dfdef2f2858a90dd6720213b62e432"
+    },
+    "text": "This is a Display Note.",
+    "time": "2011-11-15T10:12:00+00:00"
+  }
+]

@@ -1,0 +1,16 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 Specimen Resource based on CM datatype
+//
+// Argument(s):
+//   CM datatype
+//
+// Output(s):
+//   Specimen : https://hl7.org/fhir/specimen.html
+//
+def CM_Specimen (CM) {
+  type: CWE_CodeableConcept(CM.1)
+  container[].additiveCodeableConcept.text: CM.2
+  note[].text: CM.3
+  collection.bodySite: CWE_CodeableConcept(CM.4)
+}

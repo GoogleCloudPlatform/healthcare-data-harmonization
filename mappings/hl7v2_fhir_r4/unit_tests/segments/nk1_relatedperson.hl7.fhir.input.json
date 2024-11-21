@@ -1,0 +1,29 @@
+{
+  "NK1": {
+    "0": "NK1",
+    "1": "1",
+    "2": [
+      {
+        "1": {
+          "1": "NUCLEAR"
+        },
+        "2": "NELDA",
+        "3": "W"
+      }
+    ],
+    "3": {
+      "1": "SPO",
+      "2": "SPOUSE"
+    },
+    "4": null,
+    "5": null,
+    "6": null,
+    "7": {
+      "1": "NK",
+      "2": "NEXT OF KIN"
+    }
+  },
+  "patientReference": {
+    "reference": "Patient/123"
+  }
+}

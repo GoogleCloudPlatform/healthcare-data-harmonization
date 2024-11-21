@@ -1,0 +1,11 @@
+{
+  "EI": {
+    "1": "ORD448811",
+    "2": "NIST EHR",
+    "3": "O23",
+    "4": "URI"
+  },
+  "Patient": {
+    "reference": "Patient/123"
+  }
+}

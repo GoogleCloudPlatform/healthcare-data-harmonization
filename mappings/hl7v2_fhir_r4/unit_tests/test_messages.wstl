@@ -1,0 +1,300 @@
+import "test";
+import "./../mappings/messages/messages.wstl";
+
+// Runs all Test Functions in the current package.
+//
+// A Test Function is a function whose name starts with test_.
+// It must take no parameters. Upon failure, this method throws an exception.
+// Test functions loads input and output files and asserts the mappings output
+// (actualOutput) with the loaded output (expectedOutput).
+//
+test::runAll()
+
+// Tests messages::ADT_A01() function.
+def test_ADT_A01() {
+  var input: loadJson(joinPath(testdir(), "adt_a01.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "adt_a01.hl7.fhir.output.json"))
+
+  var output: withSides(messages::ADT_A01(input.ADT_A01))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::ADT_A02() function.
+def test_ADT_A02() {
+  var input: loadJson(joinPath(testdir(), "adt_a02.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "adt_a02.hl7.fhir.output.json"))
+
+  var output: withSides(messages::ADT_A02(input.ADT_A02))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::ADT_A03() function.
+def test_ADT_A03() {
+  var input: loadJson(joinPath(testdir(), "adt_a03.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "adt_a03.hl7.fhir.output.json"))
+
+  var output: withSides(messages::ADT_A03(input.ADT_A03))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::ADT_A04() function.
+def test_ADT_A04() {
+  var input: loadJson(joinPath(testdir(), "adt_a04.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "adt_a04.hl7.fhir.output.json"))
+
+  var output: withSides(messages::ADT_A04(input.ADT_A04))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::ADT_A05() function.
+def test_ADT_A05() {
+  var input: loadJson(joinPath(testdir(), "adt_a05.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "adt_a05.hl7.fhir.output.json"))
+
+  var output: withSides(messages::ADT_A05(input.ADT_A05))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::ADT_A06() function.
+def test_ADT_A06() {
+  var input: loadJson(joinPath(testdir(), "adt_a06.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "adt_a06.hl7.fhir.output.json"))
+
+  var output: withSides(messages::ADT_A06(input.ADT_A06))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::ADT_A07() function.
+def test_ADT_A07() {
+  var input: loadJson(joinPath(testdir(), "adt_a07.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "adt_a07.hl7.fhir.output.json"))
+
+  var output: withSides(messages::ADT_A07(input.ADT_A07))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::ADT_A08() function.
+def test_ADT_A08() {
+  var input: loadJson(joinPath(testdir(), "adt_a08.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "adt_a08.hl7.fhir.output.json"))
+
+  var output: withSides(messages::ADT_A08(input.ADT_A08))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::ADT_A09() function.
+def test_ADT_A09() {
+  var input: loadJson(joinPath(testdir(), "adt_a09.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "adt_a09.hl7.fhir.output.json"))
+
+  var output: withSides(messages::ADT_A09(input.ADT_A09))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::ADT_A11() function.
+def test_ADT_A11() {
+  var input: loadJson(joinPath(testdir(), "adt_a11.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "adt_a11.hl7.fhir.output.json"))
+
+  var output: withSides(messages::ADT_A11(input.ADT_A11))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::ADT_A12() function.
+def test_ADT_A12() {
+  var input: loadJson(joinPath(testdir(), "adt_a12.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "adt_a12.hl7.fhir.output.json"))
+
+  var output: withSides(messages::ADT_A12(input.ADT_A12))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::ADT_A13() function.
+def test_ADT_A13() {
+  var input: loadJson(joinPath(testdir(), "adt_a13.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "adt_a13.hl7.fhir.output.json"))
+
+  var output: withSides(messages::ADT_A13(input.ADT_A13))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::ADT_A14() function.
+def test_ADT_A14() {
+  var input: loadJson(joinPath(testdir(), "adt_a14.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "adt_a14.hl7.fhir.output.json"))
+
+  var output: withSides(messages::ADT_A14(input.ADT_A14))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::ADT_A17() function.
+def test_ADT_A17() {
+  var input: loadJson(joinPath(testdir(), "adt_a17.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "adt_a17.hl7.fhir.output.json"))
+
+  var output: withSides(messages::ADT_A17(input.ADT_A17))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::ADT_A18() function.
+def test_ADT_A18() {
+  var input: loadJson(joinPath(testdir(), "adt_a18.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "adt_a18.hl7.fhir.output.json"))
+
+  var output: withSides(messages::ADT_A18(input.ADT_A18))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::ADT_A28() function.
+def test_ADT_A28() {
+  var input: loadJson(joinPath(testdir(), "adt_a28.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "adt_a28.hl7.fhir.output.json"))
+
+  var output: withSides(messages::ADT_A28(input.ADT_A28))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::ADT_A31() function.
+def test_ADT_A31() {
+  var input: loadJson(joinPath(testdir(), "adt_a31.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "adt_a31.hl7.fhir.output.json"))
+
+  var output: withSides(messages::ADT_A31(input.ADT_A31))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::ADT_A47() function.
+def test_ADT_A47() {
+  var input: loadJson(joinPath(testdir(), "adt_a47.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "adt_a47.hl7.fhir.output.json"))
+
+  var output: withSides(messages::ADT_A47(input.ADT_A47))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::OML_O21() function.
+def test_OML_O21() {
+  var input: loadJson(joinPath(testdir(), "oml_o21.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "oml_o21.hl7.fhir.output.json"))
+
+  var output: withSides(messages::OML_O21(input.OML_O21))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::ORM_O01() function.
+def test_ORM_O01() {
+  var input: loadJson(joinPath(testdir(), "orm_o01.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "orm_o01.hl7.fhir.output.json"))
+
+  var output: withSides(messages::ORM_O01(input.ORM_O01))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::ORU_R01() function.
+def test_ORU_R01() {
+  var input: loadJson(joinPath(testdir(), "oru_r01.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "oru_r01.hl7.fhir.output.json"))
+
+  var output: withSides(messages::ORU_R01(input.ORU_R01))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::RAS_O17() function.
+def test_RAS_O17() {
+  var input: loadJson(joinPath(testdir(), "ras_o17.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "ras_o17.hl7.fhir.output.json"))
+
+  var output: withSides(messages::RAS_O17(input.RAS_O17))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::RDE_O01() function.
+def test_RDE_O01() {
+  var input: loadJson(joinPath(testdir(), "rde_o01.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "rde_o01.hl7.fhir.output.json"))
+
+  var output: withSides(messages::RDE_O01(input.RDE_O01))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::RDE_O11() function.
+def test_RDE_O11() {
+  var input: loadJson(joinPath(testdir(), "rde_o11.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "rde_o11.hl7.fhir.output.json"))
+
+  var output: withSides(messages::RDE_O11(input.RDE_O11))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::SIU_S12() function.
+def test_SIU_S12() {
+  var input: loadJson(joinPath(testdir(), "siu_s12.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "siu_s12.hl7.fhir.output.json"))
+
+  var output: withSides(messages::SIU_S12(input.SIU_S12))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Tests messages::VXU_V04() function.
+def test_VXU_V04() {
+  var input: loadJson(joinPath(testdir(), "vxu_v04.hl7.fhir.input.json"))
+  var expectedOutput: loadJson(joinPath(testdir(), "vxu_v04.hl7.fhir.output.json"))
+
+  var output: withSides(messages::VXU_V04(input.VXU_V04))
+  var actualOutput: output.Resources
+
+  test::assertEquals(expectedOutput, actualOutput)
+}
+
+// Path for input and output files.
+def testdir() "./messages/"

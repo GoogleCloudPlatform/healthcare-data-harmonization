@@ -1,0 +1,245 @@
+[
+  {
+    "active": true,
+    "contact": [
+      {
+        "address": {
+          "city": "GREENSBORO",
+          "country": "US",
+          "district": "GUILDFORD",
+          "line": [
+            "1 THIS STREET",
+            "APT 23"
+          ],
+          "period": {
+            "end": "1999-12-31T23:59:00+00:00",
+            "start": "1999-07-01T09:00:00+00:00"
+          },
+          "postalCode": "27401-1020",
+          "state": "NC",
+          "type": "postal"
+        },
+        "name": {
+          "family": "JAMES",
+          "given": [
+            "JOSEPH",
+            "THOMAS"
+          ],
+          "period": {
+            "end": "1999-12-31T23:59:00+00:00",
+            "start": "1999-07-01T09:00:00+00:00"
+          },
+          "prefix": [
+            "DR"
+          ],
+          "suffix": [
+            "III",
+            "II",
+            "PhD"
+          ],
+          "use": "official"
+        },
+        "telecom": [
+          {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-country",
+                "valueString": "1"
+              },
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-area",
+                "valueString": "555"
+              },
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-extension",
+                "valueString": "1"
+              },
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-local",
+                "valueString": "555-2011"
+              }
+            ],
+            "period": {
+              "end": "1999-12-31T23:59:00+00:00",
+              "start": "1988-07-01T09:00:00+00:00"
+            },
+            "system": "phone",
+            "use": "work",
+            "value": "5552010-HGD"
+          }
+        ]
+      }
+    ],
+    "id": "3f5265e375a9c8cd8515493a0d032284",
+    "identifier": [
+      {
+        "type": {
+          "coding": [
+            {
+              "code": "XX",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "OID724"
+      }
+    ],
+    "name": "County Women's Correctional Facility",
+    "resourceType": "Organization"
+  },
+  {
+    "address": {
+      "city": "GREENSBORO",
+      "country": "US",
+      "district": "GUILDFORD",
+      "line": [
+        "2222 HOME STREET",
+        "APT 23"
+      ],
+      "period": {
+        "end": "1999-12-31T23:59:00+00:00",
+        "start": "1999-07-01T09:00:00+00:00"
+      },
+      "postalCode": "27401-1020",
+      "state": "NC",
+      "type": "postal"
+    },
+    "gender": "male",
+    "name": {
+      "family": "NUCLEAR",
+      "given": [
+        "NELDA",
+        "W"
+      ]
+    },
+    "organization": {
+      "reference": "Organization/3f5265e375a9c8cd8515493a0d032284"
+    },
+    "period": {
+      "end": "1998-09-01T00:00:00+00:00",
+      "start": "1977-07-04T00:00:00+00:00"
+    },
+    "relationship": [
+      {
+        "coding": [
+          {
+            "code": "U",
+            "display": "Unknown",
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+            "version": "v1"
+          }
+        ]
+      }
+    ],
+    "telecom": [
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-country",
+            "valueString": "1"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-area",
+            "valueString": "555"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-extension",
+            "valueString": "1"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-local",
+            "valueString": "555-2004"
+          }
+        ],
+        "period": {
+          "end": "1999-12-31T23:59:00+00:00",
+          "start": "1988-07-01T09:00:00+00:00"
+        },
+        "system": "phone",
+        "use": "home",
+        "value": "5552007-AD"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-country",
+            "valueString": "1"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-area",
+            "valueString": "555"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-extension",
+            "valueString": "1"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-local",
+            "valueString": "555-2008"
+          }
+        ],
+        "period": {
+          "end": "1999-12-31T23:59:00+00:00",
+          "start": "1988-07-01T09:00:00+00:00"
+        },
+        "system": "phone",
+        "use": "work",
+        "value": "5552008-GH"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-country",
+            "valueString": "1"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-area",
+            "valueString": "555"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-extension",
+            "valueString": "1"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-local",
+            "valueString": "555-2021"
+          }
+        ],
+        "period": {
+          "end": "1999-12-31T23:59:00+00:00",
+          "start": "1988-07-01T09:00:00+00:00"
+        },
+        "system": "phone",
+        "use": "home",
+        "value": "5552021-DEF"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-country",
+            "valueString": "1"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-area",
+            "valueString": "555"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-extension",
+            "valueString": "1"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-local",
+            "valueString": "555-2050"
+          }
+        ],
+        "period": {
+          "end": "1999-12-31T23:59:00+00:00",
+          "start": "1988-07-01T09:00:00+00:00"
+        },
+        "system": "phone",
+        "use": "work",
+        "value": "5552040-ABC"
+      }
+    ]
+  }
+]

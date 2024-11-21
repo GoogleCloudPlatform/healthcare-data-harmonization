@@ -1,0 +1,60 @@
+[
+  {
+    "category": [
+      {
+        "coding": [
+          {
+            "code": "problem-list-item",
+            "system": "http://terminology.hl7.org/CodeSystem/condition-category"
+          }
+        ]
+      },
+      {
+        "coding": [
+          {
+            "code": "IP",
+            "display": "Inpatient",
+            "system": "ProblemClassificationList"
+          }
+        ]
+      }
+    ],
+    "clinicalStatus": {
+      "coding": [
+        {
+          "code": "active",
+          "system": "http://terminology.hl7.org/CodeSystem/condition-clinical"
+        }
+      ]
+    },
+    "code": {
+      "coding": [
+        {
+          "code": "04411",
+          "display": "Restricted Circulation",
+          "system": "NursingProblemList"
+        }
+      ]
+    },
+    "identifier": [
+      {
+        "value": "123PB"
+      }
+    ],
+    "onsetDateTime": "1995-04-25T00:00:00+00:00",
+    "recordedDate": "1995-05-01T12:00:00+00:00",
+    "resourceType": "Condition",
+    "subject": {
+      "reference": "Patient/123"
+    },
+    "verificationStatus": {
+      "coding": [
+        {
+          "code": "C",
+          "display": "Confirmed",
+          "system": "ConfirmationStatusList"
+        }
+      ]
+    }
+  }
+]

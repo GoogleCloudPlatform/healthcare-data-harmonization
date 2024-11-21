@@ -1,0 +1,14 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 Period datatype based on V2 DR datatype
+//
+// Argument(s):
+//   DR datatype
+//
+// Output(s):
+//   Period datatype : https://www.hl7.org/fhir/datatypes.html#Period
+//
+def DR_Period(DR) {
+  start: utilities::Convert_DateTime(DR.1)
+  end: utilities::Convert_DateTime(DR.2)
+}

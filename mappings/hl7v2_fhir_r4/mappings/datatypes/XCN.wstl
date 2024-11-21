@@ -1,0 +1,55 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 PractitionerRole resource based on V2 XCN datatype
+//
+// Argument(s):
+//   XCN datatype
+//   code : https://www.hl7.org/fhir/datatypes.html#code
+//   system : uri datatype (https://www.hl7.org/fhir/datatypes.html#uri)
+//
+// Output(s):
+//   PractitionerRole Resource : https://www.hl7.org/fhir/r4/practitionerrole.html
+//
+def XCN_PractitionerRole(required XCN, code, system) {
+  // The resource must be output before building the practitioner reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in
+  // the reference. The resource must not be modified after it has been output.
+  practitioner: utilities::OutputResourceAndGetReference(XCN_Practitioner(XCN))
+  code[0].coding[0].code: code
+  code[0].coding[0].system: utilities::Build_System(system)
+  resourceType: "PractitionerRole"
+}
+
+// Description: Constructs a FHIR R4 Practitioner resource based on V2 XCN datatype
+//
+// Argument(s):
+//   XCN datatype
+//
+// Output(s):
+//   Practitioner Resource : https://www.hl7.org/fhir/practitioner.html
+//
+def XCN_Practitioner(required XCN) {
+  if XCN.1 then {
+    identifier[0].value: XCN.1
+  } else {
+    identifier[0].value: "unknown"
+  }
+  identifier[0].system: "unknown"
+  name[0].family: FN_Family(XCN.2)
+  // Fixed-value to ensure https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-practitioner-definitions.html#Practitioner.name.family
+  name[0].family: if !XCN.2 then "unknown"
+  name[0].given[]: XCN.3
+  name[0].given[]: XCN.4
+  name[0].suffix[]: XCN.5
+  name[0].prefix[]: XCN.6
+  name[0].suffix[]: XCN.7
+  name[0].use: utilities::Convert_TerminologyCode(XCN.10, "HL70200", "Name_Type")
+  identifier[0].type.coding[].code: XCN.13
+  if XCN.19 and !XCN.20 then {
+    name[0].period: DR_Period(XCN.17)
+  }
+  name[0].period.start: utilities::Convert_DateTime(XCN.19)
+  name[0].period.end: utilities::Convert_DateTime(XCN.20)
+  name[0].suffix[]: XCN.21
+  resourceType: "Practitioner"
+}

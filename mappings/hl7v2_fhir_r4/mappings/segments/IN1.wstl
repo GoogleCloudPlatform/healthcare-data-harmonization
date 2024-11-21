@@ -1,0 +1,60 @@
+package segments
+
+// Description: Constructs a FHIR R4 Coverage Resource based on V2 IN1 Segment and Patient Resource
+//
+// Argument(s):
+//   IN1 Segment
+//   PatienReference already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Coverage: https://www.hl7.org/fhir/coverage.html
+//
+def IN1_Coverage(required IN1, PatientReference) {
+  order: if IN1? and tryParseNum(IN1.1) > 0 then tryParseNum(IN1.1)
+  identifier[0]: datatypes::Build_Identifier(datatypes::CWE_Code(IN1.2), "", "")
+  identifier[0].type.text: if IN1.2 then "Insurance Plan Id"
+  var Organization: datatypes::XON_XAD_Organization(IN1.4[0], IN1.5[0])
+  var Organization.telecom[]: datatypes::XTN_ContactPoint(IN1.7[], "work")
+  payor[]: utilities::OutputResourceAndGetReference(Organization)
+  class[]: if IN1.8 then {
+    type: datatypes::Build_CodeableConcept("group", "http://hl7.org/fhir/ValueSet/coverage-class", "", "")
+    value: IN1.8
+  }
+  class[]: if IN1.11 then {
+    type: datatypes::Build_CodeableConcept("group", "http://hl7.org/fhir/ValueSet/coverage-class", "", "")
+    value: IN1.11[0].1
+  }
+  policyHolder: utilities::OutputResourceAndGetReference(datatypes::XON_Organization(IN1.11[0]))
+  period.start: utilities::Convert_DateTime(IN1.12)
+  period.end: utilities::Convert_DateTime(IN1.13)
+  type: datatypes::CWE_CodeableConcept(IN1.15)
+  relationship: utilities::Convert_Terminology(datatypes::CWE_Code(IN1.17), "HL70063", "Relationship")
+  if IN1.17.1 == "SEL" then {
+    subscriber: PatientReference
+  } else {
+    subscriber: utilities::OutputResourceAndGetReference(IN1_RelatedPerson(IN1, PatientReference))
+  }
+  beneficiary: PatientReference
+  status: "active";    // place-holder for 1..1 cardinality
+  resourceType: "Coverage"
+}
+
+// Description: Constructs a FHIR R4 RelatedPerson Resource based on V2 IN1 Segment and Patient Resource
+//
+// Argument(s):
+//   IN1 Segment
+//   PatientReference already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   RelatedPerson: https://www.hl7.org/fhir/relatedperson.html
+//
+def IN1_RelatedPerson(required IN1, PatientReference) {
+  if IN1.16 then {
+    name[]: datatypes::XPN_HumanName(IN1.16[])
+    birthDate: utilities::Extract_Date(IN1.18)
+    gender: utilities::Convert_TerminologyCode(datatypes::CWE_Code(IN1.43), "HL70001", "Gender")
+    address[]: datatypes::XAD_Address(IN1.44[])
+    patient: PatientReference
+    resourceType: "RelatedPerson"
+  }
+}

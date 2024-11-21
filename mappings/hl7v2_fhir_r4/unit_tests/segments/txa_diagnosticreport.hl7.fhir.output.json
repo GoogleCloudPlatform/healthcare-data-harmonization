@@ -1,0 +1,26 @@
+[
+  {
+    "code": {
+      "coding": [
+        {
+          "code": "HP",
+          "display": "History and Physical"
+        }
+      ]
+    },
+    "effectiveDateTime": "2009-01-15T10:10:00+00:00",
+    "encounter": {
+      "reference": "Encounter/456"
+    },
+    "identifier": [
+      {
+        "value": "TX123"
+      }
+    ],
+    "resourceType": "DiagnosticReport",
+    "status": "final",
+    "subject": {
+      "reference": "Patient/123"
+    }
+  }
+]

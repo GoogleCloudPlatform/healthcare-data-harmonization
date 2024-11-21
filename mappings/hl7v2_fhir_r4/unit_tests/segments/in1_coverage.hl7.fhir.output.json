@@ -1,0 +1,91 @@
+[
+  {
+    "active": true,
+    "id": "e9bfbab6195ff6c666127d1cf1bd7750",
+    "name": "Medicare",
+    "resourceType": "Organization"
+  },
+  {
+    "birthDate": "1941-02-28",
+    "id": "c29791c54d93037f881dbabb23b0dfe7",
+    "name": [
+      {
+        "family": "POLDARK",
+        "given": [
+          "ROSS"
+        ]
+      }
+    ],
+    "patient": {
+      "reference": "Patient/123"
+    },
+    "resourceType": "RelatedPerson"
+  },
+  {
+    "beneficiary": {
+      "reference": "Patient/123"
+    },
+    "class": [
+      {
+        "type": {
+          "coding": [
+            {
+              "code": "group",
+              "system": "http://hl7.org/fhir/ValueSet/coverage-class"
+            }
+          ]
+        },
+        "value": "56"
+      },
+      {
+        "type": {
+          "coding": [
+            {
+              "code": "group",
+              "system": "http://hl7.org/fhir/ValueSet/coverage-class"
+            }
+          ]
+        },
+        "value": "Medicare"
+      }
+    ],
+    "identifier": [
+      {
+        "type": {
+          "text": "Insurance Plan Id"
+        },
+        "value": "PLANID"
+      }
+    ],
+    "order": 1,
+    "period": {
+      "end": "1999-10-31T00:00:00+00:00",
+      "start": "1998-11-01T00:00:00+00:00"
+    },
+    "policyHolder": {
+      "reference": "Organization/e9bfbab6195ff6c666127d1cf1bd7750"
+    },
+    "relationship": {
+      "coding": [
+        {
+          "code": "O",
+          "display": "Other",
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+          "version": "v1"
+        }
+      ]
+    },
+    "resourceType": "Coverage",
+    "status": "active",
+    "subscriber": {
+      "reference": "RelatedPerson/c29791c54d93037f881dbabb23b0dfe7"
+    },
+    "type": {
+      "coding": [
+        {
+          "code": "Medicare"
+        }
+      ]
+    }
+  }
+]

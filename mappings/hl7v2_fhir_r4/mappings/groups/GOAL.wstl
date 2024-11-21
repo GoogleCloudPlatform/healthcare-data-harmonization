@@ -1,0 +1,25 @@
+package groups
+
+// Description: Parse GOAL group, and constructs FHIR R4 Resources based on OBX, GOL, NTE, VAR segments
+//
+// Argument(s):
+//   GOAL Group
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Condition Resource already constructed through PRB_Condition Projector: https://www.hl7.org/fhir/condition.html
+//   Encounter Resource already constructed through PV1_DG1_Encounter Projector: https://www.hl7.org/fhir/encounter.html
+//
+// Output(s):
+//   Goal: https://www.hl7.org/fhir/goal.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//
+def Parse_GOAL(required GOAL, PatientReference, EncounterReference, ConditionReference) {
+  var ObservationResource[]: PARSE_OBSERVATION(GOAL.GOAL_OBSERVATION[], PatientReference, EncounterReference)
+
+  var Goal: segments::GOL_Goal(GOAL.GOL, PatientReference, ConditionReference)
+  var Goal.note[]: datatypes::NTE_Annotation(GOAL.NTE[])
+  var Goal.outcomeReference[]: ObservationResource[]
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var GoalReference: utilities::OutputResourceAndGetReference(Goal)
+  $this: GoalReference
+}

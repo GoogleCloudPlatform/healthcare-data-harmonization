@@ -1,0 +1,31 @@
+package segments
+
+// Description: Constructs a FHIR R4 Condition Resource and its related resources based on V2 PRB Segment and Patient resource
+//
+// Argument(s):
+//   PRB V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   Condition: https://www.hl7.org/fhir/condition.html
+//
+def PRB_Condition(required PRB, PatientReference) {
+  category[0].coding[0].code: "problem-list-item"
+  category[0].coding[0].system: "http://terminology.hl7.org/CodeSystem/condition-category"
+  code: datatypes::CWE_CodeableConcept(PRB.3)
+  identifier[]: datatypes::EI_Identifier(PRB.4, "", "");    // passing empty values since identifier code and system are unknown
+  recordedDate: utilities::Convert_DateTime(PRB.7)
+  abatementDateTime: utilities::Convert_DateTime(PRB.9)
+  category[]: datatypes::CWE_CodeableConcept(PRB.10)
+  verificationStatus: datatypes::CWE_CodeableConcept(PRB.13)
+  // To ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(Condition): "verificationStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/condition-ver-status' and code='entered-in-error').empty() or clinicalStatus.empty()"
+  if PRB.13.1 != "entered-in-error" then {
+    clinicalStatus.coding[0].code: if PRB.9 then "resolved" else "active"
+    clinicalStatus.coding[0].system: "http://terminology.hl7.org/CodeSystem/condition-clinical"
+  }
+  onsetDateTime: utilities::Convert_DateTime(PRB.16)
+  onsetString: if !PRB.16 then PRB.17
+  severity: datatypes::CWE_CodeableConcept(PRB.26)
+  subject: PatientReference
+  resourceType: "Condition"
+}

@@ -1,0 +1,34 @@
+package messages
+
+// Description: Define HL7v2 (version 2.9) to FHIR R4 transformation
+//
+// Argument(s):
+//   ADT_A18 HL7v2 Message Type (version 2.9)
+//   ADT_A18 Segments covered in this mapping configuration are: MSH, PID, PD1, PV1
+//
+// Output(s):
+//   FHIR R4 Resources : http://www.hl7.org/fhir/resourcelist.html
+// List of Generated FHIR Resources:
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   Location: https://www.hl7.org/fhir/location.html
+//   MessageHeader: https://www.hl7.org/fhir/messageheader.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//
+def ADT_A18(required ADT_A18) {
+  var MessageHeaderReference: utilities::OutputResourceAndGetReference(segments::MSH_MessageHeader(ADT_A18.MSH))
+
+  var Patient: segments::PID_PD1_Patient(ADT_A18.PID, ADT_A18.PD1)
+  var Patient.extension[]: utilities::Build_Extension(datatypes::CWE_CodeableConcept(ADT_A18.PV1.16), "CodeableConcept", "http://hl7.org/fhir/StructureDefinition/patient-importance")
+  var PatientReference: utilities::OutputResourceAndGetReference(Patient)
+
+  root Bundle: segments::MSH_Bundle(ADT_A18.MSH.7, ADT_A18.MSH.10)
+  root Provenance: segments::MSH_Provenance(ADT_A18.MSH, PatientReference)
+
+  // Encounter resource should not be created if PV1-2 - Patient Class values to "N" - not applicable.
+  // "Not Applicable" is used only in cases where the PV1 segment itself is not applicable but is retained in the message definitions for backwards compatibility.
+  if ADT_A18.PV1.2.1 != "N" then {
+    var EncounterReference: utilities::OutputResourceAndGetReference(segments::PV1_DG1_Encounter(ADT_A18.PV1, {}, ADT_A18.MSH.9, ADT_A18.EVN.2, PatientReference, {}))
+  }
+}

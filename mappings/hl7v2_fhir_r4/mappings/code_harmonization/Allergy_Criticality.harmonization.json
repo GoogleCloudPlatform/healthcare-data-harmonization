@@ -1,0 +1,40 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "SV",
+          "display": "Severe",
+          "target": [
+            {
+              "code": "high",
+              "display": "High risk",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "MI",
+          "display": "Mild",
+          "target": [
+            {
+              "code": "low",
+              "display": "Low risk",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://terminology.hl7.org/CodeSystem/v2-0128",
+      "target": "http://hl7.org/fhir/allergy-intolerance-criticality",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "unable-to-assess",
+        "display": "Unable to Assess Risk"
+      }
+    }
+  ],
+  "id": "Allergy_Criticality",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

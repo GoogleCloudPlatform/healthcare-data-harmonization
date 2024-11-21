@@ -1,0 +1,45 @@
+package groups
+
+// Description: Parse PATIENT_RESULT group, and constructs FHIR R4 Resources based on PID, PD1, PV1, OBX, OBR, ORC sub-segments
+//
+// Argument(s):
+//   PATIENT_RESULT Group
+//
+// Output(s):
+//   Account: https://www.hl7.org/fhir/account.html
+//   DiagnosticReport: https://hl7.org/fhir/diagnosticreport.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   ServiceRequest : https://hl7.org/fhir/servicerequest.html
+//
+def Parse_PATIENT_RESULT (required PATIENT_RESULT, MSH_9, EVN_2) {
+  var Patient: segments::PID_PD1_Patient(PATIENT_RESULT.PATIENT.PID, PATIENT_RESULT.PATIENT.PD1)
+  var Patient.contact[]: if PATIENT_RESULT.PATIENT.NK1 then datatypes::NK1_Contact(PATIENT_RESULT.PATIENT.NK1[])
+  var Patient.extension[]: utilities::Build_Extension(datatypes::CWE_CodeableConcept(PATIENT_RESULT.PATIENT.VISIT.PV1.16), "CodeableConcept", "http://hl7.org/fhir/StructureDefinition/patient-importance")
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var PatientReference: utilities::OutputResourceAndGetReference(Patient)
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var AccountReference: utilities::OutputResourceAndGetReference(segments::PID_Account(PATIENT_RESULT.PATIENT.PID.18, PatientReference))
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var ProvenanceReference: utilities::OutputResourceAndGetReference(segments::PID_Provenance(PATIENT_RESULT.PATIENT.PID.34, PATIENT_RESULT.PATIENT.PID.33, PatientReference))
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var RelatedPersonReference: utilities::OutputResourceAndGetReference(segments::NK1_RelatedPerson(PATIENT_RESULT.PATIENT.NK1[], PatientReference)[])
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  var EncounterReference: utilities::OutputResourceAndGetReference(segments::PV1_DG1_Encounter(PATIENT_RESULT.PATIENT.VISIT.PV1, "", MSH_9, EVN_2, PatientReference, ""))
+
+  if PATIENT_RESULT.PATIENT.PATIENT_OBSERVATION[*].OBX then {
+    // Outputting the resource adds it to the bundle and assigns the ids. The resource
+    // must not be modified after it is output.
+    var ObservationReference: utilities::OutputResourceAndGetReference(segments::OBX_Observation(PATIENT_RESULT.PATIENT.PATIENT_OBSERVATION[*].OBX[], PatientReference)[])
+  }
+  PARSE_ORDER_OBSERVATION(PATIENT_RESULT.ORDER_OBSERVATION[], PatientReference, EncounterReference)
+  PatientReference
+}

@@ -1,0 +1,123 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "E",
+          "display": "Emergency",
+          "target": [
+            {
+              "code": "EMER",
+              "display": "emergency",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "I",
+          "display": "Inpatient",
+          "target": [
+            {
+              "code": "IMP",
+              "display": "inpatient encounter",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "O",
+          "display": "Outpatient",
+          "target": [
+            {
+              "code": "AMB",
+              "display": "ambulatory",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "P",
+          "display": "Preadmit",
+          "target": [
+            {
+              "code": "PRENC",
+              "display": "pre-admission",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70004",
+      "target": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    },
+    {
+      "element": [
+        {
+          "code": "R",
+          "display": "Recurring patient",
+          "target": [
+            {
+              "code": "R",
+              "display": "Recurring patient",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "B",
+          "display": "Obstetrics",
+          "target": [
+            {
+              "code": "B",
+              "display": "Obstetrics",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "C",
+          "display": "Commercial Account",
+          "target": [
+            {
+              "code": "C",
+              "display": "Commercial Account",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "N",
+          "display": "Not Applicable",
+          "target": [
+            {
+              "code": "N",
+              "display": "Not Applicable",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "U",
+          "display": "Unknown",
+          "target": [
+            {
+              "code": "U",
+              "display": "Unknown",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70004",
+      "target": "http://terminology.hl7.org/CodeSystem/v2-0004",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "U",
+        "display": "Unknown"
+      }
+    }
+  ],
+  "id": "Encounter_Class",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

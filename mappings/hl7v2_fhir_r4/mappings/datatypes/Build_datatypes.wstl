@@ -1,0 +1,132 @@
+package datatypes
+
+// This file of datatypes package contains the build functions for FHIR datatypes used in the mappings.
+// A Build function constructs a FHIR datatype with pre-defined v2 fields as arguments for transforming any of the v2 datatype to FHIR datatype.
+// These functions are used when there is a need to build a FHIR datatype from source data.
+//
+// Example : Build_CodeableConcept(required code, required system, display, text)
+// This function constructs a codeableConcept FHIR datatype from individual v2 fields as inputs (code, system etc.)
+
+// Description: Constructs CodeableConcept datatype
+//
+// Argument(s):
+//   code : codeableConcept.coding.code attribute
+//   system : codeableConcept.coding.system attribute
+//   display : codeableConcept.coding.display attribute
+//   text : codeableConcept.text attribute
+//
+// Output(s):
+//   CodeableConcept datatype : https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def Build_CodeableConcept(required code, required system, display, text) {
+  coding[0].code: code
+  coding[0].display: display
+  coding[0].system: utilities::Build_System(system)
+  text: text
+}
+
+// Description: Constructs Identifier datatype
+//
+// Argument(s):
+//   varValue: Identifier.value attribute
+//   varType: Identifier.type attribute
+//   varID: HD.3 identifier type
+// Output(s):
+//   Identifier datatype : https://www.hl7.org/fhir/datatypes.html#Identifier
+//
+def Build_Identifier (varValue, varType, varID) {
+  value: varValue
+  type: ID_CodeableConcept(varType)
+  if varID == "ISO" or varID == "UUID" then {
+    system: "urn:ietf:rfc:3986";   // when the identifier is a URI: https://www.hl7.org/fhir/identifier-registry.html
+  }
+}
+
+// Description: Constructs a Appointment resource
+//
+// Argument(s):
+//   Appointment Resource : https://www.hl7.org/fhir/r4/appointment.html
+//   CWE Datatype : https://www.hl7.org/fhir/r4/datatypes.html#CodeableConcept
+// Output(s):
+//   AppointmentParticipant Resource : https://www.hl7.org/fhir/r4/appointment.html
+//
+def Build_AppointmentParticipant(required Actor, Type) {
+  actor: Actor
+  type[]: CWE_CodeableConcept(Type)
+  status: "accepted";    // place-holder for 1..1 cardinality
+}
+
+// Description: Constructs ContactPoint datatype
+//
+// Argument(s):
+//   varValue, varSystem, varUse, varRank, varStart, varEnd : respective values are passed to construct a ContactPoint datatype
+//
+// Output(s):
+//   ContactPoint datatype : https://www.hl7.org/fhir/datatypes.html#ContactPoint
+//
+def Build_ContactPoint(required varValue, varSystem, varUse, varRank, varStart, varEnd, extension) {
+  value: varValue
+  system: varSystem
+  use: varUse
+  rank: varRank
+  period.start: utilities::Convert_DateTime(varStart)
+  period.end: utilities::Convert_DateTime(varEnd)
+  extension[]: extension[]
+}
+
+// Description: Constructs a Provenance.agent datatype
+//
+// Argument(s):
+//   Provenance.Type: https://www.hl7.org/fhir/provenance-definitions.html#Provenance.agent.type
+//   Provenance.Who: https://www.hl7.org/fhir/provenance-definitions.html#Provenance.agent.who
+//
+// Output(s):
+//   Provenance.agent : https://www.hl7.org/fhir/provenance-definitions.html#Provenance.agent
+//
+def Build_Agent(Code, System, required Who) {
+  type.coding[0].code: Code
+  type.coding[0].system: utilities::Build_System(System)
+  who: Who
+}
+
+// Description: Constructs Procedure.performer datatype
+//
+// Argument(s):
+//   XCN datatype
+//   code: a code string to be mapped with Performer.function code
+//   system : a system string to be mapped with Performer.function system
+//
+// Output(s):
+//   Performer datatype : https://www.hl7.org/fhir/procedure-definitions.html#Procedure.performer
+//   Practitioner Resource : https://www.hl7.org/fhir/practitioner.html
+//
+def Build_Performer(required XCN, Code, System) {
+  // The resource must be output before building the actor reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in
+  // the reference. The resource must not be modified after it has been output.
+  var Actor: utilities::OutputResourceAndGetReference(XCN_Practitioner(XCN))
+  actor: Actor
+  function.coding[0].code: Code
+  function.coding[0].system: utilities::Build_System(System)
+}
+
+// Description: Constructs an Encouter.participant datatype, where a Practitioner resource is created and referrenced.
+//
+// Argument(s):
+//   XCN Datatype
+//   varCode, varSystem, varDisplay: respective values are passed to construct a participant datatype
+//
+// Output(s):
+//   Encouter.participant datatype : https://www.hl7.org/fhir/encounter-definitions.html#Encounter.participant
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def Build_Participant (required XCN, varCode, varSystem, varDisplay) {
+  // The resource must be output before building the individual reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in
+  // the reference. The resource must not be modified after it has been output.
+  var xcnPractitioner: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(XCN))
+  individual: xcnPractitioner
+  type[0].coding[0].code: varCode
+  type[0].coding[0].system: utilities::Build_System(varSystem)
+  type[0].coding[0].display: varDisplay
+}

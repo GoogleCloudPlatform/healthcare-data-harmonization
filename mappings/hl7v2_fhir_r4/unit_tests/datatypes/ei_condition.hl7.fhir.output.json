@@ -1,0 +1,31 @@
+[
+  {
+    "active": true,
+    "id": "f39c2c461fde04af3af9d8943d162150",
+    "identifier": [
+      {
+        "value": "NIST EHR"
+      },
+      {
+        "type": "URI",
+        "value": "O23"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "identifier": [
+      {
+        "assigner": {
+          "reference": "Organization/f39c2c461fde04af3af9d8943d162150"
+        },
+        "value": "ORD448811"
+      }
+    ],
+    "resourceType": "Condition",
+    "subject": {
+      "reference": "Patient/123"
+    }
+  }
+]

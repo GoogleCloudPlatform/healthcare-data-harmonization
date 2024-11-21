@@ -1,0 +1,33 @@
+[
+  {
+    "addresses": [
+      {
+        "reference": "Condition/123"
+      }
+    ],
+    "description": {
+      "coding": [
+        {
+          "code": "00312",
+          "display": "Improve Peripheral Circulation",
+          "system": "GoalList"
+        }
+      ]
+    },
+    "identifier": [
+      {
+        "value": "123GL"
+      }
+    ],
+    "lifecycleStatus": "active",
+    "resourceType": "Goal",
+    "subject": {
+      "reference": "Patient/123"
+    },
+    "target": [
+      {
+        "dueDate": "1995-05-10"
+      }
+    ]
+  }
+]

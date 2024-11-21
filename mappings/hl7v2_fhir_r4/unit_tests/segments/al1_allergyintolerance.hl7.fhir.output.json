@@ -1,0 +1,40 @@
+[
+  {
+    "category": [
+      "medication"
+    ],
+    "clinicalStatus": {
+      "coding": [
+        {
+          "code": "active",
+          "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical"
+        }
+      ]
+    },
+    "code": {
+      "coding": [
+        {
+          "code": "387458008",
+          "display": "ASPIRIN(SUBSTANCE)",
+          "system": "SCT"
+        }
+      ]
+    },
+    "patient": {
+      "reference": "Patient/123"
+    },
+    "reaction": [
+      {
+        "manifestation": [
+          {
+            "text": "HIVES"
+          }
+        ],
+        "onset": "1998-07-01T17:55:00+00:00",
+        "severity": "moderate"
+      }
+    ],
+    "resourceType": "AllergyIntolerance",
+    "type": "allergy"
+  }
+]

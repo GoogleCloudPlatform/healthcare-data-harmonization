@@ -1,0 +1,28 @@
+[
+  {
+    "active": true,
+    "address": [
+      {
+        "country": "44"
+      }
+    ],
+    "identifier": [
+      {
+        "value": "CERNER"
+      },
+      {
+        "type": {
+          "coding": [
+            {
+              "code": "URI",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0301"
+            }
+          ]
+        },
+        "value": "3.2-two"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  }
+]

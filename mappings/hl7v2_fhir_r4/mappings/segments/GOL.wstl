@@ -1,0 +1,22 @@
+package segments
+
+// Description: Constructs a FHIR R4 Goal Resource and its related resources based on V2 GOL Segment and Patient and Conditon resources
+//
+// Argument(s):
+//   GOL V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Condition Resource already constructed through PRB_Condition Projector: https://www.hl7.org/fhir/conditon.html
+//
+// Output(s):
+//   Goal: https://www.hl7.org/fhir/goal.html
+//
+def GOL_Goal(required GOL, PatientReference, ConditionReference) {
+  description: datatypes::CWE_CodeableConcept(GOL.3)
+  identifier[]: datatypes::EI_Identifier(GOL.4, "", "");    // passing empty values since identifier code and system are unknown
+  target[0].dueDate: utilities::Extract_Date(GOL.8)
+  category[]: datatypes::CWE_CodeableConcept(GOL.9)
+  lifecycleStatus: "active";    // place-holder for 1..1 cardinality
+  subject: PatientReference
+  addresses[]: ConditionReference
+  resourceType: "Goal"
+}

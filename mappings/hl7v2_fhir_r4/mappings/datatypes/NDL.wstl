@@ -1,0 +1,20 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 PractitionerRole Resource based on NDL datatype
+//
+// Argument(s):
+//   NDL datatype
+//
+// Output(s):
+//   Practitioner: https://www.hl7.org/fhir/practitionerrole.html
+//
+def NDL_PractitionerRole (required NDL) {
+  // The resource must be output before building the practitioner reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in
+  // the reference. The resource must not be modified after it has been output.
+  var practitioner: utilities::OutputResourceAndGetReference(CNN_Practitioner(NDL.1))
+  practitioner: practitioner
+  period.start: utilities::Convert_DateTime(NDL.2)
+  period.end: utilities::Convert_DateTime(NDL.3)
+  resourceType: "PractitionerRole"
+}

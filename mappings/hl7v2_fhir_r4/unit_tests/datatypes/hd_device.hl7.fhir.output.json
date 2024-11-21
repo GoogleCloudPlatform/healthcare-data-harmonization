@@ -1,0 +1,29 @@
+[
+  {
+    "identifier": [
+      {
+        "value": "RAL"
+      },
+      {
+        "system": "urn:ietf:rfc:3986",
+        "type": {
+          "coding": [
+            {
+              "code": "UUID",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0301"
+            }
+          ]
+        },
+        "value": "4.2-two"
+      }
+    ],
+    "resourceType": "Device",
+    "type": {
+      "coding": [
+        {
+          "code": "unknown"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,76 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 Organization resource based on V2 XON dtatype
+//
+// Argument(s):
+//   XON datatype
+//
+// Output(s):
+//   Organization Resource : https://www.hl7.org/fhir/organization.html
+//
+def XON_Organization(required XON) {
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-organization-definitions.html#Organization.active
+  name: if XON.1 then XON.1 else "unknown"
+  if !XON.10 then {
+    identifier[0].value: XON.3
+  } else {
+    identifier[0].value: XON.10
+  }
+  identifier[0].type.coding[0].code: XON.7
+  identifier[0].type.coding[0].system: if XON.7 then "http://terminology.hl7.org/CodeSystem/v2-0203"
+  // Fixed-value to ensure fhirpath-constraint-violation-ContainedResource.ofType(Bundle).entry.resource.ofType(Organization): "(identifier.count() + name.count()) > 0"
+  active: true
+  resourceType: "Organization"
+}
+
+// Description: Constructs a FHIR R4 String datatype based on XON V2 datatype
+//
+// Argument(s):
+//   XON datatype
+//
+// Output(s):
+//   String datatype
+//
+def XON_String(required XON) {
+  if XON.1 then {
+    $this: XON.1
+  } else {
+    $this: XON.10
+  }
+}
+
+// Description: Constructs a FHIR R4 Location resource based on V2 XON, XAD, XTN datatypes
+//
+// Argument(s):
+//   HL7 V2 XON datatype
+//   HL7 V2 XAD datatype
+//   HL7 V2 XTN datatype
+//
+// Output(s):
+//   Location : https://www.hl7.org/fhir/location.html
+//
+def XON_XAD_XTN_Location(required XON, XAD, XTN) {
+  name: XON.1
+  identifier[0].value: if !XON.10 then XON.3
+  identifier[0].type.coding[0].code: XON.7
+  identifier[0].type.coding[0].system: if XON.7 then "http://terminology.hl7.org/CodeSystem/v2-0203"
+  identifier[0].value: XON.10
+  address: XAD_Address(XAD)
+  telecom[]: XTN_ContactPoint(XTN, "");    // passing empty value since use is unknown
+  resourceType: "Location"
+}
+
+// Description: Constructs a FHIR R4 Organization resource based on V2 XON, XAD datatype
+//
+// Argument(s):
+//   XON datatype
+//   XAD datatype
+// Output(s):
+//   Organization Resource : https://www.hl7.org/fhir/organization.html
+//
+def XON_XAD_Organization (required XON, XAD) {
+  $this: XON_Organization(XON)
+  var Address: XAD_Address(XAD)
+  // To ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(Organization).address: "where(use = 'home').empty()"
+  address[]: if Address.use != "home" then Address
+}

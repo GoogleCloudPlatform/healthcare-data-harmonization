@@ -1,0 +1,56 @@
+package datatypes
+
+// Description: Constructs a FHIR R4 ServiceRequest resource based on V2 TQ datatype
+//
+// Argument(s):
+//   HL7 V2 TQ datatype
+//
+// Output(s):
+//   ServiceRequest : https://www.hl7.org/fhir/servicerequest.html
+//
+def TQ_ServiceRequest(required TQ) {
+  quantityQuantity: CQ_Quantity(TQ.1)
+  occurrenceTiming: RI_Timing(TQ.2)
+  occurrenceTiming.repeat.boundsPeriod.start: utilities::Convert_DateTime(TQ.4)
+  occurrenceTiming.repeat.boundsPeriod.end: utilities::Convert_DateTime(TQ.5)
+  priority: utilities::Convert_TerminologyCode(TQ.6, "HL70485", "Priority")
+  note[0].text: TQ.8
+  occurrenceTiming.repeat.count: TQ.12
+}
+
+// Description: Constructs a FHIR R4 Dosage BackBoneElement based on V2 TQ datatype
+//
+// Argument(s):
+//   TQ datatype
+//
+// Output(s):
+//   MedicationRequest.dosageInstruction Resource : http://hl7.org/fhir/R4/dosage.html#Dosage
+//
+def TQ_Dosage(TQ) {
+  doseAndRate[0].doseQuantity: CQ_Quantity(TQ.1)
+  timing: RI_Timing(TQ.2)
+  timing.repeat.duration: if TQ.3 then tryParseNum(TQ.3)
+  timing.repeat.boundsPeriod.start: utilities::Convert_DateTime(TQ.4)
+  timing.repeat.boundsPeriod.end: utilities::Convert_DateTime(TQ.5)
+  timing.repeat.count: if TQ.12 then tryParseNum(TQ.12)
+}
+
+// Description: Constructs a FHIR R4 ServiceRequest resource based on V2 TQ1 datatype
+//
+// Argument(s):
+//   TQ1 V2 Segment
+//
+// Output(s):
+//   ServiceRequest Resource : https://www.hl7.org/fhir/servicerequest.html
+//
+def TQ1_ServiceRequest(required TQ1) {
+  quantityQuantity: CQ_Quantity(TQ1.2)
+  occurrenceTiming.repeat.timeOfDay[]: formatDateTime("hh:mm:ss.SSS", parseDateTime("HHmmssZ", TQ1.4[])[])
+  occurrenceTiming.repeat: CQ_RepeatPeriod(TQ1.5[0])
+  occurrenceTiming.repeat.boundsPeriod.start: utilities::Convert_DateTime(TQ1.7)
+  occurrenceTiming.repeat.boundsPeriod.end: utilities::Convert_DateTime(TQ1.8)
+  priority: utilities::Convert_TerminologyCode(CWE_Code(TQ1.9[0]), "HL70485", "Priority")
+  note[].text: TQ1.11
+  occurrenceTiming.repeat: CQ_RepeatDuration(TQ1.13)
+  occurrenceTiming.repeat.count: if TQ1.14 then tryParseNum(TQ1.14)
+}

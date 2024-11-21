@@ -1,0 +1,35 @@
+package segments
+
+// Description: Constructs a FHIR R4 DiagnosticReport Resource based on TXA Segment
+//
+// Argument(s):
+//   TXA V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Encounter Resource already constructed through PV1_datatypes::DG1_Encounter Projector: https://www.hl7.org/fhir/encounter.html
+//
+// Output(s):
+//   DiagnosticReport: https://hl7.org/fhir/diagnosticreport.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   PractitionerRole: https://www.hl7.org/fhir/practitionerrole.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//
+def TXA_DiagnosticReport(required TXA, PatientReference, EncounterReference) {
+  code: datatypes::CWE_CodeableConcept(TXA.2)
+  effectiveDateTime: utilities::Convert_DateTime(TXA.4)
+  var TXA5: if is(TXA.5, "Container") then [TXA.5] else TXA.5
+  performer[]: if TXA.4 then utilities::OutputResourceAndGetReference(datatypes::XCN_PractitionerRole(TXA5[], "PPRF", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType")[])
+  issued: utilities::Convert_Instant(TXA.6)
+  performer[]: utilities::OutputResourceAndGetReference(datatypes::XCN_PractitionerRole(TXA.9[], "AUT", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType")[])
+  performer[]: utilities::OutputResourceAndGetReference(datatypes::XCN_PractitionerRole(TXA.10[], "AUTHEN", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType")[])
+  performer[]: if TXA.11 then utilities::OutputResourceAndGetReference(datatypes::XCN_PractitionerRole(TXA.11[], "TRANS", "http://terminology.hl7.org/CodeSystem/v3-ParticipationType")[])
+  identifier[]: datatypes::EI_Identifier(TXA.12, "", "");  // passing "" since code and System are unknown
+  identifier[]: datatypes::EI_Identifier(TXA.13, "", "");  // passing "" since code and System are unknown
+  identifier[]: datatypes::EI_Identifier(TXA.14[], "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: datatypes::EI_Identifier(TXA.15, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  status: utilities::Convert_TerminologyCode(TXA.17, "HL70271", "Document_Completion_Status"); // ConceptMap needed
+  performer[]: utilities::OutputResourceAndGetReference(datatypes::HD_Organization(TXA.27));   // TXA.27(Creating Facility) added in v2.9
+  encounter: EncounterReference
+  subject: PatientReference
+  resourceType: "DiagnosticReport"
+}

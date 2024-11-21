@@ -1,0 +1,34 @@
+[
+  {
+    "collection": {
+      "bodySite": {
+        "coding": [
+          {
+            "code": "LA",
+            "display": "Left Arm",
+            "system": "HL70163"
+          }
+        ]
+      }
+    },
+    "container": [
+      {
+        "additiveCodeableConcept": {
+          "text": "ACET"
+        }
+      }
+    ],
+    "note": [
+      {
+        "text": "Swab"
+      }
+    ],
+    "type": {
+      "coding": [
+        {
+          "code": "SP03"
+        }
+      ]
+    }
+  }
+]

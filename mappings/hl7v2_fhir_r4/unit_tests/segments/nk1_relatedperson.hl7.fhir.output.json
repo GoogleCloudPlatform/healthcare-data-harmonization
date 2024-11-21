@@ -1,0 +1,45 @@
+[
+  {
+    "name": [
+      {
+        "family": "NUCLEAR",
+        "given": [
+          "NELDA",
+          "W"
+        ]
+      }
+    ],
+    "patient": {
+      "reference": "Patient/123"
+    },
+    "relationship": [
+      {
+        "coding": [
+          {
+            "code": "SPS",
+            "display": "spouse",
+            "system": "http://terminology.hl7.org/CodeSystem/v3-RoleCode",
+            "version": "v1"
+          },
+          {
+            "code": "U",
+            "display": "Unknown",
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+            "version": "v1"
+          }
+        ]
+      },
+      {
+        "coding": [
+          {
+            "code": "U",
+            "display": "Unknown",
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+            "version": "v1"
+          }
+        ]
+      }
+    ],
+    "resourceType": "RelatedPerson"
+  }
+]

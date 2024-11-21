@@ -1,0 +1,46 @@
+package datatypes
+
+// Description: Constructs a Quantity datatype from CQ datatype
+//
+// Argument(s):
+//   CQ datatype
+//
+// Output(s):
+//   Quantity Datatype : https://www.hl7.org/fhir/datatypes.html#Quantity
+//
+def CQ_Quantity(required CQ) {
+  value: if CQ.1 then tryParseNum(CQ.1)
+  unit: CWE_String(CQ.2)
+}
+
+// Description: Constructs Timing.repeat datatype
+//
+// Argument(s):
+//   CQ datatype
+//
+// Output(s):
+//   Timing.repeat : https://www.hl7.org/fhir/datatypes-definitions.html#Timing.repeat
+//
+def CQ_RepeatPeriod(required CQ) {
+  // To ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(ServiceRequest).occurrence.ofType(Timing).repeat: "period.empty() or periodUnit.exists()"
+  if CQ.1 and CQ.2 then {
+    period: tryParseNum(CQ.1)
+    periodUnit: CWE_Code(CQ.2)
+  }
+}
+
+// Description: Constructs Timing.repeat datatype
+//
+// Argument(s):
+//   CQ datatype
+//
+// Output(s):
+//   Timing.repeat : https://www.hl7.org/fhir/datatypes-definitions.html#Timing.repeat
+//
+def CQ_RepeatDuration(required CQ) {
+  // To ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(ServiceRequest).occurrence.ofType(Timing).repeat: "duration.empty() or durationUnit.exists()"
+  if CQ.1 and CQ.2 then {
+    duration: tryParseNum(CQ.1)
+    durationUnit: CWE_Code(CQ.2)
+  }
+}

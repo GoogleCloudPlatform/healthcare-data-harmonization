@@ -1,0 +1,56 @@
+package datatypes
+
+// Description: Constructs a a FHIR R4 EpisodeOfCare resource based on V2 CX datatype, DG1 segment, Condition and Patient resources
+//
+// Argument(s):
+//   CX datatype
+//   DG1 Segment
+//   Condition Resource: https://www.hl7.org/fhir/condition.html
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   EpisodeOfCare Resource : https://www.hl7.org/fhir/episodeofcare.html
+//   Patient Resource : https://www.hl7.org/fhir/patient.html
+//
+def CX_DG1_EpisodeOfCare(CX, DG1, ConditionReference, PatientReference) {
+  identifier[]: CX_Identifier(CX)
+  status: "finished"
+  diagnosis[]: segments::DG1_Diagnosis(DG1[], ConditionReference[])
+  patient: PatientReference
+  resourceType: "EpisodeOfCare"
+}
+
+// Description: Constructs a FHIR R4 Identifier datatype based on V2 CX datatype
+//
+// Argument(s):
+//   CX datatype
+//
+// Output(s):
+//   Identifier datatype : https://www.hl7.org/fhir/datatypes.html#Identifier
+//
+def CX_Identifier(required CX) {
+  value: CX.1
+  if CX.4.3 == "ISO" or CX.4.3 == "UUID" or CX.4 == "DNS" or CX.4 == "GUID" or CX.4 == "URI" then {
+    system: HD_Uri(CX.4)
+  } else {
+    assigner: utilities::OutputResourceAndGetReference(HD_Organization(CX.4))
+    // Fixed value to ensure https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-patient-definitions.html#Patient.identifier.system
+    system: "unknown"
+  }
+  type: Build_CodeableConcept(CX.5, "http://terminology.hl7.org/CodeSystem/v2-0203", "", "")
+  period.start: utilities::Convert_DateTime(CX.7)
+  period.end: utilities::Convert_DateTime(CX.8)
+}
+
+// Description: Constructs a FHIR R4 EpisodeOfCare resource based on V2 CX datatype
+//
+// Argument(s):
+//   CX datatype
+//
+// Output(s):
+//   EpisodeOfCare Resource : https://www.hl7.org/fhir/episodeofcare.html
+//
+def CX_EpisodeOfCare(required CX) {
+  identifier[]: CX_Identifier(CX)
+  resourceType: "EpisodeOfCare"
+}

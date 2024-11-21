@@ -1,0 +1,84 @@
+package hl7v2_fhir
+
+import "./messages/messages.wstl"
+
+// Description: Converts a HL7v2 Message to a set of FHIR resources.
+//
+// Argument(s):
+//   message HL7v2 Message Type (version 2.9)
+//
+// Output(s):
+//   FHIR R4 Resource Transaction - http://www.hl7.org/fhir/bundle.html#transaction
+//
+def HL7v2_FHIR(message) {
+  var msgType: ""
+  if message.ADT_A01? then {
+    var msgType: "ADT_A01"
+  } else if message.ADT_A02? then {
+    var msgType: "ADT_A02"
+  } else if message.ADT_A03? then {
+    var msgType: "ADT_A03"
+  } else if message.ADT_A04? then {
+    var msgType: "ADT_A04"
+  } else if message.ADT_A05? then {
+    var msgType: "ADT_A05"
+  } else if message.ADT_A06? then {
+    var msgType: "ADT_A06"
+  } else if message.ADT_A07? then {
+    var msgType: "ADT_A07"
+  } else if message.ADT_A08? then {
+    var msgType: "ADT_A08"
+  } else if message.ADT_A09? then {
+    var msgType: "ADT_A09"
+  } else if message.ADT_A11? then {
+    var msgType: "ADT_A11"
+  } else if message.ADT_A12? then {
+    var msgType: "ADT_A12"
+  } else if message.ADT_A13? then {
+    var msgType: "ADT_A13"
+  } else if message.ADT_A14? then {
+    var msgType: "ADT_A14"
+  } else if message.ADT_A17? then {
+    var msgType: "ADT_A17"
+  } else if message.ADT_A18? then {
+    var msgType: "ADT_A18"
+  } else if message.ADT_A28? then {
+    var msgType: "ADT_A28"
+  } else if message.MDM_T02? then {
+    var msgType: "MDM_T02"
+  } else if message.ADT_A31? then {
+    var msgType: "ADT_A31"
+  } else if message.ADT_A47? then {
+    var msgType: "ADT_A47"
+  } else if message.OML_O21? then {
+    var msgType: "OML_O21"
+  } else if message.ORU_R01? then {
+    var msgType: "ORU_R01"
+  } else if message.ORM_O01? then {
+    var msgType: "ORM_O01"
+  } else if message.PPR_PC1? then {
+    var msgType: "PPR_PC1"
+  } else if message.RDE_O01? then {
+    var msgType: "RDE_O01"
+  } else if message.RDE_O11? then {
+    var msgType: "RDE_O11"
+  } else if message.RAS_O17? then {
+    var msgType: "RAS_O17"
+  } else if message.SIU_S12? then {
+    var msgType: "SIU_S12"
+  } else if message.SIU_S13? then {
+    var msgType: "SIU_S13"
+  } else if message.SIU_S14? then {
+    var msgType: "SIU_S14"
+  } else if message.VXU_V04? then {
+    var msgType: "VXU_V04"
+  }
+
+  if msgType then {
+    Timestamp: utilities::Convert_Instant(get(message, msgType).MSH.7)
+    if !$this.Timestamp then {
+      Timestamp: currentTime("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+    }
+    withSides(callPackageFn("messages", msgType, get(message, msgType)))
+  }
+}

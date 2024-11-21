@@ -1,0 +1,75 @@
+package datatypes
+
+// This file of datatypes package contains the build functions for FHIR resources used in the mappings.
+// A Build function constructs a FHIR resources with pre-defined v2 fields as arguments for transforming
+// any of the v2 datatype to FHIR datatype.
+// These functions are used when there is a need to build a FHIR resources from source data.
+//
+// Example : Build_Medication(required code, dosageForm)
+// This function constructs a Medication FHIR resource from individual inputs (code, system etc.)
+
+// Description: Constructs a Medication resource
+//
+// Argument(s):
+//   code CWE datatype
+//   dosageForm CWE datatype
+//
+// Output(s):
+//   Medication Resource : https://www.hl7.org/fhir/medication.html
+//
+def Build_Medication(required code, dosageForm) {
+  code: CWE_CodeableConcept(code);   // Need Terminology Mapping: No mappings found in community sheet
+  form: CWE_CodeableConcept(dosageForm);   // Need Terminology Mapping: No mappings found in community sheet
+  resourceType: "Medication"
+}
+
+// Description: Constructs a PractitionerRole resource
+//
+// Argument(s):
+//   Practitioner Resource : https://www.hl7.org/fhir/r4/practitioner.html
+//   Organization Resource : https://www.hl7.org/fhir/r4/organization.html
+//   code datatype : https://www.hl7.org/fhir/datatypes.html#code
+//   system : uri datatype (https://www.hl7.org/fhir/datatypes.html#uri)
+// Output(s):
+//   PractitionerRole Resource : https://www.hl7.org/fhir/r4/practitionerrole.html
+//
+def Build_PractitionerRole(required PractitionerReference, required OrganizationReference, code, system) {
+  // The resource must be output before building the practitioner reference.
+  // Outputting the resource adds it to the bundle and assigns the id used in
+  // the reference. The resource must not be modified after it has been output.
+  practitioner: PractitionerReference
+  organization: OrganizationReference
+  code[0].coding[0].code: code
+  code[0].coding[0].system: utilities::Build_System(system)
+  resourceType: "PractitionerRole"
+}
+
+// Description: Constructs a Location resource
+//
+// Argument(s):
+//   identifier datatype : https://www.hl7.org/fhir/datatypes.html#identifier
+// Output(s):
+//   Location Resource : https://www.hl7.org/fhir/r4/location.html
+//
+def Build_Location(required Identifier) {
+  identifier[]: Identifier[]
+  // Fixed value to ensure : https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-location-definitions.html#Location.name;
+  name: "Unknown"
+  resourceType: "Location"
+}
+
+// Description: Constructs a Organization resource
+//
+// Argument(s):
+//   identifier datatype : https://www.hl7.org/fhir/datatypes.html#identifier
+// Output(s):
+//   Condition Resource : https://www.hl7.org/fhir/r4/condition.html
+//
+def Build_Organization(required Identifier) {
+  identifier[]: Identifier[]
+  // Fixed-value to ensure fhirpath-constraint-violation-ContainedResource.ofType(Bundle).entry.resource.ofType(Organization): "(identifier.count() + name.count()) > 0"
+  name: "Unknown"
+  // Fixed value to ensure US-Core validation https://www.hl7.org/fhir/us/core/StructureDefinition-us-core-organization-definitions.html#Organization.active
+  active: true
+  resourceType: "Organization"
+}

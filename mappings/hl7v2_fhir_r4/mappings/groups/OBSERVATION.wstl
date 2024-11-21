@@ -1,0 +1,24 @@
+package groups
+
+// Description: Parse OBSERVATION group, and constructs FHIR R4 Resources based on OBX, NTE sub-segments
+//
+// Argument(s):
+//   ORDER_OBSERVATION Group
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//   Encounter Resource already constructed through PV1_DG1_Encounter Projector: https://www.hl7.org/fhir/encounter.html
+//
+// Output(s):
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//
+def PARSE_OBSERVATION(required OBSERVATION, PatientReference, EncounterReference) {
+  var Observation: segments::OBX_Observation(OBSERVATION.OBX, PatientReference)
+  if listLen(OBSERVATION.OBX.5) <= 1 and OBSERVATION.OBX.29 == "RSLT" then {
+    var Observation.encounter: EncounterReference
+  }
+  var Observation.note: datatypes::NTE_Annotation(OBSERVATION.NTE[])
+  // Outputting the resource adds it to the bundle and assigns the ids. The resource
+  // must not be modified after it is output.
+  $this: utilities::OutputResourceAndGetReference(Observation)
+}

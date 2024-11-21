@@ -1,0 +1,27 @@
+package messages
+
+// Description: Define RDE_O01 HL7v2 (version 2.9) to FHIR R4 transformation
+//
+// Argument(s):
+//   RDE_O01 HL7v2 Message Type (version 2.9)
+//   RDE_O01 Segments covered in this mapping configuration are: MSH, PID, PD1, PV1, OBX, OBR, ORC, AL1, IN1, RXE
+//
+// Output(s):
+//   FHIR R4 Resources : http://www.hl7.org/fhir/resourcelist.html
+// List of Generated FHIR Resources:
+//   Account: https://www.hl7.org/fhir/account.html
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//   Coverage: https://www.hl7.org/fhir/coverage.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   Location: https://www.hl7.org/fhir/location.html
+//   MessageHeader: https://www.hl7.org/fhir/messageheader.html
+//   MedicationRequest: https://www.hl7.org/fhir/medicationrequest.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   AllergyIntolerance: https://www.hl7.org/fhir/allergyintolerance.html
+//   RelatedPerson: https://www.hl7.org/fhir/relatedperson.html
+//
+def RDE_O01(RDE_O01) {
+  $this: Transform_RDE(RDE_O01)
+}

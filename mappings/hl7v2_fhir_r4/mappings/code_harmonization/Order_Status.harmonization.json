@@ -1,0 +1,106 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "CA",
+          "display": "Order was canceled",
+          "target": [
+            {
+              "code": "revoked",
+              "display": "Revoked",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "CM",
+          "display": "Order is completed",
+          "target": [
+            {
+              "code": "completed",
+              "display": "Completed",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "DC",
+          "display": "Order was discontinued",
+          "target": [
+            {
+              "code": "revoked",
+              "display": "Revoked",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ER",
+          "display": "Error, order not found",
+          "target": [
+            {
+              "code": "entered-in-error",
+              "display": "Entered in error",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "HD",
+          "display": "Order is on hold",
+          "target": [
+            {
+              "code": "on-hold",
+              "display": "On Hold",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "IP",
+          "display": "In process, unspecified",
+          "target": [
+            {
+              "code": "active",
+              "display": "Active",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "RP",
+          "display": "Order has been replaced",
+          "target": [
+            {
+              "code": "revoked",
+              "display": "Revoked",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "SC",
+          "display": "In process, scheduled",
+          "target": [
+            {
+              "code": "active",
+              "display": "Active",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70038",
+      "target": "http://hl7.org/fhir/request-status",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "unknown",
+        "display": "Unknown"
+      }
+    }
+  ],
+  "id": "Order_Status",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

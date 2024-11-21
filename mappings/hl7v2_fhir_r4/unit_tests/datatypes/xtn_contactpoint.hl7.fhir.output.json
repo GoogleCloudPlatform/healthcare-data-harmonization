@@ -1,0 +1,35 @@
+[
+  {
+    "extension": [
+      {
+        "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-country",
+        "valueString": "1"
+      },
+      {
+        "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-area",
+        "valueString": "555"
+      },
+      {
+        "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-extension",
+        "valueString": "1"
+      },
+      {
+        "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-local",
+        "valueString": "1"
+      }
+    ],
+    "period": {
+      "end": "1999-12-31T23:59:00+00:00",
+      "start": "1988-07-01T09:00:00+00:00"
+    },
+    "rank": 1,
+    "system": "phone",
+    "use": "home",
+    "value": "5552004-ABC"
+  },
+  {
+    "system": "email",
+    "use": "home",
+    "value": "smith2001@isp.com"
+  }
+]

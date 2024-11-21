@@ -1,0 +1,124 @@
+package datatypes
+
+// Description: Constructs a a FHIR R4 Organization resource based on V2 CWE datatype
+//
+// Argument(s):
+//   CWE datatype
+//
+// Output(s):
+//   Organization Resource : https://www.hl7.org/fhir/organization.html
+//
+def CWE_Organization(required CWE) {
+  identifier[0].value: CWE.1
+  identifier[0].system: if CWE.1 then "http://terminology.hl7.org/CodeSystem/v2-0227"
+  name: CWE.2
+  // Fixed value to ensure fhirpath-constraint-violation-Bundle.entry.resource.ofType(Organization): "(identifier.count() + name.count()) > 0"
+  name: if !CWE.2 then "Unknown"
+  resourceType: "Organization"
+}
+
+// Description: Constructs a FHIR R4 Code datatype based on V2 CWE datatype
+//
+// Argument(s):
+//   CWE datatype
+//
+// Output(s):
+//   Code datatype : https://www.hl7.org/fhir/datatypes.html#code
+//
+def CWE_Code(CWE) {
+  if CWE.1 then CWE.1 else CWE.4
+}
+
+// Description: Constructs a FHIR R4 Coding datatype based on V2 CWE datatype
+//
+// Argument(s):
+//   CWE datatype
+//
+// Output(s):
+//   Coding datatype : https://www.hl7.org/fhir/datatypes.html#Coding
+//
+def CWE_Coding(CWE) {
+  code: CWE.1
+  display: CWE.2
+  system: utilities::Build_System(CWE.3)
+  version: CWE.7
+}
+
+// Description: Constructs a FHIR R4 CodeableConcept datatype based on V2 CWE datatype
+//
+// Argument(s):
+//   CWE datatype
+//
+// Output(s):
+//   CodeableConcept datatype : https://www.hl7.org/fhir/datatypes.html#CodeableConcept
+//
+def CWE_CodeableConcept(CWE) {
+  coding[0].code: CWE.1
+  coding[0].display: CWE.2
+  coding[0].system: utilities::Build_System(CWE.3)
+  coding[1].code: CWE.4
+  coding[1].display: CWE.5
+  coding[1].system: utilities::Build_System(CWE.6)
+  coding[0].version: CWE.7
+  coding[1].version: CWE.8
+  text: CWE.9
+  coding[2].code: CWE.10
+  coding[2].display: CWE.11
+  coding[2].system: utilities::Build_System(CWE.12)
+  coding[2].version: CWE.13
+}
+
+// Description: Constructs a FHIR R4 String datatype based on V2 CWE datatype
+//
+// Argument(s):
+//   CWE datatype
+//
+// Output(s):
+//   String datatype, in the context of XAD.9
+//
+def CWE_String(CWE) {
+  if !CWE.9 then {
+    $this: CWE.2
+  } else {
+    $this: CWE.9
+  }
+}
+
+// Description: Constructs a FHIR R4 Location resource based on V2 CWE datatype
+//
+// Argument(s):
+//   DLD datatype
+//
+// Output(s):
+//   Location Resource : https://www.hl7.org/fhir/location.html
+//
+def CWE_Location(required CWE) {
+  identifier[0].value: CWE.1
+  if CWE.2 then {
+    name: CWE.2
+  } else {
+    name: "unknown"
+  }
+  identifier[0].system: utilities::Build_System(CWE.3)
+  resourceType: "Location"
+}
+
+// Description: Constructs a FHIR R4 Quantity datatype based on V2 CWE datatype
+//
+// Argument(s):
+//   CWE datatype
+//
+// Output(s):
+//   Quantity Datatype : https://www.hl7.org/fhir/datatypes.html#Quantity
+//
+def CWE_Qauntity(CWE) {
+  if CWE.1 and CWE.3 then {
+    code: CWE.1
+    system: utilities::Build_System(CWE.3)
+  }
+  if !CWE.2 then {
+    unit: CWE.1
+  } else {
+    unit: CWE.2
+  }
+}

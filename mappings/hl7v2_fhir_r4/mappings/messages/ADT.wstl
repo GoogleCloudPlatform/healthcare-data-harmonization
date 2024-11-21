@@ -1,0 +1,65 @@
+package messages
+
+// Description: Define ADT_Axx HL7v2 Message Types (version 2.9) to FHIR R4 transformation
+//
+// Argument(s):
+//   ADT_Axx HL7v2 Message Type (version 2.9)
+//   ADT_Axx Segments covered in this mapping configuration are: MSH, PID, PD1, DG1, PV1, AL1, OBX, EVN, PR1, GT1, IN1, NK1
+//
+// Output(s):
+//   FHIR R4 Resources : http://www.hl7.org/fhir/resourcelist.html
+// List of Generated FHIR Resources:
+//   Account: https://www.hl7.org/fhir/account.html
+//   AllergyIntolerance: https://www.hl7.org/fhir/allergyintolerance.html
+//   Bundle: https://www.hl7.org/fhir/bundle.html
+//   Condition: https://www.hl7.org/fhir/condition.html
+//   Coverage: https://www.hl7.org/fhir/coverage.html
+//   Encounter: https://www.hl7.org/fhir/encounter.html
+//   Location: https://www.hl7.org/fhir/location.html
+//   MessageHeader: https://www.hl7.org/fhir/messageheader.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//   Practitioner: https://www.hl7.org/fhir/practitioner.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   RelatedPerson: https://www.hl7.org/fhir/stu3/relatedperson.html
+//   Procedure: https://www.hl7.org/fhir/procedure.html
+//
+def Transform_ADT(required ADT) {
+  var MessageHeaderReference: utilities::OutputResourceAndGetReference(segments::MSH_MessageHeader(ADT.MSH))
+
+  var Patient: segments::PID_PD1_Patient(ADT.PID, ADT.PD1)
+  var Patient.contact[]: if ADT.NK1 then datatypes::NK1_Contact(ADT.NK1[])
+  var Patient.extension[]: utilities::Build_Extension(datatypes::CWE_CodeableConcept(ADT.PV1.16), "CodeableConcept", "http://hl7.org/fhir/StructureDefinition/patient-importance")
+  var PatientReference: utilities::OutputResourceAndGetReference(Patient)
+
+  root Bundle: segments::MSH_Bundle(ADT.MSH.7, ADT.MSH.10)
+  root Provenance: segments::MSH_Provenance(ADT.MSH, PatientReference)
+
+  var AccountReference: utilities::OutputResourceAndGetReference(segments::PID_Account(ADT.PID.18, PatientReference))
+
+  var RelatedPersonReference: utilities::OutputResourceAndGetReference(segments::PID_RelatedPersonMother(ADT.PID.21, PatientReference))
+
+  var ProvenanceReference: utilities::OutputResourceAndGetReference(segments::PID_Provenance(ADT.PID.34, ADT.PID.33, PatientReference))
+
+  var RelatedPersonReference: utilities::OutputResourceAndGetReference(segments::NK1_RelatedPerson(ADT.NK1[], PatientReference)[])
+
+  var ConditionReference: utilities::OutputResourceAndGetReference(segments::DG1_Condition(ADT.DG1[], PatientReference)[])
+
+  // Encounter Resource should not be created if PV1-2 - Patient Class values to "N" - not applicable.
+  // "Not Applicable" is used only in cases where the PV1 segment itself is not applicable but is retained in the message definitions for backwards compatibility.
+  if ADT.PV1.2.1 != "N" then {
+    var EncounterReference: utilities::OutputResourceAndGetReference(segments::PV1_DG1_Encounter(ADT.PV1, ADT.DG1, ADT.MSH.9, ADT.EVN.2, PatientReference, ConditionReference))
+  }
+  var ProvenanceReference: utilities::OutputResourceAndGetReference(segments::EVN_Provenance(ADT.EVN, ADT.MSH, MessageHeaderReference))
+
+  var AllergyIntoleranceReference: utilities::OutputResourceAndGetReference(segments::AL1_AllergyIntolerance(ADT.AL1[], PatientReference)[])
+
+  var ObservationReference: utilities::OutputResourceAndGetReference(segments::OBX_Observation(ADT.OBX[], PatientReference)[])
+
+  var ProcedureReference: utilities::OutputResourceAndGetReference(segments::PR1_Procedure(ADT.PROCEDURE[*].PR1[], PatientReference)[])
+
+  var GuarantorReference: utilities::OutputResourceAndGetReference(segments::GT1_RelatedPerson(ADT.GT1[], PatientReference)[])
+
+  var CoverageReference: utilities::OutputResourceAndGetReference(segments::IN1_Coverage(ADT.INSURANCE[*].IN1[], PatientReference)[])
+}

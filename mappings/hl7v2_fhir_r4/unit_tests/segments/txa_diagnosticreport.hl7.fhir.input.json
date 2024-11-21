@@ -1,0 +1,36 @@
+{
+  "TXA": {
+    "0": "TXA",
+    "1": "1",
+    "10": null,
+    "11": null,
+    "12": {
+      "1": "TX123"
+    },
+    "13": null,
+    "14": null,
+    "15": null,
+    "16": null,
+    "17": "DO",
+    "18": null,
+    "19": "AV",
+    "2": {
+      "1": "HP",
+      "2": "History and Physical"
+    },
+    "20": null,
+    "3": "TX",
+    "4": "200901151010",
+    "5": null,
+    "6": null,
+    "7": null,
+    "8": null,
+    "9": null
+  },
+  "patientReference": {
+    "reference": "Patient/123"
+  },
+  "encounterReference": {
+    "reference": "Encounter/456"
+  }
+}

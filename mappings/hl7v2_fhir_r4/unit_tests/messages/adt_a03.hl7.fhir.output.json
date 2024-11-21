@@ -1,0 +1,670 @@
+[
+  {
+    "active": true,
+    "address": [
+      {
+        "country": "44"
+      }
+    ],
+    "id": "d52e501c7027ff6fec951494b9b93083",
+    "identifier": [
+      {
+        "value": "SFAC"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "active": true,
+    "id": "86f612c7a097f5f922bd7c362fe62e84",
+    "identifier": [
+      {
+        "value": "RFAC"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "destination": [
+      {
+        "endpoint": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/R4/extension-data-absent-reason.html",
+              "valueCode": "unknown"
+            }
+          ]
+        },
+        "name": "RAPP",
+        "receiver": {
+          "reference": "Organization/86f612c7a097f5f922bd7c362fe62e84"
+        }
+      }
+    ],
+    "eventCoding": {
+      "code": "A03",
+      "display": "ADT^A03^",
+      "system": "http://terminology.hl7.org/CodeSystem/v2-0003"
+    },
+    "id": "4a1f55f1def4925b3d8b3460e847533e",
+    "meta": {
+      "tag": [
+        {
+          "code": "T",
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0103"
+        },
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0207"
+        }
+      ]
+    },
+    "resourceType": "MessageHeader",
+    "sender": {
+      "reference": "Organization/d52e501c7027ff6fec951494b9b93083"
+    },
+    "source": {
+      "endpoint": {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/R4/extension-data-absent-reason.html",
+            "valueCode": "unknown"
+          }
+        ]
+      },
+      "name": "SIMHOSP"
+    }
+  },
+  {
+    "active": true,
+    "id": "8c1745f5bfc0112829e4f5972f928713",
+    "identifier": [
+      {
+        "value": "SIMULATOR MRN"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "active": true,
+    "id": "8c1745f5bfc0112829e4f5972f928713",
+    "identifier": [
+      {
+        "value": "SIMULATOR MRN"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "active": true,
+    "id": "c179038a76e4d76e774a7307ba03ff33",
+    "identifier": [
+      {
+        "value": "NHSNBR"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "active": true,
+    "id": "5b8502fd0a3a0e37cd14bf29d3f7718a",
+    "identifier": [
+      {
+        "value": "12345"
+      }
+    ],
+    "name": "FAMILY PRACTICE",
+    "resourceType": "Organization"
+  },
+  {
+    "_birthDate": {
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+          "valueDateTime": "1950-11-16T00:00:00+00:00"
+        }
+      ]
+    },
+    "active": true,
+    "address": [
+      {
+        "city": "Croydon",
+        "country": "GBR",
+        "line": [
+          "79 Zoot-Suit Place"
+        ],
+        "postalCode": "NR52 4EF"
+      }
+    ],
+    "birthDate": "1950-11-16",
+    "extension": [
+      {
+        "extension": [
+          {
+            "url": "text",
+            "valueString": "Asian or Asian British - Indian"
+          },
+          {
+            "url": "ombCategory",
+            "valueCoding": {
+              "code": "H",
+              "display": "Asian or Asian British - Indian"
+            }
+          }
+        ],
+        "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"
+      }
+    ],
+    "gender": "male",
+    "generalPractitioner": [
+      {
+        "reference": "Organization/5b8502fd0a3a0e37cd14bf29d3f7718a"
+      }
+    ],
+    "id": "e98e76011d698bfbfb14351df7d83a43",
+    "identifier": [
+      {
+        "assigner": {
+          "reference": "Organization/8c1745f5bfc0112829e4f5972f928713"
+        },
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "MRN",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "1162015789"
+      },
+      {
+        "assigner": {
+          "reference": "Organization/8c1745f5bfc0112829e4f5972f928713"
+        },
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "MRN",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "1162015789"
+      },
+      {
+        "assigner": {
+          "reference": "Organization/c179038a76e4d76e774a7307ba03ff33"
+        },
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "NHSNMBR",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "2172427195"
+      }
+    ],
+    "multipleBirthBoolean": false,
+    "name": [
+      {
+        "family": "Parthasarathy",
+        "given": [
+          "AKI Scenario 12"
+        ],
+        "prefix": [
+          "Mr"
+        ],
+        "use": "anonymous"
+      }
+    ],
+    "resourceType": "Patient",
+    "telecom": [
+      {
+        "system": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+              "valueCode": "unknown"
+            }
+          ]
+        },
+        "use": "home",
+        "value": "074 5609 6867"
+      }
+    ]
+  },
+  {
+    "active": true,
+    "id": "79c98dbe97e62960a29bea95b8018dbe",
+    "identifier": [
+      {
+        "value": "SFAC"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "id": "ec33ffacc18a503525db84b514756c69",
+    "identifier": [
+      {
+        "value": "SIMHOSP"
+      }
+    ],
+    "patient": {
+      "reference": "Patient/e98e76011d698bfbfb14351df7d83a43"
+    },
+    "resourceType": "Device",
+    "type": {
+      "coding": [
+        {
+          "code": "unknown"
+        }
+      ]
+    }
+  },
+  {
+    "id": "0972e79bd4a7b989b3d534e377e21fc9",
+    "mode": "instance",
+    "name": "Simulated Hospital",
+    "physicalType": {
+      "coding": [
+        {
+          "code": "si",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "6e6133a3a67a701e7dfc7c8a0d83bfd2",
+    "mode": "instance",
+    "name": "Main Building",
+    "partOf": {
+      "reference": "Location/0972e79bd4a7b989b3d534e377e21fc9"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "bu",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "f5adf84c0655af8480b6bce3b1278eef",
+    "mode": "instance",
+    "name": "5",
+    "partOf": {
+      "reference": "Location/6e6133a3a67a701e7dfc7c8a0d83bfd2"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "lvl",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "1dc5e631e81cbfe4fa4e026ae9d538a6",
+    "mode": "instance",
+    "name": "RenalWard",
+    "partOf": {
+      "reference": "Location/6e6133a3a67a701e7dfc7c8a0d83bfd2"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "si",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "ce1eb565e94a14361f031bfa871a2f7f",
+    "mode": "instance",
+    "name": "MainRoom",
+    "partOf": {
+      "reference": "Location/1dc5e631e81cbfe4fa4e026ae9d538a6"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "ro",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "a542c707da31a5eecfe3d2b75cc7aa1e",
+    "mode": "instance",
+    "name": "Bed 6",
+    "partOf": {
+      "reference": "Location/ce1eb565e94a14361f031bfa871a2f7f"
+    },
+    "physicalType": {
+      "coding": [
+        {
+          "code": "bd",
+          "system": "http://terminology.hl7.org/CodeSystem/location-physical-type"
+        }
+      ]
+    },
+    "resourceType": "Location"
+  },
+  {
+    "id": "dbc812163839b70d119bbc2b57e2847c",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "ORGDR"
+            }
+          ]
+        },
+        "value": "C003"
+      }
+    ],
+    "name": [
+      {
+        "family": "Cuddy",
+        "given": [
+          "Kevin"
+        ],
+        "prefix": [
+          "Dr"
+        ],
+        "use": "anonymous"
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "class": {
+      "code": "IMP",
+      "display": "inpatient encounter",
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+      "version": "v1"
+    },
+    "id": "3b1e2b29a9fd6f47de3868e5d6b8510d",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "VN",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ],
+          "text": "visit number"
+        },
+        "value": "15125621663361907232"
+      }
+    ],
+    "location": [
+      {
+        "location": {
+          "display": "Simulated Hospital, Main Building, 5, RenalWard, MainRoom, Bed 6",
+          "reference": "Location/a542c707da31a5eecfe3d2b75cc7aa1e"
+        },
+        "period": {
+          "end": "2020-05-26T16:59:17+00:00"
+        },
+        "status": "completed"
+      }
+    ],
+    "participant": [
+      {
+        "individual": {
+          "reference": "Practitioner/dbc812163839b70d119bbc2b57e2847c"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "code": "ATND",
+                "display": "attender",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "period": {
+      "end": "2020-05-26T16:59:17+00:00",
+      "start": "2020-05-26T16:01:03+00:00"
+    },
+    "resourceType": "Encounter",
+    "serviceType": {
+      "coding": [
+        {
+          "code": "URO"
+        }
+      ]
+    },
+    "status": "finished",
+    "subject": {
+      "reference": "Patient/e98e76011d698bfbfb14351df7d83a43"
+    },
+    "type": [
+      {
+        "coding": [
+          {
+            "code": "28b"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dbc812163839b70d119bbc2b57e2847c",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "ORGDR"
+            }
+          ]
+        },
+        "value": "C003"
+      }
+    ],
+    "name": [
+      {
+        "family": "Cuddy",
+        "given": [
+          "Kevin"
+        ],
+        "prefix": [
+          "Dr"
+        ],
+        "use": "anonymous"
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "active": true,
+    "id": "79c98dbe97e62960a29bea95b8018dbe",
+    "identifier": [
+      {
+        "value": "SFAC"
+      }
+    ],
+    "name": "Unknown",
+    "resourceType": "Organization"
+  },
+  {
+    "activity": {
+      "coding": [
+        {
+          "display": "event - :ADT^A03"
+        }
+      ]
+    },
+    "agent": [
+      {
+        "who": {
+          "reference": "Practitioner/dbc812163839b70d119bbc2b57e2847c"
+        }
+      },
+      {
+        "who": {
+          "reference": "Organization/79c98dbe97e62960a29bea95b8018dbe"
+        }
+      }
+    ],
+    "id": "d062d6634b482089cfb6946b02cbc064",
+    "recorded": "2020-05-26T16:59:17.000+00:00",
+    "resourceType": "Provenance",
+    "target": [
+      {
+        "reference": "MessageHeader/4a1f55f1def4925b3d8b3460e847533e"
+      }
+    ]
+  },
+  {
+    "category": [
+      "food"
+    ],
+    "clinicalStatus": {
+      "coding": [
+        {
+          "code": "active",
+          "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical"
+        }
+      ]
+    },
+    "code": {
+      "coding": [
+        {
+          "code": "59037007",
+          "display": "Drug intolerance (disorder)",
+          "system": "SNM3"
+        }
+      ]
+    },
+    "id": "8c6eb532196ec9c9a530805824c76932",
+    "patient": {
+      "reference": "Patient/e98e76011d698bfbfb14351df7d83a43"
+    },
+    "reaction": [
+      {
+        "manifestation": [
+          {
+            "text": "Itchy, red, watering eyes"
+          }
+        ],
+        "onset": "2019-10-20T16:01:03+00:00",
+        "severity": "moderate"
+      }
+    ],
+    "resourceType": "AllergyIntolerance",
+    "type": "allergy"
+  },
+  {
+    "category": [
+      "medication"
+    ],
+    "clinicalStatus": {
+      "coding": [
+        {
+          "code": "active",
+          "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical"
+        }
+      ]
+    },
+    "code": {
+      "coding": [
+        {
+          "code": "419199007",
+          "display": "Allergy to substance (disorder)",
+          "system": "SNM3"
+        }
+      ]
+    },
+    "criticality": "high",
+    "id": "c6c78618355a413a76e7194121c2545d",
+    "patient": {
+      "reference": "Patient/e98e76011d698bfbfb14351df7d83a43"
+    },
+    "reaction": [
+      {
+        "manifestation": [
+          {
+            "text": "Swollen lips"
+          }
+        ],
+        "onset": "2019-06-04T16:01:03+00:00",
+        "severity": "severe"
+      }
+    ],
+    "resourceType": "AllergyIntolerance",
+    "type": "allergy"
+  },
+  {
+    "category": [
+      "medication"
+    ],
+    "clinicalStatus": {
+      "coding": [
+        {
+          "code": "active",
+          "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical"
+        }
+      ]
+    },
+    "code": {
+      "coding": [
+        {
+          "code": "235719002",
+          "display": "Food intolerance (disorder)",
+          "system": "SNM3"
+        }
+      ]
+    },
+    "criticality": "high",
+    "id": "ad8c8edfd93d7f3ce5f0584f81c7d26e",
+    "patient": {
+      "reference": "Patient/e98e76011d698bfbfb14351df7d83a43"
+    },
+    "reaction": [
+      {
+        "manifestation": [
+          {
+            "text": "Cough"
+          }
+        ],
+        "onset": "2020-05-06T16:01:03+00:00",
+        "severity": "severe"
+      }
+    ],
+    "resourceType": "AllergyIntolerance",
+    "type": "allergy"
+  }
+]

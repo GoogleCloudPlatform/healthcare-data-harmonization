@@ -1,0 +1,51 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "S",
+          "display": "Stat",
+          "target": [
+            {
+              "code": "stat",
+              "display": "STAT",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "A",
+          "display": "As soon as possible",
+          "target": [
+            {
+              "code": "asap",
+              "display": "ASAP",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "R",
+          "display": "Routine",
+          "target": [
+            {
+              "code": "routine",
+              "display": "Routine",
+              "equivalence": "Revoked"
+            }
+          ]
+        }
+      ],
+      "source": "HL70485",
+      "target": "http://hl7.org/fhir/request-priority",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "routine",
+        "display": "Routine"
+      }
+    }
+  ],
+  "id": "Priority",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

@@ -1,0 +1,79 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "1",
+          "display": "Patient request",
+          "target": [
+            {
+              "code": "PATRQT",
+              "display": "patient requested",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "2",
+          "display": "Physician/health practitioner order",
+          "target": [
+            {
+              "code": "TREAT",
+              "display": "treatment",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "3",
+          "display": "Census management",
+          "target": [
+            {
+              "code": "HOPERAT",
+              "display": "healthcare operations",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70062",
+      "target": "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+    },
+    {
+      "element": [
+        {
+          "code": "O",
+          "display": "Other",
+          "target": [
+            {
+              "code": "O",
+              "display": "Other",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "U",
+          "display": "Unknown",
+          "target": [
+            {
+              "code": "U",
+              "display": "Unknown",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70062",
+      "target": "HL70062",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "U",
+        "display": "Unknown"
+      }
+    }
+  ],
+  "id": "Event_Reason",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

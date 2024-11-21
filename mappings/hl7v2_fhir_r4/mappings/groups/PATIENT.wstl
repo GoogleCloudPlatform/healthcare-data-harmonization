@@ -1,0 +1,31 @@
+package groups
+
+// Description: Parse PATIENT group, and constructs FHIR R4 Resources based on OBX, PID, PV1, DG1, PD1, sub-segments
+//
+// Argument(s):
+//   PATIENT Group
+// Output(s):
+//   Patient: https://hl7.org/fhir/patient.html
+//   Observation: https://www.hl7.org/fhir/observation.html
+//   Provenance: https://www.hl7.org/fhir/provenance.html
+//   Encounter : https://hl7.org/fhir/encounter.html
+//   Condition : https://hl7.org/fhir/condition.html
+//   Account : https://hl7.org/fhir/account.html
+//
+def Parse_PATIENT(required PATIENT, MSH_9, EVN_2) {
+  var Patient: segments::PID_PD1_Patient(PATIENT.PID, PATIENT.PD1)
+  var Patient.extension[]: utilities::Build_Extension(datatypes::CWE_CodeableConcept(PATIENT.PV1.16), "CodeableConcept", "http://hl7.org/fhir/StructureDefinition/patient-importance")
+  var PatientReference: utilities::OutputResourceAndGetReference(Patient)
+
+  var AccountReference: utilities::OutputResourceAndGetReference(segments::PID_Account(PATIENT.PID.18, PatientReference))
+
+  var ProvenanceReference: utilities::OutputResourceAndGetReference(segments::PID_Provenance(PATIENT.PID.34, PATIENT.PID.33, PatientReference))
+
+  var ConditionReference: utilities::OutputResourceAndGetReference(segments::DG1_Condition(PATIENT.DG1[], PatientReference)[])
+
+  var EncounterReference: utilities::OutputResourceAndGetReference(segments::PV1_DG1_Encounter(PATIENT.PV1, PATIENT.DG1, MSH_9, EVN_2, PatientReference, ConditionReference))
+
+  var ObservationReference: utilities::OutputResourceAndGetReference(segments::OBX_Observation(PATIENT.OBX[], PatientReference)[])
+
+  PatientReference
+}

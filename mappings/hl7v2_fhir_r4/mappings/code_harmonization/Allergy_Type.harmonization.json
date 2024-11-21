@@ -1,0 +1,95 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "DA",
+          "display": "Drug allergy",
+          "target": [
+            {
+              "code": "allergy",
+              "display": "Allergy",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "FA",
+          "display": "Food allergy",
+          "target": [
+            {
+              "code": "allergy",
+              "display": "Allergy",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "MA",
+          "display": "Miscellaneous allergy",
+          "target": [
+            {
+              "code": "allergy",
+              "display": "Allergy",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "EA",
+          "display": "Environmental allergy",
+          "target": [
+            {
+              "code": "allergy",
+              "display": "Allergy",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "AA",
+          "display": "Animal allergy",
+          "target": [
+            {
+              "code": "allergy",
+              "display": "Allergy",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "PA",
+          "display": "Plant allergy",
+          "target": [
+            {
+              "code": "allergy",
+              "display": "Allergy",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "LA",
+          "display": "Pollen allergy",
+          "target": [
+            {
+              "code": "allergy",
+              "display": "Allergy",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "http://terminology.hl7.org/CodeSystem/v2-0127",
+      "target": "http://hl7.org/fhir/allergy-intolerance-type",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "allergy",
+        "display": "Allergy"
+      }
+    }
+  ],
+  "id": "Allergy_Type",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

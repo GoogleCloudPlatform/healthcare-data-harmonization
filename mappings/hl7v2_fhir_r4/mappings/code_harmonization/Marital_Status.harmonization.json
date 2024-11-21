@@ -1,0 +1,194 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "A",
+          "display": "Separated",
+          "target": [
+            {
+              "code": "L",
+              "display": "Legally Separated",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "D",
+          "display": "Divorced",
+          "target": [
+            {
+              "code": "D",
+              "display": "Divorced",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "M",
+          "display": "Married",
+          "target": [
+            {
+              "code": "M",
+              "display": "Married",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "S",
+          "display": "Single",
+          "target": [
+            {
+              "code": "S",
+              "display": "Never Married",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "W",
+          "display": "Widowed",
+          "target": [
+            {
+              "code": "W",
+              "display": "Widowed",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "C",
+          "display": "Common law",
+          "target": [
+            {
+              "code": "C",
+              "display": "Common Law",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "G",
+          "display": "Living together",
+          "target": [
+            {
+              "code": "T",
+              "display": "Domestic partner",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "P",
+          "display": "Domestic partner",
+          "target": [
+            {
+              "code": "T",
+              "display": "Domestic partner",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "R",
+          "display": "Registered domestic partner",
+          "target": [
+            {
+              "code": "T",
+              "display": "Domestic partner",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "E",
+          "display": "Legally Separated",
+          "target": [
+            {
+              "code": "L",
+              "display": "Legally Separated",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "N",
+          "display": "Annulled",
+          "target": [
+            {
+              "code": "A",
+              "display": "Annulled",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "I",
+          "display": "Interlocutory",
+          "target": [
+            {
+              "code": "I",
+              "display": "Interlocutory",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "B",
+          "display": "Unmarried",
+          "target": [
+            {
+              "code": "U",
+              "display": "unmarried",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "U",
+          "display": "Unknown",
+          "target": [
+            {
+              "code": "UNK",
+              "display": "Unknown",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "O",
+          "display": "Other",
+          "target": [
+            {
+              "code": "OTH",
+              "display": "Other",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "T",
+          "display": "Unreported",
+          "target": [
+            {
+              "code": "NAVU",
+              "display": "Not available",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70002",
+      "target": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "unknown",
+        "display": "Unknown"
+      }
+    }
+  ],
+  "id": "Marital_Status",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

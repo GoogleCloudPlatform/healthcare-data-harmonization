@@ -1,0 +1,20 @@
+[
+  {
+    "code": {
+      "coding": [
+        {
+          "code": {
+            "1": "Q8H"
+          },
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0335"
+        }
+      ]
+    },
+    "repeat": {
+      "timeOfDay": [
+        "22:00:00",
+        "10:00:00"
+      ]
+    }
+  }
+]

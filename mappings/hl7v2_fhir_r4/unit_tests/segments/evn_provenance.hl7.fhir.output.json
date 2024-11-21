@@ -1,0 +1,81 @@
+[
+  {
+    "id": "dec121dafddf78756693162b19eb2181",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "NPI"
+            }
+          ]
+        },
+        "value": "004777"
+      }
+    ],
+    "name": [
+      {
+        "family": "ATTEND",
+        "given": [
+          "AARON",
+          "A"
+        ],
+        "period": {
+          "end": "1999-12-31T00:00:00+00:00",
+          "start": "1990-01-01T00:00:00+00:00"
+        },
+        "prefix": [
+          "DR"
+        ],
+        "suffix": [
+          "JR",
+          "MD",
+          "MD"
+        ],
+        "use": "official"
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "activity": {
+      "coding": [
+        {
+          "display": "event - :^"
+        }
+      ]
+    },
+    "agent": [
+      {
+        "who": {
+          "reference": "Practitioner/dec121dafddf78756693162b19eb2181"
+        }
+      }
+    ],
+    "reason": [
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "code": "unknown"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "recorded": "2007-08-18T11:23:00.000+00:00",
+    "resourceType": "Provenance",
+    "target": [
+      {
+        "id": "123",
+        "resourceType": "MessageHeader"
+      }
+    ]
+  }
+]

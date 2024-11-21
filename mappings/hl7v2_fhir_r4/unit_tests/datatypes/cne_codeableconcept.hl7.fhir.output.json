@@ -1,0 +1,19 @@
+[
+  {
+    "coding": [
+      {
+        "code": "41976001",
+        "display": "Cardiac catheterization",
+        "system": "SCT",
+        "version": "1"
+      },
+      {
+        "code": "45211000",
+        "display": "Catheterization",
+        "system": "SCT",
+        "version": "1"
+      }
+    ],
+    "text": "Catheterization"
+  }
+]

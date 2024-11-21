@@ -1,0 +1,61 @@
+package segments
+
+// Description: Constructs a FHIR R4 SCH Resource and its related resources based on V2 SCH Segment and Patient Resource
+//
+// Argument(s):
+//   SCH V2 Segment
+//   Patient Resource already constructed through PID_PD1_Patient Projector: https://www.hl7.org/fhir/patient.html
+//
+// Output(s):
+//   SCH Segment: https://v2plus.hl7.org/2021Jan/segment-definition/SCH.html#SCH-7
+//   Organization: https://www.hl7.org/fhir/organization.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//
+def SCH_ServiceRequest(required SCH, PatientReference) {
+  intent: "order"
+  status: "unknown"
+  identifier[]: datatypes::EI_Identifier(SCH.26[], "", "")
+  identifier[]: datatypes::EI_Identifier(SCH.27[], "", "")
+  subject: PatientReference
+  resourceType: "ServiceRequest"
+}
+
+// Description: Constructs a FHIR R4 Build Appointment Resource and its related resources based on V2 SCH Segment and Patient, ServiceRequest Resource
+//
+// Argument(s):
+//   MSH V2 Segment
+//   https://v2plus.hl7.org/2021Jan/segment-definition/SCH.html#SCH-7
+// Output(s):
+//   Schedule Activity Information Segment: https://v2plus.hl7.org/2021Jan/segment-definition/SCH.html#SCH-7
+//   Appointment: https://www.hl7.org/fhir/appointment.html
+//   Practitioner: https://www.hl7.org/fhir/practitoner.html
+//   ServiceRequest: https://www.hl7.org/fhir/servicerequest.html
+//   Patient: https://www.hl7.org/fhir/patient.html
+//
+def SCH_Appointment(required SCH, RESOURCES, Patient, ServiceRequestReference) {
+  identifier[]: datatypes::EI_Identifier(SCH.1, "PLAC", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  identifier[]: datatypes::EI_Identifier(SCH.2, "FILL", "http://terminology.hl7.org/CodeSystem/v2-0203")
+  reasonCode[]: datatypes::CWE_CodeableConcept(SCH.7)
+  appointmentType: if !SCH.8 then datatypes::CWE_CodeableConcept(SCH.7)
+  appointmentType: datatypes::CWE_CodeableConcept(SCH.8)
+  minutesDuration: if SCH.9 then tryParseNum(SCH.9)
+  var Actor: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(SCH.12[])[])
+  var Actor: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(SCH.16[])[])
+  var Actor: utilities::OutputResourceAndGetReference(datatypes::XCN_Practitioner(SCH.20[])[])
+  participant[]: datatypes::Build_AppointmentParticipant(Actor[], {})
+
+  status: if SCH.25 then utilities::Convert_TerminologyCode(datatypes::CWE_Code(SCH.25), "HL70278", "Filler_Status") else "booked"
+  basedOn[]: ServiceRequestReference
+  participant[]: datatypes::Build_AppointmentParticipant(Patient[], {})
+
+  participant[]: AIS_AppointmentParticipant(RESOURCES[*].SERVICE[*].AIS[])
+  var comments[]: strJoin("; ", RESOURCES[*].SERVICE[*].NTE[*].3[*].1.1)
+  participant[]: AIG_AppointmentParticipant(RESOURCES[*].GENERAL_RESOURCE[*].AIG[])
+  var comments[]: strJoin("; ", RESOURCES[*].GENERAL_RESOURCE[*].NTE[*].3[*].1.1)
+  participant[]: AIL_AppointmentParticipant(RESOURCES[*].LOCATION_RESOURCE[*].AIL[])
+  var comments[]: strJoin("; ", RESOURCES[*].LOCATION_RESOURCE[*].NTE[*].3[*].1.1)
+  participant[]: AIP_AppointmentParticipant(RESOURCES[*].PERSONNEL_RESOURCE[*].AIP[])
+  var comments[]: strJoin("; ", RESOURCES[*].PERSONNEL_RESOURCE[*].NTE[*].3[*].1.1)
+  comment: strJoin("; ", comments)
+  resourceType: "Appointment"
+}

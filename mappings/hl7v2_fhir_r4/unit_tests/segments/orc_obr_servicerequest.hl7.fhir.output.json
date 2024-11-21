@@ -1,0 +1,62 @@
+[
+  {
+    "id": "ef59b26e85eca7981a8933101ca07a87",
+    "identifier": [
+      {
+        "system": "unknown",
+        "type": {
+          "coding": [
+            {
+              "code": "NPI"
+            }
+          ]
+        },
+        "value": "5742200012"
+      }
+    ],
+    "name": [
+      {
+        "family": "Radon",
+        "given": [
+          "Nicholas"
+        ],
+        "use": "official"
+      }
+    ],
+    "resourceType": "Practitioner"
+  },
+  {
+    "authoredOn": "2012-06-28T07:01:00+00:00",
+    "code": {
+      "coding": [
+        {
+          "code": "1000",
+          "display": "Hepatitis A  B  C Panel",
+          "system": "99USL"
+        }
+      ]
+    },
+    "identifier": [
+      {
+        "type": {
+          "coding": [
+            {
+              "code": "PLAC",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "ORD448811"
+      }
+    ],
+    "intent": "order",
+    "requester": {
+      "reference": "Practitioner/ef59b26e85eca7981a8933101ca07a87"
+    },
+    "resourceType": "ServiceRequest",
+    "status": "unknown",
+    "subject": {
+      "reference": "Patient/123"
+    }
+  }
+]

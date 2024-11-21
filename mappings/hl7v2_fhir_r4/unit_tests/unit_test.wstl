@@ -1,0 +1,22 @@
+import "test"
+
+// Test cases to be executed.
+var test_dir: ["messages", "segments", "datatypes"]
+run_tests(test_dir[])
+
+// Entrypoint function for running unit tests.
+//
+// This function runs each of the test files containing
+// test cases based on test_dir.
+//
+def run_tests(test_dir) {
+  var testPath: "./test_{test_dir}.wstl"
+
+  // Mock config for mocking uuid() and currentTime() builtin fucntions.
+  var mocks[]: "./../../standard_mock.mockconfig.wstl"
+
+  // Executes the wstl file specified by the file at the given
+  // path, using the given mock config paths.
+  // Passing {} as the input will be loaded within the test cases.
+  test::execPaths(testPath, mocks, {})
+}

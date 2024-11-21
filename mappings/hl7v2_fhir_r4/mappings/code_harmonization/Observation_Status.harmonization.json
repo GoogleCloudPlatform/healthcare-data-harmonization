@@ -1,0 +1,183 @@
+{
+  "group": [
+    {
+      "element": [
+        {
+          "code": "A",
+          "display": "Amended ",
+          "target": [
+            {
+              "code": "ammended",
+              "display": "Ammended",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "B",
+          "display": "Appended ",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "C",
+          "display": "Correction ",
+          "target": [
+            {
+              "code": "corrected",
+              "display": "Corrected",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "D",
+          "display": "Deleted",
+          "target": [
+            {
+              "code": "entered-in-error",
+              "display": "Entered in Error",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "F",
+          "display": "Final",
+          "target": [
+            {
+              "code": "final",
+              "display": "Final",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "I",
+          "display": "In Process",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "Registered",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "N",
+          "display": "Not Asked",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "O",
+          "display": "Order Detail",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "P",
+          "display": "Preliminary",
+          "target": [
+            {
+              "code": "preliminary",
+              "display": "Preliminary",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "R",
+          "display": "Entered - Not Verified",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "S",
+          "display": "Partial",
+          "target": [
+            {
+              "code": "preliminary",
+              "display": "Preliminary",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "V",
+          "display": "Verified",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "X",
+          "display": "Cannot be Obtained",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "U",
+          "display": "Status Change to Final Without Retransmission",
+          "target": [
+            {
+              "code": "unknown",
+              "display": "",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "W",
+          "display": "Original Posted as Wrong",
+          "target": [
+            {
+              "code": "entered-in-error",
+              "display": "Entered in Error",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ],
+      "source": "HL70085",
+      "target": "http://hl7.org/fhir/observation-status",
+      "unmapped": {
+        "mode": "fixed",
+        "code": "unknown",
+        "display": "Unknown"
+      }
+    }
+  ],
+  "id": "Observation_Status",
+  "resourceType": "ConceptMap",
+  "version": "v1"
+}

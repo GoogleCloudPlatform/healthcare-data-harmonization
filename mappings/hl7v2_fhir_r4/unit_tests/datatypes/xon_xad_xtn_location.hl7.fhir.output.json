@@ -1,0 +1,66 @@
+[
+  {
+    "address": {
+      "city": "GREENSBORO",
+      "country": "US",
+      "district": "GUILDFORD",
+      "line": [
+        "1 THIS STREET",
+        "APT 23",
+        "C/O Good Health Clinic"
+      ],
+      "period": {
+        "end": "1999-12-31T23:59:00+00:00",
+        "start": "1999-07-01T09:00:00+00:00"
+      },
+      "postalCode": "27401-1020",
+      "state": "NC",
+      "type": "postal"
+    },
+    "identifier": [
+      {
+        "type": {
+          "coding": [
+            {
+              "code": "XX",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+            }
+          ]
+        },
+        "value": "123457"
+      }
+    ],
+    "name": "Good Health Clinic",
+    "resourceType": "Location",
+    "telecom": [
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-country",
+            "valueString": "1"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-area",
+            "valueString": "555"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-extension",
+            "valueString": "1"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/contactpoint-local",
+            "valueString": "1"
+          }
+        ],
+        "period": {
+          "end": "1999-12-31T23:59:00+00:00",
+          "start": "1988-07-01T09:00:00+00:00"
+        },
+        "rank": 1,
+        "system": "phone",
+        "use": "home",
+        "value": "5552004-ABC"
+      }
+    ]
+  }
+]
