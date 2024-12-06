@@ -16,7 +16,10 @@
 
 package com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge;
 
+import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.BIGQUERY_SOURCE_SYSTEM;
+import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.CLOUD_SPANNER_SOURCE_SYSTEM;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.FHIR_VERSION_SOURCE_SYSTEM;
+import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.HL7V2_SOURCE_SYSTEM;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.LATEST;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.RESOURCE_TYPE_FIELD;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.STABLE_ID_FIELD;
@@ -76,11 +79,29 @@ public class MergeResources extends MergeResourcesBase implements Serializable {
     return prepareFinalResource(ctx, mergedResource, stableId);
   }
 
+  // LINT.IfChange(source_systems)
   @Override
   public Container prepareFinalResource(RuntimeContext ctx, Container resource, String stableId) {
     Container prepared = super.prepareFinalResource(ctx, resource, stableId);
-    return clearMetaTagField(ctx, prepared, SYSTEM_FIELD, FHIR_VERSION_SOURCE_SYSTEM).asContainer();
+    Data cleared = clearSourceSystems(ctx, prepared);
+    return cleared.asContainer();
   }
+
+  private Data clearSourceSystems(RuntimeContext ctx, Data data) {
+    String[] sourceSystems = {
+      FHIR_VERSION_SOURCE_SYSTEM,
+      HL7V2_SOURCE_SYSTEM,
+      BIGQUERY_SOURCE_SYSTEM,
+      CLOUD_SPANNER_SOURCE_SYSTEM
+    };
+
+    for (String sourceSystem : sourceSystems) {
+      data = clearMetaTagField(ctx, data, SYSTEM_FIELD, sourceSystem);
+    }
+    return data;
+  }
+
+  // LINT.ThenChange()
 
   private Container mergeResource(
       RuntimeContext ctx, String resourceRule, String resourceType, Data snapshots)

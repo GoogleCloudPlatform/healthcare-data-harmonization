@@ -176,8 +176,13 @@ public final class MergeConstants {
       "urn:oid:google/streaming-empi/patient-masterid-linkage";
   public static final String PERSON_PURPOSE_URL = "urn:oid:google/empi-person";
   public static final String EMPI_INFO_FIELD = "empi_info";
+  // LINT.IfChange(source_systems)
   public static final String FHIR_VERSION_SOURCE_SYSTEM =
       "urn:oid:google/source-fhir-resource-version-name";
+  public static final String HL7V2_SOURCE_SYSTEM = "urn:oid:google/source-hl7v2-message-name";
+  public static final String CLOUD_SPANNER_SOURCE_SYSTEM = "urn:oid:google/cloud-spanner-row";
+  public static final String BIGQUERY_SOURCE_SYSTEM = "urn:oid:google/big-query-row";
+  // LINT.ThenChange()
 
   public static final String FIRST_MERGE_NULL_SNAPSHOT = "enable_first_merge_null_snapshot";
 

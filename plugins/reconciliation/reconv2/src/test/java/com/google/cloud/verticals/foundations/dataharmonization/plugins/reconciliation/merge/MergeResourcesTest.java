@@ -17,9 +17,12 @@
 package com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge;
 
 import static com.google.cloud.verticals.foundations.dataharmonization.data.impl.TestDataTypeImplementation.testDTI;
+import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.BIGQUERY_SOURCE_SYSTEM;
+import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.CLOUD_SPANNER_SOURCE_SYSTEM;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.DEFAULT_FIELD_RULES_METHOD;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.DEFAULT_RESOURCE_TYPE;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.FHIR_VERSION_SOURCE_SYSTEM;
+import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.HL7V2_SOURCE_SYSTEM;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.META_FIELD;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.RULE_METHOD_SUFFIX;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergingTestUtils.addStableIdToNewResource;
@@ -450,8 +453,9 @@ public class MergeResourcesTest {
     assertEquals(expected, merge(context, snapshotWithStableIdField, resourceInfo));
   }
 
+  // LINT.IfChange(source_systems)
   @Test
-  public void clearHDEMetadata_inputResourceWithFhirVersionSystem_clears() {
+  public void clearHDEMetadata_inputResourceWithSourceSystem_clears() {
     Data resourceWithHdeMetadata =
         toData(
             "{"
@@ -459,6 +463,15 @@ public class MergeResourcesTest {
                 + "    \"tag\": ["
                 + "      {"
                 + String.format("        \"system\": \"%s\"", FHIR_VERSION_SOURCE_SYSTEM)
+                + "      },"
+                + "      {"
+                + String.format("        \"system\": \"%s\"", HL7V2_SOURCE_SYSTEM)
+                + "      },"
+                + "      {"
+                + String.format("        \"system\": \"%s\"", CLOUD_SPANNER_SOURCE_SYSTEM)
+                + "      },"
+                + "      {"
+                + String.format("        \"system\": \"%s\"", BIGQUERY_SOURCE_SYSTEM)
                 + "      }"
                 + "    ]"
                 + "  },"
@@ -481,6 +494,8 @@ public class MergeResourcesTest {
         expected,
         mergeResources.prepareFinalResource(context, resourceWithHdeMetadata.asContainer(), null));
   }
+
+  // LINT.ThenChange()
 
   @Test
   public void mergeResources_cleanResource_singleIdentifierStableId_filteredOut()
