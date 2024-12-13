@@ -173,7 +173,7 @@ public class DefaultRuntimeContextTest {
 
   @Test
   @Ignore(
-      "b/326425458 Disable this test due to a race condition"
+      "b/379148650 Disable this test due to a race condition"
           + " We aren't developing Whistle core features anymore.")
   public void evaluate_functionCall_executesIt() {
     StackFrame.Builder builder = mock(StackFrame.Builder.class, new ReturnsSelf());
@@ -498,7 +498,7 @@ public class DefaultRuntimeContextTest {
 
   @Test
   @Ignore(
-      "b/326425458 Disable this test due to a race condition"
+      "b/379148650 Disable this test due to a race condition"
           + " We aren't developing Whistle core features anymore.")
   public void serialize_runtimeContext_success() throws IOException, ClassNotFoundException {
     RuntimeContext expected = createRuntimeContext();
@@ -517,7 +517,7 @@ public class DefaultRuntimeContextTest {
 
   @Test
   @Ignore(
-      "b/326425458 Disable this test due to a race condition"
+      "b/379148650 Disable this test due to a race condition"
           + " We aren't developing Whistle core features anymore.")
   public void serialize_runtimeContext_usesSuppliedRegistriesSerializer()
       throws IOException, ClassNotFoundException {

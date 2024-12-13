@@ -181,7 +181,7 @@ public class DefaultClosureTest {
 
   @Test
   @Ignore(
-      "b/326425458 Disable this test due to a race condition"
+      "b/379148650 Disable this test due to a race condition"
           + " We aren't developing Whistle core features anymore.")
   public void bindNextFreeParameter_removesFromList() {
     Pipeline.FunctionCall proto =
@@ -257,7 +257,7 @@ public class DefaultClosureTest {
   @SuppressWarnings(
       "unchecked") // This test uses some mocks and casts arguments from a reflection call.
   @Ignore(
-      "b/326425458 Disable this test due to a race condition"
+      "b/379148650 Disable this test due to a race condition"
           + " We aren't developing Whistle core features anymore.")
   public void execute_integratesContextComponents() {
     Pipeline.FunctionCall proto =
@@ -313,7 +313,7 @@ public class DefaultClosureTest {
   @SuppressWarnings(
       "unchecked") // This test uses some mocks and casts arguments from a reflection call.
   @Ignore(
-      "b/326425458 Disable this test due to a race condition"
+      "b/379148650 Disable this test due to a race condition"
           + " We aren't developing Whistle core features anymore.")
   public void execute_callFunctionFromAllPackages() {
     FunctionCall proto =
@@ -384,7 +384,7 @@ public class DefaultClosureTest {
   @SuppressWarnings(
       "unchecked") // This test uses some mocks and casts arguments from a reflection call.
   @Ignore(
-      "b/326425458 Disable this test due to a race condition"
+      "b/379148650 Disable this test due to a race condition"
           + " We aren't developing Whistle core features anymore.")
   public void execute_multiFunctionsFromAllPackages() {
     // Create a function call with two arguments.
