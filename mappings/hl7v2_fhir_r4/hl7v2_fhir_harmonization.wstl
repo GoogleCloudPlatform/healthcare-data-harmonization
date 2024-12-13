@@ -13,11 +13,14 @@ package hl7v2_fhir_r4
 import "./mappings/hl7v2_fhir.wstl"
 
 var output: hl7v2_fhir::HL7v2_FHIR($root)
+
+if output then {
 var deviceId: split(output.Provenance.entity[0].what.reference, "/")[1]
 var Resources[]: output.Resources[where $.resourceType!="Provenance" and $.id!=deviceId]
 // Adding ReconciledTimestampExtension to the meta on all the resources.
 var Resources[]: AddReconciliationTimestamp(Resources[], output.Timestamp)
 resources[]: unique(Resources)
+}
 
 // Description: Add reconciliation timestamp to resource if it doesn't exist
 // Argument(s):
