@@ -191,7 +191,13 @@ public class PropertyValueFetcher implements Serializable {
         // For an AND, we want to join all the elements into a single string using the
         // AND_CONNECTOR. However, if we failed to find any values (aka if there are any empty
         // lists), we can't combine the value to create unique matching criteria.
-        boolean containsEmptyList = propertyValues.stream().anyMatch(List::isEmpty);
+        // For empty lists, the resulting Cartesian product has one element, an empty list, which
+        // is not what we want. So we will return an empty list instead.
+        // NOTE: The cartesian product library returns an empty list if any of input lists are
+        // empty, which makes the second check redundant, but it is kept for readability and
+        // additional safety.
+        boolean containsEmptyList =
+            propertyValues.isEmpty() || propertyValues.stream().anyMatch(List::isEmpty);
         if (!containsEmptyList) {
           // Return all combinations of the property-values.
           return Lists.cartesianProduct(propertyValues).stream()

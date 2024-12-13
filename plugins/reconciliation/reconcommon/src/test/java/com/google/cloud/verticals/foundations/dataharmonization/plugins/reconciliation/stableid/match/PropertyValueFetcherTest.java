@@ -141,6 +141,67 @@ public class PropertyValueFetcherTest {
                   "identifier=system=MRN|value=456|system=MRN|value=456|system=SSN|value=123")
             },
             {
+              "allIdentifiersMatch_noIdentifiers_noPropertyValues",
+              new MatchingCriteria.Builder()
+                  .setFieldType("array")
+                  .setField("identifier")
+                  .setPathOperator(PathOperator.AND)
+                  .build(),
+              "patient_with_no_identifiers",
+              ImmutableList.of()
+            },
+            {
+              "allIdentifiersAndNamesMatch_noIdentifiers_noPropertyValues",
+              new MatchingCriteria.Builder()
+                  .setFieldType("container")
+                  .setPathOperator(PathOperator.AND)
+                  .addChild(
+                      new MatchingCriteria.Builder()
+                          .setField("identifier")
+                          .setFieldType("array")
+                          .setPathOperator(PathOperator.OR)
+                          .addChild(
+                              new MatchingCriteria.Builder()
+                                  .setFieldType("container")
+                                  .setPathOperator(PathOperator.AND)
+                                  .addChild(
+                                      new MatchingCriteria.Builder()
+                                          .setField("system")
+                                          .setFieldType("primitive")
+                                          .build())
+                                  .addChild(
+                                      new MatchingCriteria.Builder()
+                                          .setField("value")
+                                          .setFieldType("primitive")
+                                          .build())
+                                  .build())
+                          .build())
+                  .addChild(
+                      new MatchingCriteria.Builder()
+                          .setField("name")
+                          .setFieldType("array")
+                          .setPathOperator(PathOperator.OR)
+                          .addChild(
+                              new MatchingCriteria.Builder()
+                                  .setFieldType("container")
+                                  .setPathOperator(PathOperator.AND)
+                                  .addChild(
+                                      new MatchingCriteria.Builder()
+                                          .setField("family")
+                                          .setFieldType("primitive")
+                                          .build())
+                                  .addChild(
+                                      new MatchingCriteria.Builder()
+                                          .setField("use")
+                                          .setFieldType("primitive")
+                                          .build())
+                                  .build())
+                          .build())
+                  .build(),
+              "patient_with_no_identifiers",
+              ImmutableList.of()
+            },
+            {
               "resourceDoNotHaveExpectedField_noPropertyValue",
               new MatchingCriteria.Builder()
                   .setFieldType("array")

@@ -1,0 +1,43 @@
+{
+  "resourceType": "Patient",
+  "id": "1",
+  "name": [
+    {
+      "use": "official",
+      "family": "Chalmers",
+      "given": [
+        "Bob",
+        "James",
+        "Alice"
+      ]
+    },
+    {
+      "use": "usual",
+      "given": [
+        "Jim"
+      ]
+    },
+    {
+      "use": "maiden",
+      "family": "Windsor",
+      "given": [
+        "Bob"
+      ],
+      "period": {
+        "end": "2002"
+      }
+    }
+  ],
+  "meta": {
+    "tag": [
+      {
+        "code": "123",
+        "system": "urn:oid:datasource1/reconciliation-external-id"
+      },
+      {
+        "code": "456",
+        "system": "anonymous_system"
+      }
+    ]
+  }
+}
