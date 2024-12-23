@@ -33,9 +33,9 @@ def AppointmentMerge(existing, inbound) {
 
   supportingInformation: recon::union(existing.supportingInformation, inbound.supportingInformation)
 
-  start: recon::preferInbound(existing.minutesDuration, inbound.minutesDuration)
+  start: recon::preferInbound(existing.start, inbound.start)
 
-  end: recon::preferInbound(existing.minutesDuration, inbound.minutesDuration)
+  end: recon::preferInbound(existing.end, inbound.end)
 
   minutesDuration: recon::preferInbound(existing.minutesDuration, inbound.minutesDuration)
 
