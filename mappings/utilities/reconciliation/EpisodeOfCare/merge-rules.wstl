@@ -3,13 +3,13 @@ package merge_rules
 import "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.ReconciliationPlugin"
 
 // Resource-level merge rule for the EpisodeofCare resource.
-def EpisodeofCareRule() {
+def EpisodeOfCareRule() {
   "merge"; // alternatively, "latest"
 }
 
 //TODO(): Add integration test-cases for FHIR reconciliation merge rules
 // Per-field merge rules for EpisodeofCare resource.
-def EpisodeofCareMerge(existing, inbound) {
+def EpisodeOfCareMerge(existing, inbound) {
   identifier: recon::unionByField(existing.identifier, inbound.identifier, "system")
 
   status: recon::forceInbound(existing.status, inbound.status)
