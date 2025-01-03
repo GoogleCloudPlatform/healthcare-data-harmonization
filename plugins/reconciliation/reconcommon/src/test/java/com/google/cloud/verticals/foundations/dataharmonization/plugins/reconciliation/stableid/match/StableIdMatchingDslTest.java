@@ -27,6 +27,7 @@ import static com.google.cloud.verticals.foundations.dataharmonization.plugins.r
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.match.StableIdMatchingDsl.filter;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.match.StableIdMatchingDsl.filterField;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.match.StableIdMatchingDsl.filterValue;
+import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.match.StableIdMatchingDsl.identifierReferenceFor;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.match.StableIdMatchingDsl.pathTo;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.match.StableIdMatchingDsl.primitive;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.match.StableIdMatchingDsl.referenceFor;
@@ -73,6 +74,51 @@ public class StableIdMatchingDslTest {
             + "}";
 
     assertEquals(toData(expected), referenceMatch);
+  }
+
+  @Test
+  public void identifierReferenceMatch() {
+    Data identifierReferenceMatch = identifierReferenceFor(ctx, "patient");
+    String expected =
+        """
+        {
+          "field":"patient",
+          "fieldType":"container",
+          "paths":[
+            {
+              "fieldType":"container",
+              "pathOperator":"AND",
+              "paths":[
+                {
+                  "field":"type",
+                  "fieldType":"primitive"
+                },
+                {
+                  "field":"identifier",
+                  "fieldType":"container",
+                  "paths":[
+                    {
+                    "fieldType": "container",
+                    "pathOperator": "AND",
+                    "paths":[
+                      {
+                        "field": "system",
+                        "fieldType": "primitive"
+                      },
+                      {
+                        "field": "value",
+                        "fieldType": "primitive"
+                      }
+                     ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }\
+        """;
+    assertEquals(toData(expected), identifierReferenceMatch);
   }
 
   @Test

@@ -32,6 +32,7 @@ import static com.google.cloud.verticals.foundations.dataharmonization.plugins.r
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.StableIdConsts.REFERENCE_FIELD;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.StableIdConsts.SYSTEM_FIELD;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.StableIdConsts.TAG_FIELD;
+import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.StableIdConsts.TYPE_FIELD;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.StableIdConsts.URL_FIELD;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.StableIdConsts.VALUESTRING_FIELD;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.StableIdConsts.VALUE_FIELD;
@@ -234,7 +235,8 @@ public class StableIdMatchingDsl implements Serializable {
   }
 
   /**
-   * Creates {@link Data} matching criteria to match fhir references rooted at the given field.
+   * Creates {@link Data} matching criteria to match fhir references (based on reference string)
+   * rooted at the given field.
    *
    * @param fieldName String specifying the field for which the reference matching criteria is
    *     relative to.
@@ -243,6 +245,28 @@ public class StableIdMatchingDsl implements Serializable {
    */
   public static Data referenceFor(RuntimeContext ctx, String fieldName) {
     return pathTo(ctx, fieldName, primitive(ctx, REFERENCE_FIELD));
+  }
+
+  /**
+   * Creates {@link Data} matching criteria to match fhir references (based on reference identifier
+   * system and value fields) rooted at the given field.
+   *
+   * @param fieldName String specifying the field for which the reference matching criteria is
+   *     relative to.
+   * @return {@link Data} reference matching criteria which is applied relative to the given field
+   *     name.
+   */
+  public static Data identifierReferenceFor(RuntimeContext ctx, String fieldName) {
+    return pathTo(
+        ctx,
+        fieldName,
+        allOf(
+            ctx,
+            primitive(ctx, TYPE_FIELD),
+            pathTo(
+                ctx,
+                IDENTIFIER_FIELD,
+                allOf(ctx, primitive(ctx, SYSTEM_FIELD), primitive(ctx, VALUE_FIELD)))));
   }
 
   /**

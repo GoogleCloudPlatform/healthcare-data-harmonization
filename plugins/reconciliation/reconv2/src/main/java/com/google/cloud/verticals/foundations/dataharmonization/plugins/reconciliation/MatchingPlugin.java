@@ -164,7 +164,8 @@ public class MatchingPlugin {
   }
 
   /**
-   * Creates {@link Data} matching criteria to match fhir references rooted at the given field.
+   * Creates {@link Data} matching criteria to match fhir references (based on reference string
+   * field) rooted at the given field.
    *
    * @param fieldName String specifying the field for which the reference matching criteria is
    *     relative to.
@@ -174,6 +175,20 @@ public class MatchingPlugin {
   @PluginFunction
   public static Data referenceFor(RuntimeContext ctx, String fieldName) {
     return StableIdMatchingDsl.referenceFor(ctx, fieldName);
+  }
+
+  /**
+   * Creates {@link Data} matching criteria to match fhir references (based on reference identifier
+   * system and value fields) rooted at the given field.
+   *
+   * @param fieldName String specifying the field for which the reference matching criteria is
+   *     relative to.
+   * @return {@link Data} reference matching criteria which is applied relative to the given field
+   *     name.
+   */
+  @PluginFunction
+  public static Data identifierReferenceFor(RuntimeContext ctx, String fieldName) {
+    return StableIdMatchingDsl.identifierReferenceFor(ctx, fieldName);
   }
 
   /**
