@@ -33,6 +33,33 @@ def Build_Extension(required value, required valueType, required url) {
   }
 }
 
+// Description: Constructs Extension datatype
+//
+// Argument(s):
+//   value: value of the extension
+//   url: uri for the extension
+//
+// Output(s):
+//   Extension datatype : http://hl7.org/fhir/R4/extensibility.html#extension
+//
+def BuildExtension(url, required value) {
+  url: url
+  extension[]: Build_ValueString(value)
+}
+
+// Description: Constructs ValueString datatype
+//
+// Argument(s):
+//   value: value of the ValueString
+//
+// Output(s):
+//   ValueString datatype : https://www.hl7.org/fhir/datatypes.html#string
+//
+def Build_ValueString(required Value) {
+  valueString: Value
+  url: "text"
+}
+
 // Description: Constructs coding.system attribute
 //
 // Argument(s):
@@ -92,4 +119,36 @@ def OutputResourceAndGetReference(required resource) {
   // executed against the destination FHIR store.
   root Resources[]: resource
   reference: "{resource.resourceType}/{resource.id}"
+}
+
+// Description: Constructs a FHIR resource reference
+//
+// Argument(s):
+//   resourceType: FHIR resource type
+//   id: FHIR resource id
+//
+// Output(s):
+//   String: FHIR resource reference
+//
+def ResourceReference(resourceType, id)
+  "{resourceType}/{id}"
+
+// Fragment resources are resources referred by incoming resources.
+def Build_FragmentResource(required resourceType, required externalId) {
+  resourceType: resourceType
+  id: externalId
+}
+
+// Description: Constructs an Identifier datatype
+//
+// Argument(s):
+//   value: value of the identifier
+//   system: system of the identifier
+//
+// Output(s):
+//   Identifier datatype: https://www.hl7.org/fhir/datatypes.html#identifier
+//
+def BuildIdentifier(required value, system) {
+  system: system
+  value: value
 }

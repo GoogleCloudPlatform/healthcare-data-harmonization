@@ -4,21 +4,6 @@ def HealthcareAPIPath() "https://healthcare.googleapis.com/v1"
 
 def getCurrentTime() currentTime("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
 
-def BuildIdentifier(required value, system) {
-  system: system
-  value: value
-}
-
-def BuildExtension(url, required value) {
-  url: url
-  extension[]: Build_ValueString(value)
-}
-
-def Build_ValueString(required Value) {
-  valueString: Value
-  url: "text"
-}
-
 def BuildReference(reference) {
   reference: reference
 }
@@ -46,19 +31,6 @@ def NonLocalGCPResourceReference(fhirStorePath, resource)
 
 def NonLocalGCPResourceReference(fhirStorePath, resourceType, resourceId)
   "{HealthcareAPIPath()}/{fhirStorePath}/fhir/{resourceType}/{resourceId}"
-
-// This function accepts the datetime format and datetime as arguments and parses the datetime.
-// TODO (): this bug will replace this change
-def Convert_DateTime(datetime_format, input) {
-  var isoTime: parseDateTime(datetime_format, input)
-  if !isoTime then {
-    var isoTime: formatDateTime("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", input)
-  }
-  if !isoTime then {
-    fail("cannot parse DateTime")
-  }
-  isoTime
-}
 
 // ClearReconciliationTimestamp removes reconciliation timestamp of the
 // input resource.

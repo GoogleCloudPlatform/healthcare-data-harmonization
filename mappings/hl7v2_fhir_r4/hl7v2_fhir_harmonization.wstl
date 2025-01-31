@@ -18,34 +18,6 @@ if output then {
 var deviceId: split(output.Provenance.entity[0].what.reference, "/")[1]
 var Resources[]: output.Resources[where $.resourceType!="Provenance" and $.id!=deviceId]
 // Adding ReconciledTimestampExtension to the meta on all the resources.
-var Resources[]: AddReconciliationTimestamp(Resources[], output.Timestamp)
+var Resources[]: utilities::AddReconciliationTimestamp(Resources[], output.Timestamp)
 resources[]: unique(Resources)
-}
-
-// Description: Add reconciliation timestamp to resource if it doesn't exist
-// Argument(s):
-//   resource : FHIR resource.
-//   timestamp: reconciliation timestamp
-//
-// Output(s)
-//   none
-//
-def AddReconciliationTimestamp(required Resource, required Timestamp) {
-  // Adding ReconciledTimestampExtension to the meta if not already present.
-  if !Resource.meta.extension[where $.url == "urn:oid:google/reconciliation-timestamp"] then {
-    var Resource.meta.extension[]: Build_ReconciledTimestampExtension(Timestamp)
-  }
-}
-
-// Description: Constructs a Resource creation timestamp extension to support FHIR reconciliation
-//
-// Argument(s):
-//   Timestamp: https://www.hl7.org/fhir/extensibility.html
-//
-// Output(s):
-//   ReconciledTimestampExtension
-//
-def Build_ReconciledTimestampExtension(TS) {
-  url: "urn:oid:google/reconciliation-timestamp"
-  valueInstant: TS
 }
