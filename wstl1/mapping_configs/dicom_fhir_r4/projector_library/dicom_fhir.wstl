@@ -666,7 +666,6 @@ def Build_Instance(inst) {
 }
 
 // Description: Helper ternary operator function.
-// TODO(): replace this function when this is supported by default.
 //
 def Cond(cond, one, two) {
   if cond {
