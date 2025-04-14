@@ -80,44 +80,42 @@ public class StableIdMatchingDslTest {
   public void identifierReferenceMatch() {
     Data identifierReferenceMatch = identifierReferenceFor(ctx, "patient");
     String expected =
-        """
-        {
-          "field":"patient",
-          "fieldType":"container",
-          "paths":[
-            {
-              "fieldType":"container",
-              "pathOperator":"AND",
-              "paths":[
-                {
-                  "field":"type",
-                  "fieldType":"primitive"
-                },
-                {
-                  "field":"identifier",
-                  "fieldType":"container",
-                  "paths":[
-                    {
-                    "fieldType": "container",
-                    "pathOperator": "AND",
-                    "paths":[
-                      {
-                        "field": "system",
-                        "fieldType": "primitive"
-                      },
-                      {
-                        "field": "value",
-                        "fieldType": "primitive"
-                      }
-                     ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }\
-        """;
+        "{\n"
+            + "  \"field\":\"patient\",\n"
+            + "  \"fieldType\":\"container\",\n"
+            + "  \"paths\":[\n"
+            + "    {\n"
+            + "      \"fieldType\":\"container\",\n"
+            + "      \"pathOperator\":\"AND\",\n"
+            + "      \"paths\":[\n"
+            + "        {\n"
+            + "          \"field\":\"type\",\n"
+            + "          \"fieldType\":\"primitive\"\n"
+            + "        },\n"
+            + "        {\n"
+            + "          \"field\":\"identifier\",\n"
+            + "          \"fieldType\":\"container\",\n"
+            + "          \"paths\":[\n"
+            + "            {\n"
+            + "            \"fieldType\": \"container\",\n"
+            + "            \"pathOperator\": \"AND\",\n"
+            + "            \"paths\":[\n"
+            + "              {\n"
+            + "                \"field\": \"system\",\n"
+            + "                \"fieldType\": \"primitive\"\n"
+            + "              },\n"
+            + "              {\n"
+            + "                \"field\": \"value\",\n"
+            + "                \"fieldType\": \"primitive\"\n"
+            + "              }\n"
+            + "             ]\n"
+            + "            }\n"
+            + "          ]\n"
+            + "        }\n"
+            + "      ]\n"
+            + "    }\n"
+            + "  ]\n"
+            + "}";
     assertEquals(toData(expected), identifierReferenceMatch);
   }
 
