@@ -19,6 +19,7 @@ package com.google.cloud.verticals.foundations.dataharmonization.plugins.reconci
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.BIGQUERY_SOURCE_SYSTEM;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.CLOUD_SPANNER_SOURCE_SYSTEM;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.FHIR_VERSION_SOURCE_SYSTEM;
+import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.GCS_SOURCE_SYSTEM;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.HL7V2_SOURCE_SYSTEM;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.LATEST;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.RESOURCE_TYPE_FIELD;
@@ -92,7 +93,8 @@ public class MergeResources extends MergeResourcesBase implements Serializable {
       FHIR_VERSION_SOURCE_SYSTEM,
       HL7V2_SOURCE_SYSTEM,
       BIGQUERY_SOURCE_SYSTEM,
-      CLOUD_SPANNER_SOURCE_SYSTEM
+      CLOUD_SPANNER_SOURCE_SYSTEM,
+      GCS_SOURCE_SYSTEM
     };
 
     for (String sourceSystem : sourceSystems) {

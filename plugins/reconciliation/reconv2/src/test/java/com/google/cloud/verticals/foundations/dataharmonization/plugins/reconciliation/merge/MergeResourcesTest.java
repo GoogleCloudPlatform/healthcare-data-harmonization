@@ -22,6 +22,7 @@ import static com.google.cloud.verticals.foundations.dataharmonization.plugins.r
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.DEFAULT_FIELD_RULES_METHOD;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.DEFAULT_RESOURCE_TYPE;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.FHIR_VERSION_SOURCE_SYSTEM;
+import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.GCS_SOURCE_SYSTEM;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.HL7V2_SOURCE_SYSTEM;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.META_FIELD;
 import static com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.merge.MergeConstants.RULE_METHOD_SUFFIX;
@@ -472,6 +473,9 @@ public class MergeResourcesTest {
                 + "      },"
                 + "      {"
                 + String.format("        \"system\": \"%s\"", BIGQUERY_SOURCE_SYSTEM)
+                + "      },"
+                + "      {"
+                + String.format("        \"system\": \"%s\"", GCS_SOURCE_SYSTEM)
                 + "      }"
                 + "    ]"
                 + "  },"

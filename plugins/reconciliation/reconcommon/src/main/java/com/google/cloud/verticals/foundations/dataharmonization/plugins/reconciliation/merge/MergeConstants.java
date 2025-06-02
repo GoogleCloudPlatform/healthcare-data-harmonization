@@ -182,6 +182,7 @@ public final class MergeConstants {
   public static final String HL7V2_SOURCE_SYSTEM = "urn:oid:google/source-hl7v2-message-name";
   public static final String CLOUD_SPANNER_SOURCE_SYSTEM = "urn:oid:google/cloud-spanner-row";
   public static final String BIGQUERY_SOURCE_SYSTEM = "urn:oid:google/big-query-row";
+  public static final String GCS_SOURCE_SYSTEM = "urn:oid:google/gcs-object";
   // LINT.ThenChange()
 
   public static final String FIRST_MERGE_NULL_SNAPSHOT = "enable_first_merge_null_snapshot";
