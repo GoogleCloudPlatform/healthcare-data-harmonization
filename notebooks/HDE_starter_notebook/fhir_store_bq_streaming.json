@@ -1,0 +1,12 @@
+{
+  "streamConfigs": [
+    {
+      "bigqueryDestination": {
+        "datasetUri": "bq://REPLACE-BIGQUERY-PROJECT-ID.REPLACE-BIGQUERY-DATASET-ID",
+        "schemaConfig": {
+          "schemaType": "ANALYTICS_V2"
+        }
+      }
+    }
+  ]
+}
