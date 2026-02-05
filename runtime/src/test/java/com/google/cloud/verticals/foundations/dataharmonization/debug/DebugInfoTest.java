@@ -62,8 +62,7 @@ public class DebugInfoTest {
 
   @Test
   public void getMetaEntry_functionInfo() {
-    FunctionInfo functionInfo =
-        FunctionInfo.newBuilder().setType(FunctionType.BLOCK).setTypeValue(14).build();
+    FunctionInfo functionInfo = FunctionInfo.newBuilder().setType(FunctionType.BLOCK).build();
     Meta meta = Meta.newBuilder().putEntries("functionInfo", Any.pack(functionInfo)).build();
 
     FunctionInfo result =
@@ -75,8 +74,7 @@ public class DebugInfoTest {
 
   @Test
   public void getMetaEntry_notRegisteredEntryType() {
-    FunctionInfo functionInfo =
-        FunctionInfo.newBuilder().setType(FunctionType.BLOCK).setTypeValue(14).build();
+    FunctionInfo functionInfo = FunctionInfo.newBuilder().setType(FunctionType.BLOCK).build();
     Meta meta = Meta.newBuilder().putEntries("functionInfo", Any.pack(functionInfo)).build();
 
     IllegalArgumentException exception =
