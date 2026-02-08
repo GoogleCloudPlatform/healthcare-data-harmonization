@@ -1,0 +1,11 @@
+{
+    "name": "REPLACE-RECON-PIPELINE-NAME",
+    "reconciliationPipelineJob": {
+        "mergeConfig": {
+            "whistleConfigSource": {
+                "uri": "gs://REPLACE-SOURCE-BUCKET-NAME/mappings/utilities/reconciliation/merge.wstl",
+                "importUriPrefix": "gs://REPLACE-SOURCE-BUCKET-NAME/mappings/utilities/reconciliation/"
+            }
+        }
+    }
+}
