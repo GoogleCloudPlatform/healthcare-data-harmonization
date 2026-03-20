@@ -60,7 +60,7 @@
       "@typescript-eslint/parser": "^4.5.0",
       "babel-cli": "^6.26.0",
       "babel-preset-env": "^1.7.0",
-      "eslint": "^7.11.0",
+      "eslint": "^7.32.0",
       "fs": "0.0.1-security",
       "glob": "^7.1.6",
       "jasmine": "^3.6.1",
