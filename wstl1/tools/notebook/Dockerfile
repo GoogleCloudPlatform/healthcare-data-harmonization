@@ -69,3 +69,5 @@ RUN chmod +x /run_services.sh
 CMD ["/run_services.sh"]
 
 WORKDIR /home/jupyter
+
+# Trigger rebuild for CVE-2021-3984 (vim)
