@@ -18,13 +18,8 @@ FROM gcr.io/deeplearning-platform-release/base-cpu:latest AS aip-build-env
 
 # Install base dependencies
 RUN pip install \
-    google-api-python-client==1.9.2 \
-    google-cloud-storage==1.28.1 \
     jupyterlab-gcloud-auth==0.2.4 \
-    pandas==1.1.2 \
-    python-language-server==0.36.1 \
-    https://storage.googleapis.com/deeplearning-platform-ui-public/jupyterlab_bigquery-0.1.4.tar.gz \
-    https://storage.googleapis.com/deeplearning-platform-ui-public/jupyterlab_gcsfilebrowser-0.1.10.tar.gz
+    python-language-server==0.36.1
 
 
 ARG WSTL_INSTALL_DIR="/opt/google/wstl"
