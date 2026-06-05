@@ -31,14 +31,14 @@
     "watch": "tsc -w"
   },
   "dependencies": {
-    "@jupyterlab/application": "^1.2.0",
-    "@jupyterlab/cells": "^1.2.0",
-    "@jupyterlab/codeeditor": "^1.2.0",
-    "@jupyterlab/codemirror": "^1.2.0",
-    "@jupyterlab/notebook": "^1.2.0",
+    "@jupyterlab/application": "^3.6.0",
+    "@jupyterlab/cells": "^3.6.0",
+    "@jupyterlab/codeeditor": "^3.6.0",
+    "@jupyterlab/codemirror": "^3.6.0",
+    "@jupyterlab/notebook": "^3.6.0",
     "codemirror": "~5.47.0",
-    "react": "~16.8.4",
-    "react-dom": "^16.0.0"
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.25.0",
@@ -49,7 +49,7 @@
     "eslint-plugin-prettier": "^3.1.2",
     "prettier": "1.16.4",
     "rimraf": "^2.6.1",
-    "typescript": "~3.7.0"
+    "typescript": "~4.1.3"
   },
   "sideEffects": [
     "style/*.css"

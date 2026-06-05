@@ -35,8 +35,7 @@ RUN jlpm install && \
 # wstl language server extension
 COPY ./wstl-language-server $WSTL_INSTALL_DIR/wstl-language-server/
 WORKDIR $WSTL_INSTALL_DIR/wstl-language-server/
-RUN conda install --quiet --yes --freeze-installed -c conda-forge 'jupyter-lsp==0.9.2' && \
-    jupyter labextension install @krassowski/jupyterlab-lsp@0.8.0 --no-build && \
+RUN pip install jupyterlab-lsp==3.10.1 && \
     npm install && \
     npm run-script compile && \
     npm run-script gen-lsp-client-spec
@@ -50,12 +49,12 @@ RUN ./build.sh
 COPY ./data-model-browser $WSTL_INSTALL_DIR/data-model-browser/
 WORKDIR $WSTL_INSTALL_DIR/data-model-browser/
 RUN python setup.py sdist && \
-    npm install && \
+    npm install --legacy-peer-deps && \
     npm run-script build && \
     jupyter labextension install . --no-build && \
     pip install \
     $WSTL_INSTALL_DIR/data-model-browser/dist/data_model_browser-0.0.1.tar.gz \
-    $WSTL_INSTALL_DIR/magics/wstl-extensions/dist/wstl-extensions-0.0.1.tar.gz && \
+    $WSTL_INSTALL_DIR/magics/wstl-extensions/dist/wstl_extensions-0.0.1.tar.gz && \
     jupyter lab build --dev-build=False --minimize=True
 
 COPY --from=wstl-service-env /etc/wstl/bin/main /usr/local/bin/wstl-service

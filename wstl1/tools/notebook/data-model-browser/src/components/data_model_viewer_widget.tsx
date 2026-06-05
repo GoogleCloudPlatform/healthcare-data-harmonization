@@ -17,12 +17,12 @@
 // limitations under the License.
 
 // tslint:disable-next-line:enforce-name-casing
-import * as React from 'react';
 import {ReactWidget, UseSignal} from '@jupyterlab/apputils';
-import {Signal} from '@phosphor/signaling';
+import {Signal} from '@lumino/signaling';
+import * as React from 'react';
 
-import {DataModelViewer} from './data_model_viewer';
 import {DataModelService} from '../service/data_model_service';
+import {DataModelViewer} from './data_model_viewer';
 
 /**
  * Widget to be registered in the left-side panel.

@@ -14,4 +14,4 @@
 # limitations under the License.
 
 /usr/local/bin/wstl-service &
-/run_jupyter.sh
+/run_jupyter_no_package_manager.sh

@@ -17,7 +17,10 @@
 readonly API_COMMON_PROTOS='../../third_party/api-common-protos'
 rm -rf $API_COMMON_PROTOS
 git clone https://github.com/googleapis/api-common-protos $API_COMMON_PROTOS
-python -m pip install grpcio==1.29.0 --ignore-installed
-python -m pip install grpcio-tools==1.29.0 setuptools==49.1.0
+python -m pip install setuptools wheel
+python -m pip install grpcio grpcio-tools
 ./gen_protos.sh
+# Cache invalidation placeholder comment
 python setup.py sdist bdist_wheel
+ls -la dist/
+
