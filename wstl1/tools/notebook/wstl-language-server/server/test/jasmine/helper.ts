@@ -15,4 +15,4 @@ import {SpecReporter} from 'jasmine-spec-reporter';
 
 jasmine.getEnv().clearReporters();
 
-jasmine.getEnv().addReporter(new SpecReporter({spec: {displayPending: true}}) as jasmine.CustomReporter);
+jasmine.getEnv().addReporter(new SpecReporter({spec: {displayPending: true}}) as unknown as jasmine.CustomReporter);

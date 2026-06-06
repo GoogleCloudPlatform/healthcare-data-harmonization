@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM openjdk:11-jdk-slim AS java-build-env
+FROM mirror.gcr.io/library/eclipse-temurin:11-jdk AS java-build-env
 
 USER root
 
@@ -30,7 +30,7 @@ RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
 
 RUN apt-get update && apt-get install -y git \
-    python-dev \
+    python3-dev \
     unzip \
     nano \
     curl \
