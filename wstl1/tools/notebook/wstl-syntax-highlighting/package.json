@@ -56,5 +56,10 @@
   ],
   "jupyterlab": {
     "extension": true
+  },
+  "resolutions": {
+    "url-parse": "^1.5.8",
+    "webpack": "^5.76.0",
+    "braces": "^3.0.3"
   }
 }

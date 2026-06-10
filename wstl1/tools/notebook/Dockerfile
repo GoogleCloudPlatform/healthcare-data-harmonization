@@ -16,10 +16,20 @@ FROM gcr.io/cloud-healthcare-containers/cloud-healthcare-data-harmonization-serv
 
 FROM gcr.io/deeplearning-platform-release/base-cpu:latest AS aip-build-env
 
-# Install base dependencies
+# Install base dependencies and upgrade vulnerable libraries
 RUN pip install \
     jupyterlab-gcloud-auth==0.2.4 \
-    python-language-server==0.36.1
+    python-language-server==0.36.1 \
+    "urllib3>=2.6.3" \
+    "h11>=0.16" \
+    "aiohttp>=3.13.3" \
+    "cryptography>=46.0.5" \
+    "gitpython>=3.1.50" \
+    "pillow>=12.2" \
+    "pyjwt>=2.12" \
+    "pyopenssl>=26" \
+    "tornado>=6.5.5" \
+    "ray>=2.52"
 
 
 ARG WSTL_INSTALL_DIR="/opt/google/wstl"
