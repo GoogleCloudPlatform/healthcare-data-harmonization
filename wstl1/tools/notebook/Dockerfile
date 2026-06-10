@@ -40,7 +40,8 @@ COPY ./wstl-syntax-highlighting $WSTL_INSTALL_DIR/wstl-syntax-highlighting/
 WORKDIR $WSTL_INSTALL_DIR/wstl-syntax-highlighting/
 RUN jlpm install && \
     jlpm build && \
-    jupyter labextension install . --no-build
+    jupyter labextension install . --no-build && \
+    rm -rf node_modules
 
 # wstl language server extension
 COPY ./wstl-language-server $WSTL_INSTALL_DIR/wstl-language-server/
@@ -65,7 +66,14 @@ RUN python setup.py sdist && \
     pip install \
     $WSTL_INSTALL_DIR/data-model-browser/dist/data_model_browser-0.0.1.tar.gz \
     $WSTL_INSTALL_DIR/magics/wstl-extensions/dist/wstl_extensions-0.0.1.tar.gz && \
-    jupyter lab build --dev-build=False --minimize=True
+    jupyter lab build --dev-build=False --minimize=True && \
+    rm -rf /opt/google/wstl/wstl-syntax-highlighting \
+           /opt/google/wstl/data-model-browser \
+           /opt/google/wstl/magics && \
+    rm -rf /opt/python/3.10/share/jupyter/lab/staging/node_modules && \
+    rm -rf /usr/local/share/.cache/yarn && \
+    rm -rf /root/.cache && \
+    rm -rf /root/.npm
 
 COPY --from=wstl-service-env /etc/wstl/bin/main /usr/local/bin/wstl-service
 COPY run_services.sh /run_services.sh

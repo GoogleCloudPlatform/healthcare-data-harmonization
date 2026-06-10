@@ -36,9 +36,9 @@ RUN apt-get update && apt-get install -y git \
     curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN wget https://golang.org/dl/go1.23.5.linux-amd64.tar.gz && \
-    tar -C /usr/local -xzf go1.23.5.linux-amd64.tar.gz && \
-    rm -f go1.23.5.linux-amd64.tar.gz
+RUN wget https://golang.org/dl/go1.25.11.linux-amd64.tar.gz && \
+    tar -C /usr/local -xzf go1.25.11.linux-amd64.tar.gz && \
+    rm -f go1.25.11.linux-amd64.tar.gz
 
 ENV PATH $PATH:/usr/local/go/bin
 
@@ -70,7 +70,7 @@ RUN chmod +x ./build_go.sh && \
     rm -rf $WSTL_INSTALL_DIR/tools
 
 # Now copy it into our base image.
-FROM gcr.io/distroless/base-debian10
+FROM gcr.io/distroless/base-debian12
 COPY --from=java-build-env /etc/wstl/* /etc/wstl/bin/
 WORKDIR "/home/jovyan"
 CMD ["/etc/wstl/bin/main",  "-host=0.0.0.0"]

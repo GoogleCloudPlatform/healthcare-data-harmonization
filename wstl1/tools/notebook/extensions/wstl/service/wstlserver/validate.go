@@ -17,7 +17,7 @@ package wstlserver
 import (
 	"context"
 
-	"google3/third_party/fhir/go/fhirversion" /* copybara-comment: fhirversion */
+	"github.com/google/fhir/go/fhirversion" /* copybara-comment: fhirversion */
 	"github.com/google/fhir/go/jsonformat" /* copybara-comment: jsonformat */
 	"google.golang.org/grpc/codes" /* copybara-comment: codes */
 	"google.golang.org/grpc/status" /* copybara-comment: status */

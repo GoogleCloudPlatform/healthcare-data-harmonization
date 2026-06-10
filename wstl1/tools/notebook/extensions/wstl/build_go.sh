@@ -19,9 +19,9 @@
 export GO111MODULE=on
 echo 'Installing protoc and go-grpc.'
 # pinning protoc version
-go get -u google.golang.org/protobuf/cmd/protoc-gen-go@v1.25.0
+go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.25.0
 # pinning protoc golang grpc plugin version
-go get -u google.golang.org/grpc/cmd/protoc-gen-go-grpc@v0.0.0-20200822010404-0e72e09474d6
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v0.0.0-20200822010404-0e72e09474d6
 # in service/go.mod pin the version of grpc dependency
 
 # install protoc
@@ -53,7 +53,13 @@ source ./gen_go_protos.sh
 
 # build wstl server
 echo Building wstlserver
-cd service/wstlserver
+cd service
+go get google.golang.org/grpc@v1.79.3
+go get golang.org/x/crypto@v0.35.0
+go get golang.org/x/net@v0.23.0
+go get golang.org/x/oauth2@v0.27.0
+go mod tidy
+cd wstlserver
 go build ./...
 go test ./...
 
