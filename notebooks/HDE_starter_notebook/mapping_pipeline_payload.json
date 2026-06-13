@@ -1,0 +1,14 @@
+{
+    "name": "REPLACE-MAPPING-PIPELINE-NAME",
+    "mappingPipelineJob": {
+      "mappingConfig": {
+        "whistleConfigSource": {
+          "uri": "gs://REPLACE-SOURCE-BUCKET-NAME/mappings/fhirVersionConversion/fhir_harmonization_r3r4.wstl",
+          "importUriPrefix": "gs://REPLACE-SOURCE-BUCKET-NAME/mappings/"
+        }
+      },
+      "fhirStreamingSource": {
+        "fhirStore": "projects/REPLACE-PROJECT-NAME/locations/REPLACE-REGION/datasets/REPLACE-DATASET-NAME/fhirStores/REPLACE-FHIR-STORE-NAME"
+      }
+    }
+  }
