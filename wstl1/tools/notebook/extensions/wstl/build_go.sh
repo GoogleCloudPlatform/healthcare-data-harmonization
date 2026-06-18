@@ -54,7 +54,7 @@ source ./gen_go_protos.sh
 # build wstl server
 echo Building wstlserver
 cd service
-go get google.golang.org/grpc@v1.79.3 golang.org/x/crypto@latest
+go get google.golang.org/grpc@v1.79.3 golang.org/x/crypto@latest go.opentelemetry.io/otel/sdk@v1.43.0 go.opentelemetry.io/otel@v1.43.0 github.com/go-jose/go-jose/v4@v4.1.4
 go mod tidy
 cd wstlserver
 go build ./...
