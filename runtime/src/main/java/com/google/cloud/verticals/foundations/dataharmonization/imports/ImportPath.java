@@ -153,7 +153,14 @@ public final class ImportPath implements Serializable {
 
   @Override
   public String toString() {
-    return String.format("%s://%s", loader, absolutePath);
+    String path = absolutePath == null ? "" : absolutePath.toString().replace('\\', '/');
+    if (!"file".equals(loader) && path.matches("^[A-Za-z]:/.*")) {
+      path = path.substring(2);
+    }
+    if (!path.startsWith("/")) {
+      path = "/" + path;
+    }
+    return String.format("%s://%s", loader, path);
   }
 
   public Path getImportsRoot() {
