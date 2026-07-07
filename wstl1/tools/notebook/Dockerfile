@@ -82,4 +82,4 @@ CMD ["/run_services.sh"]
 
 WORKDIR /home/jupyter
 
-# Trigger rebuild for CVE-2021-3984 (vim)
+# Trigger rebuild for CVE-2025-69204 (imagemagick)
