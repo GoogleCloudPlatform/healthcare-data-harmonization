@@ -109,7 +109,8 @@ public final class Main {
         inputData.put(outputDir.resolve("default.json"), NullData.instance);
       }
 
-      Path mappingPath = FileSystems.getDefault().getPath(cmd.getOptionValue("m"));
+      Path mappingPath =
+          FileSystems.getDefault().getPath(cmd.getOptionValue("m")).toAbsolutePath().normalize();
       ImportPath mappingImportPath =
           ImportPath.of(FileLoader.NAME, mappingPath, mappingPath.getParent());
 
