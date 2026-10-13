@@ -23,7 +23,6 @@ import com.google.cloud.verticals.foundations.dataharmonization.data.Data;
 import com.google.cloud.verticals.foundations.dataharmonization.function.context.RuntimeContext;
 import com.google.cloud.verticals.foundations.dataharmonization.init.Engine;
 import com.google.cloud.verticals.foundations.dataharmonization.init.initializer.TestConfigExtractor;
-import com.google.cloud.verticals.foundations.dataharmonization.plugins.reconciliation.stableid.DefaultStableIdGeneratorTest;
 import com.google.cloud.verticals.foundations.dataharmonization.proto.Pipeline;
 import com.google.protobuf.TextFormat;
 import java.io.IOException;
@@ -44,7 +43,7 @@ public class MergeResultAnnotatorTest {
   @Before
   public void setup() throws IOException {
     InputStream textprotoStream =
-        DefaultStableIdGeneratorTest.class.getResourceAsStream("/target_sample.textproto");
+        MergeResultAnnotatorTest.class.getResourceAsStream("/target_sample.textproto");
     Pipeline.PipelineConfig pConfig =
         TextFormat.parse(new String(textprotoStream.readAllBytes()), Pipeline.PipelineConfig.class);
     engine = new Engine.Builder(TestConfigExtractor.of(pConfig)).initialize().build();
