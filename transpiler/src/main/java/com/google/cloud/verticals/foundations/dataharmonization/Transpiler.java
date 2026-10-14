@@ -1040,7 +1040,10 @@ public class Transpiler extends WhistleBaseVisitor<AbstractMessage> {
     }
 
     URI uri = URI.create(fileInfo.getUrl());
-    Path path = FileSystems.getDefault().getPath(uri.getPath());
+    Path path =
+        "file".equals(uri.getScheme())
+            ? Path.of(uri)
+            : FileSystems.getDefault().getPath(uri.getPath());
     String name = path.getFileName().toString();
     return name.contains(".") ? name.substring(0, name.lastIndexOf('.')) : name;
   }

@@ -22,6 +22,9 @@ public final class Packages {
   public static final ImmutableMap<String, String> ALIAS =
       ImmutableMap.<String, String>builder()
           .put(
+              "logging",
+              "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.logging.LoggingPlugin")
+          .put(
               "test",
               "class://com.google.cloud.verticals.foundations.dataharmonization.plugins.test.TestPlugin")
           .buildOrThrow();
