@@ -1,0 +1,79 @@
+{
+  "active": true,
+  "address": [
+    {
+      "city": "Mountain View",
+      "line": [
+        "1800 Amphibious Blvd."
+      ],
+      "period": {
+        "start": "1970-01-01"
+      },
+      "postalCode": "94045",
+      "state": "California",
+      "text": "1800 Amphibious Blvd. Mountain View, California 94045",
+      "type": "both",
+      "use": "home"
+    }
+  ],
+  "maritalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
+        "code": "U",
+        "display": "Unmarried"
+      }
+    ]
+  },
+  "birthDate": "1970-01-01",
+  "deceasedBoolean": false,
+  "gender": "female",
+  "id": "example2",
+  "identifier": [
+    {
+      "assigner": {
+        "display": "Google"
+      },
+      "period": {
+        "start": "2001-05-06"
+      },
+      "system": "urn:oid:1.2.36.146.595.217.0.1",
+      "type": {
+        "coding": [
+          {
+            "code": "MR",
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+          }
+        ]
+      },
+      "use": "usual",
+      "value": "12345"
+    }
+  ],
+  "name": [
+    {
+      "family": "A.",
+      "given": [
+        "Dana"
+      ],
+      "use": "official"
+    }
+  ],
+  "resourceType": "Patient",
+  "telecom": [
+    {
+      "system": "phone",
+      "use": "home",
+      "value": "(800) 555-1085"
+    },
+    {
+      "system": "phone",
+      "use": "work",
+      "value": "(800) 555-1075"
+    }
+  ],
+  "text": {
+    "div": "text",
+    "status": "generated"
+  }
+}
