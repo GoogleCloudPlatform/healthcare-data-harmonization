@@ -15,12 +15,12 @@
 
 import json
 from os import path
-from absl.testing import absltest
+from unittest from unittest import mock
 
+from absl.testing import absltest
+from google.cloud import storage
 from IPython.testing.globalipapp import get_ipython
 
-from unittest import mock
-from google.cloud import storage
 from wstl.magics import _constants
 from wstl.magics import _location
 
