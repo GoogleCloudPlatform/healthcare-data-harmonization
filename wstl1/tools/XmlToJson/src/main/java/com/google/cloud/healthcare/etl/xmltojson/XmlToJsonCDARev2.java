@@ -174,6 +174,11 @@ public class XmlToJsonCDARev2 implements XmlToJson {
   private XMLStreamReader createXMLReader(String input) throws XmlToJsonException {
     Reader reader = new StringReader(input);
     XMLInputFactory factory = XMLInputFactory.newInstance();
+    // Prevent XML External Entity (XXE) processing: CDA documents do not use
+    // DTDs or external entities, so disable DTD support (which also disables
+    // entity resolution) and external entity resolution for untrusted input.
+    factory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+    factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
     XMLStreamReader xmlReader;
     try {
       xmlReader = factory.createXMLStreamReader(reader);
