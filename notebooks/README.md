@@ -1,0 +1,3 @@
+This folder contains introductory notebooks demonstrating the utilization of whistle mappings within this repository to facilitate the harmonization of your source data into FHIR resources via Google Cloud's Healthcare Data Engine product.
+
+Healthcare Data Engine is a FHIR-based data platform with APIs and tools to help healthcare organizations transition their healthcare data to the [Fast Healthcare Interoperability Resources (FHIR)](https://cloud.google.com/healthcare-api/docs/concepts/fhir) standard.
